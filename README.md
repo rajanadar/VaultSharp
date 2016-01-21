@@ -34,6 +34,12 @@ var consulCredentials = await vaultClient.ConsulGenerateDynamicCredentialsAsync(
 var consulToken = consulCredentials.Data.Token;
 ```
 
+### Does VaultSharp support all the Authentication, Secret and Audit Backends?
+
+* YES
+* All Authentication, Secret and Audit backends are supported by this library.
+* All administrative (seal, unseal, write policy), end-user (generate credentials) and unauthenticated methods (get status, get root CA) are supported by this client.
+
 ### VaultSharp and 100% Consul Support
 
 * VaultSharp supports all the secret backends supported by the Vault 0.4.0 Service.
