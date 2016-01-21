@@ -3,6 +3,8 @@ A .NET Library for HashiCorp's Vault - A Secret Management System.
 
 ## Nuget Package: https://www.nuget.org/packages/VaultSharp/
 
+## Documentation Site: http://rajanadar.github.io/VaultSharp/
+
 ### What is VaultSharp?
 
 * VaultSharp is a C# Library that can be used in any .NET application to interact with Hashicorp's Vault Service.
@@ -59,6 +61,12 @@ await _authenticatedClient.WriteSecretAsync(path, secretData);
 var secret = await _authenticatedClient.ReadSecretAsync(path);
 var data = secret.Data; // this is the original dictionary back.
 ```
+
+### Can I use it in my PowerShell Automation?
+
+* Absolutely. VaultSharp is a .NET Library. 
+* This means, apart from using it in your C#, VB.NET, J#.NET and any .NET application, you can use it in PowerShell automation as well.
+* Load up the DLL in your PowerShell code and execute the methods. PowerShell can totally work with .NET Dlls.
 
 ### Authentication Backends
 
@@ -211,4 +219,52 @@ var cassandraUsername = cassandraCredentials.Data.Username;
 var cassandraPassword = cassandraCredentials.Data.Password;
 
 ```
+#### Consul Secret Backend
 
+##### Configuring a Consul Backend
+
+```cs
+// mount the backend
+var consulAddress = "127.0.0.1:8500";
+var consulAclMasterToken = "raja";
+
+var backend = new SecretBackend
+{
+    BackendType = SecretBackendType.Consul,
+};
+
+await vaultClient.MountSecretBackendAsync(backend);
+
+// configure access to Consul and create roles
+var consulRole = "consulRole";
+
+await vaultClient.ConsulConfigureAccessAsync(new ConsulAccessInfo()
+{
+    AddressWithPort = consulAddress,
+    ManagementToken = consulAclMasterToken
+});
+
+// create a named role
+await vaultClient.ConsulWriteNamedRoleAsync(consulRole, new ConsulRoleDefinition()
+{
+    TokenType = ConsulTokenType.management,
+});
+
+var readRole = await vaultClient.ConsulReadNamedRoleAsync(consulRole);
+Assert.Equal(ConsulTokenType.management, readRole.Data.TokenType);
+```
+
+##### Generate Consul Credentials
+
+```cs
+var consulCredentials = await vaultClient.ConsulGenerateDynamicCredentialsAsync(consulRole);
+var consulToken = consulCredentials.Data.Token;
+```
+
+##### Deleting Role and Unmounting the Consul backend
+
+```cs
+await vaultClient.ConsulDeleteNamedRoleAsync(consulRole);
+await vaultClient.UnmountSecretBackendAsync(SecretBackendType.Consul.Type);
+
+```
