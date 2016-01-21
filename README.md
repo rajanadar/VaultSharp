@@ -566,3 +566,50 @@ Assert.NotNull(postgreSqlCredentials.Data.Username);
 Assert.NotNull(postgreSqlCredentials.Data.Password);
 
 ```
+
+#### SSH Secret Backend
+
+##### Configuring a SSH Backend
+
+```cs
+// mount the backend
+var sshKeyName = Guid.NewGuid().ToString();
+var sshRoleName = Guid.NewGuid().ToString();
+
+var mountPoint = "ssh" + Guid.NewGuid();
+var backend = new SecretBackend
+{
+    BackendType = SecretBackendType.SSH,
+    MountPoint = mountPoint,
+};
+
+await vaultClient.MountSecretBackendAsync(backend);
+
+// configure key and role
+var privateKey = @"-----BEGIN RSA PRIVATE KEY----- key ---";
+
+var ip = "127.0.0.1";
+var user = "rajan";
+
+await vaultClient.SSHWriteNamedKeyAsync(sshKeyName, privateKey, mountPoint);
+await vaultClient.SSHWriteNamedRoleAsync(sshRoleName, new SSHOTPRoleDefinition
+{
+    RoleDefaultUser = user,
+    CIDRValues = "127.0.0.1/10",
+}, mountPoint);
+
+var role = await vaultClient.SSHReadNamedRoleAsync(sshRoleName, mountPoint);
+Assert.True(role.Data.KeyTypeToGenerate == SSHKeyType.otp);
+
+```
+
+##### Generate SSH Credentials
+
+```cs
+var credentials = await
+    vaultClient.SSHGenerateDynamicCredentialsAsync(sshRoleName, ip,
+        sshBackendMountPoint: mountPoint);
+
+Assert.Equal(user, credentials.Data.Username);
+
+```
