@@ -62,9 +62,9 @@ var secretData = new Dictionary<string, object>
     {"3", false},
 };
 
-await _authenticatedClient.WriteSecretAsync(path, secretData);
+await vaultClient.WriteSecretAsync(path, secretData);
 
-var secret = await _authenticatedClient.ReadSecretAsync(path);
+var secret = await vaultClient.ReadSecretAsync(path);
 var data = secret.Data; // this is the original dictionary back.
 ```
 
@@ -566,7 +566,6 @@ Assert.NotNull(postgreSqlCredentials.Data.Username);
 Assert.NotNull(postgreSqlCredentials.Data.Password);
 
 ```
-
 #### SSH Secret Backend
 
 ##### Configuring a SSH Backend
@@ -613,3 +612,69 @@ var credentials = await
 Assert.Equal(user, credentials.Data.Username);
 
 ```
+#### Transit Secret Backend
+
+##### Configuring a Transit Backend
+
+```cs
+// mount the backend
+var backend = new SecretBackend
+{
+    BackendType = SecretBackendType.Transit,
+    MountPoint = "transit" + Guid.NewGuid(),
+};
+
+await vaultClient.MountSecretBackendAsync(backend);
+
+// create encryption key
+var keyName = "test_key" + Guid.NewGuid();
+var context = "context1";
+
+var plainText = "raja";
+var encodedPlainText = Convert.ToBase64String(Encoding.UTF8.GetBytes(plainText));
+
+await vaultClient.TransitCreateEncryptionKeyAsync(keyName, true, backend.MountPoint);
+var keyInfo = await vaultClient.TransitGetEncryptionKeyInfoAsync(keyName, backend.MountPoint);
+
+Assert.Equal(keyName, keyInfo.Data.Name);
+Assert.True(keyInfo.Data.MustUseKeyDerivation);
+Assert.False(keyInfo.Data.IsDeletionAllowed);
+
+// configure the key
+await vaultClient.TransitConfigureEncryptionKeyAsync(keyName, isDeletionAllowed: true, transitBackendMountPoint: backend.MountPoint);
+
+keyInfo = await vaultClient.TransitGetEncryptionKeyInfoAsync(keyName, backend.MountPoint);
+Assert.True(keyInfo.Data.IsDeletionAllowed);
+
+```
+
+##### Encrypt/Decrypt text
+
+```cs
+var cipherText = await vaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, transitBackendMountPoint: backend.MountPoint);
+
+var plainText2 = Encoding.UTF8.GetString(Convert.FromBase64String((await _authenticatedClient.TransitDecryptAsync(keyName, cipherText.Data.CipherText, context, backend.MountPoint)).Data.PlainText));
+
+Assert.Equal(plainText, plainText2);
+```
+
+##### Other Transit Operations
+
+```cs
+await vaultClient.TransitRotateEncryptionKeyAsync(keyName, backend.MountPoint);
+var cipherText2 = await vaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, transitBackendMountPoint: backend.MountPoint);
+
+Assert.NotEqual(cipherText.Data.CipherText, cipherText2.Data.CipherText);
+
+var cipherText3 = await vaultClient.TransitRewrapWithLatestEncryptionKeyAsync(keyName, cipherText.Data.CipherText, context, backend.MountPoint);
+
+var newKey1 = await vaultClient.TransitCreateDataKeyAsync(keyName, false, context, 128, backend.MountPoint);
+Assert.Null(newKey1.Data.PlainTextKey);
+
+newKey1 = await vaultClient.TransitCreateDataKeyAsync(keyName, true, context, 128, backend.MountPoint);
+Assert.NotNull(newKey1.Data.PlainTextKey);
+
+await vaultClient.TransitDeleteEncryptionKeyAsync(keyName, backend.MountPoint);
+
+```
+
