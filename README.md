@@ -653,7 +653,7 @@ Assert.True(keyInfo.Data.IsDeletionAllowed);
 ```cs
 var cipherText = await vaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, transitBackendMountPoint: backend.MountPoint);
 
-var plainText2 = Encoding.UTF8.GetString(Convert.FromBase64String((await _authenticatedClient.TransitDecryptAsync(keyName, cipherText.Data.CipherText, context, backend.MountPoint)).Data.PlainText));
+var plainText2 = Encoding.UTF8.GetString(Convert.FromBase64String((await vaultClient.TransitDecryptAsync(keyName, cipherText.Data.CipherText, context, backend.MountPoint)).Data.PlainText));
 
 Assert.Equal(plainText, plainText2);
 ```
@@ -675,6 +675,68 @@ newKey1 = await vaultClient.TransitCreateDataKeyAsync(keyName, true, context, 12
 Assert.NotNull(newKey1.Data.PlainTextKey);
 
 await vaultClient.TransitDeleteEncryptionKeyAsync(keyName, backend.MountPoint);
+
+```
+### Audit Backends (All of them are supported)
+
+* VaultSharp supports all the audit backends supported by the Vault Service 0.4.0
+* Here is a sample to instantiate the vault client with each of the audit backends.
+
+#### File Audit Backend
+
+```cs
+
+var audits = (await vaultClient.GetAllEnabledAuditBackendsAsync()).ToList();
+
+// enable new file audit
+var newFileAudit = new FileAuditBackend
+{
+    BackendType = AuditBackendType.File,
+    Description = "store logs in a file - test cases",
+    Options = new FileAuditBackendOptions
+    {
+        FilePath = "/var/log/file"
+    }
+};
+
+await vaultClient.EnableAuditBackendAsync(newFileAudit);
+
+// get audits
+var newAudits = (await vaultClient.GetAllEnabledAuditBackendsAsync()).ToList();
+Assert.Equal(audits.Count + 1, newAudits.Count);
+
+// hash with audit
+var hash = await vaultClient.HashWithAuditBackendAsync(newFileAudit.MountPoint, "testinput");
+Assert.NotNull(hash);
+
+// disabled audit
+await vaultClient.DisableAuditBackendAsync(newFileAudit.MountPoint);
+```
+
+#### Syslog Audit Backend
+
+```cs
+
+// enable new syslog audit
+var newSyslogAudit = new SyslogAuditBackend
+{
+    BackendType = AuditBackendType.Syslog,
+    Description = "syslog audit - test cases",
+    Options = new SyslogAuditBackendOptions()
+};
+
+await vaultClient.EnableAuditBackendAsync(newSyslogAudit);
+
+// get audits
+var newAudits2 = (await vaultClient.GetAllEnabledAuditBackendsAsync()).ToList();
+Assert.Equal(1, newAudits2.Count);
+
+// disabled audit
+await vaultClient.DisableAuditBackendAsync(newSyslogAudit.MountPoint);
+
+// get audits
+var oldAudits2 = (await vaultClient.GetAllEnabledAuditBackendsAsync()).ToList();
+Assert.Equal(audits.Count, oldAudits2.Count);
 
 ```
 
