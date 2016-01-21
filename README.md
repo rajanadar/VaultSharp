@@ -21,7 +21,13 @@ var consulCredentials = await vaultClient.ConsulGenerateDynamicCredentialsAsync(
 var consulToken = consulCredentials.Data.Token;
 ```
 
-### The fundamental READ and WRITE methods
+### VaultSharp and 100% Consul Support
+
+* VaultSharp supports all the secret backends supported by the Vault 0.4.0 Service.
+* This includes 100% support for a Consul Secret backend, which is the recommended secret backend for Vault.
+* Please look at the API usage in the 'Consul' section of 'Secret Backends' below, to see all the Consul related methods in action.
+
+### The fundamental READ and WRITE operations on a Vault
 
 * The generic READ/WRITE Apis of vault allow you to do a variety of operations.
 * A lot or almost all of these operations are supported in a strongly typed manner with dedicated methods for them in this library.
@@ -155,7 +161,43 @@ await vaultClient.AWSWriteNamedRoleAsync("myAwsRole", new AWSRoleDefinition
 
 ```cs
 var awsCredentials = await vaultClient.AWSGenerateDynamicCredentialsAsync("myAwsRole");
-var accessKey = awsCredentials.Data.AccessKey;
-var secretKey = awsCredentials.Data.SecretKey;
+var awsAccessKey = awsCredentials.Data.AccessKey;
+var awsSecretKey = awsCredentials.Data.SecretKey;
 
 ```
+
+#### Cassandra Secret Backend
+
+##### Configuring a Cassandra Backend
+
+```cs
+// mount the backend
+await vaultClient.MountSecretBackendAsync(new SecretBackend
+{
+    BackendType = SecretBackendType.Cassandra
+});
+
+// configure root connection info to create/manage roles and generate credentials
+await vaultClient.CassandraConfigureConnectionAsync(new CassandraConnectionInfo
+{
+    Hosts = "hosts",
+    Username = "username",
+    Password = "password"
+});
+
+// create a named role
+await vaultClient.CassandraWriteNamedRoleAsync("myCassandraRole", new CassandraRoleDefinition
+{
+    CreationCql = "csql"
+});
+```
+
+##### Generate Cassandra Credentials
+
+```cs
+var cassandraCredentials = await vaultClient.CassandraGenerateDynamicCredentialsAsync("myCassandraRole");
+var cassandraUsername = cassandraCredentials.Data.Username;
+var cassandraPassword = cassandraCredentials.Data.Password;
+
+```
+
