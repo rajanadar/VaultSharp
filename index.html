@@ -28,6 +28,225 @@
 <a id="nuget-package-httpswwwnugetorgpackagesvaultsharp" class="anchor" href="#nuget-package-httpswwwnugetorgpackagesvaultsharp" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Nuget Package: <a href="https://www.nuget.org/packages/VaultSharp/">https://www.nuget.org/packages/VaultSharp/</a>
 </h2>
 
+<h3>
+<a id="what-is-vaultsharp" class="anchor" href="#what-is-vaultsharp" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What is VaultSharp?</h3>
+
+<ul>
+<li>VaultSharp is a C# Library that can be used in any .NET application to interact with Hashicorp's Vault Service.</li>
+<li>The Vault system is a secret management system built as an Http Service by Hashicorp. </li>
+<li>This library supports all the Vault Service Apis documented here: <a href="https://www.vaultproject.io/docs/http/">https://www.vaultproject.io/docs/http/</a>
+</li>
+</ul>
+
+<h3>
+<a id="what-is-the-deal-with-the-versioning-of-vaultsharp-y-u-no-100" class="anchor" href="#what-is-the-deal-with-the-versioning-of-vaultsharp-y-u-no-100" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What is the deal with the Versioning of VaultSharp? (Y U NO 1.0.0)</h3>
+
+<ul>
+<li>This library is written for the Vault Service version 0.4.0</li>
+<li>The Vault service is evolving constantly and the Hashicorp team is rapidly working on it.</li>
+<li>Pretty soon, we should have an 1.0.0 version of the Vault Service from Hashicorp.</li>
+<li>Because this client library is intended to facilititate the Vault Service operations, this library makes it easier for its consumers to relate to the Vault service it supports.</li>
+<li>Hence a version of 0.4.x denotes that this library will completely support the Vault 0.4.x Service Apis.</li>
+<li>Tomorrow when Vault Service gets upgraded to 0.5.x, this library will be modified accordingly and versioned as 0.5.x</li>
+</ul>
+
+<h3>
+<a id="how-do-i-use-vaultsharp-give-me-a-code-example" class="anchor" href="#how-do-i-use-vaultsharp-give-me-a-code-example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How do I use VaultSharp? Give me a code example</h3>
+
+<ul>
+<li>Add a Nuget reference from here: <a href="https://www.nuget.org/packages/VaultSharp/">https://www.nuget.org/packages/VaultSharp/</a>
+</li>
+<li>Instantiate a IVaultClient as follows:</li>
+</ul>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">// instantiate VaultClient with one of the various authentication options available.</span>
+IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort, authenticationInfo);
+
+<span class="pl-c">// use it for operations.</span>
+<span class="pl-k">var</span> consulCredentials = <span class="pl-k">await</span> vaultClient.ConsulGenerateDynamicCredentialsAsync(consulRoleName, consulMountPoint);
+<span class="pl-k">var</span> consulToken = consulCredentials.Data.Token;</pre></div>
+
+<h3>
+<a id="vaultsharp-and-100-consul-support" class="anchor" href="#vaultsharp-and-100-consul-support" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>VaultSharp and 100% Consul Support</h3>
+
+<ul>
+<li>VaultSharp supports all the secret backends supported by the Vault 0.4.0 Service.</li>
+<li>This includes 100% support for a Consul Secret backend, which is the recommended secret backend for Vault.</li>
+<li>Please look at the API usage in the 'Consul' section of 'Secret Backends' below, to see all the Consul related methods in action.</li>
+</ul>
+
+<h3>
+<a id="the-fundamental-read-and-write-operations-on-a-vault" class="anchor" href="#the-fundamental-read-and-write-operations-on-a-vault" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>The fundamental READ and WRITE operations on a Vault</h3>
+
+<ul>
+<li>The generic READ/WRITE Apis of vault allow you to do a variety of operations.</li>
+<li>A lot or almost all of these operations are supported in a strongly typed manner with dedicated methods for them in this library.</li>
+<li>However, for some reason, if you want to use the generic READ and WRITE methods of Vault, you can use them as follows:</li>
+</ul>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> path = <span class="pl-s"><span class="pl-pds">"</span>cubbyhole/foo/test<span class="pl-pds">"</span></span>;
+
+<span class="pl-k">var</span> secretData = <span class="pl-k">new</span> Dictionary&lt;<span class="pl-k">string</span>, <span class="pl-k">object</span>&gt;
+{
+    {<span class="pl-s"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span>},
+    {<span class="pl-s"><span class="pl-pds">"</span>2<span class="pl-pds">"</span></span>, <span class="pl-c1">2</span>},
+    {<span class="pl-s"><span class="pl-pds">"</span>3<span class="pl-pds">"</span></span>, <span class="pl-c1">false</span>},
+};
+
+<span class="pl-k">await</span> _authenticatedClient.WriteSecretAsync(path, secretData);
+
+<span class="pl-k">var</span> secret = <span class="pl-k">await</span> _authenticatedClient.ReadSecretAsync(path);
+<span class="pl-k">var</span> data = secret.Data; <span class="pl-c">// this is the original dictionary back.</span></pre></div>
+
+<h3>
+<a id="authentication-backends" class="anchor" href="#authentication-backends" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authentication Backends</h3>
+
+<ul>
+<li>VaultSharp supports all the authentication backends supported by the Vault Service 0.4.0</li>
+<li>Here is a sample to instantiate the vault client with each of the authentication backends.</li>
+</ul>
+
+<h4>
+<a id="app-id-authentication-backend" class="anchor" href="#app-id-authentication-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>App Id Authentication Backend</h4>
+
+<div class="highlight highlight-source-cs"><pre>IAuthenticationInfo appIdAuthenticationInfo = <span class="pl-k">new</span> AppIdAuthenticationInfo(mountPoint, appId, userId);
+IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort, appIdAuthenticationInfo);
+
+<span class="pl-c">// any operations done using the vaultClient will use the vault token/policies mapped to the app id and user id.</span>
+</pre></div>
+
+<h4>
+<a id="github-authentication-backend" class="anchor" href="#github-authentication-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>GitHub Authentication Backend</h4>
+
+<div class="highlight highlight-source-cs"><pre>IAuthenticationInfo gitHubAuthenticationInfo = <span class="pl-k">new</span> GitHubAuthenticationInfo(mountPoint, personalAccessToken);
+IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort, gitHubAuthenticationInfo);
+
+<span class="pl-c">// any operations done using the vaultClient will use the vault token/policies mapped to the github token.</span>
+</pre></div>
+
+<h4>
+<a id="ldap-authentication-backend" class="anchor" href="#ldap-authentication-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>LDAP Authentication Backend</h4>
+
+<div class="highlight highlight-source-cs"><pre>IAuthenticationInfo ldapAuthenticationInfo = <span class="pl-k">new</span> LDAPAuthenticationInfo(mountPoint, username, password);
+IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort, ldapAuthenticationInfo);
+
+<span class="pl-c">// any operations done using the vaultClient will use the vault token/policies mapped to the LDAP username and password.</span>
+</pre></div>
+
+<h4>
+<a id="github-authentication-backend-1" class="anchor" href="#github-authentication-backend-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>GitHub Authentication Backend</h4>
+
+<div class="highlight highlight-source-cs"><pre>IAuthenticationInfo gitHubAuthenticationInfo = <span class="pl-k">new</span> GitHubAuthenticationInfo(mountPoint, personalAccessToken);
+IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort, gitHubAuthenticationInfo);
+
+<span class="pl-c">// any operations done using the vaultClient will use the vault token/policies mapped to the github token.</span>
+</pre></div>
+
+<h4>
+<a id="certificate-tls-authentication-backend" class="anchor" href="#certificate-tls-authentication-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Certificate (TLS) Authentication Backend</h4>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> clientCertificate = <span class="pl-k">new</span> X509Certificate2(certificatePath, certificatePassword, X509KeyStorageFlags.Exportable | X509KeyStorageFlags.PersistKeySet);
+
+IAuthenticationInfo certificateAuthenticationInfo = <span class="pl-k">new</span> CertificateAuthenticationInfo(mountPoint, clientCertificate);
+IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort, certificateAuthenticationInfo);
+
+<span class="pl-c">// any operations done using the vaultClient will use the vault token/policies mapped to the client certificate.</span>
+</pre></div>
+
+<h4>
+<a id="token-authentication-backend" class="anchor" href="#token-authentication-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Token Authentication Backend</h4>
+
+<div class="highlight highlight-source-cs"><pre>IAuthenticationInfo tokenAuthenticationInfo = <span class="pl-k">new</span> TokenAuthenticationInfo(mountPoint, vaultToken);
+IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort, tokenAuthenticationInfo);
+
+<span class="pl-c">// any operations done using the vaultClient will use the vault token/policies mapped to the vault token.</span>
+</pre></div>
+
+<h4>
+<a id="username-and-password-authentication-backend" class="anchor" href="#username-and-password-authentication-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Username and Password Authentication Backend</h4>
+
+<div class="highlight highlight-source-cs"><pre>IAuthenticationInfo usernamePasswordAuthenticationInfo = <span class="pl-k">new</span> UsernamePasswordAuthenticationInfo(mountPoint, username, password);
+IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort, usernamePasswordAuthenticationInfo);
+
+<span class="pl-c">// any operations done using the vaultClient will use the vault token/policies mapped to the username/password.</span>
+</pre></div>
+
+<h3>
+<a id="secret-backends" class="anchor" href="#secret-backends" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Secret Backends</h3>
+
+<ul>
+<li>VaultSharp supports all the secret backends supported by the Vault Service 0.4.0</li>
+<li>Here is a sample to instantiate the vault client with each of the secret backends.</li>
+</ul>
+
+<h4>
+<a id="aws-secret-backend" class="anchor" href="#aws-secret-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>AWS Secret Backend</h4>
+
+<h5>
+<a id="configuring-an-aws-backend" class="anchor" href="#configuring-an-aws-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuring an AWS Backend</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">// mount the backend</span>
+<span class="pl-k">await</span> vaultClient.MountSecretBackendAsync(<span class="pl-k">new</span> SecretBackend
+{
+    BackendType = SecretBackendType.AWS
+});
+
+<span class="pl-c">// configure root credentials to create/manage roles and generate credentials</span>
+<span class="pl-k">await</span> vaultClient.AWSConfigureRootCredentialsAsync(<span class="pl-k">new</span> AWSRootCredentials
+{
+    AccessKey = <span class="pl-s"><span class="pl-pds">"</span>access-key<span class="pl-pds">"</span></span>,
+    SecretKey = <span class="pl-s"><span class="pl-pds">"</span>secret-key<span class="pl-pds">"</span></span>,
+    Region = <span class="pl-s"><span class="pl-pds">"</span>region<span class="pl-pds">"</span></span>
+});
+
+<span class="pl-c">// create a named role with the IAM policy</span>
+<span class="pl-k">await</span> vaultClient.AWSWriteNamedRoleAsync(<span class="pl-s"><span class="pl-pds">"</span>myAwsRole<span class="pl-pds">"</span></span>, <span class="pl-k">new</span> AWSRoleDefinition
+{
+    Policy = <span class="pl-s"><span class="pl-pds">"</span>iam-policy-contents<span class="pl-pds">"</span></span>
+});</pre></div>
+
+<h5>
+<a id="generate-aws-credentials" class="anchor" href="#generate-aws-credentials" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Generate AWS Credentials</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> awsCredentials = <span class="pl-k">await</span> vaultClient.AWSGenerateDynamicCredentialsAsync(<span class="pl-s"><span class="pl-pds">"</span>myAwsRole<span class="pl-pds">"</span></span>);
+<span class="pl-k">var</span> awsAccessKey = awsCredentials.Data.AccessKey;
+<span class="pl-k">var</span> awsSecretKey = awsCredentials.Data.SecretKey;
+</pre></div>
+
+<h4>
+<a id="cassandra-secret-backend" class="anchor" href="#cassandra-secret-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Cassandra Secret Backend</h4>
+
+<h5>
+<a id="configuring-a-cassandra-backend" class="anchor" href="#configuring-a-cassandra-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuring a Cassandra Backend</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">// mount the backend</span>
+<span class="pl-k">await</span> vaultClient.MountSecretBackendAsync(<span class="pl-k">new</span> SecretBackend
+{
+    BackendType = SecretBackendType.Cassandra
+});
+
+<span class="pl-c">// configure root connection info to create/manage roles and generate credentials</span>
+<span class="pl-k">await</span> vaultClient.CassandraConfigureConnectionAsync(<span class="pl-k">new</span> CassandraConnectionInfo
+{
+    Hosts = <span class="pl-s"><span class="pl-pds">"</span>hosts<span class="pl-pds">"</span></span>,
+    Username = <span class="pl-s"><span class="pl-pds">"</span>username<span class="pl-pds">"</span></span>,
+    Password = <span class="pl-s"><span class="pl-pds">"</span>password<span class="pl-pds">"</span></span>
+});
+
+<span class="pl-c">// create a named role</span>
+<span class="pl-k">await</span> vaultClient.CassandraWriteNamedRoleAsync(<span class="pl-s"><span class="pl-pds">"</span>myCassandraRole<span class="pl-pds">"</span></span>, <span class="pl-k">new</span> CassandraRoleDefinition
+{
+    CreationCql = <span class="pl-s"><span class="pl-pds">"</span>csql<span class="pl-pds">"</span></span>
+});</pre></div>
+
+<h5>
+<a id="generate-cassandra-credentials" class="anchor" href="#generate-cassandra-credentials" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Generate Cassandra Credentials</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> cassandraCredentials = <span class="pl-k">await</span> vaultClient.CassandraGenerateDynamicCredentialsAsync(<span class="pl-s"><span class="pl-pds">"</span>myCassandraRole<span class="pl-pds">"</span></span>);
+<span class="pl-k">var</span> cassandraUsername = cassandraCredentials.Data.Username;
+<span class="pl-k">var</span> cassandraPassword = cassandraCredentials.Data.Password;
+</pre></div>
+
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/rajanadar/VaultSharp">Vaultsharp</a> is maintained by <a href="https://github.com/rajanadar">rajanadar</a>.</span>
 
