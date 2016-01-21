@@ -68,7 +68,27 @@ var data = secret.Data; // this is the original dictionary back.
 * This means, apart from using it in your C#, VB.NET, J#.NET and any .NET application, you can use it in PowerShell automation as well.
 * Load up the DLL in your PowerShell code and execute the methods. PowerShell can totally work with .NET Dlls.
 
-### Authentication Backends
+### All the methods are async. How do I use them synchronously?
+
+* The methods are async as the defacto implementation. The recommended usage.
+* However, there are innumerable scenarios where you would continue to want to use it synchronously.
+* For all those cases, there are various options available to you.
+* There is a lot of discussion around the right usage, avoiding deadlocks etc.
+* This library allows you to set the 'continueAsyncTasksOnCapturedContext' option when you initialize the client.
+* It is an optional parameter and defaults to 'false'
+* Setting it to false, allows you to access the .Result property of the task with reduced/zero deadlock issues.
+* There are other ways as well to invoke it synchronously, and  I leave it to you guys. (Task.Run etc.) 
+* But please note that as much as possible, use it in an async manner. 
+
+```cs
+
+IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort, authenticationInfo, continueAsyncTasksOnCapturedContext: true);
+
+var consulSecret = vaultClient.ConsulGenerateDynamicCredentialsAsync(consulRole).Result;
+
+```
+
+### Authentication Backends (All of them are supported)
 
 * VaultSharp supports all the authentication backends supported by the Vault Service 0.4.0
 * Here is a sample to instantiate the vault client with each of the authentication backends.
@@ -145,7 +165,7 @@ IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort
 
 ```
 
-### Secret Backends
+### Secret Backends (All of them are supported)
 
 * VaultSharp supports all the secret backends supported by the Vault Service 0.4.0
 * Here is a sample to instantiate the vault client with each of the secret backends.
