@@ -28,6 +28,10 @@
 <a id="nuget-package-httpswwwnugetorgpackagesvaultsharp" class="anchor" href="#nuget-package-httpswwwnugetorgpackagesvaultsharp" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Nuget Package: <a href="https://www.nuget.org/packages/VaultSharp/">https://www.nuget.org/packages/VaultSharp/</a>
 </h2>
 
+<h2>
+<a id="documentation-site-httprajanadargithubiovaultsharp" class="anchor" href="#documentation-site-httprajanadargithubiovaultsharp" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Documentation Site: <a href="http://rajanadar.github.io/VaultSharp/">http://rajanadar.github.io/VaultSharp/</a>
+</h2>
+
 <h3>
 <a id="what-is-vaultsharp" class="anchor" href="#what-is-vaultsharp" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What is VaultSharp?</h3>
 
@@ -99,7 +103,37 @@ IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort
 <span class="pl-k">var</span> data = secret.Data; <span class="pl-c">// this is the original dictionary back.</span></pre></div>
 
 <h3>
-<a id="authentication-backends" class="anchor" href="#authentication-backends" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authentication Backends</h3>
+<a id="can-i-use-it-in-my-powershell-automation" class="anchor" href="#can-i-use-it-in-my-powershell-automation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Can I use it in my PowerShell Automation?</h3>
+
+<ul>
+<li>Absolutely. VaultSharp is a .NET Library. </li>
+<li>This means, apart from using it in your C#, VB.NET, J#.NET and any .NET application, you can use it in PowerShell automation as well.</li>
+<li>Load up the DLL in your PowerShell code and execute the methods. PowerShell can totally work with .NET Dlls.</li>
+</ul>
+
+<h3>
+<a id="all-the-methods-are-async-how-do-i-use-them-synchronously" class="anchor" href="#all-the-methods-are-async-how-do-i-use-them-synchronously" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>All the methods are async. How do I use them synchronously?</h3>
+
+<ul>
+<li>The methods are async as the defacto implementation. The recommended usage.</li>
+<li>However, there are innumerable scenarios where you would continue to want to use it synchronously.</li>
+<li>For all those cases, there are various options available to you.</li>
+<li>There is a lot of discussion around the right usage, avoiding deadlocks etc.</li>
+<li>This library allows you to set the 'continueAsyncTasksOnCapturedContext' option when you initialize the client.</li>
+<li>It is an optional parameter and defaults to 'false'</li>
+<li>Setting it to false, allows you to access the .Result property of the task with reduced/zero deadlock issues.</li>
+<li>There are other ways as well to invoke it synchronously, and  I leave it to you guys. (Task.Run etc.) </li>
+<li>But please note that as much as possible, use it in an async manner. </li>
+</ul>
+
+<div class="highlight highlight-source-cs"><pre>
+IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort, authenticationInfo, continueAsyncTasksOnCapturedContext: <span class="pl-c1">true</span>);
+
+<span class="pl-k">var</span> consulSecret = vaultClient.ConsulGenerateDynamicCredentialsAsync(consulRole).Result;
+</pre></div>
+
+<h3>
+<a id="authentication-backends-all-of-them-are-supported" class="anchor" href="#authentication-backends-all-of-them-are-supported" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authentication Backends (All of them are supported)</h3>
 
 <ul>
 <li>VaultSharp supports all the authentication backends supported by the Vault Service 0.4.0</li>
@@ -172,7 +206,7 @@ IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort
 </pre></div>
 
 <h3>
-<a id="secret-backends" class="anchor" href="#secret-backends" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Secret Backends</h3>
+<a id="secret-backends-all-of-them-are-supported" class="anchor" href="#secret-backends-all-of-them-are-supported" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Secret Backends (All of them are supported)</h3>
 
 <ul>
 <li>VaultSharp supports all the secret backends supported by the Vault Service 0.4.0</li>
@@ -245,6 +279,72 @@ IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort
 <div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> cassandraCredentials = <span class="pl-k">await</span> vaultClient.CassandraGenerateDynamicCredentialsAsync(<span class="pl-s"><span class="pl-pds">"</span>myCassandraRole<span class="pl-pds">"</span></span>);
 <span class="pl-k">var</span> cassandraUsername = cassandraCredentials.Data.Username;
 <span class="pl-k">var</span> cassandraPassword = cassandraCredentials.Data.Password;
+</pre></div>
+
+<h4>
+<a id="consul-secret-backend" class="anchor" href="#consul-secret-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Consul Secret Backend</h4>
+
+<h5>
+<a id="configuring-a-consul-backend" class="anchor" href="#configuring-a-consul-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuring a Consul Backend</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">// mount the backend</span>
+<span class="pl-k">var</span> consulAddress = <span class="pl-s"><span class="pl-pds">"</span>127.0.0.1:8500<span class="pl-pds">"</span></span>;
+<span class="pl-k">var</span> consulAclMasterToken = <span class="pl-s"><span class="pl-pds">"</span>raja<span class="pl-pds">"</span></span>;
+
+<span class="pl-k">var</span> backend = <span class="pl-k">new</span> SecretBackend
+{
+    BackendType = SecretBackendType.Consul,
+};
+
+<span class="pl-k">await</span> vaultClient.MountSecretBackendAsync(backend);
+
+<span class="pl-c">// configure access to Consul and create roles</span>
+<span class="pl-k">var</span> consulRole = <span class="pl-s"><span class="pl-pds">"</span>consulRole<span class="pl-pds">"</span></span>;
+
+<span class="pl-k">await</span> vaultClient.ConsulConfigureAccessAsync(<span class="pl-k">new</span> ConsulAccessInfo()
+{
+    AddressWithPort = consulAddress,
+    ManagementToken = consulAclMasterToken
+});
+
+<span class="pl-c">// create a named role</span>
+<span class="pl-k">await</span> vaultClient.ConsulWriteNamedRoleAsync(consulRole, <span class="pl-k">new</span> ConsulRoleDefinition()
+{
+    TokenType = ConsulTokenType.management,
+});
+
+<span class="pl-k">var</span> readRole = <span class="pl-k">await</span> vaultClient.ConsulReadNamedRoleAsync(consulRole);
+Assert.Equal(ConsulTokenType.management, readRole.Data.TokenType);</pre></div>
+
+<h5>
+<a id="generate-consul-credentials" class="anchor" href="#generate-consul-credentials" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Generate Consul Credentials</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> consulCredentials = <span class="pl-k">await</span> vaultClient.ConsulGenerateDynamicCredentialsAsync(consulRole);
+<span class="pl-k">var</span> consulToken = consulCredentials.Data.Token;</pre></div>
+
+<h5>
+<a id="deleting-role-and-unmounting-the-consul-backend" class="anchor" href="#deleting-role-and-unmounting-the-consul-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Deleting Role and Unmounting the Consul backend</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">await</span> vaultClient.ConsulDeleteNamedRoleAsync(consulRole);
+<span class="pl-k">await</span> vaultClient.UnmountSecretBackendAsync(SecretBackendType.Consul.Type);
+</pre></div>
+
+<h4>
+<a id="cubbyhole-secret-backend" class="anchor" href="#cubbyhole-secret-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Cubbyhole Secret Backend</h4>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> path = <span class="pl-s"><span class="pl-pds">"</span>cubbyhole/foo1/foo2<span class="pl-pds">"</span></span>;
+<span class="pl-k">var</span> values = <span class="pl-k">new</span> Dictionary&lt;<span class="pl-k">string</span>, <span class="pl-k">object</span>&gt;
+{
+    {<span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>bar<span class="pl-pds">"</span></span>},
+    {<span class="pl-s"><span class="pl-pds">"</span>foo2<span class="pl-pds">"</span></span>, <span class="pl-c1">345</span> }
+};
+
+<span class="pl-k">await</span> vaultClient.CubbyholeWriteSecretAsync(path, values);
+
+<span class="pl-k">var</span> readValues = <span class="pl-k">await</span> vaultClient.CubbyholeReadSecretAsync(path);
+<span class="pl-k">var</span> data = readValues.Data; <span class="pl-c">// gives back the dictionary</span>
+
+<span class="pl-k">await</span> vaultClient.CubbyholeDeleteSecretAsync(path);
 </pre></div>
 
       <footer class="site-footer">
