@@ -313,3 +313,31 @@ var data = readValues.Data; // gives back the dictionary
 await vaultClient.CubbyholeDeleteSecretAsync(path);
 
 ```
+
+#### Generic Secret Backend
+
+```cs
+var mountpoint = "secret" + Guid.NewGuid();
+
+var path = mountpoint + "/foo1/blah2";
+var values = new Dictionary<string, object>
+{
+    {"foo", "bar"},
+    {"foo2", 345 }
+};
+
+await
+    vaultClient.MountSecretBackendAsync(new SecretBackend()
+    {
+        BackendType = SecretBackendType.Generic,
+        MountPoint = mountpoint
+    });
+
+await vaultClient.GenericWriteSecretAsync(path, values);
+
+var readValues = await vaultClient.GenericReadSecretAsync(path);
+var data = readValues.Data; // gives back the dictionary
+
+await vaultClient.GenericDeleteSecretAsync(path);
+
+```
