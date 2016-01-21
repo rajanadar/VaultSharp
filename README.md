@@ -5,11 +5,28 @@ A .NET Library for HashiCorp's Vault - A Secret Management System.
 
 ## Documentation Site: http://rajanadar.github.io/VaultSharp/
 
+## Table of Contents
+1. [What is VaultSharp](#what-is-vaultsharp)
+2. [VaultSharp 0.4.x should completely support Vault Service 0.4.0](#example2)
+3. [What is the deal with the Versioning of VaultSharp? (Y U NO 1.0.0)](#what-is-the-deal-with-the-versioning-of-vaultsharp-y-u-no-100)
+4. [How do I use VaultSharp? Give me a code example]()
+5. [Does VaultSharp support all the Authentication, Secret and Audit Backends?](#does-vaultsharp-support-all-the-authentication-secret-and-audit-backends)
+6. [VaultSharp and 100% Consul Support](#vaultsharp-and-100-consul-support)7. 
+7. [Can I use it in my PowerShell Automation?](#can-i-use-it-in-my-powershell-automation)
+8. [All the methods are async. How do I use them synchronously?](#all-the-methods-are-async-how-do-i-use-them-synchronously)
+9. [Authentication Backends (All of them are supported)](#authentication-backends-all-of-them-are-supported)
+10. [Secret Backends (All of them are supported)](#secret-backends-all-of-them-are-supported)
+11. [Audit Backends (All of them are supported)](#audit-backends-all-of-them-are-supported)
+12. [More Administrative & Other operations](#more-administrative--other-operations)
+13. [In Conclusion](#in-conclusion)
+
 ### What is VaultSharp?
 
 * VaultSharp is a C# Library that can be used in any .NET application to interact with Hashicorp's Vault Service.
 * The Vault system is a secret management system built as an Http Service by Hashicorp. 
 * This library supports all the Vault Service Apis documented here: https://www.vaultproject.io/docs/http/
+
+### VaultSharp 0.4.x should completely support Vault Service 0.4.0
 
 ### What is the deal with the Versioning of VaultSharp? (Y U NO 1.0.0)
 
