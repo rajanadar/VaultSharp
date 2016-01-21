@@ -391,3 +391,125 @@ var mySqlUsername = mySqlCredentials.Data.Username;
 var mySqlPassword = mySqlCredentials.Data.Password;
 
 ```
+#### PKI (Certificates) Secret Backend
+
+##### Configuring a PKI Backend
+
+```cs
+// mount the backend
+var mountpoint = "pki" + Guid.NewGuid();
+var backend = new SecretBackend
+{
+    BackendType = SecretBackendType.PKI,
+    MountPoint = mountpoint
+};
+
+await vaultClient.MountSecretBackendAsync(backend);
+
+// write expiry
+var expiry = "124h";
+var commonName = "blah.example.com";
+
+await vaultClient.PKIWriteCRLExpirationAsync(expiry, mountpoint);
+
+var readExpiry = await vaultClient.PKIReadCRLExpirationAsync(mountpoint);
+Assert.Equal(expiry, readExpiry.Data.Expiry);
+
+// read certificate in various ways
+var nocaCert = await vaultClient.PKIReadCACertificateAsync(CertificateFormat.pem, mountpoint);
+Assert.Null(nocaCert.CertificateContent);
+
+// generate root certificate
+var rootCertificateWithoutPrivateKey =
+    await vaultClient.PKIGenerateRootCACertificateAsync(new RootCertificateRequestOptions
+    {
+        CommonName = commonName,
+        ExportPrivateKey = false
+    }, mountpoint);
+
+Assert.Null(rootCertificateWithoutPrivateKey.Data.PrivateKey);
+
+var rootCertificate =
+    await vaultClient.PKIGenerateRootCACertificateAsync(new RootCertificateRequestOptions
+    {
+        CommonName = commonName,
+        ExportPrivateKey = true
+    }, mountpoint);
+
+Assert.NotNull(rootCertificate.Data.PrivateKey);
+
+// read certificate in various ways
+var caCert = await vaultClient.PKIReadCACertificateAsync(CertificateFormat.pem, mountpoint);
+Assert.NotNull(caCert.CertificateContent);
+
+var caReadCert = await vaultClient.PKIReadCertificateAsync("ca", mountpoint);
+Assert.Equal(caCert.CertificateContent, caReadCert.Data.CertificateContent);
+
+var caSerialNumberReadCert = await vaultClient.PKIReadCertificateAsync(rootCertificate.Data.SerialNumber, mountpoint);
+Assert.Equal(caCert.CertificateContent, caSerialNumberReadCert.Data.CertificateContent);
+
+var crlCert = await vaultClient.PKIReadCertificateAsync("crl", mountpoint);
+Assert.NotNull(crlCert.Data.CertificateContent);
+
+var crlCert2 = await vaultClient.PKIReadCRLCertificateAsync(CertificateFormat.pem, mountpoint);
+Assert.NotNull(crlCert2.CertificateContent);
+
+// write and read certificate endpoints
+
+var crlEndpoint = _vaultUri.AbsoluteUri + "/v1/" + mountpoint + "/crl";
+var issuingEndpoint = _vaultUri.AbsoluteUri + "/v1/" + mountpoint + "/ca";
+
+var endpoints = new CertificateEndpointOptions
+{
+    CRLDistributionPointEndpoints = string.Join(",", new List<string> { crlEndpoint }),
+    IssuingCertificateEndpoints = string.Join(",", new List<string> { issuingEndpoint }),
+};
+
+await vaultClient.PKIWriteCertificateEndpointsAsync(endpoints, mountpoint);
+
+var readEndpoints = await vaultClient.PKIReadCertificateEndpointsAsync(mountpoint);
+
+Assert.Equal(crlEndpoint, readEndpoints.Data.CRLDistributionPointEndpoints.First());
+Assert.Equal(issuingEndpoint, readEndpoints.Data.IssuingCertificateEndpoints.First());
+
+// rotate CRL
+var rotate = await vaultClient.PKIRotateCRLAsync(mountpoint);
+Assert.True(rotate);
+
+await vaultClient.RevokeSecretAsync(rootCertificateWithoutPrivateKey.LeaseId);
+```
+##### Write/Read PKI Role
+
+```cs
+// Create new Role
+var roleName = Guid.NewGuid().ToString();
+
+var role = new CertificateRoleDefinition
+{
+    AllowedDomains = "example.com",
+    AllowSubdomains = true,
+    MaximumTimeToLive = "72h",
+};
+
+await vaultClient.PKIWriteNamedRoleAsync(roleName, role, mountpoint);
+
+var readRole = await vaultClient.PKIReadNamedRoleAsync(roleName, mountpoint);
+Assert.Equal(role.AllowedDomains, readRole.Data.AllowedDomains);
+
+```
+
+##### Generate PKI Credentials
+
+```cs
+var certificateCredentials =
+    await
+        vaultClient.PKIGenerateDynamicCredentialsAsync(roleName,
+            new CertificateCredentialsRequestOptions
+            {
+                CommonName = commonName,
+                CertificateFormat = CertificateFormat.pem
+            }, mountpoint);
+
+var privateKey = certificateCredentials.Data.PrivateKey;
+
+```
