@@ -5,7 +5,18 @@ A .NET Library for HashiCorp's Vault - A Secret Management System.
 
 ### What is VaultSharp?
 
-VaultSharp is a C# Library that can be used in any .NET application to interact with a Vault Service. It supports all the Vault Service Apis documented here: https://www.vaultproject.io/docs/http/
+* VaultSharp is a C# Library that can be used in any .NET application to interact with Hashicorp's Vault Service.
+* The Vault system is a secret management system built as an Http Service by Hashicorp. 
+* This library supports all the Vault Service Apis documented here: https://www.vaultproject.io/docs/http/
+
+### What is the deal with the Versioning of VaultSharp? (Y U NO 1.0.0)
+
+* This library is written for the Vault Service version 0.4.0
+* The Vault service is evolving constantly and the Hashicorp team is rapidly working on it.
+* Pretty soon, we should have an 1.0.0 version of the Vault Service from Hashicorp.
+* Because this client library is intended to facilititate the Vault Service operations, this library makes it easier for its consumers to relate to the Vault service it supports.
+* Hence a version of 0.4.x denotes that this library will completely support the Vault 0.4.x Service Apis.
+* Tomorrow when Vault Service gets upgraded to 0.5.x, this library will be modified accordingly and versioned as 0.5.x
 
 ### How do I use VaultSharp? Give me a code example
 
