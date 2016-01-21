@@ -13,7 +13,7 @@ VaultSharp is a C# Library that can be used in any .NET application to interact 
 * Instantiate a IVaultClient as follows:
 
 ```cs
-// instantiate VaultClient
+// instantiate VaultClient with one of the various authentication options available.
 IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort, authenticationInfo);
 
 // use it for operations.
@@ -21,10 +21,32 @@ var consulCredentials = await vaultClient.ConsulGenerateDynamicCredentialsAsync(
 var consulToken = consulCredentials.Data.Token;
 ```
 
+### The fundamental READ and WRITE methods
+
+* The generic READ/WRITE Apis of vault allow you to do a variety of operations.
+* A lot or almost all of these operations are supported in a strongly typed manner with dedicated methods for them in this library.
+* However, for some reason, if you want to use the generic READ and WRITE methods of Vault, you can use them as follows:
+
+```cs
+var path = "cubbyhole/foo/test";
+
+var secretData = new Dictionary<string, object>
+{
+    {"1", "1"},
+    {"2", 2},
+    {"3", false},
+};
+
+await _authenticatedClient.WriteSecretAsync(path, secretData);
+
+var secret = await _authenticatedClient.ReadSecretAsync(path);
+var data = secret.Data; // this is the original dictionary back.
+```
+
 ### Authentication Backends
 
 * VaultSharp supports all the authentication backends supported by the Vault Service 0.4.0
-* Here is a sample to instantiate the vault client with each of the authentication types.
+* Here is a sample to instantiate the vault client with each of the authentication backends.
 
 #### App Id Authentication Backend
 
@@ -95,5 +117,45 @@ IAuthenticationInfo usernamePasswordAuthenticationInfo = new UsernamePasswordAut
 IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort, usernamePasswordAuthenticationInfo);
 
 // any operations done using the vaultClient will use the vault token/policies mapped to the username/password.
+
+```
+
+### Secret Backends
+
+* VaultSharp supports all the secret backends supported by the Vault Service 0.4.0
+* Here is a sample to instantiate the vault client with each of the secret backends.
+
+#### AWS Secret Backend
+
+##### Configuring an AWS Backend
+
+```cs
+// mount the backend
+await vaultClient.MountSecretBackendAsync(new SecretBackend
+{
+    BackendType = SecretBackendType.AWS
+});
+
+// configure root credentials to create/manage roles and generate credentials
+await vaultClient.AWSConfigureRootCredentialsAsync(new AWSRootCredentials
+{
+    AccessKey = "access-key",
+    SecretKey = "secret-key",
+    Region = "region"
+});
+
+// create a named role with the IAM policy
+await vaultClient.AWSWriteNamedRoleAsync("myAwsRole", new AWSRoleDefinition
+{
+    Policy = "iam-policy-contents"
+});
+```
+
+##### Generate AWS Credentials
+
+```cs
+var awsCredentials = await vaultClient.AWSGenerateDynamicCredentialsAsync("myAwsRole");
+var accessKey = awsCredentials.Data.AccessKey;
+var secretKey = awsCredentials.Data.SecretKey;
 
 ```
