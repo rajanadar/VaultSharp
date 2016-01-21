@@ -785,3 +785,10 @@ await vaultClient.DeletePolicyAsync(newPolicy.Name);
 
 ```
 
+### In Conclusion
+
+* If the above documentation doesn't help you, feel free to create an issue or email me. https://github.com/rajanadar/VaultSharp/issues/new
+* Also, the Intellisense on IVaultClient class should help. I have tried to add a lot of documentation.
+
+Happy Coding folks!
+
