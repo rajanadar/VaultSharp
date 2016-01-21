@@ -341,3 +341,53 @@ var data = readValues.Data; // gives back the dictionary
 await vaultClient.GenericDeleteSecretAsync(path);
 
 ```
+#### MySql Secret Backend
+
+##### Configuring a MySql Backend
+
+```cs
+// mount the backend
+var mountPoint = "mysql" + Guid.NewGuid();
+var backend = new SecretBackend
+{
+    MountPoint = mountPoint,
+    BackendType = SecretBackendType.MySql,
+};
+
+await vaultClient.MountSecretBackendAsync(backend);
+
+// configure root connection info to create/manage roles and generate credentials
+await vaultClient.MySqlConfigureConnectionAsync(new MySqlConnectionInfo()
+{
+    DataSourceName = "root:root@tcp(127.0.0.1:3306)/"
+}, mountPoint);
+
+var sql = "CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT SELECT ON *.* TO '{{name}}'@'%';";
+
+await vaultClient.MySqlConfigureCredentialLeaseSettingsAsync(new CredentialLeaseSettings()
+{
+    LeaseDuration = "1h",
+    MaximumLeaseDuration = "2h"
+}, mountPoint);
+
+// create a named role
+var mySqlRole = "mysql-readonly-role";
+
+await vaultClient.MySqlWriteNamedRoleAsync(mySqlRole, new MySqlRoleDefinition()
+{
+    Sql = sql
+}, mountPoint);
+
+var readRole = await vaultClient.MySqlReadNamedRoleAsync(mySqlRole, mountPoint);
+var roleSql = readRole.Data.Sql;
+```
+
+##### Generate MySql Credentials
+
+```cs
+var mySqlCredentials = await vaultClient.MySqlGenerateDynamicCredentialsAsync(mySqlRole, backend.MountPoint);
+
+var mySqlUsername = mySqlCredentials.Data.Username;
+var mySqlPassword = mySqlCredentials.Data.Password;
+
+```
