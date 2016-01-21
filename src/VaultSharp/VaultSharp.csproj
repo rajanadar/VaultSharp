@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8EFE7F89-F83F-4E35-8736-C3E86611D138}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>VaultSharp</RootNamespace>
+    <AssemblyName>VaultSharp</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Backends\Audit\Models\AuditBackendType.cs" />
+    <Compile Include="Backends\Authentication\Models\AuthenticationBackendType.cs" />
+    <Compile Include="Backends\Authentication\Models\Token\TokenCreationOptions.cs" />
+    <Compile Include="Backends\Secret\Models\AWS\AWSRoleDefinition.cs" />
+    <Compile Include="Backends\Secret\Models\AWS\AWSRootCredentials.cs" />
+    <Compile Include="Backends\Secret\Models\Cassandra\CassandraConnectionInfo.cs" />
+    <Compile Include="Backends\Secret\Models\Cassandra\CassandraRoleDefinition.cs" />
+    <Compile Include="Backends\Secret\Models\Consul\ConsulAccessInfo.cs" />
+    <Compile Include="Backends\Secret\Models\Consul\ConsulCredentials.cs" />
+    <Compile Include="Backends\Secret\Models\Consul\ConsulRoleDefinition.cs" />
+    <Compile Include="Backends\Secret\Models\Consul\ConsulTokenType.cs" />
+    <Compile Include="Backends\Secret\Models\CredentialLeaseSettings.cs" />
+    <Compile Include="Backends\Secret\Models\MySql\MySqlRoleDefinition.cs" />
+    <Compile Include="Backends\Secret\Models\MySql\MySqlConnectionInfo.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\CertificateEndpointOptions.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\NewCertificateData.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\IntermediateCertificateData.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\RootCertificateData.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\CertificateData.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\CertificateCredentialsRequestOptions.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\CertificateFormat.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\CertificateRequestOptions.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\RootCertificateRequestOptions.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\IntermediateCertificateRequestOptions.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\CertificateKeyType.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\CertificateRoleDefinition.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\CertificateSigningRequestOptions.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\NewCertificateSigningRequestOptions.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\VerbatimCertificateSigningRequestOptions.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\RevocationData.cs" />
+    <Compile Include="Backends\Secret\Models\PostgreSql\PostgreSqlRoleDefinition.cs" />
+    <Compile Include="Backends\Secret\Models\PostgreSql\PostgreSqlConnectionInfo.cs" />
+    <Compile Include="Backends\Secret\Models\SecretBackendDefaultMountPoints.cs" />
+    <Compile Include="Backends\Secret\Models\SSH\SSHDynamicCredentials.cs" />
+    <Compile Include="Backends\Secret\Models\SSH\SSHOTPCredentials.cs" />
+    <Compile Include="Backends\Secret\Models\SSH\SSHOTPVerificationData.cs" />
+    <Compile Include="Backends\Secret\Models\SSH\SSHRoleData.cs" />
+    <Compile Include="Backends\Secret\Models\SSH\SSHDynamicRoleDefinition.cs" />
+    <Compile Include="Backends\Secret\Models\SSH\SSHKeyType.cs" />
+    <Compile Include="Backends\Secret\Models\SSH\SSHCredentials.cs" />
+    <Compile Include="Backends\Secret\Models\SSH\SSHOTPRoleDefinition.cs" />
+    <Compile Include="Backends\Secret\Models\SSH\SSHRoleDefinition.cs" />
+    <Compile Include="Backends\Secret\Models\Transit\PlainTextData.cs" />
+    <Compile Include="Backends\Secret\Models\Transit\CipherTextData.cs" />
+    <Compile Include="Backends\Secret\Models\Transit\TransitKeyData.cs" />
+    <Compile Include="Backends\Secret\Models\Transit\TransitEncryptionKeyInfo.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\CertificateCredentials.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\RawCertificateSigningRequestData.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\CertificateEndpointData.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\ExpiryData.cs" />
+    <Compile Include="Infrastructure\JsonConverters\SSHCredentialsJsonConverter.cs" />
+    <Compile Include="Infrastructure\JsonConverters\SSHRoleDefinitionJsonConverter.cs" />
+    <Compile Include="Infrastructure\JsonConverters\AuthenticationBackendTypeJsonConverter.cs" />
+    <Compile Include="Infrastructure\JsonConverters\AuditBackendTypeJsonConverter.cs" />
+    <Compile Include="Infrastructure\JsonConverters\RawDataJsonConverter.cs" />
+    <Compile Include="Infrastructure\JsonConverters\SecretBackendTypeJsonConverter.cs" />
+    <Compile Include="Infrastructure\JsonConverters\AuditBackendJsonConverter.cs" />
+    <Compile Include="Backends\Audit\Models\Custom\CustomAuditBackend.cs" />
+    <Compile Include="Backends\Audit\Models\File\FileAuditBackend.cs" />
+    <Compile Include="Backends\Audit\Models\File\FileAuditBackendOptions.cs" />
+    <Compile Include="Backends\Audit\Models\Syslog\SyslogAuditBackend.cs" />
+    <Compile Include="Backends\Audit\Models\Syslog\SyslogAuditBackendOptions.cs" />
+    <Compile Include="Backends\Authentication\Models\AppId\AppIdAuthenticationInfo.cs" />
+    <Compile Include="Backends\Authentication\Models\Certificate\CertificateAuthenticationInfo.cs" />
+    <Compile Include="Backends\Authentication\Models\Custom\CustomAuthenticationInfo.cs" />
+    <Compile Include="Backends\Authentication\Models\GitHub\GitHubAuthenticationInfo.cs" />
+    <Compile Include="Backends\Authentication\Models\LDAP\LDAPAuthenticationInfo.cs" />
+    <Compile Include="Backends\Authentication\Models\Token\TokenAuthenticationInfo.cs" />
+    <Compile Include="Backends\Authentication\Models\UsernamePassword\UsernamePasswordAuthenticationInfo.cs" />
+    <Compile Include="Backends\Authentication\Providers\AppId\AppIdAuthenticationProvider.cs" />
+    <Compile Include="Backends\Authentication\Providers\AuthenticationProviderFactory.cs" />
+    <Compile Include="Backends\Secret\Models\AWS\AWSCredentials.cs" />
+    <Compile Include="Backends\Authentication\Providers\Certificate\CertificateAuthenticationProvider.cs" />
+    <Compile Include="Backends\Authentication\Providers\Custom\CustomAuthenticationProvider.cs" />
+    <Compile Include="Backends\Authentication\Providers\GitHub\GitHubAuthenticationProvider.cs" />
+    <Compile Include="Backends\Secret\Models\SecretBackendType.cs" />
+    <Compile Include="Backends\System\Models\AuthorizationInfo.cs" />
+    <Compile Include="Backends\System\Models\RawData.cs" />
+    <Compile Include="Infrastructure\Validation\Checker.cs" />
+    <Compile Include="DataAccess\HttpDataAccessManager.cs" />
+    <Compile Include="DataAccess\IDataAccessManager.cs" />
+    <Compile Include="Backends\Authentication\Providers\LDAP\LDAPAuthenticationProvider.cs" />
+    <Compile Include="Backends\Audit\Models\AuditBackend.cs" />
+    <Compile Include="Backends\System\Models\HealthStatus.cs" />
+    <Compile Include="Backends\Authentication\Models\IAuthenticationInfo.cs" />
+    <Compile Include="Backends\Authentication\Providers\IAuthenticationProvider.cs" />
+    <Compile Include="Backends\System\Models\EncryptionKeyStatus.cs" />
+    <Compile Include="Backends\System\Models\Leader.cs" />
+    <Compile Include="Backends\System\Models\MasterCredentials.cs" />
+    <Compile Include="Backends\System\Models\RekeyProgress.cs" />
+    <Compile Include="IVaultClient.cs" />
+    <Compile Include="Backends\Authentication\Models\AuthenticationBackend.cs" />
+    <Compile Include="Backends\System\Models\Policy.cs" />
+    <Compile Include="Backends\Secret\Models\SecretBackend.cs" />
+    <Compile Include="Backends\Secret\Models\SecretBackendConfiguration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Backends\System\Models\RekeyStatus.cs" />
+    <Compile Include="Backends\System\Models\SealStatus.cs" />
+    <Compile Include="Backends\System\Models\Secret.cs" />
+    <Compile Include="Backends\Authentication\Providers\Token\TokenAuthenticationProvider.cs" />
+    <Compile Include="Backends\Secret\Models\UsernamePasswordCredentials.cs" />
+    <Compile Include="Backends\Authentication\Providers\UsernamePassword\UsernamePasswordAuthenticationProvider.cs" />
+    <Compile Include="Backends\Authentication\Models\Token\TokenInfo.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\RawCertificateData.cs" />
+    <Compile Include="VaultClientFactory.cs" />
+    <Compile Include="VaultClient.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
