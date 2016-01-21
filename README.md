@@ -740,3 +740,48 @@ Assert.Equal(audits.Count, oldAudits2.Count);
 
 ```
 
+### More Administrative & Other operations
+
+* VaultSharp supports all the operations supported by the Service.
+* These include administrative ones like Inititalize, Unseal, Seal etc.
+* Here are some samples.
+
+```cs
+
+await noAuthInfoClient.InitializeAsync(5, 3, null);
+await vaultClient.SealAsync();
+
+await vaultClient.UnsealAsync(masterKey); // need to run this in a loop for all master keys
+await vaultClient.UnsealQuickAsync(allMasterKeys);  // unseals the Vault in 1 shot.
+
+await vaultClient.GetSealStatusAsync();
+
+// all policy operations
+
+// write a new policy
+var newPolicy = new Policy
+{
+    Name = "gubdu",
+    Rules = "path \"sys/*\" {  policy = \"deny\" }"
+};
+
+await vaultClient.WritePolicyAsync(newPolicy);
+
+// get new policy
+var newPolicyGet = await vaultClient.GetPolicyAsync(newPolicy.Name);
+Assert.Equal(newPolicy.Rules, newPolicyGet.Rules);
+
+// write updates to a new policy
+newPolicy.Rules = "path \"sys/*\" {  policy = \"read\" }";
+
+await vaultClient.WritePolicyAsync(newPolicy);
+
+// get new policy
+newPolicyGet = await vaultClient.GetPolicyAsync(newPolicy.Name);
+Assert.Equal(newPolicy.Rules, newPolicyGet.Rules);
+
+// delete policy
+await vaultClient.DeletePolicyAsync(newPolicy.Name);
+
+```
+
