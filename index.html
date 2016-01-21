@@ -32,6 +32,131 @@
 <a id="documentation-site-httprajanadargithubiovaultsharp" class="anchor" href="#documentation-site-httprajanadargithubiovaultsharp" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Documentation Site: <a href="http://rajanadar.github.io/VaultSharp/">http://rajanadar.github.io/VaultSharp/</a>
 </h2>
 
+<p><strong>Table of Contents</strong>  <em>generated with <a href="http://doctoc.herokuapp.com/">DocToc</a></em></p>
+
+<ul>
+<li>
+<a href="#">VaultSharp</a>
+
+<ul>
+<li><a href="#">Nuget Package: https://www.nuget.org/packages/VaultSharp/</a></li>
+<li>
+<a href="#">Documentation Site: http://rajanadar.github.io/VaultSharp/</a>
+
+<ul>
+<li><a href="#">What is VaultSharp?</a></li>
+<li><a href="#">VaultSharp 0.4.x should completely support Vault Service 0.4.0</a></li>
+<li><a href="#">What is the deal with the Versioning of VaultSharp? (Y U NO 1.0.0)</a></li>
+<li><a href="#">How do I use VaultSharp? Give me a code example</a></li>
+<li><a href="#">Does VaultSharp support all the Authentication, Secret and Audit Backends?</a></li>
+<li><a href="#">VaultSharp and 100% Consul Support</a></li>
+<li><a href="#">The fundamental READ and WRITE operations on a Vault</a></li>
+<li><a href="#">Can I use it in my PowerShell Automation?</a></li>
+<li><a href="#">All the methods are async. How do I use them synchronously?</a></li>
+<li>
+<a href="#">Authentication Backends (All of them are supported)</a>
+
+<ul>
+<li><a href="#">App Id Authentication Backend</a></li>
+<li><a href="#">GitHub Authentication Backend</a></li>
+<li><a href="#">LDAP Authentication Backend</a></li>
+<li><a href="#">GitHub Authentication Backend</a></li>
+<li><a href="#">Certificate (TLS) Authentication Backend</a></li>
+<li><a href="#">Token Authentication Backend</a></li>
+<li><a href="#">Username and Password Authentication Backend</a></li>
+</ul>
+</li>
+<li>
+<a href="#">Secret Backends (All of them are supported)</a>
+
+<ul>
+<li>
+<a href="#">AWS Secret Backend</a>
+
+<ul>
+<li><a href="#">Configuring an AWS Backend</a></li>
+<li><a href="#">Generate AWS Credentials</a></li>
+</ul>
+</li>
+<li>
+<a href="#">Cassandra Secret Backend</a>
+
+<ul>
+<li><a href="#">Configuring a Cassandra Backend</a></li>
+<li><a href="#">Generate Cassandra Credentials</a></li>
+</ul>
+</li>
+<li>
+<a href="#">Consul Secret Backend</a>
+
+<ul>
+<li><a href="#">Configuring a Consul Backend</a></li>
+<li><a href="#">Generate Consul Credentials</a></li>
+<li><a href="#">Deleting Role and Unmounting the Consul backend</a></li>
+</ul>
+</li>
+<li><a href="#">Cubbyhole Secret Backend</a></li>
+<li><a href="#">Generic Secret Backend</a></li>
+<li>
+<a href="#">MySql Secret Backend</a>
+
+<ul>
+<li><a href="#">Configuring a MySql Backend</a></li>
+<li><a href="#">Generate MySql Credentials</a></li>
+</ul>
+</li>
+<li>
+<a href="#">PKI (Certificates) Secret Backend</a>
+
+<ul>
+<li><a href="#">Configuring a PKI Backend</a></li>
+<li><a href="#">Write/Read PKI Role</a></li>
+<li><a href="#">Generate PKI Credentials</a></li>
+</ul>
+</li>
+<li>
+<a href="#">PostgreSql Secret Backend</a>
+
+<ul>
+<li><a href="#">Configuring a PostgreSql Backend</a></li>
+<li><a href="#">Generate PostgreSql Credentials</a></li>
+</ul>
+</li>
+<li>
+<a href="#">SSH Secret Backend</a>
+
+<ul>
+<li><a href="#">Configuring a SSH Backend</a></li>
+<li><a href="#">Generate SSH Credentials</a></li>
+</ul>
+</li>
+<li>
+<a href="#">Transit Secret Backend</a>
+
+<ul>
+<li><a href="#">Configuring a Transit Backend</a></li>
+<li><a href="#">Encrypt/Decrypt text</a></li>
+<li><a href="#">Other Transit Operations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#">Audit Backends (All of them are supported)</a>
+
+<ul>
+<li><a href="#">File Audit Backend</a></li>
+<li><a href="#">Syslog Audit Backend</a></li>
+</ul>
+</li>
+<li><a href="#">More Administrative &amp; Other operations</a></li>
+<li><a href="#">In Conclusion</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
 <h3>
 <a id="what-is-vaultsharp" class="anchor" href="#what-is-vaultsharp" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What is VaultSharp?</h3>
 
@@ -41,6 +166,9 @@
 <li>This library supports all the Vault Service Apis documented here: <a href="https://www.vaultproject.io/docs/http/">https://www.vaultproject.io/docs/http/</a>
 </li>
 </ul>
+
+<h3>
+<a id="vaultsharp-04x-should-completely-support-vault-service-040" class="anchor" href="#vaultsharp-04x-should-completely-support-vault-service-040" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>VaultSharp 0.4.x should completely support Vault Service 0.4.0</h3>
 
 <h3>
 <a id="what-is-the-deal-with-the-versioning-of-vaultsharp-y-u-no-100" class="anchor" href="#what-is-the-deal-with-the-versioning-of-vaultsharp-y-u-no-100" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What is the deal with the Versioning of VaultSharp? (Y U NO 1.0.0)</h3>
@@ -71,6 +199,15 @@ IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort
 <span class="pl-k">var</span> consulToken = consulCredentials.Data.Token;</pre></div>
 
 <h3>
+<a id="does-vaultsharp-support-all-the-authentication-secret-and-audit-backends" class="anchor" href="#does-vaultsharp-support-all-the-authentication-secret-and-audit-backends" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Does VaultSharp support all the Authentication, Secret and Audit Backends?</h3>
+
+<ul>
+<li>YES</li>
+<li>All Authentication, Secret and Audit backends are supported by this library.</li>
+<li>All administrative (seal, unseal, write policy), end-user (generate credentials) and unauthenticated methods (get status, get root CA) are supported by this client.</li>
+</ul>
+
+<h3>
 <a id="vaultsharp-and-100-consul-support" class="anchor" href="#vaultsharp-and-100-consul-support" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>VaultSharp and 100% Consul Support</h3>
 
 <ul>
@@ -97,9 +234,9 @@ IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort
     {<span class="pl-s"><span class="pl-pds">"</span>3<span class="pl-pds">"</span></span>, <span class="pl-c1">false</span>},
 };
 
-<span class="pl-k">await</span> _authenticatedClient.WriteSecretAsync(path, secretData);
+<span class="pl-k">await</span> vaultClient.WriteSecretAsync(path, secretData);
 
-<span class="pl-k">var</span> secret = <span class="pl-k">await</span> _authenticatedClient.ReadSecretAsync(path);
+<span class="pl-k">var</span> secret = <span class="pl-k">await</span> vaultClient.ReadSecretAsync(path);
 <span class="pl-k">var</span> data = secret.Data; <span class="pl-c">// this is the original dictionary back.</span></pre></div>
 
 <h3>
@@ -346,6 +483,488 @@ Assert.Equal(ConsulTokenType.management, readRole.Data.TokenType);</pre></div>
 
 <span class="pl-k">await</span> vaultClient.CubbyholeDeleteSecretAsync(path);
 </pre></div>
+
+<h4>
+<a id="generic-secret-backend" class="anchor" href="#generic-secret-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Generic Secret Backend</h4>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> mountpoint = <span class="pl-s"><span class="pl-pds">"</span>secret<span class="pl-pds">"</span></span> + Guid.NewGuid();
+
+<span class="pl-k">var</span> path = mountpoint + <span class="pl-s"><span class="pl-pds">"</span>/foo1/blah2<span class="pl-pds">"</span></span>;
+<span class="pl-k">var</span> values = <span class="pl-k">new</span> Dictionary&lt;<span class="pl-k">string</span>, <span class="pl-k">object</span>&gt;
+{
+    {<span class="pl-s"><span class="pl-pds">"</span>foo<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>bar<span class="pl-pds">"</span></span>},
+    {<span class="pl-s"><span class="pl-pds">"</span>foo2<span class="pl-pds">"</span></span>, <span class="pl-c1">345</span> }
+};
+
+<span class="pl-k">await</span>
+    vaultClient.MountSecretBackendAsync(<span class="pl-k">new</span> SecretBackend()
+    {
+        BackendType = SecretBackendType.Generic,
+        MountPoint = mountpoint
+    });
+
+<span class="pl-k">await</span> vaultClient.GenericWriteSecretAsync(path, values);
+
+<span class="pl-k">var</span> readValues = <span class="pl-k">await</span> vaultClient.GenericReadSecretAsync(path);
+<span class="pl-k">var</span> data = readValues.Data; <span class="pl-c">// gives back the dictionary</span>
+
+<span class="pl-k">await</span> vaultClient.GenericDeleteSecretAsync(path);
+</pre></div>
+
+<h4>
+<a id="mysql-secret-backend" class="anchor" href="#mysql-secret-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>MySql Secret Backend</h4>
+
+<h5>
+<a id="configuring-a-mysql-backend" class="anchor" href="#configuring-a-mysql-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuring a MySql Backend</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">// mount the backend</span>
+<span class="pl-k">var</span> mountPoint = <span class="pl-s"><span class="pl-pds">"</span>mysql<span class="pl-pds">"</span></span> + Guid.NewGuid();
+<span class="pl-k">var</span> backend = <span class="pl-k">new</span> SecretBackend
+{
+    MountPoint = mountPoint,
+    BackendType = SecretBackendType.MySql,
+};
+
+<span class="pl-k">await</span> vaultClient.MountSecretBackendAsync(backend);
+
+<span class="pl-c">// configure root connection info to create/manage roles and generate credentials</span>
+<span class="pl-k">await</span> vaultClient.MySqlConfigureConnectionAsync(<span class="pl-k">new</span> MySqlConnectionInfo()
+{
+    DataSourceName = <span class="pl-s"><span class="pl-pds">"</span>root:root@tcp(127.0.0.1:3306)/<span class="pl-pds">"</span></span>
+}, mountPoint);
+
+<span class="pl-k">var</span> sql = <span class="pl-s"><span class="pl-pds">"</span>CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT SELECT ON *.* TO '{{name}}'@'%';<span class="pl-pds">"</span></span>;
+
+<span class="pl-k">await</span> vaultClient.MySqlConfigureCredentialLeaseSettingsAsync(<span class="pl-k">new</span> CredentialLeaseSettings()
+{
+    LeaseDuration = <span class="pl-s"><span class="pl-pds">"</span>1h<span class="pl-pds">"</span></span>,
+    MaximumLeaseDuration = <span class="pl-s"><span class="pl-pds">"</span>2h<span class="pl-pds">"</span></span>
+}, mountPoint);
+
+<span class="pl-c">// create a named role</span>
+<span class="pl-k">var</span> mySqlRole = <span class="pl-s"><span class="pl-pds">"</span>mysql-readonly-role<span class="pl-pds">"</span></span>;
+
+<span class="pl-k">await</span> vaultClient.MySqlWriteNamedRoleAsync(mySqlRole, <span class="pl-k">new</span> MySqlRoleDefinition()
+{
+    Sql = sql
+}, mountPoint);
+
+<span class="pl-k">var</span> readRole = <span class="pl-k">await</span> vaultClient.MySqlReadNamedRoleAsync(mySqlRole, mountPoint);
+<span class="pl-k">var</span> roleSql = readRole.Data.Sql;</pre></div>
+
+<h5>
+<a id="generate-mysql-credentials" class="anchor" href="#generate-mysql-credentials" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Generate MySql Credentials</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> mySqlCredentials = <span class="pl-k">await</span> vaultClient.MySqlGenerateDynamicCredentialsAsync(mySqlRole, backend.MountPoint);
+
+<span class="pl-k">var</span> mySqlUsername = mySqlCredentials.Data.Username;
+<span class="pl-k">var</span> mySqlPassword = mySqlCredentials.Data.Password;
+</pre></div>
+
+<h4>
+<a id="pki-certificates-secret-backend" class="anchor" href="#pki-certificates-secret-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>PKI (Certificates) Secret Backend</h4>
+
+<h5>
+<a id="configuring-a-pki-backend" class="anchor" href="#configuring-a-pki-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuring a PKI Backend</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">// mount the backend</span>
+<span class="pl-k">var</span> mountpoint = <span class="pl-s"><span class="pl-pds">"</span>pki<span class="pl-pds">"</span></span> + Guid.NewGuid();
+<span class="pl-k">var</span> backend = <span class="pl-k">new</span> SecretBackend
+{
+    BackendType = SecretBackendType.PKI,
+    MountPoint = mountpoint
+};
+
+<span class="pl-k">await</span> vaultClient.MountSecretBackendAsync(backend);
+
+<span class="pl-c">// write expiry</span>
+<span class="pl-k">var</span> expiry = <span class="pl-s"><span class="pl-pds">"</span>124h<span class="pl-pds">"</span></span>;
+<span class="pl-k">var</span> commonName = <span class="pl-s"><span class="pl-pds">"</span>blah.example.com<span class="pl-pds">"</span></span>;
+
+<span class="pl-k">await</span> vaultClient.PKIWriteCRLExpirationAsync(expiry, mountpoint);
+
+<span class="pl-k">var</span> readExpiry = <span class="pl-k">await</span> vaultClient.PKIReadCRLExpirationAsync(mountpoint);
+Assert.Equal(expiry, readExpiry.Data.Expiry);
+
+<span class="pl-c">// read certificate in various ways</span>
+<span class="pl-k">var</span> nocaCert = <span class="pl-k">await</span> vaultClient.PKIReadCACertificateAsync(CertificateFormat.pem, mountpoint);
+Assert.Null(nocaCert.CertificateContent);
+
+<span class="pl-c">// generate root certificate</span>
+<span class="pl-k">var</span> rootCertificateWithoutPrivateKey =
+    <span class="pl-k">await</span> vaultClient.PKIGenerateRootCACertificateAsync(<span class="pl-k">new</span> RootCertificateRequestOptions
+    {
+        CommonName = commonName,
+        ExportPrivateKey = <span class="pl-c1">false</span>
+    }, mountpoint);
+
+Assert.Null(rootCertificateWithoutPrivateKey.Data.PrivateKey);
+
+<span class="pl-k">var</span> rootCertificate =
+    <span class="pl-k">await</span> vaultClient.PKIGenerateRootCACertificateAsync(<span class="pl-k">new</span> RootCertificateRequestOptions
+    {
+        CommonName = commonName,
+        ExportPrivateKey = <span class="pl-c1">true</span>
+    }, mountpoint);
+
+Assert.NotNull(rootCertificate.Data.PrivateKey);
+
+<span class="pl-c">// read certificate in various ways</span>
+<span class="pl-k">var</span> caCert = <span class="pl-k">await</span> vaultClient.PKIReadCACertificateAsync(CertificateFormat.pem, mountpoint);
+Assert.NotNull(caCert.CertificateContent);
+
+<span class="pl-k">var</span> caReadCert = <span class="pl-k">await</span> vaultClient.PKIReadCertificateAsync(<span class="pl-s"><span class="pl-pds">"</span>ca<span class="pl-pds">"</span></span>, mountpoint);
+Assert.Equal(caCert.CertificateContent, caReadCert.Data.CertificateContent);
+
+<span class="pl-k">var</span> caSerialNumberReadCert = <span class="pl-k">await</span> vaultClient.PKIReadCertificateAsync(rootCertificate.Data.SerialNumber, mountpoint);
+Assert.Equal(caCert.CertificateContent, caSerialNumberReadCert.Data.CertificateContent);
+
+<span class="pl-k">var</span> crlCert = <span class="pl-k">await</span> vaultClient.PKIReadCertificateAsync(<span class="pl-s"><span class="pl-pds">"</span>crl<span class="pl-pds">"</span></span>, mountpoint);
+Assert.NotNull(crlCert.Data.CertificateContent);
+
+<span class="pl-k">var</span> crlCert2 = <span class="pl-k">await</span> vaultClient.PKIReadCRLCertificateAsync(CertificateFormat.pem, mountpoint);
+Assert.NotNull(crlCert2.CertificateContent);
+
+<span class="pl-c">// write and read certificate endpoints</span>
+
+<span class="pl-k">var</span> crlEndpoint = _vaultUri.AbsoluteUri + <span class="pl-s"><span class="pl-pds">"</span>/v1/<span class="pl-pds">"</span></span> + mountpoint + <span class="pl-s"><span class="pl-pds">"</span>/crl<span class="pl-pds">"</span></span>;
+<span class="pl-k">var</span> issuingEndpoint = _vaultUri.AbsoluteUri + <span class="pl-s"><span class="pl-pds">"</span>/v1/<span class="pl-pds">"</span></span> + mountpoint + <span class="pl-s"><span class="pl-pds">"</span>/ca<span class="pl-pds">"</span></span>;
+
+<span class="pl-k">var</span> endpoints = <span class="pl-k">new</span> CertificateEndpointOptions
+{
+    CRLDistributionPointEndpoints = <span class="pl-k">string</span>.Join(<span class="pl-s"><span class="pl-pds">"</span>,<span class="pl-pds">"</span></span>, <span class="pl-k">new</span> List&lt;<span class="pl-k">string</span>&gt; { crlEndpoint }),
+    IssuingCertificateEndpoints = <span class="pl-k">string</span>.Join(<span class="pl-s"><span class="pl-pds">"</span>,<span class="pl-pds">"</span></span>, <span class="pl-k">new</span> List&lt;<span class="pl-k">string</span>&gt; { issuingEndpoint }),
+};
+
+<span class="pl-k">await</span> vaultClient.PKIWriteCertificateEndpointsAsync(endpoints, mountpoint);
+
+<span class="pl-k">var</span> readEndpoints = <span class="pl-k">await</span> vaultClient.PKIReadCertificateEndpointsAsync(mountpoint);
+
+Assert.Equal(crlEndpoint, readEndpoints.Data.CRLDistributionPointEndpoints.First());
+Assert.Equal(issuingEndpoint, readEndpoints.Data.IssuingCertificateEndpoints.First());
+
+<span class="pl-c">// rotate CRL</span>
+<span class="pl-k">var</span> rotate = <span class="pl-k">await</span> vaultClient.PKIRotateCRLAsync(mountpoint);
+Assert.True(rotate);
+
+<span class="pl-k">await</span> vaultClient.RevokeSecretAsync(rootCertificateWithoutPrivateKey.LeaseId);</pre></div>
+
+<h5>
+<a id="writeread-pki-role" class="anchor" href="#writeread-pki-role" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Write/Read PKI Role</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">// Create new Role</span>
+<span class="pl-k">var</span> roleName = Guid.NewGuid().ToString();
+
+<span class="pl-k">var</span> role = <span class="pl-k">new</span> CertificateRoleDefinition
+{
+    AllowedDomains = <span class="pl-s"><span class="pl-pds">"</span>example.com<span class="pl-pds">"</span></span>,
+    AllowSubdomains = <span class="pl-c1">true</span>,
+    MaximumTimeToLive = <span class="pl-s"><span class="pl-pds">"</span>72h<span class="pl-pds">"</span></span>,
+};
+
+<span class="pl-k">await</span> vaultClient.PKIWriteNamedRoleAsync(roleName, role, mountpoint);
+
+<span class="pl-k">var</span> readRole = <span class="pl-k">await</span> vaultClient.PKIReadNamedRoleAsync(roleName, mountpoint);
+Assert.Equal(role.AllowedDomains, readRole.Data.AllowedDomains);
+</pre></div>
+
+<h5>
+<a id="generate-pki-credentials" class="anchor" href="#generate-pki-credentials" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Generate PKI Credentials</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> certificateCredentials =
+    <span class="pl-k">await</span>
+        vaultClient.PKIGenerateDynamicCredentialsAsync(roleName,
+            <span class="pl-k">new</span> CertificateCredentialsRequestOptions
+            {
+                CommonName = commonName,
+                CertificateFormat = CertificateFormat.pem
+            }, mountpoint);
+
+<span class="pl-k">var</span> privateKey = certificateCredentials.Data.PrivateKey;
+</pre></div>
+
+<h4>
+<a id="postgresql-secret-backend" class="anchor" href="#postgresql-secret-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>PostgreSql Secret Backend</h4>
+
+<h5>
+<a id="configuring-a-postgresql-backend" class="anchor" href="#configuring-a-postgresql-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuring a PostgreSql Backend</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">// mount the backend</span>
+<span class="pl-k">var</span> mountPoint = <span class="pl-s"><span class="pl-pds">"</span>postgresql<span class="pl-pds">"</span></span> + Guid.NewGuid();
+<span class="pl-k">var</span> backend = <span class="pl-k">new</span> SecretBackend
+{
+    MountPoint = mountPoint,
+    BackendType = SecretBackendType.PostgreSql,
+};
+
+<span class="pl-k">await</span> vaultClient.MountSecretBackendAsync(backend);
+
+<span class="pl-k">await</span> vaultClient.PostgreSqlConfigureCredentialLeaseSettingsAsync(<span class="pl-k">new</span> CredentialLeaseSettings()
+{
+    LeaseDuration = <span class="pl-s"><span class="pl-pds">"</span>1h<span class="pl-pds">"</span></span>,
+    MaximumLeaseDuration = <span class="pl-s"><span class="pl-pds">"</span>2h<span class="pl-pds">"</span></span>
+}, mountPoint);
+
+<span class="pl-c">// configure root connection info to create/manage roles and generate credentials</span>
+<span class="pl-k">await</span> vaultClient.PostgreSqlConfigureConnectionAsync(<span class="pl-k">new</span> PostgreSqlConnectionInfo
+{
+    ConnectionString = <span class="pl-s"><span class="pl-pds">"</span>con_string<span class="pl-pds">"</span></span>,
+    MaximumOpenConnections = <span class="pl-c1">5</span>
+}, mountPoint);
+
+<span class="pl-k">var</span> sql = <span class="pl-s"><span class="pl-pds">"</span>CREATE ROLE <span class="pl-cce">\"</span>{{name}}<span class="pl-cce">\"</span> WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT SELECT ON ALL TABLES IN SCHEMA public TO <span class="pl-cce">\"</span>{{name}}<span class="pl-cce">\"</span>;<span class="pl-pds">"</span></span>;
+
+<span class="pl-c">// create a named role</span>
+<span class="pl-k">var</span> postgreSqlRole = <span class="pl-s"><span class="pl-pds">"</span>postgresql-readonly-role<span class="pl-pds">"</span></span>;
+
+<span class="pl-k">await</span> vaultClient.PostgreSqlWriteNamedRoleAsync(postgreSqlRole, <span class="pl-k">new</span> PostgreSqlRoleDefinition()
+{
+    Sql = sql
+}, mountPoint);
+
+<span class="pl-k">var</span> readRole = <span class="pl-k">await</span> vaultClient.PostgreSqlReadNamedRoleAsync(postgreSqlRole, mountPoint);
+Assert.Equal(sql, readRole.Data.Sql);</pre></div>
+
+<h5>
+<a id="generate-postgresql-credentials" class="anchor" href="#generate-postgresql-credentials" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Generate PostgreSql Credentials</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> postgreSqlCredentials = <span class="pl-k">await</span> vaultClient.PostgreSqlGenerateDynamicCredentialsAsync(postgreSqlRole, backend.MountPoint);
+
+Assert.NotNull(postgreSqlCredentials.LeaseId);
+Assert.NotNull(postgreSqlCredentials.Data.Username);
+Assert.NotNull(postgreSqlCredentials.Data.Password);
+</pre></div>
+
+<h4>
+<a id="ssh-secret-backend" class="anchor" href="#ssh-secret-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>SSH Secret Backend</h4>
+
+<h5>
+<a id="configuring-a-ssh-backend" class="anchor" href="#configuring-a-ssh-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuring a SSH Backend</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">// mount the backend</span>
+<span class="pl-k">var</span> sshKeyName = Guid.NewGuid().ToString();
+<span class="pl-k">var</span> sshRoleName = Guid.NewGuid().ToString();
+
+<span class="pl-k">var</span> mountPoint = <span class="pl-s"><span class="pl-pds">"</span>ssh<span class="pl-pds">"</span></span> + Guid.NewGuid();
+<span class="pl-k">var</span> backend = <span class="pl-k">new</span> SecretBackend
+{
+    BackendType = SecretBackendType.SSH,
+    MountPoint = mountPoint,
+};
+
+<span class="pl-k">await</span> vaultClient.MountSecretBackendAsync(backend);
+
+<span class="pl-c">// configure key and role</span>
+<span class="pl-k">var</span> privateKey = <span class="pl-s"><span class="pl-pds">@"-----BEGIN RSA PRIVATE KEY----- key ---"</span></span>;
+
+<span class="pl-k">var</span> ip = <span class="pl-s"><span class="pl-pds">"</span>127.0.0.1<span class="pl-pds">"</span></span>;
+<span class="pl-k">var</span> user = <span class="pl-s"><span class="pl-pds">"</span>rajan<span class="pl-pds">"</span></span>;
+
+<span class="pl-k">await</span> vaultClient.SSHWriteNamedKeyAsync(sshKeyName, privateKey, mountPoint);
+<span class="pl-k">await</span> vaultClient.SSHWriteNamedRoleAsync(sshRoleName, <span class="pl-k">new</span> SSHOTPRoleDefinition
+{
+    RoleDefaultUser = user,
+    CIDRValues = <span class="pl-s"><span class="pl-pds">"</span>127.0.0.1/10<span class="pl-pds">"</span></span>,
+}, mountPoint);
+
+<span class="pl-k">var</span> role = <span class="pl-k">await</span> vaultClient.SSHReadNamedRoleAsync(sshRoleName, mountPoint);
+Assert.True(role.Data.KeyTypeToGenerate == SSHKeyType.otp);
+</pre></div>
+
+<h5>
+<a id="generate-ssh-credentials" class="anchor" href="#generate-ssh-credentials" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Generate SSH Credentials</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> credentials = <span class="pl-k">await</span>
+    vaultClient.SSHGenerateDynamicCredentialsAsync(sshRoleName, ip,
+        sshBackendMountPoint: mountPoint);
+
+Assert.Equal(user, credentials.Data.Username);
+</pre></div>
+
+<h4>
+<a id="transit-secret-backend" class="anchor" href="#transit-secret-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Transit Secret Backend</h4>
+
+<h5>
+<a id="configuring-a-transit-backend" class="anchor" href="#configuring-a-transit-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuring a Transit Backend</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">// mount the backend</span>
+<span class="pl-k">var</span> backend = <span class="pl-k">new</span> SecretBackend
+{
+    BackendType = SecretBackendType.Transit,
+    MountPoint = <span class="pl-s"><span class="pl-pds">"</span>transit<span class="pl-pds">"</span></span> + Guid.NewGuid(),
+};
+
+<span class="pl-k">await</span> vaultClient.MountSecretBackendAsync(backend);
+
+<span class="pl-c">// create encryption key</span>
+<span class="pl-k">var</span> keyName = <span class="pl-s"><span class="pl-pds">"</span>test_key<span class="pl-pds">"</span></span> + Guid.NewGuid();
+<span class="pl-k">var</span> context = <span class="pl-s"><span class="pl-pds">"</span>context1<span class="pl-pds">"</span></span>;
+
+<span class="pl-k">var</span> plainText = <span class="pl-s"><span class="pl-pds">"</span>raja<span class="pl-pds">"</span></span>;
+<span class="pl-k">var</span> encodedPlainText = Convert.ToBase64String(Encoding.UTF8.GetBytes(plainText));
+
+<span class="pl-k">await</span> vaultClient.TransitCreateEncryptionKeyAsync(keyName, <span class="pl-c1">true</span>, backend.MountPoint);
+<span class="pl-k">var</span> keyInfo = <span class="pl-k">await</span> vaultClient.TransitGetEncryptionKeyInfoAsync(keyName, backend.MountPoint);
+
+Assert.Equal(keyName, keyInfo.Data.Name);
+Assert.True(keyInfo.Data.MustUseKeyDerivation);
+Assert.False(keyInfo.Data.IsDeletionAllowed);
+
+<span class="pl-c">// configure the key</span>
+<span class="pl-k">await</span> vaultClient.TransitConfigureEncryptionKeyAsync(keyName, isDeletionAllowed: <span class="pl-c1">true</span>, transitBackendMountPoint: backend.MountPoint);
+
+keyInfo = <span class="pl-k">await</span> vaultClient.TransitGetEncryptionKeyInfoAsync(keyName, backend.MountPoint);
+Assert.True(keyInfo.Data.IsDeletionAllowed);
+</pre></div>
+
+<h5>
+<a id="encryptdecrypt-text" class="anchor" href="#encryptdecrypt-text" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Encrypt/Decrypt text</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> cipherText = <span class="pl-k">await</span> vaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, transitBackendMountPoint: backend.MountPoint);
+
+<span class="pl-k">var</span> plainText2 = Encoding.UTF8.GetString(Convert.FromBase64String((<span class="pl-k">await</span> vaultClient.TransitDecryptAsync(keyName, cipherText.Data.CipherText, context, backend.MountPoint)).Data.PlainText));
+
+Assert.Equal(plainText, plainText2);</pre></div>
+
+<h5>
+<a id="other-transit-operations" class="anchor" href="#other-transit-operations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Other Transit Operations</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">await</span> vaultClient.TransitRotateEncryptionKeyAsync(keyName, backend.MountPoint);
+<span class="pl-k">var</span> cipherText2 = <span class="pl-k">await</span> vaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, transitBackendMountPoint: backend.MountPoint);
+
+Assert.NotEqual(cipherText.Data.CipherText, cipherText2.Data.CipherText);
+
+<span class="pl-k">var</span> cipherText3 = <span class="pl-k">await</span> vaultClient.TransitRewrapWithLatestEncryptionKeyAsync(keyName, cipherText.Data.CipherText, context, backend.MountPoint);
+
+<span class="pl-k">var</span> newKey1 = <span class="pl-k">await</span> vaultClient.TransitCreateDataKeyAsync(keyName, <span class="pl-c1">false</span>, context, <span class="pl-c1">128</span>, backend.MountPoint);
+Assert.Null(newKey1.Data.PlainTextKey);
+
+newKey1 = <span class="pl-k">await</span> vaultClient.TransitCreateDataKeyAsync(keyName, <span class="pl-c1">true</span>, context, <span class="pl-c1">128</span>, backend.MountPoint);
+Assert.NotNull(newKey1.Data.PlainTextKey);
+
+<span class="pl-k">await</span> vaultClient.TransitDeleteEncryptionKeyAsync(keyName, backend.MountPoint);
+</pre></div>
+
+<h3>
+<a id="audit-backends-all-of-them-are-supported" class="anchor" href="#audit-backends-all-of-them-are-supported" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Audit Backends (All of them are supported)</h3>
+
+<ul>
+<li>VaultSharp supports all the audit backends supported by the Vault Service 0.4.0</li>
+<li>Here is a sample to instantiate the vault client with each of the audit backends.</li>
+</ul>
+
+<h4>
+<a id="file-audit-backend" class="anchor" href="#file-audit-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>File Audit Backend</h4>
+
+<div class="highlight highlight-source-cs"><pre>
+<span class="pl-k">var</span> audits = (<span class="pl-k">await</span> vaultClient.GetAllEnabledAuditBackendsAsync()).ToList();
+
+<span class="pl-c">// enable new file audit</span>
+<span class="pl-k">var</span> newFileAudit = <span class="pl-k">new</span> FileAuditBackend
+{
+    BackendType = AuditBackendType.File,
+    Description = <span class="pl-s"><span class="pl-pds">"</span>store logs in a file - test cases<span class="pl-pds">"</span></span>,
+    Options = <span class="pl-k">new</span> FileAuditBackendOptions
+    {
+        FilePath = <span class="pl-s"><span class="pl-pds">"</span>/var/log/file<span class="pl-pds">"</span></span>
+    }
+};
+
+<span class="pl-k">await</span> vaultClient.EnableAuditBackendAsync(newFileAudit);
+
+<span class="pl-c">// get audits</span>
+<span class="pl-k">var</span> newAudits = (<span class="pl-k">await</span> vaultClient.GetAllEnabledAuditBackendsAsync()).ToList();
+Assert.Equal(audits.Count + <span class="pl-c1">1</span>, newAudits.Count);
+
+<span class="pl-c">// hash with audit</span>
+<span class="pl-k">var</span> hash = <span class="pl-k">await</span> vaultClient.HashWithAuditBackendAsync(newFileAudit.MountPoint, <span class="pl-s"><span class="pl-pds">"</span>testinput<span class="pl-pds">"</span></span>);
+Assert.NotNull(hash);
+
+<span class="pl-c">// disabled audit</span>
+<span class="pl-k">await</span> vaultClient.DisableAuditBackendAsync(newFileAudit.MountPoint);</pre></div>
+
+<h4>
+<a id="syslog-audit-backend" class="anchor" href="#syslog-audit-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Syslog Audit Backend</h4>
+
+<div class="highlight highlight-source-cs"><pre>
+<span class="pl-c">// enable new syslog audit</span>
+<span class="pl-k">var</span> newSyslogAudit = <span class="pl-k">new</span> SyslogAuditBackend
+{
+    BackendType = AuditBackendType.Syslog,
+    Description = <span class="pl-s"><span class="pl-pds">"</span>syslog audit - test cases<span class="pl-pds">"</span></span>,
+    Options = <span class="pl-k">new</span> SyslogAuditBackendOptions()
+};
+
+<span class="pl-k">await</span> vaultClient.EnableAuditBackendAsync(newSyslogAudit);
+
+<span class="pl-c">// get audits</span>
+<span class="pl-k">var</span> newAudits2 = (<span class="pl-k">await</span> vaultClient.GetAllEnabledAuditBackendsAsync()).ToList();
+Assert.Equal(<span class="pl-c1">1</span>, newAudits2.Count);
+
+<span class="pl-c">// disabled audit</span>
+<span class="pl-k">await</span> vaultClient.DisableAuditBackendAsync(newSyslogAudit.MountPoint);
+
+<span class="pl-c">// get audits</span>
+<span class="pl-k">var</span> oldAudits2 = (<span class="pl-k">await</span> vaultClient.GetAllEnabledAuditBackendsAsync()).ToList();
+Assert.Equal(audits.Count, oldAudits2.Count);
+</pre></div>
+
+<h3>
+<a id="more-administrative--other-operations" class="anchor" href="#more-administrative--other-operations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>More Administrative &amp; Other operations</h3>
+
+<ul>
+<li>VaultSharp supports all the operations supported by the Service.</li>
+<li>These include administrative ones like Inititalize, Unseal, Seal etc.</li>
+<li>Here are some samples.</li>
+</ul>
+
+<div class="highlight highlight-source-cs"><pre>
+<span class="pl-k">await</span> noAuthInfoClient.InitializeAsync(<span class="pl-c1">5</span>, <span class="pl-c1">3</span>, <span class="pl-c1">null</span>);
+<span class="pl-k">await</span> vaultClient.SealAsync();
+
+<span class="pl-k">await</span> vaultClient.UnsealAsync(masterKey); <span class="pl-c">// need to run this in a loop for all master keys</span>
+<span class="pl-k">await</span> vaultClient.UnsealQuickAsync(allMasterKeys);  <span class="pl-c">// unseals the Vault in 1 shot.</span>
+
+<span class="pl-k">await</span> vaultClient.GetSealStatusAsync();
+
+<span class="pl-c">// all policy operations</span>
+
+<span class="pl-c">// write a new policy</span>
+<span class="pl-k">var</span> newPolicy = <span class="pl-k">new</span> Policy
+{
+    Name = <span class="pl-s"><span class="pl-pds">"</span>gubdu<span class="pl-pds">"</span></span>,
+    Rules = <span class="pl-s"><span class="pl-pds">"</span>path <span class="pl-cce">\"</span>sys/*<span class="pl-cce">\"</span> {  policy = <span class="pl-cce">\"</span>deny<span class="pl-cce">\"</span> }<span class="pl-pds">"</span></span>
+};
+
+<span class="pl-k">await</span> vaultClient.WritePolicyAsync(newPolicy);
+
+<span class="pl-c">// get new policy</span>
+<span class="pl-k">var</span> newPolicyGet = <span class="pl-k">await</span> vaultClient.GetPolicyAsync(newPolicy.Name);
+Assert.Equal(newPolicy.Rules, newPolicyGet.Rules);
+
+<span class="pl-c">// write updates to a new policy</span>
+newPolicy.Rules = <span class="pl-s"><span class="pl-pds">"</span>path <span class="pl-cce">\"</span>sys/*<span class="pl-cce">\"</span> {  policy = <span class="pl-cce">\"</span>read<span class="pl-cce">\"</span> }<span class="pl-pds">"</span></span>;
+
+<span class="pl-k">await</span> vaultClient.WritePolicyAsync(newPolicy);
+
+<span class="pl-c">// get new policy</span>
+newPolicyGet = <span class="pl-k">await</span> vaultClient.GetPolicyAsync(newPolicy.Name);
+Assert.Equal(newPolicy.Rules, newPolicyGet.Rules);
+
+<span class="pl-c">// delete policy</span>
+<span class="pl-k">await</span> vaultClient.DeletePolicyAsync(newPolicy.Name);
+</pre></div>
+
+<h3>
+<a id="in-conclusion" class="anchor" href="#in-conclusion" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>In Conclusion</h3>
+
+<ul>
+<li>If the above documentation doesn't help you, feel free to create an issue or email me. <a href="https://github.com/rajanadar/VaultSharp/issues/new">https://github.com/rajanadar/VaultSharp/issues/new</a>
+</li>
+<li>Also, the Intellisense on IVaultClient class should help. I have tried to add a lot of documentation.</li>
+</ul>
+
+<p>Happy Coding folks!</p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/rajanadar/VaultSharp">Vaultsharp</a> is maintained by <a href="https://github.com/rajanadar">rajanadar</a>.</span>
