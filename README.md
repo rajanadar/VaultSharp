@@ -513,3 +513,56 @@ var certificateCredentials =
 var privateKey = certificateCredentials.Data.PrivateKey;
 
 ```
+
+#### PostgreSql Secret Backend
+
+##### Configuring a PostgreSql Backend
+
+```cs
+// mount the backend
+var mountPoint = "postgresql" + Guid.NewGuid();
+var backend = new SecretBackend
+{
+    MountPoint = mountPoint,
+    BackendType = SecretBackendType.PostgreSql,
+};
+
+await vaultClient.MountSecretBackendAsync(backend);
+
+await vaultClient.PostgreSqlConfigureCredentialLeaseSettingsAsync(new CredentialLeaseSettings()
+{
+    LeaseDuration = "1h",
+    MaximumLeaseDuration = "2h"
+}, mountPoint);
+
+// configure root connection info to create/manage roles and generate credentials
+await vaultClient.PostgreSqlConfigureConnectionAsync(new PostgreSqlConnectionInfo
+{
+    ConnectionString = "con_string",
+    MaximumOpenConnections = 5
+}, mountPoint);
+
+var sql = "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT SELECT ON ALL TABLES IN SCHEMA public TO \"{{name}}\";";
+
+// create a named role
+var postgreSqlRole = "postgresql-readonly-role";
+
+await vaultClient.PostgreSqlWriteNamedRoleAsync(postgreSqlRole, new PostgreSqlRoleDefinition()
+{
+    Sql = sql
+}, mountPoint);
+
+var readRole = await vaultClient.PostgreSqlReadNamedRoleAsync(postgreSqlRole, mountPoint);
+Assert.Equal(sql, readRole.Data.Sql);
+```
+
+##### Generate PostgreSql Credentials
+
+```cs
+var postgreSqlCredentials = await vaultClient.PostgreSqlGenerateDynamicCredentialsAsync(postgreSqlRole, backend.MountPoint);
+
+Assert.NotNull(postgreSqlCredentials.LeaseId);
+Assert.NotNull(postgreSqlCredentials.Data.Username);
+Assert.NotNull(postgreSqlCredentials.Data.Password);
+
+```
