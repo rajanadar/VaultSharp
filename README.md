@@ -268,3 +268,22 @@ await vaultClient.ConsulDeleteNamedRoleAsync(consulRole);
 await vaultClient.UnmountSecretBackendAsync(SecretBackendType.Consul.Type);
 
 ```
+
+#### Cubbyhole Secret Backend
+
+```cs
+var path = "cubbyhole/foo1/foo2";
+var values = new Dictionary<string, object>
+{
+    {"foo", "bar"},
+    {"foo2", 345 }
+};
+
+await vaultClient.CubbyholeWriteSecretAsync(path, values);
+
+var readValues = await vaultClient.CubbyholeReadSecretAsync(path);
+var data = readValues.Data; // gives back the dictionary
+
+await vaultClient.CubbyholeDeleteSecretAsync(path);
+
+```
