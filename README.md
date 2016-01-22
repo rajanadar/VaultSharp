@@ -5,6 +5,8 @@ A .NET Library for HashiCorp's Vault - A Secret Management System.
 
 ## Documentation Site: http://rajanadar.github.io/VaultSharp/
 
+## Report Feedback/Issues Here: https://github.com/rajanadar/VaultSharp/issues/new
+
 **Table of Contents**
 
 - [VaultSharp](#vaultsharp)
