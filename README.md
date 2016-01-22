@@ -5,63 +5,62 @@ A .NET Library for HashiCorp's Vault - A Secret Management System.
 
 ## Documentation Site: http://rajanadar.github.io/VaultSharp/
 
-**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+**Table of Contents**
 
-- [VaultSharp](#)
-	- [Nuget Package: https://www.nuget.org/packages/VaultSharp/](#)
-	- [Documentation Site: http://rajanadar.github.io/VaultSharp/](#)
-		- [What is VaultSharp?](#)
-		- [VaultSharp 0.4.x should completely support Vault Service 0.4.0](#)
-		- [What is the deal with the Versioning of VaultSharp? (Y U NO 1.0.0)](#)
-		- [How do I use VaultSharp? Give me a code example](#)
-		- [Does VaultSharp support all the Authentication, Secret and Audit Backends?](#)
-		- [VaultSharp and 100% Consul Support](#)
-		- [The fundamental READ and WRITE operations on a Vault](#)
-		- [Can I use it in my PowerShell Automation?](#)
-		- [All the methods are async. How do I use them synchronously?](#)
-		- [Authentication Backends (All of them are supported)](#)
-			- [App Id Authentication Backend](#)
-			- [GitHub Authentication Backend](#)
-			- [LDAP Authentication Backend](#)
-			- [GitHub Authentication Backend](#)
-			- [Certificate (TLS) Authentication Backend](#)
-			- [Token Authentication Backend](#)
-			- [Username and Password Authentication Backend](#)
-		- [Secret Backends (All of them are supported)](#)
-			- [AWS Secret Backend](#)
-				- [Configuring an AWS Backend](#)
-				- [Generate AWS Credentials](#)
-			- [Cassandra Secret Backend](#)
-				- [Configuring a Cassandra Backend](#)
-				- [Generate Cassandra Credentials](#)
-			- [Consul Secret Backend](#)
-				- [Configuring a Consul Backend](#)
-				- [Generate Consul Credentials](#)
-				- [Deleting Role and Unmounting the Consul backend](#)
-			- [Cubbyhole Secret Backend](#)
-			- [Generic Secret Backend](#)
-			- [MySql Secret Backend](#)
-				- [Configuring a MySql Backend](#)
-				- [Generate MySql Credentials](#)
-			- [PKI (Certificates) Secret Backend](#)
-				- [Configuring a PKI Backend](#)
-				- [Write/Read PKI Role](#)
-				- [Generate PKI Credentials](#)
-			- [PostgreSql Secret Backend](#)
-				- [Configuring a PostgreSql Backend](#)
-				- [Generate PostgreSql Credentials](#)
-			- [SSH Secret Backend](#)
-				- [Configuring a SSH Backend](#)
-				- [Generate SSH Credentials](#)
-			- [Transit Secret Backend](#)
-				- [Configuring a Transit Backend](#)
-				- [Encrypt/Decrypt text](#)
-				- [Other Transit Operations](#)
-		- [Audit Backends (All of them are supported)](#)
-			- [File Audit Backend](#)
-			- [Syslog Audit Backend](#)
-		- [More Administrative & Other operations](#)
-		- [In Conclusion](#)
+- [VaultSharp](#vaultsharp)
+	- [Nuget Package: https://www.nuget.org/packages/VaultSharp/](#nuget-package-httpswwwnugetorgpackagesvaultsharp)
+	- [Documentation Site: http://rajanadar.github.io/VaultSharp/](#documentation-site-httprajanadargithubiovaultsharp)
+		- [What is VaultSharp?](#what-is-vaultsharp)
+		- [VaultSharp 0.4.x should completely support Vault Service 0.4.0](#vaultsharp-04x-should-completely-support-vault-service-040)
+		- [What is the deal with the Versioning of VaultSharp? (Y U NO 1.0.0)](#what-is-the-deal-with-the-versioning-of-vaultsharp-y-u-no-100)
+		- [How do I use VaultSharp? Give me a code example](#how-do-i-use-vaultsharp-give-me-a-code-example)
+		- [Does VaultSharp support all the Authentication, Secret and Audit Backends?](#does-vaultsharp-support-all-the-authentication-secret-and-audit-backends)
+		- [VaultSharp and 100% Consul Support](#vaultsharp-and-100-consul-support)
+		- [The fundamental READ and WRITE operations on a Vault](#the-fundamental-read-and-write-operations-on-a-vault)
+		- [Can I use it in my PowerShell Automation?](#can-i-use-it-in-my-powershell-automation)
+		- [All the methods are async. How do I use them synchronously?](#all-the-methods-are-async-how-do-i-use-them-synchronously)
+		- [Authentication Backends (All of them are supported)](#authentication-backends-all-of-them-are-supported)
+			- [App Id Authentication Backend](#app-id-authentication-backend)
+			- [GitHub Authentication Backend](#github-authentication-backend)
+			- [LDAP Authentication Backend](#ldap-authentication-backend)
+			- [Certificate (TLS) Authentication Backend](#certificate-tls-authentication-backend)
+			- [Token Authentication Backend](#token-authentication-backend)
+			- [Username and Password Authentication Backend](#username-and-password-authentication-backend)
+		- [Secret Backends (All of them are supported)](#secret-backends-all-of-them-are-supported)
+			- [AWS Secret Backend](#aws-secret-backend)
+				- [Configuring an AWS Backend](#configuring-an-aws-backend)
+				- [Generate AWS Credentials](#generate-aws-credentials)
+			- [Cassandra Secret Backend](#cassandra-secret-backend)
+				- [Configuring a Cassandra Backend](#configuring-a-cassandra-backend)
+				- [Generate Cassandra Credentials](#generate-cassandra-credentials)
+			- [Consul Secret Backend](#consul-secret-backend)
+				- [Configuring a Consul Backend](#configuring-a-consul-backend)
+				- [Generate Consul Credentials](#generate-consul-credentials)
+				- [Deleting Role and Unmounting the Consul backend](#deleting-role-and-unmounting-the-consul-backend)
+			- [Cubbyhole Secret Backend](#cubbyhole-secret-backend)
+			- [Generic Secret Backend](#generic-secret-backend)
+			- [MySql Secret Backend](#mysql-secret-backend)
+				- [Configuring a MySql Backend](#configuring-a-mysql-backend)
+				- [Generate MySql Credentials](#generate-mysql-credentials)
+			- [PKI (Certificates) Secret Backend](#pki-certificates-secret-backend)
+				- [Configuring a PKI Backend](#configuring-a-pki-backend)
+				- [Write/Read PKI Role](#writeread-pki-role)
+				- [Generate PKI Credentials](#generate-pki-credentials)
+			- [PostgreSql Secret Backend](#postgresql-secret-backend)
+				- [Configuring a PostgreSql Backend](#configuring-a-postgresql-backend)
+				- [Generate PostgreSql Credentials](#generate-postgresql-credentials)
+			- [SSH Secret Backend](#ssh-secret-backend)
+				- [Configuring a SSH Backend](#configuring-a-ssh-backend)
+				- [Generate SSH Credentials](#generate-ssh-credentials)
+			- [Transit Secret Backend](#transit-secret-backend)
+				- [Configuring a Transit Backend](#configuring-a-transit-backend)
+				- [Encrypt/Decrypt text](#encryptdecrypt-text)
+				- [Other Transit Operations](#other-transit-operations)
+		- [Audit Backends (All of them are supported)](#audit-backends-all-of-them-are-supported)
+			- [File Audit Backend](#file-audit-backend)
+			- [Syslog Audit Backend](#syslog-audit-backend)
+		- [More Administrative & Other operations](#more-administrative--other-operations)
+		- [In Conclusion](#in-conclusion)
 
 ### What is VaultSharp?
 
@@ -186,16 +185,6 @@ IAuthenticationInfo ldapAuthenticationInfo = new LDAPAuthenticationInfo(mountPoi
 IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort, ldapAuthenticationInfo);
 
 // any operations done using the vaultClient will use the vault token/policies mapped to the LDAP username and password.
-
-```
-
-#### GitHub Authentication Backend
-
-```cs
-IAuthenticationInfo gitHubAuthenticationInfo = new GitHubAuthenticationInfo(mountPoint, personalAccessToken);
-IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort, gitHubAuthenticationInfo);
-
-// any operations done using the vaultClient will use the vault token/policies mapped to the github token.
 
 ```
 
