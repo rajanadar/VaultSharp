@@ -1,5 +1,5 @@
 ### This is VaultSharp Version 0.4.1. 
-### With Vault releasing its 0.5.0rc, VaultSharp Version 0.5.x is in progress and coming soon.
+### With Vault releasing its 0.5.0, VaultSharp Version 0.5.0 is already in progress and coming soon.
 
 # VaultSharp
 A .NET Library for HashiCorp's Vault - A Secret Management System.
