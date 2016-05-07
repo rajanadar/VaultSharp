@@ -43,6 +43,11 @@ namespace VaultSharp.Backends.Secret.Models
         private static readonly SecretBackendType GenericType = new SecretBackendType("generic");
 
         /// <summary>
+        /// Microsoft SQL type
+        /// </summary>
+        private static readonly SecretBackendType MicrosoftSqlType = new SecretBackendType(SecretBackendDefaultMountPoints.MicrosoftSql);
+
+        /// <summary>
         /// My SQL type
         /// </summary>
         private static readonly SecretBackendType MySqlType = new SecretBackendType(SecretBackendDefaultMountPoints.MySql);
@@ -153,6 +158,20 @@ namespace VaultSharp.Backends.Secret.Models
             get
             {
                 return GenericType;
+            }
+        }
+
+        /// <summary>
+        /// Gets the Microsoft Sql type.
+        /// </summary>
+        /// <value>
+        /// Microsoft Sql.
+        /// </value>
+        public static SecretBackendType MicrosoftSql
+        {
+            get
+            {
+                return MicrosoftSqlType;
             }
         }
 

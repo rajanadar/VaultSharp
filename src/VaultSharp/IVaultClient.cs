@@ -8,6 +8,7 @@ using VaultSharp.Backends.Secret.Models;
 using VaultSharp.Backends.Secret.Models.AWS;
 using VaultSharp.Backends.Secret.Models.Cassandra;
 using VaultSharp.Backends.Secret.Models.Consul;
+using VaultSharp.Backends.Secret.Models.MicrosoftSql;
 using VaultSharp.Backends.Secret.Models.MySql;
 using VaultSharp.Backends.Secret.Models.PKI;
 using VaultSharp.Backends.Secret.Models.PostgreSql;
@@ -900,6 +901,88 @@ namespace VaultSharp
         /// </returns>
         Task GenericDeleteSecretAsync(string locationPath, string genericBackendMountPoint = SecretBackendDefaultMountPoints.Generic);
 
+        /// <summary>
+        /// Configures the connection information used to communicate with Microsoft Sql.
+        /// This API is a root protected call.
+        /// </summary>
+        /// <param name="microsoftSqlConnectionInfo"><para>[required]</para>
+        /// The Microsoft Sql connection information.</param>
+        /// <param name="microsoftSqlBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the Microsoft Sql backend. Defaults to <see cref="SecretBackendType.MicrosoftSql" />
+        /// Provide a value only if you have customized the Microsoft Sql mount point.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task MicrosoftSqlConfigureConnectionAsync(MicrosoftSqlConnectionInfo microsoftSqlConnectionInfo, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
+
+        /// <summary>
+        /// Configures the lease settings for generated credentials.
+        /// This API is a root protected call.
+        /// </summary>
+        /// <param name="credentialLeaseSettings"><para>[required]</para>
+        /// The credential lease settings.</param>
+        /// <param name="microsoftSqlBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the MicrosoftSql backend. Defaults to <see cref="SecretBackendType.MicrosoftSql" />
+        /// Provide a value only if you have customized the MicrosoftSql mount point.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task MicrosoftSqlConfigureCredentialLeaseSettingsAsync(CredentialLeaseSettings credentialLeaseSettings, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
+
+        /// <summary>
+        /// Creates or updates a named MicrosoftSql role.
+        /// </summary>
+        /// <param name="microsoftSqlRoleName"><para>[required]</para>
+        /// Name of the MicrosoftSql role.</param>
+        /// <param name="microsoftSqlRoleDefinition"><para>[required]</para>
+        /// The MicrosoftSql role definition with the creation, rollback query and lease information.</param>
+        /// <param name="microsoftSqlBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the MicrosoftSql backend. Defaults to <see cref="SecretBackendType.MicrosoftSql" />
+        /// Provide a value only if you have customized the MicrosoftSql mount point.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task MicrosoftSqlWriteNamedRoleAsync(string microsoftSqlRoleName, MicrosoftSqlRoleDefinition microsoftSqlRoleDefinition, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
+
+        /// <summary>
+        /// Queries a named MicrosoftSql role definition
+        /// </summary>
+        /// <param name="microsoftSqlRoleName"><para>[required]</para>
+        /// Name of the MicrosoftSql role.</param>
+        /// <param name="microsoftSqlBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the MicrosoftSql backend. Defaults to <see cref="SecretBackendType.MicrosoftSql" />
+        /// Provide a value only if you have customized the MicrosoftSql mount point.</param>
+        /// <returns>
+        /// The secret with the MicrosoftSql role definition with the creation, rollback query and lease information.
+        /// </returns>
+        Task<Secret<MicrosoftSqlRoleDefinition>> MicrosoftSqlReadNamedRoleAsync(string microsoftSqlRoleName, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
+
+        /// <summary>
+        /// Deletes a named MicrosoftSql role definition
+        /// </summary>
+        /// <param name="microsoftSqlRoleName"><para>[required]</para>
+        /// Name of the MicrosoftSql role.</param>
+        /// <param name="microsoftSqlBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the MicrosoftSql backend. Defaults to <see cref="SecretBackendType.MicrosoftSql" />
+        /// Provide a value only if you have customized the MicrosoftSql mount point.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task MicrosoftSqlDeleteNamedRoleAsync(string microsoftSqlRoleName, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
+
+        /// <summary>
+        /// Generates a new set of dynamic credentials based on the named role.
+        /// </summary>
+        /// <param name="microsoftSqlRoleName"><para>[required]</para>
+        /// Name of the MicrosoftSql role.</param>
+        /// <param name="microsoftSqlBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the MicrosoftSql backend. Defaults to <see cref="SecretBackendType.MicrosoftSql" />
+        /// Provide a value only if you have customized the MicrosoftSql mount point.</param>
+        /// <returns>
+        /// The secret with the <see cref="UsernamePasswordCredentials" /> as the data.
+        /// </returns>
+        Task<Secret<UsernamePasswordCredentials>> MicrosoftSqlGenerateDynamicCredentialsAsync(string microsoftSqlRoleName, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
+        
         /// <summary>
         /// Configures the connection information used to communicate with MySql.
         /// This API is a root protected call.

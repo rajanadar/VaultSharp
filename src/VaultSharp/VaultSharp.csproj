@@ -63,6 +63,8 @@
     <Compile Include="Backends\Secret\Models\Consul\ConsulRoleDefinition.cs" />
     <Compile Include="Backends\Secret\Models\Consul\ConsulTokenType.cs" />
     <Compile Include="Backends\Secret\Models\CredentialLeaseSettings.cs" />
+    <Compile Include="Backends\Secret\Models\MicrosoftSql\MicrosoftSqlConnectionInfo.cs" />
+    <Compile Include="Backends\Secret\Models\MicrosoftSql\MicrosoftSqlRoleDefinition.cs" />
     <Compile Include="Backends\Secret\Models\MySql\MySqlRoleDefinition.cs" />
     <Compile Include="Backends\Secret\Models\MySql\MySqlConnectionInfo.cs" />
     <Compile Include="Backends\Secret\Models\PKI\CertificateEndpointOptions.cs" />
