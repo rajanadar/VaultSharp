@@ -14,8 +14,8 @@ namespace VaultSharp.Backends.Secret.Models
         /// <value>
         /// The duration of the lease.
         /// </value>
-        [JsonProperty("lease")]
-        public string LeaseDuration { get; set; }
+        [JsonProperty("ttl")]
+        public string TimeToLive { get; set; }
 
         /// <summary>
         /// <para>[required]</para>
@@ -24,7 +24,7 @@ namespace VaultSharp.Backends.Secret.Models
         /// <value>
         /// The maximum duration of the lease.
         /// </value>
-        [JsonProperty("lease_max")]
-        public string MaximumLeaseDuration { get; set; }
+        [JsonProperty("ttl_max")]
+        public string MaximumTimeToLive { get; set; }
     }
 }

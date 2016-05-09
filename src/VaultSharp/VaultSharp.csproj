@@ -62,6 +62,7 @@
     <Compile Include="Backends\Secret\Models\Consul\ConsulCredentials.cs" />
     <Compile Include="Backends\Secret\Models\Consul\ConsulRoleDefinition.cs" />
     <Compile Include="Backends\Secret\Models\Consul\ConsulTokenType.cs" />
+    <Compile Include="Backends\Secret\Models\ListInfo.cs" />
     <Compile Include="Backends\Secret\Models\CredentialLeaseSettings.cs" />
     <Compile Include="Backends\Secret\Models\MicrosoftSql\MicrosoftSqlConnectionInfo.cs" />
     <Compile Include="Backends\Secret\Models\MicrosoftSql\MicrosoftSqlRoleDefinition.cs" />

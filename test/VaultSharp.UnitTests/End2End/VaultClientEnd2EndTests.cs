@@ -1271,8 +1271,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
             await _authenticatedClient.MySqlConfigureCredentialLeaseSettingsAsync(new CredentialLeaseSettings()
             {
-                LeaseDuration = "1h",
-                MaximumLeaseDuration = "2h"
+                TimeToLive = "1h",
+                MaximumTimeToLive = "2h"
             }, mountPoint);
 
             await _authenticatedClient.MySqlWriteNamedRoleAsync(role, new MySqlRoleDefinition()

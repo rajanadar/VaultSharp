@@ -771,6 +771,14 @@ namespace VaultSharp
             return result;
         }
 
+        public async Task<Secret<ListInfo>> MicrosoftSqlReadAllRolesAsync(string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql)
+        {
+            Checker.NotNull(microsoftSqlBackendMountPoint, "microsoftSqlBackendMountPoint");
+
+            var result = await MakeVaultApiRequest<Secret<ListInfo>>(microsoftSqlBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return result;
+        }
+
         public async Task MicrosoftSqlDeleteNamedRoleAsync(string microsoftSqlRoleName, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql)
         {
             Checker.NotNull(microsoftSqlBackendMountPoint, "microsoftSqlBackendMountPoint");

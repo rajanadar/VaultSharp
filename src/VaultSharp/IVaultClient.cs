@@ -902,7 +902,7 @@ namespace VaultSharp
         Task GenericDeleteSecretAsync(string locationPath, string genericBackendMountPoint = SecretBackendDefaultMountPoints.Generic);
 
         /// <summary>
-        /// Configures the connection information used to communicate with Microsoft Sql.
+        /// Configures the connection information used to communicate with Microsoft Sql Server.
         /// This API is a root protected call.
         /// </summary>
         /// <param name="microsoftSqlConnectionInfo"><para>[required]</para>
@@ -956,6 +956,17 @@ namespace VaultSharp
         /// The secret with the MicrosoftSql role definition with the creation, rollback query and lease information.
         /// </returns>
         Task<Secret<MicrosoftSqlRoleDefinition>> MicrosoftSqlReadNamedRoleAsync(string microsoftSqlRoleName, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
+
+        /// <summary>
+        /// Returns a list of available roles. Only the role names are returned, not any values.
+        /// </summary>
+        /// <param name="microsoftSqlBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the MicrosoftSql backend. Defaults to <see cref="SecretBackendType.MicrosoftSql" />
+        /// Provide a value only if you have customized the MicrosoftSql mount point.</param>
+        /// <returns>
+        /// A list of available roles. Only the role names are returned, not any values.
+        /// </returns>
+        Task<Secret<ListInfo>> MicrosoftSqlReadAllRolesAsync(string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
 
         /// <summary>
         /// Deletes a named MicrosoftSql role definition
