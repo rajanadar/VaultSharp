@@ -36,8 +36,8 @@
     <DocumentationFile>bin\Release\VaultSharp.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -161,13 +161,36 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
   -->
+  <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release'">
+    <ItemGroup>
+      <InputAssemblies Include="$(ProjectDir)$(OutputPath)$(AssemblyName).dll" />
+      <InputAssemblies Include="$(ProjectDir)$(OutputPath)Newtonsoft.Json.dll" />
+      <FilesToDelete Include="@(InputAssemblies)" />
+      <FilesToDelete Include="$(ProjectDir)$(OutputPath)Consul.pdb" />
+      <FilesToDelete Include="$(ProjectDir)$(OutputPath)Newtonsoft.Json.xml" />
+    </ItemGroup>
+    <PropertyGroup>
+      <OutputFileName>$(AssemblyName).dll</OutputFileName>
+      <OutputFolder>$(ProjectDir)$(OutputPath)Standalone</OutputFolder>
+      <FullOutputAssemblyPath>$(OutputFolder)\$(OutputFileName)</FullOutputAssemblyPath>
+      <MergerEXEPath>$(ProjectDir)..\..\packages\ILRepack.2.0.10\tools\ILRepack.exe</MergerEXEPath>
+      <MergerEXE Condition="('$(OS)' == 'Windows_NT')">$(MergerEXEPath)</MergerEXE>
+      <MergerEXE Condition="('$(OS)' != 'Windows_NT')">mono $(MergerEXEPath)</MergerEXE>
+      <MergerCommands>/parallel /internalize /out:$(FullOutputAssemblyPath) @(InputAssemblies->'%(FullPath)', ' ')</MergerCommands>
+    </PropertyGroup>
+    <Message Text="MERGING: @(InputAssemblies->'%(Filename)') into $(FullOutputAssemblyPath) with the command $(MergerEXE) $(MergerCommands)" Importance="High" />
+    <Exec Command="$(MergerEXE) $(MergerCommands)" WorkingDirectory="$(OutputPath)" />
+    <Message Text="DELETING: original files - @(FilesToDelete->'%(Filename)')" Importance="High" />
+    <Delete Files="@(FilesToDelete)" />
+    <Message Text="COPYING: @(FilesToCopy->'%(Filename)')" Importance="High" />
+    <Exec Condition="('$(OS)' == 'Windows_NT')" Command="xcopy /s /y $(OutputFolder)\*.* $(ProjectDir)$(OutputPath)" />
+    <Exec Condition="('$(OS)' != 'Windows_NT')" Command="cp -a $(OutputFolder)/. $(ProjectDir)$(OutputPath)/" />
+    <RemoveDir Directories="$(OutputFolder)" />
+  </Target>
 </Project>
