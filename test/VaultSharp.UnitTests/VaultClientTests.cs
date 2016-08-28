@@ -11,6 +11,8 @@ namespace VaultSharp.UnitTests
 {
     public class VaultClientTests
     {
+        private static readonly Uri VaultUri = new Uri("http://dummy");
+
         private static readonly IAuthenticationInfo DummyAuthenticationInfo = new TokenAuthenticationInfo("test");
 
         [Fact]
@@ -22,31 +24,33 @@ namespace VaultSharp.UnitTests
         [Fact]
         public void CanInstantiateWithMinimalParameters()
         {
-            var address = new Uri("http://127.0.0.1:8200");
-
-            var client1 = new VaultClient(address, null);
+            var client1 = new VaultClient(VaultUri, null);
             Assert.NotNull(client1);
 
-            var client2 = new VaultClient(address, DummyAuthenticationInfo);
+            var client2 = new VaultClient(VaultUri, DummyAuthenticationInfo);
             Assert.NotNull(client2);
 
-            var client3 = new VaultClient(address, DummyAuthenticationInfo, true);
+            var client3 = new VaultClient(VaultUri, DummyAuthenticationInfo, true);
             Assert.NotNull(client3);
 
-            var client4 = new VaultClient(address, DummyAuthenticationInfo, true, TimeSpan.FromMinutes(3));
+            var client4 = new VaultClient(VaultUri, DummyAuthenticationInfo, true, TimeSpan.FromMinutes(3));
             Assert.NotNull(client4);
         }
 
         [Fact]
         public async Task NullTests()
         {
-            var client = new VaultClient(new Uri("http://127.0.0.1:8200"), DummyAuthenticationInfo, true, TimeSpan.FromMinutes(3));
+            var client = new VaultClient(VaultUri, DummyAuthenticationInfo, true, TimeSpan.FromMinutes(3));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.UnsealQuickAsync(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.GetMountedSecretBackendConfigurationAsync(null));
+            await
+                Assert.ThrowsAsync<ArgumentNullException>(() => client.GetMountedSecretBackendConfigurationAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.MountSecretBackendAsync(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.TuneSecretBackendConfigurationAsync(null, new SecretBackendConfiguration()));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.TuneSecretBackendConfigurationAsync("test", null));
+            await
+                Assert.ThrowsAsync<ArgumentNullException>(
+                    () => client.TuneSecretBackendConfigurationAsync(null, new SecretBackendConfiguration()));
+            await
+                Assert.ThrowsAsync<ArgumentNullException>(() => client.TuneSecretBackendConfigurationAsync("test", null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.UnmountSecretBackendAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.RemountSecretBackendAsync(null, "a"));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.RemountSecretBackendAsync("a", null));
@@ -67,16 +71,27 @@ namespace VaultSharp.UnitTests
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.RevokeAllSecretsUnderPrefixAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.ContinueRekeyAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.ReadRawSecretAsync(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.WriteRawSecretAsync(null, new Dictionary<string, object>()));
+            await
+                Assert.ThrowsAsync<ArgumentNullException>(
+                    () => client.WriteRawSecretAsync(null, new Dictionary<string, object>()));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.WriteRawSecretAsync("a", null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.DeleteRawSecretAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.ReadSecretAsync(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.WriteSecretAsync(null, new Dictionary<string, object>()));
+            await
+                Assert.ThrowsAsync<ArgumentNullException>(
+                    () => client.WriteSecretAsync(null, new Dictionary<string, object>()));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.DeleteSecretAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.GetTokenInfoAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.RevokeTokenAsync(null, true));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.RevokeAllTokensUnderPrefixAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.RenewTokenAsync(null));
+        }
+
+        [Fact]
+        public async Task SecureApiWithNoAuthenticationInfoThrowsProperMessage()
+        {
+            var client = new VaultClient(VaultUri, authenticationInfo: null);
+            await Assert.ThrowsAsync<InvalidOperationException>(() => client.WriteSecretAsync("testpath", new Dictionary<string, object>()));
         }
     }
 }

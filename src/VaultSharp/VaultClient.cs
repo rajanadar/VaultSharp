@@ -1277,6 +1277,12 @@ namespace VaultSharp
 
         private async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool sendClientToken = true, bool rawResponse = false, Action<HttpStatusCode, string> failureDelegate = null) where TResponse : class
         {
+            if (sendClientToken && _lazyVaultToken == null)
+            {
+                // a secure API was invoked, but no auth info was provided.
+                throw new InvalidOperationException("This API is a secure API and needs a client token. So please initialize Vault Client with AuthenticationInfo.");
+            }
+
             var headers = sendClientToken ? new Dictionary<string, string> { { VaultTokenHeaderKey, await _lazyVaultToken.Value } } : null;
             return await _dataAccessManager.MakeRequestAsync<TResponse>(resourcePath, httpMethod, requestData, headers, rawResponse, failureDelegate);
         }

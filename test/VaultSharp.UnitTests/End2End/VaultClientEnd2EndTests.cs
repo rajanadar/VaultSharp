@@ -24,9 +24,9 @@ namespace VaultSharp.UnitTests.End2End
     public class VaultClientEnd2EndTests
     {
         private const string MasterKey = "86332b94ffc41576c967d177f069ab52540f165b2821d1dbf4267a4b43b1370e";
-        private const string RootToken = "dcf763f2-5982-4be8-c158-90a8bcfa2c8f";
+        private const string RootToken = "a3d54c99-75fc-5bf3-e1e9-b6cb5b775e92";
 
-        private static readonly bool DevServer = true;
+        private static readonly bool DevServer = false;
 
         [Fact]
         public async Task AllTests()
@@ -38,7 +38,7 @@ namespace VaultSharp.UnitTests.End2End
                 await InitStatusTests();
                 await SealStatusTests();
                 await RawSecretAndMoreTests();
-                await GithubAuthenticationProviderTests();
+                // await GithubAuthenticationProviderTests();
             }
 
             await MountedSecretBackendTests();
@@ -447,7 +447,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
             // BEGIN setting values
 
-            var fileName = "E:\\raja\\work\\vault\\StartVault.cmd";
+            var fileName = "E:\\raja\\work\\vault0.6.1\\StartVault.cmd";
 
             var process = Process.Start(new ProcessStartInfo(fileName));
 
