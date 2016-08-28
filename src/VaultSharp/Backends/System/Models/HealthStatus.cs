@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace VaultSharp.Backends.System.Models
 {
@@ -16,13 +17,49 @@ namespace VaultSharp.Backends.System.Models
         public bool HealthCheckSucceeded { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance of Vault is initialized.
+        /// Gets or sets the cluster identifier.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if initialized; otherwise, <c>false</c>.
+        /// The cluster identifier.
         /// </value>
-        [JsonProperty("initialized")]
-        public bool Initialized { get; set; }
+        [JsonProperty("cluster_id")]
+        public string ClusterId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the cluster.
+        /// </summary>
+        /// <value>
+        /// The name of the cluster.
+        /// </value>
+        [JsonProperty("cluster_name")]
+        public string ClusterName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the version.
+        /// </summary>
+        /// <value>
+        /// The version.
+        /// </value>
+        [JsonProperty("version")]
+        public string Version { get; set; }
+
+        /// <summary>
+        /// Gets or sets the server time.
+        /// </summary>
+        /// <value>
+        /// The server time.
+        /// </value>
+        [JsonProperty("server_time_utc")]
+        public DateTimeOffset ServerTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance of Vault is a standby.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if standby; otherwise, <c>false</c>.
+        /// </value>
+        [JsonProperty("standby")]
+        public bool Standby { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance of Vault is sealed.
@@ -34,13 +71,13 @@ namespace VaultSharp.Backends.System.Models
         public bool Sealed { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this instance of Vault is a standby.
+        /// Gets or sets a value indicating whether this instance of Vault is initialized.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if standby; otherwise, <c>false</c>.
+        ///   <c>true</c> if initialized; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("standby")]
-        public bool Standby { get; set; }
+        [JsonProperty("initialized")]
+        public bool Initialized { get; set; }
 
         /// <summary>
         /// Gets or sets the error message.
