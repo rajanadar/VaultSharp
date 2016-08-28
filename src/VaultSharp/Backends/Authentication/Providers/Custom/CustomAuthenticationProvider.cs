@@ -7,15 +7,17 @@ namespace VaultSharp.Backends.Authentication.Providers.Custom
     internal class CustomAuthenticationProvider : IAuthenticationProvider
     {
         private readonly CustomAuthenticationInfo _customAuthenticationInfo;
+        private readonly bool _continueAsyncTasksOnCapturedContext;
 
-        public CustomAuthenticationProvider(CustomAuthenticationInfo customAuthenticationInfo)
+        public CustomAuthenticationProvider(CustomAuthenticationInfo customAuthenticationInfo, bool continueAsyncTasksOnCapturedContext = false)
         {
             _customAuthenticationInfo = customAuthenticationInfo;
+            _continueAsyncTasksOnCapturedContext = continueAsyncTasksOnCapturedContext;
         }
 
         public async Task<string> GetTokenAsync()
         {
-            var token = await _customAuthenticationInfo.AuthenticationTokenAsyncDelegate();
+            var token = await _customAuthenticationInfo.AuthenticationTokenAsyncDelegate().ConfigureAwait(_continueAsyncTasksOnCapturedContext);
 
             if (!string.IsNullOrWhiteSpace(token))
             {

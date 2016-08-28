@@ -51,7 +51,7 @@ namespace VaultSharp
             if (authenticationInfo != null)
             {
                 _authenticationProvider = AuthenticationProviderFactory.CreateAuthenticationProvider(
-                    authenticationInfo, vaultBaseAddress, serviceTimeout);
+                    authenticationInfo, vaultBaseAddress, serviceTimeout, continueAsyncTasksOnCapturedContext);
 
                 _lazyVaultToken = new Lazy<Task<string>>(_authenticationProvider.GetTokenAsync);
             }

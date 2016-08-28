@@ -13,11 +13,13 @@ namespace VaultSharp.Backends.Authentication.Providers.LDAP
     {
         private readonly LDAPAuthenticationInfo _ldapAuthenticationInfo;
         private readonly IDataAccessManager _dataAccessManager;
+        private readonly bool _continueAsyncTasksOnCapturedContext;
 
-        public LDAPAuthenticationProvider(LDAPAuthenticationInfo ldapAuthenticationInfo, IDataAccessManager dataAccessManager)
+        public LDAPAuthenticationProvider(LDAPAuthenticationInfo ldapAuthenticationInfo, IDataAccessManager dataAccessManager, bool continueAsyncTasksOnCapturedContext = false)
         {
             _ldapAuthenticationInfo = ldapAuthenticationInfo;
             _dataAccessManager = dataAccessManager;
+            _continueAsyncTasksOnCapturedContext = continueAsyncTasksOnCapturedContext;
         }
 
         public async Task<string> GetTokenAsync()
@@ -37,7 +39,10 @@ namespace VaultSharp.Backends.Authentication.Providers.LDAP
                 requestData.Add("method", _ldapAuthenticationInfo.MultiFactorMethod);
             }
 
-            var response = await _dataAccessManager.MakeRequestAsync<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, requestData);
+            var response =
+                await
+                    _dataAccessManager.MakeRequestAsync<Secret<Dictionary<string, object>>>(LoginResourcePath,
+                        HttpMethod.Post, requestData).ConfigureAwait(_continueAsyncTasksOnCapturedContext);
 
             if (response != null && response.AuthorizationInfo != null && !string.IsNullOrWhiteSpace(response.AuthorizationInfo.ClientToken))
             {

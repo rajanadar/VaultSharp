@@ -13,11 +13,13 @@ namespace VaultSharp.Backends.Authentication.Providers.UsernamePassword
     {
         private readonly UsernamePasswordAuthenticationInfo _userPassAuthenticationInfo;
         private readonly IDataAccessManager _dataAccessManager;
+        private readonly bool _continueAsyncTasksOnCapturedContext;
 
-        public UsernamePasswordAuthenticationProvider(UsernamePasswordAuthenticationInfo userPassAuthenticationInfo, IDataAccessManager dataAccessManager)
+        public UsernamePasswordAuthenticationProvider(UsernamePasswordAuthenticationInfo userPassAuthenticationInfo, IDataAccessManager dataAccessManager, bool continueAsyncTasksOnCapturedContext = false)
         {
             _userPassAuthenticationInfo = userPassAuthenticationInfo;
             _dataAccessManager = dataAccessManager;
+            _continueAsyncTasksOnCapturedContext = continueAsyncTasksOnCapturedContext;
         }
 
         public async Task<string> GetTokenAsync()
@@ -37,7 +39,10 @@ namespace VaultSharp.Backends.Authentication.Providers.UsernamePassword
                 requestData.Add("method", _userPassAuthenticationInfo.MultiFactorMethod);
             }
 
-            var response = await _dataAccessManager.MakeRequestAsync<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, requestData);
+            var response =
+                await
+                    _dataAccessManager.MakeRequestAsync<Secret<Dictionary<string, object>>>(LoginResourcePath,
+                        HttpMethod.Post, requestData).ConfigureAwait(_continueAsyncTasksOnCapturedContext);
 
             if (response != null && response.AuthorizationInfo != null && !string.IsNullOrWhiteSpace(response.AuthorizationInfo.ClientToken))
             {

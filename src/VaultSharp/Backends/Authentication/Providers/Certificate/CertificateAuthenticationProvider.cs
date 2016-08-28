@@ -12,16 +12,21 @@ namespace VaultSharp.Backends.Authentication.Providers.Certificate
     {
         private readonly CertificateAuthenticationInfo _certificateAuthenticationInfo;
         private readonly IDataAccessManager _dataAccessManager;
+        private readonly bool _continueAsyncTasksOnCapturedContext;
 
-        public CertificateAuthenticationProvider(CertificateAuthenticationInfo certificateAuthenticationInfo, IDataAccessManager dataAccessManager)
+        public CertificateAuthenticationProvider(CertificateAuthenticationInfo certificateAuthenticationInfo, IDataAccessManager dataAccessManager, bool continueAsyncTasksOnCapturedContext = false)
         {
             _certificateAuthenticationInfo = certificateAuthenticationInfo;
             _dataAccessManager = dataAccessManager;
+            _continueAsyncTasksOnCapturedContext = continueAsyncTasksOnCapturedContext;
         }
 
         public async Task<string> GetTokenAsync()
         {
-            var response = await _dataAccessManager.MakeRequestAsync<Secret<dynamic>>(LoginResourcePath, HttpMethod.Post);
+            var response =
+                await
+                    _dataAccessManager.MakeRequestAsync<Secret<dynamic>>(LoginResourcePath, HttpMethod.Post)
+                        .ConfigureAwait(_continueAsyncTasksOnCapturedContext);
 
             if (response != null && response.AuthorizationInfo != null && !string.IsNullOrWhiteSpace(response.AuthorizationInfo.ClientToken))
             {

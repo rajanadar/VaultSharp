@@ -13,11 +13,13 @@ namespace VaultSharp.Backends.Authentication.Providers.GitHub
     {
         private readonly GitHubAuthenticationInfo _gitHubAuthenticationInfo;
         private readonly IDataAccessManager _dataAccessManager;
+        private readonly bool _continueAsyncTasksOnCapturedContext;
 
-        public GitHubAuthenticationProvider(GitHubAuthenticationInfo gitHubAuthenticationInfo, IDataAccessManager dataAccessManager)
+        public GitHubAuthenticationProvider(GitHubAuthenticationInfo gitHubAuthenticationInfo, IDataAccessManager dataAccessManager, bool continueAsyncTasksOnCapturedContext = false)
         {
             _gitHubAuthenticationInfo = gitHubAuthenticationInfo;
             _dataAccessManager = dataAccessManager;
+            _continueAsyncTasksOnCapturedContext = continueAsyncTasksOnCapturedContext;
         }
 
         public async Task<string> GetTokenAsync()
@@ -27,7 +29,10 @@ namespace VaultSharp.Backends.Authentication.Providers.GitHub
                 token = _gitHubAuthenticationInfo.PersonalAccessToken
             };
 
-            var response = await _dataAccessManager.MakeRequestAsync<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, requestData);
+            var response =
+                await
+                    _dataAccessManager.MakeRequestAsync<Secret<Dictionary<string, object>>>(LoginResourcePath,
+                        HttpMethod.Post, requestData).ConfigureAwait(_continueAsyncTasksOnCapturedContext);
 
             if (response != null && response.AuthorizationInfo != null && !string.IsNullOrWhiteSpace(response.AuthorizationInfo.ClientToken))
             {

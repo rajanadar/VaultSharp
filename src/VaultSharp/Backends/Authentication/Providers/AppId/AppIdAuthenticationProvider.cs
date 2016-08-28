@@ -13,11 +13,13 @@ namespace VaultSharp.Backends.Authentication.Providers.AppId
     {
         private readonly AppIdAuthenticationInfo _appIdAuthenticationInfo;
         private readonly IDataAccessManager _dataAccessManager;
+        private readonly bool _continueAsyncTasksOnCapturedContext;
 
-        public AppIdAuthenticationProvider(AppIdAuthenticationInfo appIdAuthenticationInfo, IDataAccessManager dataAccessManager)
+        public AppIdAuthenticationProvider(AppIdAuthenticationInfo appIdAuthenticationInfo, IDataAccessManager dataAccessManager, bool continueAsyncTasksOnCapturedContext = false)
         {
             _appIdAuthenticationInfo = appIdAuthenticationInfo;
             _dataAccessManager = dataAccessManager;
+            _continueAsyncTasksOnCapturedContext = continueAsyncTasksOnCapturedContext;
         }
 
         public async Task<string> GetTokenAsync()
@@ -28,7 +30,10 @@ namespace VaultSharp.Backends.Authentication.Providers.AppId
                 user_id = _appIdAuthenticationInfo.UserId
             };
 
-            var response = await _dataAccessManager.MakeRequestAsync<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, requestData);
+            var response =
+                await
+                    _dataAccessManager.MakeRequestAsync<Secret<Dictionary<string, object>>>(LoginResourcePath,
+                        HttpMethod.Post, requestData).ConfigureAwait(_continueAsyncTasksOnCapturedContext);
 
             if (response != null && response.AuthorizationInfo != null && !string.IsNullOrWhiteSpace(response.AuthorizationInfo.ClientToken))
             {
