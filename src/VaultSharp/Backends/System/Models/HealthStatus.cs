@@ -44,13 +44,13 @@ namespace VaultSharp.Backends.System.Models
         public string Version { get; set; }
 
         /// <summary>
-        /// Gets or sets the server time.
+        /// Gets or sets the server time UTC.
         /// </summary>
         /// <value>
-        /// The server time.
+        /// The server time UTC.
         /// </value>
         [JsonProperty("server_time_utc")]
-        public DateTimeOffset ServerTime { get; set; }
+        public long ServerTimeUtc { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance of Vault is a standby.
