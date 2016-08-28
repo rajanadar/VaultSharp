@@ -436,21 +436,26 @@ namespace VaultSharp
 
         // this API is a bit quirky/hacky since it is aware of HttpResponseMessage
         // eventually, i need to solve this in a cleaner manner.
-        public async Task<HealthStatus> GetHealthStatusAsync(bool standbyOk = false)
+        public async Task<HealthStatus> GetHealthStatusAsync(bool? standbyOk = null, int? activeStatusCode = null, int? standbyStatusCode = null, int? sealedStatusCode = null, int? uninitializedStatusCode = null)
         {
             var failureHealthStatus = new HealthStatus();
             var expectedFailure = false;
 
             try
             {
-                var queryString = standbyOk ? "?standbyok" : string.Empty;
+                // raja todo.. add other querystrings.
+                var queryString = standbyOk == true ? "?standbyok" : string.Empty;
                 var resourcePath = "sys/health" + queryString;
 
                 var healthStatus =
                     await MakeVaultApiRequest<HealthStatus>(resourcePath, HttpMethod.Get, sendClientToken: false,
                         failureDelegate: (statusCode, responseText) =>
                         {
-                            if (statusCode == HttpStatusCode.InternalServerError || (int)statusCode == 429)
+                            // raja todo.. do the user defined error code equality as well.
+                            if (statusCode == HttpStatusCode.InternalServerError
+                                || statusCode == HttpStatusCode.NotImplemented
+                                || statusCode == HttpStatusCode.ServiceUnavailable
+                                || (int) statusCode == 429)
                             {
                                 expectedFailure = true;
                                 failureHealthStatus = JsonConvert.DeserializeObject<HealthStatus>(responseText);
@@ -464,7 +469,7 @@ namespace VaultSharp
             {
                 failureHealthStatus.HealthCheckSucceeded = false;
                 failureHealthStatus.ErrorMessage = expectedFailure
-                    ? "The Vault is sealed or uninitialized or in standby."
+                    ? "The Vault is sealed or uninitialized or in standby. Please check the response to know the exact reason."
                     : ex.Message;
 
                 return failureHealthStatus;

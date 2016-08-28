@@ -479,12 +479,34 @@ namespace VaultSharp
         /// This is an unauthenticated call and does not use the credentials.
         /// </summary>
         /// <param name="standbyOk"><para>[optional]</para>
-        /// A flag to indicate that being a standby should still return a successful response than an error response.
-        /// DEFAULTs to <value>false</value>, meaning a standby instance will return an error on health check.</param>
+        /// A flag to indicate that being a standby should still return the active status code 
+        /// instead of the standby status code of HTTP 429 (or whatever is provided as standbyStatusCode)
+        /// DEFAULTs to <value>null</value>, meaning a standby code will be returned.
+        /// </param>
+        /// <param name="activeStatusCode"><para>[optional]</para>
+        /// A user defined status code provided to indicate the status code that should be returned 
+        /// for an active node instead of the default successful response of HTTP 200.
+        /// DEFAULTs to <value>null</value>, meaning the default HTTP 200 Status code will be returned.
+        /// </param>
+        /// <param name="standbyStatusCode"><para>[optional]</para>
+        /// A user defined status code provided to indicate the status code that should be returned 
+        /// for an standby node instead of the default error response of HTTP 429.
+        /// DEFAULTs to <value>null</value>, meaning the default HTTP 429 Status code will be returned.
+        /// </param>
+        /// <param name="sealedStatusCode"><para>[optional]</para>
+        /// A user defined status code provided to indicate the status code that should be returned 
+        /// for an sealed node instead of the default error response of HTTP 503.
+        /// DEFAULTs to <value>null</value>, meaning the default HTTP 503 Status code will be returned.
+        /// </param>
+        /// <param name="uninitializedStatusCode"><para>[optional]</para>
+        /// A user defined status code provided to indicate the status code that should be returned 
+        /// for an uninitialized vault node instead of the default error response of HTTP 501.
+        /// DEFAULTs to <value>null</value>, meaning the default HTTP 501 Status code will be returned.
+        /// </param>
         /// <returns>
         /// The health status.
         /// </returns>
-        Task<HealthStatus> GetHealthStatusAsync(bool standbyOk = false);
+        Task<HealthStatus> GetHealthStatusAsync(bool? standbyOk = null, int? activeStatusCode = null, int? standbyStatusCode = null, int? sealedStatusCode = null, int? uninitializedStatusCode = null);
 
         /// <summary>
         /// An all-purpose method to read any value from vault from any path.
