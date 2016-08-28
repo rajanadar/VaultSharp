@@ -541,8 +541,25 @@ namespace VaultSharp
         {
             Checker.NotNull(token, "token");
 
-            var requestData = incrementSeconds.HasValue ? new { increment = incrementSeconds.Value } : null;
-            await MakeVaultApiRequest("auth/token/renew/" + token, HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            // If the token given for renewal is the same as the client token, 
+            // the renew-self endpoint will be used in the API. Given that the default policy (by default) 
+            // allows all clients access to the renew-self endpoint, this makes it much more likely that the 
+            // intended operation will be successful. [GH-894]
+            // https://github.com/hashicorp/vault/pull/894
+
+            var clientToken = await _lazyVaultToken.Value;
+
+            if (string.Equals(token, clientToken, StringComparison.Ordinal))
+            {
+                await RenewCallingTokenAsync(incrementSeconds);
+            }
+            else
+            {
+                var requestData = incrementSeconds.HasValue ? new {increment = incrementSeconds.Value} : null;
+                await
+                    MakeVaultApiRequest("auth/token/renew/" + token, HttpMethod.Post, requestData)
+                        .ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            }
         }
 
         public async Task AWSConfigureRootCredentialsAsync(AWSRootCredentials awsRootCredentials, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS)

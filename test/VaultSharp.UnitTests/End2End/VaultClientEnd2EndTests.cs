@@ -665,6 +665,11 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             await Assert.ThrowsAsync<Exception>(() => _authenticatedClient.GetTokenInfoAsync(secret2.AuthorizationInfo.ClientToken));
             await Assert.ThrowsAsync<Exception>(() => _authenticatedClient.GetTokenInfoAsync(secret3.AuthorizationInfo.ClientToken));
 
+            // check if renewal of same token calls renew-self.
+            // do it with lease id.
+
+            // await _authenticatedClient.RenewTokenAsync(_masterCredentials.RootToken);
+
             // renew calls need a lease id. raja todo
         }
 
