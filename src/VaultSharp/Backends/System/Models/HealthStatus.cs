@@ -44,10 +44,10 @@ namespace VaultSharp.Backends.System.Models
         public string Version { get; set; }
 
         /// <summary>
-        /// Gets or sets the server time UTC.
+        /// Gets or sets the server time UTC unix timestamp.
         /// </summary>
         /// <value>
-        /// The server time UTC.
+        /// The server time UTC unix timestamp.
         /// </value>
         [JsonProperty("server_time_utc")]
         public double ServerTimeUtcUnixTimestamp { get; set; }
