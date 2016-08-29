@@ -1,10 +1,15 @@
-﻿using VaultSharp.Infrastructure.Validation;
+﻿using System;
+using VaultSharp.Infrastructure.Validation;
 
 namespace VaultSharp.Backends.Authentication.Models.AppId
 {
     /// <summary>
     /// Represents the login information for the AppId Authentication backend.
     /// </summary>
+    [Obsolete("The AppId Authentication backend in Vault is now deprecated with the addition " +
+              "of the new AppRole backend. There are no plans to remove it, but we encourage " +
+              "using AppRole whenever possible, as it offers enhanced functionality " +
+              "and can accommodate many more types of authentication paradigms.")]
     public class AppIdAuthenticationInfo : IAuthenticationInfo
     {
         /// <summary>

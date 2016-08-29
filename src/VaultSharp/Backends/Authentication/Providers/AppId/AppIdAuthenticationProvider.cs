@@ -9,6 +9,10 @@ using VaultSharp.DataAccess;
 
 namespace VaultSharp.Backends.Authentication.Providers.AppId
 {
+    [Obsolete("The AppId Authentication backend in Vault is now deprecated with the addition " +
+          "of the new AppRole backend. There are no plans to remove it, but we encourage " +
+          "using AppRole whenever possible, as it offers enhanced functionality " +
+          "and can accommodate many more types of authentication paradigms.")]
     internal class AppIdAuthenticationProvider : IAuthenticationProvider
     {
         private readonly AppIdAuthenticationInfo _appIdAuthenticationInfo;

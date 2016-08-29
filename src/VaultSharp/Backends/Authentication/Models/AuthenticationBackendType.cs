@@ -52,6 +52,10 @@ namespace VaultSharp.Backends.Authentication.Models
         /// <value>
         /// The application identifier.
         /// </value>
+        [Obsolete("The AppId Authentication backend in Vault is now deprecated with the addition " +
+          "of the new AppRole backend. There are no plans to remove it, but we encourage " +
+          "using AppRole whenever possible, as it offers enhanced functionality " +
+          "and can accommodate many more types of authentication paradigms.")]
         public static AuthenticationBackendType AppId
         {
             get
