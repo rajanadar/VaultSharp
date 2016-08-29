@@ -41,6 +41,7 @@ namespace VaultSharp.UnitTests.End2End
                 // await GithubAuthenticationProviderTests();
             }
 
+            await EncryptStrongTests();
             await MountedSecretBackendTests();
             await MountedAuthenticationBackendTests();
             await PoliciesTests();
@@ -55,7 +56,6 @@ namespace VaultSharp.UnitTests.End2End
             await GenericTests();
             await MySqlCredentialTests();
             await MySqlCredentialStrongTests();
-            await EncryptStrongTests();
             await SSHOTPTests();
 
             // await SSHDynamicTests();
@@ -571,7 +571,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
             await _authenticatedClient.MountSecretBackendAsync(backend);
 
-            await _authenticatedClient.TransitCreateEncryptionKeyAsync(keyName, true, backend.MountPoint);
+            await _authenticatedClient.TransitCreateEncryptionKeyAsync(keyName, true, true, backend.MountPoint);
             var keyInfo = await _authenticatedClient.TransitGetEncryptionKeyInfoAsync(keyName, backend.MountPoint);
 
             Assert.Equal(keyName, keyInfo.Data.Name);
@@ -583,22 +583,32 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             keyInfo = await _authenticatedClient.TransitGetEncryptionKeyInfoAsync(keyName, backend.MountPoint);
             Assert.True(keyInfo.Data.IsDeletionAllowed);
 
-            var cipherText = await _authenticatedClient.TransitEncryptAsync(keyName, encodedPlainText, context, transitBackendMountPoint: backend.MountPoint);
-            var plainText2 = Encoding.UTF8.GetString(Convert.FromBase64String((await _authenticatedClient.TransitDecryptAsync(keyName, cipherText.Data.CipherText, context, backend.MountPoint)).Data.PlainText));
+            var nonce = Convert.ToBase64String(Enumerable.Range(0, 12).Select(i => (byte) i).ToArray());
+            var nonce2 = Convert.ToBase64String(Enumerable.Range(0, 12).Select(i => (byte)(i+1)).ToArray());
+
+            var cipherText = await _authenticatedClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce, transitBackendMountPoint: backend.MountPoint);
+            var convergentCipherText = await _authenticatedClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce, transitBackendMountPoint: backend.MountPoint);
+
+            Assert.Equal(convergentCipherText.Data.CipherText, cipherText.Data.CipherText);
+
+            var nonConvergentCipherText = await _authenticatedClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce2, transitBackendMountPoint: backend.MountPoint);
+            Assert.NotEqual(nonConvergentCipherText.Data.CipherText, cipherText.Data.CipherText);
+
+            var plainText2 = Encoding.UTF8.GetString(Convert.FromBase64String((await _authenticatedClient.TransitDecryptAsync(keyName, cipherText.Data.CipherText, context, nonce, backend.MountPoint)).Data.PlainText));
 
             Assert.Equal(plainText, plainText2);
 
             await _authenticatedClient.TransitRotateEncryptionKeyAsync(keyName, backend.MountPoint);
-            var cipherText2 = await _authenticatedClient.TransitEncryptAsync(keyName, encodedPlainText, context, transitBackendMountPoint: backend.MountPoint);
+            var cipherText2 = await _authenticatedClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce, transitBackendMountPoint: backend.MountPoint);
 
             Assert.NotEqual(cipherText.Data.CipherText, cipherText2.Data.CipherText);
 
-            var cipherText3 = await _authenticatedClient.TransitRewrapWithLatestEncryptionKeyAsync(keyName, cipherText.Data.CipherText, context, backend.MountPoint);
+            await _authenticatedClient.TransitRewrapWithLatestEncryptionKeyAsync(keyName, cipherText.Data.CipherText, context, nonce, backend.MountPoint);
 
-            var newKey1 = await _authenticatedClient.TransitCreateDataKeyAsync(keyName, false, context, 128, backend.MountPoint);
+            var newKey1 = await _authenticatedClient.TransitCreateDataKeyAsync(keyName, false, context, nonce, 128, backend.MountPoint);
             Assert.Null(newKey1.Data.PlainTextKey);
 
-            newKey1 = await _authenticatedClient.TransitCreateDataKeyAsync(keyName, true, context, 128, backend.MountPoint);
+            newKey1 = await _authenticatedClient.TransitCreateDataKeyAsync(keyName, true, context, nonce, 128, backend.MountPoint);
             Assert.NotNull(newKey1.Data.PlainTextKey);
 
             await _authenticatedClient.TransitDeleteEncryptionKeyAsync(keyName, backend.MountPoint);

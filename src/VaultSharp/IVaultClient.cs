@@ -1625,13 +1625,23 @@ namespace VaultSharp
         /// Boolean flag indicating if key derivation MUST be used.
         /// If enabled, all encrypt/decrypt requests to this named key must provide a context which is used for key derivation.
         /// Defaults to false.</param>
+        /// <param name="doConvergentEncryption"><para>[optional]</para>
+        /// Boolean flag when set, the key will support convergent encryption, where the same plaintext creates the same ciphertext. 
+        /// This requires <see cref="mustUseKeyDerivation"/> to be set to true. 
+        /// When enabled, each encryption(/decryption/rewrap/datakey) operation will require a nonce value to be specified. 
+        /// Note that while this is useful for particular situations, all nonce values used with a given context value 
+        /// must be unique or it will compromise the security of your key. 
+        /// A common way to use this will be to generate a unique identifier for the given data (for instance, a SHA-512 sum), 
+        /// then separate the bytes so that twelve bytes are used as the nonce and the remaining as the context, 
+        /// ensuring that all bits of unique identity are used as a part of the encryption operation. 
+        /// Defaults to false.</param>
         /// <param name="transitBackendMountPoint"><para>[optional]</para>
         /// The mount point for the Transit backend. Defaults to <see cref="SecretBackendType.Transit" />
         /// Provide a value only if you have customized the Transit mount point.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task TransitCreateEncryptionKeyAsync(string encryptionKeyName, bool mustUseKeyDerivation = false, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+        Task TransitCreateEncryptionKeyAsync(string encryptionKeyName, bool mustUseKeyDerivation = false, bool doConvergentEncryption = false, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
 
         /// <summary>
         /// Returns information about a named encryption key.
@@ -1702,7 +1712,11 @@ namespace VaultSharp
 
         /// <summary>
         /// Encrypts the provided plaintext using the named key.
-        /// If the named key does not already exist, it will be automatically generated for the given name with the default parameters.
+        /// This path supports the create and update policy capabilities as follows: 
+        /// if the user has the create capability for this endpoint in their policies, 
+        /// and the key does not exist, it will be upserted with default values 
+        /// (whether the key requires derivation depends on whether the context parameter is empty or not). 
+        /// If the user only has update capability and the key does not exist, an error will be returned.
         /// </summary>
         /// <param name="encryptionKeyName"><para>[required]</para>
         /// Name of the key used to encrypt the text.</param>
@@ -1710,13 +1724,17 @@ namespace VaultSharp
         /// The plaintext to encrypt, provided as base64 encoded.</param>
         /// <param name="base64EncodedKeyDerivationContext"><para>[optional]</para>
         /// The key derivation context, provided as base64 encoded. Must be provided if derivation is enabled.</param>
+        /// <param name="convergentEncryptionBase64EncodedNonce"><para>[optional]</para>
+        /// The nonce value, provided as base64 encoded. Must be provided if convergent encryption is enabled for this key. 
+        /// The value must be exactly 96 bits (12 bytes) long and the user must ensure that for any given context 
+        /// (and thus, any given encryption key) this nonce value is never reused.</param>
         /// <param name="transitBackendMountPoint"><para>[optional]</para>
         /// The mount point for the transit backend. Defaults to <see cref="SecretBackendType.Transit" />
         /// Provide a value only if you have customized the mount point.</param>
         /// <returns>
         /// The secret with cipher text.
         /// </returns>
-        Task<Secret<CipherTextData>> TransitEncryptAsync(string encryptionKeyName, string base64EncodedPlainText, string base64EncodedKeyDerivationContext = null, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+        Task<Secret<CipherTextData>> TransitEncryptAsync(string encryptionKeyName, string base64EncodedPlainText, string base64EncodedKeyDerivationContext = null, string convergentEncryptionBase64EncodedNonce = null, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
 
         /// <summary>
         /// Decrypts the provided ciphertext using the named key.
@@ -1727,13 +1745,16 @@ namespace VaultSharp
         /// The ciphertext to decrypt, provided as returned by encrypt.</param>
         /// <param name="base64EncodedKeyDerivationContext"><para>[optional]</para>
         /// The key derivation context, provided as base64 encoded. Must be provided if derivation is enabled.</param>
+        /// <param name="convergentEncryptionBase64EncodedNonce"><para>[optional]</para>
+        /// The nonce value used during encryption, provided as base64 encoded. 
+        /// Must be provided if convergent encryption is enabled for this key.</param>
         /// <param name="transitBackendMountPoint"><para>[optional]</para>
         /// The mount point for the transit backend. Defaults to <see cref="SecretBackendType.Transit" />
         /// Provide a value only if you have customized the mount point.</param>
         /// <returns>
         /// The secret with plain text.
         /// </returns>
-        Task<Secret<PlainTextData>> TransitDecryptAsync(string encryptionKeyName, string cipherText, string base64EncodedKeyDerivationContext = null, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+        Task<Secret<PlainTextData>> TransitDecryptAsync(string encryptionKeyName, string cipherText, string base64EncodedKeyDerivationContext = null, string convergentEncryptionBase64EncodedNonce = null, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
 
         /// <summary>
         /// Transits the rewrap with latest encryption key asynchronous.
@@ -1744,13 +1765,16 @@ namespace VaultSharp
         /// The ciphertext to decrypt, provided as returned by encrypt.</param>
         /// <param name="base64EncodedKeyDerivationContext"><para>[optional]</para>
         /// The key derivation context, provided as base64 encoded. Must be provided if derivation is enabled.</param>
+        /// <param name="convergentEncryptionBase64EncodedNonce"><para>[optional]</para>
+        /// The nonce value used during encryption, provided as base64 encoded. 
+        /// Must be provided if convergent encryption is enabled for this key.</param>
         /// <param name="transitBackendMountPoint"><para>[optional]</para>
         /// The mount point for the transit backend. Defaults to <see cref="SecretBackendType.Transit" />
         /// Provide a value only if you have customized the mount point.</param>
         /// <returns>
         /// The secret with cipher text.
         /// </returns>
-        Task<Secret<CipherTextData>> TransitRewrapWithLatestEncryptionKeyAsync(string encryptionKeyName, string cipherText, string base64EncodedKeyDerivationContext = null, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+        Task<Secret<CipherTextData>> TransitRewrapWithLatestEncryptionKeyAsync(string encryptionKeyName, string cipherText, string base64EncodedKeyDerivationContext = null, string convergentEncryptionBase64EncodedNonce = null, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
 
         /// <summary>
         /// Generate a new high-entropy key and the valued encrypted with the named key.
@@ -1766,6 +1790,10 @@ namespace VaultSharp
         /// Defaults to false.</param>
         /// <param name="base64EncodedKeyDerivationContext"><para>[optional]</para>
         /// The key derivation context, provided as base64 encoded. Must be provided if derivation is enabled.</param>
+        /// <param name="convergentEncryptionBase64EncodedNonce"><para>[optional]</para>
+        /// The nonce value, provided as base64 encoded. Must be provided if convergent encryption is enabled for this key. 
+        /// The value must be exactly 96 bits (12 bytes) long and the user must ensure that for any given context 
+        /// (and thus, any given encryption key) this nonce value is never reused.</param>
         /// <param name="keyBits"><para>[optional]</para>
         /// The number of bits in the desired key.
         /// Can be 128, 256, or 512; if not given, defaults to 256.</param>
@@ -1777,6 +1805,6 @@ namespace VaultSharp
         /// If <see cref="returnKeyAsPlainText" /> is true, the plaintext key will be returned along with the ciphertext.
         /// If false, only the ciphertext value will be returned.
         /// </returns>
-        Task<Secret<TransitKeyData>> TransitCreateDataKeyAsync(string encryptionKeyName, bool returnKeyAsPlainText = false, string base64EncodedKeyDerivationContext = null, int keyBits = 256, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+        Task<Secret<TransitKeyData>> TransitCreateDataKeyAsync(string encryptionKeyName, bool returnKeyAsPlainText = false, string base64EncodedKeyDerivationContext = null, string convergentEncryptionBase64EncodedNonce = null, int keyBits = 256, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
     }
 }
