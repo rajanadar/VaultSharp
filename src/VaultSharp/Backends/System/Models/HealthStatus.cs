@@ -50,7 +50,23 @@ namespace VaultSharp.Backends.System.Models
         /// The server time UTC.
         /// </value>
         [JsonProperty("server_time_utc")]
-        public long ServerTimeUtc { get; set; }
+        public double ServerTimeUtcUnixTimestamp { get; set; }
+
+        /// <summary>
+        /// Gets the friendly server time from ServerTimeUtcUnixTimestamp 
+        /// which is in seconds since January 1, 1970 12:00:00 a.m. UTC.
+        /// </summary>
+        /// <value>
+        /// The server time in UTC. (zero offset)
+        /// </value>
+        public DateTimeOffset ServerTimeUtc
+        {
+            get
+            {
+                var date = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                return new DateTimeOffset(date, TimeSpan.Zero).AddSeconds(ServerTimeUtcUnixTimestamp);
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance of Vault is a standby.
