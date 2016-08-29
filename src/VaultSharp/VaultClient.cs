@@ -378,9 +378,9 @@ namespace VaultSharp
             return rekeyStatus;
         }
 
-        public async Task InitiateRekeyAsync(int secretShares, int secretThreshold, string[] pgpKeys = null)
+        public async Task InitiateRekeyAsync(int secretShares, int secretThreshold, string[] pgpKeys = null, bool backup = false)
         {
-            var requestData = new { secret_shares = secretShares, secret_threshold = secretThreshold, pgp_keys = pgpKeys };
+            var requestData = new { secret_shares = secretShares, secret_threshold = secretThreshold, pgp_keys = pgpKeys, backup = backup };
             await MakeVaultApiRequest("sys/rekey/init", HttpMethod.Put, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
@@ -389,13 +389,15 @@ namespace VaultSharp
             await MakeVaultApiRequest("sys/rekey/init", HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<RekeyProgress> ContinueRekeyAsync(string masterShareKey)
+        public async Task<RekeyProgress> ContinueRekeyAsync(string masterShareKey, string rekeyNonce)
         {
             Checker.NotNull(masterShareKey, "masterShareKey");
+            Checker.NotNull(rekeyNonce, "rekeyNonce");
 
             var requestData = new
             {
-                key = masterShareKey
+                key = masterShareKey,
+                nonce = rekeyNonce
             };
 
             var rekeyProgress = await MakeVaultApiRequest<RekeyProgress>("sys/rekey/update", HttpMethod.Put, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);

@@ -988,10 +988,15 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.True(rekeyStatus.RequiredUnsealKeys == 3);
             Assert.True(rekeyStatus.SecretShares == 2);
             Assert.True(rekeyStatus.UnsealKeysProvided == 0);
+            Assert.NotNull(rekeyStatus.Nonce);
+            Assert.False(rekeyStatus.Backup);
 
-            var rekeyProgress = await _authenticatedClient.ContinueRekeyAsync(_masterCredentials.MasterKeys[0]);
+            var rekeyNonce = rekeyStatus.Nonce;
+            var rekeyProgress = await _authenticatedClient.ContinueRekeyAsync(_masterCredentials.MasterKeys[0], rekeyNonce);
             Assert.False(rekeyProgress.Complete);
             Assert.Null(rekeyProgress.MasterKeys);
+            Assert.Equal(string.Empty, rekeyProgress.Nonce);
+            Assert.False(rekeyProgress.Backup);
 
             rekeyStatus = await _authenticatedClient.GetRekeyStatusAsync();
             Assert.True(rekeyStatus.Started);
@@ -999,10 +1004,14 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.True(rekeyStatus.RequiredUnsealKeys == 3);
             Assert.True(rekeyStatus.SecretShares == 2);
             Assert.True(rekeyStatus.UnsealKeysProvided == 1);
+            Assert.Equal(rekeyNonce, rekeyStatus.Nonce);
+            Assert.False(rekeyStatus.Backup);
 
-            rekeyProgress = await _authenticatedClient.ContinueRekeyAsync(_masterCredentials.MasterKeys[1]);
+            rekeyProgress = await _authenticatedClient.ContinueRekeyAsync(_masterCredentials.MasterKeys[1], rekeyNonce);
             Assert.False(rekeyProgress.Complete);
             Assert.Null(rekeyProgress.MasterKeys);
+            Assert.Equal(string.Empty, rekeyProgress.Nonce);
+            Assert.False(rekeyProgress.Backup);
 
             rekeyStatus = await _authenticatedClient.GetRekeyStatusAsync();
             Assert.True(rekeyStatus.Started);
@@ -1010,18 +1019,26 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.True(rekeyStatus.RequiredUnsealKeys == 3);
             Assert.True(rekeyStatus.SecretShares == 2);
             Assert.True(rekeyStatus.UnsealKeysProvided == 2);
+            Assert.Equal(rekeyNonce, rekeyStatus.Nonce);
+            Assert.False(rekeyStatus.Backup);
 
-            rekeyProgress = await _authenticatedClient.ContinueRekeyAsync(_masterCredentials.MasterKeys[2]);
+            rekeyProgress = await _authenticatedClient.ContinueRekeyAsync(_masterCredentials.MasterKeys[2], rekeyNonce);
             Assert.True(rekeyProgress.Complete);
             Assert.NotNull(rekeyProgress.MasterKeys);
+            Assert.Equal(rekeyNonce, rekeyProgress.Nonce);
+            Assert.False(rekeyProgress.Backup);
+
             _masterCredentials.MasterKeys = rekeyProgress.MasterKeys;
 
             rekeyStatus = await _authenticatedClient.GetRekeyStatusAsync();
+
             Assert.False(rekeyStatus.Started);
             Assert.True(rekeyStatus.SecretThreshold == 0);
             Assert.True(rekeyStatus.RequiredUnsealKeys == 2);
             Assert.True(rekeyStatus.SecretShares == 0);
             Assert.True(rekeyStatus.UnsealKeysProvided == 0);
+            Assert.Equal(string.Empty, rekeyStatus.Nonce);
+            Assert.False(rekeyStatus.Backup);
 
             await _authenticatedClient.InitiateRekeyAsync(5, 5);
 
@@ -1031,6 +1048,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.True(rekeyStatus.RequiredUnsealKeys == 2);
             Assert.True(rekeyStatus.SecretShares == 5);
             Assert.True(rekeyStatus.UnsealKeysProvided == 0);
+            Assert.NotNull(rekeyStatus.Nonce);
+            Assert.False(rekeyStatus.Backup);
 
             await _authenticatedClient.CancelRekeyAsync();
             rekeyStatus = await _authenticatedClient.GetRekeyStatusAsync();
@@ -1039,6 +1058,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.True(rekeyStatus.RequiredUnsealKeys == 2);
             Assert.True(rekeyStatus.SecretShares == 0);
             Assert.True(rekeyStatus.UnsealKeysProvided == 0);
+            Assert.Equal(string.Empty, rekeyStatus.Nonce);
+            Assert.False(rekeyStatus.Backup);
 
             // update raw
             var rawPath = "rawpath";

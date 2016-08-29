@@ -403,10 +403,16 @@ namespace VaultSharp
         /// Ordering is preserved.
         /// The keys must be base64-encoded from their original binary representation.
         /// The size of this array must be the same as <see cref="secretShares" />.</param>
+        /// <param name="backup"><para>[optional]</para>
+        /// If using PGP-encrypted keys, whether Vault should also back them up to a well-known 
+        /// location in physical storage. These can then be retrieved and removed 
+        /// via the GetRekeyBackupAsync endpoint. Makes sense only when pgp keys are provided.
+        /// Defaults to 'false', meaning no backup.
+        /// </param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task InitiateRekeyAsync(int secretShares, int secretThreshold, string[] pgpKeys = null);
+        Task InitiateRekeyAsync(int secretShares, int secretThreshold, string[] pgpKeys = null, bool backup = false);
 
         /// <summary>
         /// Cancels any in-progress rekey. This clears the rekey settings as well as any progress made.
@@ -424,10 +430,16 @@ namespace VaultSharp
         /// </summary>
         /// <param name="masterShareKey"><para>[required]</para>
         /// A single master share key.</param>
+        /// <param name="rekeyNonce"><para>[required]</para>
+        /// The nonce of the rekey operation.</param>
         /// <returns>
-        /// An object indicating completion and if so with the (possibly encrypted, if pgp_keys was provided) new master keys.
+        /// An object indicating the rekey operation nonce and completion status; 
+        /// if completed, the new master keys are returned. 
+        /// If the keys are PGP-encrypted, an array of key fingerprints will also be provided 
+        /// (with the order in which the keys were used for encryption) along with whether 
+        /// or not the keys were backed up to physical storage.
         /// </returns>
-        Task<RekeyProgress> ContinueRekeyAsync(string masterShareKey);
+        Task<RekeyProgress> ContinueRekeyAsync(string masterShareKey, string rekeyNonce);
 
         /// <summary>
         /// Trigger a rotation of the backend encryption key. This is the key that is used to encrypt data written to the storage backend, and is not provided to operators.
