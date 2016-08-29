@@ -389,6 +389,17 @@ namespace VaultSharp
             await MakeVaultApiRequest("sys/rekey/init", HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<RekeyBackupInfo> GetRekeyBackupKeysAsync()
+        {
+            var rekeyBackupInfo = await MakeVaultApiRequest<RekeyBackupInfo>("sys/rekey/backup", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return rekeyBackupInfo;
+        }
+
+        public async Task DeleteRekeyBackupKeysAsync()
+        {
+            await MakeVaultApiRequest("sys/rekey/backup", HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
         public async Task<RekeyProgress> ContinueRekeyAsync(string masterShareKey, string rekeyNonce)
         {
             Checker.NotNull(masterShareKey, "masterShareKey");

@@ -424,6 +424,20 @@ namespace VaultSharp
         Task CancelRekeyAsync();
 
         /// <summary>
+        /// Gets the the backup copy of PGP-encrypted unseal keys. 
+        /// The returned value is the nonce of the rekey operation and a map of PGP key 
+        /// fingerprint to hex-encoded PGP-encrypted key.
+        /// </summary>
+        /// <returns>The rekey backup info.</returns>
+        Task<RekeyBackupInfo> GetRekeyBackupKeysAsync();
+
+        /// <summary>
+        /// Deletes the backup copy of PGP-encrypted unseal keys.
+        /// </summary>
+        /// <returns>The task.</returns>
+        Task DeleteRekeyBackupKeysAsync();
+
+        /// <summary>
         /// Continues the rekey process. Enter a single master key share to progress the rekey of the Vault.
         /// If the threshold number of master key shares is reached, Vault will complete the rekey.
         /// Otherwise, this API must be called multiple times until that threshold is met.
