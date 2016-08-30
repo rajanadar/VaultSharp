@@ -366,6 +366,13 @@ namespace VaultSharp
             return leader;
         }
 
+        public async Task StepDownActiveNodeAsync()
+        {
+            await
+                MakeVaultApiRequest("sys/step-down", HttpMethod.Put)
+                    .ConfigureAwait(_continueAsyncTasksOnCapturedContext);
+        }
+
         public async Task<EncryptionKeyStatus> GetEncryptionKeyStatusAsync()
         {
             var keyStatus = await MakeVaultApiRequest<EncryptionKeyStatus>("sys/key-status", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);

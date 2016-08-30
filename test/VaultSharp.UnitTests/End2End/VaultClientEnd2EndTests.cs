@@ -41,6 +41,8 @@ namespace VaultSharp.UnitTests.End2End
                 // await GithubAuthenticationProviderTests();
             }
 
+            await _authenticatedClient.StepDownActiveNodeAsync();
+
             await EncryptStrongTests();
             await MountedSecretBackendTests();
             await MountedAuthenticationBackendTests();

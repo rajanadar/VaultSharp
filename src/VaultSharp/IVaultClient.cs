@@ -372,6 +372,17 @@ namespace VaultSharp
         Task<Leader> GetLeaderAsync();
 
         /// <summary>
+        /// Forces the node to give up active status. 
+        /// If the node does not have active status, this endpoint does nothing. 
+        /// Note that the node will sleep for ten seconds before attempting to grab the active lock again, 
+        /// but if no standby nodes grab the active lock in the interim, 
+        /// the same node may become the active node again. 
+        /// This API is a root protected call.
+        /// </summary>
+        /// <returns>The task.</returns>
+        Task StepDownActiveNodeAsync();
+
+        /// <summary>
         /// Gets information about the current encryption key used by Vault
         /// </summary>
         /// <returns>
