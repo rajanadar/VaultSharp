@@ -332,6 +332,35 @@ namespace VaultSharp
         Task DeletePolicyAsync(string policyName);
 
         /// <summary>
+        /// Gets the capabilities of the token on the given path.
+        /// </summary>
+        /// <param name="token"><para>[required]</para>
+        /// Token for which capabilities are being queried.</param>
+        /// <param name="path"><para>[required]</para>
+        /// Path on which the token's capabilities will be checked.</param>
+        /// <returns>The list of capabilities.</returns>
+        Task<IEnumerable<string>> GetTokenCapabilitiesAsync(string token, string path);
+
+        /// <summary>
+        /// Gets the capabilities of client token on the given path. 
+        /// Client token is the Vault token with which this API call is made.
+        /// </summary>
+        /// <param name="path"><para>[required]</para>
+        /// Path on which the token's capabilities will be checked.</param>
+        /// <returns>The list of capabilities.</returns>
+        Task<IEnumerable<string>> GetCallingTokenCapabilitiesAsync(string path);
+
+        /// <summary>
+        /// Gets the capabilities of the token associated with an accessor, on the given path.
+        /// </summary>
+        /// <param name="tokenAccessor"><para>[required]</para>
+        /// Token accessor for which capabilities are being queried.</param>
+        /// <param name="path"><para>[required]</para>
+        /// Path on which the token's capabilities will be checked.</param>
+        /// <returns>The list of capabilities.</returns>
+        Task<IEnumerable<string>> GetTokenAccessorCapabilitiesAsync(string tokenAccessor, string path);
+
+        /// <summary>
         /// Gets all the enabled audit backends.
         /// </summary>
         /// <returns>

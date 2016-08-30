@@ -326,6 +326,53 @@ namespace VaultSharp
             await MakeVaultApiRequest("sys/policy/" + policyName, HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<IEnumerable<string>> GetTokenCapabilitiesAsync(string token, string path)
+        {
+            Checker.NotNull(token, "token");
+            Checker.NotNull(path, "path");
+
+            var requestData = new {token = token, path = path};
+            var response = await MakeVaultApiRequest<dynamic>("sys/capabilities", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+
+            if (response != null && response.capabilities != null)
+            {
+                return response.capabilities.ToObject<List<string>>();
+            }
+
+            return Enumerable.Empty<string>();
+        }
+
+        public async Task<IEnumerable<string>> GetCallingTokenCapabilitiesAsync(string path)
+        {
+            Checker.NotNull(path, "path");
+
+            var requestData = new { path = path };
+            var response = await MakeVaultApiRequest<dynamic>("sys/capabilities-self", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+
+            if (response != null && response.capabilities != null)
+            {
+                return response.capabilities.ToObject<List<string>>();
+            }
+
+            return Enumerable.Empty<string>();
+        }
+
+        public async Task<IEnumerable<string>> GetTokenAccessorCapabilitiesAsync(string tokenAccessor, string path)
+        {
+            Checker.NotNull(tokenAccessor, "tokenAccessor");
+            Checker.NotNull(path, "path");
+
+            var requestData = new { accessor = tokenAccessor, path = path };
+            var response = await MakeVaultApiRequest<dynamic>("sys/capabilities-accessor", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+
+            if (response != null && response.capabilities != null)
+            {
+                return response.capabilities.ToObject<List<string>>();
+            }
+
+            return Enumerable.Empty<string>();
+        }
+
         public async Task<IEnumerable<AuditBackend>> GetAllEnabledAuditBackendsAsync()
         {
             var response = await MakeVaultApiRequest<Dictionary<string, AuditBackend>>("sys/audit", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);

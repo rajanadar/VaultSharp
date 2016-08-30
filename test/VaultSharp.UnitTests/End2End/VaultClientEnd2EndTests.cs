@@ -44,7 +44,8 @@ namespace VaultSharp.UnitTests.End2End
                 // await GithubAuthenticationProviderTests();
             }
 
-            await _authenticatedClient.StepDownActiveNodeAsync();
+            await TokenTests();
+            // await _authenticatedClient.StepDownActiveNodeAsync();
 
             await EncryptStrongTests();
             await MountedSecretBackendTests();
@@ -52,7 +53,6 @@ namespace VaultSharp.UnitTests.End2End
             await PoliciesTests();
             await AuditBackendsTests();
             await SecretTests();
-            await TokenTests();
             await EncryptTests();
             await AppIdAuthenticationProviderTests();
             await UsernamePasswordAuthenticationProviderTests();
@@ -657,6 +657,14 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
         {
             var secret1 = await _authenticatedClient.CreateTokenAsync();
             Assert.NotNull(secret1);
+
+            // capabilities.
+            var caps =
+                await _authenticatedClient.GetTokenCapabilitiesAsync(secret1.AuthorizationInfo.ClientToken, "sys");
+            Assert.NotNull(caps);
+
+            var caps2 = await _authenticatedClient.GetCallingTokenCapabilitiesAsync("sys");
+            Assert.NotNull(caps2);
 
             var secret2 = await _authenticatedClient.CreateTokenAsync(new TokenCreationOptions { NoParent = true });
             Assert.NotNull(secret2);
