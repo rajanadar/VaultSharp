@@ -542,13 +542,6 @@ namespace VaultSharp
             await MakeVaultApiRequest("auth/token/revoke-self", HttpMethod.Post).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task RevokeAllTokensUnderPrefixAsync(string prefixPath)
-        {
-            Checker.NotNull(prefixPath, "prefixPath");
-
-            await MakeVaultApiRequest("auth/token/revoke-prefix/" + prefixPath.Trim('/'), HttpMethod.Post).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-        }
-
         public async Task RenewCallingTokenAsync(int? incrementSeconds = null)
         {
             var requestData = incrementSeconds.HasValue ? new { increment = incrementSeconds.Value } : null;

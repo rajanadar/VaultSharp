@@ -84,7 +84,6 @@ namespace VaultSharp.UnitTests
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.DeleteSecretAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.GetTokenInfoAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.RevokeTokenAsync(null, true));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.RevokeAllTokensUnderPrefixAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.RenewTokenAsync(null));
         }
 

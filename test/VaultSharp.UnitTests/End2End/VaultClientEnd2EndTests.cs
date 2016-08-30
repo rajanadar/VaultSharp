@@ -671,10 +671,6 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             await _authenticatedClient.RevokeTokenAsync(secret1.AuthorizationInfo.ClientToken, true);
             await Assert.ThrowsAsync<Exception>(() => _authenticatedClient.GetTokenInfoAsync(secret1.AuthorizationInfo.ClientToken));
 
-            await _authenticatedClient.RevokeAllTokensUnderPrefixAsync("auth/token");
-            await Assert.ThrowsAsync<Exception>(() => _authenticatedClient.GetTokenInfoAsync(secret2.AuthorizationInfo.ClientToken));
-            await Assert.ThrowsAsync<Exception>(() => _authenticatedClient.GetTokenInfoAsync(secret3.AuthorizationInfo.ClientToken));
-
             // check if renewal of same token calls renew-self.
             // do it with lease id.
 
