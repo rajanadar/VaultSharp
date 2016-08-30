@@ -360,6 +360,13 @@ namespace VaultSharp
             await MakeVaultApiRequest("sys/revoke-prefix/" + pathPrefix.Trim('/'), HttpMethod.Put).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
+        public async Task ForceRevokeAllSecretsUnderPrefixAsync(string pathPrefix)
+        {
+            Checker.NotNull(pathPrefix, "pathPrefix");
+
+            await MakeVaultApiRequest("sys/revoke-force/" + pathPrefix.Trim('/'), HttpMethod.Put).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
         public async Task<Leader> GetLeaderAsync()
         {
             var leader = await MakeVaultApiRequest<Leader>("sys/leader", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
