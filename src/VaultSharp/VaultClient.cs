@@ -74,6 +74,42 @@ namespace VaultSharp
             return response;
         }
 
+        public async Task<RootTokenGenerationProgress> InitiateRootTokenGenerationAsync(
+            string base64EncodedOneTimePassword = null, string pgpKey = null)
+        {
+            var requestData = new {otp = base64EncodedOneTimePassword, pgpKey = pgpKey};
+
+            var response = await MakeVaultApiRequest<RootTokenGenerationProgress>("sys/generate-root/attempt", HttpMethod.Put, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return response;
+        }
+
+        public async Task<RootTokenGenerationProgress> GetRootTokenGenerationProgressAsync()
+        {
+            var response = await MakeVaultApiRequest<RootTokenGenerationProgress>("sys/generate-root/attempt", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return response;
+        }
+
+        public async Task CancelRootTokenGenerationAsync()
+        {
+            await MakeVaultApiRequest("sys/generate-root/attempt", HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<RootTokenGenerationProgress> ContinueRootTokenGenerationAsync(string masterShareKey,
+            string nonce)
+        {
+            Checker.NotNull(masterShareKey, "masterShareKey");
+            Checker.NotNull(nonce, "nonce");
+
+            var requestData = new
+            {
+                key = masterShareKey,
+                nonce = nonce
+            };
+
+            var progress = await MakeVaultApiRequest<RootTokenGenerationProgress>("sys/generate-root/update", HttpMethod.Put, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return progress;
+        }
+
         public async Task<SealStatus> GetSealStatusAsync()
         {
             var response = await MakeVaultApiRequest<SealStatus>("sys/seal-status", HttpMethod.Get, sendClientToken: false).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);

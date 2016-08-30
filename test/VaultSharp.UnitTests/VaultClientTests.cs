@@ -73,6 +73,9 @@ namespace VaultSharp.UnitTests
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.ContinueRekeyAsync(null, "nonce"));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.ContinueRekeyAsync("masterShareKey", null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.ReadRawSecretAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.ContinueRootTokenGenerationAsync(null, "nonce"));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.ContinueRootTokenGenerationAsync("masterShareKey", null));
+
             await
                 Assert.ThrowsAsync<ArgumentNullException>(
                     () => client.WriteRawSecretAsync(null, new Dictionary<string, object>()));
