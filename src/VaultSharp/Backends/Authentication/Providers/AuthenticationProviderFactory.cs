@@ -2,6 +2,7 @@
 using System.Net.Http;
 using VaultSharp.Backends.Authentication.Models;
 using VaultSharp.Backends.Authentication.Models.AppId;
+using VaultSharp.Backends.Authentication.Models.AppRole;
 using VaultSharp.Backends.Authentication.Models.Certificate;
 using VaultSharp.Backends.Authentication.Models.Custom;
 using VaultSharp.Backends.Authentication.Models.GitHub;
@@ -9,6 +10,7 @@ using VaultSharp.Backends.Authentication.Models.LDAP;
 using VaultSharp.Backends.Authentication.Models.Token;
 using VaultSharp.Backends.Authentication.Models.UsernamePassword;
 using VaultSharp.Backends.Authentication.Providers.AppId;
+using VaultSharp.Backends.Authentication.Providers.AppRole;
 using VaultSharp.Backends.Authentication.Providers.Certificate;
 using VaultSharp.Backends.Authentication.Providers.Custom;
 using VaultSharp.Backends.Authentication.Providers.GitHub;
@@ -26,6 +28,11 @@ namespace VaultSharp.Backends.Authentication.Providers
             if (authenticationInfo.AuthenticationBackendType == AuthenticationBackendType.AppId)
             {
                 return new AppIdAuthenticationProvider(authenticationInfo as AppIdAuthenticationInfo, new HttpDataAccessManager(baseAddress, serviceTimeout: serviceTimeout), continueAsyncTasksOnCapturedContext);
+            }
+
+            if (authenticationInfo.AuthenticationBackendType == AuthenticationBackendType.AppRole)
+            {
+                return new AppRoleAuthenticationProvider(authenticationInfo as AppRoleAuthenticationInfo, new HttpDataAccessManager(baseAddress, serviceTimeout: serviceTimeout), continueAsyncTasksOnCapturedContext);
             }
 
             if (authenticationInfo.AuthenticationBackendType == AuthenticationBackendType.GitHub)

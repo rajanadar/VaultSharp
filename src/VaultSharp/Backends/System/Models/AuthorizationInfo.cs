@@ -9,6 +9,15 @@ namespace VaultSharp.Backends.System.Models
     public class AuthorizationInfo
     {
         /// <summary>
+        /// Gets or sets the client token accessor.
+        /// </summary>
+        /// <value>
+        /// The client token accessor.
+        /// </value>
+        [JsonProperty("accessor")]
+        public string ClientTokenAccessor { get; set; }
+
+        /// <summary>
         /// Gets or sets the client token.
         /// </summary>
         /// <value>

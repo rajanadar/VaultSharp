@@ -17,6 +17,11 @@ namespace VaultSharp.Backends.Authentication.Models
         private static readonly AuthenticationBackendType AppIdType = new AuthenticationBackendType("app-id");
 
         /// <summary>
+        /// The application role type
+        /// </summary>
+        private static readonly AuthenticationBackendType AppRoleType = new AuthenticationBackendType("approle");
+
+        /// <summary>
         /// The git hub type
         /// </summary>
         private static readonly AuthenticationBackendType GitHubType = new AuthenticationBackendType("github");
@@ -61,6 +66,20 @@ namespace VaultSharp.Backends.Authentication.Models
             get
             {
                 return AppIdType;
+            }
+        }
+
+        /// <summary>
+        /// Gets the application role.
+        /// </summary>
+        /// <value>
+        /// The application role.
+        /// </value>
+        public static AuthenticationBackendType AppRole
+        {
+            get
+            {
+                return AppRoleType;
             }
         }
 

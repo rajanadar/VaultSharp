@@ -52,8 +52,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Backends\Audit\Models\AuditBackendType.cs" />
+    <Compile Include="Backends\Authentication\Models\AppRole\AppRoleAuthenticationInfo.cs" />
     <Compile Include="Backends\Authentication\Models\AuthenticationBackendType.cs" />
     <Compile Include="Backends\Authentication\Models\Token\TokenCreationOptions.cs" />
+    <Compile Include="Backends\Authentication\Providers\AppRole\AppRoleAuthenticationProvider.cs" />
     <Compile Include="Backends\Secret\Models\AWS\AWSRoleDefinition.cs" />
     <Compile Include="Backends\Secret\Models\AWS\AWSRootCredentials.cs" />
     <Compile Include="Backends\Secret\Models\Cassandra\CassandraConnectionInfo.cs" />
@@ -166,6 +168,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
