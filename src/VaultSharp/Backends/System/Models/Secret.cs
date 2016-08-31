@@ -10,6 +10,15 @@ namespace VaultSharp.Backends.System.Models
     public class Secret<TData>
     {
         /// <summary>
+        /// Gets or sets the request identifier.
+        /// </summary>
+        /// <value>
+        /// The request identifier.
+        /// </value>
+        [JsonProperty("request_id")]
+        public string RequestId { get; set; }
+
+        /// <summary>
         /// Gets or sets the lease identifier.
         /// </summary>
         /// <value>

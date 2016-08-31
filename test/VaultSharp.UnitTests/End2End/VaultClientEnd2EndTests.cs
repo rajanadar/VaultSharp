@@ -669,6 +669,9 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             var secret2 = await _authenticatedClient.CreateTokenAsync(new TokenCreationOptions { NoParent = true });
             Assert.NotNull(secret2);
 
+            var accessors = await _authenticatedClient.GetTokenAccessorListAsync();
+            Assert.True(accessors.Data.Any());
+
             var secret3 = await _authenticatedClient.CreateTokenAsync(new TokenCreationOptions { NoParent = true });
             Assert.NotNull(secret3);
 

@@ -608,6 +608,23 @@ namespace VaultSharp
             await MakeVaultApiRequest(path.Trim('/'), HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<Secret<IEnumerable<string>>> GetTokenAccessorListAsync()
+        {
+            var response = await MakeVaultApiRequest<Secret<dynamic>>("auth/token/accessors?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = new Secret<IEnumerable<string>>
+            {
+                AuthorizationInfo = response.AuthorizationInfo,
+                Data = response.Data.keys.ToObject<List<string>>(),
+                LeaseDurationSeconds = response.LeaseDurationSeconds,
+                LeaseId = response.LeaseId,
+                Renewable = response.Renewable,
+                RequestId = response.RequestId,
+                Warnings = response.Warnings
+            };
+
+            return result;
+        }
+
         public async Task<Secret<Dictionary<string, object>>> CreateTokenAsync(TokenCreationOptions tokenCreationOptions = null)
         {
             var action = (tokenCreationOptions != null && tokenCreationOptions.CreateAsOrphan) ? "create-orphan" : "create";
