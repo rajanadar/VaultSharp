@@ -672,6 +672,14 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             var accessors = await _authenticatedClient.GetTokenAccessorListAsync();
             Assert.True(accessors.Data.Any());
 
+            var tokenInfoByAccessor = await _authenticatedClient.GetTokenInfoByAccessorAsync(accessors.Data.First());
+            Assert.NotNull(tokenInfoByAccessor);
+
+            await _authenticatedClient.RevokeTokenByAccessorAsync(accessors.Data.First());
+
+            var accessors2 = await _authenticatedClient.GetTokenAccessorListAsync();
+            Assert.True(accessors.Data.Count() - 1 == accessors2.Data.Count());
+
             var secret3 = await _authenticatedClient.CreateTokenAsync(new TokenCreationOptions { NoParent = true });
             Assert.NotNull(secret3);
 

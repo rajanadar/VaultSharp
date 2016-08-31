@@ -640,7 +640,16 @@ namespace VaultSharp
         {
             Checker.NotNull(token, "token");
 
-            return await MakeVaultApiRequest<Secret<TokenInfo>>("auth/token/lookup/" + token, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var requestData = new {token = token};
+            return await MakeVaultApiRequest<Secret<TokenInfo>>("auth/token/lookup", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<TokenInfo>> GetTokenInfoByAccessorAsync(string tokenAccessor)
+        {
+            Checker.NotNull(tokenAccessor, "tokenAccessor");
+
+            var requestData = new { accessor = tokenAccessor };
+            return await MakeVaultApiRequest<Secret<TokenInfo>>("auth/token/lookup-accessor", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task RevokeTokenAsync(string token, bool revokeAllChildTokens)
@@ -649,6 +658,14 @@ namespace VaultSharp
 
             var action = revokeAllChildTokens ? "revoke" : "revoke-orphan";
             await MakeVaultApiRequest("auth/token/" + action + "/" + token, HttpMethod.Post).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task RevokeTokenByAccessorAsync(string tokenAccessor)
+        {
+            Checker.NotNull(tokenAccessor, "tokenAccessor");
+
+            var requestData = new { accessor = tokenAccessor };
+            await MakeVaultApiRequest("auth/token/revoke-accessor", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task RevokeCallingTokenAsync()

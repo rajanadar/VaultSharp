@@ -706,6 +706,17 @@ namespace VaultSharp
         Task<Secret<TokenInfo>> GetTokenInfoAsync(string token);
 
         /// <summary>
+        /// Gets the properties of the token associated with the accessor, 
+        /// except the token ID. 
+        /// This is meant for purposes where there is no access to token ID 
+        /// but there is need to fetch the properties of a token.
+        /// </summary>
+        /// <param name="tokenAccessor"><para>[required]</para>
+        ///  Accessor of the token to lookup.</param>
+        /// <returns>The token info.</returns>
+        Task<Secret<TokenInfo>> GetTokenInfoByAccessorAsync(string tokenAccessor);
+
+        /// <summary>
         /// Revokes a token and all child tokens if the <see cref="revokeAllChildTokens" /> value is <value>true</value>.
         /// When the token is revoked, all secrets generated with it are also revoked.
         /// </summary>
@@ -718,6 +729,16 @@ namespace VaultSharp
         /// The task.
         /// </returns>
         Task RevokeTokenAsync(string token, bool revokeAllChildTokens);
+
+        /// <summary>
+        /// Revokes the token associated with the accessor and all the child tokens. 
+        /// This is meant for purposes where there is no access to token ID 
+        /// but there is need to revoke a token and its children.
+        /// </summary>
+        /// <param name="tokenAccessor"><para>[required]</para>
+        /// Accessor of the token.</param>
+        /// <returns>The token info.</returns>
+        Task RevokeTokenByAccessorAsync(string tokenAccessor);
 
         /// <summary>
         /// Revokes the calling client token and all child tokens.
