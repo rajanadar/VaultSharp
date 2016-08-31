@@ -1167,6 +1167,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             await Assert.ThrowsAsync<Exception>(() => _authenticatedClient.ReadSecretAsync(path));
         }
 
+        // raja todo. add approle tests.
+
         private async Task AppIdAuthenticationProviderTests()
         {
             // app-id auth 
