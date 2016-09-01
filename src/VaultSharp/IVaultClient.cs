@@ -131,7 +131,7 @@ namespace VaultSharp
         /// <returns>
         /// The seal status of the Vault.
         /// </returns>
-        Task<SealStatus> UnsealAsync(string masterShareKey, bool resetCompletely = false);
+        Task<SealStatus> UnsealAsync(string masterShareKey = null, bool resetCompletely = false);
 
         /// <summary>
         /// Unseals the Vault in a single call. 

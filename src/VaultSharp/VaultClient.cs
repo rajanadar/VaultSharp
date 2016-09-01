@@ -121,7 +121,7 @@ namespace VaultSharp
             await MakeVaultApiRequest("sys/seal", HttpMethod.Put).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<SealStatus> UnsealAsync(string masterShareKey, bool resetCompletely = false)
+        public async Task<SealStatus> UnsealAsync(string masterShareKey = null, bool resetCompletely = false)
         {
             var requestData = new
             {
