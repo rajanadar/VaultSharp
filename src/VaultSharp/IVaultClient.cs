@@ -150,6 +150,27 @@ namespace VaultSharp
         Task<IEnumerable<SecretBackend>> GetAllMountedSecretBackendsAsync();
 
         /// <summary>
+        /// Mounts the new secret backend to the mount point in the URL.
+        /// </summary>
+        /// <param name="secretBackend">The secret backend.</param>
+        /// <returns>
+        /// A task
+        /// </returns>
+        Task MountSecretBackendAsync(SecretBackend secretBackend);
+
+        /// <summary>
+        /// Unmounts the secret backend from the mount point.
+        /// When a backend is unmounted, all of its secrets are revoked and its data is deleted.
+        /// If either of these operations fail, the backend remains mounted.
+        /// </summary>
+        /// <param name="mountPoint"><para>[required]</para>
+        /// The mount point for the secret backend. (with or without trailing slashes. it doesn't matter)</param>
+        /// <returns>
+        /// A task
+        /// </returns>
+        Task UnmountSecretBackendAsync(string mountPoint);
+
+        /// <summary>
         /// Gets the mounted secret backend's configuration values.
         /// The lease values for each TTL may be the system default ("0" or "system") or a mount-specific value.
         /// </summary>
@@ -159,15 +180,6 @@ namespace VaultSharp
         /// The mounted secret backend's configuration values.
         /// </returns>
         Task<SecretBackendConfiguration> GetMountedSecretBackendConfigurationAsync(string mountPoint);
-
-        /// <summary>
-        /// Mounts the new secret backend to the mount point in the URL.
-        /// </summary>
-        /// <param name="secretBackend">The secret backend.</param>
-        /// <returns>
-        /// A task
-        /// </returns>
-        Task MountSecretBackendAsync(SecretBackend secretBackend);
 
         /// <summary>
         /// Tunes the secret backend configuration parameters for the given <see cref="mountPoint" />.
@@ -181,18 +193,6 @@ namespace VaultSharp
         /// A task
         /// </returns>
         Task TuneSecretBackendConfigurationAsync(string mountPoint, SecretBackendConfiguration secretBackendConfiguration);
-
-        /// <summary>
-        /// Unmounts the secret backend from the mount point.
-        /// When a backend is unmounted, all of its secrets are revoked and its data is deleted.
-        /// If either of these operations fail, the backend remains mounted.
-        /// </summary>
-        /// <param name="mountPoint"><para>[required]</para>
-        /// The mount point for the secret backend. (with or without trailing slashes. it doesn't matter)</param>
-        /// <returns>
-        /// A task
-        /// </returns>
-        Task UnmountSecretBackendAsync(string mountPoint);
 
         /// <summary>
         /// Remounts the secret backend from the previous mount point to the new mount point.

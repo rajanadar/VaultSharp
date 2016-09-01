@@ -170,16 +170,6 @@ namespace VaultSharp
             return Enumerable.Empty<SecretBackend>();
         }
 
-        public async Task<SecretBackendConfiguration> GetMountedSecretBackendConfigurationAsync(string mountPoint)
-        {
-            Checker.NotNull(mountPoint, "mountPoint");
-
-            var resourcePath = string.Format(CultureInfo.InvariantCulture, "sys/mounts/{0}/tune", mountPoint.Trim('/'));
-
-            var response = await MakeVaultApiRequest<SecretBackendConfiguration>(resourcePath, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-            return response;
-        }
-
         public async Task MountSecretBackendAsync(SecretBackend secretBackend)
         {
             Checker.NotNull(secretBackend, "secretBackend");
@@ -193,21 +183,39 @@ namespace VaultSharp
             await MakeVaultApiRequest(resourcePath, HttpMethod.Post, secretBackend).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task TuneSecretBackendConfigurationAsync(string mountPoint, SecretBackendConfiguration secretBackendConfiguration)
-        {
-            Checker.NotNull(mountPoint, "mountPoint");
-            Checker.NotNull(secretBackendConfiguration, "secretBackendConfiguration");
-
-            var resourcePath = string.Format(CultureInfo.InvariantCulture, "sys/mounts/{0}/tune", mountPoint.Trim('/'));
-            await MakeVaultApiRequest(resourcePath, HttpMethod.Post, secretBackendConfiguration).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-        }
-
         public async Task UnmountSecretBackendAsync(string mountPoint)
         {
             Checker.NotNull(mountPoint, "mountPoint");
 
             var resourcePath = string.Format(CultureInfo.InvariantCulture, "sys/mounts/{0}", mountPoint.Trim('/'));
             await MakeVaultApiRequest(resourcePath, HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<SecretBackendConfiguration> GetMountedSecretBackendConfigurationAsync(string mountPoint)
+        {
+            Checker.NotNull(mountPoint, "mountPoint");
+
+            var resourcePath = string.Format(CultureInfo.InvariantCulture, "sys/mounts/{0}/tune", mountPoint.Trim('/'));
+
+            var response = await MakeVaultApiRequest<SecretBackendConfiguration>(resourcePath, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return response;
+        }
+
+        public async Task TuneSecretBackendConfigurationAsync(string mountPoint, SecretBackendConfiguration secretBackendConfiguration)
+        {
+            Checker.NotNull(mountPoint, "mountPoint");
+
+            if (secretBackendConfiguration == null)
+            {
+                secretBackendConfiguration = new SecretBackendConfiguration
+                {
+                    DefaultLeaseTtl = "0",
+                    MaximumLeaseTtl = "0"
+                };
+            }
+
+            var resourcePath = string.Format(CultureInfo.InvariantCulture, "sys/mounts/{0}/tune", mountPoint.Trim('/'));
+            await MakeVaultApiRequest(resourcePath, HttpMethod.Post, secretBackendConfiguration).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task RemountSecretBackendAsync(string previousMountPoint, string newMountPoint)
