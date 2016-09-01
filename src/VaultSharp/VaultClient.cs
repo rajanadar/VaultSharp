@@ -76,7 +76,7 @@ namespace VaultSharp
 
         public async Task<RootTokenGenerationStatus> GetRootTokenGenerationStatusAsync()
         {
-            var response = await MakeVaultApiRequest<RootTokenGenerationStatus>("sys/generate-root/attempt", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var response = await MakeVaultApiRequest<RootTokenGenerationStatus>("sys/generate-root/attempt", HttpMethod.Get, sendClientToken: false).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return response;
         }
 
@@ -85,16 +85,16 @@ namespace VaultSharp
         {
             var requestData = new {otp = base64EncodedOneTimePassword, pgpKey = pgpKey};
 
-            var response = await MakeVaultApiRequest<RootTokenGenerationStatus>("sys/generate-root/attempt", HttpMethod.Put, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var response = await MakeVaultApiRequest<RootTokenGenerationStatus>("sys/generate-root/attempt", HttpMethod.Put, requestData, sendClientToken: false).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return response;
         }
 
         public async Task CancelRootTokenGenerationAsync()
         {
-            await MakeVaultApiRequest("sys/generate-root/attempt", HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            await MakeVaultApiRequest("sys/generate-root/attempt", HttpMethod.Delete, sendClientToken: false).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<RootTokenGenerationProgress> ContinueRootTokenGenerationAsync(string masterShareKey,
+        public async Task<RootTokenGenerationStatus> ContinueRootTokenGenerationAsync(string masterShareKey,
             string nonce)
         {
             Checker.NotNull(masterShareKey, "masterShareKey");
@@ -106,7 +106,7 @@ namespace VaultSharp
                 nonce = nonce
             };
 
-            var progress = await MakeVaultApiRequest<RootTokenGenerationProgress>("sys/generate-root/update", HttpMethod.Put, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var progress = await MakeVaultApiRequest<RootTokenGenerationStatus>("sys/generate-root/update", HttpMethod.Put, requestData, sendClientToken: false).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return progress;
         }
 

@@ -8,15 +8,6 @@ namespace VaultSharp.Backends.System.Models
     public class RootTokenGenerationStatus
     {
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="RootTokenGenerationProgress"/> is started.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if started; otherwise, <c>false</c>.
-        /// </value>
-        [JsonProperty("started")]
-        public bool Started { get; set; }
-
-        /// <summary>
         /// Gets or sets the nonce for the current root token generation.
         /// </summary>
         /// <value>
@@ -24,6 +15,15 @@ namespace VaultSharp.Backends.System.Models
         /// </value>
         [JsonProperty("nonce")]
         public string Nonce { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="RootTokenGenerationProgress"/> is started.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if started; otherwise, <c>false</c>.
+        /// </value>
+        [JsonProperty("started")]
+        public bool Started { get; set; }
 
         /// <summary>
         /// Gets or sets the number of unseal keys provided for this root token generation.
@@ -45,16 +45,6 @@ namespace VaultSharp.Backends.System.Models
         public int RequiredUnsealKeys { get; set; }
 
         /// <summary>
-        /// Gets or sets the PGP finger print if 
-        /// a PGP key is being used to encrypt the final root token.
-        /// </summary>
-        /// <value>
-        /// The PGP finger prints.
-        /// </value>
-        [JsonProperty("pgp_fingerprint")]
-        public string PGPFingerPrint { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether 
         /// this root token generation is complete.
         /// </summary>
@@ -63,5 +53,24 @@ namespace VaultSharp.Backends.System.Models
         /// </value>
         [JsonProperty("complete")]
         public bool Complete { get; set; }
+
+        /// <summary>
+        /// Gets or sets the encoded root token if the attempt is complete.
+        /// </summary>
+        /// <value>
+        /// The encoded root token.
+        /// </value>
+        [JsonProperty("encoded_root_token")]
+        public string EncodedRootToken { get; set; }
+
+        /// <summary>
+        /// Gets or sets the PGP finger print if 
+        /// a PGP key is being used to encrypt the final root token.
+        /// </summary>
+        /// <value>
+        /// The PGP finger prints.
+        /// </value>
+        [JsonProperty("pgp_fingerprint")]
+        public string PGPFingerPrint { get; set; }
     }
 }

@@ -108,7 +108,6 @@
     <Compile Include="Backends\Secret\Models\PKI\ExpiryData.cs" />
     <Compile Include="Backends\System\Models\RekeyBackupInfo.cs" />
     <Compile Include="Backends\System\Models\RootTokenGenerationStatus.cs" />
-    <Compile Include="Backends\System\Models\RootTokenGenerationProgress.cs" />
     <Compile Include="Infrastructure\JsonConverters\SSHCredentialsJsonConverter.cs" />
     <Compile Include="Infrastructure\JsonConverters\SSHRoleDefinitionJsonConverter.cs" />
     <Compile Include="Infrastructure\JsonConverters\AuthenticationBackendTypeJsonConverter.cs" />

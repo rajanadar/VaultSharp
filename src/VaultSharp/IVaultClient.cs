@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using VaultSharp.Backends.Audit.Models;
 using VaultSharp.Backends.Authentication.Models;
@@ -54,14 +53,16 @@ namespace VaultSharp
 
         /// <summary>
         /// Gets the configuration and progress of the current root generation attempt.
+        /// This is an unauthenticated call and does not use the credentials.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The root status</returns>
         Task<RootTokenGenerationStatus> GetRootTokenGenerationStatusAsync();
 
         /// <summary>
         /// Initializes a new root generation attempt. 
         /// Only a single root generation attempt can take place at a time. 
         /// One (and only one) of <see cref="base64EncodedOneTimePassword"/> or <see cref="pgpKey"/> are required.
+        /// This is an unauthenticated call and does not use the credentials.
         /// </summary>
         /// <param name="base64EncodedOneTimePassword"><para>[optional]</para>
         /// A base64-encoded 16-byte value. The raw bytes of the token will be XOR'd with this 
@@ -75,6 +76,7 @@ namespace VaultSharp
         /// Cancels any in-progress root generation attempt. 
         /// This clears any progress made. 
         /// This must be called to change the OTP or PGP key being used.
+        /// This is an unauthenticated call and does not use the credentials.
         /// </summary>
         /// <returns>The task.</returns>
         Task CancelRootTokenGenerationAsync();
@@ -86,6 +88,7 @@ namespace VaultSharp
         /// Vault will complete the root generation and issue the new token. 
         /// Otherwise, this API must be called multiple times until that threshold is met. 
         /// The attempt nonce must be provided with each call.
+        /// This is an unauthenticated call and does not use the credentials.
         /// </summary>
         /// <param name="masterShareKey"><para>[required]</para>
         /// A single master share key.</param>
@@ -95,7 +98,7 @@ namespace VaultSharp
         /// An object indicating the attempt nonce, and completion status, 
         /// and the encoded root token, if the attempt is complete.
         /// </returns>
-        Task<RootTokenGenerationProgress> ContinueRootTokenGenerationAsync(string masterShareKey, string nonce);
+        Task<RootTokenGenerationStatus> ContinueRootTokenGenerationAsync(string masterShareKey, string nonce);
 
         /// <summary>
         /// Gets the seal status of the Vault.
