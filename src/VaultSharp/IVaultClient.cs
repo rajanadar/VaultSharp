@@ -53,6 +53,12 @@ namespace VaultSharp
         Task<MasterCredentials> InitializeAsync(int secretShares, int secretThreshold, string[] pgpKeys = null);
 
         /// <summary>
+        /// Gets the configuration and progress of the current root generation attempt.
+        /// </summary>
+        /// <returns></returns>
+        Task<RootTokenGenerationStatus> GetRootTokenGenerationStatusAsync();
+
+        /// <summary>
         /// Initializes a new root generation attempt. 
         /// Only a single root generation attempt can take place at a time. 
         /// One (and only one) of <see cref="base64EncodedOneTimePassword"/> or <see cref="pgpKey"/> are required.
@@ -63,13 +69,7 @@ namespace VaultSharp
         /// <param name="pgpKey"><para>[optional]</para>
         /// The PGP key.</param>
         /// <returns>The root token generation progress.</returns>
-        Task<RootTokenGenerationProgress> InitiateRootTokenGenerationAsync(string base64EncodedOneTimePassword = null, string pgpKey = null);
-
-        /// <summary>
-        /// Gets the configuration and progress of the current root generation attempt.
-        /// </summary>
-        /// <returns></returns>
-        Task<RootTokenGenerationProgress> GetRootTokenGenerationProgressAsync();
+        Task<RootTokenGenerationStatus> InitiateRootTokenGenerationAsync(string base64EncodedOneTimePassword = null, string pgpKey = null);
 
         /// <summary>
         /// Cancels any in-progress root generation attempt. 

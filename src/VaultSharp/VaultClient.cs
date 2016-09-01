@@ -74,18 +74,18 @@ namespace VaultSharp
             return response;
         }
 
-        public async Task<RootTokenGenerationProgress> InitiateRootTokenGenerationAsync(
+        public async Task<RootTokenGenerationStatus> GetRootTokenGenerationStatusAsync()
+        {
+            var response = await MakeVaultApiRequest<RootTokenGenerationStatus>("sys/generate-root/attempt", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return response;
+        }
+
+        public async Task<RootTokenGenerationStatus> InitiateRootTokenGenerationAsync(
             string base64EncodedOneTimePassword = null, string pgpKey = null)
         {
             var requestData = new {otp = base64EncodedOneTimePassword, pgpKey = pgpKey};
 
-            var response = await MakeVaultApiRequest<RootTokenGenerationProgress>("sys/generate-root/attempt", HttpMethod.Put, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-            return response;
-        }
-
-        public async Task<RootTokenGenerationProgress> GetRootTokenGenerationProgressAsync()
-        {
-            var response = await MakeVaultApiRequest<RootTokenGenerationProgress>("sys/generate-root/attempt", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var response = await MakeVaultApiRequest<RootTokenGenerationStatus>("sys/generate-root/attempt", HttpMethod.Put, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return response;
         }
 
