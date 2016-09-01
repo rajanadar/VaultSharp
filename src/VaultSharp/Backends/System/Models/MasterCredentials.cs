@@ -17,6 +17,15 @@ namespace VaultSharp.Backends.System.Models
         public string[] MasterKeys { get; set; }
 
         /// <summary>
+        /// Gets or sets the new base 64 master keys. (possibly pgp encrypted)
+        /// </summary>
+        /// <value>
+        /// The master keys.
+        /// </value>
+        [JsonProperty("keys_base64")]
+        public string[] Base64MasterKeys { get; set; }
+
+        /// <summary>
         /// Gets or sets the root token which has superhero permissions on Vault.
         /// </summary>
         /// <value>
