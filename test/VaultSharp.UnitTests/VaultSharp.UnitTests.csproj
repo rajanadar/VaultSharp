@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess\HttpDataAccessManagerTests.cs" />
+    <Compile Include="AcceptanceTests.cs" />
     <Compile Include="Infrastructure\Validation\CheckerTests.cs" />
     <Compile Include="VaultClientTests.cs" />
     <Compile Include="VaultClientFactoryTests.cs" />
@@ -81,6 +82,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="acceptance-tests-vault-config.hcl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
