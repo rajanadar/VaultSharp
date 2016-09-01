@@ -43,5 +43,14 @@ namespace VaultSharp.Backends.System.Models
         /// </value>
         [JsonProperty("progress")]
         public int Progress { get; set; }
+
+        /// <summary>
+        /// Gets or sets the vault version.
+        /// </summary>
+        /// <value>
+        /// The version.
+        /// </value>
+        [JsonProperty("version")]
+        public string Version { get; set; }
     }
 }
