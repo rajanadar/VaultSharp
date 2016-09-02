@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
+using VaultSharp.Backends.Authentication.Models.Token;
+using VaultSharp.Backends.System.Models;
 using Xunit;
 
 namespace VaultSharp.UnitTests
@@ -44,6 +47,49 @@ namespace VaultSharp.UnitTests
         private async Task RunAllAcceptanceTestsAsync()
         {
             await AssertInitializationStatusAsync(false);
+            await InitializeVaultAsync();
+            await AssertInitializationStatusAsync(true);
+
+            await UnsealVaultAsync();
+
+            await _authenticatedVaultClient.SealAsync();
+            await UnsealVaultAsync();
+        }
+
+        private void CreateAuthenticatedClient()
+        {
+            _authenticatedVaultClient = VaultClientFactory.CreateVaultClient(VaultUriWithPort, new TokenAuthenticationInfo(MasterCredentials.RootToken));
+        }
+
+        private async Task UnsealVaultAsync()
+        {
+            await AssertSealStatusAsync(true);
+
+            SealStatus sealStatus = null;
+
+            foreach (var masterKey in MasterCredentials.MasterKeys)
+            {
+                sealStatus = await _unauthenticatedVaultClient.UnsealAsync(masterKey);
+            }
+
+            Assert.False(sealStatus.Sealed);
+            Assert.NotNull(sealStatus.ClusterId);
+            Assert.NotNull(sealStatus.ClusterName);
+
+            await AssertSealStatusAsync(false);
+            CreateAuthenticatedClient();
+        }
+
+        private async Task AssertSealStatusAsync(bool expected)
+        {
+            var actual = await _unauthenticatedVaultClient.GetSealStatusAsync();
+            Assert.Equal(expected, actual.Sealed);
+        }
+
+        private async Task InitializeVaultAsync()
+        {
+            MasterCredentials = await _unauthenticatedVaultClient.InitializeAsync(2, 2);
+            Assert.NotNull(MasterCredentials);
         }
 
         private async Task AssertInitializationStatusAsync(bool expectedStatus)
@@ -63,7 +109,10 @@ namespace VaultSharp.UnitTests
         private static IVaultClient _unauthenticatedVaultClient = VaultClientFactory.CreateVaultClient(
             VaultUriWithPort, authenticationInfo: null);
 
-        private static Process VaultProcess = null;
+        private static IVaultClient _authenticatedVaultClient;
+
+        private static Process VaultProcess;
+        private static MasterCredentials MasterCredentials;
 
         private void StartupVaultServer()
         {
@@ -117,6 +166,9 @@ namespace VaultSharp.UnitTests
             VaultProcess = new Process();
             VaultProcess.StartInfo = procStartInfo;
             VaultProcess.Start();
+
+            // sleep for a bit.
+            Thread.Sleep(2000);
         }
 
         private void ShutdownVaultServer()
