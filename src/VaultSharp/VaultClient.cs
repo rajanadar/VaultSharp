@@ -110,6 +110,31 @@ namespace VaultSharp
             return progress;
         }
 
+        public async Task<RootTokenGenerationStatus> QuickRootTokenGenerationAsync(string[] allMasterShareKeys, string nonce)
+        {
+            Checker.NotNull(allMasterShareKeys, "allMasterShareKeys");
+            Checker.NotNull(nonce, "nonce");
+
+            RootTokenGenerationStatus finalStatus = null;
+
+            foreach (var masterShareKey in allMasterShareKeys)
+            {
+                var requestData = new
+                {
+                    key = masterShareKey,
+                    nonce = nonce
+                };
+
+                finalStatus =
+                    await
+                        MakeVaultApiRequest<RootTokenGenerationStatus>("sys/generate-root/update", HttpMethod.Put,
+                            requestData, sendClientToken: false)
+                            .ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            }
+
+            return finalStatus;
+        }
+
         public async Task<SealStatus> GetSealStatusAsync()
         {
             var response = await MakeVaultApiRequest<SealStatus>("sys/seal-status", HttpMethod.Get, sendClientToken: false).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
@@ -133,7 +158,7 @@ namespace VaultSharp
             return response;
         }
 
-        public async Task<SealStatus> UnsealQuickAsync(string[] allMasterShareKeys)
+        public async Task<SealStatus> QuickUnsealAsync(string[] allMasterShareKeys)
         {
             Checker.NotNull(allMasterShareKeys, "allMasterShareKeys");
 
@@ -508,6 +533,30 @@ namespace VaultSharp
 
             var rekeyProgress = await MakeVaultApiRequest<RekeyProgress>("sys/rekey/update", HttpMethod.Put, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return rekeyProgress;
+        }
+
+        public async Task<RekeyProgress> QuickRekeyAsync(string[] allMasterShareKeys, string rekeyNonce)
+        {
+            Checker.NotNull(allMasterShareKeys, "allMasterShareKeys");
+            Checker.NotNull(rekeyNonce, "rekeyNonce");
+
+            RekeyProgress finalRekeyProgress = null;
+
+            foreach (var masterShareKey in allMasterShareKeys)
+            {
+                var requestData = new
+                {
+                    key = masterShareKey,
+                    nonce = rekeyNonce
+                };
+
+                finalRekeyProgress =
+                    await
+                        MakeVaultApiRequest<RekeyProgress>("sys/rekey/update", HttpMethod.Put, requestData)
+                            .ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            }
+
+            return finalRekeyProgress;
         }
 
         public async Task RotateEncryptionKeyAsync()

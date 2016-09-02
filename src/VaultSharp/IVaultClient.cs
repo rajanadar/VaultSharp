@@ -101,6 +101,17 @@ namespace VaultSharp
         Task<RootTokenGenerationStatus> ContinueRootTokenGenerationAsync(string masterShareKey, string nonce);
 
         /// <summary>
+        /// Generates a root token in a single call. 
+        /// Call this after calling the <see cref="InitiateRootTokenGenerationAsync"/> method.
+        /// Provide all the master keys together.
+        /// </summary>
+        /// <param name="allMasterShareKeys">All the master share keys.</param>
+        /// <param name="nonce"><para>[required]</para>
+        /// The nonce of the root generation attempt.</param>
+        /// <returns>The final Status after all the share keys are applied.</returns>
+        Task<RootTokenGenerationStatus> QuickRootTokenGenerationAsync(string[] allMasterShareKeys, string nonce);
+
+        /// <summary>
         /// Gets the seal status of the Vault.
         /// This is an unauthenticated call and does not use the credentials.
         /// </summary>
@@ -137,12 +148,12 @@ namespace VaultSharp
         Task<SealStatus> UnsealAsync(string masterShareKey = null, bool resetCompletely = false);
 
         /// <summary>
-        /// Unseals the Vault in a single call. 
+        /// Unseals the Vault in a single call.
         /// Provide all the master keys together.
         /// </summary>
         /// <param name="allMasterShareKeys">All the master share keys.</param>
         /// <returns>The final Seal Status after all the share keys are applied.</returns>
-        Task<SealStatus> UnsealQuickAsync(string[] allMasterShareKeys);
+        Task<SealStatus> QuickUnsealAsync(string[] allMasterShareKeys);
 
         /// <summary>
         /// Gets all the mounted secret backends.
@@ -557,6 +568,17 @@ namespace VaultSharp
         /// or not the keys were backed up to physical storage.
         /// </returns>
         Task<RekeyProgress> ContinueRekeyAsync(string masterShareKey, string rekeyNonce);
+
+        /// <summary>
+        /// Rekeys the Vault in a single call.
+        /// Call this after calling the <see cref="InitiateRekeyAsync"/> method.
+        /// Provide all the master keys together.
+        /// </summary>
+        /// <param name="allMasterShareKeys">All the master share keys.</param>
+        /// <param name="rekeyNonce"><para>[required]</para>
+        /// The nonce of the rekey operation.</param>
+        /// <returns>The final Rekey progress after all the share keys are applied.</returns>
+        Task<RekeyProgress> QuickRekeyAsync(string[] allMasterShareKeys, string rekeyNonce);
 
         /// <summary>
         /// Trigger a rotation of the backend encryption key. This is the key that is used to encrypt data written to the storage backend, and is not provided to operators.

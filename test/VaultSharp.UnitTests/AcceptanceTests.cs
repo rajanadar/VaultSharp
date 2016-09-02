@@ -176,7 +176,7 @@ namespace VaultSharp.UnitTests
             await _authenticatedVaultClient.SealAsync();
             await AssertSealStatusAsync(true);
 
-            sealStatus = await _unauthenticatedVaultClient.UnsealQuickAsync(MasterCredentials.MasterKeys);
+            sealStatus = await _unauthenticatedVaultClient.QuickUnsealAsync(MasterCredentials.MasterKeys);
             Assert.False(sealStatus.Sealed);
         }
 
@@ -208,6 +208,15 @@ namespace VaultSharp.UnitTests
 
             rootStatus = await _unauthenticatedVaultClient.GetRootTokenGenerationStatusAsync();
             Assert.False(rootStatus.Started);
+
+            rootStatus = await _unauthenticatedVaultClient.InitiateRootTokenGenerationAsync(otp);
+            rootStatus =
+                await
+                    _unauthenticatedVaultClient.QuickRootTokenGenerationAsync(MasterCredentials.MasterKeys,
+                        rootStatus.Nonce);
+
+            Assert.True(rootStatus.Complete);
+            Assert.NotNull(rootStatus.EncodedRootToken);
         }
 
         private async Task UnsealAsync()

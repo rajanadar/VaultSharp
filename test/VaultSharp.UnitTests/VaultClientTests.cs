@@ -42,7 +42,7 @@ namespace VaultSharp.UnitTests
         {
             var client = new VaultClient(VaultUri, DummyAuthenticationInfo, true, TimeSpan.FromMinutes(3));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.UnsealQuickAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.QuickUnsealAsync(null));
             await
                 Assert.ThrowsAsync<ArgumentNullException>(() => client.GetMountedSecretBackendConfigurationAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.MountSecretBackendAsync(null));
