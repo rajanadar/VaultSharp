@@ -101,7 +101,7 @@ namespace VaultSharp.UnitTests
                 File.ReadAllText(VaultConfigPath)
                     .Replace(FileBackendPlaceHolder, fileBackendFullFolderPath)
                     .Replace("\\", "\\\\");
-            var testConfigFileName = Guid.NewGuid() + ".hcl";
+            var testConfigFileName = fileBackendFolderName + ".hcl";
 
             var testConfigFullPath = Path.Combine(vaultConfigsFullRootFolderPath, testConfigFileName);
             File.WriteAllText(testConfigFullPath, config);
