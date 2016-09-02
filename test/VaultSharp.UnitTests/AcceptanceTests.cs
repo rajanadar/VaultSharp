@@ -62,11 +62,30 @@ namespace VaultSharp.UnitTests
                 await RunSecretBackendMountApiTests();
                 await RunAuthenticationBackendMountApiTests();
                 await RunPolicyApiTests();
+                await RunCapabilitiesApiTests();
             }
             finally
             {
                 ShutdownVaultServer();
             }
+        }
+
+        private async Task RunCapabilitiesApiTests()
+        {
+            var secret1 = await _authenticatedVaultClient.CreateTokenAsync(new TokenCreationOptions {NoParent = true});
+
+            var caps =
+                await _authenticatedVaultClient.GetTokenCapabilitiesAsync(secret1.AuthorizationInfo.ClientToken, "sys/mounts");
+            Assert.NotNull(caps);
+
+            var caps2 = await _authenticatedVaultClient.GetCallingTokenCapabilitiesAsync("sys/mounts");
+            Assert.NotNull(caps2);
+
+            var cap3 =
+                await
+                    _authenticatedVaultClient.GetTokenAccessorCapabilitiesAsync(
+                        secret1.AuthorizationInfo.ClientTokenAccessor, "sys/mounts");
+            Assert.NotNull(cap3);
         }
 
         private async Task RunPolicyApiTests()

@@ -314,62 +314,6 @@ namespace VaultSharp
         Task DeletePolicyAsync(string policyName);
 
         /// <summary>
-        /// Enables multi factor authentication with the specific type.
-        /// </summary>
-        /// <param name="supportedAuthenticationBackendMountPoint">
-        /// <para>[required]</para>
-        /// The supported authentication backend mount point.
-        /// </param>
-        /// <param name="mfaType">
-        /// <para>[required]</para>
-        /// Type of the mfa.
-        /// </param>
-        /// <returns>The task.</returns>
-        Task EnableMultiFactorAuthenticationAsync(string supportedAuthenticationBackendMountPoint, string mfaType = "duo");
-
-        /// <summary>
-        /// Writes contains connection information for the Duo Auth API.
-        /// </summary>
-        /// <param name="supportedAuthenticationBackendMountPoint">
-        /// <para>[required]</para>
-        /// The supported authentication backend mount point.
-        /// </param>
-        /// <param name="host">
-        /// <para>[required]</para>
-        /// The host.
-        /// </param>
-        /// <param name="integrationKey">
-        /// <para>[required]</para>
-        /// The integration key.
-        /// </param>
-        /// <param name="secretKey">
-        /// <para>[required]</para>
-        /// The secret key.
-        /// </param>
-        /// <returns>The task.</returns>
-        Task WriteDuoAccessAsync(string supportedAuthenticationBackendMountPoint, string host, string integrationKey, string secretKey);
-
-        /// <summary>
-        /// Writes the duo configuration asynchronous.
-        /// </summary>
-        /// <param name="supportedAuthenticationBackendMountPoint">
-        /// <para>[required]</para>
-        /// The supported authentication backend mount point.
-        /// </param>
-        /// <param name="userAgent">
-        /// <para>[required]</para>
-        /// The user agent to use when connecting to Duo.
-        /// </param>
-        /// <param name="usernameFormat">
-        /// <para>[required]</para>
-        /// The username format which controls how the username used to login is transformed before authenticating with Duo. 
-        /// This field is a format string that is passed the original username as its first argument and outputs the new username. 
-        /// For example "%s@example.com" would append "@example.com" to the provided username before connecting to Duo.
-        /// </param>
-        /// <returns>The task.</returns>
-        Task WriteDuoConfigurationAsync(string supportedAuthenticationBackendMountPoint, string userAgent, string usernameFormat);
-
-        /// <summary>
         /// Gets the capabilities of the token on the given path.
         /// </summary>
         /// <param name="token"><para>[required]</para>
@@ -1973,5 +1917,61 @@ namespace VaultSharp
         /// If false, only the ciphertext value will be returned.
         /// </returns>
         Task<Secret<TransitKeyData>> TransitCreateDataKeyAsync(string encryptionKeyName, bool returnKeyAsPlainText = false, string base64EncodedKeyDerivationContext = null, string convergentEncryptionBase64EncodedNonce = null, int keyBits = 256, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+
+        /// <summary>
+        /// Enables multi factor authentication with the specific type.
+        /// </summary>
+        /// <param name="supportedAuthenticationBackendMountPoint">
+        /// <para>[required]</para>
+        /// The supported authentication backend mount point.
+        /// </param>
+        /// <param name="mfaType">
+        /// <para>[required]</para>
+        /// Type of the mfa.
+        /// </param>
+        /// <returns>The task.</returns>
+        Task EnableMultiFactorAuthenticationAsync(string supportedAuthenticationBackendMountPoint, string mfaType = "duo");
+
+        /// <summary>
+        /// Writes contains connection information for the Duo Auth API.
+        /// </summary>
+        /// <param name="supportedAuthenticationBackendMountPoint">
+        /// <para>[required]</para>
+        /// The supported authentication backend mount point.
+        /// </param>
+        /// <param name="host">
+        /// <para>[required]</para>
+        /// The host.
+        /// </param>
+        /// <param name="integrationKey">
+        /// <para>[required]</para>
+        /// The integration key.
+        /// </param>
+        /// <param name="secretKey">
+        /// <para>[required]</para>
+        /// The secret key.
+        /// </param>
+        /// <returns>The task.</returns>
+        Task WriteDuoAccessAsync(string supportedAuthenticationBackendMountPoint, string host, string integrationKey, string secretKey);
+
+        /// <summary>
+        /// Writes the duo configuration asynchronous.
+        /// </summary>
+        /// <param name="supportedAuthenticationBackendMountPoint">
+        /// <para>[required]</para>
+        /// The supported authentication backend mount point.
+        /// </param>
+        /// <param name="userAgent">
+        /// <para>[required]</para>
+        /// The user agent to use when connecting to Duo.
+        /// </param>
+        /// <param name="usernameFormat">
+        /// <para>[required]</para>
+        /// The username format which controls how the username used to login is transformed before authenticating with Duo. 
+        /// This field is a format string that is passed the original username as its first argument and outputs the new username. 
+        /// For example "%s@example.com" would append "@example.com" to the provided username before connecting to Duo.
+        /// </param>
+        /// <returns>The task.</returns>
+        Task WriteDuoConfigurationAsync(string supportedAuthenticationBackendMountPoint, string userAgent, string usernameFormat);
     }
 }
