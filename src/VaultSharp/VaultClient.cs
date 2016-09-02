@@ -312,30 +312,6 @@ namespace VaultSharp
             await MakeVaultApiRequest(resourcePath, HttpMethod.Post, mountConfiguration).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task EnableMultiFactorAuthenticationAsync(string supportedAuthenticationBackendMountPoint, string mfaType = "duo")
-        {
-            Checker.NotNull(supportedAuthenticationBackendMountPoint, "supportedAuthenticationBackendMountPoint");
-
-            var requestData = new { type = mfaType };
-            await MakeVaultApiRequest("auth/" + supportedAuthenticationBackendMountPoint.Trim('/') + "/mfa_config", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-        }
-
-        public async Task WriteDuoAccessAsync(string supportedAuthenticationBackendMountPoint, string host, string integrationKey, string secretKey)
-        {
-            Checker.NotNull(supportedAuthenticationBackendMountPoint, "supportedAuthenticationBackendMountPoint");
-
-            var requestData = new { host = host, ikey = integrationKey, skey = secretKey };
-            await MakeVaultApiRequest("auth/" + supportedAuthenticationBackendMountPoint.Trim('/') + "/duo/access", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-        }
-
-        public async Task WriteDuoConfigurationAsync(string supportedAuthenticationBackendMountPoint, string userAgent, string usernameFormat)
-        {
-            Checker.NotNull(supportedAuthenticationBackendMountPoint, "supportedAuthenticationBackendMountPoint");
-
-            var requestData = new { user_agent = userAgent, username_format = usernameFormat };
-            await MakeVaultApiRequest("auth/" + supportedAuthenticationBackendMountPoint.Trim('/') + "/duo/config", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-        }
-
         public async Task<IEnumerable<string>> GetAllPoliciesAsync()
         {
             var response = await MakeVaultApiRequest<dynamic>("sys/policy", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
@@ -375,6 +351,31 @@ namespace VaultSharp
 
             await MakeVaultApiRequest("sys/policy/" + policyName, HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
+
+        public async Task EnableMultiFactorAuthenticationAsync(string supportedAuthenticationBackendMountPoint, string mfaType = "duo")
+        {
+            Checker.NotNull(supportedAuthenticationBackendMountPoint, "supportedAuthenticationBackendMountPoint");
+
+            var requestData = new { type = mfaType };
+            await MakeVaultApiRequest("auth/" + supportedAuthenticationBackendMountPoint.Trim('/') + "/mfa_config", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task WriteDuoAccessAsync(string supportedAuthenticationBackendMountPoint, string host, string integrationKey, string secretKey)
+        {
+            Checker.NotNull(supportedAuthenticationBackendMountPoint, "supportedAuthenticationBackendMountPoint");
+
+            var requestData = new { host = host, ikey = integrationKey, skey = secretKey };
+            await MakeVaultApiRequest("auth/" + supportedAuthenticationBackendMountPoint.Trim('/') + "/duo/access", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task WriteDuoConfigurationAsync(string supportedAuthenticationBackendMountPoint, string userAgent, string usernameFormat)
+        {
+            Checker.NotNull(supportedAuthenticationBackendMountPoint, "supportedAuthenticationBackendMountPoint");
+
+            var requestData = new { user_agent = userAgent, username_format = usernameFormat };
+            await MakeVaultApiRequest("auth/" + supportedAuthenticationBackendMountPoint.Trim('/') + "/duo/config", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
 
         public async Task<IEnumerable<string>> GetTokenCapabilitiesAsync(string token, string path)
         {

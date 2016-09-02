@@ -275,6 +275,45 @@ namespace VaultSharp
         Task TuneAuthenticationBackendConfigurationAsync(string authenticationPath, MountConfiguration mountConfiguration);
 
         /// <summary>
+        /// Gets all the available policy names in the system.
+        /// </summary>
+        /// <returns>
+        /// The policy names.
+        /// </returns>
+        Task<IEnumerable<string>> GetAllPoliciesAsync();
+
+        /// <summary>
+        /// Gets the rules for the named policy.
+        /// </summary>
+        /// <param name="policyName">
+        /// <para>[required]</para>
+        /// The name of the policy.</param>
+        /// <returns>
+        /// The rules for the policy.
+        /// </returns>
+        Task<Policy> GetPolicyAsync(string policyName);
+
+        /// <summary>
+        /// Adds or updates the policy.
+        /// </summary>
+        /// <param name="policy"><para>[required]</para>
+        /// The policy to be added or updated.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task WritePolicyAsync(Policy policy);
+
+        /// <summary>
+        /// Deletes the named policy.
+        /// </summary>
+        /// <param name="policyName"><para>[required]</para>
+        /// The name of the policy.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task DeletePolicyAsync(string policyName);
+
+        /// <summary>
         /// Enables multi factor authentication with the specific type.
         /// </summary>
         /// <param name="supportedAuthenticationBackendMountPoint">
@@ -329,45 +368,6 @@ namespace VaultSharp
         /// </param>
         /// <returns>The task.</returns>
         Task WriteDuoConfigurationAsync(string supportedAuthenticationBackendMountPoint, string userAgent, string usernameFormat);
-
-        /// <summary>
-        /// Gets all the available policy names in the system.
-        /// </summary>
-        /// <returns>
-        /// The policy names.
-        /// </returns>
-        Task<IEnumerable<string>> GetAllPoliciesAsync();
-
-        /// <summary>
-        /// Gets the rules for the named policy.
-        /// </summary>
-        /// <param name="policyName">
-        /// <para>[required]</para>
-        /// The name of the policy.</param>
-        /// <returns>
-        /// The rules for the policy.
-        /// </returns>
-        Task<Policy> GetPolicyAsync(string policyName);
-
-        /// <summary>
-        /// Adds or updates the policy.
-        /// </summary>
-        /// <param name="policy"><para>[required]</para>
-        /// The policy to be added or updated.</param>
-        /// <returns>
-        /// The task.
-        /// </returns>
-        Task WritePolicyAsync(Policy policy);
-
-        /// <summary>
-        /// Deletes the named policy.
-        /// </summary>
-        /// <param name="policyName"><para>[required]</para>
-        /// The name of the policy.</param>
-        /// <returns>
-        /// The task.
-        /// </returns>
-        Task DeletePolicyAsync(string policyName);
 
         /// <summary>
         /// Gets the capabilities of the token on the given path.

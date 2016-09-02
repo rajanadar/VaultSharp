@@ -44,7 +44,6 @@ namespace VaultSharp.UnitTests.End2End
             // await _authenticatedVaultClient.StepDownActiveNodeAsync();
 
             await EncryptStrongTests();
-            await PoliciesTests();
             await AuditBackendsTests();
             await SecretTests();
             await EncryptTests();
@@ -695,44 +694,6 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             // await _authenticatedVaultClient.RenewTokenAsync(_masterCredentials.RootToken);
 
             // renew calls need a lease id. raja todo
-        }
-
-        private async Task PoliciesTests()
-        {
-            var policies = (await _authenticatedVaultClient.GetAllPoliciesAsync()).ToList();
-            Assert.True(policies.Any());
-
-            var policy = await _authenticatedVaultClient.GetPolicyAsync(policies[0]);
-            Assert.NotNull(policy);
-
-            // write a new policy
-            var newPolicy = new Policy
-            {
-                Name = "gubdu",
-                Rules = "path \"sys/*\" {  policy = \"deny\" }"
-            };
-
-            await _authenticatedVaultClient.WritePolicyAsync(newPolicy);
-
-            // get new policy
-            var newPolicyGet = await _authenticatedVaultClient.GetPolicyAsync(newPolicy.Name);
-            Assert.Equal(newPolicy.Rules, newPolicyGet.Rules);
-
-            // write updates to a new policy
-            newPolicy.Rules = "path \"sys/*\" {  policy = \"read\" }";
-
-            await _authenticatedVaultClient.WritePolicyAsync(newPolicy);
-
-            // get new policy
-            newPolicyGet = await _authenticatedVaultClient.GetPolicyAsync(newPolicy.Name);
-            Assert.Equal(newPolicy.Rules, newPolicyGet.Rules);
-
-            // delete policy
-            await _authenticatedVaultClient.DeletePolicyAsync(newPolicy.Name);
-
-            // get all policies
-            var oldPolicies = (await _authenticatedVaultClient.GetAllPoliciesAsync()).ToList();
-            Assert.Equal(policies.Count, oldPolicies.Count);
         }
 
         private async Task AuditBackendsTests()
