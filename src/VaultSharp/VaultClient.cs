@@ -83,7 +83,7 @@ namespace VaultSharp
         public async Task<RootTokenGenerationStatus> InitiateRootTokenGenerationAsync(
             string base64EncodedOneTimePassword = null, string pgpKey = null)
         {
-            var requestData = new {otp = base64EncodedOneTimePassword, pgpKey = pgpKey};
+            var requestData = new { otp = base64EncodedOneTimePassword, pgpKey = pgpKey };
 
             var response = await MakeVaultApiRequest<RootTokenGenerationStatus>("sys/generate-root/attempt", HttpMethod.Put, requestData, sendClientToken: false).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return response;
@@ -153,21 +153,25 @@ namespace VaultSharp
             return finalStatus;
         }
 
-        public async Task<IEnumerable<SecretBackend>> GetAllMountedSecretBackendsAsync()
+        public async Task<Secret<IEnumerable<SecretBackend>>> GetAllMountedSecretBackendsAsync()
         {
-            var response = await MakeVaultApiRequest<Dictionary<string, SecretBackend>>("sys/mounts", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var response = await MakeVaultApiRequest<Secret<Dictionary<string, SecretBackend>>>("sys/mounts", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
 
-            if (response != null)
+            foreach (var kv in response.Data)
             {
-                foreach (var kv in response)
-                {
-                    kv.Value.MountPoint = kv.Key;
-                }
-
-                return response.Values.AsEnumerable();
+                kv.Value.MountPoint = kv.Key;
             }
 
-            return Enumerable.Empty<SecretBackend>();
+            return new Secret<IEnumerable<SecretBackend>>
+            {
+                Data = response.Data.Values.ToList(),
+                LeaseDurationSeconds = response.LeaseDurationSeconds,
+                RequestId = response.RequestId,
+                Warnings = response.Warnings,
+                LeaseId = response.LeaseId,
+                Renewable = response.Renewable,
+                AuthorizationInfo = response.AuthorizationInfo
+            };
         }
 
         public async Task MountSecretBackendAsync(SecretBackend secretBackend)
@@ -274,7 +278,7 @@ namespace VaultSharp
         {
             Checker.NotNull(supportedAuthenticationBackendMountPoint, "supportedAuthenticationBackendMountPoint");
 
-            var requestData = new {type = mfaType};
+            var requestData = new { type = mfaType };
             await MakeVaultApiRequest("auth/" + supportedAuthenticationBackendMountPoint.Trim('/') + "/mfa_config", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
@@ -339,7 +343,7 @@ namespace VaultSharp
             Checker.NotNull(token, "token");
             Checker.NotNull(path, "path");
 
-            var requestData = new {token = token, path = path};
+            var requestData = new { token = token, path = path };
             var response = await MakeVaultApiRequest<dynamic>("sys/capabilities", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
 
             if (response != null && response.capabilities != null)
@@ -573,7 +577,7 @@ namespace VaultSharp
                             if (statusCode == HttpStatusCode.InternalServerError
                                 || statusCode == HttpStatusCode.NotImplemented
                                 || statusCode == HttpStatusCode.ServiceUnavailable
-                                || (int) statusCode == 429)
+                                || (int)statusCode == 429)
                             {
                                 expectedFailure = true;
                                 failureHealthStatus = JsonConvert.DeserializeObject<HealthStatus>(responseText);
@@ -648,7 +652,7 @@ namespace VaultSharp
         {
             Checker.NotNull(token, "token");
 
-            var requestData = new {token = token};
+            var requestData = new { token = token };
             return await MakeVaultApiRequest<Secret<TokenInfo>>("auth/token/lookup", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
@@ -705,7 +709,7 @@ namespace VaultSharp
             }
             else
             {
-                var requestData = incrementSeconds.HasValue ? new {increment = incrementSeconds.Value} : null;
+                var requestData = incrementSeconds.HasValue ? new { increment = incrementSeconds.Value } : null;
                 await
                     MakeVaultApiRequest("auth/token/renew/" + token, HttpMethod.Post, requestData)
                         .ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
@@ -1319,7 +1323,7 @@ namespace VaultSharp
             await MakeVaultApiRequest(sshBackendMountPoint.Trim('/') + "/roles/" + sshRoleName, HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<SSHCredentials>>  SSHGenerateDynamicCredentialsAsync(string sshRoleName, string ipAddress, string username = null, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH)
+        public async Task<Secret<SSHCredentials>> SSHGenerateDynamicCredentialsAsync(string sshRoleName, string ipAddress, string username = null, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH)
         {
             Checker.NotNull(sshBackendMountPoint, "sshBackendMountPoint");
             Checker.NotNull(sshRoleName, "sshRoleName");
@@ -1335,7 +1339,7 @@ namespace VaultSharp
             Checker.NotNull(ipAddress, "ipAddress");
 
             var requestData = new { ip = ipAddress };
-            return await MakeVaultApiRequest<Secret<SSHRoleData>> (sshBackendMountPoint.Trim('/') + "/lookup", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return await MakeVaultApiRequest<Secret<SSHRoleData>>(sshBackendMountPoint.Trim('/') + "/lookup", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<SSHOTPVerificationData>> SSHVerifyOTPAsync(string otp, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH)

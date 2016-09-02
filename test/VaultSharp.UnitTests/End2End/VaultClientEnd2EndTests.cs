@@ -808,7 +808,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
         private async Task MountedSecretBackendTests()
         {
             // get secret backends
-            var secretBackends = (await _authenticatedClient.GetAllMountedSecretBackendsAsync()).ToList();
+            var secretBackends = (await _authenticatedClient.GetAllMountedSecretBackendsAsync()).Data.ToList();
             Assert.True(secretBackends.Any());
 
             // get secret backend config with null mountpoint
@@ -838,14 +838,14 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     new SecretBackendConfiguration { DefaultLeaseTtl = ttl, MaximumLeaseTtl = ttl });
 
             // get secret backends
-            var newSecretBackends = (await _authenticatedClient.GetAllMountedSecretBackendsAsync()).ToList();
+            var newSecretBackends = (await _authenticatedClient.GetAllMountedSecretBackendsAsync()).Data.ToList();
             Assert.Equal(secretBackends.Count + 1, newSecretBackends.Count);
 
             // unmount
             await _authenticatedClient.UnmountSecretBackendAsync(newSecretBackend.MountPoint);
 
             // get secret backends
-            var oldSecretBackends = (await _authenticatedClient.GetAllMountedSecretBackendsAsync()).ToList();
+            var oldSecretBackends = (await _authenticatedClient.GetAllMountedSecretBackendsAsync()).Data.ToList();
             Assert.Equal(secretBackends.Count, oldSecretBackends.Count);
 
             // mount a new secret backend

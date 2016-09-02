@@ -150,7 +150,7 @@ namespace VaultSharp
         /// <returns>
         /// The mounted secret backends.
         /// </returns>
-        Task<IEnumerable<SecretBackend>> GetAllMountedSecretBackendsAsync();
+        Task<Secret<IEnumerable<SecretBackend>>> GetAllMountedSecretBackendsAsync();
 
         /// <summary>
         /// Mounts the new secret backend to the mount point in the URL.
