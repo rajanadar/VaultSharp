@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using VaultSharp.Backends.Authentication.Models.Token;
@@ -26,6 +27,22 @@ namespace VaultSharp.UnitTests
             public const string VaultExeFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\vault.exe";
         }
 
+        // no need to modify these values.
+
+        private const string FileBackendsFolderName = "per_run_file_backends_delete_anytime";
+        private const string VaultConfigsFolderName = "per_run_vault_configs_delete_anytime";
+        private const string FileBackendPlaceHolder = "##FILE_BACKEND_PATH##";
+        private const string VaultConfigPath = "acceptance-tests-vault-config.hcl";
+        private static readonly Uri VaultUriWithPort = new Uri("http://127.0.0.1:8200");
+
+        private static IVaultClient _unauthenticatedVaultClient = VaultClientFactory.CreateVaultClient(
+            VaultUriWithPort, authenticationInfo: null);
+
+        private static IVaultClient _authenticatedVaultClient;
+
+        private static Process VaultProcess;
+        private static MasterCredentials MasterCredentials;
+
         /// <summary>
         /// The one stop test for all the Vault APIs.
         /// </summary>
@@ -46,25 +63,68 @@ namespace VaultSharp.UnitTests
 
         private async Task RunAllAcceptanceTestsAsync()
         {
+            await RunInitApiTests();
+            await RunSealApiTests();
+            await RunGenerateRootApiTests();
+        }
+
+        private async Task RunInitApiTests()
+        {
             await AssertInitializationStatusAsync(false);
             await InitializeVaultAsync();
             await AssertInitializationStatusAsync(true);
-
-            await UnsealVaultAsync();
-
-            await _authenticatedVaultClient.SealAsync();
-            await UnsealVaultAsync();
         }
 
-        private void CreateAuthenticatedClient()
-        {
-            _authenticatedVaultClient = VaultClientFactory.CreateVaultClient(VaultUriWithPort, new TokenAuthenticationInfo(MasterCredentials.RootToken));
-        }
-
-        private async Task UnsealVaultAsync()
+        private async Task RunSealApiTests()
         {
             await AssertSealStatusAsync(true);
+            await UnsealAsync();
 
+            await AssertSealStatusAsync(false);
+            await _authenticatedVaultClient.SealAsync();
+
+            var sealStatus = await _unauthenticatedVaultClient.UnsealAsync(MasterCredentials.MasterKeys[0]);
+            Assert.True(sealStatus.Sealed);
+            Assert.False(sealStatus.Progress == 0);
+
+            await _unauthenticatedVaultClient.UnsealAsync(resetCompletely: true);
+            await AssertSealStatusAsync(true);
+
+            await UnsealAsync();
+        }
+
+        private async Task RunGenerateRootApiTests()
+        {
+            var rootStatus = await _unauthenticatedVaultClient.GetRootTokenGenerationStatusAsync();
+            Assert.False(rootStatus.Started);
+
+            var otp = Convert.ToBase64String(Enumerable.Range(0, 16).Select(i => (byte) i).ToArray());
+            rootStatus = await _unauthenticatedVaultClient.InitiateRootTokenGenerationAsync(otp);
+
+            Assert.True(rootStatus.Started);
+            Assert.NotNull(rootStatus.Nonce);
+
+            foreach (var masterKey in MasterCredentials.MasterKeys)
+            {
+                rootStatus = await _unauthenticatedVaultClient.ContinueRootTokenGenerationAsync(masterKey, rootStatus.Nonce);
+            }
+
+            Assert.True(rootStatus.Complete);
+            Assert.NotNull(rootStatus.EncodedRootToken);
+
+            rootStatus = await _unauthenticatedVaultClient.InitiateRootTokenGenerationAsync(otp);
+
+            rootStatus = await _unauthenticatedVaultClient.ContinueRootTokenGenerationAsync(MasterCredentials.MasterKeys[0], rootStatus.Nonce);
+            Assert.True(rootStatus.Started);
+
+            await _unauthenticatedVaultClient.CancelRootTokenGenerationAsync();
+
+            rootStatus = await _unauthenticatedVaultClient.GetRootTokenGenerationStatusAsync();
+            Assert.False(rootStatus.Started);
+        }
+
+        private async Task UnsealAsync()
+        {
             SealStatus sealStatus = null;
 
             foreach (var masterKey in MasterCredentials.MasterKeys)
@@ -73,11 +133,11 @@ namespace VaultSharp.UnitTests
             }
 
             Assert.False(sealStatus.Sealed);
+            Assert.Equal(0, sealStatus.Progress);
             Assert.NotNull(sealStatus.ClusterId);
             Assert.NotNull(sealStatus.ClusterName);
 
-            await AssertSealStatusAsync(false);
-            CreateAuthenticatedClient();
+            _authenticatedVaultClient = VaultClientFactory.CreateVaultClient(VaultUriWithPort, new TokenAuthenticationInfo(MasterCredentials.RootToken));
         }
 
         private async Task AssertSealStatusAsync(bool expected)
@@ -97,22 +157,6 @@ namespace VaultSharp.UnitTests
             var actual = await _unauthenticatedVaultClient.GetInitializationStatusAsync();
             Assert.Equal(expectedStatus, actual);
         }
-
-        // no need to modify these values.
-
-        private const string FileBackendsFolderName = "per_run_file_backends_delete_anytime";
-        private const string VaultConfigsFolderName = "per_run_vault_configs_delete_anytime";
-        private const string FileBackendPlaceHolder = "##FILE_BACKEND_PATH##";
-        private const string VaultConfigPath = "acceptance-tests-vault-config.hcl";
-        private static readonly Uri VaultUriWithPort = new Uri("http://127.0.0.1:8200");
-
-        private static IVaultClient _unauthenticatedVaultClient = VaultClientFactory.CreateVaultClient(
-            VaultUriWithPort, authenticationInfo: null);
-
-        private static IVaultClient _authenticatedVaultClient;
-
-        private static Process VaultProcess;
-        private static MasterCredentials MasterCredentials;
 
         private void StartupVaultServer()
         {
