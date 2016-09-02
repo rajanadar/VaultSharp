@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using VaultSharp.Backends.Authentication.Models;
 using VaultSharp.Backends.Authentication.Models.Token;
+using VaultSharp.Backends.Secret.Models;
 using VaultSharp.Backends.System.Models;
 using Xunit;
 
@@ -48,12 +50,17 @@ namespace VaultSharp.UnitTests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task TheTest()
+        public async Task RunAllAcceptanceTestsAsync()
         {
             try
             {
                 StartupVaultServer();
-                await RunAllAcceptanceTestsAsync();
+
+                await RunInitApiTests();
+                await RunSealApiTests();
+                await RunGenerateRootApiTests();
+                await RunSecretBackendMountApiTests();
+                await RunAuthenticationBackendTMountApiTests();
             }
             finally
             {
@@ -61,11 +68,85 @@ namespace VaultSharp.UnitTests
             }
         }
 
-        private async Task RunAllAcceptanceTestsAsync()
+        private async Task RunAuthenticationBackendTMountApiTests()
         {
-            await RunInitApiTests();
-            await RunSealApiTests();
-            await RunGenerateRootApiTests();
+            // get Authentication backends
+            var authenticationBackends = await _authenticatedVaultClient.GetAllEnabledAuthenticationBackendsAsync();
+            Assert.True(authenticationBackends.Data.Any());
+
+            //var mountConfig = await _authenticatedVaultClient.gettune(secretBackends.Data.First().MountPoint);
+            //Assert.NotNull(mountConfig);
+
+            // enable new auth
+            var newAuth = new AuthenticationBackend
+            {
+                AuthenticationPath = "github1",
+                BackendType = AuthenticationBackendType.GitHub,
+                Description = "Github auth - test cases"
+            };
+
+            await _authenticatedVaultClient.EnableAuthenticationBackendAsync(newAuth);
+
+            // get all auths
+            var newAuthenticationBackends = await _authenticatedVaultClient.GetAllEnabledAuthenticationBackendsAsync();
+            Assert.Equal(authenticationBackends.Data.Count() + 1, newAuthenticationBackends.Data.Count());
+
+            // disable auth
+            await _authenticatedVaultClient.DisableAuthenticationBackendAsync(newAuth.AuthenticationPath);
+
+            // get all auths
+            var oldAuthenticationBackends = await _authenticatedVaultClient.GetAllEnabledAuthenticationBackendsAsync();
+            Assert.Equal(authenticationBackends.Data.Count(), oldAuthenticationBackends.Data.Count());
+        }
+
+        private async Task RunSecretBackendMountApiTests()
+        {
+            var secretBackends = await _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();
+            Assert.True(secretBackends.Data.Any());
+
+            var mountConfig = await _authenticatedVaultClient.GetMountedSecretBackendConfigurationAsync(secretBackends.Data.First().MountPoint);
+            Assert.NotNull(mountConfig);
+
+            // mount a new secret backend
+            var newSecretBackend = new SecretBackend
+            {
+                BackendType = SecretBackendType.AWS,
+                MountPoint = "aws1",
+                Description = "e2e tests"
+            };
+
+            await _authenticatedVaultClient.MountSecretBackendAsync(newSecretBackend);
+
+            string ttl = "10h";
+
+            await
+                _authenticatedVaultClient.TuneSecretBackendConfigurationAsync(newSecretBackend.MountPoint,
+                    new SecretBackendConfiguration { DefaultLeaseTtl = ttl, MaximumLeaseTtl = ttl });
+
+            // get secret backends
+            var newSecretBackends = await _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();
+            Assert.Equal(secretBackends.Data.Count() + 1, newSecretBackends.Data.Count());
+
+            // unmount
+            await _authenticatedVaultClient.UnmountSecretBackendAsync(newSecretBackend.MountPoint);
+
+            // get secret backends
+            var oldSecretBackends = await _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();
+            Assert.Equal(secretBackends.Data.Count(), oldSecretBackends.Data.Count());
+
+            // mount a new secret backend
+            await _authenticatedVaultClient.MountSecretBackendAsync(newSecretBackend);
+
+            // remount
+            var newMountPoint = "aws2";
+            await _authenticatedVaultClient.RemountSecretBackendAsync(newSecretBackend.MountPoint, newMountPoint);
+
+            // get new secret backend config
+            var config = await _authenticatedVaultClient.GetMountedSecretBackendConfigurationAsync(newMountPoint);
+            Assert.NotNull(config);
+
+            // unmount
+            await _authenticatedVaultClient.UnmountSecretBackendAsync(newMountPoint);
         }
 
         private async Task RunInitApiTests()
@@ -91,6 +172,12 @@ namespace VaultSharp.UnitTests
             await AssertSealStatusAsync(true);
 
             await UnsealAsync();
+
+            await _authenticatedVaultClient.SealAsync();
+            await AssertSealStatusAsync(true);
+
+            sealStatus = await _unauthenticatedVaultClient.UnsealQuickAsync(MasterCredentials.MasterKeys);
+            Assert.False(sealStatus.Sealed);
         }
 
         private async Task RunGenerateRootApiTests()

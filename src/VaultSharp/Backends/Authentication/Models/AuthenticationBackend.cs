@@ -8,14 +8,14 @@ namespace VaultSharp.Backends.Authentication.Models
     public class AuthenticationBackend
     {
         /// <summary>
-        /// Gets or sets the mount point. If not set, the value will default to the <see cref="BackendType"/> value.
+        /// Gets or sets the authentication path. If not set, the value will default to the <see cref="BackendType"/> value.
         /// Presence or absence of leading or trailing slashes don't matter.
         /// </summary>
         /// <value>
         /// The mount point.
         /// </value>
         [JsonIgnore]
-        public string MountPoint { get; set; }
+        public string AuthenticationPath { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the backend.
@@ -27,7 +27,7 @@ namespace VaultSharp.Backends.Authentication.Models
         public AuthenticationBackendType BackendType { get; set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        /// Gets or sets a human-friendly description of the auth backend.
         /// </summary>
         /// <value>
         /// The description.

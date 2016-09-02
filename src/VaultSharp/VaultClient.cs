@@ -162,16 +162,7 @@ namespace VaultSharp
                 kv.Value.MountPoint = kv.Key;
             }
 
-            return new Secret<IEnumerable<SecretBackend>>
-            {
-                Data = response.Data.Values.ToList(),
-                LeaseDurationSeconds = response.LeaseDurationSeconds,
-                RequestId = response.RequestId,
-                Warnings = response.Warnings,
-                LeaseId = response.LeaseId,
-                Renewable = response.Renewable,
-                AuthorizationInfo = response.AuthorizationInfo
-            };
+            return GetMappedSecret(response, response.Data.Values.AsEnumerable());
         }
 
         public async Task MountSecretBackendAsync(SecretBackend secretBackend)
@@ -236,41 +227,36 @@ namespace VaultSharp
             await MakeVaultApiRequest("sys/remount", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<IEnumerable<AuthenticationBackend>> GetAllEnabledAuthenticationBackendsAsync()
+        public async Task<Secret<IEnumerable<AuthenticationBackend>>> GetAllEnabledAuthenticationBackendsAsync()
         {
-            var response = await MakeVaultApiRequest<Dictionary<string, AuthenticationBackend>>("sys/auth", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var response = await MakeVaultApiRequest<Secret<Dictionary<string, AuthenticationBackend>>>("sys/auth", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
 
-            if (response != null)
+            foreach (var kv in response.Data)
             {
-                foreach (var kv in response)
-                {
-                    kv.Value.MountPoint = kv.Key;
-                }
-
-                return response.Values.AsEnumerable();
+                kv.Value.AuthenticationPath = kv.Key;
             }
 
-            return Enumerable.Empty<AuthenticationBackend>();
+            return GetMappedSecret(response, response.Data.Values.AsEnumerable());
         }
 
         public async Task EnableAuthenticationBackendAsync(AuthenticationBackend authenticationBackend)
         {
             Checker.NotNull(authenticationBackend, "authenticationBackend");
 
-            if (string.IsNullOrWhiteSpace(authenticationBackend.MountPoint))
+            if (string.IsNullOrWhiteSpace(authenticationBackend.AuthenticationPath))
             {
-                authenticationBackend.MountPoint = authenticationBackend.BackendType.Type;
+                authenticationBackend.AuthenticationPath = authenticationBackend.BackendType.Type;
             }
 
-            var resourcePath = string.Format(CultureInfo.InvariantCulture, "sys/auth/{0}", authenticationBackend.MountPoint.Trim('/'));
+            var resourcePath = string.Format(CultureInfo.InvariantCulture, "sys/auth/{0}", authenticationBackend.AuthenticationPath.Trim('/'));
             await MakeVaultApiRequest(resourcePath, HttpMethod.Post, authenticationBackend).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task DisableAuthenticationBackendAsync(string mountPoint)
+        public async Task DisableAuthenticationBackendAsync(string authenticationPath)
         {
-            Checker.NotNull(mountPoint, "mountPoint");
+            Checker.NotNull(authenticationPath, "authenticationPath");
 
-            var resourcePath = string.Format(CultureInfo.InvariantCulture, "sys/auth/{0}", mountPoint.Trim('/'));
+            var resourcePath = string.Format(CultureInfo.InvariantCulture, "sys/auth/{0}", authenticationPath.Trim('/'));
             await MakeVaultApiRequest(resourcePath, HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
@@ -1456,6 +1442,21 @@ namespace VaultSharp
 
             var headers = sendClientToken ? new Dictionary<string, string> { { VaultTokenHeaderKey, await _lazyVaultToken.Value } } : null;
             return await _dataAccessManager.MakeRequestAsync<TResponse>(resourcePath, httpMethod, requestData, headers, rawResponse, failureDelegate);
+        }
+
+        private static Secret<T2> GetMappedSecret<T1, T2>(Secret<T1> sourceSecret, T2 destinationData)
+        {
+            return new Secret<T2>
+            {
+                Data = destinationData,
+                LeaseDurationSeconds = sourceSecret.LeaseDurationSeconds,
+                RequestId = sourceSecret.RequestId,
+                Warnings = sourceSecret.Warnings,
+                LeaseId = sourceSecret.LeaseId,
+                Renewable = sourceSecret.Renewable,
+                AuthorizationInfo = sourceSecret.AuthorizationInfo,
+                WrappedInformation = sourceSecret.WrappedInformation
+            };
         }
     }
 }

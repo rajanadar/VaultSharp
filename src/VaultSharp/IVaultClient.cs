@@ -217,11 +217,11 @@ namespace VaultSharp
         /// <returns>
         /// The enabled authentication backends.
         /// </returns>
-        Task<IEnumerable<AuthenticationBackend>> GetAllEnabledAuthenticationBackendsAsync();
+        Task<Secret<IEnumerable<AuthenticationBackend>>> GetAllEnabledAuthenticationBackendsAsync();
 
         /// <summary>
         /// Enables a new authentication backend.
-        /// The authentication backend can be accessed and configured via the mount point specified in the URL.
+        /// The auth backend can be accessed and configured via the auth path specified in the URL. 
         /// </summary>
         /// <param name="authenticationBackend">The authentication backend.</param>
         /// <returns>
@@ -232,12 +232,12 @@ namespace VaultSharp
         /// <summary>
         /// Disables the authentication backend at the given mount point.
         /// </summary>
-        /// <param name="mountPoint"><para>[required]</para>
-        /// The mount point for the authentication backend. (with or without trailing slashes. it doesn't matter)</param>
+        /// <param name="authenticationPath"><para>[required]</para>
+        /// The authentication path for the authentication backend. (with or without trailing slashes. it doesn't matter)</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task DisableAuthenticationBackendAsync(string mountPoint);
+        Task DisableAuthenticationBackendAsync(string authenticationPath);
 
         /// <summary>
         /// Enables multi factor authentication with the specific type.

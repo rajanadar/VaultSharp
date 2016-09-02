@@ -34,22 +34,16 @@ namespace VaultSharp.UnitTests.End2End
         [Fact(Skip = "making proper rerunnable safe acceptance tests.")]
         public async Task AllTests()
         {
-            VaultClientConstructorTests();
-
             if (!DevServer)
             {
-                await InitStatusTests();
-                await SealStatusTests();
                 await RawSecretAndMoreTests();
                 // await GithubAuthenticationProviderTests();
             }
 
             await TokenTests();
-            // await _authenticatedClient.StepDownActiveNodeAsync();
+            // await _authenticatedVaultClient.StepDownActiveNodeAsync();
 
             await EncryptStrongTests();
-            await MountedSecretBackendTests();
-            await MountedAuthenticationBackendTests();
             await PoliciesTests();
             await AuditBackendsTests();
             await SecretTests();
@@ -82,29 +76,29 @@ namespace VaultSharp.UnitTests.End2End
 
             var role = "readonly2";
 
-            await _authenticatedClient.MountSecretBackendAsync(backend);
-            await _authenticatedClient.ConsulConfigureAccessAsync(new ConsulAccessInfo()
+            await _authenticatedVaultClient.MountSecretBackendAsync(backend);
+            await _authenticatedVaultClient.ConsulConfigureAccessAsync(new ConsulAccessInfo()
             {
                 AddressWithPort = consulAddress,
                 ManagementToken = aclMasterToken
             }, mountPoint);
 
-            await _authenticatedClient.ConsulWriteNamedRoleAsync(role, new ConsulRoleDefinition()
+            await _authenticatedVaultClient.ConsulWriteNamedRoleAsync(role, new ConsulRoleDefinition()
             {
                 TokenType = ConsulTokenType.management,
             }, mountPoint);
 
-            var readRole = await _authenticatedClient.ConsulReadNamedRoleAsync(role, mountPoint);
+            var readRole = await _authenticatedVaultClient.ConsulReadNamedRoleAsync(role, mountPoint);
             Assert.Equal(ConsulTokenType.management, readRole.Data.TokenType);
 
             var credentials =
-                await _authenticatedClient.ConsulGenerateDynamicCredentialsAsync(role, backend.MountPoint);
+                await _authenticatedVaultClient.ConsulGenerateDynamicCredentialsAsync(role, backend.MountPoint);
 
             Assert.NotNull(credentials.Data.Token);
 
-            await _authenticatedClient.ConsulDeleteNamedRoleAsync(role, mountPoint);
+            await _authenticatedVaultClient.ConsulDeleteNamedRoleAsync(role, mountPoint);
 
-            await _authenticatedClient.UnmountSecretBackendAsync(backend.MountPoint);
+            await _authenticatedVaultClient.UnmountSecretBackendAsync(backend.MountPoint);
         }
 
         private async Task PKITests()
@@ -116,16 +110,16 @@ namespace VaultSharp.UnitTests.End2End
                 MountPoint = mountpoint
             };
 
-            await _authenticatedClient.MountSecretBackendAsync(backend);
+            await _authenticatedVaultClient.MountSecretBackendAsync(backend);
 
-            await Assert.ThrowsAsync<Exception>(() => _authenticatedClient.PKIReadCRLExpirationAsync(mountpoint));
+            await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.PKIReadCRLExpirationAsync(mountpoint));
 
             var expiry = "124h";
             var commonName = "blah.example.com";
 
-            await _authenticatedClient.PKIWriteCRLExpirationAsync(expiry, mountpoint);
+            await _authenticatedVaultClient.PKIWriteCRLExpirationAsync(expiry, mountpoint);
 
-            var readExpiry = await _authenticatedClient.PKIReadCRLExpirationAsync(mountpoint);
+            var readExpiry = await _authenticatedVaultClient.PKIReadCRLExpirationAsync(mountpoint);
             Assert.Equal(expiry, readExpiry.Data.Expiry);
 
             var nocaCert = await _unauthenticatedVaultClient.PKIReadCACertificateAsync(CertificateFormat.pem, mountpoint);
@@ -133,7 +127,7 @@ namespace VaultSharp.UnitTests.End2End
 
             // generate root certificate
             var rootCertificateWithoutPrivateKey =
-                await _authenticatedClient.PKIGenerateRootCACertificateAsync(new RootCertificateRequestOptions
+                await _authenticatedVaultClient.PKIGenerateRootCACertificateAsync(new RootCertificateRequestOptions
                 {
                     CommonName = commonName,
                     ExportPrivateKey = false
@@ -142,7 +136,7 @@ namespace VaultSharp.UnitTests.End2End
             Assert.Null(rootCertificateWithoutPrivateKey.Data.PrivateKey);
 
             var rootCertificate =
-                await _authenticatedClient.PKIGenerateRootCACertificateAsync(new RootCertificateRequestOptions
+                await _authenticatedVaultClient.PKIGenerateRootCACertificateAsync(new RootCertificateRequestOptions
                 {
                     CommonName = commonName,
                     ExportPrivateKey = true
@@ -165,7 +159,7 @@ namespace VaultSharp.UnitTests.End2End
             var crlCert2 = await _unauthenticatedVaultClient.PKIReadCRLCertificateAsync(CertificateFormat.pem, mountpoint);
             Assert.NotNull(crlCert2.CertificateContent);
 
-            await Assert.ThrowsAsync<Exception>(() => _authenticatedClient.PKIReadCertificateEndpointsAsync(mountpoint));
+            await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.PKIReadCertificateEndpointsAsync(mountpoint));
 
             var crlEndpoint = _vaultUri.AbsoluteUri + "/v1/" + mountpoint + "/crl";
             var issuingEndpoint = _vaultUri.AbsoluteUri + "/v1/" + mountpoint + "/ca";
@@ -176,17 +170,17 @@ namespace VaultSharp.UnitTests.End2End
                 IssuingCertificateEndpoints = string.Join(",", new List<string> { issuingEndpoint }),
             };
 
-            await _authenticatedClient.PKIWriteCertificateEndpointsAsync(endpoints, mountpoint);
+            await _authenticatedVaultClient.PKIWriteCertificateEndpointsAsync(endpoints, mountpoint);
 
-            var readEndpoints = await _authenticatedClient.PKIReadCertificateEndpointsAsync(mountpoint);
+            var readEndpoints = await _authenticatedVaultClient.PKIReadCertificateEndpointsAsync(mountpoint);
 
             Assert.Equal(crlEndpoint, readEndpoints.Data.CRLDistributionPointEndpoints.First());
             Assert.Equal(issuingEndpoint, readEndpoints.Data.IssuingCertificateEndpoints.First());
 
-            var rotate = await _authenticatedClient.PKIRotateCRLAsync(mountpoint);
+            var rotate = await _authenticatedVaultClient.PKIRotateCRLAsync(mountpoint);
             Assert.True(rotate);
 
-            await _authenticatedClient.RevokeSecretAsync(rootCertificateWithoutPrivateKey.LeaseId);
+            await _authenticatedVaultClient.RevokeSecretAsync(rootCertificateWithoutPrivateKey.LeaseId);
 
             var roleName = Guid.NewGuid().ToString();
 
@@ -197,14 +191,14 @@ namespace VaultSharp.UnitTests.End2End
                 MaximumTimeToLive = "72h",
             };
 
-            await _authenticatedClient.PKIWriteNamedRoleAsync(roleName, role, mountpoint);
+            await _authenticatedVaultClient.PKIWriteNamedRoleAsync(roleName, role, mountpoint);
 
-            var readRole = await _authenticatedClient.PKIReadNamedRoleAsync(roleName, mountpoint);
+            var readRole = await _authenticatedVaultClient.PKIReadNamedRoleAsync(roleName, mountpoint);
             Assert.Equal(role.AllowedDomains, readRole.Data.AllowedDomains);
 
             var credentials =
                 await
-                    _authenticatedClient.PKIGenerateDynamicCredentialsAsync(roleName,
+                    _authenticatedVaultClient.PKIGenerateDynamicCredentialsAsync(roleName,
                         new CertificateCredentialsRequestOptions
                         {
                             CommonName = commonName,
@@ -221,19 +215,19 @@ namespace VaultSharp.UnitTests.End2End
 
             var pemBundle = rootCertificate.Data.CertificateContent + "\n" + rootCertificate.Data.PrivateKey;
 
-            await _authenticatedClient.PKIConfigureCACertificateAsync(pemBundle, mountpoint);
+            await _authenticatedVaultClient.PKIConfigureCACertificateAsync(pemBundle, mountpoint);
 
             var derCaCert =
                 await _unauthenticatedVaultClient.PKIReadCACertificateAsync(CertificateFormat.der, mountpoint);
             Assert.NotNull(derCaCert.CertificateContent);
 
-            await _authenticatedClient.PKIRevokeCertificateAsync(credentials.Data.SerialNumber, mountpoint);
-            await _authenticatedClient.PKIDeleteNamedRoleAsync(roleName, mountpoint);
+            await _authenticatedVaultClient.PKIRevokeCertificateAsync(credentials.Data.SerialNumber, mountpoint);
+            await _authenticatedVaultClient.PKIDeleteNamedRoleAsync(roleName, mountpoint);
 
-            var revocationData = await _authenticatedClient.PKIRevokeCertificateAsync(rootCertificate.Data.SerialNumber, mountpoint);
+            var revocationData = await _authenticatedVaultClient.PKIRevokeCertificateAsync(rootCertificate.Data.SerialNumber, mountpoint);
             Assert.True(revocationData.Data.RevocationTime > 0);
 
-            await _authenticatedClient.UnmountSecretBackendAsync(mountpoint);
+            await _authenticatedVaultClient.UnmountSecretBackendAsync(mountpoint);
         }
 
         private async Task SSHDynamicTests()
@@ -267,9 +261,9 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             var ip = "127.0.0.1";
             var user = "rajan";
 
-            await _authenticatedClient.MountSecretBackendAsync(backend);
-            await _authenticatedClient.SSHWriteNamedKeyAsync(sshKeyName, privateKey, mountPoint);
-            await _authenticatedClient.SSHWriteNamedRoleAsync(sshRoleName, new SSHDynamicRoleDefinition
+            await _authenticatedVaultClient.MountSecretBackendAsync(backend);
+            await _authenticatedVaultClient.SSHWriteNamedKeyAsync(sshKeyName, privateKey, mountPoint);
+            await _authenticatedVaultClient.SSHWriteNamedRoleAsync(sshRoleName, new SSHDynamicRoleDefinition
             {
                 RoleDefaultUser = user,
                 CIDRValues = "127.0.0.1/10",
@@ -277,11 +271,11 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                 KeyName = sshKeyName
             }, mountPoint);
 
-            var role = await _authenticatedClient.SSHReadNamedRoleAsync(sshRoleName, mountPoint);
+            var role = await _authenticatedVaultClient.SSHReadNamedRoleAsync(sshRoleName, mountPoint);
             Assert.True(role.Data.KeyTypeToGenerate == SSHKeyType.dynamic);
 
             var credentials = await
-                _authenticatedClient.SSHGenerateDynamicCredentialsAsync(sshRoleName, ip,
+                _authenticatedVaultClient.SSHGenerateDynamicCredentialsAsync(sshRoleName, ip,
                     sshBackendMountPoint: mountPoint);
 
             Assert.Equal(user, credentials.Data.Username);
@@ -289,18 +283,18 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             var v1 = await _unauthenticatedVaultClient.SSHVerifyOTPAsync("blahblah", mountPoint);
             Assert.Null(v1);
 
-            var v2 = await _authenticatedClient.SSHVerifyOTPAsync("blah", mountPoint);
+            var v2 = await _authenticatedVaultClient.SSHVerifyOTPAsync("blah", mountPoint);
             Assert.Null(v2);
 
-            var v3 = await _authenticatedClient.SSHVerifyOTPAsync(credentials.Data.Key, mountPoint);
+            var v3 = await _authenticatedVaultClient.SSHVerifyOTPAsync(credentials.Data.Key, mountPoint);
             Assert.Null(v3);
 
-            var roles = await _authenticatedClient.SSHLookupRolesAsync(ip, mountPoint);
+            var roles = await _authenticatedVaultClient.SSHLookupRolesAsync(ip, mountPoint);
             Assert.NotNull(roles.Data.Roles[0]);
 
-            await _authenticatedClient.SSHDeleteNamedRoleAsync(sshRoleName, mountPoint);
-            await _authenticatedClient.SSHDeleteNamedKeyAsync(sshKeyName, mountPoint);
-            await _authenticatedClient.UnmountSecretBackendAsync(mountPoint);
+            await _authenticatedVaultClient.SSHDeleteNamedRoleAsync(sshRoleName, mountPoint);
+            await _authenticatedVaultClient.SSHDeleteNamedKeyAsync(sshKeyName, mountPoint);
+            await _authenticatedVaultClient.UnmountSecretBackendAsync(mountPoint);
         }
 
         private async Task SSHOTPTests()
@@ -334,19 +328,19 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             var ip = "127.0.0.1";
             var user = "rajan";
 
-            await _authenticatedClient.MountSecretBackendAsync(backend);
-            await _authenticatedClient.SSHWriteNamedKeyAsync(sshKeyName, privateKey, mountPoint);
-            await _authenticatedClient.SSHWriteNamedRoleAsync(sshRoleName, new SSHOTPRoleDefinition
+            await _authenticatedVaultClient.MountSecretBackendAsync(backend);
+            await _authenticatedVaultClient.SSHWriteNamedKeyAsync(sshKeyName, privateKey, mountPoint);
+            await _authenticatedVaultClient.SSHWriteNamedRoleAsync(sshRoleName, new SSHOTPRoleDefinition
             {
                 RoleDefaultUser = user,
                 CIDRValues = "127.0.0.1/10",
             }, mountPoint);
 
-            var role = await _authenticatedClient.SSHReadNamedRoleAsync(sshRoleName, mountPoint);
+            var role = await _authenticatedVaultClient.SSHReadNamedRoleAsync(sshRoleName, mountPoint);
             Assert.True(role.Data.KeyTypeToGenerate == SSHKeyType.otp);
 
             var credentials = await
-                _authenticatedClient.SSHGenerateDynamicCredentialsAsync(sshRoleName, ip,
+                _authenticatedVaultClient.SSHGenerateDynamicCredentialsAsync(sshRoleName, ip,
                     sshBackendMountPoint: mountPoint);
 
             Assert.Equal(user, credentials.Data.Username);
@@ -354,18 +348,18 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             var v1 = await _unauthenticatedVaultClient.SSHVerifyOTPAsync("blahblah", mountPoint);
             Assert.Null(v1);
 
-            var v2 = await _authenticatedClient.SSHVerifyOTPAsync("blah", mountPoint);
+            var v2 = await _authenticatedVaultClient.SSHVerifyOTPAsync("blah", mountPoint);
             Assert.Null(v2);
 
-            var v3 = await _authenticatedClient.SSHVerifyOTPAsync(credentials.Data.Key, mountPoint);
+            var v3 = await _authenticatedVaultClient.SSHVerifyOTPAsync(credentials.Data.Key, mountPoint);
             Assert.NotNull(v3);
 
-            var roles = await _authenticatedClient.SSHLookupRolesAsync(ip, mountPoint);
+            var roles = await _authenticatedVaultClient.SSHLookupRolesAsync(ip, mountPoint);
             Assert.NotNull(roles.Data.Roles[0]);
 
-            await _authenticatedClient.SSHDeleteNamedRoleAsync(sshRoleName, mountPoint);
-            await _authenticatedClient.SSHDeleteNamedKeyAsync(sshKeyName, mountPoint);
-            await _authenticatedClient.UnmountSecretBackendAsync(mountPoint);
+            await _authenticatedVaultClient.SSHDeleteNamedRoleAsync(sshRoleName, mountPoint);
+            await _authenticatedVaultClient.SSHDeleteNamedKeyAsync(sshKeyName, mountPoint);
+            await _authenticatedVaultClient.UnmountSecretBackendAsync(mountPoint);
         }
 
         private static Uri _vaultUri;
@@ -377,7 +371,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
         private static readonly IVaultClient DummyClient = VaultClientFactory.CreateVaultClient(new Uri("http://blah"),
             DummyAuthenticationInfo);
 
-        private static IVaultClient _authenticatedClient;
+        private static IVaultClient _authenticatedVaultClient;
         private static IVaultClient _unauthenticatedVaultClient;
         private static int _vaultServerProcessId;
 
@@ -445,7 +439,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                 };
 
                 IAuthenticationInfo devRootTokenInfo = new TokenAuthenticationInfo(_masterCredentials.RootToken);
-                _authenticatedClient = VaultClientFactory.CreateVaultClient(_vaultUri, devRootTokenInfo);
+                _authenticatedVaultClient = VaultClientFactory.CreateVaultClient(_vaultUri, devRootTokenInfo);
 
                 return;
             }
@@ -552,7 +546,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
                         IAuthenticationInfo tokenAuthenticationInfo =
                             new TokenAuthenticationInfo(_masterCredentials.RootToken);
-                        _authenticatedClient = VaultClientFactory.CreateVaultClient(_vaultUri, tokenAuthenticationInfo);
+                        _authenticatedVaultClient = VaultClientFactory.CreateVaultClient(_vaultUri, tokenAuthenticationInfo);
 
                         break;
                     }
@@ -574,50 +568,50 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                 MountPoint = "transit" + Guid.NewGuid(),
             };
 
-            await _authenticatedClient.MountSecretBackendAsync(backend);
+            await _authenticatedVaultClient.MountSecretBackendAsync(backend);
 
-            await _authenticatedClient.TransitCreateEncryptionKeyAsync(keyName, true, true, backend.MountPoint);
-            var keyInfo = await _authenticatedClient.TransitGetEncryptionKeyInfoAsync(keyName, backend.MountPoint);
+            await _authenticatedVaultClient.TransitCreateEncryptionKeyAsync(keyName, true, true, backend.MountPoint);
+            var keyInfo = await _authenticatedVaultClient.TransitGetEncryptionKeyInfoAsync(keyName, backend.MountPoint);
 
             Assert.Equal(keyName, keyInfo.Data.Name);
             Assert.True(keyInfo.Data.MustUseKeyDerivation);
             Assert.False(keyInfo.Data.IsDeletionAllowed);
 
-            await _authenticatedClient.TransitConfigureEncryptionKeyAsync(keyName, isDeletionAllowed: true, transitBackendMountPoint: backend.MountPoint);
+            await _authenticatedVaultClient.TransitConfigureEncryptionKeyAsync(keyName, isDeletionAllowed: true, transitBackendMountPoint: backend.MountPoint);
 
-            keyInfo = await _authenticatedClient.TransitGetEncryptionKeyInfoAsync(keyName, backend.MountPoint);
+            keyInfo = await _authenticatedVaultClient.TransitGetEncryptionKeyInfoAsync(keyName, backend.MountPoint);
             Assert.True(keyInfo.Data.IsDeletionAllowed);
 
             var nonce = Convert.ToBase64String(Enumerable.Range(0, 12).Select(i => (byte) i).ToArray());
             var nonce2 = Convert.ToBase64String(Enumerable.Range(0, 12).Select(i => (byte)(i+1)).ToArray());
 
-            var cipherText = await _authenticatedClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce, transitBackendMountPoint: backend.MountPoint);
-            var convergentCipherText = await _authenticatedClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce, transitBackendMountPoint: backend.MountPoint);
+            var cipherText = await _authenticatedVaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce, transitBackendMountPoint: backend.MountPoint);
+            var convergentCipherText = await _authenticatedVaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce, transitBackendMountPoint: backend.MountPoint);
 
             Assert.Equal(convergentCipherText.Data.CipherText, cipherText.Data.CipherText);
 
-            var nonConvergentCipherText = await _authenticatedClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce2, transitBackendMountPoint: backend.MountPoint);
+            var nonConvergentCipherText = await _authenticatedVaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce2, transitBackendMountPoint: backend.MountPoint);
             Assert.NotEqual(nonConvergentCipherText.Data.CipherText, cipherText.Data.CipherText);
 
-            var plainText2 = Encoding.UTF8.GetString(Convert.FromBase64String((await _authenticatedClient.TransitDecryptAsync(keyName, cipherText.Data.CipherText, context, nonce, backend.MountPoint)).Data.PlainText));
+            var plainText2 = Encoding.UTF8.GetString(Convert.FromBase64String((await _authenticatedVaultClient.TransitDecryptAsync(keyName, cipherText.Data.CipherText, context, nonce, backend.MountPoint)).Data.PlainText));
 
             Assert.Equal(plainText, plainText2);
 
-            await _authenticatedClient.TransitRotateEncryptionKeyAsync(keyName, backend.MountPoint);
-            var cipherText2 = await _authenticatedClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce, transitBackendMountPoint: backend.MountPoint);
+            await _authenticatedVaultClient.TransitRotateEncryptionKeyAsync(keyName, backend.MountPoint);
+            var cipherText2 = await _authenticatedVaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce, transitBackendMountPoint: backend.MountPoint);
 
             Assert.NotEqual(cipherText.Data.CipherText, cipherText2.Data.CipherText);
 
-            await _authenticatedClient.TransitRewrapWithLatestEncryptionKeyAsync(keyName, cipherText.Data.CipherText, context, nonce, backend.MountPoint);
+            await _authenticatedVaultClient.TransitRewrapWithLatestEncryptionKeyAsync(keyName, cipherText.Data.CipherText, context, nonce, backend.MountPoint);
 
-            var newKey1 = await _authenticatedClient.TransitCreateDataKeyAsync(keyName, false, context, nonce, 128, backend.MountPoint);
+            var newKey1 = await _authenticatedVaultClient.TransitCreateDataKeyAsync(keyName, false, context, nonce, 128, backend.MountPoint);
             Assert.Null(newKey1.Data.PlainTextKey);
 
-            newKey1 = await _authenticatedClient.TransitCreateDataKeyAsync(keyName, true, context, nonce, 128, backend.MountPoint);
+            newKey1 = await _authenticatedVaultClient.TransitCreateDataKeyAsync(keyName, true, context, nonce, 128, backend.MountPoint);
             Assert.NotNull(newKey1.Data.PlainTextKey);
 
-            await _authenticatedClient.TransitDeleteEncryptionKeyAsync(keyName, backend.MountPoint);
-            await _authenticatedClient.UnmountSecretBackendAsync(backend.MountPoint);
+            await _authenticatedVaultClient.TransitDeleteEncryptionKeyAsync(keyName, backend.MountPoint);
+            await _authenticatedVaultClient.UnmountSecretBackendAsync(backend.MountPoint);
         }
 
         private async Task EncryptTests()
@@ -634,272 +628,81 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                 MountPoint = "transit1",
             };
 
-            await _authenticatedClient.MountSecretBackendAsync(backend);
+            await _authenticatedVaultClient.MountSecretBackendAsync(backend);
 
-            var cipherText1 = await _authenticatedClient.TransitEncryptAsync(keyName, encodedPlainText, transitBackendMountPoint: backend.MountPoint);
-            var cipherText2 = await _authenticatedClient.TransitEncryptAsync(keyName, encodedPlainText, context, transitBackendMountPoint: backend.MountPoint);
+            var cipherText1 = await _authenticatedVaultClient.TransitEncryptAsync(keyName, encodedPlainText, transitBackendMountPoint: backend.MountPoint);
+            var cipherText2 = await _authenticatedVaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, transitBackendMountPoint: backend.MountPoint);
 
-            var plainText1 = Encoding.UTF8.GetString(Convert.FromBase64String((await _authenticatedClient.TransitDecryptAsync(keyName, cipherText1.Data.CipherText, transitBackendMountPoint: backend.MountPoint)).Data.PlainText));
-            var plainText2 = Encoding.UTF8.GetString(Convert.FromBase64String((await _authenticatedClient.TransitDecryptAsync(keyName, cipherText2.Data.CipherText, context, backend.MountPoint)).Data.PlainText));
+            var plainText1 = Encoding.UTF8.GetString(Convert.FromBase64String((await _authenticatedVaultClient.TransitDecryptAsync(keyName, cipherText1.Data.CipherText, transitBackendMountPoint: backend.MountPoint)).Data.PlainText));
+            var plainText2 = Encoding.UTF8.GetString(Convert.FromBase64String((await _authenticatedVaultClient.TransitDecryptAsync(keyName, cipherText2.Data.CipherText, context, backend.MountPoint)).Data.PlainText));
 
             Assert.Equal(plainText, plainText1);
             Assert.Equal(plainText, plainText2);
 
-            var plainText3 = Encoding.UTF8.GetString(Convert.FromBase64String((await _authenticatedClient.TransitDecryptAsync(keyName, cipherText2.Data.CipherText, null, backend.MountPoint)).Data.PlainText));
+            var plainText3 = Encoding.UTF8.GetString(Convert.FromBase64String((await _authenticatedVaultClient.TransitDecryptAsync(keyName, cipherText2.Data.CipherText, null, backend.MountPoint)).Data.PlainText));
 
             // key derivation is not enabled since we created the key using default values.
             Assert.Equal(plainText, plainText3);
 
-            await _authenticatedClient.UnmountSecretBackendAsync(backend.MountPoint);
+            await _authenticatedVaultClient.UnmountSecretBackendAsync(backend.MountPoint);
         }
 
         private async Task TokenTests()
         {
-            var secret1 = await _authenticatedClient.CreateTokenAsync();
+            var secret1 = await _authenticatedVaultClient.CreateTokenAsync();
             Assert.NotNull(secret1);
 
             // capabilities.
             var caps =
-                await _authenticatedClient.GetTokenCapabilitiesAsync(secret1.AuthorizationInfo.ClientToken, "sys");
+                await _authenticatedVaultClient.GetTokenCapabilitiesAsync(secret1.AuthorizationInfo.ClientToken, "sys");
             Assert.NotNull(caps);
 
-            var caps2 = await _authenticatedClient.GetCallingTokenCapabilitiesAsync("sys");
+            var caps2 = await _authenticatedVaultClient.GetCallingTokenCapabilitiesAsync("sys");
             Assert.NotNull(caps2);
 
-            var secret2 = await _authenticatedClient.CreateTokenAsync(new TokenCreationOptions { NoParent = true });
+            var secret2 = await _authenticatedVaultClient.CreateTokenAsync(new TokenCreationOptions { NoParent = true });
             Assert.NotNull(secret2);
 
-            var accessors = await _authenticatedClient.GetTokenAccessorListAsync();
+            var accessors = await _authenticatedVaultClient.GetTokenAccessorListAsync();
             Assert.True(accessors.Data.Any());
 
-            var tokenInfoByAccessor = await _authenticatedClient.GetTokenInfoByAccessorAsync(accessors.Data.First());
+            var tokenInfoByAccessor = await _authenticatedVaultClient.GetTokenInfoByAccessorAsync(accessors.Data.First());
             Assert.NotNull(tokenInfoByAccessor);
 
-            await _authenticatedClient.RevokeTokenByAccessorAsync(accessors.Data.First());
+            await _authenticatedVaultClient.RevokeTokenByAccessorAsync(accessors.Data.First());
 
-            var accessors2 = await _authenticatedClient.GetTokenAccessorListAsync();
+            var accessors2 = await _authenticatedVaultClient.GetTokenAccessorListAsync();
             Assert.True(accessors.Data.Count() - 1 == accessors2.Data.Count());
 
-            var secret3 = await _authenticatedClient.CreateTokenAsync(new TokenCreationOptions { NoParent = true });
+            var secret3 = await _authenticatedVaultClient.CreateTokenAsync(new TokenCreationOptions { NoParent = true });
             Assert.NotNull(secret3);
 
-            var callingTokenInfo = await _authenticatedClient.GetCallingTokenInfoAsync();
+            var callingTokenInfo = await _authenticatedVaultClient.GetCallingTokenInfoAsync();
             Assert.Equal(_masterCredentials.RootToken, callingTokenInfo.Data.Id);
 
-            var tokenInfo1 = await _authenticatedClient.GetTokenInfoAsync(secret1.AuthorizationInfo.ClientToken);
+            var tokenInfo1 = await _authenticatedVaultClient.GetTokenInfoAsync(secret1.AuthorizationInfo.ClientToken);
             Assert.Equal(secret1.AuthorizationInfo.ClientToken, tokenInfo1.Data.Id);
 
-            var tokenInfo2 = await _authenticatedClient.GetTokenInfoAsync(secret2.AuthorizationInfo.ClientToken);
+            var tokenInfo2 = await _authenticatedVaultClient.GetTokenInfoAsync(secret2.AuthorizationInfo.ClientToken);
             Assert.Equal(secret2.AuthorizationInfo.ClientToken, tokenInfo2.Data.Id);
 
-            await _authenticatedClient.RevokeTokenAsync(secret1.AuthorizationInfo.ClientToken, true);
-            await Assert.ThrowsAsync<Exception>(() => _authenticatedClient.GetTokenInfoAsync(secret1.AuthorizationInfo.ClientToken));
+            await _authenticatedVaultClient.RevokeTokenAsync(secret1.AuthorizationInfo.ClientToken, true);
+            await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.GetTokenInfoAsync(secret1.AuthorizationInfo.ClientToken));
 
             // check if renewal of same token calls renew-self.
             // do it with lease id.
 
-            // await _authenticatedClient.RenewTokenAsync(_masterCredentials.RootToken);
+            // await _authenticatedVaultClient.RenewTokenAsync(_masterCredentials.RootToken);
 
             // renew calls need a lease id. raja todo
         }
 
-        private void VaultClientConstructorTests()
-        {
-            IAuthenticationInfo authenticationInfo = new TokenAuthenticationInfo("test-token");
-            var continueAsyncTasksOnCapturedContext = DateTime.UtcNow.Ticks % 2 == 0;
-
-            Assert.Throws<ArgumentNullException>(
-                () =>
-                    VaultClientFactory.CreateVaultClient(null, authenticationInfo, continueAsyncTasksOnCapturedContext));
-
-            var client = VaultClientFactory.CreateVaultClient(_vaultUri, null, continueAsyncTasksOnCapturedContext);
-            Assert.NotNull(client);
-        }
-
-        private async Task InitStatusTests()
-        {
-            var status = await _unauthenticatedVaultClient.GetInitializationStatusAsync();
-            Assert.True(status);
-        }
-
-        private async Task SealStatusTests()
-        {
-            var status = await _unauthenticatedVaultClient.GetSealStatusAsync();
-            Assert.False(status.Sealed);
-
-            // seal it
-            await _authenticatedClient.SealAsync();
-
-            status = await _unauthenticatedVaultClient.GetSealStatusAsync();
-            Assert.True(status.Sealed);
-            Assert.True(status.SecretThreshold == 3);
-            Assert.True(status.SecretShares == 5);
-            Assert.True(status.Progress == 0);
-
-            // unseal again
-
-            var unsealCount = 0;
-
-            foreach (var masterKey in _masterCredentials.MasterKeys)
-            {
-                var sealStatus = await _unauthenticatedVaultClient.UnsealAsync(masterKey);
-                ++unsealCount;
-
-                if (!sealStatus.Sealed)
-                {
-                    break;
-                }
-            }
-
-            Assert.Equal(3, unsealCount);
-
-            status = await _unauthenticatedVaultClient.GetSealStatusAsync();
-            Assert.False(status.Sealed);
-            Assert.True(status.SecretThreshold == 3);
-            Assert.True(status.SecretShares == 5);
-            Assert.True(status.Progress == 0);
-
-            // seal it
-            await _authenticatedClient.SealAsync();
-
-            status = await _unauthenticatedVaultClient.GetSealStatusAsync();
-            Assert.True(status.Sealed);
-
-            // unseal in one shot.
-            var finalStatus = await _unauthenticatedVaultClient.UnsealQuickAsync(_masterCredentials.MasterKeys);
-            Assert.False(finalStatus.Sealed);
-            Assert.True(finalStatus.SecretThreshold == 3);
-            Assert.True(finalStatus.SecretShares == 5);
-            Assert.True(finalStatus.Progress == 0);
-
-            // seal again
-            await _authenticatedClient.SealAsync();
-
-            status = await _unauthenticatedVaultClient.GetSealStatusAsync();
-            Assert.True(status.Sealed);
-
-            // unseal again but with reset
-
-            await _unauthenticatedVaultClient.UnsealAsync(_masterCredentials.MasterKeys[0]);
-            await _unauthenticatedVaultClient.UnsealAsync(_masterCredentials.MasterKeys[1]);
-            var progressStatus = await _unauthenticatedVaultClient.UnsealAsync(null, true);
-
-            Assert.True(progressStatus.Sealed);
-            Assert.True(progressStatus.Progress == 0);
-
-            // unseal again
-
-            unsealCount = 0;
-
-            foreach (var masterKey in _masterCredentials.MasterKeys)
-            {
-                var sealStatus = await _unauthenticatedVaultClient.UnsealAsync(masterKey);
-                ++unsealCount;
-
-                if (!sealStatus.Sealed)
-                {
-                    break;
-                }
-            }
-
-            Assert.Equal(3, unsealCount);
-        }
-
-        private async Task MountedSecretBackendTests()
-        {
-            // get secret backends
-            var secretBackends = (await _authenticatedClient.GetAllMountedSecretBackendsAsync()).Data.ToList();
-            Assert.True(secretBackends.Any());
-
-            // get secret backend config with null mountpoint
-            await
-                Assert.ThrowsAsync<ArgumentNullException>(
-                    () => _authenticatedClient.GetMountedSecretBackendConfigurationAsync(mountPoint: null));
-
-            // get secret backend tune configuration
-            var mountConfig =
-                await _authenticatedClient.GetMountedSecretBackendConfigurationAsync(secretBackends[0].MountPoint);
-            Assert.NotNull(mountConfig);
-
-            // mount a new secret backend
-            var newSecretBackend = new SecretBackend
-            {
-                BackendType = SecretBackendType.AWS,
-                MountPoint = "aws1",
-                Description = "e2e tests"
-            };
-
-            await _authenticatedClient.MountSecretBackendAsync(newSecretBackend);
-
-            string ttl = "10h";
-
-            await
-                _authenticatedClient.TuneSecretBackendConfigurationAsync(newSecretBackend.MountPoint,
-                    new SecretBackendConfiguration { DefaultLeaseTtl = ttl, MaximumLeaseTtl = ttl });
-
-            // get secret backends
-            var newSecretBackends = (await _authenticatedClient.GetAllMountedSecretBackendsAsync()).Data.ToList();
-            Assert.Equal(secretBackends.Count + 1, newSecretBackends.Count);
-
-            // unmount
-            await _authenticatedClient.UnmountSecretBackendAsync(newSecretBackend.MountPoint);
-
-            // get secret backends
-            var oldSecretBackends = (await _authenticatedClient.GetAllMountedSecretBackendsAsync()).Data.ToList();
-            Assert.Equal(secretBackends.Count, oldSecretBackends.Count);
-
-            // mount a new secret backend
-            await _authenticatedClient.MountSecretBackendAsync(newSecretBackend);
-
-            // remount
-            var newMountPoint = "aws2";
-            await _authenticatedClient.RemountSecretBackendAsync(newSecretBackend.MountPoint, newMountPoint);
-
-            // get new secret backend config
-            var config = await _authenticatedClient.GetMountedSecretBackendConfigurationAsync(newMountPoint);
-            Assert.NotNull(config);
-
-            // unmount
-            await _authenticatedClient.UnmountSecretBackendAsync(newMountPoint);
-        }
-
-        private async Task MountedAuthenticationBackendTests()
-        {
-            // get Authentication backends
-            var authenticationBackends =
-                (await _authenticatedClient.GetAllEnabledAuthenticationBackendsAsync()).ToList();
-            Assert.True(authenticationBackends.Any());
-
-            // enable new auth
-            var newAuth = new AuthenticationBackend
-            {
-                MountPoint = "github1",
-                BackendType = AuthenticationBackendType.GitHub,
-                Description = "Github auth - test cases"
-            };
-
-            await _authenticatedClient.EnableAuthenticationBackendAsync(newAuth);
-
-            // get all auths
-            var newAuthenticationBackends =
-                (await _authenticatedClient.GetAllEnabledAuthenticationBackendsAsync()).ToList();
-            Assert.Equal(authenticationBackends.Count + 1, newAuthenticationBackends.Count);
-
-            // disable auth
-            await _authenticatedClient.DisableAuthenticationBackendAsync(newAuth.MountPoint);
-
-            // get all auths
-            var oldAuthenticationBackends =
-                (await _authenticatedClient.GetAllEnabledAuthenticationBackendsAsync()).ToList();
-            Assert.Equal(authenticationBackends.Count, oldAuthenticationBackends.Count);
-        }
-
         private async Task PoliciesTests()
         {
-            var policies = (await _authenticatedClient.GetAllPoliciesAsync()).ToList();
+            var policies = (await _authenticatedVaultClient.GetAllPoliciesAsync()).ToList();
             Assert.True(policies.Any());
 
-            var policy = await _authenticatedClient.GetPolicyAsync(policies[0]);
+            var policy = await _authenticatedVaultClient.GetPolicyAsync(policies[0]);
             Assert.NotNull(policy);
 
             // write a new policy
@@ -909,32 +712,32 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                 Rules = "path \"sys/*\" {  policy = \"deny\" }"
             };
 
-            await _authenticatedClient.WritePolicyAsync(newPolicy);
+            await _authenticatedVaultClient.WritePolicyAsync(newPolicy);
 
             // get new policy
-            var newPolicyGet = await _authenticatedClient.GetPolicyAsync(newPolicy.Name);
+            var newPolicyGet = await _authenticatedVaultClient.GetPolicyAsync(newPolicy.Name);
             Assert.Equal(newPolicy.Rules, newPolicyGet.Rules);
 
             // write updates to a new policy
             newPolicy.Rules = "path \"sys/*\" {  policy = \"read\" }";
 
-            await _authenticatedClient.WritePolicyAsync(newPolicy);
+            await _authenticatedVaultClient.WritePolicyAsync(newPolicy);
 
             // get new policy
-            newPolicyGet = await _authenticatedClient.GetPolicyAsync(newPolicy.Name);
+            newPolicyGet = await _authenticatedVaultClient.GetPolicyAsync(newPolicy.Name);
             Assert.Equal(newPolicy.Rules, newPolicyGet.Rules);
 
             // delete policy
-            await _authenticatedClient.DeletePolicyAsync(newPolicy.Name);
+            await _authenticatedVaultClient.DeletePolicyAsync(newPolicy.Name);
 
             // get all policies
-            var oldPolicies = (await _authenticatedClient.GetAllPoliciesAsync()).ToList();
+            var oldPolicies = (await _authenticatedVaultClient.GetAllPoliciesAsync()).ToList();
             Assert.Equal(policies.Count, oldPolicies.Count);
         }
 
         private async Task AuditBackendsTests()
         {
-            var audits = (await _authenticatedClient.GetAllEnabledAuditBackendsAsync()).ToList();
+            var audits = (await _authenticatedVaultClient.GetAllEnabledAuditBackendsAsync()).ToList();
             Assert.False(audits.Any());
 
             // enable new file audit
@@ -948,21 +751,21 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                 }
             };
 
-            await _authenticatedClient.EnableAuditBackendAsync(newFileAudit);
+            await _authenticatedVaultClient.EnableAuditBackendAsync(newFileAudit);
 
             // get audits
-            var newAudits = (await _authenticatedClient.GetAllEnabledAuditBackendsAsync()).ToList();
+            var newAudits = (await _authenticatedVaultClient.GetAllEnabledAuditBackendsAsync()).ToList();
             Assert.Equal(audits.Count + 1, newAudits.Count);
 
             // hash with audit
-            var hash = await _authenticatedClient.HashWithAuditBackendAsync(newFileAudit.MountPoint, "testinput");
+            var hash = await _authenticatedVaultClient.HashWithAuditBackendAsync(newFileAudit.MountPoint, "testinput");
             Assert.NotNull(hash);
 
             // disabled audit
-            await _authenticatedClient.DisableAuditBackendAsync(newFileAudit.MountPoint);
+            await _authenticatedVaultClient.DisableAuditBackendAsync(newFileAudit.MountPoint);
 
             // get audits
-            var oldAudits = (await _authenticatedClient.GetAllEnabledAuditBackendsAsync()).ToList();
+            var oldAudits = (await _authenticatedVaultClient.GetAllEnabledAuditBackendsAsync()).ToList();
             Assert.Equal(audits.Count, oldAudits.Count);
 
             /* not supported on windows
@@ -975,17 +778,17 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                 Options = new SyslogAuditBackendOptions()
             };
 
-            await _authenticatedClient.EnableAuditBackendAsync(newSyslogAudit);
+            await _authenticatedVaultClient.EnableAuditBackendAsync(newSyslogAudit);
 
             // get audits
-            var newAudits2 = (await _authenticatedClient.GetAllEnabledAuditBackendsAsync()).ToList();
+            var newAudits2 = (await _authenticatedVaultClient.GetAllEnabledAuditBackendsAsync()).ToList();
             Assert.Equal(1, newAudits2.Count);
 
             // disabled audit
-            await _authenticatedClient.DisableAuditBackendAsync(newSyslogAudit.MountPoint);
+            await _authenticatedVaultClient.DisableAuditBackendAsync(newSyslogAudit.MountPoint);
 
             // get audits
-            var oldAudits2 = (await _authenticatedClient.GetAllEnabledAuditBackendsAsync()).ToList();
+            var oldAudits2 = (await _authenticatedVaultClient.GetAllEnabledAuditBackendsAsync()).ToList();
             Assert.Equal(audits.Count, oldAudits2.Count);
 
             */
@@ -994,25 +797,25 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
         private async Task RawSecretAndMoreTests()
         {
             // get leader
-            var leader = await _authenticatedClient.GetLeaderAsync();
+            var leader = await _authenticatedVaultClient.GetLeaderAsync();
             Assert.NotNull(leader);
 
             // get keystatus
-            var keyStatus = await _authenticatedClient.GetEncryptionKeyStatusAsync();
+            var keyStatus = await _authenticatedVaultClient.GetEncryptionKeyStatusAsync();
             Assert.True(keyStatus.SequentialKeyNumber == 1);
 
             // rotate key
-            await _authenticatedClient.RotateEncryptionKeyAsync();
-            keyStatus = await _authenticatedClient.GetEncryptionKeyStatusAsync();
+            await _authenticatedVaultClient.RotateEncryptionKeyAsync();
+            keyStatus = await _authenticatedVaultClient.GetEncryptionKeyStatusAsync();
             Assert.True(keyStatus.SequentialKeyNumber == 2);
 
             // rekey
-            var rekeyStatus = await _authenticatedClient.GetRekeyStatusAsync();
+            var rekeyStatus = await _authenticatedVaultClient.GetRekeyStatusAsync();
             Assert.False(rekeyStatus.Started);
 
-            await _authenticatedClient.InitiateRekeyAsync(2, 2);
+            await _authenticatedVaultClient.InitiateRekeyAsync(2, 2);
 
-            rekeyStatus = await _authenticatedClient.GetRekeyStatusAsync();
+            rekeyStatus = await _authenticatedVaultClient.GetRekeyStatusAsync();
             Assert.True(rekeyStatus.Started);
             Assert.True(rekeyStatus.SecretThreshold == 2);
             Assert.True(rekeyStatus.RequiredUnsealKeys == 3);
@@ -1022,13 +825,13 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.False(rekeyStatus.Backup);
 
             var rekeyNonce = rekeyStatus.Nonce;
-            var rekeyProgress = await _authenticatedClient.ContinueRekeyAsync(_masterCredentials.MasterKeys[0], rekeyNonce);
+            var rekeyProgress = await _authenticatedVaultClient.ContinueRekeyAsync(_masterCredentials.MasterKeys[0], rekeyNonce);
             Assert.False(rekeyProgress.Complete);
             Assert.Null(rekeyProgress.MasterKeys);
             Assert.Equal(string.Empty, rekeyProgress.Nonce);
             Assert.False(rekeyProgress.Backup);
 
-            rekeyStatus = await _authenticatedClient.GetRekeyStatusAsync();
+            rekeyStatus = await _authenticatedVaultClient.GetRekeyStatusAsync();
             Assert.True(rekeyStatus.Started);
             Assert.True(rekeyStatus.SecretThreshold == 2);
             Assert.True(rekeyStatus.RequiredUnsealKeys == 3);
@@ -1037,13 +840,13 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.Equal(rekeyNonce, rekeyStatus.Nonce);
             Assert.False(rekeyStatus.Backup);
 
-            rekeyProgress = await _authenticatedClient.ContinueRekeyAsync(_masterCredentials.MasterKeys[1], rekeyNonce);
+            rekeyProgress = await _authenticatedVaultClient.ContinueRekeyAsync(_masterCredentials.MasterKeys[1], rekeyNonce);
             Assert.False(rekeyProgress.Complete);
             Assert.Null(rekeyProgress.MasterKeys);
             Assert.Equal(string.Empty, rekeyProgress.Nonce);
             Assert.False(rekeyProgress.Backup);
 
-            rekeyStatus = await _authenticatedClient.GetRekeyStatusAsync();
+            rekeyStatus = await _authenticatedVaultClient.GetRekeyStatusAsync();
             Assert.True(rekeyStatus.Started);
             Assert.True(rekeyStatus.SecretThreshold == 2);
             Assert.True(rekeyStatus.RequiredUnsealKeys == 3);
@@ -1052,7 +855,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.Equal(rekeyNonce, rekeyStatus.Nonce);
             Assert.False(rekeyStatus.Backup);
 
-            rekeyProgress = await _authenticatedClient.ContinueRekeyAsync(_masterCredentials.MasterKeys[2], rekeyNonce);
+            rekeyProgress = await _authenticatedVaultClient.ContinueRekeyAsync(_masterCredentials.MasterKeys[2], rekeyNonce);
             Assert.True(rekeyProgress.Complete);
             Assert.NotNull(rekeyProgress.MasterKeys);
             Assert.Equal(rekeyNonce, rekeyProgress.Nonce);
@@ -1060,7 +863,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
             _masterCredentials.MasterKeys = rekeyProgress.MasterKeys;
 
-            rekeyStatus = await _authenticatedClient.GetRekeyStatusAsync();
+            rekeyStatus = await _authenticatedVaultClient.GetRekeyStatusAsync();
 
             Assert.False(rekeyStatus.Started);
             Assert.True(rekeyStatus.SecretThreshold == 0);
@@ -1070,9 +873,9 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.Equal(string.Empty, rekeyStatus.Nonce);
             Assert.False(rekeyStatus.Backup);
 
-            await _authenticatedClient.InitiateRekeyAsync(5, 5);
+            await _authenticatedVaultClient.InitiateRekeyAsync(5, 5);
 
-            rekeyStatus = await _authenticatedClient.GetRekeyStatusAsync();
+            rekeyStatus = await _authenticatedVaultClient.GetRekeyStatusAsync();
             Assert.True(rekeyStatus.Started);
             Assert.True(rekeyStatus.SecretThreshold == 5);
             Assert.True(rekeyStatus.RequiredUnsealKeys == 2);
@@ -1081,8 +884,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.NotNull(rekeyStatus.Nonce);
             Assert.False(rekeyStatus.Backup);
 
-            await _authenticatedClient.CancelRekeyAsync();
-            rekeyStatus = await _authenticatedClient.GetRekeyStatusAsync();
+            await _authenticatedVaultClient.CancelRekeyAsync();
+            rekeyStatus = await _authenticatedVaultClient.GetRekeyStatusAsync();
             Assert.False(rekeyStatus.Started);
             Assert.True(rekeyStatus.SecretThreshold == 0);
             Assert.True(rekeyStatus.RequiredUnsealKeys == 2);
@@ -1099,20 +902,20 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                 {"foo2", 345 }
             };
 
-            await _authenticatedClient.WriteRawSecretAsync(rawPath, rawValues);
+            await _authenticatedVaultClient.WriteRawSecretAsync(rawPath, rawValues);
 
             // read raw
-            var readRawValues = await _authenticatedClient.ReadRawSecretAsync(rawPath);
+            var readRawValues = await _authenticatedVaultClient.ReadRawSecretAsync(rawPath);
             Assert.True(readRawValues.Data.RawValues.Count == 2);
 
             // renew secret
-            //var secret = await _authenticatedClient.RenewSecretAsync(readRawValues.LeaseId);
+            //var secret = await _authenticatedVaultClient.RenewSecretAsync(readRawValues.LeaseId);
             // Assert.NotNull(secret);
 
             // revoke secret (only applicable for secrets with leases)
             // renew secret
-            // await _authenticatedClient.RevokeSecretAsync(readRawValues.LeaseId);
-            // await Assert.ThrowsAsync<Exception>(() => _authenticatedClient.ReadRawSecretAsync(rawPath));
+            // await _authenticatedVaultClient.RevokeSecretAsync(readRawValues.LeaseId);
+            // await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadRawSecretAsync(rawPath));
 
             // write 2 secrets and revoke prefix.
 
@@ -1122,21 +925,21 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             //var rawValues2 = new Dictionary<string, object>(rawValues);
             //rawValues2.Add("foo2", 10);
 
-            //await _authenticatedClient.WriteRawSecretAsync(path1, rawValues);
-            //await _authenticatedClient.WriteRawSecretAsync(path2, rawValues2);
+            //await _authenticatedVaultClient.WriteRawSecretAsync(path1, rawValues);
+            //await _authenticatedVaultClient.WriteRawSecretAsync(path2, rawValues2);
 
-            //await _authenticatedClient.RevokeAllSecretsUnderPrefixAsync(rawPath + "a");
+            //await _authenticatedVaultClient.RevokeAllSecretsUnderPrefixAsync(rawPath + "a");
 
-            //var v1 = await _authenticatedClient.ReadRawSecretAsync(path1);
+            //var v1 = await _authenticatedVaultClient.ReadRawSecretAsync(path1);
 
-            //await Assert.ThrowsAsync<Exception>(() => _authenticatedClient.ReadRawSecretAsync(path1));
-            //await Assert.ThrowsAsync<Exception>(() => _authenticatedClient.ReadRawSecretAsync(path2));
+            //await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadRawSecretAsync(path1));
+            //await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadRawSecretAsync(path2));
 
             // delete raw
-            await _authenticatedClient.DeleteRawSecretAsync(rawPath);
+            await _authenticatedVaultClient.DeleteRawSecretAsync(rawPath);
 
             // read raw
-            await Assert.ThrowsAsync<Exception>(() => _authenticatedClient.ReadRawSecretAsync(rawPath));
+            await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadRawSecretAsync(rawPath));
 
             // get health status
             var healthStatus = await _unauthenticatedVaultClient.GetHealthStatusAsync();
@@ -1157,14 +960,14 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                 {"3", false},
             };
 
-            await _authenticatedClient.WriteSecretAsync(path, secretData);
+            await _authenticatedVaultClient.WriteSecretAsync(path, secretData);
 
-            var secret = await _authenticatedClient.ReadSecretAsync(path);
+            var secret = await _authenticatedVaultClient.ReadSecretAsync(path);
             Assert.True(secret.Data.Count == 3);
 
-            await _authenticatedClient.DeleteSecretAsync(path);
+            await _authenticatedVaultClient.DeleteSecretAsync(path);
 
-            await Assert.ThrowsAsync<Exception>(() => _authenticatedClient.ReadSecretAsync(path));
+            await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadSecretAsync(path));
         }
 
         // raja todo. add approle tests.
@@ -1183,17 +986,17 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             var appIdAuthBackend = new AuthenticationBackend
             {
                 BackendType = AuthenticationBackendType.AppId,
-                MountPoint = path
+                AuthenticationPath = path
             };
 
-            await _authenticatedClient.EnableAuthenticationBackendAsync(appIdAuthBackend);
-            await _authenticatedClient.WriteSecretAsync(prefix + "/map/app-id/" + appId, new Dictionary<string, object> { { "value", "root" }, { "display_name", appId } });
-            await _authenticatedClient.WriteSecretAsync(prefix + "/map/user-id/" + userId, new Dictionary<string, object> { { "value", appId } });
+            await _authenticatedVaultClient.EnableAuthenticationBackendAsync(appIdAuthBackend);
+            await _authenticatedVaultClient.WriteSecretAsync(prefix + "/map/app-id/" + appId, new Dictionary<string, object> { { "value", "root" }, { "display_name", appId } });
+            await _authenticatedVaultClient.WriteSecretAsync(prefix + "/map/user-id/" + userId, new Dictionary<string, object> { { "value", appId } });
 
             var authBackends = await appidClient.GetAllEnabledAuthenticationBackendsAsync();
-            Assert.True(authBackends.Any());
+            Assert.True(authBackends.Data.Any());
 
-            await _authenticatedClient.DisableAuthenticationBackendAsync(appIdAuthBackend.MountPoint);
+            await _authenticatedVaultClient.DisableAuthenticationBackendAsync(appIdAuthBackend.AuthenticationPath);
         }
 
         private async Task GithubAuthenticationProviderTests()
@@ -1209,16 +1012,16 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             var githubAuthenticationInfo = new GitHubAuthenticationInfo(path, personalAccessToken);
 
             var githubClient = VaultClientFactory.CreateVaultClient(_vaultUri, githubAuthenticationInfo);
-            var githubAuthBackend = new AuthenticationBackend { BackendType = AuthenticationBackendType.GitHub, MountPoint = githubAuthenticationInfo.MountPoint };
+            var githubAuthBackend = new AuthenticationBackend { BackendType = AuthenticationBackendType.GitHub, AuthenticationPath = githubAuthenticationInfo.MountPoint };
 
-            await _authenticatedClient.EnableAuthenticationBackendAsync(githubAuthBackend);
-            await _authenticatedClient.WriteSecretAsync(prefix + "/config", new Dictionary<string, object> { { "organization", organization } });
-            await _authenticatedClient.WriteSecretAsync(prefix + "/map/teams/" + team, new Dictionary<string, object> { { "value", "root" } });
+            await _authenticatedVaultClient.EnableAuthenticationBackendAsync(githubAuthBackend);
+            await _authenticatedVaultClient.WriteSecretAsync(prefix + "/config", new Dictionary<string, object> { { "organization", organization } });
+            await _authenticatedVaultClient.WriteSecretAsync(prefix + "/map/teams/" + team, new Dictionary<string, object> { { "value", "root" } });
 
             var authBackends = await githubClient.GetAllEnabledAuthenticationBackendsAsync();
-            Assert.True(authBackends.Any());
+            Assert.True(authBackends.Data.Any());
 
-            await _authenticatedClient.DisableAuthenticationBackendAsync(githubAuthBackend.MountPoint);
+            await _authenticatedVaultClient.DisableAuthenticationBackendAsync(githubAuthBackend.AuthenticationPath);
         }
 
         private async Task UsernamePasswordAuthenticationProviderTests()
@@ -1233,32 +1036,32 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             var authenticationInfo = new UsernamePasswordAuthenticationInfo(path, username, password);
 
             var userPassClient = VaultClientFactory.CreateVaultClient(_vaultUri, authenticationInfo);
-            var authBackend = new AuthenticationBackend { BackendType = AuthenticationBackendType.UsernamePassword, MountPoint = authenticationInfo.MountPoint };
+            var authBackend = new AuthenticationBackend { BackendType = AuthenticationBackendType.UsernamePassword, AuthenticationPath = authenticationInfo.MountPoint };
 
-            await _authenticatedClient.EnableAuthenticationBackendAsync(authBackend);
-            await _authenticatedClient.WriteSecretAsync(prefix + "/users/" + username, new Dictionary<string, object>
+            await _authenticatedVaultClient.EnableAuthenticationBackendAsync(authBackend);
+            await _authenticatedVaultClient.WriteSecretAsync(prefix + "/users/" + username, new Dictionary<string, object>
                     {
                         { "password", password },
                         { "policies", "root" }
                     });
 
             var authBackends = await userPassClient.GetAllEnabledAuthenticationBackendsAsync();
-            Assert.True(authBackends.Any());
+            Assert.True(authBackends.Data.Any());
 
-            await _authenticatedClient.DisableAuthenticationBackendAsync(authBackend.MountPoint);
+            await _authenticatedVaultClient.DisableAuthenticationBackendAsync(authBackend.AuthenticationPath);
         }
 
         private async Task TokenAuthenticationProviderTests()
         {
             // token auth 
 
-            var secret = await _authenticatedClient.CreateTokenAsync();
+            var secret = await _authenticatedVaultClient.CreateTokenAsync();
 
             var tokenAuthenticationInfo = new TokenAuthenticationInfo(secret.AuthorizationInfo.ClientToken);
             var tokenClient = VaultClientFactory.CreateVaultClient(_vaultUri, tokenAuthenticationInfo);
 
             var authBackends = await tokenClient.GetAllEnabledAuthenticationBackendsAsync();
-            Assert.True(authBackends.Any());
+            Assert.True(authBackends.Data.Any());
         }
 
         private async Task GenericTests()
@@ -1273,21 +1076,21 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             };
 
             await
-                _authenticatedClient.MountSecretBackendAsync(new SecretBackend()
+                _authenticatedVaultClient.MountSecretBackendAsync(new SecretBackend()
                 {
                     BackendType = SecretBackendType.Generic,
                     MountPoint = mountpoint
                 });
 
-            await _authenticatedClient.GenericWriteSecretAsync(path, values);
+            await _authenticatedVaultClient.GenericWriteSecretAsync(path, values);
 
-            var readValues = await _authenticatedClient.GenericReadSecretAsync(path);
+            var readValues = await _authenticatedVaultClient.GenericReadSecretAsync(path);
             Assert.True(readValues.Data.Count == 2);
 
-            await _authenticatedClient.GenericDeleteSecretAsync(path);
-            await Assert.ThrowsAsync<Exception>(() => _authenticatedClient.GenericReadSecretAsync(path));
+            await _authenticatedVaultClient.GenericDeleteSecretAsync(path);
+            await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.GenericReadSecretAsync(path));
 
-            await _authenticatedClient.UnmountSecretBackendAsync(mountpoint);
+            await _authenticatedVaultClient.UnmountSecretBackendAsync(mountpoint);
         }
 
         private async Task CubbyholeTests()
@@ -1299,13 +1102,13 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                 {"foo2", 345 }
             };
 
-            await _authenticatedClient.CubbyholeWriteSecretAsync(path, values);
+            await _authenticatedVaultClient.CubbyholeWriteSecretAsync(path, values);
 
-            var readValues = await _authenticatedClient.CubbyholeReadSecretAsync(path);
+            var readValues = await _authenticatedVaultClient.CubbyholeReadSecretAsync(path);
             Assert.True(readValues.Data.Count == 2);
 
-            await _authenticatedClient.CubbyholeDeleteSecretAsync(path);
-            await Assert.ThrowsAsync<Exception>(() => _authenticatedClient.CubbyholeReadSecretAsync(path));
+            await _authenticatedVaultClient.CubbyholeDeleteSecretAsync(path);
+            await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.CubbyholeReadSecretAsync(path));
         }
 
         private async Task MySqlCredentialStrongTests()
@@ -1319,38 +1122,38 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
             var role = "readonly2";
 
-            await _authenticatedClient.MountSecretBackendAsync(backend);
-            await _authenticatedClient.MySqlConfigureConnectionAsync(new MySqlConnectionInfo()
+            await _authenticatedVaultClient.MountSecretBackendAsync(backend);
+            await _authenticatedVaultClient.MySqlConfigureConnectionAsync(new MySqlConnectionInfo()
             {
                 DataSourceName = "root:root@tcp(127.0.0.1:3306)/"
             }, mountPoint);
 
             var sql = "CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT SELECT ON *.* TO '{{name}}'@'%';";
 
-            await _authenticatedClient.MySqlConfigureCredentialLeaseSettingsAsync(new CredentialLeaseSettings()
+            await _authenticatedVaultClient.MySqlConfigureCredentialLeaseSettingsAsync(new CredentialLeaseSettings()
             {
                 TimeToLive = "1h",
                 MaximumTimeToLive = "2h"
             }, mountPoint);
 
-            await _authenticatedClient.MySqlWriteNamedRoleAsync(role, new MySqlRoleDefinition()
+            await _authenticatedVaultClient.MySqlWriteNamedRoleAsync(role, new MySqlRoleDefinition()
             {
                 Sql = sql
             }, mountPoint);
 
-            var readRole = await _authenticatedClient.MySqlReadNamedRoleAsync(role, mountPoint);
+            var readRole = await _authenticatedVaultClient.MySqlReadNamedRoleAsync(role, mountPoint);
             Assert.Equal(sql, readRole.Data.Sql);
 
             var credentials =
-                await _authenticatedClient.MySqlGenerateDynamicCredentialsAsync(role, backend.MountPoint);
+                await _authenticatedVaultClient.MySqlGenerateDynamicCredentialsAsync(role, backend.MountPoint);
 
             Assert.NotNull(credentials.LeaseId);
             Assert.NotNull(credentials.Data.Username);
             Assert.NotNull(credentials.Data.Password);
 
-            await _authenticatedClient.MySqlDeleteNamedRoleAsync(role, mountPoint);
+            await _authenticatedVaultClient.MySqlDeleteNamedRoleAsync(role, mountPoint);
 
-            await _authenticatedClient.UnmountSecretBackendAsync(backend.MountPoint);
+            await _authenticatedVaultClient.UnmountSecretBackendAsync(backend.MountPoint);
         }
 
         private async Task MySqlCredentialTests()
@@ -1364,29 +1167,29 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
             var role = "readonly";
 
-            await _authenticatedClient.MountSecretBackendAsync(backend);
-            await _authenticatedClient.WriteSecretAsync(mountPoint + "/config/connection", new Dictionary<string, object>
+            await _authenticatedVaultClient.MountSecretBackendAsync(backend);
+            await _authenticatedVaultClient.WriteSecretAsync(mountPoint + "/config/connection", new Dictionary<string, object>
             {
                 {"value", "root:root@tcp(127.0.0.1:3306)/"}
             });
-            await _authenticatedClient.WriteSecretAsync(mountPoint + "/config/lease", new Dictionary<string, object>
+            await _authenticatedVaultClient.WriteSecretAsync(mountPoint + "/config/lease", new Dictionary<string, object>
             {
                 {"lease", "1h"},
                 {"lease_max", "24h"}
             });
-            await _authenticatedClient.WriteSecretAsync(mountPoint + "/roles/" + role, new Dictionary<string, object>
+            await _authenticatedVaultClient.WriteSecretAsync(mountPoint + "/roles/" + role, new Dictionary<string, object>
             {
                 {"sql", "CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT SELECT ON *.* TO '{{name}}'@'%';"}
             });
 
             var credentials =
-                await _authenticatedClient.MySqlGenerateDynamicCredentialsAsync(role, backend.MountPoint);
+                await _authenticatedVaultClient.MySqlGenerateDynamicCredentialsAsync(role, backend.MountPoint);
 
             Assert.NotNull(credentials.LeaseId);
             Assert.NotNull(credentials.Data.Username);
             Assert.NotNull(credentials.Data.Password);
 
-            await _authenticatedClient.UnmountSecretBackendAsync(backend.MountPoint);
+            await _authenticatedVaultClient.UnmountSecretBackendAsync(backend.MountPoint);
         }
 
         //        [Fact(Skip = "no ldap")]
