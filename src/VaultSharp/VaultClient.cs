@@ -444,7 +444,15 @@ namespace VaultSharp
         {
             Checker.NotNull(leaseId, "leaseId");
 
-            var requestData = incrementSeconds.HasValue ? new { increment = incrementSeconds.Value } : null;
+            var requestData = new Dictionary<string, object>
+            {
+                {"lease_id", leaseId}
+            };
+
+            if (incrementSeconds.HasValue)
+            {
+                requestData.Add("increment", incrementSeconds.Value);
+            }
 
             var response = await MakeVaultApiRequest<Secret<Dictionary<string, object>>>("sys/renew/" + leaseId, HttpMethod.Put, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return response;
@@ -457,14 +465,14 @@ namespace VaultSharp
             await MakeVaultApiRequest("sys/revoke/" + leaseId, HttpMethod.Put).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task RevokeAllSecretsUnderPrefixAsync(string pathPrefix)
+        public async Task RevokeAllSecretsOrTokensUnderPrefixAsync(string pathPrefix)
         {
             Checker.NotNull(pathPrefix, "pathPrefix");
 
             await MakeVaultApiRequest("sys/revoke-prefix/" + pathPrefix.Trim('/'), HttpMethod.Put).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task ForceRevokeAllSecretsUnderPrefixAsync(string pathPrefix)
+        public async Task ForceRevokeAllSecretsOrTokensUnderPrefixAsync(string pathPrefix)
         {
             Checker.NotNull(pathPrefix, "pathPrefix");
 

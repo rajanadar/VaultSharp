@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using VaultSharp.Backends.Authentication.Models;
 using VaultSharp.Backends.Authentication.Models.Token;
-using VaultSharp.Backends.Secret.Models;
 using VaultSharp.Backends.System.Models;
 using Xunit;
 
@@ -68,8 +67,8 @@ namespace VaultSharp.UnitTests
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.HashWithAuditBackendAsync(null, "a"));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.RenewSecretAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.RevokeSecretAsync(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.RevokeAllSecretsUnderPrefixAsync(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.ForceRevokeAllSecretsUnderPrefixAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.RevokeAllSecretsOrTokensUnderPrefixAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.ForceRevokeAllSecretsOrTokensUnderPrefixAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.ContinueRekeyAsync(null, "nonce"));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.ContinueRekeyAsync("masterShareKey", null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.ReadRawSecretAsync(null));

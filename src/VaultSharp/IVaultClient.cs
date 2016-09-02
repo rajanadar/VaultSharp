@@ -410,18 +410,18 @@ namespace VaultSharp
         Task RevokeSecretAsync(string leaseId);
 
         /// <summary>
-        /// Revokes all the secrets generated under the given prefix immediately.
+        /// Revokes all the secrets or tokens generated under the given prefix immediately.
         /// </summary>
         /// <param name="pathPrefix"><para>[required]</para>
         /// The path prefix. (with or without trailing slashes. it doesn't matter)</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task RevokeAllSecretsUnderPrefixAsync(string pathPrefix);
+        Task RevokeAllSecretsOrTokensUnderPrefixAsync(string pathPrefix);
 
         /// <summary>
         /// Revoke all secrets or tokens generated under a given prefix immediately. 
-        /// Unlike <see cref="RevokeAllSecretsUnderPrefixAsync"/>, this path ignores backend errors 
+        /// Unlike <see cref="RevokeAllSecretsOrTokensUnderPrefixAsync"/>, this path ignores backend errors 
         /// encountered during revocation. 
         /// This is potentially very dangerous and should only be used in specific emergency 
         /// situations where errors in the backend or the connected backend service 
@@ -432,7 +432,7 @@ namespace VaultSharp
         /// </summary>
         /// <param name="pathPrefix">The path prefix.</param>
         /// <returns>The task.</returns>
-        Task ForceRevokeAllSecretsUnderPrefixAsync(string pathPrefix);
+        Task ForceRevokeAllSecretsOrTokensUnderPrefixAsync(string pathPrefix);
 
         /// <summary>
         /// Gets the high availability status and current leader instance of Vault.

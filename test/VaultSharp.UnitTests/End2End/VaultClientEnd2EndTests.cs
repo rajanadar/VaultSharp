@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VaultSharp.Backends.Audit.Models;
-using VaultSharp.Backends.Audit.Models.File;
 using VaultSharp.Backends.Authentication.Models;
 using VaultSharp.Backends.Authentication.Models.AppId;
 using VaultSharp.Backends.Authentication.Models.GitHub;
@@ -27,9 +25,6 @@ namespace VaultSharp.UnitTests.End2End
         private const string RootToken = "a3d54c99-75fc-5bf3-e1e9-b6cb5b775e92";
 
         private static readonly bool DevServer = false;
-
-        // raja todo: proper re-runnable predictable e2e tests
-        // 1. e2e tests for root token generation APIs. (check if token is needed?)
 
         [Fact(Skip = "making proper rerunnable safe acceptance tests.")]
         public async Task AllTests()
@@ -862,8 +857,6 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
             await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadSecretAsync(path));
         }
-
-        // raja todo. add approle tests.
 
         private async Task AppIdAuthenticationProviderTests()
         {

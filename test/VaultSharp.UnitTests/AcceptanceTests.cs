@@ -66,11 +66,18 @@ namespace VaultSharp.UnitTests
                 await RunPolicyApiTests();
                 await RunCapabilitiesApiTests();
                 await RunAuditBackendMountApiTests();
+                await RunLeaseApiTests();
             }
             finally
             {
                 ShutdownVaultServer();
             }
+        }
+
+        private async Task RunLeaseApiTests()
+        {
+            // raja todo: run leasi Api tests with proper lease id.
+            await Task.FromResult(0);
         }
 
         private async Task RunAuditBackendMountApiTests()
