@@ -26,6 +26,12 @@ namespace VaultSharp.Backends.Audit.Models
         /// </summary>
         private readonly string _type;
 
+        /// <summary>
+        /// Gets the file.
+        /// </summary>
+        /// <value>
+        /// The file.
+        /// </value>
         public static AuditBackendType File
         {
             get
@@ -34,6 +40,12 @@ namespace VaultSharp.Backends.Audit.Models
             }
         }
 
+        /// <summary>
+        /// Gets the syslog.
+        /// </summary>
+        /// <value>
+        /// The syslog.
+        /// </value>
         public static AuditBackendType Syslog
         {
             get

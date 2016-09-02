@@ -44,7 +44,6 @@ namespace VaultSharp.UnitTests.End2End
             // await _authenticatedVaultClient.StepDownActiveNodeAsync();
 
             await EncryptStrongTests();
-            await AuditBackendsTests();
             await SecretTests();
             await EncryptTests();
             await AppIdAuthenticationProviderTests();
@@ -686,65 +685,6 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             // await _authenticatedVaultClient.RenewTokenAsync(_masterCredentials.RootToken);
 
             // renew calls need a lease id. raja todo
-        }
-
-        private async Task AuditBackendsTests()
-        {
-            var audits = (await _authenticatedVaultClient.GetAllEnabledAuditBackendsAsync()).ToList();
-            Assert.False(audits.Any());
-
-            // enable new file audit
-            var newFileAudit = new FileAuditBackend
-            {
-                BackendType = AuditBackendType.File,
-                Description = "store logs in a file - test cases",
-                Options = new FileAuditBackendOptions
-                {
-                    FilePath = "/var/log/file"
-                }
-            };
-
-            await _authenticatedVaultClient.EnableAuditBackendAsync(newFileAudit);
-
-            // get audits
-            var newAudits = (await _authenticatedVaultClient.GetAllEnabledAuditBackendsAsync()).ToList();
-            Assert.Equal(audits.Count + 1, newAudits.Count);
-
-            // hash with audit
-            var hash = await _authenticatedVaultClient.HashWithAuditBackendAsync(newFileAudit.MountPoint, "testinput");
-            Assert.NotNull(hash);
-
-            // disabled audit
-            await _authenticatedVaultClient.DisableAuditBackendAsync(newFileAudit.MountPoint);
-
-            // get audits
-            var oldAudits = (await _authenticatedVaultClient.GetAllEnabledAuditBackendsAsync()).ToList();
-            Assert.Equal(audits.Count, oldAudits.Count);
-
-            /* not supported on windows
-
-            // enable new syslog audit
-            var newSyslogAudit = new SyslogAuditBackend
-            {
-                BackendType = AuditBackendType.Syslog,
-                Description = "syslog audit - test cases",
-                Options = new SyslogAuditBackendOptions()
-            };
-
-            await _authenticatedVaultClient.EnableAuditBackendAsync(newSyslogAudit);
-
-            // get audits
-            var newAudits2 = (await _authenticatedVaultClient.GetAllEnabledAuditBackendsAsync()).ToList();
-            Assert.Equal(1, newAudits2.Count);
-
-            // disabled audit
-            await _authenticatedVaultClient.DisableAuditBackendAsync(newSyslogAudit.MountPoint);
-
-            // get audits
-            var oldAudits2 = (await _authenticatedVaultClient.GetAllEnabledAuditBackendsAsync()).ToList();
-            Assert.Equal(audits.Count, oldAudits2.Count);
-
-            */
         }
 
         private async Task RawSecretAndMoreTests()

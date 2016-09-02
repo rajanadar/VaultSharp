@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using VaultSharp.Backends.Audit.Models;
+using VaultSharp.Backends.Audit.Models.File;
 using VaultSharp.Backends.Authentication.Models;
 using VaultSharp.Backends.Authentication.Models.Token;
 using VaultSharp.Backends.Secret.Models;
@@ -63,11 +65,48 @@ namespace VaultSharp.UnitTests
                 await RunAuthenticationBackendMountApiTests();
                 await RunPolicyApiTests();
                 await RunCapabilitiesApiTests();
+                await RunAuditBackendMountApiTests();
             }
             finally
             {
                 ShutdownVaultServer();
             }
+        }
+
+        private async Task RunAuditBackendMountApiTests()
+        {
+            var audits = await _authenticatedVaultClient.GetAllEnabledAuditBackendsAsync();
+            Assert.False(audits.Data.Any());
+
+            // enable new file audit
+            var newFileAudit = new FileAuditBackend
+            {
+                BackendType = AuditBackendType.File,
+                Description = "store logs in a file - test cases",
+                Options = new FileAuditBackendOptions
+                {
+                    FilePath = "/var/log/file"
+                }
+            };
+
+            await _authenticatedVaultClient.EnableAuditBackendAsync(newFileAudit);
+
+            // get audits
+            var newAudits = await _authenticatedVaultClient.GetAllEnabledAuditBackendsAsync();
+            Assert.Equal(audits.Data.Count() + 1, newAudits.Data.Count());
+
+            // hash with audit
+            var hash = await _authenticatedVaultClient.HashWithAuditBackendAsync(newFileAudit.MountPoint, "testinput");
+            Assert.NotNull(hash);
+
+            // disabled audit
+            await _authenticatedVaultClient.DisableAuditBackendAsync(newFileAudit.MountPoint);
+
+            // get audits
+            var oldAudits = await _authenticatedVaultClient.GetAllEnabledAuditBackendsAsync();
+            Assert.Equal(audits.Data.Count(), oldAudits.Data.Count());
+
+            // syslog is not supported on windows. so no acceptance tests possible.
         }
 
         private async Task RunCapabilitiesApiTests()

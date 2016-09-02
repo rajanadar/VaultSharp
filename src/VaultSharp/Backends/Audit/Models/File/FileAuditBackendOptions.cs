@@ -29,6 +29,9 @@ namespace VaultSharp.Backends.Audit.Models.File
         [JsonProperty("log_raw")]
         public string LogSensitiveDataInRawFormat { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FileAuditBackendOptions"/> class.
+        /// </summary>
         public FileAuditBackendOptions()
         {
             LogSensitiveDataInRawFormat = false.ToString().ToLowerInvariant();

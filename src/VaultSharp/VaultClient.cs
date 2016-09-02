@@ -399,21 +399,16 @@ namespace VaultSharp
             return Enumerable.Empty<string>();
         }
 
-        public async Task<IEnumerable<AuditBackend>> GetAllEnabledAuditBackendsAsync()
+        public async Task<Secret<IEnumerable<AuditBackend>>> GetAllEnabledAuditBackendsAsync()
         {
-            var response = await MakeVaultApiRequest<Dictionary<string, AuditBackend>>("sys/audit", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var response = await MakeVaultApiRequest<Secret<Dictionary<string, AuditBackend>>>("sys/audit", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
 
-            if (response != null)
+            foreach (var kv in response.Data)
             {
-                foreach (var kv in response)
-                {
-                    kv.Value.MountPoint = kv.Key;
-                }
-
-                return response.Values.AsEnumerable();
+                kv.Value.MountPoint = kv.Key;
             }
 
-            return Enumerable.Empty<AuditBackend>();
+            return GetMappedSecret(response, response.Data.Values.AsEnumerable());
         }
 
         public async Task EnableAuditBackendAsync(AuditBackend auditBackend)

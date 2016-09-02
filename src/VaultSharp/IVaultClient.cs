@@ -348,7 +348,7 @@ namespace VaultSharp
         /// <returns>
         /// The enabled audit backends.
         /// </returns>
-        Task<IEnumerable<AuditBackend>> GetAllEnabledAuditBackendsAsync();
+        Task<Secret<IEnumerable<AuditBackend>>> GetAllEnabledAuditBackendsAsync();
 
         /// <summary>
         /// Enables a new audit backend at the specified mount point.

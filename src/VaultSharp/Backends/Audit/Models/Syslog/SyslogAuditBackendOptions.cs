@@ -39,6 +39,9 @@ namespace VaultSharp.Backends.Audit.Models.Syslog
         [JsonProperty("log_raw")]
         public string LogSensitiveDataInRawFormat { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SyslogAuditBackendOptions"/> class.
+        /// </summary>
         public SyslogAuditBackendOptions()
         {
             Facility = "AUTH";
