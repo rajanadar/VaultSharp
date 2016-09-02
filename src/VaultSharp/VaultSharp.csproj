@@ -152,7 +152,7 @@
     <Compile Include="Backends\Authentication\Models\AuthenticationBackend.cs" />
     <Compile Include="Backends\System\Models\Policy.cs" />
     <Compile Include="Backends\Secret\Models\SecretBackend.cs" />
-    <Compile Include="Backends\Secret\Models\SecretBackendConfiguration.cs" />
+    <Compile Include="Backends\System\Models\MountConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Backends\System\Models\RekeyStatus.cs" />
     <Compile Include="Backends\System\Models\SealStatus.cs" />

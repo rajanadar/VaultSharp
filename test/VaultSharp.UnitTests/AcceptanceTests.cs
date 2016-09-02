@@ -60,7 +60,7 @@ namespace VaultSharp.UnitTests
                 await RunSealApiTests();
                 await RunGenerateRootApiTests();
                 await RunSecretBackendMountApiTests();
-                await RunAuthenticationBackendTMountApiTests();
+                await RunAuthenticationBackendMountApiTests();
             }
             finally
             {
@@ -68,14 +68,14 @@ namespace VaultSharp.UnitTests
             }
         }
 
-        private async Task RunAuthenticationBackendTMountApiTests()
+        private async Task RunAuthenticationBackendMountApiTests()
         {
             // get Authentication backends
             var authenticationBackends = await _authenticatedVaultClient.GetAllEnabledAuthenticationBackendsAsync();
             Assert.True(authenticationBackends.Data.Any());
 
-            //var mountConfig = await _authenticatedVaultClient.gettune(secretBackends.Data.First().MountPoint);
-            //Assert.NotNull(mountConfig);
+            var mountConfig = await _authenticatedVaultClient.GetMountedAuthenticationBackendConfigurationAsync(authenticationBackends.Data.First().AuthenticationPath);
+            Assert.NotNull(mountConfig);
 
             // enable new auth
             var newAuth = new AuthenticationBackend
@@ -86,6 +86,19 @@ namespace VaultSharp.UnitTests
             };
 
             await _authenticatedVaultClient.EnableAuthenticationBackendAsync(newAuth);
+
+            string ttl = "11h";
+
+            await
+                _authenticatedVaultClient.TuneAuthenticationBackendConfigurationAsync(newAuth.AuthenticationPath,
+                    new MountConfiguration { DefaultLeaseTtl = ttl, MaximumLeaseTtl = ttl });
+
+            mountConfig =
+                await
+                    _authenticatedVaultClient.GetMountedAuthenticationBackendConfigurationAsync(
+                        newAuth.AuthenticationPath);
+
+            Assert.NotNull(mountConfig);
 
             // get all auths
             var newAuthenticationBackends = await _authenticatedVaultClient.GetAllEnabledAuthenticationBackendsAsync();
@@ -121,7 +134,7 @@ namespace VaultSharp.UnitTests
 
             await
                 _authenticatedVaultClient.TuneSecretBackendConfigurationAsync(newSecretBackend.MountPoint,
-                    new SecretBackendConfiguration { DefaultLeaseTtl = ttl, MaximumLeaseTtl = ttl });
+                    new MountConfiguration { DefaultLeaseTtl = ttl, MaximumLeaseTtl = ttl });
 
             // get secret backends
             var newSecretBackends = await _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();

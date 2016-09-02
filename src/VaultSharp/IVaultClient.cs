@@ -193,20 +193,20 @@ namespace VaultSharp
         /// <returns>
         /// The mounted secret backend's configuration values.
         /// </returns>
-        Task<SecretBackendConfiguration> GetMountedSecretBackendConfigurationAsync(string mountPoint);
+        Task<MountConfiguration> GetMountedSecretBackendConfigurationAsync(string mountPoint);
 
         /// <summary>
-        /// Tunes the secret backend configuration parameters for the given <see cref="mountPoint" />.
+        /// Tunes the mount configuration parameters for the given <see cref="mountPoint" />.
         /// </summary>
         /// <param name="mountPoint"><para>[required]</para>
         /// The mount point for the secret backend. (with or without trailing slashes. it doesn't matter)</param>
-        /// <param name="secretBackendConfiguration"><para>[required]</para>
-        /// The secret backend configuration with the required setting values.
+        /// <param name="mountConfiguration"><para>[required]</para>
+        /// The mount configuration with the required setting values.
         /// Provide a value of <value>"0"</value> or <value>"system"</value> for the TTL settings if you want to use the system defaults.</param>
         /// <returns>
         /// A task
         /// </returns>
-        Task TuneSecretBackendConfigurationAsync(string mountPoint, SecretBackendConfiguration secretBackendConfiguration);
+        Task TuneSecretBackendConfigurationAsync(string mountPoint, MountConfiguration mountConfiguration);
 
         /// <summary>
         /// Remounts the secret backend from the previous mount point to the new mount point.
@@ -249,6 +249,30 @@ namespace VaultSharp
         /// The task.
         /// </returns>
         Task DisableAuthenticationBackendAsync(string authenticationPath);
+
+        /// <summary>
+        /// Gets the mounted authentication backend's configuration values.
+        /// The lease values for each TTL may be the system default ("0" or "system") or a mount-specific value.
+        /// </summary>
+        /// <param name="authenticationPath"><para>[required]</para>
+        /// The authentication path for the authentication backend. (with or without trailing slashes. it doesn't matter)</param>
+        /// <returns>
+        /// The mounted secret backend's configuration values.
+        /// </returns>
+        Task<MountConfiguration> GetMountedAuthenticationBackendConfigurationAsync(string authenticationPath);
+
+        /// <summary>
+        /// Tunes the mount configuration parameters for the given <see cref="authenticationPath" />.
+        /// </summary>
+        /// <param name="authenticationPath"><para>[required]</para>
+        /// The authentication path for the authentication backend. (with or without trailing slashes. it doesn't matter)</param>
+        /// <param name="mountConfiguration"><para>[required]</para>
+        /// The mount configuration with the required setting values.
+        /// Provide a value of <value>"0"</value> or <value>"system"</value> for the TTL settings if you want to use the system defaults.</param>
+        /// <returns>
+        /// A task
+        /// </returns>
+        Task TuneAuthenticationBackendConfigurationAsync(string authenticationPath, MountConfiguration mountConfiguration);
 
         /// <summary>
         /// Enables multi factor authentication with the specific type.

@@ -211,23 +211,23 @@ namespace VaultSharp
             await MakeVaultApiRequest(resourcePath, HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<SecretBackendConfiguration> GetMountedSecretBackendConfigurationAsync(string mountPoint)
+        public async Task<MountConfiguration> GetMountedSecretBackendConfigurationAsync(string mountPoint)
         {
             Checker.NotNull(mountPoint, "mountPoint");
 
             var resourcePath = string.Format(CultureInfo.InvariantCulture, "sys/mounts/{0}/tune", mountPoint.Trim('/'));
 
-            var response = await MakeVaultApiRequest<SecretBackendConfiguration>(resourcePath, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var response = await MakeVaultApiRequest<MountConfiguration>(resourcePath, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return response;
         }
 
-        public async Task TuneSecretBackendConfigurationAsync(string mountPoint, SecretBackendConfiguration secretBackendConfiguration)
+        public async Task TuneSecretBackendConfigurationAsync(string mountPoint, MountConfiguration mountConfiguration)
         {
             Checker.NotNull(mountPoint, "mountPoint");
 
-            if (secretBackendConfiguration == null)
+            if (mountConfiguration == null)
             {
-                secretBackendConfiguration = new SecretBackendConfiguration
+                mountConfiguration = new MountConfiguration
                 {
                     DefaultLeaseTtl = "0",
                     MaximumLeaseTtl = "0"
@@ -235,7 +235,7 @@ namespace VaultSharp
             }
 
             var resourcePath = string.Format(CultureInfo.InvariantCulture, "sys/mounts/{0}/tune", mountPoint.Trim('/'));
-            await MakeVaultApiRequest(resourcePath, HttpMethod.Post, secretBackendConfiguration).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            await MakeVaultApiRequest(resourcePath, HttpMethod.Post, mountConfiguration).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task RemountSecretBackendAsync(string previousMountPoint, string newMountPoint)
@@ -283,6 +283,33 @@ namespace VaultSharp
 
             var resourcePath = string.Format(CultureInfo.InvariantCulture, "sys/auth/{0}", authenticationPath.Trim('/'));
             await MakeVaultApiRequest(resourcePath, HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<MountConfiguration> GetMountedAuthenticationBackendConfigurationAsync(string authenticationPath)
+        {
+            Checker.NotNull(authenticationPath, "authenticationPath");
+
+            var resourcePath = string.Format(CultureInfo.InvariantCulture, "sys/auth/{0}/tune", authenticationPath.Trim('/'));
+
+            var response = await MakeVaultApiRequest<MountConfiguration>(resourcePath, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return response;
+        }
+
+        public async Task TuneAuthenticationBackendConfigurationAsync(string authenticationPath, MountConfiguration mountConfiguration)
+        {
+            Checker.NotNull(authenticationPath, "authenticationPath");
+
+            if (mountConfiguration == null)
+            {
+                mountConfiguration = new MountConfiguration
+                {
+                    DefaultLeaseTtl = "0",
+                    MaximumLeaseTtl = "0"
+                };
+            }
+
+            var resourcePath = string.Format(CultureInfo.InvariantCulture, "sys/auth/{0}/tune", authenticationPath.Trim('/'));
+            await MakeVaultApiRequest(resourcePath, HttpMethod.Post, mountConfiguration).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task EnableMultiFactorAuthenticationAsync(string supportedAuthenticationBackendMountPoint, string mfaType = "duo")

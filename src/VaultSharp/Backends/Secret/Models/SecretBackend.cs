@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using VaultSharp.Backends.System.Models;
 
 namespace VaultSharp.Backends.Secret.Models
 {
@@ -36,12 +37,12 @@ namespace VaultSharp.Backends.Secret.Models
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the secret backend configuration.
+        /// Gets or sets the mount configuration.
         /// </summary>
         /// <value>
-        /// The secret backend configuration.
+        /// The mount configuration.
         /// </value>
         [JsonProperty("config")]
-        public SecretBackendConfiguration SecretBackendConfiguration { get; set; }
+        public MountConfiguration MountConfiguration { get; set; }
     }
 }
