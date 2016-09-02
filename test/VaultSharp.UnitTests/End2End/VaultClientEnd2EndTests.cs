@@ -651,14 +651,6 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             var secret1 = await _authenticatedVaultClient.CreateTokenAsync();
             Assert.NotNull(secret1);
 
-            // capabilities.
-            var caps =
-                await _authenticatedVaultClient.GetTokenCapabilitiesAsync(secret1.AuthorizationInfo.ClientToken, "sys");
-            Assert.NotNull(caps);
-
-            var caps2 = await _authenticatedVaultClient.GetCallingTokenCapabilitiesAsync("sys");
-            Assert.NotNull(caps2);
-
             var secret2 = await _authenticatedVaultClient.CreateTokenAsync(new TokenCreationOptions { NoParent = true });
             Assert.NotNull(secret2);
 
