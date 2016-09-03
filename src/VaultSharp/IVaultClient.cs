@@ -494,9 +494,9 @@ namespace VaultSharp
         /// Defaults to 'false', meaning no backup.
         /// </param>
         /// <returns>
-        /// The task.
+        /// The rekey status.
         /// </returns>
-        Task InitiateRekeyAsync(int secretShares, int secretThreshold, string[] pgpKeys = null, bool backup = false);
+        Task<RekeyStatus> InitiateRekeyAsync(int secretShares, int secretThreshold, string[] pgpKeys = null, bool backup = false);
 
         /// <summary>
         /// Cancels any in-progress rekey. This clears the rekey settings as well as any progress made.

@@ -90,7 +90,10 @@ namespace VaultSharp.UnitTests
             var rekeyStatus = await UnauthenticatedVaultClient.GetRekeyStatusAsync();
             Assert.False(rekeyStatus.Started);
 
-            await UnauthenticatedVaultClient.InitiateRekeyAsync(2, 2);
+            rekeyStatus = await UnauthenticatedVaultClient.InitiateRekeyAsync(2, 2);
+            Assert.True(rekeyStatus.Started);
+            Assert.True(rekeyStatus.UnsealKeysProvided == 0);
+            Assert.NotNull(rekeyStatus.Nonce);
 
             // raja todo: test the rekey backup API, after giving good pgp encrypted keys.
 
@@ -98,11 +101,6 @@ namespace VaultSharp.UnitTests
             // Assert.NotNull(backups);
 
             await _authenticatedVaultClient.DeleteRekeyBackupKeysAsync();
-
-            rekeyStatus = await UnauthenticatedVaultClient.GetRekeyStatusAsync();
-            Assert.True(rekeyStatus.Started);
-            Assert.True(rekeyStatus.UnsealKeysProvided == 0);
-            Assert.NotNull(rekeyStatus.Nonce);
 
             var rekeyNonce = rekeyStatus.Nonce;
             var rekeyProgress = await UnauthenticatedVaultClient.ContinueRekeyAsync(_masterCredentials.MasterKeys[0], rekeyNonce);
