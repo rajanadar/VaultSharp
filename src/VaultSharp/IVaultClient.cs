@@ -638,12 +638,19 @@ namespace VaultSharp
         Task<HealthStatus> GetHealthStatusAsync(bool? standbyOk = null, int? activeStatusCode = null, int? standbyStatusCode = null, int? sealedStatusCode = null, int? uninitializedStatusCode = null, HttpMethod queryHttpMethod = null);
 
         /// <summary>
-        /// Configures the root IAM credentials that perform various IAM actions.
+        /// Configures the root IAM credentials used. 
+        /// If static credentials are not provided using this endpoint, then the credentials will be retrieved 
+        /// from the environment variables AWS_ACCESS_KEY, AWS_SECRET_KEY and AWS_REGION respectively. 
+        /// If the credentials are still not found and if the backend is configured on 
+        /// an EC2 instance with metadata querying capabilities, 
+        /// the credentials are fetched automatically.
         /// This API is a root protected call.
         /// </summary>
-        /// <param name="awsRootCredentials"><para>[required]</para>
+        /// <param name="awsRootCredentials"><para>[optional]</para>
         /// The root credentials need permission to perform various IAM actions.
-        /// These are the actions that the AWS secret backend uses to manage IAM credentials.</param>
+        /// These are the actions that the AWS secret backend uses to manage IAM credentials.
+        /// Provide null, if you want to use the environment variables of Vault Server or fetch from metadata of EC2 instance. 
+        /// </param>
         /// <param name="awsBackendMountPoint"><para>[optional]</para>
         /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
         /// Provide a value only if you have customized the AWS mount point.</param>
@@ -672,7 +679,7 @@ namespace VaultSharp
         /// <param name="awsRoleName"><para>[required]</para>
         /// Name of the AWS role.</param>
         /// <param name="awsRoleDefinition"><para>[required]</para>
-        /// The AWS role definition IAM policy in a string JSON format.</param>
+        /// The AWS role definition with IAM policy or full ARN. Provide one of the two.</param>
         /// <param name="awsBackendMountPoint"><para>[optional]</para>
         /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
         /// Provide a value only if you have customized the AWS mount point.</param>
@@ -707,7 +714,14 @@ namespace VaultSharp
         /// </returns>
         Task AWSDeleteNamedRoleAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
 
-        // raja add list of roles.
+        /// <summary>
+        /// Get the list of existing roles in the backend.
+        /// </summary>
+        /// <param name="awsBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
+        /// Provide a value only if you have customized the AWS mount point.</param>
+        /// <returns>The role list.</returns>
+        Task<Secret<ListInfo>> AWSGetRoleListAsync(string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
 
         /// <summary>
         /// Generates a dynamic IAM AWS credential based on the named role.
@@ -722,8 +736,19 @@ namespace VaultSharp
         /// </returns>
         Task<Secret<AWSCredentials>> AWSGenerateDynamicCredentialsAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
 
-        // raja generate sts token
-        
+        /// <summary>
+        /// Generates a dynamic IAM AWS credential  with an STS token based on the named role.
+        /// </summary>
+        /// <param name="awsRoleName"><para>[required]</para>
+        /// Name of the AWS role.</param>
+        /// <param name="awsBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
+        /// Provide a value only if you have customized the AWS mount point.</param>
+        /// <returns>
+        /// The secret with the <see cref="AWSCredentials" /> as the data.
+        /// </returns>
+        Task<Secret<AWSCredentials>> AWSGenerateDynamicCredentialsWithSecurityTokenAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
+
         /// <summary>
         /// An all-purpose method to read any value from vault from any path.
         /// </summary>

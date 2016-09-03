@@ -432,6 +432,10 @@ namespace VaultSharp.UnitTests
             Assert.False(health.HealthCheckSucceeded);
             Assert.True(health.Sealed);
 
+            health = await UnauthenticatedVaultClient.GetHealthStatusAsync(sealedStatusCode: 400);
+            Assert.False(health.HealthCheckSucceeded);
+            Assert.True(health.Sealed);
+
             health = await UnauthenticatedVaultClient.GetHealthStatusAsync(sealedStatusCode: 200);
             Assert.True(health.HealthCheckSucceeded);
             Assert.True(health.Sealed);

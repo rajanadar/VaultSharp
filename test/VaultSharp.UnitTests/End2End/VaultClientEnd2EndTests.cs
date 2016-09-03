@@ -893,8 +893,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
             await _authenticatedVaultClient.MySqlConfigureCredentialLeaseSettingsAsync(new CredentialLeaseSettings()
             {
-                TimeToLive = "1h",
-                MaximumTimeToLive = "2h"
+                LeaseTime = "1h",
+                MaximumLeaseTime = "2h"
             }, mountPoint);
 
             await _authenticatedVaultClient.MySqlWriteNamedRoleAsync(role, new MySqlRoleDefinition()

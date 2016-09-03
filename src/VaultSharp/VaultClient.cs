@@ -690,10 +690,14 @@ namespace VaultSharp
             }
         }
 
-        public async Task AWSConfigureRootCredentialsAsync(AWSRootCredentials awsRootCredentials, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS)
+        public async Task AWSConfigureRootCredentialsAsync(AWSRootCredentials awsRootCredentials = null, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS)
         {
             Checker.NotNull(awsBackendMountPoint, "awsBackendMountPoint");
-            Checker.NotNull(awsRootCredentials, "awsRootCredentials");
+
+            if (awsRootCredentials == null)
+            {
+                awsRootCredentials = new AWSRootCredentials();
+            }
 
             await MakeVaultApiRequest(awsBackendMountPoint.Trim('/') + "/config/root", HttpMethod.Post, awsRootCredentials).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
@@ -735,12 +739,28 @@ namespace VaultSharp
             await MakeVaultApiRequest(awsBackendMountPoint.Trim('/') + "/roles/" + awsRoleName, HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<Secret<ListInfo>> AWSGetRoleListAsync(
+            string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS)
+        {
+            Checker.NotNull(awsBackendMountPoint, "awsBackendMountPoint");
+            return await MakeVaultApiRequest<Secret<ListInfo>>(awsBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
         public async Task<Secret<AWSCredentials>> AWSGenerateDynamicCredentialsAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS)
         {
             Checker.NotNull(awsBackendMountPoint, "awsBackendMountPoint");
             Checker.NotNull(awsRoleName, "awsRoleName");
 
             var result = await MakeVaultApiRequest<Secret<AWSCredentials>>(awsBackendMountPoint.Trim('/') + "/creds/" + awsRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return result;
+        }
+
+        public async Task<Secret<AWSCredentials>> AWSGenerateDynamicCredentialsWithSecurityTokenAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS)
+        {
+            Checker.NotNull(awsBackendMountPoint, "awsBackendMountPoint");
+            Checker.NotNull(awsRoleName, "awsRoleName");
+
+            var result = await MakeVaultApiRequest<Secret<AWSCredentials>>(awsBackendMountPoint.Trim('/') + "/sts/" + awsRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 

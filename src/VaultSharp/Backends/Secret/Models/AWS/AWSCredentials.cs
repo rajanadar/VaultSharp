@@ -24,5 +24,14 @@ namespace VaultSharp.Backends.Secret.Models.AWS
         /// </value>
         [JsonProperty("secret_key")]
         public string SecretKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the STS token.
+        /// </summary>
+        /// <value>
+        /// The secret token.
+        /// </value>
+        [JsonProperty("secret_token")]
+        public string SecretToken { get; set; }
     }
 }

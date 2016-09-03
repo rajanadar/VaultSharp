@@ -14,6 +14,15 @@ namespace VaultSharp.Backends.Secret.Models.AWS
         /// The policy.
         /// </value>
         [JsonProperty("policy")]
-        public string Policy { get; set; }
+        public string PolicyJson { get; set; }
+
+        /// <summary>
+        /// Gets or sets the full ARN reference to the desired existing policy.
+        /// </summary>
+        /// <value>
+        /// The policy arn.
+        /// </value>
+        [JsonProperty("arn")]
+        public string PolicyARN { get; set; }
     }
 }
