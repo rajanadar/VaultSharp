@@ -732,27 +732,32 @@ namespace VaultSharp
             await MakeVaultApiRequest("auth/token/renew-self", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task RenewTokenAsync(string token, int? incrementSeconds = null)
+        public async Task RenewTokenAsync(string token = null, int? incrementSeconds = null)
         {
-            Checker.NotNull(token, "token");
-
-            // If the token given for renewal is the same as the client token, 
+            // If the token given for renewal is null or is the same as the client token, 
             // the renew-self endpoint will be used in the API. Given that the default policy (by default) 
             // allows all clients access to the renew-self endpoint, this makes it much more likely that the 
             // intended operation will be successful. [GH-894]
             // https://github.com/hashicorp/vault/pull/894
 
-            var clientToken = await _lazyVaultToken.Value;
-
-            if (string.Equals(token, clientToken, StringComparison.Ordinal))
+            if (string.IsNullOrWhiteSpace(token) || string.Equals(token, (await _lazyVaultToken.Value), StringComparison.Ordinal))
             {
                 await RenewCallingTokenAsync(incrementSeconds);
             }
             else
             {
-                var requestData = incrementSeconds.HasValue ? new { increment = incrementSeconds.Value } : null;
+                var requestData = new Dictionary<string, object>
+                {
+                    {"token", token}
+                };
+
+                if (incrementSeconds.HasValue)
+                {
+                    requestData.Add("increment", incrementSeconds.Value);
+                }
+
                 await
-                    MakeVaultApiRequest("auth/token/renew/" + token, HttpMethod.Post, requestData)
+                    MakeVaultApiRequest("auth/token/renew", HttpMethod.Post, requestData)
                         .ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             }
         }

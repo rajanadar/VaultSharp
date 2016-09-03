@@ -684,10 +684,6 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private async Task RawSecretAndMoreTests()
         {
-            // get leader
-            var leader = await _authenticatedVaultClient.GetLeaderAsync();
-            Assert.NotNull(leader);
-
             // get keystatus
             var keyStatus = await _authenticatedVaultClient.GetEncryptionKeyStatusAsync();
             Assert.True(keyStatus.SequentialKeyNumber == 1);

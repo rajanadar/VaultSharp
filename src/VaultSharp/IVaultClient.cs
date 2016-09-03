@@ -766,7 +766,7 @@ namespace VaultSharp
         /// <returns>
         /// The task.
         /// </returns>
-        Task RenewTokenAsync(string token, int? incrementSeconds = null);
+        Task RenewTokenAsync(string token = null, int? incrementSeconds = null);
 
         /// <summary>
         /// Configures the root IAM credentials that perform various IAM actions.
