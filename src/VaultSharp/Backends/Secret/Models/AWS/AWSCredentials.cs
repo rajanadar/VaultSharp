@@ -31,7 +31,7 @@ namespace VaultSharp.Backends.Secret.Models.AWS
         /// <value>
         /// The secret token.
         /// </value>
-        [JsonProperty("secret_token")]
-        public string SecretToken { get; set; }
+        [JsonProperty("security_token")]
+        public string SecurityToken { get; set; }
     }
 }

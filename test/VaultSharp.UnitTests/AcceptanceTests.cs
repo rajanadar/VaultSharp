@@ -5,11 +5,13 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using VaultSharp.Backends.Audit.Models;
 using VaultSharp.Backends.Audit.Models.File;
 using VaultSharp.Backends.Authentication.Models;
 using VaultSharp.Backends.Authentication.Models.Token;
 using VaultSharp.Backends.Secret.Models;
+using VaultSharp.Backends.Secret.Models.AWS;
 using VaultSharp.Backends.System.Models;
 using Xunit;
 
@@ -29,7 +31,17 @@ namespace VaultSharp.UnitTests
         /// </summary>
         private static class SetupData
         {
+            // the best thing to do would be create a temp folder, and have vault.exe and any text files within that.
+            // that way, all of these acceptance tests will run under the context of that folder.
+            // they never delete any folder or tamper with file or credentials.
+
+            // vault.exe that'll be used for this acceptance test run.
             public const string VaultExeFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\vault.exe";
+
+            // turn on, if you want aws tests. if yes, provide a credential text file, 
+            // with access-key on line 1 and secret on line 2 and region on line 3.
+            public const bool RunAwsSecretBackendAcceptanceTests = true;
+            public const string AwsCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\aws.txt";
         }
 
         // no need to modify these values.
@@ -71,10 +83,124 @@ namespace VaultSharp.UnitTests
                 await RunLeaderApiTests();
                 await RunRekeyApiTests();
                 await RunRawSecretApiTests();
+
+                // secret backend tests.
+
+                await RunAwsSecretBackendApiTests();
             }
             finally
             {
                 ShutdownVaultServer();
+            }
+        }
+
+        private async Task RunAwsSecretBackendApiTests()
+        {
+            try
+            {
+                if (SetupData.RunAwsSecretBackendAcceptanceTests)
+                {
+                    if (!File.Exists(SetupData.AwsCredentialsFullPath))
+                    {
+                        throw new Exception("AWS Credential file does not exist: " + SetupData.AwsCredentialsFullPath);
+                    }
+
+                    var awsCredentialsFileContent = File.ReadAllLines(SetupData.AwsCredentialsFullPath);
+
+                    if (awsCredentialsFileContent.Count() < 3)
+                    {
+                        throw new Exception("AWS Credential file needs at least 3 lines: " + awsCredentialsFileContent);
+                    }
+
+                    var awsRootCredentials = new AWSRootCredentials
+                    {
+                        AccessKey = awsCredentialsFileContent[0],
+                        SecretKey = awsCredentialsFileContent[1],
+                        Region = awsCredentialsFileContent[2]
+                    };
+
+                    await _authenticatedVaultClient.QuickMountSecretBackendAsync(SecretBackendType.AWS);
+                    await _authenticatedVaultClient.AWSConfigureRootCredentialsAsync(awsRootCredentials);
+
+                    var lease = new CredentialLeaseSettings
+                    {
+                        LeaseTime = "1m",
+                        MaximumLeaseTime = "2m"
+                    };
+
+                    await _authenticatedVaultClient.AWSConfigureCredentialLeaseSettingsAsync(lease);
+
+                    var awsRoleJsonName = "aws-role-json";
+                    var awsRoleJson = new AWSRoleDefinition
+                    {
+                        PolicyText = JsonConvert.SerializeObject(new
+                        {
+                            Version = "2012-10-17",
+                            Statement = new
+                            {
+                                Effect = "Allow",
+                                Action = "iam:*",
+                                Resource = "*"
+                            }
+                        })
+                    };
+
+                    await _authenticatedVaultClient.AWSWriteNamedRoleAsync(awsRoleJsonName, awsRoleJson);
+                    var queriedRoleJson = await _authenticatedVaultClient.AWSReadNamedRoleAsync(awsRoleJsonName);
+                    Assert.Equal(awsRoleJson.PolicyText, queriedRoleJson.Data.PolicyText);
+
+                    var awsRoleNameArn = "aws-role-arn";
+                    var awsRoleArn = new AWSRoleDefinition
+                    {
+                        ARN = "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
+                    };
+
+                    await _authenticatedVaultClient.AWSWriteNamedRoleAsync(awsRoleNameArn, awsRoleArn);
+                    var queriedRole = await _authenticatedVaultClient.AWSReadNamedRoleAsync(awsRoleNameArn);
+                    Assert.Equal(awsRoleArn.ARN, queriedRole.Data.ARN);
+
+                    var roles = await _authenticatedVaultClient.AWSGetRoleListAsync();
+                    Assert.True(roles.Data.Keys.Count == 2);
+
+                    var generatedCreds = await _authenticatedVaultClient.AWSGenerateDynamicCredentialsAsync(awsRoleJsonName);
+                    Assert.NotNull(generatedCreds.Data.SecretKey);
+
+                    generatedCreds = await _authenticatedVaultClient.AWSGenerateDynamicCredentialsAsync(awsRoleNameArn);
+                    Assert.NotNull(generatedCreds.Data.SecretKey);
+
+                    awsRoleJson.PolicyText = JsonConvert.SerializeObject(new
+                    {
+                        Version = "2012-10-17",
+                        Statement = new
+                        {
+                            Effect = "Allow",
+                            Action = "ec2:*",
+                            Resource = "*"
+                        }
+                    });
+
+                    await _authenticatedVaultClient.AWSWriteNamedRoleAsync(awsRoleJsonName, awsRoleJson);
+
+                    queriedRoleJson = await _authenticatedVaultClient.AWSReadNamedRoleAsync(awsRoleJsonName);
+                    Assert.Equal(awsRoleJson.PolicyText, queriedRoleJson.Data.PolicyText);
+
+                    generatedCreds = await _authenticatedVaultClient.AWSGenerateDynamicCredentialsWithSecurityTokenAsync(awsRoleJsonName);
+                    Assert.NotNull(generatedCreds.Data.SecurityToken);
+
+                    await _authenticatedVaultClient.AWSDeleteNamedRoleAsync(awsRoleJsonName);
+                    await _authenticatedVaultClient.AWSDeleteNamedRoleAsync(awsRoleNameArn);
+                }
+            }
+            finally
+            {
+                try
+                {
+                    await _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.AWS);
+                }
+                catch
+                {
+                    // you can always go to https://console.aws.amazon.com/iam/home#users and clean up any test users.
+                }
             }
         }
 
@@ -394,6 +520,16 @@ namespace VaultSharp.UnitTests
 
             // unmount
             await _authenticatedVaultClient.UnmountSecretBackendAsync(newMountPoint);
+
+            // quick
+            secretBackends = await _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();
+            await _authenticatedVaultClient.QuickMountSecretBackendAsync(SecretBackendType.AWS);
+            newSecretBackends = await _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();
+            Assert.Equal(secretBackends.Data.Count() + 1, newSecretBackends.Data.Count());
+
+            await _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.AWS);
+            newSecretBackends = await _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();
+            Assert.Equal(secretBackends.Data.Count(), newSecretBackends.Data.Count());
         }
 
         private async Task RunInitApiTests()

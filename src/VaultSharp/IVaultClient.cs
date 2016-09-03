@@ -174,6 +174,16 @@ namespace VaultSharp
         Task MountSecretBackendAsync(SecretBackend secretBackend);
 
         /// <summary>
+        /// Quick api to mount the secret backend with default settings.
+        /// </summary>
+        /// <param name="secretBackendType"><para>[required]</para>
+        /// The backend type to mount.</param>
+        /// <returns>
+        /// A task
+        /// </returns>
+        Task QuickMountSecretBackendAsync(SecretBackendType secretBackendType);
+
+        /// <summary>
         /// Unmounts the secret backend from the mount point.
         /// When a backend is unmounted, all of its secrets are revoked and its data is deleted.
         /// If either of these operations fail, the backend remains mounted.
@@ -184,6 +194,18 @@ namespace VaultSharp
         /// A task
         /// </returns>
         Task UnmountSecretBackendAsync(string mountPoint);
+
+        /// <summary>
+        /// Quick api to unmounts the secret backend from the default mount point.
+        /// When a backend is unmounted, all of its secrets are revoked and its data is deleted.
+        /// If either of these operations fail, the backend remains mounted.
+        /// </summary>
+        /// <param name="secretBackendType"><para>[required]</para>
+        /// The backend type to unmount.</param>
+        /// <returns>
+        /// A task
+        /// </returns>
+        Task QuickUnmountSecretBackendAsync(SecretBackendType secretBackendType);
 
         /// <summary>
         /// Gets the mounted secret backend's configuration values.
@@ -738,6 +760,8 @@ namespace VaultSharp
 
         /// <summary>
         /// Generates a dynamic IAM AWS credential  with an STS token based on the named role.
+        /// STS federation token credentials can only be generated for user inline policies; 
+        /// the AWS GetFederationToken API does not support managed policies.
         /// </summary>
         /// <param name="awsRoleName"><para>[required]</para>
         /// Name of the AWS role.</param>
@@ -748,147 +772,6 @@ namespace VaultSharp
         /// The secret with the <see cref="AWSCredentials" /> as the data.
         /// </returns>
         Task<Secret<AWSCredentials>> AWSGenerateDynamicCredentialsWithSecurityTokenAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
-
-        /// <summary>
-        /// An all-purpose method to read any value from vault from any path.
-        /// </summary>
-        /// <param name="path"><para>[required]</para>
-        /// The path where the value is stored.</param>
-        /// <returns>
-        /// The data as a general dictionary along with the lease information.
-        /// </returns>
-        Task<Secret<Dictionary<string, object>>> ReadSecretAsync(string path);
-
-        /// <summary>
-        /// An all-purpose method to write any value to vault at any path.
-        /// </summary>
-        /// <param name="path"><para>[required]</para>
-        /// The path where the value is to be stored.</param>
-        /// <param name="values"><para>[required]</para>
-        /// The value to be written.</param>
-        /// <returns>
-        /// The task.
-        /// </returns>
-        Task WriteSecretAsync(string path, IDictionary<string, object> values);
-
-        /// <summary>
-        /// Deletes the value at the specified path in Vault.
-        /// </summary>
-        /// <param name="path"><para>[required]</para>
-        /// The path where the value is to be stored.</param>
-        /// <returns>
-        /// The task.
-        /// </returns>
-        Task DeleteSecretAsync(string path);
-
-        /// <summary>
-        /// Gets the list of token accessors. This requires root capability, and access to it should be tightly 
-        /// controlled as the accessors can be used to revoke very large numbers of tokens 
-        /// and their associated leases at once.
-        /// </summary>
-        /// <returns>The list of accessors.</returns>
-        Task<Secret<ListInfo>> GetTokenAccessorListAsync();
-
-        /// <summary>
-        /// Creates a new token.
-        /// <para>
-        /// Certain options are only available to when called by a root token.
-        /// If used with the 'createAsOrphan' flag, a root token is not required to create an orphan token (otherwise set with the noParent option).
-        /// </para>
-        /// </summary>
-        /// <param name="tokenCreationOptions">The token creation options.</param>
-        /// <returns>
-        /// The secret with the data.
-        /// </returns>
-        Task<Secret<Dictionary<string, object>>> CreateTokenAsync(TokenCreationOptions tokenCreationOptions = null);
-
-        /// <summary>
-        /// Gets the calling client token information. i.e. the token used by the client as part of this call.
-        /// </summary>
-        /// <returns>
-        /// The secret with <see cref="TokenInfo" />.
-        /// </returns>
-        Task<Secret<TokenInfo>> GetCallingTokenInfoAsync();
-
-        /// <summary>
-        /// Gets the token information for the provided <see cref="token" />.
-        /// </summary>
-        /// <param name="token"><para>[required]</para>
-        /// The token.</param>
-        /// <returns>
-        /// The secret with <see cref="TokenInfo" />.
-        /// </returns>
-        Task<Secret<TokenInfo>> GetTokenInfoAsync(string token);
-
-        /// <summary>
-        /// Gets the properties of the token associated with the accessor, 
-        /// except the token ID. 
-        /// This is meant for purposes where there is no access to token ID 
-        /// but there is need to fetch the properties of a token.
-        /// </summary>
-        /// <param name="tokenAccessor"><para>[required]</para>
-        ///  Accessor of the token to lookup.</param>
-        /// <returns>The token info.</returns>
-        Task<Secret<TokenInfo>> GetTokenInfoByAccessorAsync(string tokenAccessor);
-
-        /// <summary>
-        /// Revokes a token and all child tokens if the <see cref="revokeAllChildTokens" /> value is <value>true</value>.
-        /// When the token is revoked, all secrets generated with it are also revoked.
-        /// </summary>
-        /// <param name="token"><para>[required]</para>
-        /// The token to revoke.</param>
-        /// <param name="revokeAllChildTokens"><para>[required]</para>
-        /// if set to <c>true</c> [revoke all child tokens].
-        /// else only the current token is revoked. All child tokens are orphaned, but can be revoked subsequently.</param>
-        /// <returns>
-        /// The task.
-        /// </returns>
-        Task RevokeTokenAsync(string token, bool revokeAllChildTokens);
-
-        /// <summary>
-        /// Revokes the token associated with the accessor and all the child tokens. 
-        /// This is meant for purposes where there is no access to token ID 
-        /// but there is need to revoke a token and its children.
-        /// </summary>
-        /// <param name="tokenAccessor"><para>[required]</para>
-        /// Accessor of the token.</param>
-        /// <returns>The token info.</returns>
-        Task RevokeTokenByAccessorAsync(string tokenAccessor);
-
-        /// <summary>
-        /// Revokes the calling client token and all child tokens.
-        /// When the token is revoked, all secrets generated with it are also revoked.
-        /// </summary>
-        /// <returns>
-        /// The task.
-        /// </returns>
-        Task RevokeCallingTokenAsync();
-
-        /// <summary>
-        /// Renews a lease associated with the calling token.
-        /// This is used to prevent the expiration of a token, and the automatic revocation of it.
-        /// Token renewal is possible only if there is a lease associated with it.
-        /// </summary>
-        /// <param name="incrementSeconds"><para>[optional]</para>
-        /// A requested amount of time in seconds to extend the lease. This is advisory and may be ignored.</param>
-        /// <returns>
-        /// The task.
-        /// </returns>
-        Task RenewCallingTokenAsync(int? incrementSeconds = null);
-
-        /// <summary>
-        /// Renews a lease associated with the calling token.
-        /// This is used to prevent the expiration of a token, and the automatic revocation of it.
-        /// Token renewal is possible only if there is a lease associated with it.
-        /// </summary>
-        /// <param name="token"><para>[required]</para>
-        /// The token to renew.</param>
-        /// <param name="incrementSeconds"><para>[optional]</para>
-        /// A requested amount of time in seconds to extend the lease. This is advisory and may be ignored.</param>
-        /// <returns>
-        /// The task.
-        /// </returns>
-        Task RenewTokenAsync(string token = null, int? incrementSeconds = null);
 
         /// <summary>
         /// Configures the connection information used to communicate with Cassandra.
@@ -2012,5 +1895,146 @@ namespace VaultSharp
         /// </param>
         /// <returns>The task.</returns>
         Task WriteDuoConfigurationAsync(string supportedAuthenticationBackendMountPoint, string userAgent, string usernameFormat);
+
+        /// <summary>
+        /// An all-purpose method to read any value from vault from any path.
+        /// </summary>
+        /// <param name="path"><para>[required]</para>
+        /// The path where the value is stored.</param>
+        /// <returns>
+        /// The data as a general dictionary along with the lease information.
+        /// </returns>
+        Task<Secret<Dictionary<string, object>>> ReadSecretAsync(string path);
+
+        /// <summary>
+        /// An all-purpose method to write any value to vault at any path.
+        /// </summary>
+        /// <param name="path"><para>[required]</para>
+        /// The path where the value is to be stored.</param>
+        /// <param name="values"><para>[required]</para>
+        /// The value to be written.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task WriteSecretAsync(string path, IDictionary<string, object> values);
+
+        /// <summary>
+        /// Deletes the value at the specified path in Vault.
+        /// </summary>
+        /// <param name="path"><para>[required]</para>
+        /// The path where the value is to be stored.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task DeleteSecretAsync(string path);
+
+        /// <summary>
+        /// Gets the list of token accessors. This requires root capability, and access to it should be tightly 
+        /// controlled as the accessors can be used to revoke very large numbers of tokens 
+        /// and their associated leases at once.
+        /// </summary>
+        /// <returns>The list of accessors.</returns>
+        Task<Secret<ListInfo>> GetTokenAccessorListAsync();
+
+        /// <summary>
+        /// Creates a new token.
+        /// <para>
+        /// Certain options are only available to when called by a root token.
+        /// If used with the 'createAsOrphan' flag, a root token is not required to create an orphan token (otherwise set with the noParent option).
+        /// </para>
+        /// </summary>
+        /// <param name="tokenCreationOptions">The token creation options.</param>
+        /// <returns>
+        /// The secret with the data.
+        /// </returns>
+        Task<Secret<Dictionary<string, object>>> CreateTokenAsync(TokenCreationOptions tokenCreationOptions = null);
+
+        /// <summary>
+        /// Gets the calling client token information. i.e. the token used by the client as part of this call.
+        /// </summary>
+        /// <returns>
+        /// The secret with <see cref="TokenInfo" />.
+        /// </returns>
+        Task<Secret<TokenInfo>> GetCallingTokenInfoAsync();
+
+        /// <summary>
+        /// Gets the token information for the provided <see cref="token" />.
+        /// </summary>
+        /// <param name="token"><para>[required]</para>
+        /// The token.</param>
+        /// <returns>
+        /// The secret with <see cref="TokenInfo" />.
+        /// </returns>
+        Task<Secret<TokenInfo>> GetTokenInfoAsync(string token);
+
+        /// <summary>
+        /// Gets the properties of the token associated with the accessor, 
+        /// except the token ID. 
+        /// This is meant for purposes where there is no access to token ID 
+        /// but there is need to fetch the properties of a token.
+        /// </summary>
+        /// <param name="tokenAccessor"><para>[required]</para>
+        ///  Accessor of the token to lookup.</param>
+        /// <returns>The token info.</returns>
+        Task<Secret<TokenInfo>> GetTokenInfoByAccessorAsync(string tokenAccessor);
+
+        /// <summary>
+        /// Revokes a token and all child tokens if the <see cref="revokeAllChildTokens" /> value is <value>true</value>.
+        /// When the token is revoked, all secrets generated with it are also revoked.
+        /// </summary>
+        /// <param name="token"><para>[required]</para>
+        /// The token to revoke.</param>
+        /// <param name="revokeAllChildTokens"><para>[required]</para>
+        /// if set to <c>true</c> [revoke all child tokens].
+        /// else only the current token is revoked. All child tokens are orphaned, but can be revoked subsequently.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task RevokeTokenAsync(string token, bool revokeAllChildTokens);
+
+        /// <summary>
+        /// Revokes the token associated with the accessor and all the child tokens. 
+        /// This is meant for purposes where there is no access to token ID 
+        /// but there is need to revoke a token and its children.
+        /// </summary>
+        /// <param name="tokenAccessor"><para>[required]</para>
+        /// Accessor of the token.</param>
+        /// <returns>The token info.</returns>
+        Task RevokeTokenByAccessorAsync(string tokenAccessor);
+
+        /// <summary>
+        /// Revokes the calling client token and all child tokens.
+        /// When the token is revoked, all secrets generated with it are also revoked.
+        /// </summary>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task RevokeCallingTokenAsync();
+
+        /// <summary>
+        /// Renews a lease associated with the calling token.
+        /// This is used to prevent the expiration of a token, and the automatic revocation of it.
+        /// Token renewal is possible only if there is a lease associated with it.
+        /// </summary>
+        /// <param name="incrementSeconds"><para>[optional]</para>
+        /// A requested amount of time in seconds to extend the lease. This is advisory and may be ignored.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task RenewCallingTokenAsync(int? incrementSeconds = null);
+
+        /// <summary>
+        /// Renews a lease associated with the calling token.
+        /// This is used to prevent the expiration of a token, and the automatic revocation of it.
+        /// Token renewal is possible only if there is a lease associated with it.
+        /// </summary>
+        /// <param name="token"><para>[required]</para>
+        /// The token to renew.</param>
+        /// <param name="incrementSeconds"><para>[optional]</para>
+        /// A requested amount of time in seconds to extend the lease. This is advisory and may be ignored.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task RenewTokenAsync(string token = null, int? incrementSeconds = null);
     }
 }

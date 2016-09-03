@@ -203,12 +203,28 @@ namespace VaultSharp
             await MakeVaultApiRequest(resourcePath, HttpMethod.Post, secretBackend).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
+        public async Task QuickMountSecretBackendAsync(SecretBackendType secretBackendType)
+        {
+            Checker.NotNull(secretBackendType, "secretBackendType");
+
+            await MountSecretBackendAsync(new SecretBackend
+            {
+                BackendType = secretBackendType,
+            });
+        }
+
         public async Task UnmountSecretBackendAsync(string mountPoint)
         {
             Checker.NotNull(mountPoint, "mountPoint");
 
             var resourcePath = string.Format(CultureInfo.InvariantCulture, "sys/mounts/{0}", mountPoint.Trim('/'));
             await MakeVaultApiRequest(resourcePath, HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task QuickUnmountSecretBackendAsync(SecretBackendType secretBackendType)
+        {
+            Checker.NotNull(secretBackendType, "secretBackendType");
+            await UnmountSecretBackendAsync(SecretBackendType.AWS.Type);
         }
 
         public async Task<MountConfiguration> GetMountedSecretBackendConfigurationAsync(string mountPoint)
@@ -743,7 +759,7 @@ namespace VaultSharp
             string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS)
         {
             Checker.NotNull(awsBackendMountPoint, "awsBackendMountPoint");
-            return await MakeVaultApiRequest<Secret<ListInfo>>(awsBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return await MakeVaultApiRequest<Secret<ListInfo>>(awsBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<AWSCredentials>> AWSGenerateDynamicCredentialsAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS)
