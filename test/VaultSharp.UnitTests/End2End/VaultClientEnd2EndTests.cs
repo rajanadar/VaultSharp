@@ -684,20 +684,6 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private async Task RawSecretAndMoreTests()
         {
-            // update raw
-            var rawPath = "rawpath";
-            var rawValues = new Dictionary<string, object>
-            {
-                {"foo", "bar"},
-                {"foo2", 345 }
-            };
-
-            await _authenticatedVaultClient.WriteRawSecretAsync(rawPath, rawValues);
-
-            // read raw
-            var readRawValues = await _authenticatedVaultClient.ReadRawSecretAsync(rawPath);
-            Assert.True(readRawValues.Data.RawValues.Count == 2);
-
             // renew secret
             //var secret = await _authenticatedVaultClient.RenewSecretAsync(readRawValues.LeaseId);
             // Assert.NotNull(secret);
@@ -724,13 +710,6 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
             //await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadRawSecretAsync(path1));
             //await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadRawSecretAsync(path2));
-
-            // get health status
-            var healthStatus = await _unauthenticatedVaultClient.GetHealthStatusAsync();
-            Assert.True(healthStatus.Initialized);
-
-            healthStatus = await _unauthenticatedVaultClient.GetHealthStatusAsync(standbyOk: true);
-            Assert.True(healthStatus.Initialized);
         }
 
         private async Task SecretTests()

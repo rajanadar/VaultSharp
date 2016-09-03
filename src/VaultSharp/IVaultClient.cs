@@ -638,6 +638,93 @@ namespace VaultSharp
         Task<HealthStatus> GetHealthStatusAsync(bool? standbyOk = null, int? activeStatusCode = null, int? standbyStatusCode = null, int? sealedStatusCode = null, int? uninitializedStatusCode = null, HttpMethod queryHttpMethod = null);
 
         /// <summary>
+        /// Configures the root IAM credentials that perform various IAM actions.
+        /// This API is a root protected call.
+        /// </summary>
+        /// <param name="awsRootCredentials"><para>[required]</para>
+        /// The root credentials need permission to perform various IAM actions.
+        /// These are the actions that the AWS secret backend uses to manage IAM credentials.</param>
+        /// <param name="awsBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
+        /// Provide a value only if you have customized the AWS mount point.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task AWSConfigureRootCredentialsAsync(AWSRootCredentials awsRootCredentials, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
+
+        /// <summary>
+        /// Configures the lease settings for generated credentials.
+        /// This API is a root protected call.
+        /// </summary>
+        /// <param name="credentialLeaseSettings"><para>[required]</para>
+        /// The credential lease settings.</param>
+        /// <param name="awsBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
+        /// Provide a value only if you have customized the AWS mount point.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task AWSConfigureCredentialLeaseSettingsAsync(CredentialLeaseSettings credentialLeaseSettings, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
+
+        /// <summary>
+        /// Creates or updates a named AWS role.
+        /// </summary>
+        /// <param name="awsRoleName"><para>[required]</para>
+        /// Name of the AWS role.</param>
+        /// <param name="awsRoleDefinition"><para>[required]</para>
+        /// The AWS role definition IAM policy in a string JSON format.</param>
+        /// <param name="awsBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
+        /// Provide a value only if you have customized the AWS mount point.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task AWSWriteNamedRoleAsync(string awsRoleName, AWSRoleDefinition awsRoleDefinition, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
+
+        /// <summary>
+        /// Queries a named AWS role definition to get the IAM policy.
+        /// </summary>
+        /// <param name="awsRoleName"><para>[required]</para>
+        /// Name of the AWS role.</param>
+        /// <param name="awsBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
+        /// Provide a value only if you have customized the AWS mount point.</param>
+        /// <returns>
+        /// The secret with the AWS Role definition as an IAM policy in a string JSON format.
+        /// </returns>
+        Task<Secret<AWSRoleDefinition>> AWSReadNamedRoleAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
+
+        /// <summary>
+        /// Deletes a named AWS role.
+        /// </summary>
+        /// <param name="awsRoleName"><para>[required]</para>
+        /// Name of the AWS role.</param>
+        /// <param name="awsBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
+        /// Provide a value only if you have customized the AWS mount point.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task AWSDeleteNamedRoleAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
+
+        // raja add list of roles.
+
+        /// <summary>
+        /// Generates a dynamic IAM AWS credential based on the named role.
+        /// </summary>
+        /// <param name="awsRoleName"><para>[required]</para>
+        /// Name of the AWS role.</param>
+        /// <param name="awsBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
+        /// Provide a value only if you have customized the AWS mount point.</param>
+        /// <returns>
+        /// The secret with the <see cref="AWSCredentials" /> as the data.
+        /// </returns>
+        Task<Secret<AWSCredentials>> AWSGenerateDynamicCredentialsAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
+
+        // raja generate sts token
+        
+        /// <summary>
         /// An all-purpose method to read any value from vault from any path.
         /// </summary>
         /// <param name="path"><para>[required]</para>
@@ -777,89 +864,6 @@ namespace VaultSharp
         /// The task.
         /// </returns>
         Task RenewTokenAsync(string token = null, int? incrementSeconds = null);
-
-        /// <summary>
-        /// Configures the root IAM credentials that perform various IAM actions.
-        /// This API is a root protected call.
-        /// </summary>
-        /// <param name="awsRootCredentials"><para>[required]</para>
-        /// The root credentials need permission to perform various IAM actions.
-        /// These are the actions that the AWS secret backend uses to manage IAM credentials.</param>
-        /// <param name="awsBackendMountPoint"><para>[optional]</para>
-        /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
-        /// Provide a value only if you have customized the AWS mount point.</param>
-        /// <returns>
-        /// The task.
-        /// </returns>
-        Task AWSConfigureRootCredentialsAsync(AWSRootCredentials awsRootCredentials, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
-
-        /// <summary>
-        /// Configures the lease settings for generated credentials.
-        /// This API is a root protected call.
-        /// </summary>
-        /// <param name="credentialLeaseSettings"><para>[required]</para>
-        /// The credential lease settings.</param>
-        /// <param name="awsBackendMountPoint"><para>[optional]</para>
-        /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
-        /// Provide a value only if you have customized the AWS mount point.</param>
-        /// <returns>
-        /// The task.
-        /// </returns>
-        Task AWSConfigureCredentialLeaseSettingsAsync(CredentialLeaseSettings credentialLeaseSettings, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
-
-        /// <summary>
-        /// Creates or updates a named AWS role.
-        /// </summary>
-        /// <param name="awsRoleName"><para>[required]</para>
-        /// Name of the AWS role.</param>
-        /// <param name="awsRoleDefinition"><para>[required]</para>
-        /// The AWS role definition IAM policy in a string JSON format.</param>
-        /// <param name="awsBackendMountPoint"><para>[optional]</para>
-        /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
-        /// Provide a value only if you have customized the AWS mount point.</param>
-        /// <returns>
-        /// The task.
-        /// </returns>
-        Task AWSWriteNamedRoleAsync(string awsRoleName, AWSRoleDefinition awsRoleDefinition, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
-
-        /// <summary>
-        /// Queries a named AWS role definition to get the IAM policy.
-        /// </summary>
-        /// <param name="awsRoleName"><para>[required]</para>
-        /// Name of the AWS role.</param>
-        /// <param name="awsBackendMountPoint"><para>[optional]</para>
-        /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
-        /// Provide a value only if you have customized the AWS mount point.</param>
-        /// <returns>
-        /// The secret with the AWS Role definition as an IAM policy in a string JSON format.
-        /// </returns>
-        Task<Secret<AWSRoleDefinition>> AWSReadNamedRoleAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
-
-        /// <summary>
-        /// Deletes a named AWS role.
-        /// </summary>
-        /// <param name="awsRoleName"><para>[required]</para>
-        /// Name of the AWS role.</param>
-        /// <param name="awsBackendMountPoint"><para>[optional]</para>
-        /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
-        /// Provide a value only if you have customized the AWS mount point.</param>
-        /// <returns>
-        /// The task.
-        /// </returns>
-        Task AWSDeleteNamedRoleAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
-
-        /// <summary>
-        /// Generates a dynamic IAM AWS credential based on the named role.
-        /// </summary>
-        /// <param name="awsRoleName"><para>[required]</para>
-        /// Name of the AWS role.</param>
-        /// <param name="awsBackendMountPoint"><para>[optional]</para>
-        /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
-        /// Provide a value only if you have customized the AWS mount point.</param>
-        /// <returns>
-        /// The secret with the <see cref="AWSCredentials" /> as the data.
-        /// </returns>
-        Task<Secret<AWSCredentials>> AWSGenerateDynamicCredentialsAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
 
         /// <summary>
         /// Configures the connection information used to communicate with Cassandra.

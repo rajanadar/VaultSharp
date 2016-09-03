@@ -690,129 +690,6 @@ namespace VaultSharp
             }
         }
 
-        public async Task<Secret<Dictionary<string, object>>> ReadSecretAsync(string path)
-        {
-            Checker.NotNull(path, "path");
-
-            var value = await MakeVaultApiRequest<Secret<Dictionary<string, object>>>(path.Trim('/'), HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-            return value;
-        }
-
-        public async Task WriteSecretAsync(string path, IDictionary<string, object> values)
-        {
-            Checker.NotNull(path, "path");
-
-            await MakeVaultApiRequest(path.Trim('/'), HttpMethod.Post, values).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-        }
-
-        public async Task DeleteSecretAsync(string path)
-        {
-            Checker.NotNull(path, "path");
-
-            await MakeVaultApiRequest(path.Trim('/'), HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-        }
-
-        public async Task<Secret<IEnumerable<string>>> GetTokenAccessorListAsync()
-        {
-            var response = await MakeVaultApiRequest<Secret<dynamic>>("auth/token/accessors?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-            var result = new Secret<IEnumerable<string>>
-            {
-                AuthorizationInfo = response.AuthorizationInfo,
-                Data = response.Data.keys.ToObject<List<string>>(),
-                LeaseDurationSeconds = response.LeaseDurationSeconds,
-                LeaseId = response.LeaseId,
-                Renewable = response.Renewable,
-                RequestId = response.RequestId,
-                Warnings = response.Warnings
-            };
-
-            return result;
-        }
-
-        public async Task<Secret<Dictionary<string, object>>> CreateTokenAsync(TokenCreationOptions tokenCreationOptions = null)
-        {
-            var action = (tokenCreationOptions != null && tokenCreationOptions.CreateAsOrphan) ? "create-orphan" : "create";
-            return await MakeVaultApiRequest<Secret<Dictionary<string, object>>>("auth/token/" + action, HttpMethod.Post, tokenCreationOptions).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-        }
-
-        public async Task<Secret<TokenInfo>> GetCallingTokenInfoAsync()
-        {
-            return await MakeVaultApiRequest<Secret<TokenInfo>>("auth/token/lookup-self", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-        }
-
-        public async Task<Secret<TokenInfo>> GetTokenInfoAsync(string token)
-        {
-            Checker.NotNull(token, "token");
-
-            var requestData = new { token = token };
-            return await MakeVaultApiRequest<Secret<TokenInfo>>("auth/token/lookup", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-        }
-
-        public async Task<Secret<TokenInfo>> GetTokenInfoByAccessorAsync(string tokenAccessor)
-        {
-            Checker.NotNull(tokenAccessor, "tokenAccessor");
-
-            var requestData = new { accessor = tokenAccessor };
-            return await MakeVaultApiRequest<Secret<TokenInfo>>("auth/token/lookup-accessor", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-        }
-
-        public async Task RevokeTokenAsync(string token, bool revokeAllChildTokens)
-        {
-            Checker.NotNull(token, "token");
-
-            var action = revokeAllChildTokens ? "revoke" : "revoke-orphan";
-            await MakeVaultApiRequest("auth/token/" + action + "/" + token, HttpMethod.Post).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-        }
-
-        public async Task RevokeTokenByAccessorAsync(string tokenAccessor)
-        {
-            Checker.NotNull(tokenAccessor, "tokenAccessor");
-
-            var requestData = new { accessor = tokenAccessor };
-            await MakeVaultApiRequest("auth/token/revoke-accessor", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-        }
-
-        public async Task RevokeCallingTokenAsync()
-        {
-            await MakeVaultApiRequest("auth/token/revoke-self", HttpMethod.Post).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-        }
-
-        public async Task RenewCallingTokenAsync(int? incrementSeconds = null)
-        {
-            var requestData = incrementSeconds.HasValue ? new { increment = incrementSeconds.Value } : null;
-            await MakeVaultApiRequest("auth/token/renew-self", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-        }
-
-        public async Task RenewTokenAsync(string token = null, int? incrementSeconds = null)
-        {
-            // If the token given for renewal is null or is the same as the client token, 
-            // the renew-self endpoint will be used in the API. Given that the default policy (by default) 
-            // allows all clients access to the renew-self endpoint, this makes it much more likely that the 
-            // intended operation will be successful. [GH-894]
-            // https://github.com/hashicorp/vault/pull/894
-
-            if (string.IsNullOrWhiteSpace(token) || string.Equals(token, (await _lazyVaultToken.Value), StringComparison.Ordinal))
-            {
-                await RenewCallingTokenAsync(incrementSeconds);
-            }
-            else
-            {
-                var requestData = new Dictionary<string, object>
-                {
-                    {"token", token}
-                };
-
-                if (incrementSeconds.HasValue)
-                {
-                    requestData.Add("increment", incrementSeconds.Value);
-                }
-
-                await
-                    MakeVaultApiRequest("auth/token/renew", HttpMethod.Post, requestData)
-                        .ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-            }
-        }
-
         public async Task AWSConfigureRootCredentialsAsync(AWSRootCredentials awsRootCredentials, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS)
         {
             Checker.NotNull(awsBackendMountPoint, "awsBackendMountPoint");
@@ -1562,6 +1439,128 @@ namespace VaultSharp
             await MakeVaultApiRequest("auth/" + supportedAuthenticationBackendMountPoint.Trim('/') + "/duo/config", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<Secret<Dictionary<string, object>>> ReadSecretAsync(string path)
+        {
+            Checker.NotNull(path, "path");
+
+            var value = await MakeVaultApiRequest<Secret<Dictionary<string, object>>>(path.Trim('/'), HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return value;
+        }
+
+        public async Task WriteSecretAsync(string path, IDictionary<string, object> values)
+        {
+            Checker.NotNull(path, "path");
+
+            await MakeVaultApiRequest(path.Trim('/'), HttpMethod.Post, values).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task DeleteSecretAsync(string path)
+        {
+            Checker.NotNull(path, "path");
+
+            await MakeVaultApiRequest(path.Trim('/'), HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<IEnumerable<string>>> GetTokenAccessorListAsync()
+        {
+            var response = await MakeVaultApiRequest<Secret<dynamic>>("auth/token/accessors?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = new Secret<IEnumerable<string>>
+            {
+                AuthorizationInfo = response.AuthorizationInfo,
+                Data = response.Data.keys.ToObject<List<string>>(),
+                LeaseDurationSeconds = response.LeaseDurationSeconds,
+                LeaseId = response.LeaseId,
+                Renewable = response.Renewable,
+                RequestId = response.RequestId,
+                Warnings = response.Warnings
+            };
+
+            return result;
+        }
+
+        public async Task<Secret<Dictionary<string, object>>> CreateTokenAsync(TokenCreationOptions tokenCreationOptions = null)
+        {
+            var action = (tokenCreationOptions != null && tokenCreationOptions.CreateAsOrphan) ? "create-orphan" : "create";
+            return await MakeVaultApiRequest<Secret<Dictionary<string, object>>>("auth/token/" + action, HttpMethod.Post, tokenCreationOptions).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<TokenInfo>> GetCallingTokenInfoAsync()
+        {
+            return await MakeVaultApiRequest<Secret<TokenInfo>>("auth/token/lookup-self", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<TokenInfo>> GetTokenInfoAsync(string token)
+        {
+            Checker.NotNull(token, "token");
+
+            var requestData = new { token = token };
+            return await MakeVaultApiRequest<Secret<TokenInfo>>("auth/token/lookup", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<TokenInfo>> GetTokenInfoByAccessorAsync(string tokenAccessor)
+        {
+            Checker.NotNull(tokenAccessor, "tokenAccessor");
+
+            var requestData = new { accessor = tokenAccessor };
+            return await MakeVaultApiRequest<Secret<TokenInfo>>("auth/token/lookup-accessor", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task RevokeTokenAsync(string token, bool revokeAllChildTokens)
+        {
+            Checker.NotNull(token, "token");
+
+            var action = revokeAllChildTokens ? "revoke" : "revoke-orphan";
+            await MakeVaultApiRequest("auth/token/" + action + "/" + token, HttpMethod.Post).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task RevokeTokenByAccessorAsync(string tokenAccessor)
+        {
+            Checker.NotNull(tokenAccessor, "tokenAccessor");
+
+            var requestData = new { accessor = tokenAccessor };
+            await MakeVaultApiRequest("auth/token/revoke-accessor", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task RevokeCallingTokenAsync()
+        {
+            await MakeVaultApiRequest("auth/token/revoke-self", HttpMethod.Post).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task RenewCallingTokenAsync(int? incrementSeconds = null)
+        {
+            var requestData = incrementSeconds.HasValue ? new { increment = incrementSeconds.Value } : null;
+            await MakeVaultApiRequest("auth/token/renew-self", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task RenewTokenAsync(string token = null, int? incrementSeconds = null)
+        {
+            // If the token given for renewal is null or is the same as the client token, 
+            // the renew-self endpoint will be used in the API. Given that the default policy (by default) 
+            // allows all clients access to the renew-self endpoint, this makes it much more likely that the 
+            // intended operation will be successful. [GH-894]
+            // https://github.com/hashicorp/vault/pull/894
+
+            if (string.IsNullOrWhiteSpace(token) || string.Equals(token, (await _lazyVaultToken.Value), StringComparison.Ordinal))
+            {
+                await RenewCallingTokenAsync(incrementSeconds);
+            }
+            else
+            {
+                var requestData = new Dictionary<string, object>
+                {
+                    {"token", token}
+                };
+
+                if (incrementSeconds.HasValue)
+                {
+                    requestData.Add("increment", incrementSeconds.Value);
+                }
+
+                await
+                    MakeVaultApiRequest("auth/token/renew", HttpMethod.Post, requestData)
+                        .ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            }
+        }
 
         private async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false)
         {
