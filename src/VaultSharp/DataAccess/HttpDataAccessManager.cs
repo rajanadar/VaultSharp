@@ -27,7 +27,7 @@ namespace VaultSharp.DataAccess
             }
         }
 
-        public async Task<TResponse> MakeRequestAsync<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, IDictionary<string, string> headers = null, bool rawResponse = false, Action<HttpStatusCode, string> failureDelegate = null) where TResponse : class
+        public async Task<TResponse> MakeRequestAsync<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, IDictionary<string, string> headers = null, bool rawResponse = false, Func<int, string, TResponse> customProcessor = null) where TResponse : class
         {
             try
             {
@@ -59,6 +59,11 @@ namespace VaultSharp.DataAccess
                         apiFunc = () => _httpClient.PutAsync(resourcePath, requestContent);
                         break;
 
+                    case "HEAD":
+
+                        apiFunc = () => _httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Head, resourcePath));
+                        break;
+
                     default:
                         throw new NotSupportedException("The Http Method is not supported: " + httpMethod);
                 }
@@ -88,9 +93,9 @@ namespace VaultSharp.DataAccess
                     return default(TResponse);
                 }
 
-                if (failureDelegate != null)
+                if (customProcessor != null)
                 {
-                    failureDelegate(httpResponseMessage.StatusCode, responseText);
+                    return customProcessor((int)httpResponseMessage.StatusCode, responseText);
                 }
 
                 throw new Exception(string.Format(CultureInfo.InvariantCulture,
@@ -105,12 +110,17 @@ namespace VaultSharp.DataAccess
 
                     if (response != null)
                     {
-                        var responseText = string.Empty;
+                        string responseText;
 
                         using (StreamReader stream = new StreamReader(response.GetResponseStream()))
                         {
                             responseText =
                                 await stream.ReadToEndAsync().ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+                        }
+
+                        if (customProcessor != null)
+                        {
+                            return customProcessor((int)response.StatusCode, responseText);
                         }
 
                         throw new Exception(string.Format(CultureInfo.InvariantCulture,

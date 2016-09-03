@@ -70,11 +70,31 @@ namespace VaultSharp.UnitTests
                 await RunLeaseApiTests();
                 await RunLeaderApiTests();
                 await RunRekeyApiTests();
+                await RunRawSecretApiTests();
             }
             finally
             {
                 ShutdownVaultServer();
             }
+        }
+
+        private async Task RunRawSecretApiTests()
+        {
+            var rawPath = "rawpath";
+            var rawValues = new Dictionary<string, object>
+            {
+                {"foo", "bar"},
+                {"foo2", 345 }
+            };
+
+            await _authenticatedVaultClient.WriteRawSecretAsync(rawPath, rawValues);
+
+            var readRawValues = await _authenticatedVaultClient.ReadRawSecretAsync(rawPath);
+            Assert.True(readRawValues.Data.RawValues.Count == 2);
+
+            await _authenticatedVaultClient.DeleteRawSecretAsync(rawPath);
+
+            await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadRawSecretAsync(rawPath));
         }
 
         private async Task RunRekeyApiTests()
@@ -379,16 +399,54 @@ namespace VaultSharp.UnitTests
         private async Task RunInitApiTests()
         {
             await AssertInitializationStatusAsync(false);
+
+            var health = await UnauthenticatedVaultClient.GetHealthStatusAsync();
+            Assert.False(health.HealthCheckSucceeded);
+            Assert.False(health.Initialized);
+
+            health = await UnauthenticatedVaultClient.GetHealthStatusAsync(uninitializedStatusCode: 300);
+            Assert.False(health.HealthCheckSucceeded);
+            Assert.False(health.Initialized);
+
+            health = await UnauthenticatedVaultClient.GetHealthStatusAsync(uninitializedStatusCode: 200);
+            Assert.True(health.HealthCheckSucceeded);
+            Assert.False(health.Initialized);
+
             await InitializeVaultAsync();
             await AssertInitializationStatusAsync(true);
+
+            health = await UnauthenticatedVaultClient.GetHealthStatusAsync();
+            Assert.False(health.HealthCheckSucceeded);
+            Assert.True(health.Initialized);
         }
 
         private async Task RunSealApiTests()
         {
             await AssertSealStatusAsync(true);
-            await UnsealAsync();
 
+            var health = await UnauthenticatedVaultClient.GetHealthStatusAsync();
+            Assert.False(health.HealthCheckSucceeded);
+            Assert.True(health.Sealed);
+
+            health = await UnauthenticatedVaultClient.GetHealthStatusAsync(sealedStatusCode: 300);
+            Assert.False(health.HealthCheckSucceeded);
+            Assert.True(health.Sealed);
+
+            health = await UnauthenticatedVaultClient.GetHealthStatusAsync(sealedStatusCode: 200);
+            Assert.True(health.HealthCheckSucceeded);
+            Assert.True(health.Sealed);
+
+            await UnsealAsync();
             await AssertSealStatusAsync(false);
+
+            health = await UnauthenticatedVaultClient.GetHealthStatusAsync();
+            Assert.True(health.HealthCheckSucceeded);
+            Assert.False(health.Sealed);
+
+            health = await UnauthenticatedVaultClient.GetHealthStatusAsync(activeStatusCode: 300);
+            Assert.False(health.HealthCheckSucceeded);
+            Assert.False(health.Sealed);
+
             await _authenticatedVaultClient.SealAsync();
 
             var sealStatus = await UnauthenticatedVaultClient.UnsealAsync(_masterCredentials.MasterKeys[0]);

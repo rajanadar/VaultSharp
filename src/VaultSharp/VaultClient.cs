@@ -599,33 +599,84 @@ namespace VaultSharp
 
         // this API is a bit quirky/hacky since it is aware of HttpResponseMessage
         // eventually, i need to solve this in a cleaner manner.
-        public async Task<HealthStatus> GetHealthStatusAsync(bool? standbyOk = null, int? activeStatusCode = null, int? standbyStatusCode = null, int? sealedStatusCode = null, int? uninitializedStatusCode = null)
+        public async Task<HealthStatus> GetHealthStatusAsync(bool? standbyOk = null, int? activeStatusCode = null, int? standbyStatusCode = null, int? sealedStatusCode = null, int? uninitializedStatusCode = null, HttpMethod queryHttpMethod = null)
         {
             var failureHealthStatus = new HealthStatus();
             var expectedFailure = false;
 
             try
             {
-                // raja todo.. add other querystrings.
-                var queryString = standbyOk == true ? "?standbyok" : string.Empty;
-                var resourcePath = "sys/health" + queryString;
+                if (queryHttpMethod == null)
+                {
+                    queryHttpMethod = HttpMethod.Get;
+                }
+
+                var queryStringBuilder = new List<string>();
+
+                if (standbyOk == true)
+                {
+                    queryStringBuilder.Add("standbyok=true");
+                }
+
+                if (activeStatusCode == null)
+                {
+                    activeStatusCode = 200;
+                }
+
+                if (standbyStatusCode == null)
+                {
+                    standbyStatusCode = 429;
+                }
+
+                if (sealedStatusCode == null)
+                {
+                    sealedStatusCode = 503;
+                }
+
+                if (uninitializedStatusCode == null)
+                {
+                    uninitializedStatusCode = 501;
+                }
+
+                queryStringBuilder.Add("activecode=" + activeStatusCode.Value);
+                queryStringBuilder.Add("standbycode=" + standbyStatusCode.Value);
+                queryStringBuilder.Add("sealedcode=" + sealedStatusCode.Value);
+                queryStringBuilder.Add("uninitcode=" + uninitializedStatusCode.Value);
+
+                var queryString = string.Join("&", queryStringBuilder);
+                var resourcePath = "sys/health?" + queryString;
 
                 var healthStatus =
-                    await MakeVaultApiRequest<HealthStatus>(resourcePath, HttpMethod.Get,
-                        failureDelegate: (statusCode, responseText) =>
+                    await MakeVaultApiRequest(resourcePath, queryHttpMethod,
+                        customProcessor: (statusCode, responseText) =>
                         {
-                            // raja todo.. do the user defined error code equality as well.
-                            if (statusCode == HttpStatusCode.InternalServerError
-                                || statusCode == HttpStatusCode.NotImplemented
-                                || statusCode == HttpStatusCode.ServiceUnavailable
-                                || (int)statusCode == 429)
+                            if (statusCode == activeStatusCode.Value
+                                || (statusCode == standbyStatusCode.Value && standbyOk != true)
+                                || statusCode == sealedStatusCode.Value
+                                || statusCode == uninitializedStatusCode.Value)
                             {
                                 expectedFailure = true;
-                                failureHealthStatus = JsonConvert.DeserializeObject<HealthStatus>(responseText);
+
+                                if (!string.IsNullOrWhiteSpace(responseText))
+                                {
+                                    failureHealthStatus = JsonConvert.DeserializeObject<HealthStatus>(responseText);
+                                }
+
+                                return failureHealthStatus;
+
+                                // there is a bad case, of empty response but matching code here.
+                                // the status will have default values populated which might confuse the callers.
+                                // the workaround is for the callers to mess with the http status codes too much.
+                                // see https://github.com/hashicorp/vault/issues/1849
                             }
+
+                            throw new Exception(string.Format(CultureInfo.InvariantCulture,
+                                "Http Status Code {0}. {1}",
+                                statusCode, responseText));
+
                         }).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
 
-                healthStatus.HealthCheckSucceeded = true;
+                healthStatus.HealthCheckSucceeded = !expectedFailure;
                 return healthStatus;
             }
             catch (Exception ex)
@@ -1512,12 +1563,12 @@ namespace VaultSharp
         }
 
 
-        private async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpStatusCode, string> failureDelegate = null)
+        private async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false)
         {
-            await MakeVaultApiRequest<dynamic>(resourcePath, httpMethod, requestData, rawResponse, failureDelegate);
+            await MakeVaultApiRequest<dynamic>(resourcePath, httpMethod, requestData, rawResponse);
         }
 
-        private async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpStatusCode, string> failureDelegate = null) where TResponse : class
+        private async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Func<int, string, TResponse> customProcessor = null) where TResponse : class
         {
             IDictionary<string, string> headers = null;
 
@@ -1526,7 +1577,7 @@ namespace VaultSharp
                 headers = new Dictionary<string, string> {{VaultTokenHeaderKey, await _lazyVaultToken.Value}};
             }
 
-            return await _dataAccessManager.MakeRequestAsync<TResponse>(resourcePath, httpMethod, requestData, headers, rawResponse, failureDelegate);
+            return await _dataAccessManager.MakeRequestAsync<TResponse>(resourcePath, httpMethod, requestData, headers, rawResponse, customProcessor);
         }
 
         private static Secret<T2> GetMappedSecret<T1, T2>(Secret<T1> sourceSecret, T2 destinationData)

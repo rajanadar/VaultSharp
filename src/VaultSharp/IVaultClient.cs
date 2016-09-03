@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using VaultSharp.Backends.Audit.Models;
 using VaultSharp.Backends.Authentication.Models;
@@ -627,10 +628,14 @@ namespace VaultSharp
         /// for an uninitialized vault node instead of the default error response of HTTP 501.
         /// DEFAULTs to <value>null</value>, meaning the default HTTP 501 Status code will be returned.
         /// </param>
+        /// <param name="queryHttpMethod"><para>[optional]</para>
+        /// The <see cref="HttpMethod"/> to be used to query vault. By default <see cref="HttpMethod.Get"/> will be used.
+        /// You can change it to <see cref="HttpMethod.Head"/>.
+        /// </param>
         /// <returns>
         /// The health status.
         /// </returns>
-        Task<HealthStatus> GetHealthStatusAsync(bool? standbyOk = null, int? activeStatusCode = null, int? standbyStatusCode = null, int? sealedStatusCode = null, int? uninitializedStatusCode = null);
+        Task<HealthStatus> GetHealthStatusAsync(bool? standbyOk = null, int? activeStatusCode = null, int? standbyStatusCode = null, int? sealedStatusCode = null, int? uninitializedStatusCode = null, HttpMethod queryHttpMethod = null);
 
         /// <summary>
         /// An all-purpose method to read any value from vault from any path.

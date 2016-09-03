@@ -725,12 +725,6 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             //await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadRawSecretAsync(path1));
             //await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadRawSecretAsync(path2));
 
-            // delete raw
-            await _authenticatedVaultClient.DeleteRawSecretAsync(rawPath);
-
-            // read raw
-            await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadRawSecretAsync(rawPath));
-
             // get health status
             var healthStatus = await _unauthenticatedVaultClient.GetHealthStatusAsync();
             Assert.True(healthStatus.Initialized);
