@@ -465,6 +465,7 @@ namespace VaultSharp
         /// Gets the configuration and progress of the current rekey attempt.
         /// Information about the new shares to generate and the threshold required for the new shares,
         /// the number of unseal keys provided for this rekey and the required number of unseal keys is returned.
+        /// This is an unauthenticated call and does not need the credentials.
         /// </summary>
         /// <returns>
         /// The rekey status.
@@ -474,6 +475,7 @@ namespace VaultSharp
         /// <summary>
         /// Initiates a new rekey attempt.
         /// Only a single rekey attempt can take place at a time, and changing the parameters of a rekey requires canceling and starting a new rekey.
+        /// This is an unauthenticated call and does not need the credentials.
         /// </summary>
         /// <param name="secretShares"><para>[required]</para>
         /// The number of shares to split the master key into.</param>
@@ -499,6 +501,7 @@ namespace VaultSharp
         /// <summary>
         /// Cancels any in-progress rekey. This clears the rekey settings as well as any progress made.
         /// This must be called to change the parameters of the rekey.
+        /// This is an unauthenticated call and does not need the credentials.
         /// </summary>
         /// <returns>
         /// The task.
@@ -523,6 +526,7 @@ namespace VaultSharp
         /// Continues the rekey process. Enter a single master key share to progress the rekey of the Vault.
         /// If the threshold number of master key shares is reached, Vault will complete the rekey.
         /// Otherwise, this API must be called multiple times until that threshold is met.
+        /// This is an unauthenticated call and does not need the credentials.
         /// </summary>
         /// <param name="masterShareKey"><para>[required]</para>
         /// A single master share key.</param>
@@ -541,6 +545,7 @@ namespace VaultSharp
         /// Rekeys the Vault in a single call.
         /// Call this after calling the <see cref="InitiateRekeyAsync"/> method.
         /// Provide all the master keys together.
+        /// This is an unauthenticated call and does not need the credentials.
         /// </summary>
         /// <param name="allMasterShareKeys">All the master share keys.</param>
         /// <param name="rekeyNonce"><para>[required]</para>

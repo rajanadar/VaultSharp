@@ -48,8 +48,7 @@ namespace VaultSharp.UnitTests
             await
                 Assert.ThrowsAsync<ArgumentNullException>(
                     () => client.TuneSecretBackendConfigurationAsync(null, new MountConfiguration()));
-            await
-                Assert.ThrowsAsync<ArgumentNullException>(() => client.TuneSecretBackendConfigurationAsync("test", null));
+
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.UnmountSecretBackendAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.RemountSecretBackendAsync(null, "a"));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.RemountSecretBackendAsync("a", null));
@@ -87,7 +86,6 @@ namespace VaultSharp.UnitTests
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.DeleteSecretAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.GetTokenInfoAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.RevokeTokenAsync(null, true));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.RenewTokenAsync(null));
         }
 
         [Fact]

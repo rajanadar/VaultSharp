@@ -69,11 +69,96 @@ namespace VaultSharp.UnitTests
                 await RunAuditBackendMountApiTests();
                 await RunLeaseApiTests();
                 await RunLeaderApiTests();
+                await RunRekeyApiTests();
             }
             finally
             {
                 ShutdownVaultServer();
             }
+        }
+
+        private async Task RunRekeyApiTests()
+        {
+            var keyStatus = await _authenticatedVaultClient.GetEncryptionKeyStatusAsync();
+            Assert.True(keyStatus.SequentialKeyNumber == 1);
+
+            await _authenticatedVaultClient.RotateEncryptionKeyAsync();
+
+            keyStatus = await _authenticatedVaultClient.GetEncryptionKeyStatusAsync();
+            Assert.True(keyStatus.SequentialKeyNumber == 2);
+
+            var rekeyStatus = await UnauthenticatedVaultClient.GetRekeyStatusAsync();
+            Assert.False(rekeyStatus.Started);
+
+            await UnauthenticatedVaultClient.InitiateRekeyAsync(2, 2);
+
+            // raja todo: test the rekey backup API, after giving good pgp encrypted keys.
+
+            // var backups = await _authenticatedVaultClient.GetRekeyBackupKeysAsync();
+            // Assert.NotNull(backups);
+
+            await _authenticatedVaultClient.DeleteRekeyBackupKeysAsync();
+
+            rekeyStatus = await UnauthenticatedVaultClient.GetRekeyStatusAsync();
+            Assert.True(rekeyStatus.Started);
+            Assert.True(rekeyStatus.UnsealKeysProvided == 0);
+            Assert.NotNull(rekeyStatus.Nonce);
+
+            var rekeyNonce = rekeyStatus.Nonce;
+            var rekeyProgress = await UnauthenticatedVaultClient.ContinueRekeyAsync(_masterCredentials.MasterKeys[0], rekeyNonce);
+            Assert.False(rekeyProgress.Complete);
+            Assert.Null(rekeyProgress.MasterKeys);
+
+            rekeyStatus = await UnauthenticatedVaultClient.GetRekeyStatusAsync();
+            Assert.True(rekeyStatus.Started);
+            Assert.True(rekeyStatus.UnsealKeysProvided == 1);
+
+            rekeyProgress = await UnauthenticatedVaultClient.ContinueRekeyAsync(_masterCredentials.MasterKeys[1], rekeyNonce);
+            Assert.True(rekeyProgress.Complete);
+            Assert.NotNull(rekeyProgress.MasterKeys);
+
+            _masterCredentials.MasterKeys = rekeyProgress.MasterKeys;
+            _masterCredentials.Base64MasterKeys = rekeyProgress.Base64MasterKeys;
+
+            rekeyStatus = await UnauthenticatedVaultClient.GetRekeyStatusAsync();
+
+            Assert.False(rekeyStatus.Started);
+            Assert.True(rekeyStatus.SecretThreshold == 0);
+            Assert.True(rekeyStatus.RequiredUnsealKeys == 2);
+            Assert.True(rekeyStatus.SecretShares == 0);
+            Assert.True(rekeyStatus.UnsealKeysProvided == 0);
+            Assert.Equal(string.Empty, rekeyStatus.Nonce);
+            Assert.False(rekeyStatus.Backup);
+
+            await UnauthenticatedVaultClient.InitiateRekeyAsync(5, 5);
+
+            rekeyStatus = await UnauthenticatedVaultClient.GetRekeyStatusAsync();
+            Assert.True(rekeyStatus.Started);
+            Assert.True(rekeyStatus.SecretThreshold == 5);
+            Assert.True(rekeyStatus.RequiredUnsealKeys == 2);
+            Assert.True(rekeyStatus.SecretShares == 5);
+            Assert.True(rekeyStatus.UnsealKeysProvided == 0);
+            Assert.NotNull(rekeyStatus.Nonce);
+            Assert.False(rekeyStatus.Backup);
+
+            await UnauthenticatedVaultClient.CancelRekeyAsync();
+            rekeyStatus = await UnauthenticatedVaultClient.GetRekeyStatusAsync();
+            Assert.False(rekeyStatus.Started);
+            Assert.True(rekeyStatus.SecretThreshold == 0);
+            Assert.True(rekeyStatus.RequiredUnsealKeys == 2);
+            Assert.True(rekeyStatus.SecretShares == 0);
+            Assert.True(rekeyStatus.UnsealKeysProvided == 0);
+            Assert.Equal(string.Empty, rekeyStatus.Nonce);
+            Assert.False(rekeyStatus.Backup);
+
+            await UnauthenticatedVaultClient.InitiateRekeyAsync(2, 2);
+            rekeyStatus = await UnauthenticatedVaultClient.GetRekeyStatusAsync();
+
+            var quick = await UnauthenticatedVaultClient.QuickRekeyAsync(_masterCredentials.MasterKeys, rekeyStatus.Nonce);
+            Assert.True(quick.Complete);
+
+            _masterCredentials.MasterKeys = quick.MasterKeys;
+            _masterCredentials.Base64MasterKeys = quick.Base64MasterKeys;
         }
 
         private async Task RunLeaderApiTests()

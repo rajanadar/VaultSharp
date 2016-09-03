@@ -62,7 +62,7 @@ namespace VaultSharp
 
         public async Task<bool> GetInitializationStatusAsync()
         {
-            var response = await MakeVaultApiRequest<dynamic>("sys/init", HttpMethod.Get, sendClientToken: false).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var response = await MakeVaultApiRequest<dynamic>("sys/init", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return response.initialized;
         }
 
@@ -70,13 +70,13 @@ namespace VaultSharp
         {
             var requestData = new { secret_shares = secretShares, secret_threshold = secretThreshold, pgp_keys = pgpKeys };
 
-            var response = await MakeVaultApiRequest<MasterCredentials>("sys/init", HttpMethod.Put, requestData, sendClientToken: false).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var response = await MakeVaultApiRequest<MasterCredentials>("sys/init", HttpMethod.Put, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return response;
         }
 
         public async Task<RootTokenGenerationStatus> GetRootTokenGenerationStatusAsync()
         {
-            var response = await MakeVaultApiRequest<RootTokenGenerationStatus>("sys/generate-root/attempt", HttpMethod.Get, sendClientToken: false).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var response = await MakeVaultApiRequest<RootTokenGenerationStatus>("sys/generate-root/attempt", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return response;
         }
 
@@ -85,13 +85,13 @@ namespace VaultSharp
         {
             var requestData = new { otp = base64EncodedOneTimePassword, pgpKey = pgpKey };
 
-            var response = await MakeVaultApiRequest<RootTokenGenerationStatus>("sys/generate-root/attempt", HttpMethod.Put, requestData, sendClientToken: false).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var response = await MakeVaultApiRequest<RootTokenGenerationStatus>("sys/generate-root/attempt", HttpMethod.Put, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return response;
         }
 
         public async Task CancelRootTokenGenerationAsync()
         {
-            await MakeVaultApiRequest("sys/generate-root/attempt", HttpMethod.Delete, sendClientToken: false).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            await MakeVaultApiRequest("sys/generate-root/attempt", HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task<RootTokenGenerationStatus> ContinueRootTokenGenerationAsync(string masterShareKey,
@@ -106,7 +106,7 @@ namespace VaultSharp
                 nonce = nonce
             };
 
-            var progress = await MakeVaultApiRequest<RootTokenGenerationStatus>("sys/generate-root/update", HttpMethod.Put, requestData, sendClientToken: false).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var progress = await MakeVaultApiRequest<RootTokenGenerationStatus>("sys/generate-root/update", HttpMethod.Put, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return progress;
         }
 
@@ -128,7 +128,7 @@ namespace VaultSharp
                 finalStatus =
                     await
                         MakeVaultApiRequest<RootTokenGenerationStatus>("sys/generate-root/update", HttpMethod.Put,
-                            requestData, sendClientToken: false)
+                            requestData)
                             .ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             }
 
@@ -137,7 +137,7 @@ namespace VaultSharp
 
         public async Task<SealStatus> GetSealStatusAsync()
         {
-            var response = await MakeVaultApiRequest<SealStatus>("sys/seal-status", HttpMethod.Get, sendClientToken: false).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var response = await MakeVaultApiRequest<SealStatus>("sys/seal-status", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return response;
         }
 
@@ -154,7 +154,7 @@ namespace VaultSharp
                 reset = resetCompletely
             };
 
-            var response = await MakeVaultApiRequest<SealStatus>("sys/unseal", HttpMethod.Put, requestData, sendClientToken: false).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var response = await MakeVaultApiRequest<SealStatus>("sys/unseal", HttpMethod.Put, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return response;
         }
 
@@ -172,7 +172,7 @@ namespace VaultSharp
                     reset = false
                 };
 
-                finalStatus = await MakeVaultApiRequest<SealStatus>("sys/unseal", HttpMethod.Put, requestData, sendClientToken: false).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+                finalStatus = await MakeVaultApiRequest<SealStatus>("sys/unseal", HttpMethod.Put, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             }
 
             return finalStatus;
@@ -611,7 +611,7 @@ namespace VaultSharp
                 var resourcePath = "sys/health" + queryString;
 
                 var healthStatus =
-                    await MakeVaultApiRequest<HealthStatus>(resourcePath, HttpMethod.Get, sendClientToken: false,
+                    await MakeVaultApiRequest<HealthStatus>(resourcePath, HttpMethod.Get,
                         failureDelegate: (statusCode, responseText) =>
                         {
                             // raja todo.. do the user defined error code equality as well.
@@ -1072,7 +1072,7 @@ namespace VaultSharp
                 ? CertificateFormat.pem
                 : CertificateFormat.der;
 
-            var result = await MakeVaultApiRequest<string>(pkiBackendMountPoint.Trim('/') + "/ca" + format, HttpMethod.Get, sendClientToken: false, rawResponse: true).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<string>(pkiBackendMountPoint.Trim('/') + "/ca" + format, HttpMethod.Get, rawResponse: true).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return new RawCertificateData
             {
                 CertificateContent = result,
@@ -1085,7 +1085,7 @@ namespace VaultSharp
             Checker.NotNull(pkiBackendMountPoint, "pkiBackendMountPoint");
             Checker.NotNull(predicate, "predicate");
 
-            var result = await MakeVaultApiRequest<Secret<RawCertificateData>>(pkiBackendMountPoint.Trim('/') + "/cert/" + predicate, HttpMethod.Get, sendClientToken: false).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<RawCertificateData>>(pkiBackendMountPoint.Trim('/') + "/cert/" + predicate, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             result.Data.EncodedCertificateFormat = CertificateFormat.pem;
 
             return result;
@@ -1140,7 +1140,7 @@ namespace VaultSharp
                 ? CertificateFormat.pem
                 : CertificateFormat.der;
 
-            var result = await MakeVaultApiRequest<string>(pkiBackendMountPoint.Trim('/') + "/crl" + format, HttpMethod.Get, sendClientToken: false, rawResponse: true).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<string>(pkiBackendMountPoint.Trim('/') + "/crl" + format, HttpMethod.Get, rawResponse: true).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return new RawCertificateData
             {
                 CertificateContent = result,
@@ -1395,7 +1395,7 @@ namespace VaultSharp
 
             var requestData = new { otp = otp };
 
-            var response = await MakeVaultApiRequest<Secret<SSHOTPVerificationData>>(sshBackendMountPoint.Trim('/') + "/verify", HttpMethod.Post, requestData, sendClientToken: false).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var response = await MakeVaultApiRequest<Secret<SSHOTPVerificationData>>(sshBackendMountPoint.Trim('/') + "/verify", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return response;
         }
 
@@ -1512,20 +1512,20 @@ namespace VaultSharp
         }
 
 
-        private async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool sendClientToken = true, bool rawResponse = false, Action<HttpStatusCode, string> failureDelegate = null)
+        private async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpStatusCode, string> failureDelegate = null)
         {
-            await MakeVaultApiRequest<dynamic>(resourcePath, httpMethod, requestData, sendClientToken, rawResponse, failureDelegate);
+            await MakeVaultApiRequest<dynamic>(resourcePath, httpMethod, requestData, rawResponse, failureDelegate);
         }
 
-        private async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool sendClientToken = true, bool rawResponse = false, Action<HttpStatusCode, string> failureDelegate = null) where TResponse : class
+        private async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpStatusCode, string> failureDelegate = null) where TResponse : class
         {
-            if (sendClientToken && _lazyVaultToken == null)
+            IDictionary<string, string> headers = null;
+
+            if (_lazyVaultToken != null)
             {
-                // a secure API was invoked, but no auth info was provided.
-                throw new InvalidOperationException("This API is a secure API and needs a client token. So please initialize Vault Client with AuthenticationInfo.");
+                headers = new Dictionary<string, string> {{VaultTokenHeaderKey, await _lazyVaultToken.Value}};
             }
 
-            var headers = sendClientToken ? new Dictionary<string, string> { { VaultTokenHeaderKey, await _lazyVaultToken.Value } } : null;
             return await _dataAccessManager.MakeRequestAsync<TResponse>(resourcePath, httpMethod, requestData, headers, rawResponse, failureDelegate);
         }
 
