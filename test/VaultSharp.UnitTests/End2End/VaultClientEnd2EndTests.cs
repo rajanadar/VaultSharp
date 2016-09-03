@@ -649,15 +649,15 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.NotNull(secret2);
 
             var accessors = await _authenticatedVaultClient.GetTokenAccessorListAsync();
-            Assert.True(accessors.Data.Any());
+            Assert.True(accessors.Data.Keys.Any());
 
-            var tokenInfoByAccessor = await _authenticatedVaultClient.GetTokenInfoByAccessorAsync(accessors.Data.First());
+            var tokenInfoByAccessor = await _authenticatedVaultClient.GetTokenInfoByAccessorAsync(accessors.Data.Keys.First());
             Assert.NotNull(tokenInfoByAccessor);
 
-            await _authenticatedVaultClient.RevokeTokenByAccessorAsync(accessors.Data.First());
+            await _authenticatedVaultClient.RevokeTokenByAccessorAsync(accessors.Data.Keys.First());
 
             var accessors2 = await _authenticatedVaultClient.GetTokenAccessorListAsync();
-            Assert.True(accessors.Data.Count() - 1 == accessors2.Data.Count());
+            Assert.True(accessors.Data.Keys.Count - 1 == accessors2.Data.Keys.Count);
 
             var secret3 = await _authenticatedVaultClient.CreateTokenAsync(new TokenCreationOptions { NoParent = true });
             Assert.NotNull(secret3);

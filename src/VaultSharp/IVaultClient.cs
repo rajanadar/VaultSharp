@@ -782,12 +782,12 @@ namespace VaultSharp
         Task DeleteSecretAsync(string path);
 
         /// <summary>
-        /// Gets  token accessors. This requires root capability, and access to it should be tightly 
+        /// Gets the list of token accessors. This requires root capability, and access to it should be tightly 
         /// controlled as the accessors can be used to revoke very large numbers of tokens 
         /// and their associated leases at once.
         /// </summary>
         /// <returns>The list of accessors.</returns>
-        Task<Secret<IEnumerable<string>>> GetTokenAccessorListAsync();
+        Task<Secret<ListInfo>> GetTokenAccessorListAsync();
 
         /// <summary>
         /// Creates a new token.
