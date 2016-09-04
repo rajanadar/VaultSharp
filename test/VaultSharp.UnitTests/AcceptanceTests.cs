@@ -13,6 +13,7 @@ using VaultSharp.Backends.Authentication.Models.Token;
 using VaultSharp.Backends.Secret.Models;
 using VaultSharp.Backends.Secret.Models.AWS;
 using VaultSharp.Backends.Secret.Models.Cassandra;
+using VaultSharp.Backends.Secret.Models.Consul;
 using VaultSharp.Backends.System.Models;
 using Xunit;
 
@@ -41,13 +42,24 @@ namespace VaultSharp.UnitTests
 
             // turn on, if you want aws tests. if yes, provide a credential text file,
             // with access-key on line 1 and secret on line 2 and region on line 3.
+            // create an IAM user with admin access and use the secret below for least hassle.
             public const bool RunAwsSecretBackendAcceptanceTests = true;
             public const string AwsCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\aws.txt";
 
             // turn on, if you want cassandra tests. if yes, provide a credential text file,
             // with hosts on line 1 and root-username on line 2 and root-password on line 3.
+            // once you install Cassandra, 
+            // 1. set authenticator: AllowAllAuthenticator to authenticator: PasswordAuthenticator in cassandra.yaml.
+            // 2. also change AllowAllAuthorizer to CassandraAuthorizer
+            // 3. default cassandra superuser is cassandra/cassandra, on localhost:9042
+            // 4. restart service.
             public const bool RunCassandraSecretBackendAcceptanceTests = true;
             public const string CassandraCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\cassandra.txt";
+
+            // install Consul and start it up
+            //  .\consul.exe agent -config-file .\c.json
+            public const bool RunConsulSecretBackendAcceptanceTests = true;
+            public const string ConsulCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\consul.txt";
         }
 
         // no need to modify these values.
@@ -94,6 +106,7 @@ namespace VaultSharp.UnitTests
 
                 await RunAwsSecretBackendApiTests();
                 await RunCassandraSecretBackendApiTests();
+                await RunConsulSecretBackendApiTests();
             }
             finally
             {
@@ -101,14 +114,71 @@ namespace VaultSharp.UnitTests
             }
         }
 
+        private async Task RunConsulSecretBackendApiTests()
+        {
+            try
+            {
+                if (SetupData.RunConsulSecretBackendAcceptanceTests)
+                {
+                    if (!File.Exists(SetupData.ConsulCredentialsFullPath))
+                    {
+                        throw new Exception("Consul Credential file does not exist: " + SetupData.ConsulCredentialsFullPath);
+                    }
+
+                    var credentialsFileContent = File.ReadAllLines(SetupData.ConsulCredentialsFullPath);
+
+                    if (credentialsFileContent.Count() < 2)
+                    {
+                        throw new Exception("Consul Credential file needs at least 3 lines: " + credentialsFileContent);
+                    }
+
+                    var consulAccessInfo = new ConsulAccessInfo
+                    {
+                        AddressWithPort = credentialsFileContent[0],
+                        ManagementToken = credentialsFileContent[1],
+                    };
+
+                    await _authenticatedVaultClient.QuickMountSecretBackendAsync(SecretBackendType.Consul);
+                    await _authenticatedVaultClient.ConsulConfigureAccessAsync(consulAccessInfo);
+
+                    var roleName = "consul-role";
+
+                    var role = new ConsulRoleDefinition
+                    {
+                        LeaseDuration = "1m1s",
+                        TokenType = ConsulTokenType.management
+                    };
+
+                    await _authenticatedVaultClient.ConsulWriteNamedRoleAsync(roleName, role);
+                    var queriedRole = await _authenticatedVaultClient.ConsulReadNamedRoleAsync(roleName);
+                    Assert.Equal(role.LeaseDuration, queriedRole.Data.LeaseDuration);
+
+                    role.LeaseDuration = "2m1s";
+                    await _authenticatedVaultClient.ConsulWriteNamedRoleAsync(roleName, role);
+                    queriedRole = await _authenticatedVaultClient.ConsulReadNamedRoleAsync(roleName);
+                    Assert.Equal(role.LeaseDuration, queriedRole.Data.LeaseDuration);
+
+                    var generatedCreds = await _authenticatedVaultClient.ConsulGenerateDynamicCredentialsAsync(roleName);
+                    Assert.NotNull(generatedCreds.Data.Token);
+
+                    await _authenticatedVaultClient.ConsulDeleteNamedRoleAsync(roleName);
+                }
+            }
+            finally
+            {
+                try
+                {
+                    await _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.Consul);
+                }
+                catch
+                {
+                    // you can always go to your Cassandra user base and delete users.
+                }
+            }
+        }
+
         private async Task RunCassandraSecretBackendApiTests()
         {
-            // once you install Cassandra, 
-            // 1. set authenticator: AllowAllAuthenticator to authenticator: PasswordAuthenticator in cassandra.yaml.
-            // 2. also change AllowAllAuthorizer to CassandraAuthorizer
-            // 3. default cassandra superuser is cassandra/cassandra, on localhost:9042
-            // 4. restart service.
-
             try
             {
                 if (SetupData.RunCassandraSecretBackendAcceptanceTests)
