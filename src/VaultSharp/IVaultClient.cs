@@ -920,6 +920,18 @@ namespace VaultSharp
         Task<Secret<Dictionary<string, object>>> CubbyholeReadSecretAsync(string locationPath);
 
         /// <summary>
+        /// Retrieves the secret list entries at the specified location.
+        /// Folders are suffixed with /. The input must be a folder; list on a file will not return a value. 
+        /// The values themselves are not accessible via this API.
+        /// </summary>
+        /// <param name="locationPath"><para>[required]</para>
+        /// The location path where the secret needs to be read from.</param>
+        /// <returns>
+        /// The secret list with the data.
+        /// </returns>
+        Task<Secret<ListInfo>> CubbyholeReadSecretListAsync(string locationPath);
+
+        /// <summary>
         /// Stores a secret at the specified location.
         /// </summary>
         /// <param name="locationPath"><para>[required]</para>

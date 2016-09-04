@@ -44,7 +44,6 @@ namespace VaultSharp.UnitTests.End2End
             await AppIdAuthenticationProviderTests();
             await UsernamePasswordAuthenticationProviderTests();
             await TokenAuthenticationProviderTests();
-            await CubbyholeTests();
             await GenericTests();
             await MySqlCredentialTests();
             await MySqlCredentialStrongTests();
@@ -52,46 +51,6 @@ namespace VaultSharp.UnitTests.End2End
 
             // await SSHDynamicTests();
             await PKITests();
-
-            await ConsulTests();
-        }
-        private async Task ConsulTests()
-        {
-            var consulAddress = "127.0.0.1:8500";
-            var aclMasterToken = "raja";
-
-            var mountPoint = "consul" + Guid.NewGuid();
-            var backend = new SecretBackend
-            {
-                MountPoint = mountPoint,
-                BackendType = SecretBackendType.Consul,
-            };
-
-            var role = "readonly2";
-
-            await _authenticatedVaultClient.MountSecretBackendAsync(backend);
-            await _authenticatedVaultClient.ConsulConfigureAccessAsync(new ConsulAccessInfo()
-            {
-                AddressWithPort = consulAddress,
-                ManagementToken = aclMasterToken
-            }, mountPoint);
-
-            await _authenticatedVaultClient.ConsulWriteNamedRoleAsync(role, new ConsulRoleDefinition()
-            {
-                TokenType = ConsulTokenType.management,
-            }, mountPoint);
-
-            var readRole = await _authenticatedVaultClient.ConsulReadNamedRoleAsync(role, mountPoint);
-            Assert.Equal(ConsulTokenType.management, readRole.Data.TokenType);
-
-            var credentials =
-                await _authenticatedVaultClient.ConsulGenerateDynamicCredentialsAsync(role, backend.MountPoint);
-
-            Assert.NotNull(credentials.Data.Token);
-
-            await _authenticatedVaultClient.ConsulDeleteNamedRoleAsync(role, mountPoint);
-
-            await _authenticatedVaultClient.UnmountSecretBackendAsync(backend.MountPoint);
         }
 
         private async Task PKITests()
@@ -852,24 +811,6 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.GenericReadSecretAsync(path));
 
             await _authenticatedVaultClient.UnmountSecretBackendAsync(mountpoint);
-        }
-
-        private async Task CubbyholeTests()
-        {
-            var path = "cubbyhole/foo1/foo2";
-            var values = new Dictionary<string, object>
-            {
-                {"foo", "bar"},
-                {"foo2", 345 }
-            };
-
-            await _authenticatedVaultClient.CubbyholeWriteSecretAsync(path, values);
-
-            var readValues = await _authenticatedVaultClient.CubbyholeReadSecretAsync(path);
-            Assert.True(readValues.Data.Count == 2);
-
-            await _authenticatedVaultClient.CubbyholeDeleteSecretAsync(path);
-            await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.CubbyholeReadSecretAsync(path));
         }
 
         private async Task MySqlCredentialStrongTests()

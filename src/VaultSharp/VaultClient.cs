@@ -880,11 +880,17 @@ namespace VaultSharp
             return result;
         }
 
+        public async Task<Secret<ListInfo>> CubbyholeReadSecretListAsync(string locationPath)
+        {
+            var result = await MakeVaultApiRequest<Secret<ListInfo>>(SecretBackendType.CubbyHole + "/" + locationPath.Trim('/') + "?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return result;
+        }
+
         public async Task CubbyholeWriteSecretAsync(string locationPath, IDictionary<string, object> values)
         {
             Checker.NotNull(locationPath, "locationPath");
 
-            await MakeVaultApiRequest(SecretBackendType.CubbyHole + "/" + locationPath.Trim('/'), HttpMethod.Post, values).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            await MakeVaultApiRequest(SecretBackendType.CubbyHole + "/" + locationPath.Trim('/'), HttpMethod.Put, values).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task CubbyholeDeleteSecretAsync(string locationPath)

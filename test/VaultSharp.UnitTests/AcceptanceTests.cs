@@ -43,7 +43,7 @@ namespace VaultSharp.UnitTests
             // turn on, if you want aws tests. if yes, provide a credential text file,
             // with access-key on line 1 and secret on line 2 and region on line 3.
             // create an IAM user with admin access and use the secret below for least hassle.
-            public const bool RunAwsSecretBackendAcceptanceTests = true;
+            public const bool RunAwsSecretBackendAcceptanceTests = false;
             public const string AwsCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\aws.txt";
 
             // turn on, if you want cassandra tests. if yes, provide a credential text file,
@@ -53,12 +53,12 @@ namespace VaultSharp.UnitTests
             // 2. also change AllowAllAuthorizer to CassandraAuthorizer
             // 3. default cassandra superuser is cassandra/cassandra, on localhost:9042
             // 4. restart service.
-            public const bool RunCassandraSecretBackendAcceptanceTests = true;
+            public const bool RunCassandraSecretBackendAcceptanceTests = false;
             public const string CassandraCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\cassandra.txt";
 
             // install Consul and start it up
             //  .\consul.exe agent -config-file .\c.json
-            public const bool RunConsulSecretBackendAcceptanceTests = true;
+            public const bool RunConsulSecretBackendAcceptanceTests = false;
             public const string ConsulCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\consul.txt";
         }
 
@@ -107,6 +107,7 @@ namespace VaultSharp.UnitTests
                 await RunAwsSecretBackendApiTests();
                 await RunCassandraSecretBackendApiTests();
                 await RunConsulSecretBackendApiTests();
+                await RunCubbyholeSecretBackendApiTests();
             }
             finally
             {
@@ -114,15 +115,55 @@ namespace VaultSharp.UnitTests
             }
         }
 
+        private async Task RunCubbyholeSecretBackendApiTests()
+        {
+            var path = "cubbyhole/path1";
+            var values = new Dictionary<string, object>
+            {
+                {"foo1", "bar"},
+                {"foo2", 345 }
+            };
+
+            await _authenticatedVaultClient.CubbyholeWriteSecretAsync(path, values);
+
+            var readValues = await _authenticatedVaultClient.CubbyholeReadSecretAsync(path);
+            Assert.True(readValues.Data.Count == 2);
+
+            values["foo2"] = 346;
+
+            await _authenticatedVaultClient.CubbyholeWriteSecretAsync(path, values);
+
+            readValues = await _authenticatedVaultClient.CubbyholeReadSecretAsync(path);
+            Assert.True(int.Parse(readValues.Data["foo2"].ToString()) == 346);
+
+            var path2 = "cubbyhole/path1/path2";
+            var values2 = new Dictionary<string, object>
+            {
+                {"bar1", "bleh"},
+                {"bar2", 42 }
+            };
+
+            await _authenticatedVaultClient.CubbyholeWriteSecretAsync(path2, values2);
+
+            var list = await _authenticatedVaultClient.CubbyholeReadSecretListAsync(SecretBackendType.CubbyHole.Type);
+            Assert.True(list.Data.Keys.Count == 2);
+
+            await _authenticatedVaultClient.CubbyholeDeleteSecretAsync(path);
+            await _authenticatedVaultClient.CubbyholeDeleteSecretAsync(path2);
+
+            await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.CubbyholeReadSecretAsync(path));
+        }
+
         private async Task RunConsulSecretBackendApiTests()
         {
-            try
+            if (SetupData.RunConsulSecretBackendAcceptanceTests)
             {
-                if (SetupData.RunConsulSecretBackendAcceptanceTests)
+                try
                 {
                     if (!File.Exists(SetupData.ConsulCredentialsFullPath))
                     {
-                        throw new Exception("Consul Credential file does not exist: " + SetupData.ConsulCredentialsFullPath);
+                        throw new Exception("Consul Credential file does not exist: " +
+                                            SetupData.ConsulCredentialsFullPath);
                     }
 
                     var credentialsFileContent = File.ReadAllLines(SetupData.ConsulCredentialsFullPath);
@@ -163,36 +204,38 @@ namespace VaultSharp.UnitTests
 
                     await _authenticatedVaultClient.ConsulDeleteNamedRoleAsync(roleName);
                 }
-            }
-            finally
-            {
-                try
+                finally
                 {
-                    await _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.Consul);
-                }
-                catch
-                {
-                    // you can always go to your Cassandra user base and delete users.
+                    try
+                    {
+                        await _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.Consul);
+                    }
+                    catch
+                    {
+                        // you can always go to your Cassandra user base and delete users.
+                    }
                 }
             }
         }
 
         private async Task RunCassandraSecretBackendApiTests()
         {
-            try
+            if (SetupData.RunCassandraSecretBackendAcceptanceTests)
             {
-                if (SetupData.RunCassandraSecretBackendAcceptanceTests)
+                try
                 {
                     if (!File.Exists(SetupData.CassandraCredentialsFullPath))
                     {
-                        throw new Exception("Cassandra Credential file does not exist: " + SetupData.CassandraCredentialsFullPath);
+                        throw new Exception("Cassandra Credential file does not exist: " +
+                                            SetupData.CassandraCredentialsFullPath);
                     }
 
                     var credentialsFileContent = File.ReadAllLines(SetupData.CassandraCredentialsFullPath);
 
                     if (credentialsFileContent.Count() < 3)
                     {
-                        throw new Exception("Cassandra Credential file needs at least 3 lines: " + credentialsFileContent);
+                        throw new Exception("Cassandra Credential file needs at least 3 lines: " +
+                                            credentialsFileContent);
                     }
 
                     var cassandraConnectionInfo = new CassandraConnectionInfo
@@ -210,7 +253,8 @@ namespace VaultSharp.UnitTests
 
                     var role = new CassandraRoleDefinition
                     {
-                        CreationCql = @"CREATE USER  '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT SELECT ON ALL KEYSPACES TO '{{username}}'; ",
+                        CreationCql =
+                            @"CREATE USER  '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT SELECT ON ALL KEYSPACES TO '{{username}}'; ",
                         LeaseDuration = "1m",
                         RollbackCql = "DROP USER '{{username}}';"
                     };
@@ -226,30 +270,31 @@ namespace VaultSharp.UnitTests
                     queriedRole = await _authenticatedVaultClient.CassandraReadNamedRoleAsync(roleName);
                     Assert.Equal(role.CreationCql, queriedRole.Data.CreationCql);
 
-                    var generatedCreds = await _authenticatedVaultClient.CassandraGenerateDynamicCredentialsAsync(roleName);
+                    var generatedCreds =
+                        await _authenticatedVaultClient.CassandraGenerateDynamicCredentialsAsync(roleName);
                     Assert.NotNull(generatedCreds.Data.Password);
 
                     await _authenticatedVaultClient.CassandraDeleteNamedRoleAsync(roleName);
                 }
-            }
-            finally
-            {
-                try
+                finally
                 {
-                    await _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.Cassandra);
-                }
-                catch
-                {
-                    // you can always go to your Cassandra user base and delete users.
+                    try
+                    {
+                        await _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.Cassandra);
+                    }
+                    catch
+                    {
+                        // you can always go to your Cassandra user base and delete users.
+                    }
                 }
             }
         }
 
         private async Task RunAwsSecretBackendApiTests()
         {
-            try
+            if (SetupData.RunAwsSecretBackendAcceptanceTests)
             {
-                if (SetupData.RunAwsSecretBackendAcceptanceTests)
+                try
                 {
                     if (!File.Exists(SetupData.AwsCredentialsFullPath))
                     {
@@ -313,7 +358,8 @@ namespace VaultSharp.UnitTests
                     var roles = await _authenticatedVaultClient.AWSGetRoleListAsync();
                     Assert.True(roles.Data.Keys.Count == 2);
 
-                    var generatedCreds = await _authenticatedVaultClient.AWSGenerateDynamicCredentialsAsync(awsRoleJsonName);
+                    var generatedCreds =
+                        await _authenticatedVaultClient.AWSGenerateDynamicCredentialsAsync(awsRoleJsonName);
                     Assert.NotNull(generatedCreds.Data.SecretKey);
 
                     generatedCreds = await _authenticatedVaultClient.AWSGenerateDynamicCredentialsAsync(awsRoleNameArn);
@@ -335,22 +381,25 @@ namespace VaultSharp.UnitTests
                     queriedRoleJson = await _authenticatedVaultClient.AWSReadNamedRoleAsync(awsRoleJsonName);
                     Assert.Equal(awsRoleJson.PolicyText, queriedRoleJson.Data.PolicyText);
 
-                    generatedCreds = await _authenticatedVaultClient.AWSGenerateDynamicCredentialsWithSecurityTokenAsync(awsRoleJsonName);
+                    generatedCreds =
+                        await
+                            _authenticatedVaultClient.AWSGenerateDynamicCredentialsWithSecurityTokenAsync(
+                                awsRoleJsonName);
                     Assert.NotNull(generatedCreds.Data.SecurityToken);
 
                     await _authenticatedVaultClient.AWSDeleteNamedRoleAsync(awsRoleJsonName);
                     await _authenticatedVaultClient.AWSDeleteNamedRoleAsync(awsRoleNameArn);
                 }
-            }
-            finally
-            {
-                try
+                finally
                 {
-                    await _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.AWS);
-                }
-                catch
-                {
-                    // you can always go to https://console.aws.amazon.com/iam/home#users and clean up any test users.
+                    try
+                    {
+                        await _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.AWS);
+                    }
+                    catch
+                    {
+                        // you can always go to https://console.aws.amazon.com/iam/home#users and clean up any test users.
+                    }
                 }
             }
         }
@@ -882,9 +931,6 @@ namespace VaultSharp.UnitTests
             _vaultProcess = new Process();
             _vaultProcess.StartInfo = procStartInfo;
             _vaultProcess.Start();
-
-            // sleep for a bit.
-            Thread.Sleep(2000);
         }
 
         private void ShutdownVaultServer()
