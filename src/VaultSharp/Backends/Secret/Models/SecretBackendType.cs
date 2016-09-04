@@ -43,6 +43,11 @@ namespace VaultSharp.Backends.Secret.Models
         private static readonly SecretBackendType GenericType = new SecretBackendType("generic");
 
         /// <summary>
+        /// MongoDb type
+        /// </summary>
+        private static readonly SecretBackendType MongoDbType = new SecretBackendType(SecretBackendDefaultMountPoints.MongoDb);
+
+        /// <summary>
         /// Microsoft SQL type
         /// </summary>
         private static readonly SecretBackendType MicrosoftSqlType = new SecretBackendType(SecretBackendDefaultMountPoints.MicrosoftSql);
@@ -158,6 +163,20 @@ namespace VaultSharp.Backends.Secret.Models
             get
             {
                 return GenericType;
+            }
+        }
+
+        /// <summary>
+        /// Gets the mongo database.
+        /// </summary>
+        /// <value>
+        /// The mongo database.
+        /// </value>
+        public static SecretBackendType MongoDb
+        {
+            get
+            {
+                return MongoDbType;
             }
         }
 

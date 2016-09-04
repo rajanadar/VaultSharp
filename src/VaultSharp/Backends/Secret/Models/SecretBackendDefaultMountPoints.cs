@@ -14,6 +14,8 @@
 
         public const string Generic = "secret";
 
+        public const string MongoDb = "mongodb";
+
         public const string MicrosoftSql = "mssql";
 
         public const string MySql = "mysql";

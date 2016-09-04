@@ -10,7 +10,6 @@ using VaultSharp.Backends.Authentication.Models.GitHub;
 using VaultSharp.Backends.Authentication.Models.Token;
 using VaultSharp.Backends.Authentication.Models.UsernamePassword;
 using VaultSharp.Backends.Secret.Models;
-using VaultSharp.Backends.Secret.Models.Consul;
 using VaultSharp.Backends.Secret.Models.MySql;
 using VaultSharp.Backends.Secret.Models.PKI;
 using VaultSharp.Backends.Secret.Models.SSH;
@@ -44,7 +43,6 @@ namespace VaultSharp.UnitTests.End2End
             await AppIdAuthenticationProviderTests();
             await UsernamePasswordAuthenticationProviderTests();
             await TokenAuthenticationProviderTests();
-            await GenericTests();
             await MySqlCredentialTests();
             await MySqlCredentialStrongTests();
             await SSHOTPTests();
@@ -782,35 +780,6 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
             var authBackends = await tokenClient.GetAllEnabledAuthenticationBackendsAsync();
             Assert.True(authBackends.Data.Any());
-        }
-
-        private async Task GenericTests()
-        {
-            var mountpoint = "secret" + Guid.NewGuid();
-
-            var path = mountpoint + "/foo1/blah2";
-            var values = new Dictionary<string, object>
-            {
-                {"foo", "bar"},
-                {"foo2", 345 }
-            };
-
-            await
-                _authenticatedVaultClient.MountSecretBackendAsync(new SecretBackend()
-                {
-                    BackendType = SecretBackendType.Generic,
-                    MountPoint = mountpoint
-                });
-
-            await _authenticatedVaultClient.GenericWriteSecretAsync(path, values);
-
-            var readValues = await _authenticatedVaultClient.GenericReadSecretAsync(path);
-            Assert.True(readValues.Data.Count == 2);
-
-            await _authenticatedVaultClient.GenericDeleteSecretAsync(path);
-            await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.GenericReadSecretAsync(path));
-
-            await _authenticatedVaultClient.UnmountSecretBackendAsync(mountpoint);
         }
 
         private async Task MySqlCredentialStrongTests()

@@ -9,6 +9,7 @@ using VaultSharp.Backends.Secret.Models.AWS;
 using VaultSharp.Backends.Secret.Models.Cassandra;
 using VaultSharp.Backends.Secret.Models.Consul;
 using VaultSharp.Backends.Secret.Models.MicrosoftSql;
+using VaultSharp.Backends.Secret.Models.MongoDb;
 using VaultSharp.Backends.Secret.Models.MySql;
 using VaultSharp.Backends.Secret.Models.PKI;
 using VaultSharp.Backends.Secret.Models.PostgreSql;
@@ -1008,6 +1009,123 @@ namespace VaultSharp
         /// The task.
         /// </returns>
         Task GenericDeleteSecretAsync(string locationPath, string genericBackendMountPoint = SecretBackendDefaultMountPoints.Generic);
+
+        /// <summary>
+        /// Configures the connection information used to communicate with MongoDb Server.
+        /// This API is a root protected call.
+        /// </summary>
+        /// <param name="mongoDbConnectionInfo"><para>[required]</para>
+        /// The MongoDb connection information.</param>
+        /// <param name="mongoDbBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the MongoDb backend. Defaults to <see cref="SecretBackendType.MongoDb" />
+        /// Provide a value only if you have customized the MongoDb mount point.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task MongoDbConfigureConnectionAsync(MongoDbConnectionInfo mongoDbConnectionInfo, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
+
+        /// <summary>
+        /// Queries the connection configuration. Access to this endpoint should be controlled via ACLs as it will 
+        /// return the connection URI as it is, including passwords, if any.
+        /// This API is a root protected call.
+        /// </summary>
+        /// <param name="mongoDbBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the MongoDb backend. Defaults to <see cref="SecretBackendType.MongoDb" />
+        /// Provide a value only if you have customized the MongoDb mount point.</param>
+        /// <returns>
+        /// The MongoDb connection information.
+        /// </returns>
+        Task<Secret<MongoDbConnectionInfo>> MongoDbReadConnectionInfoAsync(string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
+
+        /// <summary>
+        /// Configures the lease settings for generated credentials.
+        /// This API is a root protected call.
+        /// </summary>
+        /// <param name="credentialLeaseSettings"><para>[required]</para>
+        /// The credential lease settings.</param>
+        /// <param name="mongoDbBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the MongoDb backend. Defaults to <see cref="SecretBackendType.MongoDb" />
+        /// Provide a value only if you have customized the MongoDb mount point.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task MongoDbConfigureCredentialLeaseSettingsAsync(CredentialLeaseSettings credentialLeaseSettings, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
+
+        /// <summary>
+        /// Queries the lease configuration.
+        /// </summary>
+        /// <param name="mongoDbBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the MongoDb backend. Defaults to <see cref="SecretBackendType.MongoDb" />
+        /// Provide a value only if you have customized the MongoDb mount point.</param>
+        /// <returns>
+        /// The MongoDb lease settings.
+        /// </returns>
+        Task<Secret<CredentialLeaseSettings>> MongoDbReadCredentialLeaseSettingsAsync(string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
+        
+        /// <summary>
+        /// Creates or updates a named MongoDb role.
+        /// </summary>
+        /// <param name="mongoDbRoleName"><para>[required]</para>
+        /// Name of the MongoDb role.</param>
+        /// <param name="mongoDbRoleDefinition"><para>[required]</para>
+        /// The MongoDb role definition with the creation, rollback query and lease information.</param>
+        /// <param name="mongoDbBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the MongoDb backend. Defaults to <see cref="SecretBackendType.MongoDb" />
+        /// Provide a value only if you have customized the MongoDb mount point.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task MongoDbWriteNamedRoleAsync(string mongoDbRoleName, MongoDbRoleDefinition mongoDbRoleDefinition, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
+
+        /// <summary>
+        /// Queries a named MongoDb role definition
+        /// </summary>
+        /// <param name="mongoDbRoleName"><para>[required]</para>
+        /// Name of the MongoDb role.</param>
+        /// <param name="mongoDbBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the MongoDb backend. Defaults to <see cref="SecretBackendType.MongoDb" />
+        /// Provide a value only if you have customized the MongoDb mount point.</param>
+        /// <returns>
+        /// The secret with the MongoDb role definition with the creation, rollback query and lease information.
+        /// </returns>
+        Task<Secret<MongoDbRoleDefinition>> MongoDbReadNamedRoleAsync(string mongoDbRoleName, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
+
+        /// <summary>
+        /// Returns a list of available roles. Only the role names are returned, not any values.
+        /// </summary>
+        /// <param name="mongoDbBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the MongoDb backend. Defaults to <see cref="SecretBackendType.MongoDb" />
+        /// Provide a value only if you have customized the MongoDb mount point.</param>
+        /// <returns>
+        /// A list of available roles. Only the role names are returned, not any values.
+        /// </returns>
+        Task<Secret<ListInfo>> MongoDbReadRoleListAsync(string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
+
+        /// <summary>
+        /// Deletes a named MongoDb role definition
+        /// </summary>
+        /// <param name="mongoDbRoleName"><para>[required]</para>
+        /// Name of the MongoDb role.</param>
+        /// <param name="mongoDbBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the MongoDb backend. Defaults to <see cref="SecretBackendType.MongoDb" />
+        /// Provide a value only if you have customized the MongoDb mount point.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task MongoDbDeleteNamedRoleAsync(string mongoDbRoleName, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
+
+        /// <summary>
+        /// Generates a new set of dynamic credentials based on the named role.
+        /// </summary>
+        /// <param name="mongoDbRoleName"><para>[required]</para>
+        /// Name of the MongoDb role.</param>
+        /// <param name="mongoDbBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the MongoDb backend. Defaults to <see cref="SecretBackendType.MongoDb" />
+        /// Provide a value only if you have customized the MongoDb mount point.</param>
+        /// <returns>
+        /// The secret with the <see cref="UsernamePasswordCredentials" /> as the data.
+        /// </returns>
+        Task<Secret<UsernamePasswordCredentials>> MongoDbGenerateDynamicCredentialsAsync(string mongoDbRoleName, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
 
         /// <summary>
         /// Configures the connection information used to communicate with Microsoft Sql Server.

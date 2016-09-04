@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using VaultSharp.Backends.Audit.Models;
@@ -14,6 +13,7 @@ using VaultSharp.Backends.Secret.Models;
 using VaultSharp.Backends.Secret.Models.AWS;
 using VaultSharp.Backends.Secret.Models.Cassandra;
 using VaultSharp.Backends.Secret.Models.Consul;
+using VaultSharp.Backends.Secret.Models.MongoDb;
 using VaultSharp.Backends.System.Models;
 using Xunit;
 
@@ -60,6 +60,11 @@ namespace VaultSharp.UnitTests
             //  .\consul.exe agent -config-file .\c.json
             public const bool RunConsulSecretBackendAcceptanceTests = false;
             public const string ConsulCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\consul.txt";
+
+            // https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
+            // create a root user as follows: http://stackoverflow.com/a/29090991/1174414
+            public const bool RunMongoDbSecretBackendAcceptanceTests = true;
+            public const string MongoDbCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\mongodb.txt";
         }
 
         // no need to modify these values.
@@ -109,10 +114,100 @@ namespace VaultSharp.UnitTests
                 await RunConsulSecretBackendApiTests();
                 await RunCubbyholeSecretBackendApiTests();
                 await RunGenericSecretBackendApiTests();
+                await RunMongoDbSecretBackendApiTests();
             }
             finally
             {
                 ShutdownVaultServer();
+            }
+        }
+
+        private async Task RunMongoDbSecretBackendApiTests()
+        {
+            if (SetupData.RunMongoDbSecretBackendAcceptanceTests)
+            {
+                try
+                {
+                    if (!File.Exists(SetupData.MongoDbCredentialsFullPath))
+                    {
+                        throw new Exception("MongoDb Credential file does not exist: " +
+                                            SetupData.MongoDbCredentialsFullPath);
+                    }
+
+                    var credentialsFileContent = File.ReadAllLines(SetupData.MongoDbCredentialsFullPath);
+
+                    if (credentialsFileContent.Count() < 1)
+                    {
+                        throw new Exception("MongoDb Credential file needs at least 1 line: " +
+                                            credentialsFileContent);
+                    }
+
+                    var mongoDbConnectionInfo = new MongoDbConnectionInfo
+                    {
+                        ConnectionStringUri = credentialsFileContent[0]
+                    };
+
+                    await _authenticatedVaultClient.QuickMountSecretBackendAsync(SecretBackendType.MongoDb);
+                    await _authenticatedVaultClient.MongoDbConfigureConnectionAsync(mongoDbConnectionInfo);
+
+                    var connection = await _authenticatedVaultClient.MongoDbReadConnectionInfoAsync();
+                    Assert.Equal(mongoDbConnectionInfo.ConnectionStringUri, connection.Data.ConnectionStringUri);
+
+                    var lease = new CredentialLeaseSettings
+                    {
+                        LeaseTime = "1m1s",
+                        MaximumLeaseTime = "2m1s"
+                    };
+
+                    await _authenticatedVaultClient.MongoDbConfigureCredentialLeaseSettingsAsync(lease);
+
+                    // raja todo: this does not seem to work.
+                    // var queriedLease = await _authenticatedVaultClient.MongoDbReadCredentialLeaseSettingsAsync();
+                    // Assert.Equal(lease.LeaseTime, queriedLease.Data.LeaseTime);
+
+                    var roleName = "mongodb-role";
+
+                    var role = new MongoDbRoleDefinition
+                    {
+                        Database = "admin",
+                        Roles = JsonConvert.SerializeObject(new object[] { "readWrite", new { role = "read", db = "bar" } })
+                    };
+
+                    await _authenticatedVaultClient.MongoDbWriteNamedRoleAsync(roleName, role);
+
+                    var queriedRole = await _authenticatedVaultClient.MongoDbReadNamedRoleAsync(roleName);
+                    Assert.Equal(role.Database, queriedRole.Data.Database);
+                    Assert.Equal(role.Roles, queriedRole.Data.Roles);
+
+                    var roleName2 = "mongodb-role2";
+                    var role2 = new MongoDbRoleDefinition
+                    {
+                        Database = "admin",
+                        Roles = JsonConvert.SerializeObject(new object[] { "readWrite", new { role = "read", db = "foo" } })
+                    };
+
+                    await _authenticatedVaultClient.MongoDbWriteNamedRoleAsync(roleName2, role2);
+
+                    var roles = await _authenticatedVaultClient.MongoDbReadRoleListAsync();
+                    Assert.True(roles.Data.Keys.Count == 2);
+
+                    var generatedCreds = await _authenticatedVaultClient.MongoDbGenerateDynamicCredentialsAsync(roleName);
+                    Assert.NotNull(generatedCreds.Data.Password);
+
+                    await _authenticatedVaultClient.MongoDbDeleteNamedRoleAsync(roleName);
+                    await _authenticatedVaultClient.MongoDbDeleteNamedRoleAsync(roleName2);
+                }
+                finally
+                {
+                    try
+                    {
+                        await _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.MongoDb);
+                    }
+                    catch
+                    {
+                        // you can always go to your MongoDb shell and delete users.
+                    }
+                }
             }
         }
 
@@ -263,7 +358,6 @@ namespace VaultSharp.UnitTests
                     }
                     catch
                     {
-                        // you can always go to your Cassandra user base and delete users.
                     }
                 }
             }

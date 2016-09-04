@@ -15,6 +15,7 @@ using VaultSharp.Backends.Secret.Models.AWS;
 using VaultSharp.Backends.Secret.Models.Cassandra;
 using VaultSharp.Backends.Secret.Models.Consul;
 using VaultSharp.Backends.Secret.Models.MicrosoftSql;
+using VaultSharp.Backends.Secret.Models.MongoDb;
 using VaultSharp.Backends.Secret.Models.MySql;
 using VaultSharp.Backends.Secret.Models.PKI;
 using VaultSharp.Backends.Secret.Models.PostgreSql;
@@ -922,7 +923,7 @@ namespace VaultSharp
             Checker.NotNull(genericBackendMountPoint, "genericBackendMountPoint");
             Checker.NotNull(locationPath, "locationPath");
 
-            await MakeVaultApiRequest(genericBackendMountPoint.Trim('/') + "/" + locationPath.Trim('/'), HttpMethod.Post, values).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            await MakeVaultApiRequest(genericBackendMountPoint.Trim('/') + "/" + locationPath.Trim('/'), HttpMethod.Put, values).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task GenericDeleteSecretAsync(string locationPath, string genericBackendMountPoint = SecretBackendDefaultMountPoints.Generic)
@@ -931,6 +932,72 @@ namespace VaultSharp
             Checker.NotNull(locationPath, "locationPath");
 
             await MakeVaultApiRequest(genericBackendMountPoint.Trim('/') + "/" + locationPath.Trim('/'), HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task MongoDbConfigureConnectionAsync(MongoDbConnectionInfo mongoDbConnectionInfo, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb)
+        {
+            Checker.NotNull(mongoDbConnectionInfo, "mongoDbConnectionInfo");
+            Checker.NotNull(mongoDbBackendMountPoint, "mongoDbBackendMountPoint");
+
+            await MakeVaultApiRequest(mongoDbBackendMountPoint.Trim('/') + "/config/connection", HttpMethod.Post, mongoDbConnectionInfo).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<MongoDbConnectionInfo>> MongoDbReadConnectionInfoAsync(string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb)
+        {
+            Checker.NotNull(mongoDbBackendMountPoint, "mongoDbBackendMountPoint");
+            return await MakeVaultApiRequest<Secret<MongoDbConnectionInfo>>(mongoDbBackendMountPoint.Trim('/') + "/config/connection", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task MongoDbConfigureCredentialLeaseSettingsAsync(CredentialLeaseSettings credentialLeaseSettings, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb)
+        {
+            Checker.NotNull(mongoDbBackendMountPoint, "mongoDbBackendMountPoint");
+            Checker.NotNull(credentialLeaseSettings, "credentialLeaseSettings");
+
+            await MakeVaultApiRequest(mongoDbBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Post, credentialLeaseSettings).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<CredentialLeaseSettings>> MongoDbReadCredentialLeaseSettingsAsync(string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb)
+        {
+            Checker.NotNull(mongoDbBackendMountPoint, "mongoDbBackendMountPoint");
+            return await MakeVaultApiRequest<Secret<CredentialLeaseSettings>>(mongoDbBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task MongoDbWriteNamedRoleAsync(string mongoDbRoleName, MongoDbRoleDefinition mongoDbRoleDefinition, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb)
+        {
+            Checker.NotNull(mongoDbBackendMountPoint, "mongoDbBackendMountPoint");
+            Checker.NotNull(mongoDbRoleName, "mongoDbRoleName");
+
+            await MakeVaultApiRequest(mongoDbBackendMountPoint.Trim('/') + "/roles/" + mongoDbRoleName, HttpMethod.Post, mongoDbRoleDefinition).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<MongoDbRoleDefinition>> MongoDbReadNamedRoleAsync(string mongoDbRoleName, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb)
+        {
+            Checker.NotNull(mongoDbBackendMountPoint, "mongoDbBackendMountPoint");
+            Checker.NotNull(mongoDbRoleName, "mongoDbRoleName");
+
+            return await MakeVaultApiRequest<Secret<MongoDbRoleDefinition>>(mongoDbBackendMountPoint.Trim('/') + "/roles/" + mongoDbRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<ListInfo>> MongoDbReadRoleListAsync(string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb)
+        {
+            Checker.NotNull(mongoDbBackendMountPoint, "mongoDbBackendMountPoint");
+            return await MakeVaultApiRequest<Secret<ListInfo>>(mongoDbBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task MongoDbDeleteNamedRoleAsync(string mongoDbRoleName, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb)
+        {
+            Checker.NotNull(mongoDbBackendMountPoint, "mongoDbBackendMountPoint");
+            Checker.NotNull(mongoDbRoleName, "mongoDbRoleName");
+
+            await MakeVaultApiRequest(mongoDbBackendMountPoint.Trim('/') + "/roles/" + mongoDbRoleName, HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<UsernamePasswordCredentials>> MongoDbGenerateDynamicCredentialsAsync(string mongoDbRoleName, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb)
+        {
+            Checker.NotNull(mongoDbBackendMountPoint, "mongoDbBackendMountPoint");
+            Checker.NotNull(mongoDbRoleName, "mongoDbRoleName");
+
+            return await MakeVaultApiRequest<Secret<UsernamePasswordCredentials>>(mongoDbBackendMountPoint.Trim('/') + "/creds/" + mongoDbRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task MicrosoftSqlConfigureConnectionAsync(MicrosoftSqlConnectionInfo microsoftSqlConnectionInfo, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql)
