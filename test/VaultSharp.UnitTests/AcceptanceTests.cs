@@ -108,6 +108,7 @@ namespace VaultSharp.UnitTests
                 await RunCassandraSecretBackendApiTests();
                 await RunConsulSecretBackendApiTests();
                 await RunCubbyholeSecretBackendApiTests();
+                await RunGenericSecretBackendApiTests();
             }
             finally
             {
@@ -115,9 +116,59 @@ namespace VaultSharp.UnitTests
             }
         }
 
+        private async Task RunGenericSecretBackendApiTests()
+        {
+            var mountpoint = "secret" + Guid.NewGuid();
+
+            var path1 = "/path1/blah2";
+            var values = new Dictionary<string, object>
+            {
+                {"foo", "bar"},
+                {"foo2", 345 }
+            };
+
+            await
+                _authenticatedVaultClient.MountSecretBackendAsync(new SecretBackend()
+                {
+                    BackendType = SecretBackendType.Generic,
+                    MountPoint = mountpoint
+                });
+
+            await _authenticatedVaultClient.GenericWriteSecretAsync(path1, values, mountpoint);
+
+            var readValues = await _authenticatedVaultClient.GenericReadSecretAsync(path1, mountpoint);
+            Assert.True(readValues.Data.Count == 2);
+
+            values["foo2"] = 347;
+
+            await _authenticatedVaultClient.GenericWriteSecretAsync(path1, values, mountpoint);
+
+            readValues = await _authenticatedVaultClient.GenericReadSecretAsync(path1, mountpoint);
+            Assert.True(int.Parse(readValues.Data["foo2"].ToString()) == 347);
+
+            var path2 = "/path1/blah3";
+            var values2 = new Dictionary<string, object>
+            {
+                {"foo2", "bar2"},
+                {"foo3", 3450 }
+            };
+
+            await _authenticatedVaultClient.GenericWriteSecretAsync(path2, values2, mountpoint);
+
+            var keys = await _authenticatedVaultClient.GenericReadSecretLocationPathListAsync("/path1", mountpoint);
+            Assert.True(keys.Data.Keys.Count == 2);
+
+            await _authenticatedVaultClient.GenericDeleteSecretAsync(path1, mountpoint);
+            await _authenticatedVaultClient.GenericDeleteSecretAsync(path2, mountpoint);
+
+            await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.GenericReadSecretAsync(path1, mountpoint));
+
+            await _authenticatedVaultClient.UnmountSecretBackendAsync(mountpoint);
+        }
+
         private async Task RunCubbyholeSecretBackendApiTests()
         {
-            var path = "cubbyhole/path1";
+            var path = "path1/";
             var values = new Dictionary<string, object>
             {
                 {"foo1", "bar"},
@@ -136,7 +187,7 @@ namespace VaultSharp.UnitTests
             readValues = await _authenticatedVaultClient.CubbyholeReadSecretAsync(path);
             Assert.True(int.Parse(readValues.Data["foo2"].ToString()) == 346);
 
-            var path2 = "cubbyhole/path1/path2";
+            var path2 = "path1/path2";
             var values2 = new Dictionary<string, object>
             {
                 {"bar1", "bleh"},
@@ -145,8 +196,8 @@ namespace VaultSharp.UnitTests
 
             await _authenticatedVaultClient.CubbyholeWriteSecretAsync(path2, values2);
 
-            var list = await _authenticatedVaultClient.CubbyholeReadSecretListAsync(SecretBackendType.CubbyHole.Type);
-            Assert.True(list.Data.Keys.Count == 2);
+            var list = await _authenticatedVaultClient.CubbyholeReadSecretLocationPathListAsync("path1");
+            Assert.True(list.Data.Keys.Count == 1);
 
             await _authenticatedVaultClient.CubbyholeDeleteSecretAsync(path);
             await _authenticatedVaultClient.CubbyholeDeleteSecretAsync(path2);

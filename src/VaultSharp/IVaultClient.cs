@@ -920,7 +920,7 @@ namespace VaultSharp
         Task<Secret<Dictionary<string, object>>> CubbyholeReadSecretAsync(string locationPath);
 
         /// <summary>
-        /// Retrieves the secret list entries at the specified location.
+        /// Retrieves the secret location path entries at the specified location.
         /// Folders are suffixed with /. The input must be a folder; list on a file will not return a value. 
         /// The values themselves are not accessible via this API.
         /// </summary>
@@ -929,7 +929,7 @@ namespace VaultSharp
         /// <returns>
         /// The secret list with the data.
         /// </returns>
-        Task<Secret<ListInfo>> CubbyholeReadSecretListAsync(string locationPath);
+        Task<Secret<ListInfo>> CubbyholeReadSecretLocationPathListAsync(string locationPath);
 
         /// <summary>
         /// Stores a secret at the specified location.
@@ -965,6 +965,21 @@ namespace VaultSharp
         /// The secret with the data.
         /// </returns>
         Task<Secret<Dictionary<string, object>>> GenericReadSecretAsync(string locationPath, string genericBackendMountPoint = SecretBackendDefaultMountPoints.Generic);
+
+        /// <summary>
+        /// Retrieves the secret location path entries at the specified location.
+        /// Folders are suffixed with /. The input must be a folder; list on a file will not return a value. 
+        /// The values themselves are not accessible via this API.
+        /// </summary>
+        /// <param name="locationPath"><para>[required]</para>
+        /// The location path where the secret needs to be read from.</param>
+        /// <param name="genericBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretBackendType.Generic" />
+        /// Provide a value only if you have customized the Generic mount point.</param>
+        /// <returns>
+        /// The secret list with the data.
+        /// </returns>
+        Task<Secret<ListInfo>> GenericReadSecretLocationPathListAsync(string locationPath, string genericBackendMountPoint = SecretBackendDefaultMountPoints.Generic);
 
         /// <summary>
         /// Stores a secret at the specified location.

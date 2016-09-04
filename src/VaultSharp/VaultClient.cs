@@ -880,9 +880,9 @@ namespace VaultSharp
             return result;
         }
 
-        public async Task<Secret<ListInfo>> CubbyholeReadSecretListAsync(string locationPath)
+        public async Task<Secret<ListInfo>> CubbyholeReadSecretLocationPathListAsync(string locationPath)
         {
-            var result = await MakeVaultApiRequest<Secret<ListInfo>>(SecretBackendType.CubbyHole + "/" + locationPath.Trim('/') + "?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<ListInfo>>(SecretBackendType.CubbyHole + "/" + (locationPath ?? string.Empty).Trim('/') + "?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
@@ -906,6 +906,14 @@ namespace VaultSharp
             Checker.NotNull(locationPath, "locationPath");
 
             var result = await MakeVaultApiRequest<Secret<Dictionary<string, object>>>(genericBackendMountPoint.Trim('/') + "/" + locationPath.Trim('/'), HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return result;
+        }
+
+        public async Task<Secret<ListInfo>> GenericReadSecretLocationPathListAsync(string locationPath, string genericBackendMountPoint = SecretBackendDefaultMountPoints.Generic)
+        {
+            Checker.NotNull(genericBackendMountPoint, "genericBackendMountPoint");
+
+            var result = await MakeVaultApiRequest<Secret<ListInfo>>(genericBackendMountPoint.Trim('/') + "/" + (locationPath ?? string.Empty).Trim('/') + "?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
