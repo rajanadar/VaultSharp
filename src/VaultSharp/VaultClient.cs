@@ -224,7 +224,7 @@ namespace VaultSharp
         public async Task QuickUnmountSecretBackendAsync(SecretBackendType secretBackendType)
         {
             Checker.NotNull(secretBackendType, "secretBackendType");
-            await UnmountSecretBackendAsync(SecretBackendType.AWS.Type);
+            await UnmountSecretBackendAsync(secretBackendType.Type);
         }
 
         public async Task<MountConfiguration> GetMountedSecretBackendConfigurationAsync(string mountPoint)

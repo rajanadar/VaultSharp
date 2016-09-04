@@ -7,6 +7,10 @@ namespace VaultSharp.Backends.Secret.Models.Cassandra
     /// </summary>
     public class CassandraConnectionInfo
     {
+        private const int DefaultCqlProtocolVersion = 2;
+
+        private const int DefaultConnectionTimeoutSeconds = 5;
+
         /// <summary>
         /// <para>[required]</para>
         /// Gets or sets a set of comma-delimited Cassandra hosts to connect to.
@@ -94,5 +98,36 @@ namespace VaultSharp.Backends.Secret.Models.Cassandra
         /// </value>
         [JsonProperty("pem_json")]
         public string PemJson { get; set; }
+
+        /// <summary>
+        /// <para>[optional]</para>
+        /// Gets or sets the CQL protocol version.
+        /// Defaults to <value>true</value>.
+        /// </summary>
+        /// <value>
+        /// The CQL protocol version.
+        /// </value>
+        [JsonProperty("protocol_version")]
+        public int CqlProtocolVersion { get; set; }
+
+        /// <summary>
+        /// <para>[optional]</para>
+        /// Gets or sets connection timeout to use. 
+        /// Defaults to 5 seconds.
+        /// </summary>
+        /// <value>
+        /// The connection timeout.
+        /// </value>
+        [JsonProperty("connect_timeout")]
+        public int ConnectionTimeoutSeconds { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CassandraConnectionInfo"/> class.
+        /// </summary>
+        public CassandraConnectionInfo()
+        {
+            CqlProtocolVersion = DefaultCqlProtocolVersion;
+            ConnectionTimeoutSeconds = DefaultConnectionTimeoutSeconds;
+        }
     }
 }

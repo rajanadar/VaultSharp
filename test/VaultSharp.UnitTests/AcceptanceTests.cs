@@ -12,6 +12,7 @@ using VaultSharp.Backends.Authentication.Models;
 using VaultSharp.Backends.Authentication.Models.Token;
 using VaultSharp.Backends.Secret.Models;
 using VaultSharp.Backends.Secret.Models.AWS;
+using VaultSharp.Backends.Secret.Models.Cassandra;
 using VaultSharp.Backends.System.Models;
 using Xunit;
 
@@ -38,10 +39,15 @@ namespace VaultSharp.UnitTests
             // vault.exe that'll be used for this acceptance test run.
             public const string VaultExeFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\vault.exe";
 
-            // turn on, if you want aws tests. if yes, provide a credential text file, 
+            // turn on, if you want aws tests. if yes, provide a credential text file,
             // with access-key on line 1 and secret on line 2 and region on line 3.
             public const bool RunAwsSecretBackendAcceptanceTests = true;
             public const string AwsCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\aws.txt";
+
+            // turn on, if you want cassandra tests. if yes, provide a credential text file,
+            // with hosts on line 1 and root-username on line 2 and root-password on line 3.
+            public const bool RunCassandraSecretBackendAcceptanceTests = true;
+            public const string CassandraCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\cassandra.txt";
         }
 
         // no need to modify these values.
@@ -87,10 +93,85 @@ namespace VaultSharp.UnitTests
                 // secret backend tests.
 
                 await RunAwsSecretBackendApiTests();
+                await RunCassandraSecretBackendApiTests();
             }
             finally
             {
                 ShutdownVaultServer();
+            }
+        }
+
+        private async Task RunCassandraSecretBackendApiTests()
+        {
+            // once you install Cassandra, 
+            // 1. set authenticator: AllowAllAuthenticator to authenticator: PasswordAuthenticator in cassandra.yaml.
+            // 2. also change AllowAllAuthorizer to CassandraAuthorizer
+            // 3. default cassandra superuser is cassandra/cassandra, on localhost:9042
+            // 4. restart service.
+
+            try
+            {
+                if (SetupData.RunCassandraSecretBackendAcceptanceTests)
+                {
+                    if (!File.Exists(SetupData.CassandraCredentialsFullPath))
+                    {
+                        throw new Exception("Cassandra Credential file does not exist: " + SetupData.CassandraCredentialsFullPath);
+                    }
+
+                    var credentialsFileContent = File.ReadAllLines(SetupData.CassandraCredentialsFullPath);
+
+                    if (credentialsFileContent.Count() < 3)
+                    {
+                        throw new Exception("Cassandra Credential file needs at least 3 lines: " + credentialsFileContent);
+                    }
+
+                    var cassandraConnectionInfo = new CassandraConnectionInfo
+                    {
+                        Hosts = credentialsFileContent[0],
+                        Username = credentialsFileContent[1],
+                        Password = credentialsFileContent[2],
+                        CqlProtocolVersion = 4
+                    };
+
+                    await _authenticatedVaultClient.QuickMountSecretBackendAsync(SecretBackendType.Cassandra);
+                    await _authenticatedVaultClient.CassandraConfigureConnectionAsync(cassandraConnectionInfo);
+
+                    var roleName = "cassandra-role";
+
+                    var role = new CassandraRoleDefinition
+                    {
+                        CreationCql = @"CREATE USER  '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT SELECT ON ALL KEYSPACES TO '{{username}}'; ",
+                        LeaseDuration = "1m",
+                        RollbackCql = "DROP USER '{{username}}';"
+                    };
+
+                    await _authenticatedVaultClient.CassandraWriteNamedRoleAsync(roleName, role);
+                    var queriedRole = await _authenticatedVaultClient.CassandraReadNamedRoleAsync(roleName);
+                    Assert.Equal(role.CreationCql, queriedRole.Data.CreationCql);
+
+                    role.CreationCql =
+                        @"CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT SELECT ON ALL KEYSPACES TO '{{username}}';";
+
+                    await _authenticatedVaultClient.CassandraWriteNamedRoleAsync(roleName, role);
+                    queriedRole = await _authenticatedVaultClient.CassandraReadNamedRoleAsync(roleName);
+                    Assert.Equal(role.CreationCql, queriedRole.Data.CreationCql);
+
+                    var generatedCreds = await _authenticatedVaultClient.CassandraGenerateDynamicCredentialsAsync(roleName);
+                    Assert.NotNull(generatedCreds.Data.Password);
+
+                    await _authenticatedVaultClient.CassandraDeleteNamedRoleAsync(roleName);
+                }
+            }
+            finally
+            {
+                try
+                {
+                    await _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.Cassandra);
+                }
+                catch
+                {
+                    // you can always go to your Cassandra user base and delete users.
+                }
             }
         }
 

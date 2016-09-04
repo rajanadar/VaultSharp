@@ -42,17 +42,5 @@ namespace VaultSharp.Backends.Secret.Models.Cassandra
         /// </value>
         [JsonProperty("lease")]
         public string LeaseDuration { get; set; }
-
-        /// <summary>
-        /// <para>[optional]</para>
-        /// Gets or sets the duration of the lease grace period (time before revocation after the lease has expired) 
-        /// provided as a string duration with time suffix. 
-        /// Hour is the largest suffix.
-        /// </summary>
-        /// <value>
-        /// The duration of the lease grace period.
-        /// </value>
-        [JsonProperty("lease_grace_period")]
-        public string LeaseGracePeriodDuration { get; set; }
     }
 }
