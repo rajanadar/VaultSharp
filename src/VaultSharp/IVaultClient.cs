@@ -1041,7 +1041,7 @@ namespace VaultSharp
         /// Configures the lease settings for generated credentials.
         /// This API is a root protected call.
         /// </summary>
-        /// <param name="credentialLeaseSettings"><para>[required]</para>
+        /// <param name="credentialTimeToLiveSettings"><para>[required]</para>
         /// The credential lease settings.</param>
         /// <param name="mongoDbBackendMountPoint"><para>[optional]</para>
         /// The mount point for the MongoDb backend. Defaults to <see cref="SecretBackendType.MongoDb" />
@@ -1049,7 +1049,7 @@ namespace VaultSharp
         /// <returns>
         /// The task.
         /// </returns>
-        Task MongoDbConfigureCredentialLeaseSettingsAsync(CredentialLeaseSettings credentialLeaseSettings, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
+        Task MongoDbConfigureCredentialLeaseSettingsAsync(CredentialTimeToLiveSettings credentialTimeToLiveSettings, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
 
         /// <summary>
         /// Queries the lease configuration.
@@ -1060,7 +1060,7 @@ namespace VaultSharp
         /// <returns>
         /// The MongoDb lease settings.
         /// </returns>
-        Task<Secret<CredentialLeaseSettings>> MongoDbReadCredentialLeaseSettingsAsync(string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
+        Task<Secret<CredentialTimeToLiveSettings>> MongoDbReadCredentialLeaseSettingsAsync(string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
         
         /// <summary>
         /// Creates or updates a named MongoDb role.

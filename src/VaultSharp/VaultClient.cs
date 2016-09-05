@@ -948,18 +948,18 @@ namespace VaultSharp
             return await MakeVaultApiRequest<Secret<MongoDbConnectionInfo>>(mongoDbBackendMountPoint.Trim('/') + "/config/connection", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task MongoDbConfigureCredentialLeaseSettingsAsync(CredentialLeaseSettings credentialLeaseSettings, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb)
+        public async Task MongoDbConfigureCredentialLeaseSettingsAsync(CredentialTimeToLiveSettings credentialTimeToLiveSettings, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb)
         {
             Checker.NotNull(mongoDbBackendMountPoint, "mongoDbBackendMountPoint");
-            Checker.NotNull(credentialLeaseSettings, "credentialLeaseSettings");
+            Checker.NotNull(credentialTimeToLiveSettings, "credentialTimeToLiveSettings");
 
-            await MakeVaultApiRequest(mongoDbBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Post, credentialLeaseSettings).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            await MakeVaultApiRequest(mongoDbBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Post, credentialTimeToLiveSettings).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<CredentialLeaseSettings>> MongoDbReadCredentialLeaseSettingsAsync(string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb)
+        public async Task<Secret<CredentialTimeToLiveSettings>> MongoDbReadCredentialLeaseSettingsAsync(string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb)
         {
             Checker.NotNull(mongoDbBackendMountPoint, "mongoDbBackendMountPoint");
-            return await MakeVaultApiRequest<Secret<CredentialLeaseSettings>>(mongoDbBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return await MakeVaultApiRequest<Secret<CredentialTimeToLiveSettings>>(mongoDbBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task MongoDbWriteNamedRoleAsync(string mongoDbRoleName, MongoDbRoleDefinition mongoDbRoleDefinition, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb)

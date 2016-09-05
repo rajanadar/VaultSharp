@@ -153,17 +153,16 @@ namespace VaultSharp.UnitTests
                     var connection = await _authenticatedVaultClient.MongoDbReadConnectionInfoAsync();
                     Assert.Equal(mongoDbConnectionInfo.ConnectionStringUri, connection.Data.ConnectionStringUri);
 
-                    var lease = new CredentialLeaseSettings
+                    var lease = new CredentialTimeToLiveSettings
                     {
-                        LeaseTime = "1m1s",
-                        MaximumLeaseTime = "2m1s"
+                        TimeToLive = "1m1s",
+                        MaximumTimeToLive = "2m1s"
                     };
 
                     await _authenticatedVaultClient.MongoDbConfigureCredentialLeaseSettingsAsync(lease);
 
-                    // raja todo: this does not seem to work.
-                    // var queriedLease = await _authenticatedVaultClient.MongoDbReadCredentialLeaseSettingsAsync();
-                    // Assert.Equal(lease.LeaseTime, queriedLease.Data.LeaseTime);
+                    var queriedLease = await _authenticatedVaultClient.MongoDbReadCredentialLeaseSettingsAsync();
+                    Assert.Equal("61", queriedLease.Data.TimeToLive);
 
                     var roleName = "mongodb-role";
 
