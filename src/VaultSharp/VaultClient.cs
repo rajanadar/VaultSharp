@@ -1008,12 +1008,26 @@ namespace VaultSharp
             await MakeVaultApiRequest(microsoftSqlBackendMountPoint.Trim('/') + "/config/connection", HttpMethod.Post, microsoftSqlConnectionInfo).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task MicrosoftSqlConfigureCredentialLeaseSettingsAsync(CredentialLeaseSettings credentialLeaseSettings, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql)
+        public async Task<Secret<MicrosoftSqlConnectionInfo>> MicrosoftSqlReadConnectionInfoAsync(string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql)
         {
             Checker.NotNull(microsoftSqlBackendMountPoint, "microsoftSqlBackendMountPoint");
-            Checker.NotNull(credentialLeaseSettings, "credentialLeaseSettings");
 
-            await MakeVaultApiRequest(microsoftSqlBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Post, credentialLeaseSettings).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return await MakeVaultApiRequest<Secret<MicrosoftSqlConnectionInfo>>(microsoftSqlBackendMountPoint.Trim('/') + "/config/connection", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task MicrosoftSqlConfigureCredentialLeaseSettingsAsync(CredentialTtlSettings credentialTimeToLiveSettings, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql)
+        {
+            Checker.NotNull(microsoftSqlBackendMountPoint, "microsoftSqlBackendMountPoint");
+            Checker.NotNull(credentialTimeToLiveSettings, "credentialTimeToLiveSettings");
+
+            await MakeVaultApiRequest(microsoftSqlBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Post, credentialTimeToLiveSettings).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<CredentialTtlSettings>> MicrosoftSqlReadCredentialLeaseSettingsAsync(string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql)
+        {
+            Checker.NotNull(microsoftSqlBackendMountPoint, "microsoftSqlBackendMountPoint");
+
+            return await MakeVaultApiRequest<Secret<CredentialTtlSettings>>(microsoftSqlBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task MicrosoftSqlWriteNamedRoleAsync(string microsoftSqlRoleName, MicrosoftSqlRoleDefinition microsoftSqlRoleDefinition, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql)
@@ -1033,7 +1047,7 @@ namespace VaultSharp
             return result;
         }
 
-        public async Task<Secret<ListInfo>> MicrosoftSqlReadAllRolesAsync(string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql)
+        public async Task<Secret<ListInfo>> MicrosoftSqlReadRoleListAsync(string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql)
         {
             Checker.NotNull(microsoftSqlBackendMountPoint, "microsoftSqlBackendMountPoint");
 

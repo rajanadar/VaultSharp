@@ -13,6 +13,7 @@ using VaultSharp.Backends.Secret.Models;
 using VaultSharp.Backends.Secret.Models.AWS;
 using VaultSharp.Backends.Secret.Models.Cassandra;
 using VaultSharp.Backends.Secret.Models.Consul;
+using VaultSharp.Backends.Secret.Models.MicrosoftSql;
 using VaultSharp.Backends.Secret.Models.MongoDb;
 using VaultSharp.Backends.System.Models;
 using Xunit;
@@ -63,8 +64,11 @@ namespace VaultSharp.UnitTests
 
             // https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
             // create a root user as follows: http://stackoverflow.com/a/29090991/1174414
-            public const bool RunMongoDbSecretBackendAcceptanceTests = true;
+            public const bool RunMongoDbSecretBackendAcceptanceTests = false;
             public const string MongoDbCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\mongodb.txt";
+
+            public const bool RunMicrosoftSqlSecretBackendAcceptanceTests = true;
+            public const string MicrosoftSqlCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\mssql.txt";
         }
 
         // no need to modify these values.
@@ -115,10 +119,98 @@ namespace VaultSharp.UnitTests
                 await RunCubbyholeSecretBackendApiTests();
                 await RunGenericSecretBackendApiTests();
                 await RunMongoDbSecretBackendApiTests();
+                await RunMicrosoftSqlSecretBackendApiTests();
             }
             finally
             {
                 ShutdownVaultServer();
+            }
+        }
+
+        private async Task RunMicrosoftSqlSecretBackendApiTests()
+        {
+            if (SetupData.RunMicrosoftSqlSecretBackendAcceptanceTests)
+            {
+                try
+                {
+                    if (!File.Exists(SetupData.MicrosoftSqlCredentialsFullPath))
+                    {
+                        throw new Exception("MicrosoftSql Credential file does not exist: " +
+                                            SetupData.MicrosoftSqlCredentialsFullPath);
+                    }
+
+                    var credentialsFileContent = File.ReadAllLines(SetupData.MicrosoftSqlCredentialsFullPath);
+
+                    if (credentialsFileContent.Count() < 1)
+                    {
+                        throw new Exception("MicrosoftSql Credential file needs at least 1 line: " +
+                                            credentialsFileContent);
+                    }
+
+                    var microsoftSqlConnectionInfo = new MicrosoftSqlConnectionInfo
+                    {
+                        ConnectionString = credentialsFileContent[0],
+                        MaximumOpenConnections = 5
+                    };
+
+                    await _authenticatedVaultClient.QuickMountSecretBackendAsync(SecretBackendType.MicrosoftSql);
+                    await _authenticatedVaultClient.MicrosoftSqlConfigureConnectionAsync(microsoftSqlConnectionInfo);
+
+                    var connection = await _authenticatedVaultClient.MicrosoftSqlReadConnectionInfoAsync();
+                    Assert.Equal(microsoftSqlConnectionInfo.MaximumOpenConnections, connection.Data.MaximumOpenConnections);
+
+                    var lease = new CredentialTtlSettings()
+                    {
+                        TimeToLive = "1m1s",
+                        MaximumTimeToLive = "2m1s"
+                    };
+
+                    await _authenticatedVaultClient.MicrosoftSqlConfigureCredentialLeaseSettingsAsync(lease);
+
+                    var queriedLease = await _authenticatedVaultClient.MicrosoftSqlReadCredentialLeaseSettingsAsync();
+                    Assert.Equal(lease.TimeToLive, queriedLease.Data.TimeToLive);
+                    Assert.Equal(lease.MaximumTimeToLive, queriedLease.Data.MaximumTimeToLive);
+
+                    var roleName = "msssqlrole";
+
+                    var role = new MicrosoftSqlRoleDefinition
+                    {
+                        Sql = "CREATE LOGIN '[{{name}}]' WITH PASSWORD = '{{password}}'; USE master; CREATE USER '[{{name}}]' FOR LOGIN '[{{name}}]'; GRANT SELECT ON SCHEMA::dbo TO '[{{name}}]'"
+                    };
+
+                    await _authenticatedVaultClient.MicrosoftSqlWriteNamedRoleAsync(roleName, role);
+
+                    var queriedRole = await _authenticatedVaultClient.MicrosoftSqlReadNamedRoleAsync(roleName);
+                    Assert.Equal(role.Sql, queriedRole.Data.Sql);
+
+                    var roleName2 = "mssqlrole2";
+                    var role2 = new MicrosoftSqlRoleDefinition
+                    {
+                        Sql = "SELECT 1"
+                    };
+
+                    await _authenticatedVaultClient.MicrosoftSqlWriteNamedRoleAsync(roleName2, role2);
+
+                    var roles = await _authenticatedVaultClient.MicrosoftSqlReadRoleListAsync();
+                    Assert.True(roles.Data.Keys.Count == 2);
+
+                    var generatedCreds = await _authenticatedVaultClient.MicrosoftSqlGenerateDynamicCredentialsAsync(roleName);
+                    Assert.NotNull(generatedCreds.Data.Password);
+
+                    await _authenticatedVaultClient.MicrosoftSqlDeleteNamedRoleAsync(roleName);
+                    await _authenticatedVaultClient.MicrosoftSqlDeleteNamedRoleAsync(roleName2);
+                }
+                finally
+                {
+                    try
+                    {
+                        await _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.MicrosoftSql);
+                    }
+                    catch
+                    {
+                        // you can always go to your MicrosoftSql SSMS and delete users.
+                    }
+                }
             }
         }
 
@@ -163,6 +255,7 @@ namespace VaultSharp.UnitTests
 
                     var queriedLease = await _authenticatedVaultClient.MongoDbReadCredentialLeaseSettingsAsync();
                     Assert.Equal("61", queriedLease.Data.TimeToLive);
+                    Assert.Equal("121", queriedLease.Data.MaximumTimeToLive);
 
                     var roleName = "mongodb-role";
 

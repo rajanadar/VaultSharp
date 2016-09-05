@@ -1142,10 +1142,19 @@ namespace VaultSharp
         Task MicrosoftSqlConfigureConnectionAsync(MicrosoftSqlConnectionInfo microsoftSqlConnectionInfo, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
 
         /// <summary>
+        /// Queries the Microsoft SQL connection information. The connection string value is not returned.
+        /// </summary>
+        /// <param name="microsoftSqlBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the Microsoft Sql backend. Defaults to <see cref="SecretBackendType.MicrosoftSql" />
+        /// Provide a value only if you have customized the Microsoft Sql mount point.</param>
+        /// <returns>The connection info.</returns>
+        Task<Secret<MicrosoftSqlConnectionInfo>> MicrosoftSqlReadConnectionInfoAsync(string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
+
+        /// <summary>
         /// Configures the lease settings for generated credentials.
         /// This API is a root protected call.
         /// </summary>
-        /// <param name="credentialLeaseSettings"><para>[required]</para>
+        /// <param name="credentialTimeToLiveSettings"><para>[required]</para>
         /// The credential lease settings.</param>
         /// <param name="microsoftSqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the MicrosoftSql backend. Defaults to <see cref="SecretBackendType.MicrosoftSql" />
@@ -1153,7 +1162,16 @@ namespace VaultSharp
         /// <returns>
         /// The task.
         /// </returns>
-        Task MicrosoftSqlConfigureCredentialLeaseSettingsAsync(CredentialLeaseSettings credentialLeaseSettings, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
+        Task MicrosoftSqlConfigureCredentialLeaseSettingsAsync(CredentialTtlSettings credentialTimeToLiveSettings, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
+
+        /// <summary>
+        /// Queries the Microsofts SQL credential lease settings.
+        /// </summary>
+        /// <param name="microsoftSqlBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the MicrosoftSql backend. Defaults to <see cref="SecretBackendType.MicrosoftSql" />
+        /// Provide a value only if you have customized the MicrosoftSql mount point.</param>
+        /// <returns>The lease settings.</returns>
+        Task<Secret<CredentialTtlSettings>> MicrosoftSqlReadCredentialLeaseSettingsAsync(string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
 
         /// <summary>
         /// Creates or updates a named MicrosoftSql role.
@@ -1192,7 +1210,7 @@ namespace VaultSharp
         /// <returns>
         /// A list of available roles. Only the role names are returned, not any values.
         /// </returns>
-        Task<Secret<ListInfo>> MicrosoftSqlReadAllRolesAsync(string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
+        Task<Secret<ListInfo>> MicrosoftSqlReadRoleListAsync(string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
 
         /// <summary>
         /// Deletes a named MicrosoftSql role definition

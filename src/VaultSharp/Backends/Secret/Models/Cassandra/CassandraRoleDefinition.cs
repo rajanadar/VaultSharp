@@ -10,7 +10,9 @@ namespace VaultSharp.Backends.Secret.Models.Cassandra
         /// <summary>
         /// <para>[optional]</para>
         /// Gets or sets the CQL statements executed to create and configure the new user. 
-        /// Must be semi-colon separated. The '{{username}}' and '{{password}}' values will be substituted; 
+        /// Must be semi-colon separated string, a base64-encoded semicolon-separated string, 
+        /// a serialized JSON string array, or a base64-encoded serialized JSON string array.
+        /// The '{{username}}' and '{{password}}' values will be substituted; 
         /// it is required that these parameters are in single quotes. 
         /// The default creates a non-superuser user with no authorization grants.
         /// </summary>

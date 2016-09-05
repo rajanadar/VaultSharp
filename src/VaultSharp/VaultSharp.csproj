@@ -64,6 +64,7 @@
     <Compile Include="Backends\Secret\Models\Consul\ConsulCredentials.cs" />
     <Compile Include="Backends\Secret\Models\Consul\ConsulRoleDefinition.cs" />
     <Compile Include="Backends\Secret\Models\Consul\ConsulTokenType.cs" />
+    <Compile Include="Backends\Secret\Models\CredentialTtlSettings.cs" />
     <Compile Include="Backends\Secret\Models\CredentialTimeToLiveSettings.cs" />
     <Compile Include="Backends\Secret\Models\ListInfo.cs" />
     <Compile Include="Backends\Secret\Models\CredentialLeaseSettings.cs" />
