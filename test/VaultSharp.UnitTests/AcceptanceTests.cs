@@ -17,6 +17,7 @@ using VaultSharp.Backends.Secret.Models.MicrosoftSql;
 using VaultSharp.Backends.Secret.Models.MongoDb;
 using VaultSharp.Backends.Secret.Models.MySql;
 using VaultSharp.Backends.Secret.Models.PostgreSql;
+using VaultSharp.Backends.Secret.Models.RabbitMQ;
 using VaultSharp.Backends.System.Models;
 using Xunit;
 
@@ -81,8 +82,14 @@ namespace VaultSharp.UnitTests
 
             // install postgresql
             // pgadmin, setup superuser (postgres), ?sslmode=disable
-            public const bool RunPostgreSqlSecretBackendAcceptanceTests = true;
+            public const bool RunPostgreSqlSecretBackendAcceptanceTests = false;
             public const string PostgreSqlCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\postgresql.txt";
+
+            // insttall erlang otp, rabbitmq server, then follow this thread http://stackoverflow.com/questions/28258392/rabbitmq-has-nodedown-error/34538688#34538688
+            // since msi doesn't install the service properly. then run the plugin
+            // launch http://localhost:15672
+            public const bool RunRabbitMQSecretBackendAcceptanceTests = true;
+            public const string RabbitMQCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\rabbitmq.txt";
         }
 
         // no need to modify these values.
@@ -137,10 +144,99 @@ namespace VaultSharp.UnitTests
                 await RunMySqlSecretBackendApiTests();
                 await RunPkiSecretBackendApiTests();
                 await RunPostgreSqlSecretBackendApiTests();
+                await RunRabbitMQSecretBackendApiTests();
             }
             finally
             {
                 ShutdownVaultServer();
+            }
+        }
+
+        private async Task RunRabbitMQSecretBackendApiTests()
+        {
+            if (SetupData.RunRabbitMQSecretBackendAcceptanceTests)
+            {
+                try
+                {
+                    if (!File.Exists(SetupData.RabbitMQCredentialsFullPath))
+                    {
+                        throw new Exception("RabbitMQ Credential file does not exist: " +
+                                            SetupData.RabbitMQCredentialsFullPath);
+                    }
+
+                    var credentialsFileContent = File.ReadAllLines(SetupData.RabbitMQCredentialsFullPath);
+
+                    if (credentialsFileContent.Count() < 3)
+                    {
+                        throw new Exception("RabbitMQ Credential file needs at least 3 lines: " +
+                                            credentialsFileContent);
+                    }
+
+                    var connectionInfo = new RabbitMQConnectionInfo
+                    {
+                        ConnectionUri = credentialsFileContent[0],
+                        Username = credentialsFileContent[1],
+                        Password = credentialsFileContent[2],
+                        VerifyConnection = true
+                    };
+
+                    await _authenticatedVaultClient.QuickMountSecretBackendAsync(SecretBackendType.RabbitMQ);
+                    await _authenticatedVaultClient.RabbitMQConfigureConnectionAsync(connectionInfo);
+
+                    // var connection = await _authenticatedVaultClient.RabbitMQReadConnectionInfoAsync();
+                    // Assert.Equal(connectionInfo.ConnectionUri, connection.Data.ConnectionUri);
+
+                    var lease = new CredentialTimeToLiveSettings
+                    {
+                        TimeToLive  = "1m1s",
+                        MaximumTimeToLive = "2m1s"
+                    };
+
+                    await _authenticatedVaultClient.RabbitMQConfigureCredentialLeaseSettingsAsync(lease);
+
+                    var queriedLease = await _authenticatedVaultClient.RabbitMQReadCredentialLeaseSettingsAsync();
+                    Assert.Equal("61", queriedLease.Data.TimeToLive);
+                    Assert.Equal("121", queriedLease.Data.MaximumTimeToLive);
+
+                    var roleName = "rabbitmqrole";
+
+                    var role = new RabbitMQRoleDefinition
+                    {
+                        VirtualHostPermissions = "{\"/\":{\"write\": \".*\", \"read\": \".*\"}}"
+                    };
+
+                    await _authenticatedVaultClient.RabbitMQWriteNamedRoleAsync(roleName, role);
+
+                    var queriedRole = await _authenticatedVaultClient.RabbitMQReadNamedRoleAsync(roleName);
+                    Assert.NotNull(queriedRole.Data.VirtualHostPermissions);
+
+                    var roleName2 = "rabbitmq2";
+                    var role2 = new RabbitMQRoleDefinition
+                    {
+                        VirtualHostPermissions = "{\"/\":{\"write\": \".*\", \"read\": \".*\"}}"
+                    };
+
+                    await _authenticatedVaultClient.RabbitMQWriteNamedRoleAsync(roleName2, role2);
+
+                    var roles = await _authenticatedVaultClient.RabbitMQReadRoleListAsync();
+                    Assert.True(roles.Data.Keys.Count == 2);
+
+                    var generatedCreds = await _authenticatedVaultClient.RabbitMQGenerateDynamicCredentialsAsync(roleName);
+                    Assert.NotNull(generatedCreds.Data.Password);
+
+                    await _authenticatedVaultClient.RabbitMQDeleteNamedRoleAsync(roleName);
+                    await _authenticatedVaultClient.RabbitMQDeleteNamedRoleAsync(roleName2);
+                }
+                finally
+                {
+                    try
+                    {
+                        await _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.RabbitMQ);
+                    }
+                    catch
+                    {
+                    }
+                }
             }
         }
 

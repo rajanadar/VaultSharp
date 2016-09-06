@@ -66,6 +66,11 @@ namespace VaultSharp.Backends.Secret.Models
         /// The postgre SQL type
         /// </summary>
         private static readonly SecretBackendType PostgreSqlType = new SecretBackendType(SecretBackendDefaultMountPoints.PostgreSql);
+        
+        /// <summary>
+        /// The rabbit mq type
+        /// </summary>
+        private static readonly SecretBackendType RabbitMQType = new SecretBackendType(SecretBackendDefaultMountPoints.RabbitMQ);
 
         /// <summary>
         /// The SSH type
@@ -233,6 +238,20 @@ namespace VaultSharp.Backends.Secret.Models
             get
             {
                 return PostgreSqlType;
+            }
+        }
+
+        /// <summary>
+        /// Gets the rabbit mq type.
+        /// </summary>
+        /// <value>
+        /// The rabbit mq.
+        /// </value>
+        public static SecretBackendType RabbitMQ
+        {
+            get
+            {
+                return RabbitMQType;
             }
         }
 

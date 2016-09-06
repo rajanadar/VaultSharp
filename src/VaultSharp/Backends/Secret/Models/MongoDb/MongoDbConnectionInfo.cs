@@ -9,7 +9,7 @@ namespace VaultSharp.Backends.Secret.Models.MongoDb
     {
         /// <summary>
         /// <para>[required]</para>
-        /// Gets or sets the the standard connection string (URI) used to communicate with MongoDB.
+        /// Gets or sets the standard connection string (URI) used to communicate with MongoDB.
         /// </summary>
         /// <value>
         /// The Connection String Uri

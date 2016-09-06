@@ -19,6 +19,7 @@ using VaultSharp.Backends.Secret.Models.MongoDb;
 using VaultSharp.Backends.Secret.Models.MySql;
 using VaultSharp.Backends.Secret.Models.PKI;
 using VaultSharp.Backends.Secret.Models.PostgreSql;
+using VaultSharp.Backends.Secret.Models.RabbitMQ;
 using VaultSharp.Backends.Secret.Models.SSH;
 using VaultSharp.Backends.Secret.Models.Transit;
 using VaultSharp.Backends.System.Models;
@@ -1426,6 +1427,78 @@ namespace VaultSharp
             Checker.NotNull(postgreSqlRoleName, "postgreSqlRoleName");
 
             var result = await MakeVaultApiRequest<Secret<UsernamePasswordCredentials>>(postgreSqlBackendMountPoint.Trim('/') + "/creds/" + postgreSqlRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return result;
+        }
+
+        public async Task RabbitMQConfigureConnectionAsync(RabbitMQConnectionInfo rabbitMQConnectionInfo, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ)
+        {
+            Checker.NotNull(rabbitMQBackendMountPoint, "rabbitMQBackendMountPoint");
+            Checker.NotNull(rabbitMQConnectionInfo, "rabbitMQConnectionInfo");
+
+            await MakeVaultApiRequest(rabbitMQBackendMountPoint.Trim('/') + "/config/connection", HttpMethod.Post, rabbitMQConnectionInfo).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        //public async Task<Secret<RabbitMQConnectionInfo>> RabbitMQReadConnectionInfoAsync(string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ)
+        //{
+        //    Checker.NotNull(rabbitMQBackendMountPoint, "rabbitMQBackendMountPoint");
+
+        //    return await MakeVaultApiRequest<Secret<RabbitMQConnectionInfo>>(rabbitMQBackendMountPoint.Trim('/') + "/config/connection", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        //}
+
+        public async Task RabbitMQConfigureCredentialLeaseSettingsAsync(CredentialTimeToLiveSettings credentialTimeToLiveSettings, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ)
+        {
+            Checker.NotNull(rabbitMQBackendMountPoint, "rabbitMQBackendMountPoint");
+            Checker.NotNull(credentialTimeToLiveSettings, "credentialTimeToLiveSettings");
+
+            await MakeVaultApiRequest(rabbitMQBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Post, credentialTimeToLiveSettings).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<CredentialTimeToLiveSettings>> RabbitMQReadCredentialLeaseSettingsAsync(string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ)
+        {
+            Checker.NotNull(rabbitMQBackendMountPoint, "rabbitMQBackendMountPoint");
+
+            return await MakeVaultApiRequest<Secret<CredentialTimeToLiveSettings>>(rabbitMQBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task RabbitMQWriteNamedRoleAsync(string rabbitMQRoleName, RabbitMQRoleDefinition rabbitMQRoleDefinition, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ)
+        {
+            Checker.NotNull(rabbitMQBackendMountPoint, "rabbitMQBackendMountPoint");
+            Checker.NotNull(rabbitMQRoleName, "rabbitMQRoleName");
+
+            await MakeVaultApiRequest(rabbitMQBackendMountPoint.Trim('/') + "/roles/" + rabbitMQRoleName, HttpMethod.Post, rabbitMQRoleDefinition).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<RabbitMQRoleDefinition>> RabbitMQReadNamedRoleAsync(string rabbitMQRoleName, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ)
+        {
+            Checker.NotNull(rabbitMQBackendMountPoint, "rabbitMQBackendMountPoint");
+            Checker.NotNull(rabbitMQRoleName, "rabbitMQRoleName");
+
+            var result = await MakeVaultApiRequest<Secret<RabbitMQRoleDefinition>>(rabbitMQBackendMountPoint.Trim('/') + "/roles/" + rabbitMQRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return result;
+        }
+
+        public async Task<Secret<ListInfo>> RabbitMQReadRoleListAsync(string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ)
+        {
+            Checker.NotNull(rabbitMQBackendMountPoint, "rabbitMQBackendMountPoint");
+
+            var result = await MakeVaultApiRequest<Secret<ListInfo>>(rabbitMQBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return result;
+        }
+
+        public async Task RabbitMQDeleteNamedRoleAsync(string rabbitMQRoleName, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ)
+        {
+            Checker.NotNull(rabbitMQBackendMountPoint, "rabbitMQBackendMountPoint");
+            Checker.NotNull(rabbitMQRoleName, "rabbitMQRoleName");
+
+            await MakeVaultApiRequest(rabbitMQBackendMountPoint.Trim('/') + "/roles/" + rabbitMQRoleName, HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<UsernamePasswordCredentials>> RabbitMQGenerateDynamicCredentialsAsync(string rabbitMQRoleName, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ)
+        {
+            Checker.NotNull(rabbitMQBackendMountPoint, "rabbitMQBackendMountPoint");
+            Checker.NotNull(rabbitMQRoleName, "rabbitMQRoleName");
+
+            var result = await MakeVaultApiRequest<Secret<UsernamePasswordCredentials>>(rabbitMQBackendMountPoint.Trim('/') + "/creds/" + rabbitMQRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 

@@ -13,9 +13,11 @@ using VaultSharp.Backends.Secret.Models.MongoDb;
 using VaultSharp.Backends.Secret.Models.MySql;
 using VaultSharp.Backends.Secret.Models.PKI;
 using VaultSharp.Backends.Secret.Models.PostgreSql;
+using VaultSharp.Backends.Secret.Models.RabbitMQ;
 using VaultSharp.Backends.Secret.Models.SSH;
 using VaultSharp.Backends.Secret.Models.Transit;
 using VaultSharp.Backends.System.Models;
+// ReSharper disable All
 
 namespace VaultSharp
 {
@@ -1642,15 +1644,15 @@ namespace VaultSharp
         /// Configures the connection information used to communicate with PostgreSql.
         /// This API is a root protected call.
         /// </summary>
-        /// <param name="mySqlConnectionInfo"><para>[required]</para>
+        /// <param name="postgreSqlConnectionInfo"><para>[required]</para>
         /// The PostgreSql connection information.</param>
-        /// <param name="mySqlBackendMountPoint"><para>[optional]</para>
+        /// <param name="postgreSqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the PostgreSql backend. Defaults to <see cref="SecretBackendType.PostgreSql" />
         /// Provide a value only if you have customized the PostgreSql mount point.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task PostgreSqlConfigureConnectionAsync(PostgreSqlConnectionInfo mySqlConnectionInfo, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
+        Task PostgreSqlConfigureConnectionAsync(PostgreSqlConnectionInfo postgreSqlConnectionInfo, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
 
         /// <summary>
         /// Reads the connection information used to communicate with PostgreSql.
@@ -1750,6 +1752,119 @@ namespace VaultSharp
         /// The secret with the <see cref="UsernamePasswordCredentials" /> as the data.
         /// </returns>
         Task<Secret<UsernamePasswordCredentials>> PostgreSqlGenerateDynamicCredentialsAsync(string postgreSqlRoleName, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
+
+        /// <summary>
+        /// Configures the connection information used to communicate with RabbitMQ.
+        /// This API is a root protected call.
+        /// </summary>
+        /// <param name="rabbitMQConnectionInfo"><para>[required]</para>
+        /// The RabbitMQ connection information.</param>
+        /// <param name="rabbitMQBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the RabbitMQ backend. Defaults to <see cref="SecretBackendType.RabbitMQ" />
+        /// Provide a value only if you have customized the RabbitMQ mount point.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task RabbitMQConfigureConnectionAsync(RabbitMQConnectionInfo rabbitMQConnectionInfo, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ);
+
+        ///// <summary>
+        ///// Reads the connection information used to communicate with RabbitMQ.
+        ///// </summary>
+        ///// <param name="rabbitMQBackendMountPoint"><para>[optional]</para>
+        ///// The mount point for the RabbitMQ backend. Defaults to <see cref="SecretBackendType.RabbitMQ" />
+        ///// Provide a value only if you have customized the RabbitMQ mount point.</param>
+        ///// <returns>
+        ///// The connection information.
+        ///// </returns>
+        //Task<Secret<RabbitMQConnectionInfo>> RabbitMQReadConnectionInfoAsync(string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ);
+
+        /// <summary>
+        /// Configures the lease settings for generated credentials. If not configured, leases default to 1 hour. 
+        /// This API is a root protected call.
+        /// </summary>
+        /// <param name="credentialTimeToLiveSettings"><para>[required]</para>
+        /// The credential lease settings.</param>
+        /// <param name="rabbitMQBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the RabbitMQ backend. Defaults to <see cref="SecretBackendType.RabbitMQ" />
+        /// Provide a value only if you have customized the RabbitMQ mount point.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task RabbitMQConfigureCredentialLeaseSettingsAsync(CredentialTimeToLiveSettings credentialTimeToLiveSettings, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ);
+
+        /// <summary>
+        /// Queries the RabbitMQ credential lease settings.
+        /// </summary>
+        /// <param name="rabbitMQBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the RabbitMQ backend. Defaults to <see cref="SecretBackendType.RabbitMQ" />
+        /// Provide a value only if you have customized the RabbitMQ mount point.</param>
+        /// <returns>The lease settings.</returns>
+        Task<Secret<CredentialTimeToLiveSettings>> RabbitMQReadCredentialLeaseSettingsAsync(string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ);
+
+        /// <summary>
+        /// Creates or updates a named RabbitMQ role.
+        /// </summary>
+        /// <param name="rabbitMQRoleName"><para>[required]</para>
+        /// Name of the RabbitMQ role.</param>
+        /// <param name="rabbitMQRoleDefinition"><para>[required]</para>
+        /// The RabbitMQ role definition with the creation, rollback query and lease information.</param>
+        /// <param name="rabbitMQBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the RabbitMQ backend. Defaults to <see cref="SecretBackendType.RabbitMQ" />
+        /// Provide a value only if you have customized the RabbitMQ mount point.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task RabbitMQWriteNamedRoleAsync(string rabbitMQRoleName, RabbitMQRoleDefinition rabbitMQRoleDefinition, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ);
+
+        /// <summary>
+        /// Queries a named RabbitMQ role definition
+        /// </summary>
+        /// <param name="rabbitMQRoleName"><para>[required]</para>
+        /// Name of the RabbitMQ role.</param>
+        /// <param name="rabbitMQBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the RabbitMQ backend. Defaults to <see cref="SecretBackendType.RabbitMQ" />
+        /// Provide a value only if you have customized the RabbitMQ mount point.</param>
+        /// <returns>
+        /// The secret with the RabbitMQ role definition with the creation, rollback query and lease information.
+        /// </returns>
+        Task<Secret<RabbitMQRoleDefinition>> RabbitMQReadNamedRoleAsync(string rabbitMQRoleName, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ);
+
+        /// <summary>
+        /// Returns a list of available roles. Only the role names are returned, not any values.
+        /// </summary>
+        /// <param name="rabbitMQBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the RabbitMQ backend. Defaults to <see cref="SecretBackendType.RabbitMQ" />
+        /// Provide a value only if you have customized the RabbitMQ mount point.</param>
+        /// <returns>
+        /// A list of available roles. Only the role names are returned, not any values.
+        /// </returns>
+        Task<Secret<ListInfo>> RabbitMQReadRoleListAsync(string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ);
+
+        /// <summary>
+        /// Deletes a named RabbitMQ role definition
+        /// </summary>
+        /// <param name="rabbitMQRoleName"><para>[required]</para>
+        /// Name of the RabbitMQ role.</param>
+        /// <param name="rabbitMQBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the RabbitMQ backend. Defaults to <see cref="SecretBackendType.RabbitMQ" />
+        /// Provide a value only if you have customized the RabbitMQ mount point.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task RabbitMQDeleteNamedRoleAsync(string rabbitMQRoleName, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ);
+
+        /// <summary>
+        /// Generates a new set of dynamic credentials based on the named role.
+        /// </summary>
+        /// <param name="rabbitMQRoleName"><para>[required]</para>
+        /// Name of the RabbitMQ role.</param>
+        /// <param name="rabbitMQBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the RabbitMQ backend. Defaults to <see cref="SecretBackendType.RabbitMQ" />
+        /// Provide a value only if you have customized the RabbitMQ mount point.</param>
+        /// <returns>
+        /// The secret with the <see cref="UsernamePasswordCredentials" /> as the data.
+        /// </returns>
+        Task<Secret<UsernamePasswordCredentials>> RabbitMQGenerateDynamicCredentialsAsync(string rabbitMQRoleName, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ);
 
         /// <summary>
         /// Creates or updates a named key.

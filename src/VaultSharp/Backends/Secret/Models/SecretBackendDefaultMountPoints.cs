@@ -24,6 +24,8 @@
 
         public const string PostgreSql = "postgresql";
 
+        public const string RabbitMQ = "rabbitmq";
+
         public const string SSH = "ssh";
 
         public const string Transit = "transit";
