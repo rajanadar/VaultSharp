@@ -1653,7 +1653,18 @@ namespace VaultSharp
         Task PostgreSqlConfigureConnectionAsync(PostgreSqlConnectionInfo mySqlConnectionInfo, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
 
         /// <summary>
-        /// Configures the lease settings for generated credentials.
+        /// Reads the connection information used to communicate with PostgreSql.
+        /// </summary>
+        /// <param name="postgreSqlBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the PostgreSql backend. Defaults to <see cref="SecretBackendType.PostgreSql" />
+        /// Provide a value only if you have customized the PostgreSql mount point.</param>
+        /// <returns>
+        /// The connection information.
+        /// </returns>
+        Task<Secret<PostgreSqlConnectionInfo>> PostgreSqlReadConnectionInfoAsync(string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
+
+        /// <summary>
+        /// Configures the lease settings for generated credentials. If not configured, leases default to 1 hour. 
         /// This API is a root protected call.
         /// </summary>
         /// <param name="credentialLeaseSettings"><para>[required]</para>
@@ -1667,45 +1678,65 @@ namespace VaultSharp
         Task PostgreSqlConfigureCredentialLeaseSettingsAsync(CredentialLeaseSettings credentialLeaseSettings, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
 
         /// <summary>
+        /// Queries the PostgreSql credential lease settings.
+        /// </summary>
+        /// <param name="postgreSqlBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the PostgreSql backend. Defaults to <see cref="SecretBackendType.PostgreSql" />
+        /// Provide a value only if you have customized the PostgreSql mount point.</param>
+        /// <returns>The lease settings.</returns>
+        Task<Secret<CredentialLeaseSettings>> PostgreSqlReadCredentialLeaseSettingsAsync(string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
+
+        /// <summary>
         /// Creates or updates a named PostgreSql role.
         /// </summary>
-        /// <param name="mySqlRoleName"><para>[required]</para>
+        /// <param name="postgreSqlRoleName"><para>[required]</para>
         /// Name of the PostgreSql role.</param>
-        /// <param name="mySqlRoleDefinition"><para>[required]</para>
+        /// <param name="postgreSqlRoleDefinition"><para>[required]</para>
         /// The PostgreSql role definition with the creation, rollback query and lease information.</param>
-        /// <param name="mySqlBackendMountPoint"><para>[optional]</para>
+        /// <param name="postgreSqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the PostgreSql backend. Defaults to <see cref="SecretBackendType.PostgreSql" />
         /// Provide a value only if you have customized the PostgreSql mount point.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task PostgreSqlWriteNamedRoleAsync(string mySqlRoleName, PostgreSqlRoleDefinition mySqlRoleDefinition, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
+        Task PostgreSqlWriteNamedRoleAsync(string postgreSqlRoleName, PostgreSqlRoleDefinition postgreSqlRoleDefinition, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
 
         /// <summary>
         /// Queries a named PostgreSql role definition
         /// </summary>
-        /// <param name="mySqlRoleName"><para>[required]</para>
+        /// <param name="postgreSqlRoleName"><para>[required]</para>
         /// Name of the PostgreSql role.</param>
-        /// <param name="mySqlBackendMountPoint"><para>[optional]</para>
+        /// <param name="postgreSqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the PostgreSql backend. Defaults to <see cref="SecretBackendType.PostgreSql" />
         /// Provide a value only if you have customized the PostgreSql mount point.</param>
         /// <returns>
         /// The secret with the PostgreSql role definition with the creation, rollback query and lease information.
         /// </returns>
-        Task<Secret<PostgreSqlRoleDefinition>> PostgreSqlReadNamedRoleAsync(string mySqlRoleName, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
+        Task<Secret<PostgreSqlRoleDefinition>> PostgreSqlReadNamedRoleAsync(string postgreSqlRoleName, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
+
+        /// <summary>
+        /// Returns a list of available roles. Only the role names are returned, not any values.
+        /// </summary>
+        /// <param name="postgreSqlBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the PostgreSql backend. Defaults to <see cref="SecretBackendType.PostgreSql" />
+        /// Provide a value only if you have customized the PostgreSql mount point.</param>
+        /// <returns>
+        /// A list of available roles. Only the role names are returned, not any values.
+        /// </returns>
+        Task<Secret<ListInfo>> PostgreSqlReadRoleListAsync(string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
 
         /// <summary>
         /// Deletes a named PostgreSql role definition
         /// </summary>
-        /// <param name="mySqlRoleName"><para>[required]</para>
+        /// <param name="postgreSqlRoleName"><para>[required]</para>
         /// Name of the PostgreSql role.</param>
-        /// <param name="mySqlBackendMountPoint"><para>[optional]</para>
+        /// <param name="postgreSqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the PostgreSql backend. Defaults to <see cref="SecretBackendType.PostgreSql" />
         /// Provide a value only if you have customized the PostgreSql mount point.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task PostgreSqlDeleteNamedRoleAsync(string mySqlRoleName, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
+        Task PostgreSqlDeleteNamedRoleAsync(string postgreSqlRoleName, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
 
         /// <summary>
         /// Generates a new set of dynamic credentials based on the named role.

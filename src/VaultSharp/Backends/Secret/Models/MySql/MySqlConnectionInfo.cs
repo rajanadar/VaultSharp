@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 
 namespace VaultSharp.Backends.Secret.Models.MySql
@@ -20,12 +21,13 @@ namespace VaultSharp.Backends.Secret.Models.MySql
         /// <summary>
         /// <para>[optional]</para>
         /// Gets or sets the value of the data source.
-        /// Probably deprecated, please use <see cref="ConnectionUrl"/>
+        /// Deprecated, please use <see cref="ConnectionUrl"/>
         /// </summary>
         /// <value>
         /// The value of the data source.
         /// </value>
         [JsonProperty("value")]
+        [Obsolete("Please use ConnectionUrl.")]
         public string Value { get; set; }
 
         /// <summary>

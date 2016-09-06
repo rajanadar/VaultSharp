@@ -16,6 +16,7 @@ using VaultSharp.Backends.Secret.Models.Consul;
 using VaultSharp.Backends.Secret.Models.MicrosoftSql;
 using VaultSharp.Backends.Secret.Models.MongoDb;
 using VaultSharp.Backends.Secret.Models.MySql;
+using VaultSharp.Backends.Secret.Models.PostgreSql;
 using VaultSharp.Backends.System.Models;
 using Xunit;
 
@@ -75,8 +76,13 @@ namespace VaultSharp.UnitTests
             public const string MicrosoftSqlCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\mssql.txt";
 
             // install mysql
-            public const bool RunMySqlSecretBackendAcceptanceTests = true;
+            public const bool RunMySqlSecretBackendAcceptanceTests = false;
             public const string MySqlCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\mysql.txt";
+
+            // install postgresql
+            // pgadmin, setup superuser (postgres), ?sslmode=disable
+            public const bool RunPostgreSqlSecretBackendAcceptanceTests = true;
+            public const string PostgreSqlCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\postgresql.txt";
         }
 
         // no need to modify these values.
@@ -129,11 +135,106 @@ namespace VaultSharp.UnitTests
                 await RunMongoDbSecretBackendApiTests();
                 await RunMicrosoftSqlSecretBackendApiTests();
                 await RunMySqlSecretBackendApiTests();
+                await RunPkiSecretBackendApiTests();
+                await RunPostgreSqlSecretBackendApiTests();
             }
             finally
             {
                 ShutdownVaultServer();
             }
+        }
+
+        private async Task RunPostgreSqlSecretBackendApiTests()
+        {
+            if (SetupData.RunPostgreSqlSecretBackendAcceptanceTests)
+            {
+                try
+                {
+                    if (!File.Exists(SetupData.PostgreSqlCredentialsFullPath))
+                    {
+                        throw new Exception("PostgreSql Credential file does not exist: " +
+                                            SetupData.PostgreSqlCredentialsFullPath);
+                    }
+
+                    var credentialsFileContent = File.ReadAllLines(SetupData.PostgreSqlCredentialsFullPath);
+
+                    if (credentialsFileContent.Count() < 1)
+                    {
+                        throw new Exception("PostgreSql Credential file needs at least 1 line: " +
+                                            credentialsFileContent);
+                    }
+
+                    var connectionInfo = new PostgreSqlConnectionInfo
+                    {
+                        ConnectionUrl = credentialsFileContent[0],
+                        VerifyConnection = true
+                    };
+
+                    await _authenticatedVaultClient.QuickMountSecretBackendAsync(SecretBackendType.PostgreSql);
+                    await _authenticatedVaultClient.PostgreSqlConfigureConnectionAsync(connectionInfo);
+
+                    var connection = await _authenticatedVaultClient.PostgreSqlReadConnectionInfoAsync();
+                    Assert.Equal(connectionInfo.ConnectionUrl, connection.Data.ConnectionUrl);
+
+                    var lease = new CredentialLeaseSettings
+                    {
+                        LeaseTime = "1m1s",
+                        MaximumLeaseTime = "2m1s"
+                    };
+
+                    await _authenticatedVaultClient.PostgreSqlConfigureCredentialLeaseSettingsAsync(lease);
+
+                    var queriedLease = await _authenticatedVaultClient.PostgreSqlReadCredentialLeaseSettingsAsync();
+                    Assert.Equal(lease.LeaseTime, queriedLease.Data.LeaseTime);
+                    Assert.Equal(lease.MaximumLeaseTime, queriedLease.Data.MaximumLeaseTime);
+
+                    var roleName = "postgresqlrole";
+
+                    var role = new PostgreSqlRoleDefinition
+                    {
+                        Sql = "CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT SELECT ON ALL TABLES IN SCHEMA public TO \"{{name}}\";"
+                    };
+
+                    await _authenticatedVaultClient.PostgreSqlWriteNamedRoleAsync(roleName, role);
+
+                    var queriedRole = await _authenticatedVaultClient.PostgreSqlReadNamedRoleAsync(roleName);
+                    Assert.Equal(role.Sql, queriedRole.Data.Sql);
+
+                    var roleName2 = "postgresqlrole2";
+                    var role2 = new PostgreSqlRoleDefinition
+                    {
+                        Sql = "SELECT 1"
+                    };
+
+                    await _authenticatedVaultClient.PostgreSqlWriteNamedRoleAsync(roleName2, role2);
+
+                    var roles = await _authenticatedVaultClient.PostgreSqlReadRoleListAsync();
+                    Assert.True(roles.Data.Keys.Count == 2);
+
+                    var generatedCreds = await _authenticatedVaultClient.PostgreSqlGenerateDynamicCredentialsAsync(roleName);
+                    Assert.NotNull(generatedCreds.Data.Password);
+
+                    await _authenticatedVaultClient.PostgreSqlDeleteNamedRoleAsync(roleName);
+                    await _authenticatedVaultClient.PostgreSqlDeleteNamedRoleAsync(roleName2);
+                }
+                finally
+                {
+                    try
+                    {
+                        await _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.PostgreSql);
+                    }
+                    catch
+                    {
+                        // you can always go to your PostgreSql pgAdmin user list and delete users.
+                    }
+                }
+            }
+        }
+
+        private async Task RunPkiSecretBackendApiTests()
+        {
+            // raja todo
+            await Task.FromResult(1);
         }
 
         private async Task RunMySqlSecretBackendApiTests()
@@ -222,8 +323,7 @@ namespace VaultSharp.UnitTests
                 }
             }
         }
-
-
+        
         private async Task RunMicrosoftSqlSecretBackendApiTests()
         {
             if (SetupData.RunMicrosoftSqlSecretBackendAcceptanceTests)

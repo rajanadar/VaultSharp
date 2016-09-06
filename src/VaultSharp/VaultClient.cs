@@ -1365,12 +1365,26 @@ namespace VaultSharp
             await MakeVaultApiRequest(postgreSqlBackendMountPoint.Trim('/') + "/config/connection", HttpMethod.Post, postgreSqlConnectionInfo).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<Secret<PostgreSqlConnectionInfo>> PostgreSqlReadConnectionInfoAsync(string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql)
+        {
+            Checker.NotNull(postgreSqlBackendMountPoint, "postgreSqlBackendMountPoint");
+
+            return await MakeVaultApiRequest<Secret<PostgreSqlConnectionInfo>>(postgreSqlBackendMountPoint.Trim('/') + "/config/connection", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
         public async Task PostgreSqlConfigureCredentialLeaseSettingsAsync(CredentialLeaseSettings credentialLeaseSettings, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql)
         {
             Checker.NotNull(postgreSqlBackendMountPoint, "postgreSqlBackendMountPoint");
             Checker.NotNull(credentialLeaseSettings, "credentialLeaseSettings");
 
             await MakeVaultApiRequest(postgreSqlBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Post, credentialLeaseSettings).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<CredentialLeaseSettings>> PostgreSqlReadCredentialLeaseSettingsAsync(string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql)
+        {
+            Checker.NotNull(postgreSqlBackendMountPoint, "postgreSqlBackendMountPoint");
+
+            return await MakeVaultApiRequest<Secret<CredentialLeaseSettings>>(postgreSqlBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task PostgreSqlWriteNamedRoleAsync(string postgreSqlRoleName, PostgreSqlRoleDefinition postgreSqlRoleDefinition, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql)
@@ -1387,6 +1401,14 @@ namespace VaultSharp
             Checker.NotNull(postgreSqlRoleName, "postgreSqlRoleName");
 
             var result = await MakeVaultApiRequest<Secret<PostgreSqlRoleDefinition>>(postgreSqlBackendMountPoint.Trim('/') + "/roles/" + postgreSqlRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return result;
+        }
+
+        public async Task<Secret<ListInfo>> PostgreSqlReadRoleListAsync(string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql)
+        {
+            Checker.NotNull(postgreSqlBackendMountPoint, "postgreSqlBackendMountPoint");
+
+            var result = await MakeVaultApiRequest<Secret<ListInfo>>(postgreSqlBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
