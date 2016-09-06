@@ -10,7 +10,6 @@ using VaultSharp.Backends.Authentication.Models.GitHub;
 using VaultSharp.Backends.Authentication.Models.Token;
 using VaultSharp.Backends.Authentication.Models.UsernamePassword;
 using VaultSharp.Backends.Secret.Models;
-using VaultSharp.Backends.Secret.Models.MySql;
 using VaultSharp.Backends.Secret.Models.PKI;
 using VaultSharp.Backends.Secret.Models.SSH;
 using VaultSharp.Backends.System.Models;
@@ -44,7 +43,6 @@ namespace VaultSharp.UnitTests.End2End
             await UsernamePasswordAuthenticationProviderTests();
             await TokenAuthenticationProviderTests();
             await MySqlCredentialTests();
-            await MySqlCredentialStrongTests();
             await SSHOTPTests();
 
             // await SSHDynamicTests();
@@ -780,51 +778,6 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
             var authBackends = await tokenClient.GetAllEnabledAuthenticationBackendsAsync();
             Assert.True(authBackends.Data.Any());
-        }
-
-        private async Task MySqlCredentialStrongTests()
-        {
-            var mountPoint = "mysql" + Guid.NewGuid();
-            var backend = new SecretBackend
-            {
-                MountPoint = mountPoint,
-                BackendType = SecretBackendType.MySql,
-            };
-
-            var role = "readonly2";
-
-            await _authenticatedVaultClient.MountSecretBackendAsync(backend);
-            await _authenticatedVaultClient.MySqlConfigureConnectionAsync(new MySqlConnectionInfo()
-            {
-                DataSourceName = "root:root@tcp(127.0.0.1:3306)/"
-            }, mountPoint);
-
-            var sql = "CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT SELECT ON *.* TO '{{name}}'@'%';";
-
-            await _authenticatedVaultClient.MySqlConfigureCredentialLeaseSettingsAsync(new CredentialLeaseSettings()
-            {
-                LeaseTime = "1h",
-                MaximumLeaseTime = "2h"
-            }, mountPoint);
-
-            await _authenticatedVaultClient.MySqlWriteNamedRoleAsync(role, new MySqlRoleDefinition()
-            {
-                Sql = sql
-            }, mountPoint);
-
-            var readRole = await _authenticatedVaultClient.MySqlReadNamedRoleAsync(role, mountPoint);
-            Assert.Equal(sql, readRole.Data.Sql);
-
-            var credentials =
-                await _authenticatedVaultClient.MySqlGenerateDynamicCredentialsAsync(role, backend.MountPoint);
-
-            Assert.NotNull(credentials.LeaseId);
-            Assert.NotNull(credentials.Data.Username);
-            Assert.NotNull(credentials.Data.Password);
-
-            await _authenticatedVaultClient.MySqlDeleteNamedRoleAsync(role, mountPoint);
-
-            await _authenticatedVaultClient.UnmountSecretBackendAsync(backend.MountPoint);
         }
 
         private async Task MySqlCredentialTests()

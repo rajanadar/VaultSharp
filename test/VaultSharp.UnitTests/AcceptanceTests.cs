@@ -15,6 +15,7 @@ using VaultSharp.Backends.Secret.Models.Cassandra;
 using VaultSharp.Backends.Secret.Models.Consul;
 using VaultSharp.Backends.Secret.Models.MicrosoftSql;
 using VaultSharp.Backends.Secret.Models.MongoDb;
+using VaultSharp.Backends.Secret.Models.MySql;
 using VaultSharp.Backends.System.Models;
 using Xunit;
 
@@ -72,6 +73,10 @@ namespace VaultSharp.UnitTests
             // raja todo: not complete. connection issues with connection string.
             public const bool RunMicrosoftSqlSecretBackendAcceptanceTests = false;
             public const string MicrosoftSqlCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\mssql.txt";
+
+            // install mysql
+            public const bool RunMySqlSecretBackendAcceptanceTests = true;
+            public const string MySqlCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\mysql.txt";
         }
 
         // no need to modify these values.
@@ -123,12 +128,101 @@ namespace VaultSharp.UnitTests
                 await RunGenericSecretBackendApiTests();
                 await RunMongoDbSecretBackendApiTests();
                 await RunMicrosoftSqlSecretBackendApiTests();
+                await RunMySqlSecretBackendApiTests();
             }
             finally
             {
                 ShutdownVaultServer();
             }
         }
+
+        private async Task RunMySqlSecretBackendApiTests()
+        {
+            if (SetupData.RunMySqlSecretBackendAcceptanceTests)
+            {
+                try
+                {
+                    if (!File.Exists(SetupData.MySqlCredentialsFullPath))
+                    {
+                        throw new Exception("MySql Credential file does not exist: " +
+                                            SetupData.MySqlCredentialsFullPath);
+                    }
+
+                    var credentialsFileContent = File.ReadAllLines(SetupData.MySqlCredentialsFullPath);
+
+                    if (credentialsFileContent.Count() < 1)
+                    {
+                        throw new Exception("MySql Credential file needs at least 1 line: " +
+                                            credentialsFileContent);
+                    }
+
+                    var connectionInfo = new MySqlConnectionInfo
+                    {
+                        ConnectionUrl = credentialsFileContent[0],
+                        VerifyConnection = true
+                    };
+
+                    await _authenticatedVaultClient.QuickMountSecretBackendAsync(SecretBackendType.MySql);
+                    await _authenticatedVaultClient.MySqlConfigureConnectionAsync(connectionInfo);
+
+                    var connection = await _authenticatedVaultClient.MySqlReadConnectionInfoAsync();
+                    Assert.Equal(connectionInfo.ConnectionUrl, connection.Data.ConnectionUrl);
+
+                    var lease = new CredentialLeaseSettings
+                    {
+                        LeaseTime = "1m1s",
+                        MaximumLeaseTime = "2m1s"
+                    };
+
+                    await _authenticatedVaultClient.MySqlConfigureCredentialLeaseSettingsAsync(lease);
+
+                    var queriedLease = await _authenticatedVaultClient.MySqlReadCredentialLeaseSettingsAsync();
+                    Assert.Equal(lease.LeaseTime, queriedLease.Data.LeaseTime);
+                    Assert.Equal(lease.MaximumLeaseTime, queriedLease.Data.MaximumLeaseTime);
+
+                    var roleName = "mysqlrole";
+
+                    var role = new MySqlRoleDefinition
+                    {
+                        Sql = "CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT SELECT ON *.* TO '{{name}}'@'%';"
+                    };
+
+                    await _authenticatedVaultClient.MySqlWriteNamedRoleAsync(roleName, role);
+
+                    var queriedRole = await _authenticatedVaultClient.MySqlReadNamedRoleAsync(roleName);
+                    Assert.Equal(role.Sql, queriedRole.Data.Sql);
+
+                    var roleName2 = "mysqlrole2";
+                    var role2 = new MySqlRoleDefinition
+                    {
+                        Sql = "SELECT 1"
+                    };
+
+                    await _authenticatedVaultClient.MySqlWriteNamedRoleAsync(roleName2, role2);
+
+                    var roles = await _authenticatedVaultClient.MySqlReadRoleListAsync();
+                    Assert.True(roles.Data.Keys.Count == 2);
+
+                    var generatedCreds = await _authenticatedVaultClient.MySqlGenerateDynamicCredentialsAsync(roleName);
+                    Assert.NotNull(generatedCreds.Data.Password);
+
+                    await _authenticatedVaultClient.MySqlDeleteNamedRoleAsync(roleName);
+                    await _authenticatedVaultClient.MySqlDeleteNamedRoleAsync(roleName2);
+                }
+                finally
+                {
+                    try
+                    {
+                        await _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.MySql);
+                    }
+                    catch
+                    {
+                        // you can always go to your MySql user list and delete users.
+                    }
+                }
+            }
+        }
+
 
         private async Task RunMicrosoftSqlSecretBackendApiTests()
         {

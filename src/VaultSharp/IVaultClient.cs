@@ -1246,6 +1246,17 @@ namespace VaultSharp
         Task MySqlConfigureConnectionAsync(MySqlConnectionInfo mySqlConnectionInfo, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql);
 
         /// <summary>
+        /// Reads the connection information used to communicate with MySql.
+        /// </summary>
+        /// <param name="mySqlBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the MySql backend. Defaults to <see cref="SecretBackendType.MySql" />
+        /// Provide a value only if you have customized the MySql mount point.</param>
+        /// <returns>
+        /// The connection information.
+        /// </returns>
+        Task<Secret<MySqlConnectionInfo>> MySqlReadConnectionInfoAsync(string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql);
+
+        /// <summary>
         /// Configures the lease settings for generated credentials.
         /// This API is a root protected call.
         /// </summary>
@@ -1258,6 +1269,15 @@ namespace VaultSharp
         /// The task.
         /// </returns>
         Task MySqlConfigureCredentialLeaseSettingsAsync(CredentialLeaseSettings credentialLeaseSettings, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql);
+
+        /// <summary>
+        /// Queries the MySql credential lease settings.
+        /// </summary>
+        /// <param name="mySqlBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the MySql backend. Defaults to <see cref="SecretBackendType.MySql" />
+        /// Provide a value only if you have customized the MySql mount point.</param>
+        /// <returns>The lease settings.</returns>
+        Task<Secret<CredentialLeaseSettings>> MySqlReadCredentialLeaseSettingsAsync(string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql);
 
         /// <summary>
         /// Creates or updates a named MySql role.
@@ -1286,6 +1306,17 @@ namespace VaultSharp
         /// The secret with the MySql role definition with the creation, rollback query and lease information.
         /// </returns>
         Task<Secret<MySqlRoleDefinition>> MySqlReadNamedRoleAsync(string mySqlRoleName, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql);
+
+        /// <summary>
+        /// Returns a list of available roles. Only the role names are returned, not any values.
+        /// </summary>
+        /// <param name="mySqlBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the MySql backend. Defaults to <see cref="SecretBackendType.MySql" />
+        /// Provide a value only if you have customized the MySql mount point.</param>
+        /// <returns>
+        /// A list of available roles. Only the role names are returned, not any values.
+        /// </returns>
+        Task<Secret<ListInfo>> MySqlReadRoleListAsync(string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql);
 
         /// <summary>
         /// Deletes a named MySql role definition

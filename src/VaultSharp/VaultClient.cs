@@ -1080,12 +1080,26 @@ namespace VaultSharp
             await MakeVaultApiRequest(mySqlBackendMountPoint.Trim('/') + "/config/connection", HttpMethod.Post, mySqlConnectionInfo).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<Secret<MySqlConnectionInfo>> MySqlReadConnectionInfoAsync(string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql)
+        {
+            Checker.NotNull(mySqlBackendMountPoint, "mySqlBackendMountPoint");
+
+            return await MakeVaultApiRequest<Secret<MySqlConnectionInfo>>(mySqlBackendMountPoint.Trim('/') + "/config/connection", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
         public async Task MySqlConfigureCredentialLeaseSettingsAsync(CredentialLeaseSettings credentialLeaseSettings, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql)
         {
             Checker.NotNull(mySqlBackendMountPoint, "mySqlBackendMountPoint");
             Checker.NotNull(credentialLeaseSettings, "credentialLeaseSettings");
 
             await MakeVaultApiRequest(mySqlBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Post, credentialLeaseSettings).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<CredentialLeaseSettings>> MySqlReadCredentialLeaseSettingsAsync(string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql)
+        {
+            Checker.NotNull(mySqlBackendMountPoint, "mySqlBackendMountPoint");
+
+            return await MakeVaultApiRequest<Secret<CredentialLeaseSettings>>(mySqlBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task MySqlWriteNamedRoleAsync(string mySqlRoleName, MySqlRoleDefinition mySqlRoleDefinition, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql)
@@ -1102,6 +1116,14 @@ namespace VaultSharp
             Checker.NotNull(mySqlRoleName, "mySqlRoleName");
 
             var result = await MakeVaultApiRequest<Secret<MySqlRoleDefinition>>(mySqlBackendMountPoint.Trim('/') + "/roles/" + mySqlRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return result;
+        }
+
+        public async Task<Secret<ListInfo>> MySqlReadRoleListAsync(string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql)
+        {
+            Checker.NotNull(mySqlBackendMountPoint, "mySqlBackendMountPoint");
+
+            var result = await MakeVaultApiRequest<Secret<ListInfo>>(mySqlBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
