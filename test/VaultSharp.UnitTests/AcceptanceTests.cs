@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using VaultSharp.Backends.Audit.Models;
@@ -147,10 +148,78 @@ namespace VaultSharp.UnitTests
                 await RunPostgreSqlSecretBackendApiTests();
                 await RunRabbitMQSecretBackendApiTests();
                 await RunSSHSecretBackendApiTests();
+                await RunTransitSecretBackendApiTests();
             }
             finally
             {
                 ShutdownVaultServer();
+            }
+        }
+
+        private async Task RunTransitSecretBackendApiTests()
+        {
+            var mountPoint = "transit" + Guid.NewGuid();
+
+            try
+            {
+                var backend = new SecretBackend
+                {
+                    BackendType = SecretBackendType.Transit,
+                    MountPoint = mountPoint,
+                };
+
+                await _authenticatedVaultClient.MountSecretBackendAsync(backend);
+
+                var keyName = "test_key" + Guid.NewGuid();
+                await _authenticatedVaultClient.TransitCreateEncryptionKeyAsync(keyName, true, true, backend.MountPoint);
+
+                var keyInfo = await _authenticatedVaultClient.TransitGetEncryptionKeyInfoAsync(keyName, backend.MountPoint);
+
+                Assert.Equal(keyName, keyInfo.Data.Name);
+                Assert.True(keyInfo.Data.MustUseKeyDerivation);
+                Assert.False(keyInfo.Data.IsDeletionAllowed);
+
+                await _authenticatedVaultClient.TransitConfigureEncryptionKeyAsync(keyName, isDeletionAllowed: true, transitBackendMountPoint: backend.MountPoint);
+
+                keyInfo = await _authenticatedVaultClient.TransitGetEncryptionKeyInfoAsync(keyName, backend.MountPoint);
+                Assert.True(keyInfo.Data.IsDeletionAllowed);
+
+                var context = "context1";
+                var plainText = "raja";
+                var encodedPlainText = Convert.ToBase64String(Encoding.UTF8.GetBytes(plainText));
+
+                var nonce = Convert.ToBase64String(Enumerable.Range(0, 12).Select(i => (byte)i).ToArray());
+                var nonce2 = Convert.ToBase64String(Enumerable.Range(0, 12).Select(i => (byte)(i + 1)).ToArray());
+
+                var cipherText = await _authenticatedVaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce, transitBackendMountPoint: backend.MountPoint);
+                var convergentCipherText = await _authenticatedVaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce, transitBackendMountPoint: backend.MountPoint);
+
+                Assert.Equal(convergentCipherText.Data.CipherText, cipherText.Data.CipherText);
+
+                var nonConvergentCipherText = await _authenticatedVaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce2, transitBackendMountPoint: backend.MountPoint);
+                Assert.NotEqual(nonConvergentCipherText.Data.CipherText, cipherText.Data.CipherText);
+
+                var plainText2 = Encoding.UTF8.GetString(Convert.FromBase64String((await _authenticatedVaultClient.TransitDecryptAsync(keyName, cipherText.Data.CipherText, context, nonce, backend.MountPoint)).Data.PlainText));
+                Assert.Equal(plainText, plainText2);
+
+                await _authenticatedVaultClient.TransitRotateEncryptionKeyAsync(keyName, backend.MountPoint);
+                var cipherText2 = await _authenticatedVaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce, transitBackendMountPoint: backend.MountPoint);
+
+                Assert.NotEqual(cipherText.Data.CipherText, cipherText2.Data.CipherText);
+
+                await _authenticatedVaultClient.TransitRewrapWithLatestEncryptionKeyAsync(keyName, cipherText.Data.CipherText, context, nonce, backend.MountPoint);
+
+                var newKey1 = await _authenticatedVaultClient.TransitCreateDataKeyAsync(keyName, false, context, nonce, 128, backend.MountPoint);
+                Assert.Null(newKey1.Data.PlainTextKey);
+
+                newKey1 = await _authenticatedVaultClient.TransitCreateDataKeyAsync(keyName, true, context, nonce, 128, backend.MountPoint);
+                Assert.NotNull(newKey1.Data.PlainTextKey);
+
+                await _authenticatedVaultClient.TransitDeleteEncryptionKeyAsync(keyName, backend.MountPoint);
+            }
+            finally
+            {
+                await _authenticatedVaultClient.UnmountSecretBackendAsync(mountPoint);
             }
         }
 

@@ -11,7 +11,6 @@ using VaultSharp.Backends.Authentication.Models.Token;
 using VaultSharp.Backends.Authentication.Models.UsernamePassword;
 using VaultSharp.Backends.Secret.Models;
 using VaultSharp.Backends.Secret.Models.PKI;
-using VaultSharp.Backends.Secret.Models.SSH;
 using VaultSharp.Backends.System.Models;
 using Xunit;
 
@@ -30,15 +29,11 @@ namespace VaultSharp.UnitTests.End2End
             if (!DevServer)
             {
                 await RawSecretAndMoreTests();
-                // await GithubAuthenticationProviderTests();
             }
 
             await TokenTests();
-            // await _authenticatedVaultClient.StepDownActiveNodeAsync();
 
-            await EncryptStrongTests();
             await SecretTests();
-            await EncryptTests();
             await AppIdAuthenticationProviderTests();
             await UsernamePasswordAuthenticationProviderTests();
             await TokenAuthenticationProviderTests();
@@ -177,81 +172,8 @@ namespace VaultSharp.UnitTests.End2End
             await _authenticatedVaultClient.UnmountSecretBackendAsync(mountpoint);
         }
 
-        private async Task SSHDynamicTests()
-        {
-            var sshKeyName = Guid.NewGuid().ToString();
-            var sshRoleName = Guid.NewGuid().ToString();
-
-            var mountPoint = "ssh" + Guid.NewGuid();
-            var backend = new SecretBackend
-            {
-                BackendType = SecretBackendType.SSH,
-                MountPoint = mountPoint,
-            };
-
-            var privateKey = @"-----BEGIN RSA PRIVATE KEY-----
-MIICXgIBAAKBgQC2+cfxgJ5LsWAq+vRZB77pCwy5P+tnLahCeq4OBViloSfKVq/y
-Hq/u3YScNNoqkailjmOMJtzKDD9W7dNasfu5zGWxjLUL4NwasbEK1jseKfbwKjmc
-Nw1KYByx5BTECN0l5FxGUkQQVSmwJvqgyXDEHCsAvC72x96uBk2qJTAoLwIDAQAB
-AoGBALXyCvAKhV2fM5GJmhAts5joc+6BsQMYU4hHlWw7xLpuVbLOIIcSHL/ZZlQt
-+gL6dEisHjDvM/110EYQl2pIMZYO+WU+OSmRKU8U12bjDmoypONZokBplXsVDeY4
-vbb7yVmOpazr/lpM4cqxL7TeRgxypQT08t7ukgt/7NOSHx0BAkEA8B0YXsxvxJLp
-g1LmCnP0L3vcsRw4wLNtEBfmJc/okknIyIAadLBW5mFXxQNIjj1JGTGbK/lbedBP
-ypVgY5l9uQJBAMMU6qtupP671bzEXACt6Gst/qyx7vMHMc7yRdckrXr5Wl/uyxDC
-BbErr5xg6e6qi3HnZBQbYbnYVn6gI4u2iScCQQDhK0e5TpnZi7Oz1T+ouchZ5xu0
-czS9cQVrvB21g90jolHJxGgK2XsEnHCEbmnSCaLNH3nWqQahmznYTnCPtlbxAkAE
-WhUaGe/IVvxfp6m9wiNrMK17wMRp24E68qCoOgM8uQ9REIyrJQjneOgD/w1464kM
-03KiGDJH6RGU5ZGlbj8FAkEAmm9GGdG4/rcI2o5kUQJWOPkr2KPy/X34FyD9etbv
-TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
------END RSA PRIVATE KEY-----";
-
-            var ip = "127.0.0.1";
-            var user = "rajan";
-
-            await _authenticatedVaultClient.MountSecretBackendAsync(backend);
-            await _authenticatedVaultClient.SSHWriteNamedKeyAsync(sshKeyName, privateKey, mountPoint);
-            await _authenticatedVaultClient.SSHWriteNamedRoleAsync(sshRoleName, new SSHDynamicRoleDefinition
-            {
-                RoleDefaultUser = user,
-                CIDRValues = "127.0.0.1/10",
-                AdminUser = user,
-                KeyName = sshKeyName
-            }, mountPoint);
-
-            var role = await _authenticatedVaultClient.SSHReadNamedRoleAsync(sshRoleName, mountPoint);
-            Assert.True(role.Data.KeyTypeToGenerate == SSHKeyType.dynamic);
-
-            var credentials = await
-                _authenticatedVaultClient.SSHGenerateDynamicCredentialsAsync(sshRoleName, ip,
-                    sshBackendMountPoint: mountPoint);
-
-            Assert.Equal(user, credentials.Data.Username);
-
-            var v1 = await _unauthenticatedVaultClient.SSHVerifyOTPAsync("blahblah", mountPoint);
-            Assert.Null(v1);
-
-            var v2 = await _authenticatedVaultClient.SSHVerifyOTPAsync("blah", mountPoint);
-            Assert.Null(v2);
-
-            var v3 = await _authenticatedVaultClient.SSHVerifyOTPAsync(credentials.Data.Key, mountPoint);
-            Assert.Null(v3);
-
-            var roles = await _authenticatedVaultClient.SSHLookupRolesAsync(ip, mountPoint);
-            Assert.NotNull(roles.Data.Roles[0]);
-
-            await _authenticatedVaultClient.SSHDeleteNamedRoleAsync(sshRoleName, mountPoint);
-            await _authenticatedVaultClient.SSHDeleteNamedKeyAsync(sshKeyName, mountPoint);
-            await _authenticatedVaultClient.UnmountSecretBackendAsync(mountPoint);
-        }
-
         private static Uri _vaultUri;
         private static MasterCredentials _masterCredentials;
-
-        private static readonly IAuthenticationInfo DummyAuthenticationInfo =
-            new TokenAuthenticationInfo(Guid.NewGuid().ToString());
-
-        private static readonly IVaultClient DummyClient = VaultClientFactory.CreateVaultClient(new Uri("http://blah"),
-            DummyAuthenticationInfo);
 
         private static IVaultClient _authenticatedVaultClient;
         private static IVaultClient _unauthenticatedVaultClient;
@@ -434,99 +356,6 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     }
                 }
             }
-        }
-
-        private async Task EncryptStrongTests()
-        {
-            var keyName = "test_key" + Guid.NewGuid();
-            var context = "context1";
-
-            var plainText = "raja";
-            var encodedPlainText = Convert.ToBase64String(Encoding.UTF8.GetBytes(plainText));
-
-            var backend = new SecretBackend
-            {
-                BackendType = SecretBackendType.Transit,
-                MountPoint = "transit" + Guid.NewGuid(),
-            };
-
-            await _authenticatedVaultClient.MountSecretBackendAsync(backend);
-
-            await _authenticatedVaultClient.TransitCreateEncryptionKeyAsync(keyName, true, true, backend.MountPoint);
-            var keyInfo = await _authenticatedVaultClient.TransitGetEncryptionKeyInfoAsync(keyName, backend.MountPoint);
-
-            Assert.Equal(keyName, keyInfo.Data.Name);
-            Assert.True(keyInfo.Data.MustUseKeyDerivation);
-            Assert.False(keyInfo.Data.IsDeletionAllowed);
-
-            await _authenticatedVaultClient.TransitConfigureEncryptionKeyAsync(keyName, isDeletionAllowed: true, transitBackendMountPoint: backend.MountPoint);
-
-            keyInfo = await _authenticatedVaultClient.TransitGetEncryptionKeyInfoAsync(keyName, backend.MountPoint);
-            Assert.True(keyInfo.Data.IsDeletionAllowed);
-
-            var nonce = Convert.ToBase64String(Enumerable.Range(0, 12).Select(i => (byte) i).ToArray());
-            var nonce2 = Convert.ToBase64String(Enumerable.Range(0, 12).Select(i => (byte)(i+1)).ToArray());
-
-            var cipherText = await _authenticatedVaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce, transitBackendMountPoint: backend.MountPoint);
-            var convergentCipherText = await _authenticatedVaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce, transitBackendMountPoint: backend.MountPoint);
-
-            Assert.Equal(convergentCipherText.Data.CipherText, cipherText.Data.CipherText);
-
-            var nonConvergentCipherText = await _authenticatedVaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce2, transitBackendMountPoint: backend.MountPoint);
-            Assert.NotEqual(nonConvergentCipherText.Data.CipherText, cipherText.Data.CipherText);
-
-            var plainText2 = Encoding.UTF8.GetString(Convert.FromBase64String((await _authenticatedVaultClient.TransitDecryptAsync(keyName, cipherText.Data.CipherText, context, nonce, backend.MountPoint)).Data.PlainText));
-
-            Assert.Equal(plainText, plainText2);
-
-            await _authenticatedVaultClient.TransitRotateEncryptionKeyAsync(keyName, backend.MountPoint);
-            var cipherText2 = await _authenticatedVaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce, transitBackendMountPoint: backend.MountPoint);
-
-            Assert.NotEqual(cipherText.Data.CipherText, cipherText2.Data.CipherText);
-
-            await _authenticatedVaultClient.TransitRewrapWithLatestEncryptionKeyAsync(keyName, cipherText.Data.CipherText, context, nonce, backend.MountPoint);
-
-            var newKey1 = await _authenticatedVaultClient.TransitCreateDataKeyAsync(keyName, false, context, nonce, 128, backend.MountPoint);
-            Assert.Null(newKey1.Data.PlainTextKey);
-
-            newKey1 = await _authenticatedVaultClient.TransitCreateDataKeyAsync(keyName, true, context, nonce, 128, backend.MountPoint);
-            Assert.NotNull(newKey1.Data.PlainTextKey);
-
-            await _authenticatedVaultClient.TransitDeleteEncryptionKeyAsync(keyName, backend.MountPoint);
-            await _authenticatedVaultClient.UnmountSecretBackendAsync(backend.MountPoint);
-        }
-
-        private async Task EncryptTests()
-        {
-            var keyName = "test_key";
-            var context = "context1";
-
-            var plainText = "raja";
-            var encodedPlainText = Convert.ToBase64String(Encoding.UTF8.GetBytes(plainText));
-
-            var backend = new SecretBackend
-            {
-                BackendType = SecretBackendType.Transit,
-                MountPoint = "transit1",
-            };
-
-            await _authenticatedVaultClient.MountSecretBackendAsync(backend);
-
-            var cipherText1 = await _authenticatedVaultClient.TransitEncryptAsync(keyName, encodedPlainText, transitBackendMountPoint: backend.MountPoint);
-            var cipherText2 = await _authenticatedVaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, transitBackendMountPoint: backend.MountPoint);
-
-            var plainText1 = Encoding.UTF8.GetString(Convert.FromBase64String((await _authenticatedVaultClient.TransitDecryptAsync(keyName, cipherText1.Data.CipherText, transitBackendMountPoint: backend.MountPoint)).Data.PlainText));
-            var plainText2 = Encoding.UTF8.GetString(Convert.FromBase64String((await _authenticatedVaultClient.TransitDecryptAsync(keyName, cipherText2.Data.CipherText, context, backend.MountPoint)).Data.PlainText));
-
-            Assert.Equal(plainText, plainText1);
-            Assert.Equal(plainText, plainText2);
-
-            var plainText3 = Encoding.UTF8.GetString(Convert.FromBase64String((await _authenticatedVaultClient.TransitDecryptAsync(keyName, cipherText2.Data.CipherText, null, backend.MountPoint)).Data.PlainText));
-
-            // key derivation is not enabled since we created the key using default values.
-            Assert.Equal(plainText, plainText3);
-
-            await _authenticatedVaultClient.UnmountSecretBackendAsync(backend.MountPoint);
         }
 
         private async Task TokenTests()
