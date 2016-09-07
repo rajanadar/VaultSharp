@@ -18,6 +18,7 @@ using VaultSharp.Backends.Secret.Models.MongoDb;
 using VaultSharp.Backends.Secret.Models.MySql;
 using VaultSharp.Backends.Secret.Models.PostgreSql;
 using VaultSharp.Backends.Secret.Models.RabbitMQ;
+using VaultSharp.Backends.Secret.Models.SSH;
 using VaultSharp.Backends.System.Models;
 using Xunit;
 
@@ -88,7 +89,7 @@ namespace VaultSharp.UnitTests
             // insttall erlang otp, rabbitmq server, then follow this thread http://stackoverflow.com/questions/28258392/rabbitmq-has-nodedown-error/34538688#34538688
             // since msi doesn't install the service properly. then run the plugin
             // launch http://localhost:15672
-            public const bool RunRabbitMQSecretBackendAcceptanceTests = true;
+            public const bool RunRabbitMQSecretBackendAcceptanceTests = false;
             public const string RabbitMQCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\rabbitmq.txt";
         }
 
@@ -145,10 +146,121 @@ namespace VaultSharp.UnitTests
                 await RunPkiSecretBackendApiTests();
                 await RunPostgreSqlSecretBackendApiTests();
                 await RunRabbitMQSecretBackendApiTests();
+                await RunSSHSecretBackendApiTests();
             }
             finally
             {
                 ShutdownVaultServer();
+            }
+        }
+
+        private async Task RunSSHSecretBackendApiTests()
+        {
+            var mountPoint = "ssh" + Guid.NewGuid();
+
+            try
+            {
+                var backend = new SecretBackend
+                {
+                    BackendType = SecretBackendType.SSH,
+                    MountPoint = mountPoint,
+                };
+
+                await _authenticatedVaultClient.MountSecretBackendAsync(backend);
+
+                var sshKeyName = Guid.NewGuid().ToString();
+                var sshRoleName = Guid.NewGuid().ToString();
+
+                var privateKey = @"-----BEGIN RSA PRIVATE KEY-----
+MIICXgIBAAKBgQC2+cfxgJ5LsWAq+vRZB77pCwy5P+tnLahCeq4OBViloSfKVq/y
+Hq/u3YScNNoqkailjmOMJtzKDD9W7dNasfu5zGWxjLUL4NwasbEK1jseKfbwKjmc
+Nw1KYByx5BTECN0l5FxGUkQQVSmwJvqgyXDEHCsAvC72x96uBk2qJTAoLwIDAQAB
+AoGBALXyCvAKhV2fM5GJmhAts5joc+6BsQMYU4hHlWw7xLpuVbLOIIcSHL/ZZlQt
++gL6dEisHjDvM/110EYQl2pIMZYO+WU+OSmRKU8U12bjDmoypONZokBplXsVDeY4
+vbb7yVmOpazr/lpM4cqxL7TeRgxypQT08t7ukgt/7NOSHx0BAkEA8B0YXsxvxJLp
+g1LmCnP0L3vcsRw4wLNtEBfmJc/okknIyIAadLBW5mFXxQNIjj1JGTGbK/lbedBP
+ypVgY5l9uQJBAMMU6qtupP671bzEXACt6Gst/qyx7vMHMc7yRdckrXr5Wl/uyxDC
+BbErr5xg6e6qi3HnZBQbYbnYVn6gI4u2iScCQQDhK0e5TpnZi7Oz1T+ouchZ5xu0
+czS9cQVrvB21g90jolHJxGgK2XsEnHCEbmnSCaLNH3nWqQahmznYTnCPtlbxAkAE
+WhUaGe/IVvxfp6m9wiNrMK17wMRp24E68qCoOgM8uQ9REIyrJQjneOgD/w1464kM
+03KiGDJH6RGU5ZGlbj8FAkEAmm9GGdG4/rcI2o5kUQJWOPkr2KPy/X34FyD9etbv
+TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
+-----END RSA PRIVATE KEY-----";
+
+                var ip = "127.0.0.1";
+                var user = "rajan";
+
+                await _authenticatedVaultClient.SSHWriteNamedKeyAsync(sshKeyName, privateKey, mountPoint);
+
+                // update
+                await _authenticatedVaultClient.SSHWriteNamedKeyAsync(sshKeyName, privateKey, mountPoint);
+
+                var sshOTPRoleDefinition = new SSHOTPRoleDefinition
+                {
+                    RoleDefaultUser = user,
+                    CIDRValues = "127.0.0.1/10",
+                    Port = 22
+                };
+
+                await _authenticatedVaultClient.SSHWriteNamedRoleAsync(sshRoleName, sshOTPRoleDefinition, mountPoint);
+
+                var role = await _authenticatedVaultClient.SSHReadNamedRoleAsync(sshRoleName, mountPoint);
+                Assert.True(role.Data.KeyTypeToGenerate == SSHKeyType.otp);
+                Assert.Equal(sshOTPRoleDefinition.CIDRValues, role.Data.CIDRValues);
+
+                var rolename2 = "sshrolename2";
+                await _authenticatedVaultClient.SSHWriteNamedRoleAsync(rolename2, sshOTPRoleDefinition, mountPoint);
+
+                var roleList = await _authenticatedVaultClient.SSHReadRoleListAsync(mountPoint);
+                Assert.True(roleList.Data.Keys.Count == 2);
+
+                var roleNames = string.Join(",", sshRoleName, rolename2);
+                await _authenticatedVaultClient.SSHConfigureZeroAddressRolesAsync(roleNames, mountPoint);
+
+                var readRoles = await _authenticatedVaultClient.SSHReadZeroAddressRolesAsync(mountPoint);
+                Assert.Equal(2, readRoles.Data.Roles.Count);
+
+                await _authenticatedVaultClient.SSHDeleteZeroAddressRolesAsync(mountPoint);
+
+                var credentials = await
+                    _authenticatedVaultClient.SSHGenerateDynamicCredentialsAsync(sshRoleName, ip,
+                        sshBackendMountPoint: mountPoint);
+
+                Assert.NotNull(credentials.Data.Key);
+
+                var roles = await _authenticatedVaultClient.SSHLookupRolesAsync(ip, mountPoint);
+                Assert.NotNull(roles.Data.Roles[0]);
+
+                await Assert.ThrowsAsync<Exception>(() => UnauthenticatedVaultClient.SSHVerifyOTPAsync("blahblah", mountPoint));
+
+                var v3 = await _authenticatedVaultClient.SSHVerifyOTPAsync(credentials.Data.Key, mountPoint);
+                Assert.NotNull(v3.Data.RoleName);
+
+                var dynamicRoleName = Guid.NewGuid().ToString();
+
+                await _authenticatedVaultClient.SSHWriteNamedRoleAsync(dynamicRoleName, new SSHDynamicRoleDefinition
+                {
+                    RoleDefaultUser = user,
+                    CIDRValues = "127.0.0.1/10",
+                    AdminUser = user,
+                    KeyName = sshKeyName
+                }, mountPoint);
+
+                var dynamicRole = await _authenticatedVaultClient.SSHReadNamedRoleAsync(dynamicRoleName, mountPoint);
+                Assert.True(dynamicRole.Data.KeyTypeToGenerate == SSHKeyType.dynamic);
+
+                // error adding public key to authorized_keys file in target
+                // var dynamicCredentials = await _authenticatedVaultClient.SSHGenerateDynamicCredentialsAsync(dynamicRoleName, ip, sshBackendMountPoint: mountPoint);
+                // Assert.NotNull(dynamicCredentials.Data.Key);
+
+                await _authenticatedVaultClient.SSHDeleteNamedRoleAsync(sshRoleName, mountPoint);
+                await _authenticatedVaultClient.SSHDeleteNamedRoleAsync(rolename2, mountPoint);
+
+                await _authenticatedVaultClient.SSHDeleteNamedKeyAsync(sshKeyName, mountPoint);
+            }
+            finally
+            {
+                await _authenticatedVaultClient.UnmountSecretBackendAsync(mountPoint);
             }
         }
 

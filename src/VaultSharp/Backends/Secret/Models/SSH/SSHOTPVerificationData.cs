@@ -24,5 +24,14 @@ namespace VaultSharp.Backends.Secret.Models.SSH
         /// </value>
         [JsonProperty("username")]
         public string Username { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name of the role.
+        /// </summary>
+        /// <value>
+        /// The name of the role.
+        /// </value>
+        [JsonProperty("role_name")]
+        public string RoleName { get; set; }
     }
 }

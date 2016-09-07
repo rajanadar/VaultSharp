@@ -43,7 +43,6 @@ namespace VaultSharp.UnitTests.End2End
             await UsernamePasswordAuthenticationProviderTests();
             await TokenAuthenticationProviderTests();
             await MySqlCredentialTests();
-            await SSHOTPTests();
 
             // await SSHDynamicTests();
             await PKITests();
@@ -236,71 +235,6 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
             var v3 = await _authenticatedVaultClient.SSHVerifyOTPAsync(credentials.Data.Key, mountPoint);
             Assert.Null(v3);
-
-            var roles = await _authenticatedVaultClient.SSHLookupRolesAsync(ip, mountPoint);
-            Assert.NotNull(roles.Data.Roles[0]);
-
-            await _authenticatedVaultClient.SSHDeleteNamedRoleAsync(sshRoleName, mountPoint);
-            await _authenticatedVaultClient.SSHDeleteNamedKeyAsync(sshKeyName, mountPoint);
-            await _authenticatedVaultClient.UnmountSecretBackendAsync(mountPoint);
-        }
-
-        private async Task SSHOTPTests()
-        {
-            var sshKeyName = Guid.NewGuid().ToString();
-            var sshRoleName = Guid.NewGuid().ToString();
-
-            var mountPoint = "ssh" + Guid.NewGuid();
-            var backend = new SecretBackend
-            {
-                BackendType = SecretBackendType.SSH,
-                MountPoint = mountPoint,
-            };
-
-            var privateKey = @"-----BEGIN RSA PRIVATE KEY-----
-MIICXgIBAAKBgQC2+cfxgJ5LsWAq+vRZB77pCwy5P+tnLahCeq4OBViloSfKVq/y
-Hq/u3YScNNoqkailjmOMJtzKDD9W7dNasfu5zGWxjLUL4NwasbEK1jseKfbwKjmc
-Nw1KYByx5BTECN0l5FxGUkQQVSmwJvqgyXDEHCsAvC72x96uBk2qJTAoLwIDAQAB
-AoGBALXyCvAKhV2fM5GJmhAts5joc+6BsQMYU4hHlWw7xLpuVbLOIIcSHL/ZZlQt
-+gL6dEisHjDvM/110EYQl2pIMZYO+WU+OSmRKU8U12bjDmoypONZokBplXsVDeY4
-vbb7yVmOpazr/lpM4cqxL7TeRgxypQT08t7ukgt/7NOSHx0BAkEA8B0YXsxvxJLp
-g1LmCnP0L3vcsRw4wLNtEBfmJc/okknIyIAadLBW5mFXxQNIjj1JGTGbK/lbedBP
-ypVgY5l9uQJBAMMU6qtupP671bzEXACt6Gst/qyx7vMHMc7yRdckrXr5Wl/uyxDC
-BbErr5xg6e6qi3HnZBQbYbnYVn6gI4u2iScCQQDhK0e5TpnZi7Oz1T+ouchZ5xu0
-czS9cQVrvB21g90jolHJxGgK2XsEnHCEbmnSCaLNH3nWqQahmznYTnCPtlbxAkAE
-WhUaGe/IVvxfp6m9wiNrMK17wMRp24E68qCoOgM8uQ9REIyrJQjneOgD/w1464kM
-03KiGDJH6RGU5ZGlbj8FAkEAmm9GGdG4/rcI2o5kUQJWOPkr2KPy/X34FyD9etbv
-TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
------END RSA PRIVATE KEY-----";
-
-            var ip = "127.0.0.1";
-            var user = "rajan";
-
-            await _authenticatedVaultClient.MountSecretBackendAsync(backend);
-            await _authenticatedVaultClient.SSHWriteNamedKeyAsync(sshKeyName, privateKey, mountPoint);
-            await _authenticatedVaultClient.SSHWriteNamedRoleAsync(sshRoleName, new SSHOTPRoleDefinition
-            {
-                RoleDefaultUser = user,
-                CIDRValues = "127.0.0.1/10",
-            }, mountPoint);
-
-            var role = await _authenticatedVaultClient.SSHReadNamedRoleAsync(sshRoleName, mountPoint);
-            Assert.True(role.Data.KeyTypeToGenerate == SSHKeyType.otp);
-
-            var credentials = await
-                _authenticatedVaultClient.SSHGenerateDynamicCredentialsAsync(sshRoleName, ip,
-                    sshBackendMountPoint: mountPoint);
-
-            Assert.Equal(user, credentials.Data.Username);
-
-            var v1 = await _unauthenticatedVaultClient.SSHVerifyOTPAsync("blahblah", mountPoint);
-            Assert.Null(v1);
-
-            var v2 = await _authenticatedVaultClient.SSHVerifyOTPAsync("blah", mountPoint);
-            Assert.Null(v2);
-
-            var v3 = await _authenticatedVaultClient.SSHVerifyOTPAsync(credentials.Data.Key, mountPoint);
-            Assert.NotNull(v3);
 
             var roles = await _authenticatedVaultClient.SSHLookupRolesAsync(ip, mountPoint);
             Assert.NotNull(roles.Data.Roles[0]);

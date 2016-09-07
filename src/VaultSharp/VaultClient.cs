@@ -1537,12 +1537,43 @@ namespace VaultSharp
             return result;
         }
 
+        public async Task<Secret<ListInfo>> SSHReadRoleListAsync(string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH)
+        {
+            Checker.NotNull(sshBackendMountPoint, "sshBackendMountPoint");
+
+            var result = await MakeVaultApiRequest<Secret<ListInfo>>(sshBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return result;
+        }
+
         public async Task SSHDeleteNamedRoleAsync(string sshRoleName, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH)
         {
             Checker.NotNull(sshBackendMountPoint, "sshBackendMountPoint");
             Checker.NotNull(sshRoleName, "sshRoleName");
 
             await MakeVaultApiRequest(sshBackendMountPoint.Trim('/') + "/roles/" + sshRoleName, HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<SSHRoleData>> SSHReadZeroAddressRolesAsync(string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH)
+        {
+            Checker.NotNull(sshBackendMountPoint, "sshBackendMountPoint");
+
+            var result = await MakeVaultApiRequest<Secret<SSHRoleData>>(sshBackendMountPoint.Trim('/') + "/config/zeroaddress", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return result;
+        }
+
+        public async Task SSHConfigureZeroAddressRolesAsync(string roleNames, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH)
+        {
+            Checker.NotNull(sshBackendMountPoint, "sshBackendMountPoint");
+            Checker.NotNull(roleNames, "roleNames");
+
+            var requestData = new {roles = roleNames};
+            await MakeVaultApiRequest(sshBackendMountPoint.Trim('/') + "/config/zeroaddress", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task SSHDeleteZeroAddressRolesAsync(string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH)
+        {
+            Checker.NotNull(sshBackendMountPoint, "sshBackendMountPoint");
+            await MakeVaultApiRequest(sshBackendMountPoint.Trim('/') + "/config/zeroaddress", HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<SSHCredentials>> SSHGenerateDynamicCredentialsAsync(string sshRoleName, string ipAddress, string username = null, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH)

@@ -1925,6 +1925,17 @@ namespace VaultSharp
         Task<Secret<SSHRoleDefinition>> SSHReadNamedRoleAsync(string sshRoleName, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH);
 
         /// <summary>
+        /// Returns a list of available roles. Only the role names are returned, not any values.
+        /// </summary>
+        /// <param name="sshBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the SSH backend. Defaults to <see cref="SecretBackendType.SSH" />
+        /// Provide a value only if you have customized the SSH mount point.</param>
+        /// <returns>
+        /// The list of role names.
+        /// </returns>
+        Task<Secret<ListInfo>> SSHReadRoleListAsync(string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH);
+
+        /// <summary>
         /// Deletes a named role.
         /// </summary>
         /// <param name="sshRoleName"><para>[required]</para>
@@ -1936,6 +1947,42 @@ namespace VaultSharp
         /// The task.
         /// </returns>
         Task SSHDeleteNamedRoleAsync(string sshRoleName, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH);
+
+        /// <summary>
+        /// Returns the list of configured zero-address roles.
+        /// </summary>
+        /// <param name="sshBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the SSH backend. Defaults to <see cref="SecretBackendType.SSH" />
+        /// Provide a value only if you have customized the SSH mount point.</param>
+        /// <returns>
+        /// The roles.
+        /// </returns>
+        Task<Secret<SSHRoleData>> SSHReadZeroAddressRolesAsync(string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH);
+
+        /// <summary>
+        /// Configures zero-address roles.
+        /// </summary>
+        /// <param name="roleNames"><para>[required]</para>
+        /// A string containing comma separated list of role names which allows credentials to be requested for any IP address. 
+        /// CIDR blocks previously registered under these roles will be ignored.</param>
+        /// <param name="sshBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the SSH backend. Defaults to <see cref="SecretBackendType.SSH" />
+        /// Provide a value only if you have customized the SSH mount point.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task SSHConfigureZeroAddressRolesAsync(string roleNames, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH);
+
+        /// <summary>
+        /// Deletes the zero-address roles configuration.
+        /// </summary>
+        /// <param name="sshBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the SSH backend. Defaults to <see cref="SecretBackendType.SSH" />
+        /// Provide a value only if you have customized the SSH mount point.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task SSHDeleteZeroAddressRolesAsync(string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH);
 
         /// <summary>
         /// Generates a dynamic SSH credentials for a specific username and IP Address based on the named role.
