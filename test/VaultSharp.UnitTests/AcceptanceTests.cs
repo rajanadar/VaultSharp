@@ -17,6 +17,7 @@ using VaultSharp.Backends.Secret.Models.Consul;
 using VaultSharp.Backends.Secret.Models.MicrosoftSql;
 using VaultSharp.Backends.Secret.Models.MongoDb;
 using VaultSharp.Backends.Secret.Models.MySql;
+using VaultSharp.Backends.Secret.Models.PKI;
 using VaultSharp.Backends.Secret.Models.PostgreSql;
 using VaultSharp.Backends.Secret.Models.RabbitMQ;
 using VaultSharp.Backends.Secret.Models.SSH;
@@ -144,7 +145,10 @@ namespace VaultSharp.UnitTests
                 await RunMongoDbSecretBackendApiTests();
                 await RunMicrosoftSqlSecretBackendApiTests();
                 await RunMySqlSecretBackendApiTests();
-                await RunPkiSecretBackendApiTests();
+
+                // raja todo. pki doesn't work with file system backends. verified with -dev server inmem.
+                // await RunPkiSecretBackendApiTests();
+
                 await RunPostgreSqlSecretBackendApiTests();
                 await RunRabbitMQSecretBackendApiTests();
                 await RunSSHSecretBackendApiTests();
@@ -510,8 +514,148 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private async Task RunPkiSecretBackendApiTests()
         {
-            // raja todo
-            await Task.FromResult(1);
+            var mountpoint = "pki" + Guid.NewGuid();
+
+            try
+            {
+                var backend = new SecretBackend
+                {
+                    BackendType = SecretBackendType.PKI,
+                    MountPoint = mountpoint
+                };
+
+                await _authenticatedVaultClient.MountSecretBackendAsync(backend);
+
+                await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.PKIReadCRLExpirationAsync(mountpoint));
+
+                var expiry = "124h";
+                var commonName = "blah.example.com";
+
+                await _authenticatedVaultClient.PKIWriteCRLExpirationAsync(expiry, mountpoint);
+
+                var readExpiry = await _authenticatedVaultClient.PKIReadCRLExpirationAsync(mountpoint);
+                Assert.Equal(expiry, readExpiry.Data.Expiry);
+
+                var nocaCert = await UnauthenticatedVaultClient.PKIReadCACertificateAsync(CertificateFormat.pem, mountpoint);
+                Assert.Null(nocaCert.CertificateContent);
+
+                // generate root certificate
+                var rootCertificateWithoutPrivateKey =
+                    await _authenticatedVaultClient.PKIGenerateRootCACertificateAsync(new RootCertificateRequestOptions
+                    {
+                        CommonName = commonName,
+                        ExportPrivateKey = false
+                    }, mountpoint);
+
+                Assert.Null(rootCertificateWithoutPrivateKey.Data.PrivateKey);
+
+                var rootCertificate =
+                    await _authenticatedVaultClient.PKIGenerateRootCACertificateAsync(new RootCertificateRequestOptions
+                    {
+                        CommonName = commonName,
+                        ExportPrivateKey = true
+                    }, mountpoint);
+
+                Assert.NotNull(rootCertificate.Data.PrivateKey);
+
+                var caCert = await UnauthenticatedVaultClient.PKIReadCACertificateAsync(CertificateFormat.pem, mountpoint);
+                Assert.NotNull(caCert.CertificateContent);
+
+                var caReadCert = await UnauthenticatedVaultClient.PKIReadCertificateAsync("ca", mountpoint);
+                Assert.Equal(caCert.CertificateContent, caReadCert.Data.CertificateContent);
+
+                var caSerialNumberReadCert = await UnauthenticatedVaultClient.PKIReadCertificateAsync(rootCertificate.Data.SerialNumber, mountpoint);
+                Assert.Equal(caCert.CertificateContent, caSerialNumberReadCert.Data.CertificateContent);
+
+                var crlCert = await UnauthenticatedVaultClient.PKIReadCertificateAsync("crl", mountpoint);
+                Assert.NotNull(crlCert.Data.CertificateContent);
+
+                var crlCert2 = await UnauthenticatedVaultClient.PKIReadCRLCertificateAsync(CertificateFormat.pem, mountpoint);
+                Assert.NotNull(crlCert2.CertificateContent);
+
+                await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.PKIReadCertificateEndpointsAsync(mountpoint));
+
+                var crlEndpoint = VaultUriWithPort.AbsoluteUri + "/v1/" + mountpoint + "/crl";
+                var issuingEndpoint = VaultUriWithPort.AbsoluteUri + "/v1/" + mountpoint + "/ca";
+
+                var endpoints = new CertificateEndpointOptions
+                {
+                    CRLDistributionPointEndpoints = string.Join(",", new List<string> { crlEndpoint }),
+                    IssuingCertificateEndpoints = string.Join(",", new List<string> { issuingEndpoint }),
+                };
+
+                await _authenticatedVaultClient.PKIWriteCertificateEndpointsAsync(endpoints, mountpoint);
+
+                var readEndpoints = await _authenticatedVaultClient.PKIReadCertificateEndpointsAsync(mountpoint);
+
+                Assert.Equal(crlEndpoint, readEndpoints.Data.CRLDistributionPointEndpoints.First());
+                Assert.Equal(issuingEndpoint, readEndpoints.Data.IssuingCertificateEndpoints.First());
+
+                var rotate = await _authenticatedVaultClient.PKIRotateCRLAsync(mountpoint);
+                Assert.True(rotate.Data);
+
+                await _authenticatedVaultClient.RevokeSecretAsync(rootCertificateWithoutPrivateKey.LeaseId);
+
+                var roleName = Guid.NewGuid().ToString();
+
+                var role = new CertificateRoleDefinition
+                {
+                    AllowedDomains = "example.com",
+                    AllowSubdomains = true,
+                    MaximumTimeToLive = "72h",
+                };
+
+                await _authenticatedVaultClient.PKIWriteNamedRoleAsync(roleName, role, mountpoint);
+
+                var readRole = await _authenticatedVaultClient.PKIReadNamedRoleAsync(roleName, mountpoint);
+                Assert.Equal(role.AllowedDomains, readRole.Data.AllowedDomains);
+
+                await _authenticatedVaultClient.PKIWriteNamedRoleAsync(roleName + "2", role, mountpoint);
+
+                var roles = await _authenticatedVaultClient.PKIReadRoleListAsync(mountpoint);
+                Assert.True(roles.Data.Keys.Count == 2);
+
+                var credentials =
+                    await
+                        _authenticatedVaultClient.PKIGenerateDynamicCredentialsAsync(roleName,
+                            new CertificateCredentialsRequestOptions
+                            {
+                                CommonName = commonName,
+                                CertificateFormat = CertificateFormat.pem
+                            }, mountpoint);
+
+                Assert.NotNull(credentials.Data.PrivateKey);
+
+                var credCert =
+                    await UnauthenticatedVaultClient.PKIReadCertificateAsync(credentials.Data.SerialNumber, mountpoint);
+
+                // \n differences in the content.
+                Assert.True(credCert.Data.CertificateContent.Contains(credentials.Data.CertificateContent));
+
+                var pemBundle = rootCertificate.Data.CertificateContent + "\n" + rootCertificate.Data.PrivateKey;
+
+                await _authenticatedVaultClient.PKIConfigureCACertificateAsync(pemBundle, mountpoint);
+
+                var derCaCert =
+                    await UnauthenticatedVaultClient.PKIReadCACertificateAsync(CertificateFormat.der, mountpoint);
+                Assert.NotNull(derCaCert.CertificateContent);
+
+                await _authenticatedVaultClient.PKIRevokeCertificateAsync(credentials.Data.SerialNumber, mountpoint);
+                await _authenticatedVaultClient.PKIDeleteNamedRoleAsync(roleName, mountpoint);
+
+                var revocationData = await _authenticatedVaultClient.PKIRevokeCertificateAsync(rootCertificate.Data.SerialNumber, mountpoint);
+                Assert.True(revocationData.Data.RevocationTime > 0);
+
+                await _authenticatedVaultClient.PKITidyAsync(new TidyRequestOptions
+                {
+                    TidyUpCertificateStore = true,
+                    TidyUpRevocationList = true
+                }, mountpoint);
+            }
+            finally
+            {
+                await _authenticatedVaultClient.UnmountSecretBackendAsync(mountpoint);
+            }
         }
 
         private async Task RunMySqlSecretBackendApiTests()

@@ -1377,6 +1377,15 @@ namespace VaultSharp
         Task<Secret<RawCertificateData>> PKIReadCertificateAsync(string predicate, string pkiBackendMountPoint = SecretBackendDefaultMountPoints.PKI);
 
         /// <summary>
+        /// Returns a list of the current certificates by serial number only.
+        /// </summary>
+        /// <param name="pkiBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretBackendType.PKI" />
+        /// Provide a value only if you have customized the PKI mount point.</param>
+        /// <returns>The list of the current certificates by serial number only.</returns>
+        Task<Secret<ListInfo>> PKIReadCertificateListAsync(string pkiBackendMountPoint = SecretBackendDefaultMountPoints.PKI);
+        
+        /// <summary>
         /// Allows submitting the CA information for the backend via a PEM file containing the CA certificate and its private key, concatenated.
         /// Not needed if you are generating a self-signed root certificate, and not used if you have a signed intermediate CA certificate with a generated key.
         /// If you have already set a certificate and key, they will be overridden.
@@ -1467,7 +1476,7 @@ namespace VaultSharp
         /// <returns>
         /// A status indicating if the rotation succeeded.
         /// </returns>
-        Task<bool> PKIRotateCRLAsync(string pkiBackendMountPoint = SecretBackendDefaultMountPoints.PKI);
+        Task<Secret<bool>> PKIRotateCRLAsync(string pkiBackendMountPoint = SecretBackendDefaultMountPoints.PKI);
 
         /// <summary>
         /// Generates a new private key and a CSR for signing.
@@ -1563,6 +1572,17 @@ namespace VaultSharp
         Task<Secret<CertificateRoleDefinition>> PKIReadNamedRoleAsync(string pkiRoleName, string pkiBackendMountPoint = SecretBackendDefaultMountPoints.PKI);
 
         /// <summary>
+        /// Queries the list of available roles. Only the role names are returned, not any values.
+        /// </summary>
+        /// <param name="pkiBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretBackendType.PKI" />
+        /// Provide a value only if you have customized the PKI mount point.</param>
+        /// <returns>
+        /// The secret with the role names.
+        /// </returns>
+        Task<Secret<ListInfo>> PKIReadRoleListAsync(string pkiBackendMountPoint = SecretBackendDefaultMountPoints.PKI);
+
+        /// <summary>
         /// Deletes the named PKI role definition.
         /// </summary>
         /// <param name="pkiRoleName"><para>[required]</para>
@@ -1639,6 +1659,20 @@ namespace VaultSharp
         /// The secret with the new certificate data.
         /// </returns>
         Task<Secret<NewCertificateData>> PKISignCertificateVerbatimAsync(VerbatimCertificateSigningRequestOptions verbatimCertificateSigningRequestOptions, string pkiBackendMountPoint = SecretBackendDefaultMountPoints.PKI);
+
+        /// <summary>
+        /// Allows tidying up the backend storage and/or CRL by removing certificates that have expired 
+        /// and are past a certain buffer period beyond their expiration time.
+        /// </summary>
+        /// <param name="tidyRequestOptions"><para>[optional]</para>
+        /// The tidy request options.</param>
+        /// <param name="pkiBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretBackendType.PKI" />
+        /// Provide a value only if you have customized the PKI mount point.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task PKITidyAsync(TidyRequestOptions tidyRequestOptions = null, string pkiBackendMountPoint = SecretBackendDefaultMountPoints.PKI);
 
         /// <summary>
         /// Configures the connection information used to communicate with PostgreSql.

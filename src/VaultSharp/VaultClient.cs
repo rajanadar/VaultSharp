@@ -1173,6 +1173,14 @@ namespace VaultSharp
             return result;
         }
 
+        public async Task<Secret<ListInfo>> PKIReadCertificateListAsync(string pkiBackendMountPoint = SecretBackendDefaultMountPoints.PKI)
+        {
+            Checker.NotNull(pkiBackendMountPoint, "pkiBackendMountPoint");
+
+            var result = await MakeVaultApiRequest<Secret<ListInfo>>(pkiBackendMountPoint.Trim('/') + "/certs/?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return result;
+        }
+
         public async Task PKIConfigureCACertificateAsync(string pemBundle, string pkiBackendMountPoint = SecretBackendDefaultMountPoints.PKI)
         {
             Checker.NotNull(pkiBackendMountPoint, "pkiBackendMountPoint");
@@ -1230,12 +1238,12 @@ namespace VaultSharp
             };
         }
 
-        public async Task<bool> PKIRotateCRLAsync(string pkiBackendMountPoint = SecretBackendDefaultMountPoints.PKI)
+        public async Task<Secret<bool>> PKIRotateCRLAsync(string pkiBackendMountPoint = SecretBackendDefaultMountPoints.PKI)
         {
             Checker.NotNull(pkiBackendMountPoint, "pkiBackendMountPoint");
 
             var result = await MakeVaultApiRequest<Secret<dynamic>>(pkiBackendMountPoint.Trim('/') + "/crl/rotate", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-            return result.Data.success;
+            return GetMappedSecret(result, (bool)result.Data.success);
         }
 
         public async Task<Secret<RawCertificateSigningRequestData>> PKIGenerateIntermediateCACertificateSigningRequestAsync(CertificateSigningRequestOptions certificateSigningRequestOptions, string pkiBackendMountPoint = SecretBackendDefaultMountPoints.PKI)
@@ -1303,6 +1311,14 @@ namespace VaultSharp
             return result;
         }
 
+        public async Task<Secret<ListInfo>> PKIReadRoleListAsync(string pkiBackendMountPoint = SecretBackendDefaultMountPoints.PKI)
+        {
+            Checker.NotNull(pkiBackendMountPoint, "pkiBackendMountPoint");
+
+            var result = await MakeVaultApiRequest<Secret<ListInfo>>(pkiBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return result;
+        }
+
         public async Task PKIDeleteNamedRoleAsync(string pkiRoleName, string pkiBackendMountPoint = SecretBackendDefaultMountPoints.PKI)
         {
             Checker.NotNull(pkiBackendMountPoint, "pkiBackendMountPoint");
@@ -1356,6 +1372,18 @@ namespace VaultSharp
             result.Data.CertificateFormat = verbatimCertificateSigningRequestOptions.CertificateFormat;
 
             return result;
+        }
+
+        public async Task PKITidyAsync(TidyRequestOptions tidyRequestOptions = null, string pkiBackendMountPoint = SecretBackendDefaultMountPoints.PKI)
+        {
+            Checker.NotNull(pkiBackendMountPoint, "pkiBackendMountPoint");
+
+            if (tidyRequestOptions == null)
+            {
+                tidyRequestOptions = new TidyRequestOptions();
+            }
+
+            await MakeVaultApiRequest(pkiBackendMountPoint.Trim('/') + "/tidy", HttpMethod.Post, tidyRequestOptions).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task PostgreSqlConfigureConnectionAsync(PostgreSqlConnectionInfo postgreSqlConnectionInfo, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql)

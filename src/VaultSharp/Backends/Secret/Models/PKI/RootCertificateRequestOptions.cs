@@ -66,6 +66,18 @@ namespace VaultSharp.Backends.Secret.Models.PKI
         public int MaximumPathLength { get; set; }
 
         /// <summary>
+        /// <para>[optional]</para>
+        /// Gets or sets a value indicating whether [exclude common name from subject alternative names].
+        /// If set, the given common name will not be included in DNS or Email Subject Alternate Names (as appropriate). 
+        /// Useful if the CN is not a hostname or email address, but is instead some human-readable identifier.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [exclude common name from subject alternative names]; otherwise, <c>false</c>.
+        /// </value>
+        [JsonProperty("exclude_cn_from_sans")]
+        public bool ExcludeCommonNameFromSubjectAlternativeNames { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="RootCertificateRequestOptions"/> class.
         /// </summary>
         public RootCertificateRequestOptions()

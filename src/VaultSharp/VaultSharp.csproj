@@ -75,6 +75,7 @@
     <Compile Include="Backends\Secret\Models\MySql\MySqlRoleDefinition.cs" />
     <Compile Include="Backends\Secret\Models\MySql\MySqlConnectionInfo.cs" />
     <Compile Include="Backends\Secret\Models\PKI\CertificateEndpointOptions.cs" />
+    <Compile Include="Backends\Secret\Models\PKI\TidyRequestOptions.cs" />
     <Compile Include="Backends\Secret\Models\PKI\NewCertificateData.cs" />
     <Compile Include="Backends\Secret\Models\PKI\IntermediateCertificateData.cs" />
     <Compile Include="Backends\Secret\Models\PKI\RootCertificateData.cs" />

@@ -198,6 +198,18 @@ namespace VaultSharp.Backends.Secret.Models.PKI
         public int KeyBits { get; set; }
 
         /// <summary>
+        /// Gets or sets the allowed key usage constraint on issued certificates. 
+        /// This is a comma-separated string; valid values can be found at https://golang.org/pkg/crypto/x509/#KeyUsage -- 
+        /// simply drop the KeyUsage part of the value. 
+        /// Values are not case-sensitive. To specify no key usage constraints, set this to an empty string. 
+        /// Defaults to DigitalSignature,KeyAgreement,KeyEncipherment.
+        /// </summary>
+        /// <value>
+        /// The key usage.
+        /// </value>
+        public string KeyUsage { get; set; }
+
+        /// <summary>
         /// <para>[optional]</para>
         /// Gets or sets a value indicating whether [use certificate signing request common name].
         /// If set, when used with the CSR signing API, the common name in the CSR will be used instead of taken from the input data. 
@@ -228,6 +240,7 @@ namespace VaultSharp.Backends.Secret.Models.PKI
             KeyType = CertificateKeyType.rsa;
             KeyBits = 2048;
             UseCertificateSigningRequestCommonName = false;
+            KeyUsage = "DigitalSignature,KeyAgreement,KeyEncipherment";
         }
     }
 }
