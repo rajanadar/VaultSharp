@@ -23,26 +23,26 @@ namespace VaultSharp.Backends.Authentication.Providers
 {
     internal static class AuthenticationProviderFactory
     {
-        public static IAuthenticationProvider CreateAuthenticationProvider(IAuthenticationInfo authenticationInfo, Uri baseAddress, TimeSpan? serviceTimeout = null, bool continueAsyncTasksOnCapturedContext = false)
+        public static IAuthenticationProvider CreateAuthenticationProvider(IAuthenticationInfo authenticationInfo, Uri baseAddress, TimeSpan? serviceTimeout = null, bool continueAsyncTasksOnCapturedContext = false, Action<HttpClient> postHttpClientInitializeAction = null)
         {
             if (authenticationInfo.AuthenticationBackendType == AuthenticationBackendType.AppId)
             {
-                return new AppIdAuthenticationProvider(authenticationInfo as AppIdAuthenticationInfo, new HttpDataAccessManager(baseAddress, serviceTimeout: serviceTimeout), continueAsyncTasksOnCapturedContext);
+                return new AppIdAuthenticationProvider(authenticationInfo as AppIdAuthenticationInfo, new HttpDataAccessManager(baseAddress, serviceTimeout: serviceTimeout, postHttpClientInitializeAction: postHttpClientInitializeAction), continueAsyncTasksOnCapturedContext);
             }
 
             if (authenticationInfo.AuthenticationBackendType == AuthenticationBackendType.AppRole)
             {
-                return new AppRoleAuthenticationProvider(authenticationInfo as AppRoleAuthenticationInfo, new HttpDataAccessManager(baseAddress, serviceTimeout: serviceTimeout), continueAsyncTasksOnCapturedContext);
+                return new AppRoleAuthenticationProvider(authenticationInfo as AppRoleAuthenticationInfo, new HttpDataAccessManager(baseAddress, serviceTimeout: serviceTimeout, postHttpClientInitializeAction: postHttpClientInitializeAction), continueAsyncTasksOnCapturedContext);
             }
 
             if (authenticationInfo.AuthenticationBackendType == AuthenticationBackendType.GitHub)
             {
-                return new GitHubAuthenticationProvider(authenticationInfo as GitHubAuthenticationInfo, new HttpDataAccessManager(baseAddress, serviceTimeout: serviceTimeout), continueAsyncTasksOnCapturedContext);
+                return new GitHubAuthenticationProvider(authenticationInfo as GitHubAuthenticationInfo, new HttpDataAccessManager(baseAddress, serviceTimeout: serviceTimeout, postHttpClientInitializeAction: postHttpClientInitializeAction), continueAsyncTasksOnCapturedContext);
             }
 
             if (authenticationInfo.AuthenticationBackendType == AuthenticationBackendType.LDAP)
             {
-                return new LDAPAuthenticationProvider(authenticationInfo as LDAPAuthenticationInfo, new HttpDataAccessManager(baseAddress, serviceTimeout: serviceTimeout), continueAsyncTasksOnCapturedContext);
+                return new LDAPAuthenticationProvider(authenticationInfo as LDAPAuthenticationInfo, new HttpDataAccessManager(baseAddress, serviceTimeout: serviceTimeout, postHttpClientInitializeAction: postHttpClientInitializeAction), continueAsyncTasksOnCapturedContext);
             }
 
             if (authenticationInfo.AuthenticationBackendType == AuthenticationBackendType.Certificate)
@@ -52,7 +52,7 @@ namespace VaultSharp.Backends.Authentication.Providers
                 var handler = new WebRequestHandler();
                 handler.ClientCertificates.Add(certificationInfo.ClientCertificate);
 
-                return new CertificateAuthenticationProvider(certificationInfo, new HttpDataAccessManager(baseAddress, handler, serviceTimeout: serviceTimeout), continueAsyncTasksOnCapturedContext);
+                return new CertificateAuthenticationProvider(certificationInfo, new HttpDataAccessManager(baseAddress, handler, serviceTimeout: serviceTimeout, postHttpClientInitializeAction: postHttpClientInitializeAction), continueAsyncTasksOnCapturedContext);
             }
 
             if (authenticationInfo.AuthenticationBackendType == AuthenticationBackendType.Token)
@@ -62,7 +62,7 @@ namespace VaultSharp.Backends.Authentication.Providers
 
             if (authenticationInfo.AuthenticationBackendType == AuthenticationBackendType.UsernamePassword)
             {
-                return new UsernamePasswordAuthenticationProvider(authenticationInfo as UsernamePasswordAuthenticationInfo, new HttpDataAccessManager(baseAddress, serviceTimeout: serviceTimeout), continueAsyncTasksOnCapturedContext);
+                return new UsernamePasswordAuthenticationProvider(authenticationInfo as UsernamePasswordAuthenticationInfo, new HttpDataAccessManager(baseAddress, serviceTimeout: serviceTimeout, postHttpClientInitializeAction: postHttpClientInitializeAction), continueAsyncTasksOnCapturedContext);
             }
 
             var customAuthenticationInfo = authenticationInfo as CustomAuthenticationInfo;

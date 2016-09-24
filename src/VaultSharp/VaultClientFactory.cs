@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using VaultSharp.Backends.Authentication.Models;
 
 namespace VaultSharp
@@ -25,12 +26,18 @@ namespace VaultSharp
         /// if set to <c>true</c> [continue asynchronous tasks on captured context].</param>
         /// <param name="serviceTimeout"><para>[optional]</para>
         /// The timeout value for the Vault Service calls. Do not specify a value, if you want to go with the default timeout values.</param>
+        /// <param name="postHttpClientInitializeAction"><para>[optional]</para>
+        /// A post-processing delegate on the <see cref="HttpClient"/> instance used by the library.
+        /// This can be used to setup any custom message handlers, proxy settings etc.
+        /// Please note that the delegate will get an instance of <see cref="HttpClient"/> that is initialized with the address
+        /// and timeout settings.
+        /// </param>
         /// <returns>
         /// An instance of the <see cref="IVaultClient" /> interface implementation.
         /// </returns>
-        public static IVaultClient CreateVaultClient(Uri vaultServerUriWithPort, IAuthenticationInfo authenticationInfo, bool continueAsyncTasksOnCapturedContext = false, TimeSpan? serviceTimeout = null)
+        public static IVaultClient CreateVaultClient(Uri vaultServerUriWithPort, IAuthenticationInfo authenticationInfo, bool continueAsyncTasksOnCapturedContext = false, TimeSpan? serviceTimeout = null, Action<HttpClient> postHttpClientInitializeAction = null)
         {
-            IVaultClient vaultClient = new VaultClient(vaultServerUriWithPort, authenticationInfo, continueAsyncTasksOnCapturedContext, serviceTimeout);
+            IVaultClient vaultClient = new VaultClient(vaultServerUriWithPort, authenticationInfo, continueAsyncTasksOnCapturedContext, serviceTimeout, postHttpClientInitializeAction: postHttpClientInitializeAction);
             return vaultClient;
         }
     }

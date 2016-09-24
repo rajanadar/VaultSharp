@@ -29,7 +29,10 @@ namespace VaultSharp.UnitTests.DataAccess
 
             httpDataAccessManager = new HttpDataAccessManager(DummyUri, new HttpClientHandler(), true,
                 TimeSpan.FromMinutes(1));
+            Assert.NotNull(httpDataAccessManager);
 
+            httpDataAccessManager = new HttpDataAccessManager(DummyUri, new HttpClientHandler(), true,
+                TimeSpan.FromMinutes(1), client => { });
             Assert.NotNull(httpDataAccessManager);
         }
 

@@ -41,7 +41,7 @@ namespace VaultSharp
 
         private readonly bool _continueAsyncTasksOnCapturedContext;
 
-        public VaultClient(Uri vaultServerUriWithPort, IAuthenticationInfo authenticationInfo, bool continueAsyncTasksOnCapturedContext = false, TimeSpan? serviceTimeout = null, IDataAccessManager dataAccessManager = null)
+        public VaultClient(Uri vaultServerUriWithPort, IAuthenticationInfo authenticationInfo, bool continueAsyncTasksOnCapturedContext = false, TimeSpan? serviceTimeout = null, IDataAccessManager dataAccessManager = null, Action<HttpClient> postHttpClientInitializeAction = null)
         {
             Checker.NotNull(vaultServerUriWithPort, "vaultServerUriWithPort");
 
@@ -53,13 +53,13 @@ namespace VaultSharp
             if (authenticationInfo != null)
             {
                 _authenticationProvider = AuthenticationProviderFactory.CreateAuthenticationProvider(
-                    authenticationInfo, vaultBaseAddress, serviceTimeout, continueAsyncTasksOnCapturedContext);
+                    authenticationInfo, vaultBaseAddress, serviceTimeout, continueAsyncTasksOnCapturedContext, postHttpClientInitializeAction);
 
                 _lazyVaultToken = new Lazy<Task<string>>(_authenticationProvider.GetTokenAsync);
             }
 
             _dataAccessManager = dataAccessManager ??
-                                 new HttpDataAccessManager(vaultBaseAddress, serviceTimeout: serviceTimeout);
+                                 new HttpDataAccessManager(vaultBaseAddress, serviceTimeout: serviceTimeout, postHttpClientInitializeAction: postHttpClientInitializeAction);
         }
 
         public async Task<bool> GetInitializationStatusAsync()

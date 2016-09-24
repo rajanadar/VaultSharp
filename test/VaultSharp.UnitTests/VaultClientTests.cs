@@ -87,12 +87,5 @@ namespace VaultSharp.UnitTests
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.GetTokenInfoAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.RevokeTokenAsync(null, true));
         }
-
-        [Fact]
-        public async Task SecureApiWithNoAuthenticationInfoThrowsProperMessage()
-        {
-            var client = new VaultClient(VaultUri, authenticationInfo: null);
-            await Assert.ThrowsAsync<InvalidOperationException>(() => client.WriteSecretAsync("testpath", new Dictionary<string, object>()));
-        }
     }
 }

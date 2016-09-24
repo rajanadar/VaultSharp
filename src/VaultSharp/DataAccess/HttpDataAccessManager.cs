@@ -15,7 +15,7 @@ namespace VaultSharp.DataAccess
         private readonly HttpClient _httpClient;
         private readonly bool _continueAsyncTasksOnCapturedContext;
 
-        public HttpDataAccessManager(Uri baseAddress, HttpMessageHandler httpMessageHandler = null, bool continueAsyncTasksOnCapturedContext = false, TimeSpan? serviceTimeout = null)
+        public HttpDataAccessManager(Uri baseAddress, HttpMessageHandler httpMessageHandler = null, bool continueAsyncTasksOnCapturedContext = false, TimeSpan? serviceTimeout = null, Action<HttpClient> postHttpClientInitializeAction = null)
         {
             _httpClient = httpMessageHandler == null ? new HttpClient() : new HttpClient(httpMessageHandler);
             _httpClient.BaseAddress = baseAddress;
@@ -24,6 +24,11 @@ namespace VaultSharp.DataAccess
             if (serviceTimeout != null)
             {
                 _httpClient.Timeout = serviceTimeout.Value;
+            }
+
+            if (postHttpClientInitializeAction != null)
+            {
+                postHttpClientInitializeAction(_httpClient);
             }
         }
 
