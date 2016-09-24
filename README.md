@@ -1,5 +1,5 @@
 ### This is VaultSharp Version 0.4.1. 
-### With Vault releasing its 0.6.1, VaultSharp Version 0.6.1 is already in progress and coming soon.
+### With Vault releasing its 0.6.1, VaultSharp Version 0.6.1 is already in progress and releasing by October 03, 2016.
 ### This VaultSharp Version 0.4.1 is tested to be compatible with Vault 0.5.x.
 
 # VaultSharp
