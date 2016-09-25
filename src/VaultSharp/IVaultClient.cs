@@ -17,7 +17,6 @@ using VaultSharp.Backends.Secret.Models.RabbitMQ;
 using VaultSharp.Backends.Secret.Models.SSH;
 using VaultSharp.Backends.Secret.Models.Transit;
 using VaultSharp.Backends.System.Models;
-// ReSharper disable All
 
 namespace VaultSharp
 {
@@ -265,6 +264,15 @@ namespace VaultSharp
         /// The task.
         /// </returns>
         Task EnableAuthenticationBackendAsync(AuthenticationBackend authenticationBackend);
+
+        /// <summary>
+        /// Quickly enables a new authentication backend at the default mountpoint.
+        /// </summary>
+        /// <param name="authenticationBackendType">The authentication backend type.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task QuickEnableAuthenticationBackendAsync(AuthenticationBackendType authenticationBackendType);
 
         /// <summary>
         /// Disables the authentication backend at the given mount point.
@@ -2253,6 +2261,9 @@ namespace VaultSharp
         /// If false, only the ciphertext value will be returned.
         /// </returns>
         Task<Secret<TransitKeyData>> TransitCreateDataKeyAsync(string encryptionKeyName, bool returnKeyAsPlainText = false, string base64EncodedKeyDerivationContext = null, string convergentEncryptionBase64EncodedNonce = null, int keyBits = 256, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+
+        // Auth Backends
+
 
         /// <summary>
         /// Enables multi factor authentication with the specific type.

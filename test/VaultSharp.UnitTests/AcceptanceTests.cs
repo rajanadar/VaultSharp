@@ -1526,6 +1526,15 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             // get all auths
             var oldAuthenticationBackends = await _authenticatedVaultClient.GetAllEnabledAuthenticationBackendsAsync();
             Assert.Equal(authenticationBackends.Data.Count(), oldAuthenticationBackends.Data.Count());
+
+            // quick api.
+            await _authenticatedVaultClient.QuickEnableAuthenticationBackendAsync(AuthenticationBackendType.GitHub);
+            newAuthenticationBackends = await _authenticatedVaultClient.GetAllEnabledAuthenticationBackendsAsync();
+            Assert.Equal(authenticationBackends.Data.Count() + 1, newAuthenticationBackends.Data.Count());
+
+            await _authenticatedVaultClient.DisableAuthenticationBackendAsync(AuthenticationBackendType.GitHub.Type);
+            oldAuthenticationBackends = await _authenticatedVaultClient.GetAllEnabledAuthenticationBackendsAsync();
+            Assert.Equal(authenticationBackends.Data.Count(), oldAuthenticationBackends.Data.Count());
         }
 
         private async Task RunSecretBackendMountApiTests()

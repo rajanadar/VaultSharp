@@ -295,6 +295,16 @@ namespace VaultSharp
             await MakeVaultApiRequest(resourcePath, HttpMethod.Post, authenticationBackend).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
+        public async Task QuickEnableAuthenticationBackendAsync(AuthenticationBackendType authenticationBackendType)
+        {
+            var authenticationBackend = new AuthenticationBackend
+            {
+                BackendType = authenticationBackendType
+            };
+
+            await EnableAuthenticationBackendAsync(authenticationBackend);
+        }
+
         public async Task DisableAuthenticationBackendAsync(string authenticationPath)
         {
             Checker.NotNull(authenticationPath, "authenticationPath");
@@ -1775,7 +1785,18 @@ namespace VaultSharp
 
         public async Task<Secret<Dictionary<string, object>>> CreateTokenAsync(TokenCreationOptions tokenCreationOptions = null)
         {
-            var action = (tokenCreationOptions != null && tokenCreationOptions.CreateAsOrphan) ? "create-orphan" : "create";
+            if (tokenCreationOptions == null)
+            {
+                tokenCreationOptions = new TokenCreationOptions();
+            }
+
+            var action = tokenCreationOptions.CreateAsOrphan ? "create-orphan" : "create";
+
+            if (!string.IsNullOrWhiteSpace(tokenCreationOptions.RoleName))
+            {
+                action = "create/" + tokenCreationOptions.RoleName.Trim('/');
+            }
+
             return await MakeVaultApiRequest<Secret<Dictionary<string, object>>>("auth/token/" + action, HttpMethod.Post, tokenCreationOptions).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
