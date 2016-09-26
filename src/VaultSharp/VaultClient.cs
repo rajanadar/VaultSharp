@@ -1732,6 +1732,34 @@ namespace VaultSharp
             return result;
         }
 
+        public async Task AppIdAuthenticationCreateAppId(string appId, string policyValue, string displayName = null, string authenticationPath = AuthenticationBackendDefaultPaths.AppId)
+        {
+            Checker.NotNull(appId, "appId");
+            Checker.NotNull(policyValue, "policyValue");
+
+            var requestData = new {value = policyValue, display_name = displayName};
+            await MakeVaultApiRequest("auth/" + authenticationPath.Trim('/') + "/map/app-id/" + appId.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task AppIdAuthenticationCreateUserId(string userId, string appIdValue, string cidrBlock = null,
+            string authenticationPath = AuthenticationBackendDefaultPaths.AppId)
+        {
+            Checker.NotNull(userId, "userId");
+            Checker.NotNull(appIdValue, "appIdValue");
+
+            var requestData = new Dictionary<string, object>
+            {
+                {"value", appIdValue},
+            };
+
+            if (!string.IsNullOrWhiteSpace(cidrBlock))
+            {
+                requestData.Add("cidr_block", cidrBlock);
+            }
+
+            await MakeVaultApiRequest("auth/" + authenticationPath.Trim('/') + "/map/user-id/" + userId.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
         public async Task EnableMultiFactorAuthenticationAsync(string supportedAuthenticationBackendMountPoint, string mfaType = "duo")
         {
             Checker.NotNull(supportedAuthenticationBackendMountPoint, "supportedAuthenticationBackendMountPoint");

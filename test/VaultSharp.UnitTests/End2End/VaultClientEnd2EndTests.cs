@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VaultSharp.Backends.Authentication.Models;
-using VaultSharp.Backends.Authentication.Models.AppId;
 using VaultSharp.Backends.Authentication.Models.GitHub;
 using VaultSharp.Backends.Authentication.Models.Token;
 using VaultSharp.Backends.Authentication.Models.UsernamePassword;
@@ -33,7 +32,6 @@ namespace VaultSharp.UnitTests.End2End
             await TokenTests();
 
             await SecretTests();
-            await AppIdAuthenticationProviderTests();
             await UsernamePasswordAuthenticationProviderTests();
             await TokenAuthenticationProviderTests();
             await MySqlCredentialTests();
@@ -316,33 +314,6 @@ namespace VaultSharp.UnitTests.End2End
             await _authenticatedVaultClient.DeleteSecretAsync(path);
 
             await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadSecretAsync(path));
-        }
-
-        private async Task AppIdAuthenticationProviderTests()
-        {
-            // app-id auth 
-
-            var path = "app-id" + Guid.NewGuid();
-            var prefix = "auth/" + path;
-            var appId = Guid.NewGuid().ToString();
-            var userId = Guid.NewGuid().ToString();
-
-            var appIdAuthenticationInfo = new AppIdAuthenticationInfo(path, appId, userId);
-            var appidClient = VaultClientFactory.CreateVaultClient(_vaultUri, appIdAuthenticationInfo);
-            var appIdAuthBackend = new AuthenticationBackend
-            {
-                BackendType = AuthenticationBackendType.AppId,
-                AuthenticationPath = path
-            };
-
-            await _authenticatedVaultClient.EnableAuthenticationBackendAsync(appIdAuthBackend);
-            await _authenticatedVaultClient.WriteSecretAsync(prefix + "/map/app-id/" + appId, new Dictionary<string, object> { { "value", "root" }, { "display_name", appId } });
-            await _authenticatedVaultClient.WriteSecretAsync(prefix + "/map/user-id/" + userId, new Dictionary<string, object> { { "value", appId } });
-
-            var authBackends = await appidClient.GetAllEnabledAuthenticationBackendsAsync();
-            Assert.True(authBackends.Data.Any());
-
-            await _authenticatedVaultClient.DisableAuthenticationBackendAsync(appIdAuthBackend.AuthenticationPath);
         }
 
         private async Task GithubAuthenticationProviderTests()

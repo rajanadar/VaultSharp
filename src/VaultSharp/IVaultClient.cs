@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using VaultSharp.Backends.Audit.Models;
@@ -2262,8 +2263,58 @@ namespace VaultSharp
         /// </returns>
         Task<Secret<TransitKeyData>> TransitCreateDataKeyAsync(string encryptionKeyName, bool returnKeyAsPlainText = false, string base64EncodedKeyDerivationContext = null, string convergentEncryptionBase64EncodedNonce = null, int keyBits = 256, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
 
-        // Auth Backends
+        /// <summary>
+        /// Creates an App Id that associates with the policy value.
+        /// The <see cref="displayName"/> sets the display name for audit logs and secrets. 
+        /// </summary>
+        /// <param name="appId">
+        /// <para>[required]</para>
+        /// The application identifier.</param>
+        /// <param name="policyValue">
+        /// <para>[required]</para>
+        /// The policy value.</param>
+        /// <param name="displayName">
+        /// <para>[optional]</para>
+        /// The display name.</param>
+        /// <param name="authenticationPath"><para>[optional]</para>
+        /// The path for the authentication backend. 
+        /// Defaults to <see cref="AuthenticationBackendDefaultPaths.AppId" />
+        /// Provide a value only if you have customized the path.</param>
+        /// <returns>The task.</returns>
+        [Obsolete("The AppId Authentication backend in Vault is now deprecated with the addition " +
+          "of the new AppRole backend. There are no plans to remove it, but we encourage " +
+          "using AppRole whenever possible, as it offers enhanced functionality " +
+          "and can accommodate many more types of authentication paradigms.")]
+        Task AppIdAuthenticationCreateAppId(string appId, string policyValue, string displayName = null, string authenticationPath = AuthenticationBackendDefaultPaths.AppId);
 
+        /// <summary>
+        /// Configures the <see cref="userId"/> and says that it can be paired with <see cref="appIdValue"/> 
+        /// but only if the client is in the <see cref="cidrBlock"/> (an optional construct).
+        /// This means that if a client authenticates and provide both <see cref="appIdValue"/>  and <see cref="userId"/>, 
+        /// then the <see cref="appIdValue"/> will authenticate that client with the policy.
+        /// In practice, both the <see cref="userId"/> and <see cref="appIdValue"/>  are likely hard-to-guess UUID-like values.
+        /// Note that it is possible to authorize multiple app IDs with each user ID by writing them as 
+        /// comma-separated values to the user ID mapping. 
+        /// </summary>
+        /// <param name="userId">
+        /// <para>[required]</para>
+        /// The user identifier.</param>
+        /// <param name="appIdValue">
+        /// <para>[required]</para>
+        /// The application identifier(s).</param>
+        /// <param name="cidrBlock">
+        /// <para>[optional]</para>
+        /// The cidr block restriction for the user.</param>
+        /// <param name="authenticationPath"><para>[optional]</para>
+        /// The path for the authentication backend. 
+        /// Defaults to <see cref="AuthenticationBackendDefaultPaths.AppId" />
+        /// Provide a value only if you have customized the path.</param>
+        /// <returns>The task.</returns>
+        [Obsolete("The AppId Authentication backend in Vault is now deprecated with the addition " +
+          "of the new AppRole backend. There are no plans to remove it, but we encourage " +
+          "using AppRole whenever possible, as it offers enhanced functionality " +
+          "and can accommodate many more types of authentication paradigms.")]
+        Task AppIdAuthenticationCreateUserId(string userId, string appIdValue, string cidrBlock = null, string authenticationPath = AuthenticationBackendDefaultPaths.AppId);
 
         /// <summary>
         /// Enables multi factor authentication with the specific type.

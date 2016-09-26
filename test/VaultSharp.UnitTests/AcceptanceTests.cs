@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using VaultSharp.Backends.Audit.Models;
 using VaultSharp.Backends.Audit.Models.File;
 using VaultSharp.Backends.Authentication.Models;
+using VaultSharp.Backends.Authentication.Models.AppId;
 using VaultSharp.Backends.Authentication.Models.Token;
 using VaultSharp.Backends.Secret.Models;
 using VaultSharp.Backends.Secret.Models.AWS;
@@ -153,10 +154,56 @@ namespace VaultSharp.UnitTests
                 await RunRabbitMQSecretBackendApiTests();
                 await RunSSHSecretBackendApiTests();
                 await RunTransitSecretBackendApiTests();
+
+                // authentication backend tests
+
+                await RunAppIdAuthenticationBackendApiTests();
             }
             finally
             {
                 ShutdownVaultServer();
+            }
+        }
+
+        private async Task RunAppIdAuthenticationBackendApiTests()
+        {
+            var path = "app-id" + Guid.NewGuid();
+
+            try
+            {
+                var policy = new Policy
+                {
+                    Name = "app-id-test-policy",
+                    Rules = "path \"sys/*\" {  policy = \"read\" }"
+                };
+
+                await _authenticatedVaultClient.WritePolicyAsync(policy);
+
+                var appId = Guid.NewGuid().ToString();
+                var userId = Guid.NewGuid().ToString();
+
+                var appIdAuthenticationInfo = new AppIdAuthenticationInfo(path, appId, userId);
+                var appidClient = VaultClientFactory.CreateVaultClient(VaultUriWithPort, appIdAuthenticationInfo);
+
+                var appIdAuthBackend = new AuthenticationBackend
+                {
+                    BackendType = AuthenticationBackendType.AppId,
+                    AuthenticationPath = path
+                };
+
+                await _authenticatedVaultClient.EnableAuthenticationBackendAsync(appIdAuthBackend);
+
+                await _authenticatedVaultClient.AppIdAuthenticationCreateAppId(appId, policy.Name, appId, path);
+                await _authenticatedVaultClient.AppIdAuthenticationCreateUserId(userId, appId, authenticationPath: path);
+
+                var authBackends = await appidClient.GetAllEnabledAuthenticationBackendsAsync();
+                Assert.True(authBackends.Data.Any());
+
+                await _authenticatedVaultClient.DeletePolicyAsync(policy.Name);
+            }
+            finally
+            {
+                await _authenticatedVaultClient.DisableAuthenticationBackendAsync(path);
             }
         }
 

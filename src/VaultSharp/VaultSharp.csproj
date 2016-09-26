@@ -54,6 +54,7 @@
     <Compile Include="Backends\Audit\Models\AuditBackendType.cs" />
     <Compile Include="Backends\Authentication\Models\AppRole\AppRoleAuthenticationInfo.cs" />
     <Compile Include="Backends\Authentication\Models\AuthenticationBackendType.cs" />
+    <Compile Include="Backends\Authentication\Models\AuthenticationBackendDefaultPaths.cs" />
     <Compile Include="Backends\Authentication\Models\Token\TokenCreationOptions.cs" />
     <Compile Include="Backends\Authentication\Providers\AppRole\AppRoleAuthenticationProvider.cs" />
     <Compile Include="Backends\Secret\Models\AWS\AWSRoleDefinition.cs" />
