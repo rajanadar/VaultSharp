@@ -97,32 +97,35 @@ namespace VaultSharp.DataAccess
                     "{0} {1}. {2}",
                     (int)httpResponseMessage.StatusCode, httpResponseMessage.StatusCode, responseText));
             }
-            catch (WebException ex)
-            {
-                if (ex.Status == WebExceptionStatus.ProtocolError)
-                {
-                    var response = ex.Response as HttpWebResponse;
-
-                    if (response != null)
-                    {
-                        var responseText = string.Empty;
-
-                        using (StreamReader stream = new StreamReader(response.GetResponseStream()))
-                        {
-                            responseText =
-                                await stream.ReadToEndAsync().ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
-                        }
-
-                        throw new Exception(string.Format(CultureInfo.InvariantCulture,
-                            "{0} {1}. {2}",
-                            (int)response.StatusCode, response.StatusCode, responseText), ex);
-                    }
-
-                    throw;
-                }
-
+            catch(Exception ex){
                 throw;
             }
+            // catch (WebException ex)
+            // {
+            //     if (ex.Status == WebExceptionStatus.ProtocolError)
+            //     {
+            //         var response = ex.Response as HttpWebResponse;
+
+            //         if (response != null)
+            //         {
+            //             var responseText = string.Empty;
+
+            //             using (StreamReader stream = new StreamReader(response.GetResponseStream()))
+            //             {
+            //                 responseText =
+            //                     await stream.ReadToEndAsync().ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            //             }
+
+            //             throw new Exception(string.Format(CultureInfo.InvariantCulture,
+            //                 "{0} {1}. {2}",
+            //                 (int)response.StatusCode, response.StatusCode, responseText), ex);
+            //         }
+
+            //         throw;
+            //     }
+
+            //     throw;
+            // }
         }
     }
 }

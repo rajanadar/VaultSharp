@@ -1,0 +1,17 @@
+{
+  "name": "vaultsharp",
+  "version": "0.6.1-core",
+  "buildOptions": {
+    "debugType": "portable"
+  },
+  "dependencies": {
+      "Newtonsoft.Json": "9.0.1"
+  },
+  "frameworks": {
+    "netstandard1.6": {
+      "dependencies": {
+        "NETStandard.Library": "1.6.0"
+      }
+    }
+  }
+}

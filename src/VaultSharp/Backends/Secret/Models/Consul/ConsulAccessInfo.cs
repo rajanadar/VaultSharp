@@ -45,7 +45,7 @@ namespace VaultSharp.Backends.Secret.Models.Consul
         /// </summary>
         public ConsulAccessInfo()
         {
-            UriScheme = Uri.UriSchemeHttp;
+            UriScheme = "http";
         }
     }
 }

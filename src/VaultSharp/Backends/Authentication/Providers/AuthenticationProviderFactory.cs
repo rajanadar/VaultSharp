@@ -42,7 +42,7 @@ namespace VaultSharp.Backends.Authentication.Providers
             {
                 var certificationInfo = authenticationInfo as CertificateAuthenticationInfo;
 
-                var handler = new WebRequestHandler();
+                var handler = new HttpClientHandler();
                 handler.ClientCertificates.Add(certificationInfo.ClientCertificate);
 
                 return new CertificateAuthenticationProvider(certificationInfo, new HttpDataAccessManager(baseAddress, handler, serviceTimeout: serviceTimeout), continueAsyncTasksOnCapturedContext);
