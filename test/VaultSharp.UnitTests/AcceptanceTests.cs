@@ -172,6 +172,59 @@ namespace VaultSharp.UnitTests
         {
             var accessors = await _authenticatedVaultClient.GetTokenAccessorListAsync();
             Assert.True(accessors.Data.Keys.Any());
+
+            var tokenRoleDefinition = new TokenRoleDefinition
+            {
+                RoleName = Guid.NewGuid().ToString(),
+                Renewable = true,
+                AllowedPolicies = "root",
+                Orphan = true,
+                PathSuffix = "suffix1"
+            };
+
+            await _authenticatedVaultClient.WriteTokenRoleInfoAsync(tokenRoleDefinition);
+
+            var readRole = await _authenticatedVaultClient.GetTokenRoleInfoAsync(tokenRoleDefinition.RoleName);
+            Assert.Equal(tokenRoleDefinition.PathSuffix, readRole.Data.PathSuffix);
+
+            tokenRoleDefinition.PathSuffix = "suffix2";
+            await _authenticatedVaultClient.WriteTokenRoleInfoAsync(tokenRoleDefinition);
+            readRole = await _authenticatedVaultClient.GetTokenRoleInfoAsync(tokenRoleDefinition.RoleName);
+            Assert.Equal(tokenRoleDefinition.PathSuffix, readRole.Data.PathSuffix);
+
+            var tokenCreationOptions = new TokenCreationOptions
+            {
+                RoleName = tokenRoleDefinition.RoleName
+            };
+
+            var tokenFromRole = await _authenticatedVaultClient.CreateTokenAsync(tokenCreationOptions);
+            Assert.NotNull(tokenFromRole.AuthorizationInfo.ClientToken);
+
+            tokenCreationOptions.RoleName = null;
+            tokenCreationOptions.CreateAsOrphan = true;
+
+            var orphanToken = await _authenticatedVaultClient.CreateTokenAsync(tokenCreationOptions);
+            Assert.NotNull(orphanToken.AuthorizationInfo.ClientToken);
+
+            var lookupInfo = await _authenticatedVaultClient.GetTokenInfoAsync(orphanToken.AuthorizationInfo.ClientToken);
+            Assert.NotNull(lookupInfo.Data.Id);
+
+            var lookupInfoByAccessor = await _authenticatedVaultClient.GetTokenInfoByAccessorAsync(orphanToken.AuthorizationInfo.ClientTokenAccessor);
+            Assert.NotNull(lookupInfoByAccessor.Data.Id);
+
+            var selfInfo = await _authenticatedVaultClient.GetCallingTokenInfoAsync();
+            Assert.NotNull(selfInfo.Data.Id);
+
+            // renew token
+            // renew self by new client. ??
+
+            await _authenticatedVaultClient.RevokeTokenAsync(tokenFromRole.AuthorizationInfo.ClientToken, false);
+            await _authenticatedVaultClient.RevokeTokenByAccessorAsync(orphanToken.AuthorizationInfo.ClientTokenAccessor);
+
+            var roles = await _authenticatedVaultClient.GetTokenRoleListAsync();
+            Assert.True(roles.Data.Keys.Any());
+
+            await _authenticatedVaultClient.DeleteTokenRoleAsync(tokenRoleDefinition.RoleName);
         }
 
         private static async Task RunAppRoleAuthenticationBackendApiTests()

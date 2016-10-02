@@ -2549,10 +2549,8 @@ namespace VaultSharp
         /// The role name is also included in the token path, allowing all tokens created 
         /// against a role to be revoked using the <see cref="RevokeAllSecretsOrTokensUnderPrefixAsync"/> endpoint.
         /// </summary>
-        /// <param name="tokenRoleInfo">
-        /// <para>[required]</para>
-        /// The token role information.</param>
+        /// <param name="tokenRoleDefinition">The token role definition.</param>
         /// <returns>The task.</returns>
-        Task WriteTokenRoleInfoAsync(TokenRoleInfo tokenRoleInfo);
+        Task WriteTokenRoleInfoAsync(TokenRoleDefinition tokenRoleDefinition);
     }
 }

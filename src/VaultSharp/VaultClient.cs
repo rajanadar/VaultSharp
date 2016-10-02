@@ -1935,12 +1935,12 @@ namespace VaultSharp
             return await MakeVaultApiRequest<Secret<ListInfo>>("auth/token/roles?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task WriteTokenRoleInfoAsync(TokenRoleInfo tokenRoleInfo)
+        public async Task WriteTokenRoleInfoAsync(TokenRoleDefinition tokenRoleDefinition)
         {
-            Checker.NotNull(tokenRoleInfo, "tokenRoleInfo");
-            Checker.NotNull(tokenRoleInfo.RoleName, "tokenRoleInfo.RoleName");
+            Checker.NotNull(tokenRoleDefinition, "tokenRoleDefinition");
+            Checker.NotNull(tokenRoleDefinition.RoleName, "tokenRoleDefinition.RoleName");
 
-            await MakeVaultApiRequest("auth/token/roles/" + tokenRoleInfo.RoleName, HttpMethod.Post, tokenRoleInfo).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            await MakeVaultApiRequest("auth/token/roles/" + tokenRoleDefinition.RoleName, HttpMethod.Post, tokenRoleDefinition).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         private async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false)
