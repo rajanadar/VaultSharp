@@ -193,8 +193,8 @@ namespace VaultSharp.UnitTests
 
                 await _authenticatedVaultClient.EnableAuthenticationBackendAsync(appIdAuthBackend);
 
-                await _authenticatedVaultClient.AppIdAuthenticationCreateAppId(appId, policy.Name, appId, path);
-                await _authenticatedVaultClient.AppIdAuthenticationCreateUserId(userId, appId, authenticationPath: path);
+                await _authenticatedVaultClient.AppIdAuthenticationConfigureAppId(appId, policy.Name, appId, path);
+                await _authenticatedVaultClient.AppIdAuthenticationConfigureUserId(userId, appId, authenticationPath: path);
 
                 var authBackends = await appidClient.GetAllEnabledAuthenticationBackendsAsync();
                 Assert.True(authBackends.Data.Any());

@@ -3,5 +3,7 @@
     internal class AuthenticationBackendDefaultPaths
     {
         public const string AppId = "app-id";
+
+        public const string AppRole = "approle";
     }
 }

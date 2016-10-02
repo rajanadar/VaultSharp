@@ -24,11 +24,15 @@ namespace VaultSharp.Backends.Authentication.Providers.AppRole
 
         public async Task<string> GetTokenAsync()
         {
-            var requestData = new
+            var requestData = new Dictionary<string, object>
             {
-                role_id = _appRoleAuthenticationInfo.RoleId,
-                secret_id = _appRoleAuthenticationInfo.SecretId
+                {"role_id", _appRoleAuthenticationInfo.RoleId}
             };
+
+            if (!string.IsNullOrWhiteSpace(_appRoleAuthenticationInfo.SecretId))
+            {
+                requestData.Add("secret_id", _appRoleAuthenticationInfo.SecretId);
+            }
 
             var response =
                 await

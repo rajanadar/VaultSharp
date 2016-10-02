@@ -2285,7 +2285,7 @@ namespace VaultSharp
           "of the new AppRole backend. There are no plans to remove it, but we encourage " +
           "using AppRole whenever possible, as it offers enhanced functionality " +
           "and can accommodate many more types of authentication paradigms.")]
-        Task AppIdAuthenticationCreateAppId(string appId, string policyValue, string displayName = null, string authenticationPath = AuthenticationBackendDefaultPaths.AppId);
+        Task AppIdAuthenticationConfigureAppId(string appId, string policyValue, string displayName = null, string authenticationPath = AuthenticationBackendDefaultPaths.AppId);
 
         /// <summary>
         /// Configures the <see cref="userId"/> and says that it can be paired with <see cref="appIdValue"/> 
@@ -2314,7 +2314,7 @@ namespace VaultSharp
           "of the new AppRole backend. There are no plans to remove it, but we encourage " +
           "using AppRole whenever possible, as it offers enhanced functionality " +
           "and can accommodate many more types of authentication paradigms.")]
-        Task AppIdAuthenticationCreateUserId(string userId, string appIdValue, string cidrBlock = null, string authenticationPath = AuthenticationBackendDefaultPaths.AppId);
+        Task AppIdAuthenticationConfigureUserId(string userId, string appIdValue, string cidrBlock = null, string authenticationPath = AuthenticationBackendDefaultPaths.AppId);
 
         /// <summary>
         /// Enables multi factor authentication with the specific type.

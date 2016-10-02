@@ -14,12 +14,12 @@ namespace VaultSharp.Backends.Authentication.Models
         /// <summary>
         /// The application identifier type
         /// </summary>
-        private static readonly AuthenticationBackendType AppIdType = new AuthenticationBackendType("app-id");
+        private static readonly AuthenticationBackendType AppIdType = new AuthenticationBackendType(AuthenticationBackendDefaultPaths.AppId);
 
         /// <summary>
         /// The application role type
         /// </summary>
-        private static readonly AuthenticationBackendType AppRoleType = new AuthenticationBackendType("approle");
+        private static readonly AuthenticationBackendType AppRoleType = new AuthenticationBackendType(AuthenticationBackendDefaultPaths.AppRole);
 
         /// <summary>
         /// The git hub type
