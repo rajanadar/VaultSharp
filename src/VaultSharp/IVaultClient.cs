@@ -2322,6 +2322,8 @@ namespace VaultSharp
         /// <returns>The list.</returns>
         Task<Secret<ListInfo>> AppRoleAuthenticationGetRolesAsync();
 
+        // raja todo.. fill in other approle apis, after other auth methods.
+
         /// <summary>
         /// Enables multi factor authentication with the specific type.
         /// </summary>

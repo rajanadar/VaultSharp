@@ -3,6 +3,7 @@ using System.Net.Http;
 using VaultSharp.Backends.Authentication.Models;
 using VaultSharp.Backends.Authentication.Models.AppId;
 using VaultSharp.Backends.Authentication.Models.AppRole;
+using VaultSharp.Backends.Authentication.Models.AwsEc2;
 using VaultSharp.Backends.Authentication.Models.Certificate;
 using VaultSharp.Backends.Authentication.Models.Custom;
 using VaultSharp.Backends.Authentication.Models.GitHub;
@@ -11,6 +12,7 @@ using VaultSharp.Backends.Authentication.Models.Token;
 using VaultSharp.Backends.Authentication.Models.UsernamePassword;
 using VaultSharp.Backends.Authentication.Providers.AppId;
 using VaultSharp.Backends.Authentication.Providers.AppRole;
+using VaultSharp.Backends.Authentication.Providers.AwsEc2;
 using VaultSharp.Backends.Authentication.Providers.Certificate;
 using VaultSharp.Backends.Authentication.Providers.Custom;
 using VaultSharp.Backends.Authentication.Providers.GitHub;
@@ -33,6 +35,11 @@ namespace VaultSharp.Backends.Authentication.Providers
             if (authenticationInfo.AuthenticationBackendType == AuthenticationBackendType.AppRole)
             {
                 return new AppRoleAuthenticationProvider(authenticationInfo as AppRoleAuthenticationInfo, new HttpDataAccessManager(baseAddress, serviceTimeout: serviceTimeout, postHttpClientInitializeAction: postHttpClientInitializeAction), continueAsyncTasksOnCapturedContext);
+            }
+
+            if (authenticationInfo.AuthenticationBackendType == AuthenticationBackendType.AwsEc2)
+            {
+                return new AwsEc2AuthenticationProvider(authenticationInfo as AwsEc2AuthenticationInfo, new HttpDataAccessManager(baseAddress, serviceTimeout: serviceTimeout, postHttpClientInitializeAction: postHttpClientInitializeAction), continueAsyncTasksOnCapturedContext);
             }
 
             if (authenticationInfo.AuthenticationBackendType == AuthenticationBackendType.GitHub)

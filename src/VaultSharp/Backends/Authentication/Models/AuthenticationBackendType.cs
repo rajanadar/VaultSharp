@@ -22,6 +22,11 @@ namespace VaultSharp.Backends.Authentication.Models
         private static readonly AuthenticationBackendType AppRoleType = new AuthenticationBackendType(AuthenticationBackendDefaultPaths.AppRole);
 
         /// <summary>
+        /// The aws ec2 role type
+        /// </summary>
+        private static readonly AuthenticationBackendType AwsEc2RoleType = new AuthenticationBackendType(AuthenticationBackendDefaultPaths.AwsEc2);
+
+        /// <summary>
         /// The git hub type
         /// </summary>
         private static readonly AuthenticationBackendType GitHubType = new AuthenticationBackendType("github");
@@ -80,6 +85,20 @@ namespace VaultSharp.Backends.Authentication.Models
             get
             {
                 return AppRoleType;
+            }
+        }
+
+        /// <summary>
+        /// Gets the aws ec2.
+        /// </summary>
+        /// <value>
+        /// The aws ec2.
+        /// </value>
+        public static AuthenticationBackendType AwsEc2
+        {
+            get
+            {
+                return AwsEc2RoleType;
             }
         }
 
