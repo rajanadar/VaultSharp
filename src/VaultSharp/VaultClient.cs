@@ -1916,6 +1916,33 @@ namespace VaultSharp
             await MakeVaultApiRequest("auth/token/revoke-self", HttpMethod.Post).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<Secret<TokenRoleInfo>> GetTokenRoleInfoAsync(string roleName)
+        {
+            Checker.NotNull(roleName, "roleName");
+
+            return await MakeVaultApiRequest<Secret<TokenRoleInfo>>("auth/token/roles/" + roleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task DeleteTokenRoleAsync(string roleName)
+        {
+            Checker.NotNull(roleName, "roleName");
+
+            await MakeVaultApiRequest("auth/token/roles/" + roleName, HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<ListInfo>> GetTokenRoleListAsync()
+        {
+            return await MakeVaultApiRequest<Secret<ListInfo>>("auth/token/roles?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task WriteTokenRoleInfoAsync(TokenRoleInfo tokenRoleInfo)
+        {
+            Checker.NotNull(tokenRoleInfo, "tokenRoleInfo");
+            Checker.NotNull(tokenRoleInfo.RoleName, "tokenRoleInfo.RoleName");
+
+            await MakeVaultApiRequest("auth/token/roles/" + tokenRoleInfo.RoleName, HttpMethod.Post, tokenRoleInfo).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
         private async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false)
         {
             await MakeVaultApiRequest<dynamic>(resourcePath, httpMethod, requestData, rawResponse);

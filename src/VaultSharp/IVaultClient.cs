@@ -2520,5 +2520,39 @@ namespace VaultSharp
         /// The task.
         /// </returns>
         Task RevokeCallingTokenAsync();
+
+        /// <summary>
+        /// Deletes the token role.
+        /// </summary>
+        /// <param name="roleName">Name of the role.</param>
+        /// <returns>The task.</returns>
+        Task DeleteTokenRoleAsync(string roleName);
+
+        /// <summary>
+        /// Gets the token role information.
+        /// </summary>
+        /// <param name="roleName">Name of the role.</param>
+        /// <returns>The role configuration.</returns>
+        Task<Secret<TokenRoleInfo>> GetTokenRoleInfoAsync(string roleName);
+
+        /// <summary>
+        /// Gets the token role list.
+        /// </summary>
+        /// <returns>The role list.</returns>
+        Task<Secret<ListInfo>> GetTokenRoleListAsync();
+
+        /// <summary>
+        /// Creates (or replaces) the named role. 
+        /// Roles enforce specific behavior when creating tokens that allow token functionality 
+        /// that is otherwise not available or would require sudo/root privileges to access. 
+        /// Role parameters, when set, override any provided options to the create endpoints. 
+        /// The role name is also included in the token path, allowing all tokens created 
+        /// against a role to be revoked using the <see cref="RevokeAllSecretsOrTokensUnderPrefixAsync"/> endpoint.
+        /// </summary>
+        /// <param name="tokenRoleInfo">
+        /// <para>[required]</para>
+        /// The token role information.</param>
+        /// <returns>The task.</returns>
+        Task WriteTokenRoleInfoAsync(TokenRoleInfo tokenRoleInfo);
     }
 }
