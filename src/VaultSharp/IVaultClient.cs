@@ -219,7 +219,7 @@ namespace VaultSharp
         /// <returns>
         /// The mounted secret backend's configuration values.
         /// </returns>
-        Task<MountConfiguration> GetMountedSecretBackendConfigurationAsync(string mountPoint);
+        Task<Secret<MountConfiguration>> GetMountedSecretBackendConfigurationAsync(string mountPoint);
 
         /// <summary>
         /// Tunes the mount configuration parameters for the given <see cref="mountPoint" />.

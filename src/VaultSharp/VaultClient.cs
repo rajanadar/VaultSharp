@@ -229,13 +229,13 @@ namespace VaultSharp
             await UnmountSecretBackendAsync(secretBackendType.Type);
         }
 
-        public async Task<MountConfiguration> GetMountedSecretBackendConfigurationAsync(string mountPoint)
+        public async Task<Secret<MountConfiguration>> GetMountedSecretBackendConfigurationAsync(string mountPoint)
         {
             Checker.NotNull(mountPoint, "mountPoint");
 
             var resourcePath = string.Format(CultureInfo.InvariantCulture, "sys/mounts/{0}/tune", mountPoint.Trim('/'));
 
-            var response = await MakeVaultApiRequest<MountConfiguration>(resourcePath, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var response = await MakeVaultApiRequest<Secret<MountConfiguration>>(resourcePath, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return response;
         }
 

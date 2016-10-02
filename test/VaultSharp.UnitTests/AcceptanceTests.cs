@@ -1678,7 +1678,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.True(secretBackends.Data.Any());
 
             var mountConfig = await _authenticatedVaultClient.GetMountedSecretBackendConfigurationAsync(secretBackends.Data.First().MountPoint);
-            Assert.NotNull(mountConfig);
+            Assert.NotNull(mountConfig.Data.MaximumLeaseTtl);
 
             // mount a new secret backend
             var newSecretBackend = new SecretBackend
