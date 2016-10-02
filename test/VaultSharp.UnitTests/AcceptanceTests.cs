@@ -158,6 +158,7 @@ namespace VaultSharp.UnitTests
                 // authentication backend tests
 
                 await RunAppIdAuthenticationBackendApiTests();
+                await RunAppRoleAuthenticationBackendApiTests();
             }
             finally
             {
@@ -165,7 +166,33 @@ namespace VaultSharp.UnitTests
             }
         }
 
-        private async Task RunAppIdAuthenticationBackendApiTests()
+        private static async Task RunAppRoleAuthenticationBackendApiTests()
+        {
+            var path = "approle" + Guid.NewGuid();
+
+            try
+            {
+                var authBackend = new AuthenticationBackend
+                {
+                    BackendType = AuthenticationBackendType.AppRole,
+                    AuthenticationPath = path
+                };
+
+                await _authenticatedVaultClient.EnableAuthenticationBackendAsync(authBackend);
+
+                var authBackends = await _authenticatedVaultClient.GetAllEnabledAuthenticationBackendsAsync();
+                Assert.True(authBackends.Data.Any(b => b.BackendType == AuthenticationBackendType.AppRole));
+
+                // raja todo.. run more tests once api work is done.
+                await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.AppRoleAuthenticationGetRolesAsync());
+            }
+            finally
+            {
+                await _authenticatedVaultClient.DisableAuthenticationBackendAsync(path);
+            }
+        }
+
+        private static async Task RunAppIdAuthenticationBackendApiTests()
         {
             var path = "app-id" + Guid.NewGuid();
 
@@ -207,7 +234,7 @@ namespace VaultSharp.UnitTests
             }
         }
 
-        private async Task RunTransitSecretBackendApiTests()
+        private static async Task RunTransitSecretBackendApiTests()
         {
             var mountPoint = "transit" + Guid.NewGuid();
 
@@ -274,7 +301,7 @@ namespace VaultSharp.UnitTests
             }
         }
 
-        private async Task RunSSHSecretBackendApiTests()
+        private static async Task RunSSHSecretBackendApiTests()
         {
             var mountPoint = "ssh" + Guid.NewGuid();
 
@@ -384,7 +411,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             }
         }
 
-        private async Task RunRabbitMQSecretBackendApiTests()
+        private static async Task RunRabbitMQSecretBackendApiTests()
         {
             if (SetupData.RunRabbitMQSecretBackendAcceptanceTests)
             {
@@ -420,7 +447,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
                     var lease = new CredentialTimeToLiveSettings
                     {
-                        TimeToLive  = "1m1s",
+                        TimeToLive = "1m1s",
                         MaximumTimeToLive = "2m1s"
                     };
 
@@ -472,7 +499,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             }
         }
 
-        private async Task RunPostgreSqlSecretBackendApiTests()
+        private static async Task RunPostgreSqlSecretBackendApiTests()
         {
             if (SetupData.RunPostgreSqlSecretBackendAcceptanceTests)
             {
@@ -559,7 +586,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             }
         }
 
-        private async Task RunPkiSecretBackendApiTests()
+        private static async Task RunPkiSecretBackendApiTests()
         {
             var mountpoint = "pki" + Guid.NewGuid();
 
@@ -705,7 +732,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             }
         }
 
-        private async Task RunMySqlSecretBackendApiTests()
+        private static async Task RunMySqlSecretBackendApiTests()
         {
             if (SetupData.RunMySqlSecretBackendAcceptanceTests)
             {
@@ -791,8 +818,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                 }
             }
         }
-        
-        private async Task RunMicrosoftSqlSecretBackendApiTests()
+
+        private static async Task RunMicrosoftSqlSecretBackendApiTests()
         {
             if (SetupData.RunMicrosoftSqlSecretBackendAcceptanceTests)
             {
@@ -880,7 +907,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             }
         }
 
-        private async Task RunMongoDbSecretBackendApiTests()
+        private static async Task RunMongoDbSecretBackendApiTests()
         {
             if (SetupData.RunMongoDbSecretBackendAcceptanceTests)
             {
@@ -969,7 +996,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             }
         }
 
-        private async Task RunGenericSecretBackendApiTests()
+        private static async Task RunGenericSecretBackendApiTests()
         {
             var mountpoint = "secret" + Guid.NewGuid();
 
@@ -1019,7 +1046,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             await _authenticatedVaultClient.UnmountSecretBackendAsync(mountpoint);
         }
 
-        private async Task RunCubbyholeSecretBackendApiTests()
+        private static async Task RunCubbyholeSecretBackendApiTests()
         {
             var path = "path1/";
             var values = new Dictionary<string, object>
@@ -1058,7 +1085,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.CubbyholeReadSecretAsync(path));
         }
 
-        private async Task RunConsulSecretBackendApiTests()
+        private static async Task RunConsulSecretBackendApiTests()
         {
             if (SetupData.RunConsulSecretBackendAcceptanceTests)
             {
@@ -1121,7 +1148,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             }
         }
 
-        private async Task RunCassandraSecretBackendApiTests()
+        private static async Task RunCassandraSecretBackendApiTests()
         {
             if (SetupData.RunCassandraSecretBackendAcceptanceTests)
             {
@@ -1193,7 +1220,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             }
         }
 
-        private async Task RunAwsSecretBackendApiTests()
+        private static async Task RunAwsSecretBackendApiTests()
         {
             if (SetupData.RunAwsSecretBackendAcceptanceTests)
             {
@@ -1307,7 +1334,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             }
         }
 
-        private async Task RunRawSecretApiTests()
+        private static async Task RunRawSecretApiTests()
         {
             var rawPath = "rawpath";
             var rawValues = new Dictionary<string, object>
@@ -1326,7 +1353,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadRawSecretAsync(rawPath));
         }
 
-        private async Task RunRekeyApiTests()
+        private static async Task RunRekeyApiTests()
         {
             var keyStatus = await _authenticatedVaultClient.GetEncryptionKeyStatusAsync();
             Assert.True(keyStatus.SequentialKeyNumber == 1);
@@ -1408,7 +1435,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             _masterCredentials.Base64MasterKeys = quick.Base64MasterKeys;
         }
 
-        private async Task RunLeaderApiTests()
+        private static async Task RunLeaderApiTests()
         {
             var leader = await _authenticatedVaultClient.GetLeaderAsync();
             Assert.NotNull(leader);
@@ -1419,7 +1446,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.NotNull(leader);
         }
 
-        private async Task RunLeaseApiTests()
+        private static async Task RunLeaseApiTests()
         {
             //var lease = await _authenticatedVaultClient.CreateTokenAsync(new TokenCreationOptions
             //{
@@ -1439,7 +1466,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             await Task.FromResult(0);
         }
 
-        private async Task RunAuditBackendMountApiTests()
+        private static async Task RunAuditBackendMountApiTests()
         {
             var audits = await _authenticatedVaultClient.GetAllEnabledAuditBackendsAsync();
             Assert.False(audits.Data.Any());
@@ -1475,7 +1502,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             // syslog is not supported on windows. so no acceptance tests possible.
         }
 
-        private async Task RunCapabilitiesApiTests()
+        private static async Task RunCapabilitiesApiTests()
         {
             var secret1 = await _authenticatedVaultClient.CreateTokenAsync(new TokenCreationOptions { NoParent = true });
 
@@ -1493,7 +1520,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.NotNull(cap3);
         }
 
-        private async Task RunPolicyApiTests()
+        private static async Task RunPolicyApiTests()
         {
             var policies = (await _authenticatedVaultClient.GetAllPoliciesAsync()).ToList();
             Assert.True(policies.Any());
@@ -1531,7 +1558,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.Equal(policies.Count, oldPolicies.Count);
         }
 
-        private async Task RunAuthenticationBackendMountApiTests()
+        private static async Task RunAuthenticationBackendMountApiTests()
         {
             // get Authentication backends
             var authenticationBackends = await _authenticatedVaultClient.GetAllEnabledAuthenticationBackendsAsync();
@@ -1584,7 +1611,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.Equal(authenticationBackends.Data.Count(), oldAuthenticationBackends.Data.Count());
         }
 
-        private async Task RunSecretBackendMountApiTests()
+        private static async Task RunSecretBackendMountApiTests()
         {
             var secretBackends = await _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();
             Assert.True(secretBackends.Data.Any());
@@ -1644,7 +1671,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.Equal(secretBackends.Data.Count(), newSecretBackends.Data.Count());
         }
 
-        private async Task RunInitApiTests()
+        private static async Task RunInitApiTests()
         {
             await AssertInitializationStatusAsync(false);
 
@@ -1668,7 +1695,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.True(health.Initialized);
         }
 
-        private async Task RunSealApiTests()
+        private static async Task RunSealApiTests()
         {
             await AssertSealStatusAsync(true);
 
@@ -1717,7 +1744,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.False(sealStatus.Sealed);
         }
 
-        private async Task RunGenerateRootApiTests()
+        private static async Task RunGenerateRootApiTests()
         {
             var rootStatus = await UnauthenticatedVaultClient.GetRootTokenGenerationStatusAsync();
             Assert.False(rootStatus.Started);
@@ -1756,7 +1783,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.NotNull(rootStatus.EncodedRootToken);
         }
 
-        private async Task UnsealAsync()
+        private static async Task UnsealAsync()
         {
             SealStatus sealStatus = null;
 
@@ -1773,25 +1800,25 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             _authenticatedVaultClient = VaultClientFactory.CreateVaultClient(VaultUriWithPort, new TokenAuthenticationInfo(_masterCredentials.RootToken));
         }
 
-        private async Task AssertSealStatusAsync(bool expected)
+        private static async Task AssertSealStatusAsync(bool expected)
         {
             var actual = await UnauthenticatedVaultClient.GetSealStatusAsync();
             Assert.Equal(expected, actual.Sealed);
         }
 
-        private async Task InitializeVaultAsync()
+        private static async Task InitializeVaultAsync()
         {
             _masterCredentials = await UnauthenticatedVaultClient.InitializeAsync(2, 2);
             Assert.NotNull(_masterCredentials);
         }
 
-        private async Task AssertInitializationStatusAsync(bool expectedStatus)
+        private static async Task AssertInitializationStatusAsync(bool expectedStatus)
         {
             var actual = await UnauthenticatedVaultClient.GetInitializationStatusAsync();
             Assert.Equal(expectedStatus, actual);
         }
 
-        private void StartupVaultServer()
+        private static void StartupVaultServer()
         {
             if (!File.Exists(SetupData.VaultExeFullPath))
             {
@@ -1845,7 +1872,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             _vaultProcess.Start();
         }
 
-        private void ShutdownVaultServer()
+        private static void ShutdownVaultServer()
         {
             if (_vaultProcess != null && !_vaultProcess.HasExited)
             {

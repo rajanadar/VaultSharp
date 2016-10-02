@@ -1760,6 +1760,14 @@ namespace VaultSharp
             await MakeVaultApiRequest("auth/" + authenticationPath.Trim('/') + "/map/user-id/" + userId.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<Secret<ListInfo>> AppRoleAuthenticationGetRolesAsync()
+        {
+            // raja todo, this should be /roles i think.
+            return await MakeVaultApiRequest<Secret<ListInfo>>("/auth/approle/role?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        // raja todo.. fill in other approle apis, after other auth methods.
+
         public async Task EnableMultiFactorAuthenticationAsync(string supportedAuthenticationBackendMountPoint, string mfaType = "duo")
         {
             Checker.NotNull(supportedAuthenticationBackendMountPoint, "supportedAuthenticationBackendMountPoint");

@@ -2317,6 +2317,12 @@ namespace VaultSharp
         Task AppIdAuthenticationConfigureUserId(string userId, string appIdValue, string cidrBlock = null, string authenticationPath = AuthenticationBackendDefaultPaths.AppId);
 
         /// <summary>
+        /// Gets the list of existing AppRoles in the backend.
+        /// </summary>
+        /// <returns>The list.</returns>
+        Task<Secret<ListInfo>> AppRoleAuthenticationGetRolesAsync();
+
+        /// <summary>
         /// Enables multi factor authentication with the specific type.
         /// </summary>
         /// <param name="supportedAuthenticationBackendMountPoint">
