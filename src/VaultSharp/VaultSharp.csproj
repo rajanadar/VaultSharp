@@ -57,6 +57,7 @@
     <Compile Include="Backends\Authentication\Models\AuthenticationBackendDefaultPaths.cs" />
     <Compile Include="Backends\Authentication\Models\AwsEc2\AwsEc2AuthenticationInfo.cs" />
     <Compile Include="Backends\Authentication\Models\Token\TokenCreationOptions.cs" />
+    <Compile Include="Backends\Authentication\Models\Token\TokenAccessorInfo.cs" />
     <Compile Include="Backends\Authentication\Providers\AppRole\AppRoleAuthenticationProvider.cs" />
     <Compile Include="Backends\Authentication\Providers\AwsEc2\AwsEc2AuthenticationProvider.cs" />
     <Compile Include="Backends\Secret\Models\AWS\AWSRoleDefinition.cs" />

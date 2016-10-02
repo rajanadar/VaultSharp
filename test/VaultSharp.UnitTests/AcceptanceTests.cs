@@ -159,11 +159,19 @@ namespace VaultSharp.UnitTests
 
                 await RunAppIdAuthenticationBackendApiTests();
                 await RunAppRoleAuthenticationBackendApiTests();
+
+                await RunTokenAuthenticationBackendApiTests();
             }
             finally
             {
                 ShutdownVaultServer();
             }
+        }
+
+        private static async Task RunTokenAuthenticationBackendApiTests()
+        {
+            var accessors = await _authenticatedVaultClient.GetTokenAccessorListAsync();
+            Assert.True(accessors.Data.Keys.Any());
         }
 
         private static async Task RunAppRoleAuthenticationBackendApiTests()
@@ -184,7 +192,7 @@ namespace VaultSharp.UnitTests
                 Assert.True(authBackends.Data.Any(b => b.BackendType == AuthenticationBackendType.AppRole));
 
                 // raja todo.. run more tests once api work is done.
-                await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.AppRoleAuthenticationGetRolesAsync());
+                // await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.AppRoleAuthenticationGetRolesAsync());
             }
             finally
             {

@@ -10,6 +10,17 @@ namespace VaultSharp.Backends.Authentication.Models.Token
     {
         /// <summary>
         /// <para>[optional]</para>
+        /// Gets or sets a value indicating whether to create the token as an orphan.
+        /// Use this flag when you're calling with a non-root token.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [create as orphan]; otherwise, <c>false</c>.
+        /// </value>
+        [JsonIgnore]
+        public bool CreateAsOrphan { get; set; }
+
+        /// <summary>
+        /// <para>[optional]</para>
         /// Gets or sets the name of the role.
         /// The token will be created against the specified role name; 
         /// this may override options set during this call.
@@ -31,17 +42,6 @@ namespace VaultSharp.Backends.Authentication.Models.Token
         /// </value>
         [JsonProperty("no_parent")]
         public bool NoParent { get; set; }
-
-        /// <summary>
-        /// <para>[optional]</para>
-        /// Gets or sets a value indicating whether to create the token as an orphan.
-        /// Use this flag when you're calling with a non-root token.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if [create as orphan]; otherwise, <c>false</c>.
-        /// </value>
-        [JsonIgnore]
-        public bool CreateAsOrphan { get; set; }
 
         /// <summary>
         /// <para>[optional]</para>
@@ -72,7 +72,7 @@ namespace VaultSharp.Backends.Authentication.Models.Token
         /// The lease time to live.
         /// </value>
         [JsonProperty("lease")]
-        [Obsolete]
+        [Obsolete("Use TimeToLive instead")]
         public string Lease { get; set; }
 
         /// <summary>

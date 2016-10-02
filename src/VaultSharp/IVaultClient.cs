@@ -2320,7 +2320,7 @@ namespace VaultSharp
         /// Gets the list of existing AppRoles in the backend.
         /// </summary>
         /// <returns>The list.</returns>
-        Task<Secret<ListInfo>> AppRoleAuthenticationGetRolesAsync();
+        // Task<Secret<ListInfo>> AppRoleAuthenticationGetRolesAsync();
 
         // raja todo.. fill in other approle apis, after other auth methods.
 
@@ -2434,14 +2434,6 @@ namespace VaultSharp
         Task<Secret<Dictionary<string, object>>> CreateTokenAsync(TokenCreationOptions tokenCreationOptions = null);
 
         /// <summary>
-        /// Gets the calling client token information. i.e. the token used by the client as part of this call.
-        /// </summary>
-        /// <returns>
-        /// The secret with <see cref="TokenInfo" />.
-        /// </returns>
-        Task<Secret<TokenInfo>> GetCallingTokenInfoAsync();
-
-        /// <summary>
         /// Gets the token information for the provided <see cref="token" />.
         /// </summary>
         /// <param name="token"><para>[required]</para>
@@ -2460,7 +2452,41 @@ namespace VaultSharp
         /// <param name="tokenAccessor"><para>[required]</para>
         ///  Accessor of the token to lookup.</param>
         /// <returns>The token info.</returns>
-        Task<Secret<TokenInfo>> GetTokenInfoByAccessorAsync(string tokenAccessor);
+        Task<Secret<TokenAccessorInfo>> GetTokenInfoByAccessorAsync(string tokenAccessor);
+
+        /// <summary>
+        /// Gets the calling client token information. i.e. the token used by the client as part of this call.
+        /// </summary>
+        /// <returns>
+        /// The secret with <see cref="TokenInfo" />.
+        /// </returns>
+        Task<Secret<TokenInfo>> GetCallingTokenInfoAsync();
+
+        /// <summary>
+        /// Renews a lease associated with the calling token.
+        /// This is used to prevent the expiration of a token, and the automatic revocation of it.
+        /// Token renewal is possible only if there is a lease associated with it.
+        /// </summary>
+        /// <param name="token"><para>[required]</para>
+        /// The token to renew.</param>
+        /// <param name="incrementSeconds"><para>[optional]</para>
+        /// A requested amount of time in seconds to extend the lease. This is advisory and may be ignored.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task RenewTokenAsync(string token = null, int? incrementSeconds = null);
+
+        /// <summary>
+        /// Renews a lease associated with the calling token.
+        /// This is used to prevent the expiration of a token, and the automatic revocation of it.
+        /// Token renewal is possible only if there is a lease associated with it.
+        /// </summary>
+        /// <param name="incrementSeconds"><para>[optional]</para>
+        /// A requested amount of time in seconds to extend the lease. This is advisory and may be ignored.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task RenewCallingTokenAsync(int? incrementSeconds = null);
 
         /// <summary>
         /// Revokes a token and all child tokens if the <see cref="revokeAllChildTokens" /> value is <value>true</value>.
@@ -2494,31 +2520,5 @@ namespace VaultSharp
         /// The task.
         /// </returns>
         Task RevokeCallingTokenAsync();
-
-        /// <summary>
-        /// Renews a lease associated with the calling token.
-        /// This is used to prevent the expiration of a token, and the automatic revocation of it.
-        /// Token renewal is possible only if there is a lease associated with it.
-        /// </summary>
-        /// <param name="incrementSeconds"><para>[optional]</para>
-        /// A requested amount of time in seconds to extend the lease. This is advisory and may be ignored.</param>
-        /// <returns>
-        /// The task.
-        /// </returns>
-        Task RenewCallingTokenAsync(int? incrementSeconds = null);
-
-        /// <summary>
-        /// Renews a lease associated with the calling token.
-        /// This is used to prevent the expiration of a token, and the automatic revocation of it.
-        /// Token renewal is possible only if there is a lease associated with it.
-        /// </summary>
-        /// <param name="token"><para>[required]</para>
-        /// The token to renew.</param>
-        /// <param name="incrementSeconds"><para>[optional]</para>
-        /// A requested amount of time in seconds to extend the lease. This is advisory and may be ignored.</param>
-        /// <returns>
-        /// The task.
-        /// </returns>
-        Task RenewTokenAsync(string token = null, int? incrementSeconds = null);
     }
 }

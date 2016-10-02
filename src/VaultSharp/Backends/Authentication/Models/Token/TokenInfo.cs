@@ -32,15 +32,6 @@ namespace VaultSharp.Backends.Authentication.Models.Token
         public List<string> Policies { get; set; }
 
         /// <summary>
-        /// Gets or sets the path used to create the token in the first place.
-        /// </summary>
-        /// <value>
-        /// The created by path.
-        /// </value>
-        [JsonProperty("path")]
-        public string CreatedByPath { get; set; }
-
-        /// <summary>
         /// <para>[optional]</para>
         /// Gets or sets a map of string to string valued metadata. 
         /// This is passed through to the audit backends.
@@ -50,6 +41,15 @@ namespace VaultSharp.Backends.Authentication.Models.Token
         /// </value>
         [JsonProperty("meta")]
         public Dictionary<string, string> Metadata { get; set; }
+
+        /// <summary>
+        /// Gets or sets the path used to create the token in the first place.
+        /// </summary>
+        /// <value>
+        /// The created by path.
+        /// </value>
+        [JsonProperty("path")]
+        public string CreatedByPath { get; set; }
 
         /// <summary>
         /// <para>[optional]</para>
