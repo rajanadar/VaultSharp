@@ -189,6 +189,32 @@ IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort
 
 ```
 
+#### App Role Authentication Backend
+
+```cs
+
+// setup the AppRole based auth to get the right token.
+
+IAuthenticationInfo appRoleAuthenticationInfo = new AppRoleAuthenticationInfo(mountPoint, roleId, secretId);
+IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort, appRoleAuthenticationInfo);
+
+// any operations done using the vaultClient will use the vault token/policies mapped to the app role and secret id.
+
+```
+
+#### AWS-EC2 Authentication Backend
+
+```cs
+
+// setup the AWS-EC2 based auth to get the right token.
+
+IAuthenticationInfo awsEc2AuthenticationInfo = new AwcEc2AuthenticationInfo(mountPoint, pkcs7, nonce, roleName);
+IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort, awsEc2AuthenticationInfo);
+
+// any operations done using the vaultClient will use the vault token/policies mapped to the aws-ec2 role
+
+```
+
 #### GitHub Authentication Backend
 
 ```cs
