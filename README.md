@@ -51,6 +51,9 @@ A .NET Library for HashiCorp's Vault - A Secret Management System.
 				- [Deleting Role and Unmounting the Consul backend](#deleting-role-and-unmounting-the-consul-backend)
 			- [Cubbyhole Secret Backend](#cubbyhole-secret-backend)
 			- [Generic Secret Backend](#generic-secret-backend)
+			- [MongoDB Secret Backend](#mongodb-secret-backend)
+				- [Configuring a MongoDB Backend](#configuring-a-mongodb-backend)
+				- [Generate MongoDB Credentials](#generate-mongodb-credentials)
 			- [MySql Secret Backend](#mysql-secret-backend)
 				- [Configuring a MySql Backend](#configuring-a-mysql-backend)
 				- [Generate MySql Credentials](#generate-mysql-credentials)
@@ -437,6 +440,61 @@ var readValues = await vaultClient.GenericReadSecretAsync(path);
 var data = readValues.Data; // gives back the dictionary
 
 await vaultClient.GenericDeleteSecretAsync(path);
+
+```
+#### MongoDB Secret Backend
+
+##### Configuring a MongoDB Backend
+
+```cs
+// mount the backend
+var mountPoint = "mongodb" + Guid.NewGuid();
+var backend = new SecretBackend
+{
+    MountPoint = mountPoint,
+    BackendType = SecretBackendType.MongoDB,
+};
+
+await vaultClient.MountSecretBackendAsync(backend);
+
+// configure root connection info to create/manage roles and generate credentials
+
+var mongoDbConnectionInfo = new MongoDbConnectionInfo
+{
+ ConnectionStringUri = credentialsFileContent[0]
+};
+
+await vaultClient.MongoDbConfigureConnectionAsync(mongoDbConnectionInfo, mountPoint);
+
+var lease = new CredentialTimeToLiveSettings
+{
+    TimeToLive = "1m1s",
+    MaximumTimeToLive = "2m1s"
+};
+
+await vaultClient.MongoDbConfigureCredentialLeaseSettingsAsync(lease);
+
+// create a named role
+var roleName = "mongodb-role";
+
+var role = new MongoDbRoleDefinition
+{
+    Database = "admin",
+    Roles = JsonConvert.SerializeObject(new object[] { "readWrite", new { role = "read", db = "bar" } })
+};
+
+await vaultClient.MongoDbWriteNamedRoleAsync(roleName, role);
+
+var queriedRole = await vaultClient.MongoDbReadNamedRoleAsync(roleName);
+```
+
+##### Generate MongoDB Credentials
+
+```cs
+var generatedCreds = await vaultClient.MongoDbGenerateDynamicCredentialsAsync(roleName, mountPoint);
+
+var username = generatedCreds.Data.Username;
+var password = generatedCreds.Data.Password;
 
 ```
 #### MySql Secret Backend
