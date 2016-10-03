@@ -1052,6 +1052,39 @@ await vaultClient.DeletePolicyAsync(newPolicy.Name);
 
 ```
 
+### Miscellaneous Features
+
+* VaultSharp supports some awesome features like quick mount, quick unseal, quick rekey etc.
+* It also supports setting Proxy settings, custom message handlers for the HttpClient.
+
+#### Quick mount, unseal and rekey methods
+
+```cs
+
+// quickly mount a secret backend
+await vaultClient.QuickMountSecretBackendAsync(SecretBackendType.AWS);
+
+// quickly mount an auth backend
+await vaultClient.QuickEnableAuthenticationBackendAsync(AuthenticationBackendType.GitHub);
+
+// quickly unseal Vault with a single call.
+var sealStatus = await UnauthenticatedVaultClient.QuickUnsealAsync(AllMasterKeys);
+
+// quickly rekey Vault with a single call.
+var quick = await UnauthenticatedVaultClient.QuickRekeyAsync(AllMasterKeys, rekeyStatus.Nonce);
+
+```
+#### Setting Proxy Settings, custom Message Handlers etc.
+
+```cs
+
+var vaultClient = VaultClientFactory.CreateVaultClient(VaultUriWithPort, new TokenAuthenticationInfo(someToken), postHttpClientInitializeAction:
+    httpClient =>
+    {
+        // set proxy or custom handlers here.
+    });
+```
+
 ### In Conclusion
 
 * If the above documentation doesn't help you, feel free to create an issue or email me. https://github.com/rajanadar/VaultSharp/issues/new
