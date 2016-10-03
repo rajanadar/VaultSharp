@@ -54,6 +54,9 @@ A .NET Library for HashiCorp's Vault - A Secret Management System.
 			- [MongoDB Secret Backend](#mongodb-secret-backend)
 				- [Configuring a MongoDB Backend](#configuring-a-mongodb-backend)
 				- [Generate MongoDB Credentials](#generate-mongodb-credentials)
+			- [MSSQL Secret Backend](#mssql-secret-backend)
+				- [Configuring a MSSQL Backend](#configuring-a-mssql-backend)
+				- [Generate MSSQL Credentials](#generate-mssql-credentials)
 			- [MySql Secret Backend](#mysql-secret-backend)
 				- [Configuring a MySql Backend](#configuring-a-mysql-backend)
 				- [Generate MySql Credentials](#generate-mysql-credentials)
@@ -461,7 +464,7 @@ await vaultClient.MountSecretBackendAsync(backend);
 
 var mongoDbConnectionInfo = new MongoDbConnectionInfo
 {
- ConnectionStringUri = credentialsFileContent[0]
+ ConnectionStringUri = "mongodb://root:password@127.0.0.1:27017/admin?ssl=false"
 };
 
 await vaultClient.MongoDbConfigureConnectionAsync(mongoDbConnectionInfo, mountPoint);
@@ -495,6 +498,61 @@ var generatedCreds = await vaultClient.MongoDbGenerateDynamicCredentialsAsync(ro
 
 var username = generatedCreds.Data.Username;
 var password = generatedCreds.Data.Password;
+
+```
+#### MSSQL Secret Backend
+
+##### Configuring a MSSQL Backend
+
+```cs
+// mount the backend
+var mountPoint = "mssql" + Guid.NewGuid();
+var backend = new SecretBackend
+{
+    MountPoint = mountPoint,
+    BackendType = SecretBackendType.MicrosoftSql,
+};
+
+await vaultClient.MountSecretBackendAsync(backend);
+
+// configure root connection info to create/manage roles and generate credentials
+var microsoftSqlConnectionInfo = new MicrosoftSqlConnectionInfo
+{
+    ConnectionString = credentialsFileContent[0],
+    MaximumOpenConnections = 5,
+    VerifyConnection = true
+};
+
+await vaultClient.MicrosoftSqlConfigureConnectionAsync(microsoftSqlConnectionInfo, mountPoint);
+
+var lease = new CredentialTtlSettings()
+{
+    TimeToLive = "1m1s",
+    MaximumTimeToLive = "2m1s"
+};
+
+await vaultClient.MicrosoftSqlConfigureCredentialLeaseSettingsAsync(lease, mountPoint);
+
+// create a named role
+var roleName = "msssqlrole";
+
+var role = new MicrosoftSqlRoleDefinition
+{
+    Sql = "CREATE LOGIN '[{{name}}]' WITH PASSWORD = '{{password}}'; USE master; CREATE USER '[{{name}}]' FOR LOGIN '[{{name}}]'; GRANT SELECT ON SCHEMA::dbo TO '[{{name}}]'"
+};
+
+await vaultClient.MicrosoftSqlWriteNamedRoleAsync(roleName, role, mountPoint);
+
+var queriedRole = await vaultClient.MicrosoftSqlReadNamedRoleAsync(roleName, mountPoint);
+```
+
+##### Generate MSSQL Credentials
+
+```cs
+var msSqlCredentials = await vaultClient.MicrosoftSqlGenerateDynamicCredentialsAsync(roleName, backend.MountPoint);
+
+var msSqlUsername = msSqlCredentials.Data.Username;
+var msSqlPassword = msSqlCredentials.Data.Password;
 
 ```
 #### MySql Secret Backend
