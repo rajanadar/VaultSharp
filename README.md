@@ -826,7 +826,7 @@ var queriedRole = await vaultClient.RabbitMQReadNamedRoleAsync(roleName);
 ##### Generate RabbitMQ Credentials
 
 ```cs
-var generatedCreds = await _authenticatedVaultClient.RabbitMQGenerateDynamicCredentialsAsync(roleName);
+var generatedCreds = await vaultClient.RabbitMQGenerateDynamicCredentialsAsync(roleName);
 
 Assert.NotNull(generatedCreds.Data.Username);
 Assert.NotNull(generatedCreds.Data.Password);
