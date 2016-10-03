@@ -78,16 +78,16 @@ A .NET Library for HashiCorp's Vault - A Secret Management System.
 * The Vault system is a secret management system built as an Http Service by Hashicorp. 
 * This library supports all the Vault Service Apis documented here: https://www.vaultproject.io/docs/http/
 
-### VaultSharp 0.4.x should completely support Vault Service 0.4.0
+### VaultSharp 0.6.1 completely supports Hashicorp's Vault 0.6.1
 
 ### What is the deal with the Versioning of VaultSharp? (Y U NO 1.0.0)
 
-* This library is written for the Vault Service version 0.4.0
+* This library is written for Hashicorp's Vault Service
 * The Vault service is evolving constantly and the Hashicorp team is rapidly working on it.
-* Pretty soon, we should have an 1.0.0 version of the Vault Service from Hashicorp.
+* Pretty soon, they should have an 1.0.0 version of the Vault Service from Hashicorp.
 * Because this client library is intended to facilititate the Vault Service operations, this library makes it easier for its consumers to relate to the Vault service it supports.
-* Hence a version of 0.4.x denotes that this library will completely support the Vault 0.4.x Service Apis.
-* Tomorrow when Vault Service gets upgraded to 0.5.x, this library will be modified accordingly and versioned as 0.5.x
+* Hence a version of 0.6.1 denotes that this library will completely support the Vault 0.6.1 Service Apis.
+* Tomorrow when Vault Service gets upgraded to 0.6.2, this library will be modified accordingly and versioned as 0.6.2
 
 ### How do I use VaultSharp? Give me a code example
 
@@ -111,7 +111,7 @@ var consulToken = consulCredentials.Data.Token;
 
 ### VaultSharp and 100% Consul Support
 
-* VaultSharp supports all the secret backends supported by the Vault 0.4.0 Service.
+* VaultSharp supports all the secret backends supported by the Vault 0.6.1 Service.
 * This includes 100% support for a Consul Secret backend, which is the recommended secret backend for Vault.
 * Please look at the API usage in the 'Consul' section of 'Secret Backends' below, to see all the Consul related methods in action.
 
@@ -170,7 +170,18 @@ var consulSecret = vaultClient.ConsulGenerateDynamicCredentialsAsync(consulRole)
 
 #### App Id Authentication Backend
 
+* Please note that the app-id auth backend has been deprecated by Vault. They recommend us to use the AppRole backend.
+* VaultSharp still lets you use the app-id Apis, for backward compatibility.
+* You can use the strongly typed api's to configure the appid and userid as follows.
+
 ```cs
+
+// Configure app-id roles and users as follows.
+await _authenticatedVaultClient.AppIdAuthenticationConfigureAppId(appId, policy.Name, appId, path);
+await _authenticatedVaultClient.AppIdAuthenticationConfigureUserId(userId, appId, authenticationPath: path);
+
+// now, setup the app-id based auth to get the right token.
+
 IAuthenticationInfo appIdAuthenticationInfo = new AppIdAuthenticationInfo(mountPoint, appId, userId);
 IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort, appIdAuthenticationInfo);
 
