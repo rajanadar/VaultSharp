@@ -67,6 +67,9 @@ A .NET Library for HashiCorp's Vault - A Secret Management System.
 			- [PostgreSql Secret Backend](#postgresql-secret-backend)
 				- [Configuring a PostgreSql Backend](#configuring-a-postgresql-backend)
 				- [Generate PostgreSql Credentials](#generate-postgresql-credentials)
+			- [RabbitMQ Secret Backend](#rabbitmq-secret-backend)
+				- [Configuring a RabbitMQ Backend](#configuring-a-rabbitmq-backend)
+				- [Generate RabbitMQ Credentials](#generate-rabbitmq-credentials)
 			- [SSH Secret Backend](#ssh-secret-backend)
 				- [Configuring a SSH Backend](#configuring-a-ssh-backend)
 				- [Generate SSH Credentials](#generate-ssh-credentials)
@@ -780,6 +783,56 @@ Assert.NotNull(postgreSqlCredentials.Data.Username);
 Assert.NotNull(postgreSqlCredentials.Data.Password);
 
 ```
+#### RabbitMQ Secret Backend
+
+##### Configuring a RabbitMQ Backend
+
+```cs
+// mount the backend
+await vaultClient.QuickMountSecretBackendAsync(SecretBackendType.RabbitMQ);
+
+// configure root connection info to create/manage roles and generate credentials
+var connectionInfo = new RabbitMQConnectionInfo
+{
+    ConnectionUri = "http://localhost:15672",
+    Username = "guest",
+    Password = "guest",
+    VerifyConnection = true
+};
+
+await vaultClient.RabbitMQConfigureConnectionAsync(connectionInfo);
+
+var lease = new CredentialTimeToLiveSettings
+{
+    TimeToLive = "1m1s",
+    MaximumTimeToLive = "2m1s"
+};
+
+await vaultClient.RabbitMQConfigureCredentialLeaseSettingsAsync(lease);
+var queriedLease = await vaultClient.RabbitMQReadCredentialLeaseSettingsAsync();
+
+var roleName = "rabbitmqrole";
+
+var role = new RabbitMQRoleDefinition
+{
+    VirtualHostPermissions = "{\"/\":{\"write\": \".*\", \"read\": \".*\"}}"
+};
+
+await vaultClient.RabbitMQWriteNamedRoleAsync(roleName, role);
+
+var queriedRole = await vaultClient.RabbitMQReadNamedRoleAsync(roleName);
+```
+
+##### Generate RabbitMQ Credentials
+
+```cs
+var generatedCreds = await _authenticatedVaultClient.RabbitMQGenerateDynamicCredentialsAsync(roleName);
+
+Assert.NotNull(generatedCreds.Data.Username);
+Assert.NotNull(generatedCreds.Data.Password);
+
+```
+
 #### SSH Secret Backend
 
 ##### Configuring a SSH Backend
