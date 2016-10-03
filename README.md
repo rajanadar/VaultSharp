@@ -1,10 +1,6 @@
 
 ## VaultSharp 0.6.1 is now released and available via NuGet.
-
 ### VaultSharp 0.6.1 supports all backends (auth + secret) of Vault 0.6.1
-### The documentation upgrade from 0.4.1 to 0.6.1 is in-progress.
-
-### This is VaultSharp Version 0.6.1.
 
 # VaultSharp
 A .NET Library for HashiCorp's Vault - A Secret Management System.
