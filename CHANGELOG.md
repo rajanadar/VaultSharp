@@ -2,19 +2,23 @@
 
 DEPRECATIONS/CHANGES:
 
-  * tbd
+  * AppId backend is now deprecated, but still supported.
 
 FEATURES:
 
-  * tbd
+  * All the new Authentication backends are now supported: AppRole and AWS-EC2
+  * All the new Secret backends are now supported: MongoDB, MSSQL and RabbitMQ
+  * All the List Apis are now supported.
+  * New Token Apis pertaining to token-roles are now supported.
 
 IMPROVEMENTS:
 
-  * tbd
+  * You can now provide a delegate for HttpClient to be executed. Use this to set proxy settings, message handlers etc.
 
 BUG FIXES:
 
-  * tbd
+  * Fixed deadlock issue with Auth login. #5
+  * 
 
 MISC:
 
