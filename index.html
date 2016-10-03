@@ -191,6 +191,14 @@
 </ul>
 </li>
 <li><a href="#more-administrative--other-operations">More Administrative &amp; Other operations</a></li>
+<li>
+<a href="#miscellaneous-features">Miscellaneous Features</a>
+
+<ul>
+<li><a href="#quick-mount-unseal-and-rekey-methods">Quick mount, unseal and rekey methods</a></li>
+<li><a href="#setting-proxy-settings-custom-message-handlers-etc">Setting Proxy Settings, custom Message Handlers etc.</a></li>
+</ul>
+</li>
 <li><a href="#in-conclusion">In Conclusion</a></li>
 </ul>
 </li>
@@ -1182,6 +1190,41 @@ Assert.Equal(newPolicy.Rules, newPolicyGet.Rules);
 <span class="pl-c">// delete policy</span>
 <span class="pl-k">await</span> vaultClient.DeletePolicyAsync(newPolicy.Name);
 </pre></div>
+
+<h3>
+<a id="miscellaneous-features" class="anchor" href="#miscellaneous-features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Miscellaneous Features</h3>
+
+<ul>
+<li>VaultSharp supports some awesome features like quick mount, quick unseal, quick rekey etc.</li>
+<li>It also supports setting Proxy settings, custom message handlers for the HttpClient.</li>
+</ul>
+
+<h4>
+<a id="quick-mount-unseal-and-rekey-methods" class="anchor" href="#quick-mount-unseal-and-rekey-methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Quick mount, unseal and rekey methods</h4>
+
+<div class="highlight highlight-source-cs"><pre>
+<span class="pl-c">// quickly mount a secret backend</span>
+<span class="pl-k">await</span> vaultClient.QuickMountSecretBackendAsync(SecretBackendType.AWS);
+
+<span class="pl-c">// quickly mount an auth backend</span>
+<span class="pl-k">await</span> vaultClient.QuickEnableAuthenticationBackendAsync(AuthenticationBackendType.GitHub);
+
+<span class="pl-c">// quickly unseal Vault with a single call.</span>
+<span class="pl-k">var</span> sealStatus = <span class="pl-k">await</span> UnauthenticatedVaultClient.QuickUnsealAsync(AllMasterKeys);
+
+<span class="pl-c">// quickly rekey Vault with a single call.</span>
+<span class="pl-k">var</span> quick = <span class="pl-k">await</span> UnauthenticatedVaultClient.QuickRekeyAsync(AllMasterKeys, rekeyStatus.Nonce);
+</pre></div>
+
+<h4>
+<a id="setting-proxy-settings-custom-message-handlers-etc" class="anchor" href="#setting-proxy-settings-custom-message-handlers-etc" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setting Proxy Settings, custom Message Handlers etc.</h4>
+
+<div class="highlight highlight-source-cs"><pre>
+<span class="pl-k">var</span> vaultClient = VaultClientFactory.CreateVaultClient(VaultUriWithPort, <span class="pl-k">new</span> TokenAuthenticationInfo(someToken), postHttpClientInitializeAction:
+    httpClient =&gt;
+    {
+        <span class="pl-c">// set proxy or custom handlers here.</span>
+    });</pre></div>
 
 <h3>
 <a id="in-conclusion" class="anchor" href="#in-conclusion" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>In Conclusion</h3>
