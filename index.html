@@ -2,7 +2,7 @@
 <html lang="en-us">
   <head>
     <meta charset="UTF-8">
-    <title>Vaultsharp by rajanadar</title>
+    <title>VaultSharp by rajanadar</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
@@ -11,7 +11,7 @@
   </head>
   <body>
     <section class="page-header">
-      <h1 class="project-name">Vaultsharp</h1>
+      <h1 class="project-name">VaultSharp</h1>
       <h2 class="project-tagline">A .NET Library for HashiCorp&#39;s Vault - A Secret Management System.</h2>
       <a href="https://github.com/rajanadar/VaultSharp" class="btn">View on GitHub</a>
       <a href="https://github.com/rajanadar/VaultSharp/zipball/master" class="btn">Download .zip</a>
@@ -19,10 +19,17 @@
     </section>
 
     <section class="main-content">
-      <h1>
-<a id="vaultsharp-061-is-now-available-via-nuget" class="anchor" href="#vaultsharp-061-is-now-available-via-nuget" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>VaultSharp 0.6.1 is now available via NuGet.</h1>
+      <h2>
+<a id="vaultsharp-061-is-now-released-and-available-via-nuget" class="anchor" href="#vaultsharp-061-is-now-released-and-available-via-nuget" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>VaultSharp 0.6.1 is now released and available via NuGet.</h2>
 
-<p>(documentation upgrade in progress)</p>
+<h3>
+<a id="vaultsharp-061-supports-all-backends-auth--secret-of-vault-061" class="anchor" href="#vaultsharp-061-supports-all-backends-auth--secret-of-vault-061" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>VaultSharp 0.6.1 supports all backends (auth + secret) of Vault 0.6.1</h3>
+
+<h3>
+<a id="the-documentation-upgrade-from-041-to-061-is-in-progress" class="anchor" href="#the-documentation-upgrade-from-041-to-061-is-in-progress" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>The documentation upgrade from 0.4.1 to 0.6.1 is in-progress.</h3>
+
+<h3>
+<a id="this-is-vaultsharp-version-061" class="anchor" href="#this-is-vaultsharp-version-061" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>This is VaultSharp Version 0.6.1.</h3>
 
 <h1>
 <a id="vaultsharp" class="anchor" href="#vaultsharp" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>VaultSharp</h1>
@@ -34,12 +41,12 @@
 </h2>
 
 <h2>
-<a id="github-site-httpsgithubcomrajanadarvaultsharp" class="anchor" href="#github-site-httpsgithubcomrajanadarvaultsharp" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>GitHub Site: <a href="https://github.com/rajanadar/VaultSharp">https://github.com/rajanadar/VaultSharp</a>
+<a id="documentation-site-httprajanadargithubiovaultsharp" class="anchor" href="#documentation-site-httprajanadargithubiovaultsharp" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Documentation Site: <a href="http://rajanadar.github.io/VaultSharp/">http://rajanadar.github.io/VaultSharp/</a>
 </h2>
 
-<h4>
+<h2>
 <a id="report-feedbackissues-here-httpsgithubcomrajanadarvaultsharpissuesnew" class="anchor" href="#report-feedbackissues-here-httpsgithubcomrajanadarvaultsharpissuesnew" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Report Feedback/Issues Here: <a href="https://github.com/rajanadar/VaultSharp/issues/new">https://github.com/rajanadar/VaultSharp/issues/new</a>
-</h4>
+</h2>
 
 <p><strong>Table of Contents</strong></p>
 
@@ -50,7 +57,7 @@
 <ul>
 <li><a href="#nuget-package-httpswwwnugetorgpackagesvaultsharp">Nuget Package: https://www.nuget.org/packages/VaultSharp/</a></li>
 <li>
-<a href="#github-site-httpsgithubcomrajanadarvaultsharp">GitHub Site: https://github.com/rajanadar/VaultSharp</a>
+<a href="#documentation-site-httprajanadargithubiovaultsharp">Documentation Site: http://rajanadar.github.io/VaultSharp/</a>
 
 <ul>
 <li><a href="#what-is-vaultsharp">What is VaultSharp?</a></li>
@@ -67,6 +74,8 @@
 
 <ul>
 <li><a href="#app-id-authentication-backend">App Id Authentication Backend</a></li>
+<li><a href="#app-role-authentication-backend">App Role Authentication Backend</a></li>
+<li><a href="#aws-ec2-authentication-backend">AWS-EC2 Authentication Backend</a></li>
 <li><a href="#github-authentication-backend">GitHub Authentication Backend</a></li>
 <li><a href="#ldap-authentication-backend">LDAP Authentication Backend</a></li>
 <li><a href="#certificate-tls-authentication-backend">Certificate (TLS) Authentication Backend</a></li>
@@ -106,6 +115,22 @@
 <li><a href="#cubbyhole-secret-backend">Cubbyhole Secret Backend</a></li>
 <li><a href="#generic-secret-backend">Generic Secret Backend</a></li>
 <li>
+<a href="#mongodb-secret-backend">MongoDB Secret Backend</a>
+
+<ul>
+<li><a href="#configuring-a-mongodb-backend">Configuring a MongoDB Backend</a></li>
+<li><a href="#generate-mongodb-credentials">Generate MongoDB Credentials</a></li>
+</ul>
+</li>
+<li>
+<a href="#mssql-secret-backend">MSSQL Secret Backend</a>
+
+<ul>
+<li><a href="#configuring-a-mssql-backend">Configuring a MSSQL Backend</a></li>
+<li><a href="#generate-mssql-credentials">Generate MSSQL Credentials</a></li>
+</ul>
+</li>
+<li>
 <a href="#mysql-secret-backend">MySql Secret Backend</a>
 
 <ul>
@@ -128,6 +153,14 @@
 <ul>
 <li><a href="#configuring-a-postgresql-backend">Configuring a PostgreSql Backend</a></li>
 <li><a href="#generate-postgresql-credentials">Generate PostgreSql Credentials</a></li>
+</ul>
+</li>
+<li>
+<a href="#rabbitmq-secret-backend">RabbitMQ Secret Backend</a>
+
+<ul>
+<li><a href="#configuring-a-rabbitmq-backend">Configuring a RabbitMQ Backend</a></li>
+<li><a href="#generate-rabbitmq-credentials">Generate RabbitMQ Credentials</a></li>
 </ul>
 </li>
 <li>
@@ -176,18 +209,18 @@
 </ul>
 
 <h3>
-<a id="vaultsharp-04x-should-completely-support-vault-service-040" class="anchor" href="#vaultsharp-04x-should-completely-support-vault-service-040" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>VaultSharp 0.4.x should completely support Vault Service 0.4.0</h3>
+<a id="vaultsharp-061-completely-supports-hashicorps-vault-061" class="anchor" href="#vaultsharp-061-completely-supports-hashicorps-vault-061" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>VaultSharp 0.6.1 completely supports Hashicorp's Vault 0.6.1</h3>
 
 <h3>
 <a id="what-is-the-deal-with-the-versioning-of-vaultsharp-y-u-no-100" class="anchor" href="#what-is-the-deal-with-the-versioning-of-vaultsharp-y-u-no-100" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What is the deal with the Versioning of VaultSharp? (Y U NO 1.0.0)</h3>
 
 <ul>
-<li>This library is written for the Vault Service version 0.4.0</li>
+<li>This library is written for Hashicorp's Vault Service</li>
 <li>The Vault service is evolving constantly and the Hashicorp team is rapidly working on it.</li>
-<li>Pretty soon, we should have an 1.0.0 version of the Vault Service from Hashicorp.</li>
+<li>Pretty soon, they should have an 1.0.0 version of the Vault Service from Hashicorp.</li>
 <li>Because this client library is intended to facilititate the Vault Service operations, this library makes it easier for its consumers to relate to the Vault service it supports.</li>
-<li>Hence a version of 0.4.x denotes that this library will completely support the Vault 0.4.x Service Apis.</li>
-<li>Tomorrow when Vault Service gets upgraded to 0.5.x, this library will be modified accordingly and versioned as 0.5.x</li>
+<li>Hence a version of 0.6.1 denotes that this library will completely support the Vault 0.6.1 Service Apis.</li>
+<li>Tomorrow when Vault Service gets upgraded to 0.6.2, this library will be modified accordingly and versioned as 0.6.2</li>
 </ul>
 
 <h3>
@@ -219,7 +252,7 @@ IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort
 <a id="vaultsharp-and-100-consul-support" class="anchor" href="#vaultsharp-and-100-consul-support" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>VaultSharp and 100% Consul Support</h3>
 
 <ul>
-<li>VaultSharp supports all the secret backends supported by the Vault 0.4.0 Service.</li>
+<li>VaultSharp supports all the secret backends supported by the Vault 0.6.1 Service.</li>
 <li>This includes 100% support for a Consul Secret backend, which is the recommended secret backend for Vault.</li>
 <li>Please look at the API usage in the 'Consul' section of 'Secret Backends' below, to see all the Consul related methods in action.</li>
 </ul>
@@ -288,10 +321,47 @@ IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort
 <h4>
 <a id="app-id-authentication-backend" class="anchor" href="#app-id-authentication-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>App Id Authentication Backend</h4>
 
-<div class="highlight highlight-source-cs"><pre>IAuthenticationInfo appIdAuthenticationInfo = <span class="pl-k">new</span> AppIdAuthenticationInfo(mountPoint, appId, userId);
+<ul>
+<li>Please note that the app-id auth backend has been deprecated by Vault. They recommend us to use the AppRole backend.</li>
+<li>VaultSharp still lets you use the app-id Apis, for backward compatibility.</li>
+<li>You can use the strongly typed api's to configure the appid and userid as follows.</li>
+</ul>
+
+<div class="highlight highlight-source-cs"><pre>
+<span class="pl-c">// Configure app-id roles and users as follows.</span>
+<span class="pl-k">await</span> AdminVaultClient.AppIdAuthenticationConfigureAppId(appId, policy.Name, appId, path);
+<span class="pl-k">await</span> AdminVaultClient.AppIdAuthenticationConfigureUserId(userId, appId, authenticationPath: path);
+
+<span class="pl-c">// now, setup the app-id based auth to get the right token.</span>
+
+IAuthenticationInfo appIdAuthenticationInfo = <span class="pl-k">new</span> AppIdAuthenticationInfo(mountPoint, appId, userId);
 IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort, appIdAuthenticationInfo);
 
 <span class="pl-c">// any operations done using the vaultClient will use the vault token/policies mapped to the app id and user id.</span>
+</pre></div>
+
+<h4>
+<a id="app-role-authentication-backend" class="anchor" href="#app-role-authentication-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>App Role Authentication Backend</h4>
+
+<div class="highlight highlight-source-cs"><pre>
+<span class="pl-c">// setup the AppRole based auth to get the right token.</span>
+
+IAuthenticationInfo appRoleAuthenticationInfo = <span class="pl-k">new</span> AppRoleAuthenticationInfo(mountPoint, roleId, secretId);
+IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort, appRoleAuthenticationInfo);
+
+<span class="pl-c">// any operations done using the vaultClient will use the vault token/policies mapped to the app role and secret id.</span>
+</pre></div>
+
+<h4>
+<a id="aws-ec2-authentication-backend" class="anchor" href="#aws-ec2-authentication-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>AWS-EC2 Authentication Backend</h4>
+
+<div class="highlight highlight-source-cs"><pre>
+<span class="pl-c">// setup the AWS-EC2 based auth to get the right token.</span>
+
+IAuthenticationInfo awsEc2AuthenticationInfo = <span class="pl-k">new</span> AwcEc2AuthenticationInfo(mountPoint, pkcs7, nonce, roleName);
+IVaultClient vaultClient = VaultClientFactory.CreateVaultClient(vaultUriWithPort, awsEc2AuthenticationInfo);
+
+<span class="pl-c">// any operations done using the vaultClient will use the vault token/policies mapped to the aws-ec2 role</span>
 </pre></div>
 
 <h4>
@@ -508,6 +578,116 @@ Assert.Equal(ConsulTokenType.management, readRole.Data.TokenType);</pre></div>
 <span class="pl-k">var</span> data = readValues.Data; <span class="pl-c">// gives back the dictionary</span>
 
 <span class="pl-k">await</span> vaultClient.GenericDeleteSecretAsync(path);
+</pre></div>
+
+<h4>
+<a id="mongodb-secret-backend" class="anchor" href="#mongodb-secret-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>MongoDB Secret Backend</h4>
+
+<h5>
+<a id="configuring-a-mongodb-backend" class="anchor" href="#configuring-a-mongodb-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuring a MongoDB Backend</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">// mount the backend</span>
+<span class="pl-k">var</span> mountPoint = <span class="pl-s"><span class="pl-pds">"</span>mongodb<span class="pl-pds">"</span></span> + Guid.NewGuid();
+<span class="pl-k">var</span> backend = <span class="pl-k">new</span> SecretBackend
+{
+    MountPoint = mountPoint,
+    BackendType = SecretBackendType.MongoDB,
+};
+
+<span class="pl-k">await</span> vaultClient.MountSecretBackendAsync(backend);
+
+<span class="pl-c">// configure root connection info to create/manage roles and generate credentials</span>
+
+<span class="pl-k">var</span> mongoDbConnectionInfo = <span class="pl-k">new</span> MongoDbConnectionInfo
+{
+ ConnectionStringUri = <span class="pl-s"><span class="pl-pds">"</span>mongodb://root:password@127.0.0.1:27017/admin?ssl=false<span class="pl-pds">"</span></span>
+};
+
+<span class="pl-k">await</span> vaultClient.MongoDbConfigureConnectionAsync(mongoDbConnectionInfo, mountPoint);
+
+<span class="pl-k">var</span> lease = <span class="pl-k">new</span> CredentialTimeToLiveSettings
+{
+    TimeToLive = <span class="pl-s"><span class="pl-pds">"</span>1m1s<span class="pl-pds">"</span></span>,
+    MaximumTimeToLive = <span class="pl-s"><span class="pl-pds">"</span>2m1s<span class="pl-pds">"</span></span>
+};
+
+<span class="pl-k">await</span> vaultClient.MongoDbConfigureCredentialLeaseSettingsAsync(lease);
+
+<span class="pl-c">// create a named role</span>
+<span class="pl-k">var</span> roleName = <span class="pl-s"><span class="pl-pds">"</span>mongodb-role<span class="pl-pds">"</span></span>;
+
+<span class="pl-k">var</span> role = <span class="pl-k">new</span> MongoDbRoleDefinition
+{
+    Database = <span class="pl-s"><span class="pl-pds">"</span>admin<span class="pl-pds">"</span></span>,
+    Roles = JsonConvert.SerializeObject(<span class="pl-k">new</span> <span class="pl-k">object</span>[] { <span class="pl-s"><span class="pl-pds">"</span>readWrite<span class="pl-pds">"</span></span>, <span class="pl-k">new</span> { role = <span class="pl-s"><span class="pl-pds">"</span>read<span class="pl-pds">"</span></span>, db = <span class="pl-s"><span class="pl-pds">"</span>bar<span class="pl-pds">"</span></span> } })
+};
+
+<span class="pl-k">await</span> vaultClient.MongoDbWriteNamedRoleAsync(roleName, role);
+
+<span class="pl-k">var</span> queriedRole = <span class="pl-k">await</span> vaultClient.MongoDbReadNamedRoleAsync(roleName);</pre></div>
+
+<h5>
+<a id="generate-mongodb-credentials" class="anchor" href="#generate-mongodb-credentials" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Generate MongoDB Credentials</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> generatedCreds = <span class="pl-k">await</span> vaultClient.MongoDbGenerateDynamicCredentialsAsync(roleName, mountPoint);
+
+<span class="pl-k">var</span> username = generatedCreds.Data.Username;
+<span class="pl-k">var</span> password = generatedCreds.Data.Password;
+</pre></div>
+
+<h4>
+<a id="mssql-secret-backend" class="anchor" href="#mssql-secret-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>MSSQL Secret Backend</h4>
+
+<h5>
+<a id="configuring-a-mssql-backend" class="anchor" href="#configuring-a-mssql-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuring a MSSQL Backend</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">// mount the backend</span>
+<span class="pl-k">var</span> mountPoint = <span class="pl-s"><span class="pl-pds">"</span>mssql<span class="pl-pds">"</span></span> + Guid.NewGuid();
+<span class="pl-k">var</span> backend = <span class="pl-k">new</span> SecretBackend
+{
+    MountPoint = mountPoint,
+    BackendType = SecretBackendType.MicrosoftSql,
+};
+
+<span class="pl-k">await</span> vaultClient.MountSecretBackendAsync(backend);
+
+<span class="pl-c">// configure root connection info to create/manage roles and generate credentials</span>
+<span class="pl-k">var</span> microsoftSqlConnectionInfo = <span class="pl-k">new</span> MicrosoftSqlConnectionInfo
+{
+    ConnectionString = <span class="pl-s"><span class="pl-pds">"</span>server=localhost<span class="pl-cce">\s</span>qlexpress;port=1433;user id=sa;password=****;database=master;app name=vault<span class="pl-pds">"</span></span>,
+    MaximumOpenConnections = <span class="pl-c1">5</span>,
+    VerifyConnection = <span class="pl-c1">true</span>
+};
+
+<span class="pl-k">await</span> vaultClient.MicrosoftSqlConfigureConnectionAsync(microsoftSqlConnectionInfo, mountPoint);
+
+<span class="pl-k">var</span> lease = <span class="pl-k">new</span> CredentialTtlSettings()
+{
+    TimeToLive = <span class="pl-s"><span class="pl-pds">"</span>1m1s<span class="pl-pds">"</span></span>,
+    MaximumTimeToLive = <span class="pl-s"><span class="pl-pds">"</span>2m1s<span class="pl-pds">"</span></span>
+};
+
+<span class="pl-k">await</span> vaultClient.MicrosoftSqlConfigureCredentialLeaseSettingsAsync(lease, mountPoint);
+
+<span class="pl-c">// create a named role</span>
+<span class="pl-k">var</span> roleName = <span class="pl-s"><span class="pl-pds">"</span>msssqlrole<span class="pl-pds">"</span></span>;
+
+<span class="pl-k">var</span> role = <span class="pl-k">new</span> MicrosoftSqlRoleDefinition
+{
+    Sql = <span class="pl-s"><span class="pl-pds">"</span>CREATE LOGIN '[{{name}}]' WITH PASSWORD = '{{password}}'; USE master; CREATE USER '[{{name}}]' FOR LOGIN '[{{name}}]'; GRANT SELECT ON SCHEMA::dbo TO '[{{name}}]'<span class="pl-pds">"</span></span>
+};
+
+<span class="pl-k">await</span> vaultClient.MicrosoftSqlWriteNamedRoleAsync(roleName, role, mountPoint);
+
+<span class="pl-k">var</span> queriedRole = <span class="pl-k">await</span> vaultClient.MicrosoftSqlReadNamedRoleAsync(roleName, mountPoint);</pre></div>
+
+<h5>
+<a id="generate-mssql-credentials" class="anchor" href="#generate-mssql-credentials" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Generate MSSQL Credentials</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> msSqlCredentials = <span class="pl-k">await</span> vaultClient.MicrosoftSqlGenerateDynamicCredentialsAsync(roleName, backend.MountPoint);
+
+<span class="pl-k">var</span> msSqlUsername = msSqlCredentials.Data.Username;
+<span class="pl-k">var</span> msSqlPassword = msSqlCredentials.Data.Password;
 </pre></div>
 
 <h4>
@@ -732,6 +912,55 @@ Assert.Equal(sql, readRole.Data.Sql);</pre></div>
 Assert.NotNull(postgreSqlCredentials.LeaseId);
 Assert.NotNull(postgreSqlCredentials.Data.Username);
 Assert.NotNull(postgreSqlCredentials.Data.Password);
+</pre></div>
+
+<h4>
+<a id="rabbitmq-secret-backend" class="anchor" href="#rabbitmq-secret-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>RabbitMQ Secret Backend</h4>
+
+<h5>
+<a id="configuring-a-rabbitmq-backend" class="anchor" href="#configuring-a-rabbitmq-backend" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuring a RabbitMQ Backend</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-c">// mount the backend</span>
+<span class="pl-k">await</span> vaultClient.QuickMountSecretBackendAsync(SecretBackendType.RabbitMQ);
+
+<span class="pl-c">// configure root connection info to create/manage roles and generate credentials</span>
+<span class="pl-k">var</span> connectionInfo = <span class="pl-k">new</span> RabbitMQConnectionInfo
+{
+    ConnectionUri = <span class="pl-s"><span class="pl-pds">"</span>http://localhost:15672<span class="pl-pds">"</span></span>,
+    Username = <span class="pl-s"><span class="pl-pds">"</span>guest<span class="pl-pds">"</span></span>,
+    Password = <span class="pl-s"><span class="pl-pds">"</span>guest<span class="pl-pds">"</span></span>,
+    VerifyConnection = <span class="pl-c1">true</span>
+};
+
+<span class="pl-k">await</span> vaultClient.RabbitMQConfigureConnectionAsync(connectionInfo);
+
+<span class="pl-k">var</span> lease = <span class="pl-k">new</span> CredentialTimeToLiveSettings
+{
+    TimeToLive = <span class="pl-s"><span class="pl-pds">"</span>1m1s<span class="pl-pds">"</span></span>,
+    MaximumTimeToLive = <span class="pl-s"><span class="pl-pds">"</span>2m1s<span class="pl-pds">"</span></span>
+};
+
+<span class="pl-k">await</span> vaultClient.RabbitMQConfigureCredentialLeaseSettingsAsync(lease);
+<span class="pl-k">var</span> queriedLease = <span class="pl-k">await</span> vaultClient.RabbitMQReadCredentialLeaseSettingsAsync();
+
+<span class="pl-k">var</span> roleName = <span class="pl-s"><span class="pl-pds">"</span>rabbitmqrole<span class="pl-pds">"</span></span>;
+
+<span class="pl-k">var</span> role = <span class="pl-k">new</span> RabbitMQRoleDefinition
+{
+    VirtualHostPermissions = <span class="pl-s"><span class="pl-pds">"</span>{<span class="pl-cce">\"</span>/<span class="pl-cce">\"</span>:{<span class="pl-cce">\"</span>write<span class="pl-cce">\"</span>: <span class="pl-cce">\"</span>.*<span class="pl-cce">\"</span>, <span class="pl-cce">\"</span>read<span class="pl-cce">\"</span>: <span class="pl-cce">\"</span>.*<span class="pl-cce">\"</span>}}<span class="pl-pds">"</span></span>
+};
+
+<span class="pl-k">await</span> vaultClient.RabbitMQWriteNamedRoleAsync(roleName, role);
+
+<span class="pl-k">var</span> queriedRole = <span class="pl-k">await</span> vaultClient.RabbitMQReadNamedRoleAsync(roleName);</pre></div>
+
+<h5>
+<a id="generate-rabbitmq-credentials" class="anchor" href="#generate-rabbitmq-credentials" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Generate RabbitMQ Credentials</h5>
+
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> generatedCreds = <span class="pl-k">await</span> vaultClient.RabbitMQGenerateDynamicCredentialsAsync(roleName);
+
+Assert.NotNull(generatedCreds.Data.Username);
+Assert.NotNull(generatedCreds.Data.Password);
 </pre></div>
 
 <h4>
@@ -966,7 +1195,7 @@ Assert.Equal(newPolicy.Rules, newPolicyGet.Rules);
 <p>Happy Coding folks!</p>
 
       <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/rajanadar/VaultSharp">Vaultsharp</a> is maintained by <a href="https://github.com/rajanadar">rajanadar</a>.</span>
+        <span class="site-footer-owner"><a href="https://github.com/rajanadar/VaultSharp">VaultSharp</a> is maintained by <a href="https://github.com/rajanadar">rajanadar</a>.</span>
 
         <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
