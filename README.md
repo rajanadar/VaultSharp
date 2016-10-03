@@ -31,6 +31,8 @@ A .NET Library for HashiCorp's Vault - A Secret Management System.
 		- [All the methods are async. How do I use them synchronously?](#all-the-methods-are-async-how-do-i-use-them-synchronously)
 		- [Authentication Backends (All of them are supported)](#authentication-backends-all-of-them-are-supported)
 			- [App Id Authentication Backend](#app-id-authentication-backend)
+			- [App Role Authentication Backend](#app-role-authentication-backend)
+			- [AWS-EC2 Authentication Backend](#aws-ec2-authentication-backend)
 			- [GitHub Authentication Backend](#github-authentication-backend)
 			- [LDAP Authentication Backend](#ldap-authentication-backend)
 			- [Certificate (TLS) Authentication Backend](#certificate-tls-authentication-backend)
