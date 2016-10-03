@@ -81,6 +81,9 @@ A .NET Library for HashiCorp's Vault - A Secret Management System.
 			- [File Audit Backend](#file-audit-backend)
 			- [Syslog Audit Backend](#syslog-audit-backend)
 		- [More Administrative & Other operations](#more-administrative--other-operations)
+		- [Miscellaneous Features)](#miscellaneous-features)
+			- [Quick mount, unseal and rekey methods](#quick-mount-unseal-and-rekey-methods)
+			- [Setting Proxy Settings, custom Message Handlers etc.](#setting-proxy-settings-custom-message-handlers-etc)
 		- [In Conclusion](#in-conclusion)
 
 ### What is VaultSharp?
