@@ -185,8 +185,8 @@ var consulSecret = vaultClient.ConsulGenerateDynamicCredentialsAsync(consulRole)
 ```cs
 
 // Configure app-id roles and users as follows.
-await _authenticatedVaultClient.AppIdAuthenticationConfigureAppId(appId, policy.Name, appId, path);
-await _authenticatedVaultClient.AppIdAuthenticationConfigureUserId(userId, appId, authenticationPath: path);
+await AdminVaultClient.AppIdAuthenticationConfigureAppId(appId, policy.Name, appId, path);
+await AdminVaultClient.AppIdAuthenticationConfigureUserId(userId, appId, authenticationPath: path);
 
 // now, setup the app-id based auth to get the right token.
 
@@ -518,7 +518,7 @@ await vaultClient.MountSecretBackendAsync(backend);
 // configure root connection info to create/manage roles and generate credentials
 var microsoftSqlConnectionInfo = new MicrosoftSqlConnectionInfo
 {
-    ConnectionString = credentialsFileContent[0],
+    ConnectionString = "server=localhost\sqlexpress;port=1433;user id=sa;password=****;database=master;app name=vault",
     MaximumOpenConnections = 5,
     VerifyConnection = true
 };
