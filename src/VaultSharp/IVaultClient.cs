@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using VaultSharp.Backends.Audit.Models;
 using VaultSharp.Backends.Authentication.Models;
+using VaultSharp.Backends.Authentication.Models.AwsEc2;
 using VaultSharp.Backends.Authentication.Models.Token;
 using VaultSharp.Backends.Secret.Models;
 using VaultSharp.Backends.Secret.Models.AWS;
@@ -2318,11 +2319,85 @@ namespace VaultSharp
 
         /// <summary>
         /// Gets the list of existing AppRoles in the backend.
+        /// raja todo.. fill in all strongly typed apis together.
         /// </summary>
         /// <returns>The list.</returns>
         // Task<Secret<ListInfo>> AppRoleAuthenticationGetRolesAsync();
 
-        // raja todo.. fill in other approle apis, after other auth methods.
+        /// <summary>
+        /// Configures the credentials required to perform API calls to AWS. 
+        /// The instance identity document fetched from the PKCS#7 signature will provide 
+        /// the EC2 instance ID. The credentials configured using this endpoint will be used 
+        /// to query the status of the instances via DescribeInstances API.
+        /// If static credentials are not provided using this endpoint, then the credentials will be 
+        /// retrieved from the environment variables AWS_ACCESS_KEY, AWS_SECRET_KEY and AWS_REGION respectively. 
+        /// If the credentials are still not found and if the backend is configured 
+        /// on an EC2 instance with metadata querying capabilities, the credentials are fetched automatically.
+        /// </summary>
+        /// <param name="awsEc2AccessCredentials">
+        /// <para>[optional]</para>
+        /// AWS Access credentials.</param>
+        /// <param name="authenticationPath"><para>[optional]</para>
+        /// The path for the authentication backend. 
+        /// Defaults to <see cref="AuthenticationBackendDefaultPaths.AwsEc2" />
+        /// Provide a value only if you have customized the path.</param>
+        /// <returns>The task.</returns>
+        Task AwsEc2AuthenticationConfigureClientAccessCredentialsAsync(AwsEc2AccessCredentials awsEc2AccessCredentials = null, string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2);
+
+        /// <summary>
+        /// Returns the configured AWS access credentials.
+        /// </summary>
+        /// <param name="authenticationPath"><para>[optional]</para>
+        /// The path for the authentication backend. 
+        /// Defaults to <see cref="AuthenticationBackendDefaultPaths.AwsEc2" />
+        /// Provide a value only if you have customized the path.</param>
+        /// <returns>The configured AWS access credentials.</returns>
+        Task<Secret<AwsEc2AccessCredentials>> AwsEc2AuthenticationGetClientAccessCredentialsAsync(string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2);
+
+        /// <summary>
+        /// Deletes the configured AWS access credentials.
+        /// </summary>
+        /// <param name="authenticationPath"><para>[optional]</para>
+        /// The path for the authentication backend. 
+        /// Defaults to <see cref="AuthenticationBackendDefaultPaths.AwsEc2" />
+        /// Provide a value only if you have customized the path.</param>
+        /// <returns>The task.</returns>
+        Task AwsEc2AuthenticationDeleteClientAccessCredentialsAsync(string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2);
+
+        /// <summary>
+        /// Registers an AWS public key to be used to verify the instance identity documents. 
+        /// While the PKCS#7 signature of the identity documents have DSA digest, 
+        /// the identity signature will have RSA digest, and hence the public keys for each type varies respectively. 
+        /// Indicate the type of the public key using the "type" parameter.
+        /// </summary>
+        /// <param name="awsEc2PublicKeyInfo">The aws ec2 public key information.</param>
+        /// <param name="authenticationPath">The authentication path.</param>
+        /// <returns>The task.</returns>
+        Task AwsEc2AuthenticationRegisterAwsPublicKeyAsync(AwsEc2PublicKeyInfo awsEc2PublicKeyInfo, string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2);
+
+        /// <summary>
+        /// Returns the configured AWS public key.
+        /// </summary>
+        /// <param name="certificateName">
+        /// <para>[required]</para>
+        /// The name of the certificate.
+        /// </param>
+        /// <param name="authenticationPath"><para>[optional]</para>
+        /// The path for the authentication backend. 
+        /// Defaults to <see cref="AuthenticationBackendDefaultPaths.AwsEc2" />
+        /// Provide a value only if you have customized the path.</param>
+        /// <returns>The configured AWS access credentials.</returns>
+        Task<Secret<AwsEc2PublicKeyInfo>> AwsEc2AuthenticationGetAwsPublicKeyAsync(string certificateName, string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2);
+
+        /// <summary>
+        /// Returns all the AWS public certificates that are registered with the backend.
+        /// </summary>
+        /// <param name="authenticationPath"><para>[optional]</para>
+        /// The path for the authentication backend. 
+        /// Defaults to <see cref="AuthenticationBackendDefaultPaths.AwsEc2" />
+        /// Provide a value only if you have customized the path.</param>
+        /// <returns>The configured AWS access credentials.</returns>
+        Task<Secret<ListInfo>> AwsEc2AuthenticationGetAwsPublicKeyListAsync(string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2);
 
         /// <summary>
         /// Enables multi factor authentication with the specific type.

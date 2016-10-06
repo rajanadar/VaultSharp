@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using VaultSharp.Backends.Audit.Models;
 using VaultSharp.Backends.Authentication.Models;
+using VaultSharp.Backends.Authentication.Models.AwsEc2;
 using VaultSharp.Backends.Authentication.Models.Token;
 using VaultSharp.Backends.Authentication.Providers;
 using VaultSharp.Backends.Secret.Models;
@@ -1765,7 +1766,44 @@ namespace VaultSharp
             return await MakeVaultApiRequest<Secret<ListInfo>>("/auth/approle/role?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        // raja todo.. fill in other approle apis, after other auth methods.
+        public async Task AwsEc2AuthenticationConfigureClientAccessCredentialsAsync(AwsEc2AccessCredentials awsEc2AccessCredentials = null, string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2)
+        {
+            if (awsEc2AccessCredentials == null)
+            {
+                awsEc2AccessCredentials = new AwsEc2AccessCredentials();
+            }
+
+            await MakeVaultApiRequest("auth/" + authenticationPath.Trim('/') + "/config/client", HttpMethod.Post, awsEc2AccessCredentials).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<AwsEc2AccessCredentials>> AwsEc2AuthenticationGetClientAccessCredentialsAsync(string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2)
+        {
+            return await MakeVaultApiRequest<Secret<AwsEc2AccessCredentials>>("auth/" + authenticationPath.Trim('/') + "/config/client", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task AwsEc2AuthenticationDeleteClientAccessCredentialsAsync(string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2)
+        {
+            await MakeVaultApiRequest("auth/" + authenticationPath.Trim('/') + "/config/client", HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task AwsEc2AuthenticationRegisterAwsPublicKeyAsync(AwsEc2PublicKeyInfo awsEc2PublicKeyInfo, string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2)
+        {
+            Checker.NotNull(awsEc2PublicKeyInfo, "awsEc2PublicKeyInfo");
+            Checker.NotNull(awsEc2PublicKeyInfo.CertificateName, "awsEc2PublicKeyInfo.CertificateName");
+
+            await MakeVaultApiRequest("auth/" + authenticationPath.Trim('/') + "/config/certificate/" + awsEc2PublicKeyInfo.CertificateName, HttpMethod.Post, awsEc2PublicKeyInfo).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<AwsEc2PublicKeyInfo>> AwsEc2AuthenticationGetAwsPublicKeyAsync(string certificateName, string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2)
+        {
+            Checker.NotNull(certificateName, "certificateName");
+            return await MakeVaultApiRequest<Secret<AwsEc2PublicKeyInfo>>("auth/" + authenticationPath.Trim('/') + "/config/certificate/" + certificateName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<ListInfo>> AwsEc2AuthenticationGetAwsPublicKeyListAsync(string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2)
+        {
+            return await MakeVaultApiRequest<Secret<ListInfo>>("auth/" + authenticationPath.Trim('/') + "/config/certificates?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
 
         public async Task EnableMultiFactorAuthenticationAsync(string supportedAuthenticationBackendMountPoint, string mfaType = "duo")
         {
