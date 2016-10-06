@@ -71,6 +71,8 @@ namespace VaultSharp.UnitTests
 
             // https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
             // create a root user as follows: http://stackoverflow.com/a/29090991/1174414
+
+            // startup mongodb server as follows: "C:\Program Files\MongoDB\Server\3.2\bin\mongod.exe"
             public const bool RunMongoDbSecretBackendAcceptanceTests = false;
             public const string MongoDbCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\mongodb.txt";
 

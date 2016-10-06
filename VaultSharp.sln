@@ -1,11 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VaultSharp", "src\VaultSharp\VaultSharp.csproj", "{8EFE7F89-F83F-4E35-8736-C3E86611D138}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VaultSharp.UnitTests", "test\VaultSharp.UnitTests\VaultSharp.UnitTests.csproj", "{E2EAEADB-4B95-4F84-96FD-57AC2C30EA0C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EDD023C0-3460-4B40-B061-7D925F5C2F59}"
+	ProjectSection(SolutionItems) = preProject
+		CHANGELOG.md = CHANGELOG.md
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,17 +30,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 3
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://rajatfs.visualstudio.com/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = src\\VaultSharp\\VaultSharp.csproj
-		SccProjectName1 = src/VaultSharp
-		SccLocalPath1 = src\\VaultSharp
-		SccProjectUniqueName2 = test\\VaultSharp.UnitTests\\VaultSharp.UnitTests.csproj
-		SccProjectName2 = test/VaultSharp.UnitTests
-		SccLocalPath2 = test\\VaultSharp.UnitTests
 	EndGlobalSection
 EndGlobal

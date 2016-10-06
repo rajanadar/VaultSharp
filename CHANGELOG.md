@@ -1,3 +1,27 @@
+## 0.6.2 (Unreleased)
+
+MISC:
+
+  * Basically the change log for  VaultSharp 0.6.2 follows the changelog 
+    for Vault 0.6.2 here. (https://github.com/hashicorp/vault/blob/master/CHANGELOG.md)
+  * Some of the changes are called out below. But all of Vault 0.6.2 changes are supported by VaultSharp 0.6.2
+
+DEPRECATIONS/CHANGES:
+
+  * 
+
+FEATURES:
+
+  * 
+
+IMPROVEMENTS:
+
+  * 
+
+BUG FIXES:
+
+  * 
+
 ## 0.6.1 (October 03, 2016)
 
 MISC:
