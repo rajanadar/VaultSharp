@@ -55,7 +55,9 @@
     <Compile Include="Backends\Authentication\Models\AppRole\AppRoleAuthenticationInfo.cs" />
     <Compile Include="Backends\Authentication\Models\AuthenticationBackendType.cs" />
     <Compile Include="Backends\Authentication\Models\AuthenticationBackendDefaultPaths.cs" />
+    <Compile Include="Backends\Authentication\Models\AwsEc2\AwsEc2AuthenticationRole.cs" />
     <Compile Include="Backends\Authentication\Models\AwsEc2\AwsEc2DocumentType.cs" />
+    <Compile Include="Backends\Authentication\Models\AwsEc2\AwsEc2AuthenticationTidyOptions.cs" />
     <Compile Include="Backends\Authentication\Models\AwsEc2\AwsEc2PublicKeyInfo.cs" />
     <Compile Include="Backends\Authentication\Models\AwsEc2\AwsEc2AccessCredentials.cs" />
     <Compile Include="Backends\Authentication\Models\AwsEc2\AwsEc2AuthenticationInfo.cs" />

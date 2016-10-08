@@ -2322,7 +2322,7 @@ namespace VaultSharp
         /// raja todo.. fill in all strongly typed apis together.
         /// </summary>
         /// <returns>The list.</returns>
-        // Task<Secret<ListInfo>> AppRoleAuthenticationGetRolesAsync();
+        Task<Secret<ListInfo>> AppRoleAuthenticationGetRolesAsync();
 
         /// <summary>
         /// Configures the credentials required to perform API calls to AWS. 
@@ -2398,6 +2398,85 @@ namespace VaultSharp
         /// Provide a value only if you have customized the path.</param>
         /// <returns>The configured AWS access credentials.</returns>
         Task<Secret<ListInfo>> AwsEc2AuthenticationGetAwsPublicKeyListAsync(string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2);
+
+        /// <summary>
+        /// Configures the periodic tidying operation of the whitelisted identity entries.
+        /// </summary>
+        /// <param name="awsEc2AuthenticationTidyOptions">The aws ec2 authentication tidy options.</param>
+        /// <param name="authenticationPath"><para>[optional]</para>
+        /// The path for the authentication backend. 
+        /// Defaults to <see cref="AuthenticationBackendDefaultPaths.AwsEc2" />
+        /// Provide a value only if you have customized the path.</param>
+        /// <returns>The task.</returns>
+        Task AwsEc2AuthenticationConfigureIdentityWhitelistTidyOptionsAsync(AwsEc2AuthenticationTidyOptions awsEc2AuthenticationTidyOptions, string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2);
+
+        /// <summary>
+        /// Returns the configured periodic whitelist tidying settings.
+        /// </summary>
+        /// <param name="authenticationPath"><para>[optional]</para>
+        /// The path for the authentication backend. 
+        /// Defaults to <see cref="AuthenticationBackendDefaultPaths.AwsEc2" />
+        /// Provide a value only if you have customized the path.</param>
+        /// <returns>The tidy options.</returns>
+        Task<Secret<AwsEc2AuthenticationTidyOptions>> AwsEc2AuthenticationGetIdentityWhitelistTidyOptionsAsync(string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2);
+
+        /// <summary>
+        /// Deletes the configured periodic whitelist tidying settings.
+        /// </summary>
+        /// <param name="authenticationPath"><para>[optional]</para>
+        /// The path for the authentication backend. 
+        /// Defaults to <see cref="AuthenticationBackendDefaultPaths.AwsEc2" />
+        /// Provide a value only if you have customized the path.</param>
+        /// <returns>The task.</returns>
+        Task AwsEc2AuthenticationDeleteIdentityWhitelistTidyOptionsAsync(string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2);
+
+        /// <summary>
+        /// Configures the periodic tidying operation of the blacklisted identity entries.
+        /// </summary>
+        /// <param name="awsEc2AuthenticationTidyOptions">The aws ec2 authentication tidy options.</param>
+        /// <param name="authenticationPath"><para>[optional]</para>
+        /// The path for the authentication backend. 
+        /// Defaults to <see cref="AuthenticationBackendDefaultPaths.AwsEc2" />
+        /// Provide a value only if you have customized the path.</param>
+        /// <returns>The task.</returns>
+        Task AwsEc2AuthenticationConfigureRoletagBlacklistTidyOptionsAsync(AwsEc2AuthenticationTidyOptions awsEc2AuthenticationTidyOptions, string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2);
+
+        /// <summary>
+        /// Returns the configured periodic blacklisted tidying settings.
+        /// </summary>
+        /// <param name="authenticationPath"><para>[optional]</para>
+        /// The path for the authentication backend. 
+        /// Defaults to <see cref="AuthenticationBackendDefaultPaths.AwsEc2" />
+        /// Provide a value only if you have customized the path.</param>
+        /// <returns>The tidy options.</returns>
+        Task<Secret<AwsEc2AuthenticationTidyOptions>> AwsEc2AuthenticationGetRoletagBlacklistTidyOptionsAsync(string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2);
+
+        /// <summary>
+        /// Deletes the configured periodic blacklisted tidying settings.
+        /// </summary>
+        /// <param name="authenticationPath"><para>[optional]</para>
+        /// The path for the authentication backend. 
+        /// Defaults to <see cref="AuthenticationBackendDefaultPaths.AwsEc2" />
+        /// Provide a value only if you have customized the path.</param>
+        /// <returns>The task.</returns>
+        Task AwsEc2AuthenticationDeleteRoletagBlacklistTidyOptionsAsync(string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2);
+
+        /// <summary>
+        /// Registers a role in the backend. 
+        /// Only those instances which are using the role registered using this endpoint, 
+        /// will be able to perform the login operation. 
+        /// Constraints can be specified on the role, that are applied on the instances attempting to login. 
+        /// At least one constraint should be specified on the role.
+        /// </summary>
+        /// <param name="awsEc2AuthenticationRole">
+        /// <para>[required]</para>
+        /// The aws ec2 authentication role.</param>
+        /// <param name="authenticationPath"><para>[optional]</para>
+        /// The path for the authentication backend. 
+        /// Defaults to <see cref="AuthenticationBackendDefaultPaths.AwsEc2" />
+        /// Provide a value only if you have customized the path.</param>
+        /// <returns></returns>
+        Task AwsEc2AuthenticationRegisterRoleAsync(AwsEc2AuthenticationRole awsEc2AuthenticationRole, string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2);
 
         /// <summary>
         /// Enables multi factor authentication with the specific type.

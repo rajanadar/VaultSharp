@@ -12,7 +12,7 @@ DEPRECATIONS/CHANGES:
 
 FEATURES:
 
-  * All aws-ec2 Authentication backend APIs are now strongly supported. (configuration/role based APIs)
+  * 
 
 IMPROVEMENTS:
 

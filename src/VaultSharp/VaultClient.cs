@@ -1805,6 +1805,44 @@ namespace VaultSharp
             return await MakeVaultApiRequest<Secret<ListInfo>>("auth/" + authenticationPath.Trim('/') + "/config/certificates?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
+        public async Task AwsEc2AuthenticationConfigureIdentityWhitelistTidyOptionsAsync(AwsEc2AuthenticationTidyOptions awsEc2AuthenticationTidyOptions, string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2)
+        {
+            await MakeVaultApiRequest("auth/" + authenticationPath.Trim('/') + "/config/tidy/identity-whitelist", HttpMethod.Post, awsEc2AuthenticationTidyOptions).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<AwsEc2AuthenticationTidyOptions>> AwsEc2AuthenticationGetIdentityWhitelistTidyOptionsAsync(string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2)
+        {
+            return await MakeVaultApiRequest<Secret<AwsEc2AuthenticationTidyOptions>>("auth/" + authenticationPath.Trim('/') + "/config/tidy/identity-whitelist", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task AwsEc2AuthenticationDeleteIdentityWhitelistTidyOptionsAsync(string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2)
+        {
+            await MakeVaultApiRequest("auth/" + authenticationPath.Trim('/') + "/config/tidy/identity-whitelist", HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task AwsEc2AuthenticationConfigureRoletagBlacklistTidyOptionsAsync(AwsEc2AuthenticationTidyOptions awsEc2AuthenticationTidyOptions, string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2)
+        {
+            await MakeVaultApiRequest("auth/" + authenticationPath.Trim('/') + "/config/tidy/roletag-blacklist", HttpMethod.Post, awsEc2AuthenticationTidyOptions).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<AwsEc2AuthenticationTidyOptions>> AwsEc2AuthenticationGetRoletagBlacklistTidyOptionsAsync(string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2)
+        {
+            return await MakeVaultApiRequest<Secret<AwsEc2AuthenticationTidyOptions>>("auth/" + authenticationPath.Trim('/') + "/config/tidy/roletag-blacklist", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task AwsEc2AuthenticationDeleteRoletagBlacklistTidyOptionsAsync(string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2)
+        {
+            await MakeVaultApiRequest("auth/" + authenticationPath.Trim('/') + "/config/tidy/roletag-blacklist", HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task AwsEc2AuthenticationRegisterRoleAsync(AwsEc2AuthenticationRole awsEc2AuthenticationRole, string authenticationPath = AuthenticationBackendDefaultPaths.AwsEc2)
+        {
+            Checker.NotNull(awsEc2AuthenticationRole, "awsEc2AuthenticationRole");
+            Checker.NotNull(awsEc2AuthenticationRole.RoleName, "awsEc2AuthenticationRole.RoleName");
+
+            await MakeVaultApiRequest("auth/" + authenticationPath.Trim('/') + "/role/" + awsEc2AuthenticationRole.RoleName, HttpMethod.Post, awsEc2AuthenticationRole).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
         public async Task EnableMultiFactorAuthenticationAsync(string supportedAuthenticationBackendMountPoint, string mfaType = "duo")
         {
             Checker.NotNull(supportedAuthenticationBackendMountPoint, "supportedAuthenticationBackendMountPoint");
