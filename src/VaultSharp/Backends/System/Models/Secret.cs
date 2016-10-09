@@ -56,13 +56,12 @@ namespace VaultSharp.Backends.System.Models
 
         /// <summary>
         /// Gets or sets the wrapped information.
-        /// raja todo: change to appropriate type later.
         /// </summary>
         /// <value>
         /// The wrapped information.
         /// </value>
         [JsonProperty("wrap_info")]
-        public dynamic WrappedInformation { get; set; }
+        public WrapInfo WrappedInformation { get; set; }
 
         /// <summary>
         /// Gets or sets the warnings.

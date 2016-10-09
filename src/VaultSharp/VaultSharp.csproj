@@ -125,6 +125,7 @@
     <Compile Include="Backends\Secret\Models\PKI\RawCertificateSigningRequestData.cs" />
     <Compile Include="Backends\Secret\Models\PKI\CertificateEndpointData.cs" />
     <Compile Include="Backends\Secret\Models\PKI\ExpiryData.cs" />
+    <Compile Include="Backends\System\Models\WrapInfo.cs" />
     <Compile Include="Backends\System\Models\RekeyBackupInfo.cs" />
     <Compile Include="Backends\System\Models\RootTokenGenerationStatus.cs" />
     <Compile Include="Infrastructure\JsonConverters\SSHCredentialsJsonConverter.cs" />
