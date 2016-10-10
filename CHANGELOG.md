@@ -12,7 +12,7 @@ DEPRECATIONS/CHANGES:
 
 FEATURES:
 
-  * 
+  * Support for all the /sys/wrapping Apis. (wrap, rewrap, lookup and unwrap)
 
 IMPROVEMENTS:
 
@@ -20,7 +20,9 @@ IMPROVEMENTS:
 
 BUG FIXES:
 
-  * 
+  * Fixes a race condition in the API calls to add the Vault Client Token Header. A single call involves removal and addition of the client token header. 
+    Between the removal and addition, some other thread could make the API call, resulting in 401 errors. This is because the HttpClient is shared by all threads.
+    The fallacy happens due to messing with Headers at the HttpClient level. The fix was to compose a per thread HttpRequestMessage and set its headers. [GH-13](https://github.com/rajanadar/VaultSharp/issues/13)
 
 ## 0.6.1 (October 03, 2016)
 

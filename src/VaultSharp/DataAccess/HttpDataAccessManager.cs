@@ -36,55 +36,63 @@ namespace VaultSharp.DataAccess
         {
             try
             {
+                var requestUri = new Uri(_httpClient.BaseAddress, resourcePath);
+
                 var requestContent = requestData != null
                     ? new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8)
                     : null;
 
-                Func<Task<HttpResponseMessage>> apiFunc = null;
+                HttpRequestMessage httpRequestMessage = null;
 
                 switch (httpMethod.ToString().ToUpperInvariant())
                 {
                     case "GET":
 
-                        apiFunc = () => _httpClient.GetAsync(resourcePath);
+                        httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri);
                         break;
 
                     case "DELETE":
 
-                        apiFunc = () => _httpClient.DeleteAsync(resourcePath);
+                        httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, requestUri);
                         break;
 
                     case "POST":
 
-                        apiFunc = () => _httpClient.PostAsync(resourcePath, requestContent);
+                        httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri)
+                        {
+                            Content = requestContent
+                        };
+
                         break;
 
                     case "PUT":
 
-                        apiFunc = () => _httpClient.PutAsync(resourcePath, requestContent);
+                        httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, requestUri)
+                        {
+                            Content = requestContent
+                        };
+
                         break;
 
                     case "HEAD":
 
-                        apiFunc = () => _httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Head, resourcePath));
+                        httpRequestMessage = new HttpRequestMessage(HttpMethod.Head, requestUri);
                         break;
 
                     default:
                         throw new NotSupportedException("The Http Method is not supported: " + httpMethod);
                 }
 
-                _httpClient.DefaultRequestHeaders.Clear();
-
                 if (headers != null)
                 {
                     foreach (var kv in headers)
                     {
-                        _httpClient.DefaultRequestHeaders.Remove(kv.Key);
-                        _httpClient.DefaultRequestHeaders.Add(kv.Key, kv.Value);
+                        httpRequestMessage.Headers.Remove(kv.Key);
+                        httpRequestMessage.Headers.Add(kv.Key, kv.Value);
                     }
                 }
 
-                var httpResponseMessage = await apiFunc().ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+                var httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
                 var responseText =
                     await
                         httpResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
