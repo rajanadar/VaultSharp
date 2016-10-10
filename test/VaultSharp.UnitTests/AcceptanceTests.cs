@@ -134,6 +134,7 @@ namespace VaultSharp.UnitTests
                 await RunCapabilitiesApiTests();
                 await RunAuditBackendMountApiTests();
                 await RunLeaseApiTests();
+                await RunWrapApiTests();
                 await RunLeaderApiTests();
                 await RunRekeyApiTests();
                 await RunRawSecretApiTests();
@@ -1507,6 +1508,38 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
             leader = await _authenticatedVaultClient.GetLeaderAsync();
             Assert.NotNull(leader);
+        }
+
+        private static async Task RunWrapApiTests()
+        {
+            var data = new Dictionary<string, object>
+            {
+                {"key1", "value1"},
+                {"key2", 23},
+                {"key3", true}
+            };
+
+            var wrapTimeToLive = "1h";
+
+            var wrappedResponse = await _authenticatedVaultClient.WrapResponseDataAsync(data, wrapTimeToLive);
+            Assert.NotNull(wrappedResponse.WrappedInformation.Token);
+
+            var tokenWrapInfo = await _authenticatedVaultClient.LookupTokenWrapInfoAsync(wrappedResponse.WrappedInformation.Token);
+            Assert.NotEqual(DateTimeOffset.MinValue, tokenWrapInfo.Data.CreationTime);
+
+            var rewrappedResponse =
+                await _authenticatedVaultClient.RewrapWrappedResponseDataAsync(wrappedResponse.WrappedInformation.Token);
+            Assert.NotNull(rewrappedResponse.WrappedInformation.Token);
+            Assert.NotEqual(wrappedResponse.WrappedInformation.Token, rewrappedResponse.WrappedInformation.Token);
+
+            var unwrappedResponse = await _authenticatedVaultClient.UnwrapWrappedResponseDataAsync(rewrappedResponse.WrappedInformation.Token);
+            Assert.Equal(data.Count, unwrappedResponse.Data.Count);
+
+            wrappedResponse = await _authenticatedVaultClient.WrapResponseDataAsync(null, wrapTimeToLive);
+            Assert.NotNull(wrappedResponse.WrappedInformation.Token);
+
+            unwrappedResponse = await _authenticatedVaultClient.UnwrapWrappedResponseDataAsync(wrappedResponse.WrappedInformation.Token);
+            Assert.True(unwrappedResponse.Data.Count == 0);
         }
 
         private static async Task RunLeaseApiTests()

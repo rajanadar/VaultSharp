@@ -466,9 +466,58 @@ namespace VaultSharp
         /// credentials or secrets are properly revoked and/or cleaned up. 
         /// Access to this endpoint should be tightly controlled.
         /// </summary>
-        /// <param name="pathPrefix">The path prefix.</param>
+        /// <param name="pathPrefix"><para>[required]</para>The path prefix.</param>
         /// <returns>The task.</returns>
         Task ForceRevokeAllSecretsOrTokensUnderPrefixAsync(string pathPrefix);
+
+        /// <summary>
+        /// Looks up wrapping properties for the given token.
+        /// </summary>
+        /// <param name="tokenId">
+        /// <para>[required]</para>
+        /// The wrapping token identifier.
+        /// </param>
+        /// <returns>The token wrap info.</returns>
+        Task<Secret<TokenWrapInfo>> LookupTokenWrapInfoAsync(string tokenId);
+
+        /// <summary>
+        /// Rewraps a response-wrapped token; the new token will use the same creation TTL as 
+        /// the original token and contain the same response. 
+        /// The old token will be invalidated. 
+        /// This can be used for long-term storage of a secret in a response-wrapped 
+        /// token when rotation is a requirement.
+        /// </summary>
+        /// <param name="tokenId">
+        /// <para>[required]</para>
+        /// The wrapping token identifier.
+        /// </param>
+        /// <returns>The secret with re-wrapped info.</returns>
+        Task<Secret<object>> RewrapWrappedResponseDataAsync(string tokenId);
+
+        /// <summary>
+        /// Returns the original response inside the given wrapping token. 
+        /// This endpoint provides additional validation checks on the token, 
+        /// returns the original value on the wire and ensures that the response is properly audit-logged.
+        /// </summary>
+        /// <param name="tokenId">
+        /// <para>[required]</para>
+        /// The wrapping token identifier.
+        /// </param>
+        /// <returns>The unwrapped original data.</returns>
+        Task<Secret<Dictionary<string, object>>> UnwrapWrappedResponseDataAsync(string tokenId);
+
+        /// <summary>
+        /// Wraps the given user-supplied data inside a response-wrapped token.
+        /// </summary>
+        /// <param name="data">
+        /// <para>[required]</para>
+        /// The user supplied data.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
+        /// <returns>The wrapped response.</returns>
+        Task<Secret<object>> WrapResponseDataAsync(Dictionary<string, object> data, string wrapTimeToLive);
 
         /// <summary>
         /// Gets the high availability status and current leader instance of Vault.

@@ -73,6 +73,8 @@ namespace VaultSharp.DataAccess
                         throw new NotSupportedException("The Http Method is not supported: " + httpMethod);
                 }
 
+                _httpClient.DefaultRequestHeaders.Clear();
+
                 if (headers != null)
                 {
                     foreach (var kv in headers)

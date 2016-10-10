@@ -32,6 +32,8 @@ namespace VaultSharp
     {
         private const string VaultTokenHeaderKey = "X-Vault-Token";
 
+        private const string VaultWrapTimeToLiveHeaderKey = "X-Vault-Wrap-TTL";
+
         private readonly IDataAccessManager _dataAccessManager;
 
         // leave it at instance level to avoid any garbage collection scenarios.
@@ -505,6 +507,35 @@ namespace VaultSharp
             Checker.NotNull(pathPrefix, "pathPrefix");
 
             await MakeVaultApiRequest("sys/revoke-force/" + pathPrefix.Trim('/'), HttpMethod.Put).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<TokenWrapInfo>> LookupTokenWrapInfoAsync(string tokenId)
+        {
+            Checker.NotNull(tokenId, "tokenId");
+
+            var requestData = new {token = tokenId};
+            return await MakeVaultApiRequest<Secret<TokenWrapInfo>>("sys/wrapping/lookup", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<object>> RewrapWrappedResponseDataAsync(string tokenId)
+        {
+            Checker.NotNull(tokenId, "tokenId");
+
+            var requestData = new { token = tokenId };
+            return await MakeVaultApiRequest<Secret<object>>("sys/wrapping/rewrap", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<Dictionary<string, object>>> UnwrapWrappedResponseDataAsync(string tokenId)
+        {
+            Checker.NotNull(tokenId, "tokenId");
+
+            var requestData = new { token = tokenId };
+            return await MakeVaultApiRequest<Secret<Dictionary<string, object>>>("sys/wrapping/unwrap", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<object>> WrapResponseDataAsync(Dictionary<string, object> data, string wrapTimeToLive)
+        {
+            return await MakeVaultApiRequest<Secret<object>>("sys/wrapping/wrap", HttpMethod.Post, data, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Leader> GetLeaderAsync()
@@ -2023,13 +2054,18 @@ namespace VaultSharp
             await MakeVaultApiRequest<dynamic>(resourcePath, httpMethod, requestData, rawResponse);
         }
 
-        private async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Func<int, string, TResponse> customProcessor = null) where TResponse : class
+        private async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Func<int, string, TResponse> customProcessor = null, string wrapTimeToLive = null) where TResponse : class
         {
-            IDictionary<string, string> headers = null;
+            var headers = new Dictionary<string, string>();
 
             if (_lazyVaultToken != null)
             {
-                headers = new Dictionary<string, string> {{VaultTokenHeaderKey, await _lazyVaultToken.Value}};
+                headers.Add(VaultTokenHeaderKey, await _lazyVaultToken.Value);
+            }
+
+            if (wrapTimeToLive != null)
+            {
+                headers.Add(VaultWrapTimeToLiveHeaderKey, wrapTimeToLive);
             }
 
             return await _dataAccessManager.MakeRequestAsync<TResponse>(resourcePath, httpMethod, requestData, headers, rawResponse, customProcessor);
