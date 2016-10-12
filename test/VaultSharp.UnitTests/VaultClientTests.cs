@@ -57,15 +57,16 @@ namespace VaultSharp.UnitTests
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.GetMountedAuthenticationBackendConfigurationAsync(authenticationPath: null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.TuneAuthenticationBackendConfigurationAsync(authenticationPath: null));
 
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.GetPolicyAsync(policyName: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.WritePolicyAsync(policy: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.WritePolicyAsync(new Policy {Name = null}));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.DeletePolicyAsync(policyName: null));
+
             // add selectively
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.EnableMultiFactorAuthenticationAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.WriteDuoAccessAsync(null, "a", "a", "a"));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.WriteDuoConfigurationAsync(null, "a", "a"));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.GetPolicyAsync(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.WritePolicyAsync(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.WritePolicyAsync(new Policy()));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.DeletePolicyAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.EnableAuditBackendAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.DisableAuditBackendAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.HashWithAuditBackendAsync(null, "a"));

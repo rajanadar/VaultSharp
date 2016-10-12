@@ -321,6 +321,7 @@ namespace VaultSharp
 
         /// <summary>
         /// Adds or updates the policy.
+        /// Once a policy is updated, it takes effect immediately to all associated users.
         /// </summary>
         /// <param name="policy"><para>[required]</para>
         /// The policy to be added or updated.</param>
@@ -330,7 +331,7 @@ namespace VaultSharp
         Task WritePolicyAsync(Policy policy);
 
         /// <summary>
-        /// Deletes the named policy.
+        /// Deletes the named policy. This will immediately affect all associated users.
         /// </summary>
         /// <param name="policyName"><para>[required]</para>
         /// The name of the policy.</param>
