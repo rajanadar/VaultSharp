@@ -181,9 +181,7 @@ namespace VaultSharp
         Task QuickMountSecretBackendAsync(SecretBackendType secretBackendType);
 
         /// <summary>
-        /// Unmounts the secret backend from the mount point.
-        /// When a backend is unmounted, all of its secrets are revoked and its data is deleted.
-        /// If either of these operations fail, the backend remains mounted.
+        /// Unmounts the mount point specified in the URL.
         /// </summary>
         /// <param name="mountPoint"><para>[required]</para>
         /// The mount point for the secret backend. (with or without trailing slashes. it doesn't matter)</param>
@@ -194,8 +192,6 @@ namespace VaultSharp
 
         /// <summary>
         /// Quick api to unmounts the secret backend from the default mount point.
-        /// When a backend is unmounted, all of its secrets are revoked and its data is deleted.
-        /// If either of these operations fail, the backend remains mounted.
         /// </summary>
         /// <param name="secretBackendType"><para>[required]</para>
         /// The backend type to unmount.</param>
@@ -206,7 +202,9 @@ namespace VaultSharp
 
         /// <summary>
         /// Gets the mounted secret backend's configuration values.
-        /// The lease values for each TTL may be the system default ("0" or "system") or a mount-specific value.
+        /// Unlike the <see cref="GetAllMountedSecretBackendsAsync"/> method, 
+        /// this will return the current time in seconds for each TTL, 
+        /// which may be the system default or a mount-specific value.
         /// </summary>
         /// <param name="mountPoint"><para>[required]</para>
         /// The mount point for the secret backend. (with or without trailing slashes. it doesn't matter)</param>
@@ -220,18 +218,17 @@ namespace VaultSharp
         /// </summary>
         /// <param name="mountPoint"><para>[required]</para>
         /// The mount point for the secret backend. (with or without trailing slashes. it doesn't matter)</param>
-        /// <param name="mountConfiguration"><para>[required]</para>
+        /// <param name="mountConfiguration"><para>[optional]</para>
         /// The mount configuration with the required setting values.
-        /// Provide a value of <value>"0"</value> or <value>"system"</value> for the TTL settings if you want to use the system defaults.</param>
+        /// Provide a value of <value>"0"</value> or <value>"system"</value> for the TTL settings 
+        /// if you want to use the system defaults.</param>
         /// <returns>
         /// A task
         /// </returns>
-        Task TuneSecretBackendConfigurationAsync(string mountPoint, MountConfiguration mountConfiguration);
+        Task TuneSecretBackendConfigurationAsync(string mountPoint, MountConfiguration mountConfiguration = null);
 
         /// <summary>
         /// Remounts the secret backend from the previous mount point to the new mount point.
-        /// This is a disruptive command.
-        /// Though the stored data is retained,  all secrets are revoked since secrets are closely tied to their mount paths.
         /// </summary>
         /// <param name="previousMountPoint"><para>[required]</para>
         /// The previous mount point for the secret backend.</param>

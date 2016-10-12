@@ -217,7 +217,7 @@ namespace VaultSharp
             return response;
         }
 
-        public async Task TuneSecretBackendConfigurationAsync(string mountPoint, MountConfiguration mountConfiguration)
+        public async Task TuneSecretBackendConfigurationAsync(string mountPoint, MountConfiguration mountConfiguration = null)
         {
             Checker.NotNull(mountPoint, "mountPoint");
 
@@ -236,9 +236,6 @@ namespace VaultSharp
 
         public async Task RemountSecretBackendAsync(string previousMountPoint, string newMountPoint)
         {
-            Checker.NotNull(previousMountPoint, "previousMountPoint");
-            Checker.NotNull(newMountPoint, "newMountPoint");
-
             var requestData = new
             {
                 from = previousMountPoint,

@@ -41,22 +41,19 @@ namespace VaultSharp.UnitTests
         {
             var client = new VaultClient(VaultUri, DummyAuthenticationInfo, true, TimeSpan.FromMinutes(3));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.QuickRootTokenGenerationAsync(null, nonce: "any"));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.QuickUnsealAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.QuickRootTokenGenerationAsync(allMasterShareKeys: null, nonce: "any"));
 
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.QuickUnsealAsync(allMasterShareKeys: null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.MountSecretBackendAsync(secretBackend: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.QuickMountSecretBackendAsync(secretBackendType: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.UnmountSecretBackendAsync(mountPoint: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.QuickUnmountSecretBackendAsync(secretBackendType: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.GetMountedSecretBackendConfigurationAsync(mountPoint: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.TuneSecretBackendConfigurationAsync(mountPoint: null));
 
             // add selectively
 
-            await
-                Assert.ThrowsAsync<ArgumentNullException>(() => client.GetMountedSecretBackendConfigurationAsync(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.MountSecretBackendAsync(null));
-            await
-                Assert.ThrowsAsync<ArgumentNullException>(
-                    () => client.TuneSecretBackendConfigurationAsync(null, new MountConfiguration()));
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.UnmountSecretBackendAsync(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.RemountSecretBackendAsync(null, "a"));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.RemountSecretBackendAsync("a", null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.EnableAuthenticationBackendAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.DisableAuthenticationBackendAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.EnableMultiFactorAuthenticationAsync(null));
