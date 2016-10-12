@@ -52,10 +52,13 @@ namespace VaultSharp.UnitTests
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.GetMountedSecretBackendConfigurationAsync(mountPoint: null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.TuneSecretBackendConfigurationAsync(mountPoint: null));
 
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.EnableAuthenticationBackendAsync(authenticationBackend: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.DisableAuthenticationBackendAsync(authenticationPath: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.GetMountedAuthenticationBackendConfigurationAsync(authenticationPath: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.TuneAuthenticationBackendConfigurationAsync(authenticationPath: null));
+
             // add selectively
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.EnableAuthenticationBackendAsync(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.DisableAuthenticationBackendAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.EnableMultiFactorAuthenticationAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.WriteDuoAccessAsync(null, "a", "a", "a"));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.WriteDuoConfigurationAsync(null, "a", "a"));

@@ -298,7 +298,7 @@ namespace VaultSharp
         /// <returns>
         /// A task
         /// </returns>
-        Task TuneAuthenticationBackendConfigurationAsync(string authenticationPath, MountConfiguration mountConfiguration);
+        Task TuneAuthenticationBackendConfigurationAsync(string authenticationPath, MountConfiguration mountConfiguration = null);
 
         /// <summary>
         /// Gets all the available policy names in the system.

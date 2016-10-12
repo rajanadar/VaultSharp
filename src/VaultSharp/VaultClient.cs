@@ -298,7 +298,7 @@ namespace VaultSharp
             return response;
         }
 
-        public async Task TuneAuthenticationBackendConfigurationAsync(string authenticationPath, MountConfiguration mountConfiguration)
+        public async Task TuneAuthenticationBackendConfigurationAsync(string authenticationPath, MountConfiguration mountConfiguration = null)
         {
             Checker.NotNull(authenticationPath, "authenticationPath");
 
