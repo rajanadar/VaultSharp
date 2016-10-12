@@ -41,16 +41,9 @@ namespace VaultSharp
         /// Initializes a new Vault. The Vault must have not been previously initialized.
         /// This is an unauthenticated call and does not use the credentials.
         /// </summary>
-        /// <param name="secretShares"><para>[required]</para>
-        /// The number of shares to split the master key into.</param>
-        /// <param name="secretThreshold"><para>[required]</para>
-        /// The number of shares required to reconstruct the master key.
-        /// This must be less than or equal to <see cref="secretShares" />.</param>
-        /// <param name="pgpKeys"><para>[optional]</para>
-        /// An array of PGP public keys used to encrypt the output unseal keys.
-        /// Ordering is preserved.
-        /// The keys must be base64-encoded from their original binary representation.
-        /// The size of this array must be the same as <see cref="secretShares" />.</param>
+        /// <param name="initializeOptions"><para>[required]</para>
+        /// The initialization options.
+        /// </param>
         /// <returns>
         /// An object including the (possibly encrypted, if pgp_keys was provided) master keys and initial root token.
         /// </returns>
@@ -58,7 +51,6 @@ namespace VaultSharp
 
         /// <summary>
         /// Gets the configuration and progress of the current root generation attempt.
-        /// This is an unauthenticated call and does not use the credentials.
         /// </summary>
         /// <returns>The root status</returns>
         Task<RootTokenGenerationStatus> GetRootTokenGenerationStatusAsync();
@@ -67,21 +59,20 @@ namespace VaultSharp
         /// Initializes a new root generation attempt. 
         /// Only a single root generation attempt can take place at a time. 
         /// One (and only one) of <see cref="base64EncodedOneTimePassword"/> or <see cref="pgpKey"/> are required.
-        /// This is an unauthenticated call and does not use the credentials.
         /// </summary>
         /// <param name="base64EncodedOneTimePassword"><para>[optional]</para>
         /// A base64-encoded 16-byte value. The raw bytes of the token will be XOR'd with this 
         /// value before being returned to the final unseal key provider.</param>
         /// <param name="pgpKey"><para>[optional]</para>
-        /// The PGP key.</param>
-        /// <returns>The root token generation progress.</returns>
+        /// A base64-encoded PGP public key. The raw bytes of the token will be encrypted with this value before being 
+        /// returned to the final unseal key provider.</param>
+        /// <returns>The root token generation status.</returns>
         Task<RootTokenGenerationStatus> InitiateRootTokenGenerationAsync(string base64EncodedOneTimePassword = null, string pgpKey = null);
 
         /// <summary>
         /// Cancels any in-progress root generation attempt. 
         /// This clears any progress made. 
         /// This must be called to change the OTP or PGP key being used.
-        /// This is an unauthenticated call and does not use the credentials.
         /// </summary>
         /// <returns>The task.</returns>
         Task CancelRootTokenGenerationAsync();
@@ -93,7 +84,6 @@ namespace VaultSharp
         /// Vault will complete the root generation and issue the new token. 
         /// Otherwise, this API must be called multiple times until that threshold is met. 
         /// The attempt nonce must be provided with each call.
-        /// This is an unauthenticated call and does not use the credentials.
         /// </summary>
         /// <param name="masterShareKey"><para>[required]</para>
         /// A single master share key.</param>

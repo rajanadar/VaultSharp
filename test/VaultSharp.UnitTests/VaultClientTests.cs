@@ -41,6 +41,8 @@ namespace VaultSharp.UnitTests
         {
             var client = new VaultClient(VaultUri, DummyAuthenticationInfo, true, TimeSpan.FromMinutes(3));
 
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.QuickRootTokenGenerationAsync(null, nonce: "any"));
+
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.QuickUnsealAsync(null));
             await
                 Assert.ThrowsAsync<ArgumentNullException>(() => client.GetMountedSecretBackendConfigurationAsync(null));
@@ -71,8 +73,6 @@ namespace VaultSharp.UnitTests
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.ContinueRekeyAsync(null, "nonce"));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.ContinueRekeyAsync("masterShareKey", null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.ReadRawSecretAsync(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.ContinueRootTokenGenerationAsync(null, "nonce"));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.ContinueRootTokenGenerationAsync("masterShareKey", null));
 
             await
                 Assert.ThrowsAsync<ArgumentNullException>(

@@ -82,8 +82,7 @@ namespace VaultSharp
             return response;
         }
 
-        public async Task<RootTokenGenerationStatus> InitiateRootTokenGenerationAsync(
-            string base64EncodedOneTimePassword = null, string pgpKey = null)
+        public async Task<RootTokenGenerationStatus> InitiateRootTokenGenerationAsync(string base64EncodedOneTimePassword = null, string pgpKey = null)
         {
             var requestData = new { otp = base64EncodedOneTimePassword, pgpKey = pgpKey };
 
@@ -96,12 +95,8 @@ namespace VaultSharp
             await MakeVaultApiRequest("sys/generate-root/attempt", HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<RootTokenGenerationStatus> ContinueRootTokenGenerationAsync(string masterShareKey,
-            string nonce)
+        public async Task<RootTokenGenerationStatus> ContinueRootTokenGenerationAsync(string masterShareKey, string nonce)
         {
-            Checker.NotNull(masterShareKey, "masterShareKey");
-            Checker.NotNull(nonce, "nonce");
-
             var requestData = new
             {
                 key = masterShareKey,
@@ -115,23 +110,12 @@ namespace VaultSharp
         public async Task<RootTokenGenerationStatus> QuickRootTokenGenerationAsync(string[] allMasterShareKeys, string nonce)
         {
             Checker.NotNull(allMasterShareKeys, "allMasterShareKeys");
-            Checker.NotNull(nonce, "nonce");
 
             RootTokenGenerationStatus finalStatus = null;
 
             foreach (var masterShareKey in allMasterShareKeys)
             {
-                var requestData = new
-                {
-                    key = masterShareKey,
-                    nonce = nonce
-                };
-
-                finalStatus =
-                    await
-                        MakeVaultApiRequest<RootTokenGenerationStatus>("sys/generate-root/update", HttpMethod.Put,
-                            requestData)
-                            .ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+                finalStatus = await ContinueRootTokenGenerationAsync(masterShareKey, nonce);
             }
 
             return finalStatus;
