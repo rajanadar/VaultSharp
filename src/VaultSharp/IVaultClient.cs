@@ -108,7 +108,7 @@ namespace VaultSharp
 
         /// <summary>
         /// Gets the seal status of the Vault.
-        /// This is an unauthenticated call and does not use the credentials.
+        /// This is an unauthenticated call and does not need credentials.
         /// </summary>
         /// <returns>
         /// The seal status of the Vault.
@@ -117,6 +117,8 @@ namespace VaultSharp
 
         /// <summary>
         /// Seals the Vault.
+        /// In HA mode, only an active node can be sealed. Standby nodes should be restarted to get the same effect. 
+        /// Requires a token with root policy.
         /// </summary>
         /// <returns>
         /// The task.
@@ -129,7 +131,8 @@ namespace VaultSharp
         /// If the threshold number of master key shares is reached, Vault will attempt to unseal the Vault.
         /// Otherwise, this API must be called multiple times until that threshold is met.
         /// <para>
-        /// Either the <see cref="masterShareKey" /> or <see cref="resetCompletely" /> parameter must be provided; if both are provided, <see cref="resetCompletely" /> takes precedence.
+        /// Either the <see cref="masterShareKey" /> or <see cref="resetCompletely" /> parameter must be provided; 
+        /// if both are provided, <see cref="resetCompletely" /> takes precedence.
         /// </para>
         /// This is an unauthenticated call and does not use the credentials.
         /// </summary>

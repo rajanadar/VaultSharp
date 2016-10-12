@@ -152,13 +152,7 @@ namespace VaultSharp
 
             foreach (var masterShareKey in allMasterShareKeys)
             {
-                var requestData = new
-                {
-                    key = masterShareKey,
-                    reset = false
-                };
-
-                finalStatus = await MakeVaultApiRequest<SealStatus>("sys/unseal", HttpMethod.Put, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+                finalStatus = await UnsealAsync(masterShareKey);
             }
 
             return finalStatus;
