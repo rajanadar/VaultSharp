@@ -54,7 +54,7 @@ namespace VaultSharp
         /// <returns>
         /// An object including the (possibly encrypted, if pgp_keys was provided) master keys and initial root token.
         /// </returns>
-        Task<MasterCredentials> InitializeAsync(int secretShares, int secretThreshold, string[] pgpKeys = null);
+        Task<MasterCredentials> InitializeAsync(InitializeOptions initializeOptions);
 
         /// <summary>
         /// Gets the configuration and progress of the current root generation attempt.

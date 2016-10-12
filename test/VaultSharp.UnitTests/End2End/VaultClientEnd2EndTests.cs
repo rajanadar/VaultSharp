@@ -136,13 +136,21 @@ namespace VaultSharp.UnitTests.End2End
                 Assert.Throws<AggregateException>(
                     () =>
                         _masterCredentials =
-                            _unauthenticatedVaultClient.InitializeAsync(5, 3,
-                                new[] { Convert.ToBase64String(Encoding.UTF8.GetBytes("pgp_key1")) }).Result);
+                            _unauthenticatedVaultClient.InitializeAsync(new InitializeOptions
+                            {
+                                SecretShares = 5,
+                                SecretThreshold = 3,
+                                PgpKeys = new[] { Convert.ToBase64String(Encoding.UTF8.GetBytes("pgp_key1")) }
+                            }).Result);
 
             Assert.NotNull(invalidPgpException.InnerException);
             Assert.True(invalidPgpException.InnerException.Message.Contains("400 BadRequest"));
 
-            _masterCredentials = _unauthenticatedVaultClient.InitializeAsync(7, 6).Result;
+            _masterCredentials = _unauthenticatedVaultClient.InitializeAsync(new InitializeOptions
+            {
+                SecretShares = 7,
+                SecretThreshold = 6
+            }).Result;
 
             Assert.NotNull(_masterCredentials);
             Assert.NotNull(_masterCredentials.RootToken);
@@ -177,7 +185,11 @@ namespace VaultSharp.UnitTests.End2End
 
             //_vaultServerProcessId = process.Id;
 
-            _masterCredentials = _unauthenticatedVaultClient.InitializeAsync(5, 3).Result;
+            _masterCredentials = _unauthenticatedVaultClient.InitializeAsync(new InitializeOptions
+            {
+                SecretShares = 5,
+                SecretThreshold = 3
+            }).Result;
 
             Assert.NotNull(_masterCredentials);
             Assert.NotNull(_masterCredentials.RootToken);
@@ -192,7 +204,11 @@ namespace VaultSharp.UnitTests.End2End
             // try to initialize an already initialized vault.
             var aggregateException =
                 Assert.Throws<AggregateException>(
-                    () => _masterCredentials = _unauthenticatedVaultClient.InitializeAsync(5, 3).Result);
+                    () => _masterCredentials = _unauthenticatedVaultClient.InitializeAsync(new InitializeOptions
+                    {
+                        SecretShares = 5,
+                        SecretThreshold = 3
+                    }).Result);
 
             Assert.NotNull(aggregateException.InnerException);
             Assert.True(aggregateException.InnerException.Message.Contains("Vault is already initialized"));

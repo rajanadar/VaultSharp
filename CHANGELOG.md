@@ -8,11 +8,12 @@ MISC:
 
 DEPRECATIONS/CHANGES:
 
-  * 
+  * The InitializeAsync method now takes a single container object for all parameters, instead of primitive parameters.
 
 FEATURES:
 
   * Support for all the /sys/wrapping Apis. (wrap, rewrap, lookup and unwrap)
+  * Add support for stored shares, recovery parameters etc. during the initialization of Vault.
 
 IMPROVEMENTS:
 

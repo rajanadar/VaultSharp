@@ -1905,7 +1905,13 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private static async Task InitializeVaultAsync()
         {
-            _masterCredentials = await UnauthenticatedVaultClient.InitializeAsync(2, 2);
+            _masterCredentials = await UnauthenticatedVaultClient.InitializeAsync(new InitializeOptions
+            {
+                SecretShares = 2,
+                SecretThreshold = 2,
+                RecoveryShares = 2,
+                RecoveryThreshold = 2
+            });
             Assert.NotNull(_masterCredentials);
         }
 

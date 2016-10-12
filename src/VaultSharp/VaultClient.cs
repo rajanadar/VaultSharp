@@ -70,11 +70,9 @@ namespace VaultSharp
             return response.initialized;
         }
 
-        public async Task<MasterCredentials> InitializeAsync(int secretShares, int secretThreshold, string[] pgpKeys = null)
+        public async Task<MasterCredentials> InitializeAsync(InitializeOptions initializeOptions)
         {
-            var requestData = new { secret_shares = secretShares, secret_threshold = secretThreshold, pgp_keys = pgpKeys };
-
-            var response = await MakeVaultApiRequest<MasterCredentials>("sys/init", HttpMethod.Put, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var response = await MakeVaultApiRequest<MasterCredentials>("sys/init", HttpMethod.Put, initializeOptions).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return response;
         }
 
