@@ -476,24 +476,18 @@ namespace VaultSharp
 
         public async Task<Secret<TokenWrapInfo>> LookupTokenWrapInfoAsync(string tokenId)
         {
-            Checker.NotNull(tokenId, "tokenId");
-
             var requestData = new {token = tokenId};
             return await MakeVaultApiRequest<Secret<TokenWrapInfo>>("sys/wrapping/lookup", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<object>> RewrapWrappedResponseDataAsync(string tokenId)
         {
-            Checker.NotNull(tokenId, "tokenId");
-
             var requestData = new { token = tokenId };
             return await MakeVaultApiRequest<Secret<object>>("sys/wrapping/rewrap", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<Dictionary<string, object>>> UnwrapWrappedResponseDataAsync(string tokenId)
         {
-            Checker.NotNull(tokenId, "tokenId");
-
             var requestData = new { token = tokenId };
             return await MakeVaultApiRequest<Secret<Dictionary<string, object>>>("sys/wrapping/unwrap", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
