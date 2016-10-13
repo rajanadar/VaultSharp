@@ -70,14 +70,14 @@ namespace VaultSharp.UnitTests
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.RevokeAllSecretsOrTokensUnderPrefixAsync(pathPrefix: null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.ForceRevokeAllSecretsOrTokensUnderPrefixAsync(pathPrefix: null));
 
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.QuickRekeyAsync(allMasterShareKeys: null, rekeyNonce: "some_nonce"));
+
             // add selectively
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.EnableMultiFactorAuthenticationAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.WriteDuoAccessAsync(null, "a", "a", "a"));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.WriteDuoConfigurationAsync(null, "a", "a"));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.ContinueRekeyAsync(null, "nonce"));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.ContinueRekeyAsync("masterShareKey", null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.ReadRawSecretAsync(null));
 
             await

@@ -544,9 +544,6 @@ namespace VaultSharp
 
         public async Task<RekeyProgress> ContinueRekeyAsync(string masterShareKey, string rekeyNonce)
         {
-            Checker.NotNull(masterShareKey, "masterShareKey");
-            Checker.NotNull(rekeyNonce, "rekeyNonce");
-
             var requestData = new
             {
                 key = masterShareKey,
@@ -560,22 +557,12 @@ namespace VaultSharp
         public async Task<RekeyProgress> QuickRekeyAsync(string[] allMasterShareKeys, string rekeyNonce)
         {
             Checker.NotNull(allMasterShareKeys, "allMasterShareKeys");
-            Checker.NotNull(rekeyNonce, "rekeyNonce");
 
             RekeyProgress finalRekeyProgress = null;
 
             foreach (var masterShareKey in allMasterShareKeys)
             {
-                var requestData = new
-                {
-                    key = masterShareKey,
-                    nonce = rekeyNonce
-                };
-
-                finalRekeyProgress =
-                    await
-                        MakeVaultApiRequest<RekeyProgress>("sys/rekey/update", HttpMethod.Put, requestData)
-                            .ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+                finalRekeyProgress = await ContinueRekeyAsync(masterShareKey, rekeyNonce);
             }
 
             return finalRekeyProgress;
@@ -614,7 +601,7 @@ namespace VaultSharp
         }
 
         // this API is a bit quirky/hacky since it is aware of HttpResponseMessage
-        // eventually, i need to solve this in a cleaner manner.
+        // eventually, i need to solve this in a cleaner manner. haha.. eventually! funny word in software.
         public async Task<HealthStatus> GetHealthStatusAsync(bool? standbyOk = null, int? activeStatusCode = null, int? standbyStatusCode = null, int? sealedStatusCode = null, int? uninitializedStatusCode = null, HttpMethod queryHttpMethod = null)
         {
             var failureHealthStatus = new HealthStatus();
@@ -1720,7 +1707,7 @@ namespace VaultSharp
             return result;
         }
 
-        public async Task AppIdAuthenticationConfigureAppId(string appId, string policyValue, string displayName = null, string authenticationPath = AuthenticationBackendDefaultPaths.AppId)
+        public async Task AppIdAuthenticationConfigureAppIdAsync(string appId, string policyValue, string displayName = null, string authenticationPath = AuthenticationBackendDefaultPaths.AppId)
         {
             Checker.NotNull(appId, "appId");
             Checker.NotNull(policyValue, "policyValue");
@@ -1729,7 +1716,7 @@ namespace VaultSharp
             await MakeVaultApiRequest("auth/" + authenticationPath.Trim('/') + "/map/app-id/" + appId.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task AppIdAuthenticationConfigureUserId(string userId, string appIdValue, string cidrBlock = null,
+        public async Task AppIdAuthenticationConfigureUserIdAsync(string userId, string appIdValue, string cidrBlock = null,
             string authenticationPath = AuthenticationBackendDefaultPaths.AppId)
         {
             Checker.NotNull(userId, "userId");
