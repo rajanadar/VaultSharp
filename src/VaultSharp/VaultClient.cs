@@ -583,7 +583,6 @@ namespace VaultSharp
         public async Task WriteRawSecretAsync(string storagePath, IDictionary<string, object> values)
         {
             Checker.NotNull(storagePath, "storagePath");
-            Checker.NotNull(values, "values");
 
             var requestData = new
             {
@@ -609,7 +608,7 @@ namespace VaultSharp
 
             try
             {
-                if (queryHttpMethod == null)
+                if (queryHttpMethod != HttpMethod.Head)
                 {
                     queryHttpMethod = HttpMethod.Get;
                 }

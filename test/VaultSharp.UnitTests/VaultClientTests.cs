@@ -72,19 +72,19 @@ namespace VaultSharp.UnitTests
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.QuickRekeyAsync(allMasterShareKeys: null, rekeyNonce: "some_nonce"));
 
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.ReadRawSecretAsync(storagePath: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.WriteRawSecretAsync(storagePath: null, values: new Dictionary<string, object>()));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.DeleteRawSecretAsync(storagePath: null));
+
             // add selectively
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.EnableMultiFactorAuthenticationAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.WriteDuoAccessAsync(null, "a", "a", "a"));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.WriteDuoConfigurationAsync(null, "a", "a"));
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.ReadRawSecretAsync(null));
-
             await
                 Assert.ThrowsAsync<ArgumentNullException>(
                     () => client.WriteRawSecretAsync(null, new Dictionary<string, object>()));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.WriteRawSecretAsync("a", null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.DeleteRawSecretAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.ReadSecretAsync(null));
             await
                 Assert.ThrowsAsync<ArgumentNullException>(
