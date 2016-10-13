@@ -11,6 +11,21 @@ namespace VaultSharp.Backends.Audit.Models.Syslog
     public class SyslogAuditBackend : AuditBackend
     {
         /// <summary>
+        /// <para>[required]</para>
+        /// Gets or sets the type of the backend.
+        /// </summary>
+        /// <value>
+        /// The type of the backend.
+        /// </value>
+        public override AuditBackendType BackendType
+        {
+            get
+            {
+                return AuditBackendType.Syslog;
+            }
+        }
+
+        /// <summary>
         /// <para>[optional]</para>
         /// Gets or sets the options.
         /// </summary>

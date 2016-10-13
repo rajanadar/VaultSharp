@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Backends\Audit\Models\AuditBackendOptionsBase.cs" />
     <Compile Include="Backends\Audit\Models\AuditBackendType.cs" />
     <Compile Include="Backends\Authentication\Models\AppRole\AppRoleAuthenticationInfo.cs" />
     <Compile Include="Backends\Authentication\Models\AuthenticationBackendType.cs" />

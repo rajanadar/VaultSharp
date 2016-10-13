@@ -9,19 +9,21 @@ MISC:
 DEPRECATIONS/CHANGES:
 
   * The InitializeAsync method now takes a single container object for all parameters, instead of primitive parameters.
+  * The File Audit backend path json key internally changed from path to file_path.
 
 FEATURES:
 
-  * Support for all the /sys/wrapping Apis. (wrap, rewrap, lookup and unwrap)
+  * New /sys/wrapping Apis: Wrap, Rewrap, Lookup and Unwrap.
   * Add support for stored shares, recovery parameters etc. during the initialization of Vault.
+  * Supports the new fields (hmac_accessor, jsonx format etc.) for File and SysLog Audit Backends.
 
 IMPROVEMENTS:
 
-  * 
+  * Overall intellisense comments are updated to match the Vault documentation site.
 
 BUG FIXES:
 
-  * Fixes a race condition in the API calls to add the Vault Client Token Header. A single call involves removal and addition of the client token header. 
+  * Fixed a race condition in the API calls to add the Vault Client Token Header. A single call involves removal and addition of the client token header. 
     Between the removal and addition, some other thread could make the API call, resulting in 401 errors. This is because the HttpClient is shared by all threads.
     The fallacy happens due to messing with Headers at the HttpClient level. The fix was to compose a per thread HttpRequestMessage and set its headers. [GH-13](https://github.com/rajanadar/VaultSharp/issues/13)
 

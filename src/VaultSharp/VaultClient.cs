@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using VaultSharp.Backends.Audit.Models;
+using VaultSharp.Backends.Audit.Models.File;
+using VaultSharp.Backends.Audit.Models.Syslog;
 using VaultSharp.Backends.Authentication.Models;
 using VaultSharp.Backends.Authentication.Models.AwsEc2;
 using VaultSharp.Backends.Authentication.Models.Token;

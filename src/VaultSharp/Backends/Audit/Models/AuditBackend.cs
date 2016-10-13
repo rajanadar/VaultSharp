@@ -27,7 +27,7 @@ namespace VaultSharp.Backends.Audit.Models
         /// The type of the backend.
         /// </value>
         [JsonProperty("type")]
-        public AuditBackendType BackendType { get; set; }
+        public abstract AuditBackendType BackendType { get; }
 
         /// <summary>
         /// <para>[optional]</para>

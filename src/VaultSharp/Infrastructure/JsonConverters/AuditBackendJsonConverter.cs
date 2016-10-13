@@ -56,7 +56,8 @@ namespace VaultSharp.Infrastructure.JsonConverters
 
             if (jobject != null)
             {
-                var type = new AuditBackendType(jobject["type"].Value<string>());
+                var typeValue = jobject["type"].Value<string>();
+                var type = new AuditBackendType(typeValue);
 
                 if (type == AuditBackendType.File)
                 {
@@ -69,14 +70,15 @@ namespace VaultSharp.Infrastructure.JsonConverters
                         target = new SyslogAuditBackend();
                     }
                 }
+
+                if (target == null)
+                {
+                    target = new CustomAuditBackend(new AuditBackendType(typeValue));
+                }
+
+                serializer.Populate(jobject.CreateReader(), target);
             }
 
-            if (target == null)
-            {
-                target = new CustomAuditBackend();
-            }
-
-            serializer.Populate(jobject.CreateReader(), target);
             return target;
         }
 

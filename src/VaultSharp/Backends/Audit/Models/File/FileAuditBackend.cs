@@ -11,6 +11,21 @@ namespace VaultSharp.Backends.Audit.Models.File
     public class FileAuditBackend : AuditBackend
     {
         /// <summary>
+        /// <para>[required]</para>
+        /// Gets or sets the type of the backend.
+        /// </summary>
+        /// <value>
+        /// The type of the backend.
+        /// </value>
+        public override AuditBackendType BackendType
+        {
+            get
+            {
+                return AuditBackendType.File;
+            }
+        }
+
+        /// <summary>
         /// <para>[optional]</para>
         /// Gets or sets the options.
         /// </summary>

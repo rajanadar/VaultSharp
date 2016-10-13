@@ -1571,11 +1571,13 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             // enable new file audit
             var newFileAudit = new FileAuditBackend
             {
-                BackendType = AuditBackendType.File,
                 Description = "store logs in a file - test cases",
                 Options = new FileAuditBackendOptions
                 {
-                    FilePath = "/var/log/file"
+                    FilePath = "/var/log/file",
+                    LogSensitiveDataInRawFormat = true.ToString().ToLowerInvariant(),
+                    HmacAccessor = false.ToString().ToLowerInvariant(),
+                    Format = "jsonx"
                 }
             };
 

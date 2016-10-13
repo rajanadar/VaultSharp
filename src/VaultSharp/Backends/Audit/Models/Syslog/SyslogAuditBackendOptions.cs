@@ -1,11 +1,11 @@
 using Newtonsoft.Json;
 
 namespace VaultSharp.Backends.Audit.Models.Syslog
-{
+{ 
     /// <summary>
     /// Represents the options for the <see cref="SyslogAuditBackend"/>.
     /// </summary>
-    public class SyslogAuditBackendOptions
+    public class SyslogAuditBackendOptions : AuditBackendOptionsBase
     {
         /// <summary>
         /// <para>[optional]</para>
@@ -30,23 +30,12 @@ namespace VaultSharp.Backends.Audit.Models.Syslog
         public string Tag { get; set; }
 
         /// <summary>
-        /// Gets or sets the flag indicating if security sensitive information be logged raw. 
-        /// Defaults to <value>"false"</value>.
-        /// </summary>
-        /// <value>
-        /// The boolean value.
-        /// </value>
-        [JsonProperty("log_raw")]
-        public string LogSensitiveDataInRawFormat { get; set; }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="SyslogAuditBackendOptions"/> class.
         /// </summary>
         public SyslogAuditBackendOptions()
         {
             Facility = "AUTH";
             Tag = "vault";
-            LogSensitiveDataInRawFormat = false.ToString().ToLowerInvariant();
         }
     }
 }
