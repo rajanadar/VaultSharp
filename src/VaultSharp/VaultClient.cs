@@ -505,9 +505,7 @@ namespace VaultSharp
 
         public async Task StepDownActiveNodeAsync()
         {
-            await
-                MakeVaultApiRequest("sys/step-down", HttpMethod.Put)
-                    .ConfigureAwait(_continueAsyncTasksOnCapturedContext);
+            await MakeVaultApiRequest("sys/step-down", HttpMethod.Put).ConfigureAwait(_continueAsyncTasksOnCapturedContext);
         }
 
         public async Task<EncryptionKeyStatus> GetEncryptionKeyStatusAsync()
