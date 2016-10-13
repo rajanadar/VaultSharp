@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using VaultSharp.Backends.Audit.Models;
 using VaultSharp.Backends.Audit.Models.File;
 using VaultSharp.Backends.Authentication.Models;
 using VaultSharp.Backends.Authentication.Models.AppId;
@@ -133,7 +132,10 @@ namespace VaultSharp.UnitTests
                 await RunPolicyApiTests();
                 await RunCapabilitiesApiTests();
                 await RunAuditBackendMountApiTests();
-                await RunLeaseApiTests();
+
+                // raja todo: ssh secrets are not renewable. find a simple renewable secret store.
+                // await RunLeaseApiTests();
+
                 await RunWrapApiTests();
                 await RunLeaderApiTests();
                 await RunRekeyApiTests();
@@ -1545,22 +1547,68 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private static async Task RunLeaseApiTests()
         {
-            //var lease = await _authenticatedVaultClient.CreateTokenAsync(new TokenCreationOptions
-            //{
-            //    CreateAsOrphan = true,
-            //    LeaseTimeToLive = "1h",
-            //    NoParent = true,
-            //    Policies = new List<string> {"read"}
-            //});
+            try
+            {
+                await _authenticatedVaultClient.QuickMountSecretBackendAsync(SecretBackendType.SSH);
 
-            //Assert.NotNull(lease.LeaseId);
+                var secretWithLeaseId = await GetRenewableSecretWithLeaseId();
+                await _authenticatedVaultClient.RenewSecretAsync(secretWithLeaseId.LeaseId, 5);
 
-            //var secret = await _authenticatedVaultClient.RenewSecretAsync(lease.LeaseId, 36000);
-            //Assert.NotNull(secret.Data);
+                await _authenticatedVaultClient.RevokeSecretAsync(secretWithLeaseId.LeaseId);
+            }
+            finally
+            {
+                try
+                {
+                    await _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.SSH);
+                }
+                catch
+                {
+                    // no op.
+                }
+            }
+        }
 
-            // raja todo: run leasi Api tests with proper lease id.
-            // also remove renewtokenasync
-            await Task.FromResult(0);
+        private static async Task<Secret<SSHCredentials>> GetRenewableSecretWithLeaseId()
+        {
+            var sshKeyName = Guid.NewGuid().ToString();
+            var sshRoleName = Guid.NewGuid().ToString();
+
+            var privateKey = @"-----BEGIN RSA PRIVATE KEY-----
+MIICXgIBAAKBgQC2+cfxgJ5LsWAq+vRZB77pCwy5P+tnLahCeq4OBViloSfKVq/y
+Hq/u3YScNNoqkailjmOMJtzKDD9W7dNasfu5zGWxjLUL4NwasbEK1jseKfbwKjmc
+Nw1KYByx5BTECN0l5FxGUkQQVSmwJvqgyXDEHCsAvC72x96uBk2qJTAoLwIDAQAB
+AoGBALXyCvAKhV2fM5GJmhAts5joc+6BsQMYU4hHlWw7xLpuVbLOIIcSHL/ZZlQt
++gL6dEisHjDvM/110EYQl2pIMZYO+WU+OSmRKU8U12bjDmoypONZokBplXsVDeY4
+vbb7yVmOpazr/lpM4cqxL7TeRgxypQT08t7ukgt/7NOSHx0BAkEA8B0YXsxvxJLp
+g1LmCnP0L3vcsRw4wLNtEBfmJc/okknIyIAadLBW5mFXxQNIjj1JGTGbK/lbedBP
+ypVgY5l9uQJBAMMU6qtupP671bzEXACt6Gst/qyx7vMHMc7yRdckrXr5Wl/uyxDC
+BbErr5xg6e6qi3HnZBQbYbnYVn6gI4u2iScCQQDhK0e5TpnZi7Oz1T+ouchZ5xu0
+czS9cQVrvB21g90jolHJxGgK2XsEnHCEbmnSCaLNH3nWqQahmznYTnCPtlbxAkAE
+WhUaGe/IVvxfp6m9wiNrMK17wMRp24E68qCoOgM8uQ9REIyrJQjneOgD/w1464kM
+03KiGDJH6RGU5ZGlbj8FAkEAmm9GGdG4/rcI2o5kUQJWOPkr2KPy/X34FyD9etbv
+TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
+-----END RSA PRIVATE KEY-----";
+
+            var ip = "127.0.0.1";
+            var user = "rajan";
+
+            await _authenticatedVaultClient.SSHWriteNamedKeyAsync(sshKeyName, privateKey);
+
+            var sshOTPRoleDefinition = new SSHOTPRoleDefinition
+            {
+                RoleDefaultUser = user,
+                CIDRValues = "127.0.0.1/10",
+                Port = 22
+            };
+
+            await _authenticatedVaultClient.SSHWriteNamedRoleAsync(sshRoleName, sshOTPRoleDefinition);
+
+            var secretWithLeaseId = await _authenticatedVaultClient.SSHGenerateDynamicCredentialsAsync(sshRoleName, ip);
+            Assert.NotNull(secretWithLeaseId.LeaseId);
+            Assert.True(secretWithLeaseId.Renewable);
+
+            return secretWithLeaseId;
         }
 
         private static async Task RunAuditBackendMountApiTests()

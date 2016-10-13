@@ -66,15 +66,16 @@ namespace VaultSharp.UnitTests
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.DisableAuditBackendAsync(mountPoint: null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.HashWithAuditBackendAsync(mountPoint: null, inputToHash: "a"));
 
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.RevokeSecretAsync(leaseId: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.RevokeAllSecretsOrTokensUnderPrefixAsync(pathPrefix: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => client.ForceRevokeAllSecretsOrTokensUnderPrefixAsync(pathPrefix: null));
+
             // add selectively
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.EnableMultiFactorAuthenticationAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.WriteDuoAccessAsync(null, "a", "a", "a"));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.WriteDuoConfigurationAsync(null, "a", "a"));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.RenewSecretAsync(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.RevokeSecretAsync(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.RevokeAllSecretsOrTokensUnderPrefixAsync(null));
-            await Assert.ThrowsAsync<ArgumentNullException>(() => client.ForceRevokeAllSecretsOrTokensUnderPrefixAsync(null));
+
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.ContinueRekeyAsync(null, "nonce"));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.ContinueRekeyAsync("masterShareKey", null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.ReadRawSecretAsync(null));

@@ -439,8 +439,6 @@ namespace VaultSharp
 
         public async Task<Secret<Dictionary<string, object>>> RenewSecretAsync(string leaseId, int? incrementSeconds = null)
         {
-            Checker.NotNull(leaseId, "leaseId");
-
             var requestData = new Dictionary<string, object>
             {
                 {"lease_id", leaseId}
@@ -451,7 +449,7 @@ namespace VaultSharp
                 requestData.Add("increment", incrementSeconds.Value);
             }
 
-            var response = await MakeVaultApiRequest<Secret<Dictionary<string, object>>>("sys/renew/" + leaseId, HttpMethod.Put, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var response = await MakeVaultApiRequest<Secret<Dictionary<string, object>>>("sys/renew", HttpMethod.Put, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return response;
         }
 

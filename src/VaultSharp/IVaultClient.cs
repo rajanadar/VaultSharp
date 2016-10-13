@@ -438,6 +438,7 @@ namespace VaultSharp
 
         /// <summary>
         /// Revokes all the secrets or tokens generated under the given prefix immediately.
+        /// Access to it should be tightly controlled as it can be used to revoke very large numbers of secrets/tokens at once.
         /// </summary>
         /// <param name="pathPrefix"><para>[required]</para>
         /// The path prefix. (with or without trailing slashes. it doesn't matter)</param>
