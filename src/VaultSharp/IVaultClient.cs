@@ -816,18 +816,19 @@ namespace VaultSharp
 
         /// <summary>
         /// Generates a dynamic IAM AWS credential  with an STS token based on the named role.
-        /// STS federation token credentials can only be generated for user inline policies; 
-        /// the AWS GetFederationToken API does not support managed policies.
+        /// The TTL will be 3600 seconds (one hour).
         /// </summary>
         /// <param name="awsRoleName"><para>[required]</para>
         /// Name of the AWS role.</param>
+        /// <param name="timeToLive"><para>[optional]</para>
+        /// Time to live. Defaults to 1 hour</param>
         /// <param name="awsBackendMountPoint"><para>[optional]</para>
         /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
         /// Provide a value only if you have customized the AWS mount point.</param>
         /// <returns>
         /// The secret with the <see cref="AWSCredentials" /> as the data.
         /// </returns>
-        Task<Secret<AWSCredentials>> AWSGenerateDynamicCredentialsWithSecurityTokenAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
+        Task<Secret<AWSCredentials>> AWSGenerateDynamicCredentialsWithSecurityTokenAsync(string awsRoleName, string timeToLive = "1h", string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
 
         /// <summary>
         /// Configures the connection information used to communicate with Cassandra.

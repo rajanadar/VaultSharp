@@ -74,7 +74,6 @@
     <Compile Include="DataAccess\HttpDataAccessManagerTests.cs" />
     <Compile Include="AcceptanceTests.cs" />
     <Compile Include="Infrastructure\Validation\CheckerTests.cs" />
-    <Compile Include="VaultClientTests.cs" />
     <Compile Include="VaultClientFactoryTests.cs" />
     <Compile Include="End2End\VaultClientEnd2EndTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

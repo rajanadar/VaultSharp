@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Moq;
 using Newtonsoft.Json;
 using VaultSharp.Backends.Audit.Models.File;
 using VaultSharp.Backends.Authentication.Models;
@@ -22,6 +23,7 @@ using VaultSharp.Backends.Secret.Models.PostgreSql;
 using VaultSharp.Backends.Secret.Models.RabbitMQ;
 using VaultSharp.Backends.Secret.Models.SSH;
 using VaultSharp.Backends.System.Models;
+using VaultSharp.DataAccess;
 using Xunit;
 
 namespace VaultSharp.UnitTests
@@ -132,10 +134,7 @@ namespace VaultSharp.UnitTests
                 await RunPolicyApiTests();
                 await RunCapabilitiesApiTests();
                 await RunAuditBackendMountApiTests();
-
-                // raja todo: ssh secrets are not renewable. find a simple renewable secret store.
-                // await RunLeaseApiTests();
-
+                await RunLeaseApiTests();
                 await RunWrapApiTests();
                 await RunLeaderApiTests();
                 await RunRekeyApiTests();
@@ -1289,6 +1288,26 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private static async Task RunAwsSecretBackendApiTests()
         {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.AWSConfigureRootCredentialsAsync(null, awsBackendMountPoint: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.AWSConfigureCredentialLeaseSettingsAsync(null, awsBackendMountPoint: null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.AWSWriteNamedRoleAsync(awsRoleName: null, awsRoleDefinition: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.AWSWriteNamedRoleAsync("role", null, awsBackendMountPoint: null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.AWSReadNamedRoleAsync(awsRoleName: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.AWSReadNamedRoleAsync("role", awsBackendMountPoint: null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.AWSDeleteNamedRoleAsync(awsRoleName: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.AWSDeleteNamedRoleAsync("role", awsBackendMountPoint: null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.AWSGetRoleListAsync(awsBackendMountPoint: null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.AWSGenerateDynamicCredentialsAsync(awsRoleName: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.AWSGenerateDynamicCredentialsAsync("role", awsBackendMountPoint: null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.AWSGenerateDynamicCredentialsWithSecurityTokenAsync(awsRoleName: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.AWSGenerateDynamicCredentialsWithSecurityTokenAsync("role", awsBackendMountPoint: null));
+
             if (SetupData.RunAwsSecretBackendAcceptanceTests)
             {
                 try
@@ -1381,7 +1400,13 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     generatedCreds =
                         await
                             _authenticatedVaultClient.AWSGenerateDynamicCredentialsWithSecurityTokenAsync(
-                                awsRoleJsonName);
+                                awsRoleJsonName, timeToLive: null);
+                    Assert.NotNull(generatedCreds.Data.SecurityToken);
+
+                    generatedCreds =
+                        await
+                            _authenticatedVaultClient.AWSGenerateDynamicCredentialsWithSecurityTokenAsync(
+                                awsRoleJsonName, timeToLive: "2h");
                     Assert.NotNull(generatedCreds.Data.SecurityToken);
 
                     await _authenticatedVaultClient.AWSDeleteNamedRoleAsync(awsRoleJsonName);
@@ -1403,6 +1428,10 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private static async Task RunRawSecretApiTests()
         {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.ReadRawSecretAsync(storagePath: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.WriteRawSecretAsync(storagePath: null, values: new Dictionary<string, object>()));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.DeleteRawSecretAsync(storagePath: null));
+
             var rawPath = "rawpath";
             var rawValues = new Dictionary<string, object>
             {
@@ -1422,6 +1451,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private static async Task RunRekeyApiTests()
         {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.QuickRekeyAsync(allMasterShareKeys: null, rekeyNonce: "some_nonce"));
+
             var keyStatus = await _authenticatedVaultClient.GetEncryptionKeyStatusAsync();
             Assert.True(keyStatus.SequentialKeyNumber == 1);
 
@@ -1547,26 +1578,32 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private static async Task RunLeaseApiTests()
         {
-            try
-            {
-                await _authenticatedVaultClient.QuickMountSecretBackendAsync(SecretBackendType.SSH);
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.RevokeSecretAsync(leaseId: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.RevokeAllSecretsOrTokensUnderPrefixAsync(pathPrefix: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.ForceRevokeAllSecretsOrTokensUnderPrefixAsync(pathPrefix: null));
 
-                var secretWithLeaseId = await GetRenewableSecretWithLeaseId();
-                await _authenticatedVaultClient.RenewSecretAsync(secretWithLeaseId.LeaseId, 5);
+            // raja todo: aws creds have leaseid and are renewable. use them.
 
-                await _authenticatedVaultClient.RevokeSecretAsync(secretWithLeaseId.LeaseId);
-            }
-            finally
-            {
-                try
-                {
-                    await _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.SSH);
-                }
-                catch
-                {
-                    // no op.
-                }
-            }
+            //try
+            //{
+            //    await _authenticatedVaultClient.QuickMountSecretBackendAsync(SecretBackendType.SSH);
+
+            //    var secretWithLeaseId = await GetRenewableSecretWithLeaseId();
+            //    await _authenticatedVaultClient.RenewSecretAsync(secretWithLeaseId.LeaseId, 5);
+
+            //    await _authenticatedVaultClient.RevokeSecretAsync(secretWithLeaseId.LeaseId);
+            //}
+            //finally
+            //{
+            //    try
+            //    {
+            //        await _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.SSH);
+            //    }
+            //    catch
+            //    {
+            //        // no op.
+            //    }
+            //}
         }
 
         private static async Task<Secret<SSHCredentials>> GetRenewableSecretWithLeaseId()
@@ -1613,6 +1650,10 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private static async Task RunAuditBackendMountApiTests()
         {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.EnableAuditBackendAsync(auditBackend: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.DisableAuditBackendAsync(mountPoint: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.HashWithAuditBackendAsync(mountPoint: null, inputToHash: "a"));
+
             var audits = await _authenticatedVaultClient.GetAllEnabledAuditBackendsAsync();
             Assert.False(audits.Data.Any());
 
@@ -1669,6 +1710,11 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private static async Task RunPolicyApiTests()
         {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.GetPolicyAsync(policyName: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.WritePolicyAsync(policy: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.WritePolicyAsync(new Policy { Name = null }));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.DeletePolicyAsync(policyName: null));
+
             var policies = (await _authenticatedVaultClient.GetAllPoliciesAsync()).ToList();
             Assert.True(policies.Any());
 
@@ -1707,6 +1753,11 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private static async Task RunAuthenticationBackendMountApiTests()
         {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.EnableAuthenticationBackendAsync(authenticationBackend: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.DisableAuthenticationBackendAsync(authenticationPath: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.GetMountedAuthenticationBackendConfigurationAsync(authenticationPath: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.TuneAuthenticationBackendConfigurationAsync(authenticationPath: null));
+
             // get Authentication backends
             var authenticationBackends = await _authenticatedVaultClient.GetAllEnabledAuthenticationBackendsAsync();
             Assert.True(authenticationBackends.Data.Any());
@@ -1760,6 +1811,13 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private static async Task RunSecretBackendMountApiTests()
         {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MountSecretBackendAsync(secretBackend: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.QuickMountSecretBackendAsync(secretBackendType: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.UnmountSecretBackendAsync(mountPoint: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.QuickUnmountSecretBackendAsync(secretBackendType: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.GetMountedSecretBackendConfigurationAsync(mountPoint: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.TuneSecretBackendConfigurationAsync(mountPoint: null));
+
             var secretBackends = await _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();
             Assert.True(secretBackends.Data.Any());
 
@@ -1820,6 +1878,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private static async Task RunInitApiTests()
         {
+            RunConstructorTests();
+
             await AssertInitializationStatusAsync(false);
 
             var health = await UnauthenticatedVaultClient.GetHealthStatusAsync();
@@ -1840,6 +1900,34 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             health = await UnauthenticatedVaultClient.GetHealthStatusAsync();
             Assert.False(health.HealthCheckSucceeded);
             Assert.True(health.Initialized);
+        }
+
+        private static void RunConstructorTests()
+        {
+            var dummyAuthenticationInfo = new TokenAuthenticationInfo("test");
+
+            Assert.Throws<ArgumentNullException>(() => new VaultClient(null, dummyAuthenticationInfo));
+
+            var client1 = new VaultClient(VaultUriWithPort, null);
+            Assert.NotNull(client1);
+
+            var client2 = new VaultClient(VaultUriWithPort, dummyAuthenticationInfo);
+            Assert.NotNull(client2);
+
+            var client3 = new VaultClient(VaultUriWithPort, dummyAuthenticationInfo, true);
+            Assert.NotNull(client3);
+
+            var client4 = new VaultClient(VaultUriWithPort, dummyAuthenticationInfo, true, TimeSpan.FromMinutes(3));
+            Assert.NotNull(client4);
+
+            var client5 = new VaultClient(VaultUriWithPort, dummyAuthenticationInfo, true, TimeSpan.FromMinutes(3), new Mock<IDataAccessManager>().Object);
+            Assert.NotNull(client5);
+
+            var client6 = new VaultClient(VaultUriWithPort, dummyAuthenticationInfo, true, TimeSpan.FromMinutes(3),
+                new Mock<IDataAccessManager>().Object,
+                client => { });
+
+            Assert.NotNull(client6);
         }
 
         private static async Task RunSealApiTests()
@@ -1887,6 +1975,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             await _authenticatedVaultClient.SealAsync();
             await AssertSealStatusAsync(true);
 
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.QuickUnsealAsync(allMasterShareKeys: null));
+
             sealStatus = await UnauthenticatedVaultClient.QuickUnsealAsync(_masterCredentials.MasterKeys);
             Assert.False(sealStatus.Sealed);
         }
@@ -1921,6 +2011,9 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             Assert.False(rootStatus.Started);
 
             rootStatus = await UnauthenticatedVaultClient.InitiateRootTokenGenerationAsync(otp);
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.QuickRootTokenGenerationAsync(allMasterShareKeys: null, nonce: "any"));
+
             rootStatus =
                 await
                     UnauthenticatedVaultClient.QuickRootTokenGenerationAsync(_masterCredentials.MasterKeys,

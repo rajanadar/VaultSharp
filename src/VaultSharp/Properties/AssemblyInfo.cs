@@ -35,3 +35,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("0.6.1.0")]
 [assembly: AssemblyFileVersion("0.6.1.0")]
 [assembly: InternalsVisibleTo("VaultSharp.UnitTests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

@@ -16,6 +16,7 @@ FEATURES:
   * New `/sys/wrapping` Apis: Wrap, Rewrap, Lookup and Unwrap.
   * Add support for stored shares, recovery parameters etc. during the initialization of Vault.
   * Supports the new fields (`hmac_accessor`, `jsonx` format etc.) for File and SysLog Audit Backends.
+  * The `AWSGenerateDynamicCredentialsWithSecurityTokenAsync` method now supports the `timeToLive` parameter.
 
 IMPROVEMENTS:
 
