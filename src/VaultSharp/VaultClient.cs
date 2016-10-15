@@ -6,8 +6,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using VaultSharp.Backends.Audit.Models;
-using VaultSharp.Backends.Audit.Models.File;
-using VaultSharp.Backends.Audit.Models.Syslog;
 using VaultSharp.Backends.Authentication.Models;
 using VaultSharp.Backends.Authentication.Models.AwsEc2;
 using VaultSharp.Backends.Authentication.Models.Token;
@@ -488,8 +486,13 @@ namespace VaultSharp
 
         public async Task<Secret<Dictionary<string, object>>> UnwrapWrappedResponseDataAsync(string tokenId)
         {
+            return await UnwrapWrappedResponseDataAsync<Dictionary<string, object>>(tokenId);
+        }
+
+        public async Task<Secret<TData>> UnwrapWrappedResponseDataAsync<TData>(string tokenId)
+        {
             var requestData = new { token = tokenId };
-            return await MakeVaultApiRequest<Secret<Dictionary<string, object>>>("sys/wrapping/unwrap", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return await MakeVaultApiRequest<Secret<TData>>("sys/wrapping/unwrap", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<object>> WrapResponseDataAsync(Dictionary<string, object> data, string wrapTimeToLive)
@@ -714,14 +717,14 @@ namespace VaultSharp
             await MakeVaultApiRequest(awsBackendMountPoint.Trim('/') + "/roles/" + awsRoleName, HttpMethod.Post, awsRoleDefinition).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<AWSRoleDefinition>> AWSReadNamedRoleAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS)
+        public async Task<Secret<AWSRoleDefinition>> AWSReadNamedRoleAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS, string wrapTimeToLive = null)
         {
             Checker.NotNull(awsBackendMountPoint, "awsBackendMountPoint");
             Checker.NotNull(awsRoleName, "awsRoleName");
 
             var result =
                 await
-                    MakeVaultApiRequest<Secret<AWSRoleDefinition>>(awsBackendMountPoint.Trim('/') + "/roles/" + awsRoleName, HttpMethod.Get)
+                    MakeVaultApiRequest<Secret<AWSRoleDefinition>>(awsBackendMountPoint.Trim('/') + "/roles/" + awsRoleName, HttpMethod.Get, wrapTimeToLive: wrapTimeToLive)
                         .ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
 
             return result;
@@ -735,22 +738,22 @@ namespace VaultSharp
             await MakeVaultApiRequest(awsBackendMountPoint.Trim('/') + "/roles/" + awsRoleName, HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<ListInfo>> AWSGetRoleListAsync(string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS)
+        public async Task<Secret<ListInfo>> AWSGetRoleListAsync(string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS, string wrapTimeToLive = null)
         {
             Checker.NotNull(awsBackendMountPoint, "awsBackendMountPoint");
-            return await MakeVaultApiRequest<Secret<ListInfo>>(awsBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return await MakeVaultApiRequest<Secret<ListInfo>>(awsBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<AWSCredentials>> AWSGenerateDynamicCredentialsAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS)
+        public async Task<Secret<AWSCredentials>> AWSGenerateDynamicCredentialsAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS, string wrapTimeToLive = null)
         {
             Checker.NotNull(awsBackendMountPoint, "awsBackendMountPoint");
             Checker.NotNull(awsRoleName, "awsRoleName");
 
-            var result = await MakeVaultApiRequest<Secret<AWSCredentials>>(awsBackendMountPoint.Trim('/') + "/creds/" + awsRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<AWSCredentials>>(awsBackendMountPoint.Trim('/') + "/creds/" + awsRoleName, HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
-        public async Task<Secret<AWSCredentials>> AWSGenerateDynamicCredentialsWithSecurityTokenAsync(string awsRoleName, string timeToLive = "1h", string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS)
+        public async Task<Secret<AWSCredentials>> AWSGenerateDynamicCredentialsWithSecurityTokenAsync(string awsRoleName, string timeToLive = "1h", string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS, string wrapTimeToLive = null)
         {
             Checker.NotNull(awsBackendMountPoint, "awsBackendMountPoint");
             Checker.NotNull(awsRoleName, "awsRoleName");
@@ -758,7 +761,7 @@ namespace VaultSharp
             object requestData = string.IsNullOrWhiteSpace(timeToLive) ? null : new {ttl = timeToLive};
             var method = string.IsNullOrWhiteSpace(timeToLive) ? HttpMethod.Get : HttpMethod.Post;
 
-            var result = await MakeVaultApiRequest<Secret<AWSCredentials>>(awsBackendMountPoint.Trim('/') + "/sts/" + awsRoleName, method, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<AWSCredentials>>(awsBackendMountPoint.Trim('/') + "/sts/" + awsRoleName, method, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 

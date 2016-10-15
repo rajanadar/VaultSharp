@@ -1361,6 +1361,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var queriedRoleJson = await _authenticatedVaultClient.AWSReadNamedRoleAsync(awsRoleJsonName);
                     Assert.Equal(awsRoleJson.PolicyText, queriedRoleJson.Data.PolicyText);
 
+                    RunWrapUnwrapCheck(_authenticatedVaultClient.AWSReadNamedRoleAsync(awsRoleJsonName, wrapTimeToLive: "1m"));
+
                     var awsRoleNameArn = "aws-role-arn";
                     var awsRoleArn = new AWSRoleDefinition
                     {
@@ -1374,12 +1376,16 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var roles = await _authenticatedVaultClient.AWSGetRoleListAsync();
                     Assert.True(roles.Data.Keys.Count == 2);
 
+                    RunWrapUnwrapCheck(_authenticatedVaultClient.AWSGetRoleListAsync(wrapTimeToLive: "1m"));
+
                     var generatedCreds =
                         await _authenticatedVaultClient.AWSGenerateDynamicCredentialsAsync(awsRoleJsonName);
                     Assert.NotNull(generatedCreds.Data.SecretKey);
 
                     generatedCreds = await _authenticatedVaultClient.AWSGenerateDynamicCredentialsAsync(awsRoleNameArn);
                     Assert.NotNull(generatedCreds.Data.SecretKey);
+
+                    RunWrapUnwrapCheck(_authenticatedVaultClient.AWSGenerateDynamicCredentialsAsync(awsRoleNameArn, wrapTimeToLive: "1m"));
 
                     awsRoleJson.PolicyText = JsonConvert.SerializeObject(new
                     {
@@ -1408,6 +1414,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                             _authenticatedVaultClient.AWSGenerateDynamicCredentialsWithSecurityTokenAsync(
                                 awsRoleJsonName, timeToLive: "2h");
                     Assert.NotNull(generatedCreds.Data.SecurityToken);
+
+                    RunWrapUnwrapCheck(_authenticatedVaultClient.AWSGenerateDynamicCredentialsWithSecurityTokenAsync(awsRoleJsonName, wrapTimeToLive: "1m"));
 
                     await _authenticatedVaultClient.AWSDeleteNamedRoleAsync(awsRoleJsonName);
                     await _authenticatedVaultClient.AWSDeleteNamedRoleAsync(awsRoleNameArn);
@@ -2124,6 +2132,21 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             {
                 _vaultProcess.CloseMainWindow();
             }
+        }
+
+        private static async void RunWrapUnwrapCheck<TData>(Task<Secret<TData>> wrapTask)
+        {
+            var wrappedResponse = await wrapTask;
+
+            Assert.NotNull(wrappedResponse.WrappedInformation);
+            Assert.NotNull(wrappedResponse.WrappedInformation.Token);
+
+            var unwrappedResponse =
+                await
+                    _authenticatedVaultClient.UnwrapWrappedResponseDataAsync<TData>(
+                        wrappedResponse.WrappedInformation.Token);
+
+            Assert.NotNull(unwrappedResponse.Data);
         }
     }
 }

@@ -499,6 +499,19 @@ namespace VaultSharp
         Task<Secret<Dictionary<string, object>>> UnwrapWrappedResponseDataAsync(string tokenId);
 
         /// <summary>
+        /// Returns the original response inside the given wrapping token. 
+        /// This endpoint provides additional validation checks on the token, 
+        /// returns the original value on the wire and ensures that the response is properly audit-logged.
+        /// </summary>
+        /// <typeparam name="TData">The type of the data.</typeparam>
+        /// <param name="tokenId">
+        /// <para>[required]</para>
+        /// The wrapping token identifier.
+        /// </param>
+        /// <returns>The unwrapped original data.</returns>
+        Task<Secret<TData>> UnwrapWrappedResponseDataAsync<TData>(string tokenId);
+
+        /// <summary>
         /// Wraps the given user-supplied data inside a response-wrapped token.
         /// </summary>
         /// <param name="data">
@@ -774,10 +787,14 @@ namespace VaultSharp
         /// <param name="awsBackendMountPoint"><para>[optional]</para>
         /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
         /// Provide a value only if you have customized the AWS mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the AWS Role definition as an IAM policy in a string JSON format.
         /// </returns>
-        Task<Secret<AWSRoleDefinition>> AWSReadNamedRoleAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
+        Task<Secret<AWSRoleDefinition>> AWSReadNamedRoleAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS, string wrapTimeToLive = null);
 
         /// <summary>
         /// Deletes a named AWS role.
@@ -798,8 +815,12 @@ namespace VaultSharp
         /// <param name="awsBackendMountPoint"><para>[optional]</para>
         /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
         /// Provide a value only if you have customized the AWS mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>The role list.</returns>
-        Task<Secret<ListInfo>> AWSGetRoleListAsync(string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
+        Task<Secret<ListInfo>> AWSGetRoleListAsync(string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS, string wrapTimeToLive = null);
 
         /// <summary>
         /// Generates a dynamic IAM AWS credential based on the named role.
@@ -809,10 +830,14 @@ namespace VaultSharp
         /// <param name="awsBackendMountPoint"><para>[optional]</para>
         /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
         /// Provide a value only if you have customized the AWS mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the <see cref="AWSCredentials" /> as the data.
         /// </returns>
-        Task<Secret<AWSCredentials>> AWSGenerateDynamicCredentialsAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
+        Task<Secret<AWSCredentials>> AWSGenerateDynamicCredentialsAsync(string awsRoleName, string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS, string wrapTimeToLive = null);
 
         /// <summary>
         /// Generates a dynamic IAM AWS credential  with an STS token based on the named role.
@@ -825,10 +850,14 @@ namespace VaultSharp
         /// <param name="awsBackendMountPoint"><para>[optional]</para>
         /// The mount point for the AWS backend. Defaults to <see cref="SecretBackendType.AWS" />
         /// Provide a value only if you have customized the AWS mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the <see cref="AWSCredentials" /> as the data.
         /// </returns>
-        Task<Secret<AWSCredentials>> AWSGenerateDynamicCredentialsWithSecurityTokenAsync(string awsRoleName, string timeToLive = "1h", string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS);
+        Task<Secret<AWSCredentials>> AWSGenerateDynamicCredentialsWithSecurityTokenAsync(string awsRoleName, string timeToLive = "1h", string awsBackendMountPoint = SecretBackendDefaultMountPoints.AWS, string wrapTimeToLive = null);
 
         /// <summary>
         /// Configures the connection information used to communicate with Cassandra.

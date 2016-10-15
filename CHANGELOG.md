@@ -14,9 +14,14 @@ DEPRECATIONS/CHANGES:
 FEATURES:
 
   * New `/sys/wrapping` Apis: Wrap, Rewrap, Lookup and Unwrap.
+  * The `UnwrapWrappedResponseDataAsync` method also supports a generic return type to give you strongly typed data back.
+    So if you wrapped `AWSCredentials`, then you can unwrap `Secret<AWSCredentials>` instead of `Secret<Dictionary<string, object>>`.
+    And at any time if you need the non-generic method, you can always fallback to the non-generic version returning a dictionary.
   * Add support for stored shares, recovery parameters etc. during the initialization of Vault.
   * Supports the new fields (`hmac_accessor`, `jsonx` format etc.) for File and SysLog Audit Backends.
   * The `AWSGenerateDynamicCredentialsWithSecurityTokenAsync` method now supports the `timeToLive` parameter.
+  * All the methods now support wrapping of the secret into a cubbyhole token.
+  ** AWS Secret Backend
 
 IMPROVEMENTS:
 
