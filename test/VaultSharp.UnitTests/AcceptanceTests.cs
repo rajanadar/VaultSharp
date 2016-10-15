@@ -1064,6 +1064,17 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private static async Task RunGenericSecretBackendApiTests()
         {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.GenericReadSecretAsync(locationPath: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.GenericReadSecretAsync("path", null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.GenericReadSecretLocationPathListAsync(null, null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.GenericWriteSecretAsync(null, null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.GenericWriteSecretAsync("path", null, null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.GenericDeleteSecretAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.GenericDeleteSecretAsync("path", null));
+
             var mountpoint = "secret" + Guid.NewGuid();
 
             var path1 = "/path1/blah2";
@@ -1085,6 +1096,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             var readValues = await _authenticatedVaultClient.GenericReadSecretAsync(path1, mountpoint);
             Assert.True(readValues.Data.Count == 2);
 
+            await RunWrapUnwrapCheck(_authenticatedVaultClient.GenericReadSecretAsync(path1, mountpoint, wrapTimeToLive: "1m"));
+
             values["foo2"] = 347;
 
             await _authenticatedVaultClient.GenericWriteSecretAsync(path1, values, mountpoint);
@@ -1103,6 +1116,10 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
             var keys = await _authenticatedVaultClient.GenericReadSecretLocationPathListAsync("/path1", mountpoint);
             Assert.True(keys.Data.Keys.Count == 2);
+
+            await
+                RunWrapUnwrapCheck(_authenticatedVaultClient.GenericReadSecretLocationPathListAsync("/path1", mountpoint,
+                    wrapTimeToLive: "1m"));
 
             await _authenticatedVaultClient.GenericDeleteSecretAsync(path1, mountpoint);
             await _authenticatedVaultClient.GenericDeleteSecretAsync(path2, mountpoint);

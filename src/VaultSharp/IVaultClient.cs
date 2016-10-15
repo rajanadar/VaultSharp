@@ -1070,10 +1070,14 @@ namespace VaultSharp
         /// <param name="genericBackendMountPoint"><para>[optional]</para>
         /// The mount point for the Generic backend. Defaults to <see cref="SecretBackendType.Generic" />
         /// Provide a value only if you have customized the Generic mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the data.
         /// </returns>
-        Task<Secret<Dictionary<string, object>>> GenericReadSecretAsync(string locationPath, string genericBackendMountPoint = SecretBackendDefaultMountPoints.Generic);
+        Task<Secret<Dictionary<string, object>>> GenericReadSecretAsync(string locationPath, string genericBackendMountPoint = SecretBackendDefaultMountPoints.Generic, string wrapTimeToLive = null);
 
         /// <summary>
         /// Retrieves the secret location path entries at the specified location.
@@ -1085,13 +1089,19 @@ namespace VaultSharp
         /// <param name="genericBackendMountPoint"><para>[optional]</para>
         /// The mount point for the Generic backend. Defaults to <see cref="SecretBackendType.Generic" />
         /// Provide a value only if you have customized the Generic mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret list with the data.
         /// </returns>
-        Task<Secret<ListInfo>> GenericReadSecretLocationPathListAsync(string locationPath, string genericBackendMountPoint = SecretBackendDefaultMountPoints.Generic);
+        Task<Secret<ListInfo>> GenericReadSecretLocationPathListAsync(string locationPath, string genericBackendMountPoint = SecretBackendDefaultMountPoints.Generic, string wrapTimeToLive = null);
 
         /// <summary>
         /// Stores a secret at the specified location.
+        /// If the value does not yet exist, the calling token must have an ACL policy granting the create capability. 
+        /// If the value already exists, the calling token must have an ACL policy granting the update capability.
         /// </summary>
         /// <param name="locationPath"><para>[required]</para>
         /// The location path where the secret needs to be stored.</param>

@@ -888,20 +888,20 @@ namespace VaultSharp
             await MakeVaultApiRequest(SecretBackendType.CubbyHole.Type + "/" + locationPath.Trim('/'), HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<Dictionary<string, object>>> GenericReadSecretAsync(string locationPath, string genericBackendMountPoint = SecretBackendDefaultMountPoints.Generic)
+        public async Task<Secret<Dictionary<string, object>>> GenericReadSecretAsync(string locationPath, string genericBackendMountPoint = SecretBackendDefaultMountPoints.Generic, string wrapTimeToLive = null)
         {
             Checker.NotNull(genericBackendMountPoint, "genericBackendMountPoint");
             Checker.NotNull(locationPath, "locationPath");
 
-            var result = await MakeVaultApiRequest<Secret<Dictionary<string, object>>>(genericBackendMountPoint.Trim('/') + "/" + locationPath.Trim('/'), HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<Dictionary<string, object>>>(genericBackendMountPoint.Trim('/') + "/" + locationPath.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
-        public async Task<Secret<ListInfo>> GenericReadSecretLocationPathListAsync(string locationPath, string genericBackendMountPoint = SecretBackendDefaultMountPoints.Generic)
+        public async Task<Secret<ListInfo>> GenericReadSecretLocationPathListAsync(string locationPath, string genericBackendMountPoint = SecretBackendDefaultMountPoints.Generic, string wrapTimeToLive = null)
         {
             Checker.NotNull(genericBackendMountPoint, "genericBackendMountPoint");
 
-            var result = await MakeVaultApiRequest<Secret<ListInfo>>(genericBackendMountPoint.Trim('/') + "/" + (locationPath ?? string.Empty).Trim('/') + "?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<ListInfo>>(genericBackendMountPoint.Trim('/') + "/" + (locationPath ?? string.Empty).Trim('/') + "?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 

@@ -25,6 +25,7 @@ FEATURES:
   ** Cassandra Secret Backend
   ** Consul Secret Backend
   ** Cubbyhole Secret Backend
+  ** Generic Secret Backend
 
 IMPROVEMENTS:
 
