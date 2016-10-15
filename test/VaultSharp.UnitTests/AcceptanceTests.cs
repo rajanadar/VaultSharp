@@ -1114,6 +1114,10 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private static async Task RunCubbyholeSecretBackendApiTests()
         {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.CubbyholeReadSecretAsync(locationPath: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.CubbyholeWriteSecretAsync(null, null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.CubbyholeDeleteSecretAsync(locationPath: null));
+
             var path = "path1/";
             var values = new Dictionary<string, object>
             {

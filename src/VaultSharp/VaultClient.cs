@@ -864,13 +864,13 @@ namespace VaultSharp
         {
             Checker.NotNull(locationPath, "locationPath");
 
-            var result = await MakeVaultApiRequest<Secret<Dictionary<string, object>>>(SecretBackendType.CubbyHole + "/" + locationPath.Trim('/'), HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<Dictionary<string, object>>>(SecretBackendType.CubbyHole.Type + "/" + locationPath.Trim('/'), HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
         public async Task<Secret<ListInfo>> CubbyholeReadSecretLocationPathListAsync(string locationPath)
         {
-            var result = await MakeVaultApiRequest<Secret<ListInfo>>(SecretBackendType.CubbyHole + "/" + (locationPath ?? string.Empty).Trim('/') + "?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<ListInfo>>(SecretBackendType.CubbyHole.Type + "/" + (locationPath ?? string.Empty).Trim('/') + "?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
@@ -878,14 +878,14 @@ namespace VaultSharp
         {
             Checker.NotNull(locationPath, "locationPath");
 
-            await MakeVaultApiRequest(SecretBackendType.CubbyHole + "/" + locationPath.Trim('/'), HttpMethod.Put, values).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            await MakeVaultApiRequest(SecretBackendType.CubbyHole.Type + "/" + locationPath.Trim('/'), HttpMethod.Put, values).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task CubbyholeDeleteSecretAsync(string locationPath)
         {
             Checker.NotNull(locationPath, "locationPath");
 
-            await MakeVaultApiRequest(SecretBackendType.CubbyHole + "/" + locationPath.Trim('/'), HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            await MakeVaultApiRequest(SecretBackendType.CubbyHole.Type + "/" + locationPath.Trim('/'), HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<Dictionary<string, object>>> GenericReadSecretAsync(string locationPath, string genericBackendMountPoint = SecretBackendDefaultMountPoints.Generic)
