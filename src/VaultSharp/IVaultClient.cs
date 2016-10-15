@@ -861,7 +861,6 @@ namespace VaultSharp
 
         /// <summary>
         /// Configures the connection information used to communicate with Cassandra.
-        /// This API is a root protected call.
         /// </summary>
         /// <param name="cassandraConnectionInfo"><para>[required]</para>
         /// The cassandra connection information.</param>
@@ -896,10 +895,14 @@ namespace VaultSharp
         /// <param name="cassandraBackendMountPoint"><para>[optional]</para>
         /// The mount point for the Cassandra backend. Defaults to <see cref="SecretBackendType.Cassandra" />
         /// Provide a value only if you have customized the Cassandra mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the Cassandra role definition with the creation, rollback query and lease information.
         /// </returns>
-        Task<Secret<CassandraRoleDefinition>> CassandraReadNamedRoleAsync(string cassandraRoleName, string cassandraBackendMountPoint = SecretBackendDefaultMountPoints.Cassandra);
+        Task<Secret<CassandraRoleDefinition>> CassandraReadNamedRoleAsync(string cassandraRoleName, string cassandraBackendMountPoint = SecretBackendDefaultMountPoints.Cassandra, string wrapTimeToLive = null);
 
         /// <summary>
         /// Deletes a named Cassandra role definition
@@ -922,10 +925,14 @@ namespace VaultSharp
         /// <param name="cassandraBackendMountPoint"><para>[optional]</para>
         /// The mount point for the Cassandra backend. Defaults to <see cref="SecretBackendType.Cassandra" />
         /// Provide a value only if you have customized the Cassandra mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the <see cref="UsernamePasswordCredentials" /> as the data.
         /// </returns>
-        Task<Secret<UsernamePasswordCredentials>> CassandraGenerateDynamicCredentialsAsync(string cassandraRoleName, string cassandraBackendMountPoint = SecretBackendDefaultMountPoints.Cassandra);
+        Task<Secret<UsernamePasswordCredentials>> CassandraGenerateDynamicCredentialsAsync(string cassandraRoleName, string cassandraBackendMountPoint = SecretBackendDefaultMountPoints.Cassandra, string wrapTimeToLive = null);
 
         /// <summary>
         /// Configures the access information for Consul.

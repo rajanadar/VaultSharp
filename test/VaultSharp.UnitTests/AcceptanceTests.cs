@@ -1216,6 +1216,20 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private static async Task RunCassandraSecretBackendApiTests()
         {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.CassandraConfigureConnectionAsync(null, cassandraBackendMountPoint: null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.CassandraWriteNamedRoleAsync("roleName", null, cassandraBackendMountPoint: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.CassandraConfigureConnectionAsync(null, null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.CassandraReadNamedRoleAsync("roleName", cassandraBackendMountPoint: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.CassandraReadNamedRoleAsync(null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.CassandraDeleteNamedRoleAsync("roleName", cassandraBackendMountPoint: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.CassandraDeleteNamedRoleAsync(null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.CassandraGenerateDynamicCredentialsAsync("roleName", cassandraBackendMountPoint: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.CassandraGenerateDynamicCredentialsAsync(null));
+
             if (SetupData.RunCassandraSecretBackendAcceptanceTests)
             {
                 try
@@ -1259,6 +1273,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var queriedRole = await _authenticatedVaultClient.CassandraReadNamedRoleAsync(roleName);
                     Assert.Equal(role.CreationCql, queriedRole.Data.CreationCql);
 
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.CassandraReadNamedRoleAsync(roleName, wrapTimeToLive: "1m"));
+
                     role.CreationCql =
                         @"CREATE USER '{{username}}' WITH PASSWORD '{{password}}' NOSUPERUSER; GRANT SELECT ON ALL KEYSPACES TO '{{username}}';";
 
@@ -1269,6 +1285,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var generatedCreds =
                         await _authenticatedVaultClient.CassandraGenerateDynamicCredentialsAsync(roleName);
                     Assert.NotNull(generatedCreds.Data.Password);
+
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.CassandraGenerateDynamicCredentialsAsync(roleName, wrapTimeToLive: "1m"));
 
                     await _authenticatedVaultClient.CassandraDeleteNamedRoleAsync(roleName);
                 }
@@ -1361,7 +1379,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var queriedRoleJson = await _authenticatedVaultClient.AWSReadNamedRoleAsync(awsRoleJsonName);
                     Assert.Equal(awsRoleJson.PolicyText, queriedRoleJson.Data.PolicyText);
 
-                    RunWrapUnwrapCheck(_authenticatedVaultClient.AWSReadNamedRoleAsync(awsRoleJsonName, wrapTimeToLive: "1m"));
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.AWSReadNamedRoleAsync(awsRoleJsonName, wrapTimeToLive: "1m"));
 
                     var awsRoleNameArn = "aws-role-arn";
                     var awsRoleArn = new AWSRoleDefinition
@@ -1376,7 +1394,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var roles = await _authenticatedVaultClient.AWSGetRoleListAsync();
                     Assert.True(roles.Data.Keys.Count == 2);
 
-                    RunWrapUnwrapCheck(_authenticatedVaultClient.AWSGetRoleListAsync(wrapTimeToLive: "1m"));
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.AWSGetRoleListAsync(wrapTimeToLive: "1m"));
 
                     var generatedCreds =
                         await _authenticatedVaultClient.AWSGenerateDynamicCredentialsAsync(awsRoleJsonName);
@@ -1385,7 +1403,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     generatedCreds = await _authenticatedVaultClient.AWSGenerateDynamicCredentialsAsync(awsRoleNameArn);
                     Assert.NotNull(generatedCreds.Data.SecretKey);
 
-                    RunWrapUnwrapCheck(_authenticatedVaultClient.AWSGenerateDynamicCredentialsAsync(awsRoleNameArn, wrapTimeToLive: "1m"));
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.AWSGenerateDynamicCredentialsAsync(awsRoleNameArn, wrapTimeToLive: "1m"));
 
                     awsRoleJson.PolicyText = JsonConvert.SerializeObject(new
                     {
@@ -1415,7 +1433,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                                 awsRoleJsonName, timeToLive: "2h");
                     Assert.NotNull(generatedCreds.Data.SecurityToken);
 
-                    RunWrapUnwrapCheck(_authenticatedVaultClient.AWSGenerateDynamicCredentialsWithSecurityTokenAsync(awsRoleJsonName, wrapTimeToLive: "1m"));
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.AWSGenerateDynamicCredentialsWithSecurityTokenAsync(awsRoleJsonName, wrapTimeToLive: "1m"));
 
                     await _authenticatedVaultClient.AWSDeleteNamedRoleAsync(awsRoleJsonName);
                     await _authenticatedVaultClient.AWSDeleteNamedRoleAsync(awsRoleNameArn);
@@ -2134,7 +2152,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             }
         }
 
-        private static async void RunWrapUnwrapCheck<TData>(Task<Secret<TData>> wrapTask)
+        private static async Task RunWrapUnwrapCheck<TData>(Task<Secret<TData>> wrapTask)
         {
             var wrappedResponse = await wrapTask;
 

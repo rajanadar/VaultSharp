@@ -768,7 +768,11 @@ namespace VaultSharp
         public async Task CassandraConfigureConnectionAsync(CassandraConnectionInfo cassandraConnectionInfo, string cassandraBackendMountPoint = SecretBackendDefaultMountPoints.Cassandra)
         {
             Checker.NotNull(cassandraBackendMountPoint, "cassandraBackendMountPoint");
-            Checker.NotNull(cassandraConnectionInfo, "cassandraConnectionInfo");
+
+            if (cassandraConnectionInfo == null)
+            {
+                cassandraConnectionInfo = new CassandraConnectionInfo();
+            }
 
             // https://www.vaultproject.io/docs/secrets/cassandra/index.html
             if (!cassandraConnectionInfo.UseTLS &&
@@ -789,12 +793,12 @@ namespace VaultSharp
             await MakeVaultApiRequest(cassandraBackendMountPoint.Trim('/') + "/roles/" + cassandraRoleName, HttpMethod.Post, cassandraRoleDefinition).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<CassandraRoleDefinition>> CassandraReadNamedRoleAsync(string cassandraRoleName, string cassandraBackendMountPoint = SecretBackendDefaultMountPoints.Cassandra)
+        public async Task<Secret<CassandraRoleDefinition>> CassandraReadNamedRoleAsync(string cassandraRoleName, string cassandraBackendMountPoint = SecretBackendDefaultMountPoints.Cassandra, string wrapTimeToLive = null)
         {
             Checker.NotNull(cassandraBackendMountPoint, "cassandraBackendMountPoint");
             Checker.NotNull(cassandraRoleName, "cassandraRoleName");
 
-            var result = await MakeVaultApiRequest<Secret<CassandraRoleDefinition>>(cassandraBackendMountPoint.Trim('/') + "/roles/" + cassandraRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<CassandraRoleDefinition>>(cassandraBackendMountPoint.Trim('/') + "/roles/" + cassandraRoleName, HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
@@ -806,12 +810,12 @@ namespace VaultSharp
             await MakeVaultApiRequest(cassandraBackendMountPoint.Trim('/') + "/roles/" + cassandraRoleName, HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<UsernamePasswordCredentials>> CassandraGenerateDynamicCredentialsAsync(string cassandraRoleName, string cassandraBackendMountPoint = SecretBackendDefaultMountPoints.Cassandra)
+        public async Task<Secret<UsernamePasswordCredentials>> CassandraGenerateDynamicCredentialsAsync(string cassandraRoleName, string cassandraBackendMountPoint = SecretBackendDefaultMountPoints.Cassandra, string wrapTimeToLive = null)
         {
             Checker.NotNull(cassandraBackendMountPoint, "cassandraBackendMountPoint");
             Checker.NotNull(cassandraRoleName, "cassandraRoleName");
 
-            var result = await MakeVaultApiRequest<Secret<UsernamePasswordCredentials>>(cassandraBackendMountPoint.Trim('/') + "/creds/" + cassandraRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<UsernamePasswordCredentials>>(cassandraBackendMountPoint.Trim('/') + "/creds/" + cassandraRoleName, HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 

@@ -7,6 +7,8 @@ namespace VaultSharp.Backends.Secret.Models.Cassandra
     /// </summary>
     public class CassandraRoleDefinition
     {
+        private const string DefaultConsistencyLevel = "Quorum";
+
         /// <summary>
         /// <para>[optional]</para>
         /// Gets or sets the CQL statements executed to create and configure the new user. 
@@ -25,8 +27,10 @@ namespace VaultSharp.Backends.Secret.Models.Cassandra
         /// <summary>
         /// <para>[optional]</para>
         /// Gets or sets the CQL statements executed to attempt a rollback if an error is encountered during user creation. 
-        /// The default is to delete the user. Must be semi-colon separated. 
-        /// The '{{username}}' and '{{password}}' values will be substituted; it is required that these parameters are in single quotes.
+        /// The default is to delete the user. Must be semi-colon separated string, a base64-encoded semicolon-separated string, 
+        /// a serialized JSON string array, or a base64-encoded serialized JSON string array.
+        /// The '{{username}}' and '{{password}}' values will be substituted; 
+        /// it is required that these parameters are in single quotes.
         /// </summary>
         /// <value>
         /// The rollback CQL.
@@ -44,5 +48,25 @@ namespace VaultSharp.Backends.Secret.Models.Cassandra
         /// </value>
         [JsonProperty("lease")]
         public string LeaseDuration { get; set; }
+
+        /// <summary>
+        /// Gets or sets the consistency level.
+        /// The consistency level value provided as a string. 
+        /// Determines the consistency level used for operations performed on the Cassandra database. 
+        /// Defaults to a consistency level of Quorum.
+        /// </summary>
+        /// <value>
+        /// The consistency level.
+        /// </value>
+        [JsonProperty("consistency")]
+        public string ConsistencyLevel { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CassandraRoleDefinition"/> class.
+        /// </summary>
+        public CassandraRoleDefinition()
+        {
+            ConsistencyLevel = DefaultConsistencyLevel;
+        }
     }
 }

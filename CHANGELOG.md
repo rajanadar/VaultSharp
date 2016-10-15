@@ -22,10 +22,12 @@ FEATURES:
   * The `AWSGenerateDynamicCredentialsWithSecurityTokenAsync` method now supports the `timeToLive` parameter.
   * All the methods now support wrapping of the secret into a cubbyhole token.
   ** AWS Secret Backend
+  ** Cassandra Secret Backend
 
 IMPROVEMENTS:
 
   * Overall intellisense comments are updated to match the Vault documentation site.
+  * The `CassandraRoleDefinition` now supports a consistency level parameter. (defaults to `Quorum`)
 
 BUG FIXES:
 
