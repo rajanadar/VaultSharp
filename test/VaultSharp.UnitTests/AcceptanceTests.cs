@@ -1153,6 +1153,17 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private static async Task RunConsulSecretBackendApiTests()
         {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.ConsulConfigureAccessAsync(null, consulBackendMountPoint: null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.ConsulWriteNamedRoleAsync("roleName", null, consulBackendMountPoint: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.ConsulWriteNamedRoleAsync(null, null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.ConsulReadNamedRoleAsync("roleName", consulBackendMountPoint: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.ConsulReadNamedRoleAsync(null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.ConsulDeleteNamedRoleAsync("roleName", consulBackendMountPoint: null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.ConsulDeleteNamedRoleAsync(null));
+
             if (SetupData.RunConsulSecretBackendAcceptanceTests)
             {
                 try
@@ -1191,6 +1202,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var queriedRole = await _authenticatedVaultClient.ConsulReadNamedRoleAsync(roleName);
                     Assert.Equal(role.LeaseDuration, queriedRole.Data.LeaseDuration);
 
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.ConsulReadNamedRoleAsync(roleName, wrapTimeToLive: "1m"));
+
                     role.LeaseDuration = "2m1s";
                     await _authenticatedVaultClient.ConsulWriteNamedRoleAsync(roleName, role);
                     queriedRole = await _authenticatedVaultClient.ConsulReadNamedRoleAsync(roleName);
@@ -1198,6 +1211,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
                     var generatedCreds = await _authenticatedVaultClient.ConsulGenerateDynamicCredentialsAsync(roleName);
                     Assert.NotNull(generatedCreds.Data.Token);
+
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.ConsulGenerateDynamicCredentialsAsync(roleName, wrapTimeToLive: "1m"));
 
                     await _authenticatedVaultClient.ConsulDeleteNamedRoleAsync(roleName);
                 }

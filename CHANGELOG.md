@@ -23,6 +23,7 @@ FEATURES:
   * All the methods now support wrapping of the secret into a cubbyhole token.
   ** AWS Secret Backend
   ** Cassandra Secret Backend
+  ** Consul Secret Backend
 
 IMPROVEMENTS:
 

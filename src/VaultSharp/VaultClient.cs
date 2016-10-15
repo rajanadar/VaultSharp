@@ -822,7 +822,6 @@ namespace VaultSharp
         public async Task ConsulConfigureAccessAsync(ConsulAccessInfo consulAccessInfo, string consulBackendMountPoint = SecretBackendDefaultMountPoints.Consul)
         {
             Checker.NotNull(consulBackendMountPoint, "consulBackendMountPoint");
-            Checker.NotNull(consulAccessInfo, "consulAccessInfo");
 
             await MakeVaultApiRequest(consulBackendMountPoint.Trim('/') + "/config/access", HttpMethod.Post, consulAccessInfo).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
@@ -835,12 +834,12 @@ namespace VaultSharp
             await MakeVaultApiRequest(consulBackendMountPoint.Trim('/') + "/roles/" + consulRoleName, HttpMethod.Post, consulRoleDefinition).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<ConsulRoleDefinition>> ConsulReadNamedRoleAsync(string consulRoleName, string consulBackendMountPoint = SecretBackendDefaultMountPoints.Consul)
+        public async Task<Secret<ConsulRoleDefinition>> ConsulReadNamedRoleAsync(string consulRoleName, string consulBackendMountPoint = SecretBackendDefaultMountPoints.Consul, string wrapTimeToLive = null)
         {
             Checker.NotNull(consulBackendMountPoint, "consulBackendMountPoint");
             Checker.NotNull(consulRoleName, "consulRoleName");
 
-            var result = await MakeVaultApiRequest<Secret<ConsulRoleDefinition>>(consulBackendMountPoint.Trim('/') + "/roles/" + consulRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<ConsulRoleDefinition>>(consulBackendMountPoint.Trim('/') + "/roles/" + consulRoleName, HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
@@ -852,12 +851,12 @@ namespace VaultSharp
             await MakeVaultApiRequest(consulBackendMountPoint.Trim('/') + "/roles/" + consulRoleName, HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<ConsulCredentials>> ConsulGenerateDynamicCredentialsAsync(string consulRoleName, string consulBackendMountPoint = SecretBackendDefaultMountPoints.Consul)
+        public async Task<Secret<ConsulCredentials>> ConsulGenerateDynamicCredentialsAsync(string consulRoleName, string consulBackendMountPoint = SecretBackendDefaultMountPoints.Consul, string wrapTimeToLive = null)
         {
             Checker.NotNull(consulBackendMountPoint, "consulBackendMountPoint");
             Checker.NotNull(consulRoleName, "consulRoleName");
 
-            var result = await MakeVaultApiRequest<Secret<ConsulCredentials>>(consulBackendMountPoint.Trim('/') + "/creds/" + consulRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<ConsulCredentials>>(consulBackendMountPoint.Trim('/') + "/creds/" + consulRoleName, HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 

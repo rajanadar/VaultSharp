@@ -971,13 +971,17 @@ namespace VaultSharp
         /// <param name="consulBackendMountPoint"><para>[optional]</para>
         /// The mount point for the Consul backend. Defaults to <see cref="SecretBackendType.Consul" />
         /// Provide a value only if you have customized the Consul mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the Consul role definition.
         /// </returns>
-        Task<Secret<ConsulRoleDefinition>> ConsulReadNamedRoleAsync(string consulRoleName, string consulBackendMountPoint = SecretBackendDefaultMountPoints.Consul);
+        Task<Secret<ConsulRoleDefinition>> ConsulReadNamedRoleAsync(string consulRoleName, string consulBackendMountPoint = SecretBackendDefaultMountPoints.Consul, string wrapTimeToLive = null);
 
         /// <summary>
-        /// Deletes a named Consul role.
+        /// Deletes a Consul role definition.
         /// </summary>
         /// <param name="consulRoleName"><para>[required]</para>
         /// Name of the Consul role.</param>
@@ -997,10 +1001,14 @@ namespace VaultSharp
         /// <param name="consulBackendMountPoint"><para>[optional]</para>
         /// The mount point for the Consul backend. Defaults to <see cref="SecretBackendType.Consul" />
         /// Provide a value only if you have customized the Consul mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the <see cref="ConsulCredentials" /> as the data.
         /// </returns>
-        Task<Secret<ConsulCredentials>> ConsulGenerateDynamicCredentialsAsync(string consulRoleName, string consulBackendMountPoint = SecretBackendDefaultMountPoints.Consul);
+        Task<Secret<ConsulCredentials>> ConsulGenerateDynamicCredentialsAsync(string consulRoleName, string consulBackendMountPoint = SecretBackendDefaultMountPoints.Consul, string wrapTimeToLive = null);
 
         /// <summary>
         /// Retrieves the secret at the specified location.
