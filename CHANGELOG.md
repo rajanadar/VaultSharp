@@ -24,6 +24,7 @@ FEATURES:
   ** AWS Secret Backend
   ** Cassandra Secret Backend
   ** Consul Secret Backend
+  ** Cubbyhole Secret Backend
 
 IMPROVEMENTS:
 

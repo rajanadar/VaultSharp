@@ -860,17 +860,17 @@ namespace VaultSharp
             return result;
         }
 
-        public async Task<Secret<Dictionary<string, object>>> CubbyholeReadSecretAsync(string locationPath)
+        public async Task<Secret<Dictionary<string, object>>> CubbyholeReadSecretAsync(string locationPath, string wrapTimeToLive = null)
         {
             Checker.NotNull(locationPath, "locationPath");
 
-            var result = await MakeVaultApiRequest<Secret<Dictionary<string, object>>>(SecretBackendType.CubbyHole.Type + "/" + locationPath.Trim('/'), HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<Dictionary<string, object>>>(SecretBackendType.CubbyHole.Type + "/" + locationPath.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
-        public async Task<Secret<ListInfo>> CubbyholeReadSecretLocationPathListAsync(string locationPath)
+        public async Task<Secret<ListInfo>> CubbyholeReadSecretLocationPathListAsync(string locationPath, string wrapTimeToLive = null)
         {
-            var result = await MakeVaultApiRequest<Secret<ListInfo>>(SecretBackendType.CubbyHole.Type + "/" + (locationPath ?? string.Empty).Trim('/') + "?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<ListInfo>>(SecretBackendType.CubbyHole.Type + "/" + (locationPath ?? string.Empty).Trim('/') + "?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 

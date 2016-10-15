@@ -1130,6 +1130,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             var readValues = await _authenticatedVaultClient.CubbyholeReadSecretAsync(path);
             Assert.True(readValues.Data.Count == 2);
 
+            await RunWrapUnwrapCheck(_authenticatedVaultClient.CubbyholeReadSecretAsync(path, wrapTimeToLive: "1m"));
+
             values["foo2"] = 346;
 
             await _authenticatedVaultClient.CubbyholeWriteSecretAsync(path, values);
@@ -1148,6 +1150,10 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
             var list = await _authenticatedVaultClient.CubbyholeReadSecretLocationPathListAsync("path1");
             Assert.True(list.Data.Keys.Count == 1);
+
+            await
+                RunWrapUnwrapCheck(_authenticatedVaultClient.CubbyholeReadSecretLocationPathListAsync("path1",
+                    wrapTimeToLive: "1m"));
 
             await _authenticatedVaultClient.CubbyholeDeleteSecretAsync(path);
             await _authenticatedVaultClient.CubbyholeDeleteSecretAsync(path2);

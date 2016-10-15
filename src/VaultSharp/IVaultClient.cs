@@ -1015,10 +1015,14 @@ namespace VaultSharp
         /// </summary>
         /// <param name="locationPath"><para>[required]</para>
         /// The location path where the secret needs to be read from.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the data.
         /// </returns>
-        Task<Secret<Dictionary<string, object>>> CubbyholeReadSecretAsync(string locationPath);
+        Task<Secret<Dictionary<string, object>>> CubbyholeReadSecretAsync(string locationPath, string wrapTimeToLive = null);
 
         /// <summary>
         /// Retrieves the secret location path entries at the specified location.
@@ -1027,10 +1031,14 @@ namespace VaultSharp
         /// </summary>
         /// <param name="locationPath"><para>[required]</para>
         /// The location path where the secret needs to be read from.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret list with the data.
         /// </returns>
-        Task<Secret<ListInfo>> CubbyholeReadSecretLocationPathListAsync(string locationPath);
+        Task<Secret<ListInfo>> CubbyholeReadSecretLocationPathListAsync(string locationPath, string wrapTimeToLive = null);
 
         /// <summary>
         /// Stores a secret at the specified location.
