@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 
 namespace VaultSharp.Backends.Secret.Models
@@ -26,5 +27,16 @@ namespace VaultSharp.Backends.Secret.Models
         /// </value>
         [JsonProperty("max_ttl")]
         public string MaximumTimeToLive { get; set; }
+
+        /// <summary>
+        /// This field is deprecated and will be removed in a future release. 
+        /// Use <see cref="MaximumTimeToLive"/> instead."
+        /// </summary>
+        /// <value>
+        /// The maximum duration of the lease.
+        /// </value>
+        [JsonProperty("ttl_max")]
+        [Obsolete("This field is deprecated and will be removed in a future release. Use MaximumTimeToLive instead.")]
+        public string LegacyMaximumTimeToLive { get; set; }
     }
 }
