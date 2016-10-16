@@ -987,7 +987,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MongoDbReadNamedRoleAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MongoDbReadNamedRoleAsync("role", null));
-            
+
             await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MongoDbReadRoleListAsync(null));
 
             await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MongoDbDeleteNamedRoleAsync(null));
@@ -996,7 +996,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MongoDbGenerateDynamicCredentialsAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MongoDbGenerateDynamicCredentialsAsync("role", null));
 
-            if (!SetupData.RunMongoDbSecretBackendAcceptanceTests)
+            if (SetupData.RunMongoDbSecretBackendAcceptanceTests)
             {
                 try
                 {
@@ -1024,8 +1024,15 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var blah = await _authenticatedVaultClient.MongoDbConfigureConnectionAsync(mongoDbConnectionInfo);
                     Assert.NotNull(blah);
 
+                    await
+                        RunWrapUnwrapCheck(
+                            _authenticatedVaultClient.MongoDbConfigureConnectionAsync(mongoDbConnectionInfo, wrapTimeToLive: "1m"), requestIdCheckOnly: true);
+
                     var connection = await _authenticatedVaultClient.MongoDbReadConnectionInfoAsync();
                     Assert.Equal(mongoDbConnectionInfo.ConnectionStringUri, connection.Data.ConnectionStringUri);
+
+                    await
+                        RunWrapUnwrapCheck(_authenticatedVaultClient.MongoDbReadConnectionInfoAsync(wrapTimeToLive: "1m"));
 
                     var lease = new CredentialTimeToLiveSettings
                     {
@@ -1038,6 +1045,10 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var queriedLease = await _authenticatedVaultClient.MongoDbReadCredentialLeaseSettingsAsync();
                     Assert.Equal("61", queriedLease.Data.TimeToLive);
                     Assert.Equal("121", queriedLease.Data.MaximumTimeToLive);
+
+                    await
+                        RunWrapUnwrapCheck(
+                            _authenticatedVaultClient.MongoDbReadCredentialLeaseSettingsAsync(wrapTimeToLive: "1m"));
 
                     var roleName = "mongodb-role";
 
@@ -1053,6 +1064,10 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     Assert.Equal(role.Database, queriedRole.Data.Database);
                     Assert.Equal(role.Roles, queriedRole.Data.Roles);
 
+                    await
+                        RunWrapUnwrapCheck(_authenticatedVaultClient.MongoDbReadNamedRoleAsync(roleName,
+                            wrapTimeToLive: "1m"));
+
                     var roleName2 = "mongodb-role2";
                     var role2 = new MongoDbRoleDefinition
                     {
@@ -1065,9 +1080,15 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var roles = await _authenticatedVaultClient.MongoDbReadRoleListAsync();
                     Assert.True(roles.Data.Keys.Count == 2);
 
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.MongoDbReadRoleListAsync(wrapTimeToLive: "1m"));
+
                     var generatedCreds = await _authenticatedVaultClient.MongoDbGenerateDynamicCredentialsAsync(roleName);
                     Assert.Equal(role.Database, generatedCreds.Data.Database);
                     Assert.NotNull(generatedCreds.Data.Password);
+
+                    await
+                        RunWrapUnwrapCheck(_authenticatedVaultClient.MongoDbGenerateDynamicCredentialsAsync(roleName,
+                            wrapTimeToLive: "1m"));
 
                     await _authenticatedVaultClient.MongoDbDeleteNamedRoleAsync(roleName);
                     await _authenticatedVaultClient.MongoDbDeleteNamedRoleAsync(roleName2);
@@ -2218,7 +2239,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             }
         }
 
-        private static async Task RunWrapUnwrapCheck<TData>(Task<Secret<TData>> wrapTask)
+        private static async Task RunWrapUnwrapCheck<TData>(Task<Secret<TData>> wrapTask, bool requestIdCheckOnly = false)
         {
             var wrappedResponse = await wrapTask;
 
@@ -2229,6 +2250,12 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                 await
                     _authenticatedVaultClient.UnwrapWrappedResponseDataAsync<TData>(
                         wrappedResponse.WrappedInformation.Token);
+
+            if (requestIdCheckOnly)
+            {
+                Assert.NotNull(unwrappedResponse.RequestId);
+                return;
+            }
 
             Assert.NotNull(unwrappedResponse.Data);
         }

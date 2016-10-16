@@ -28,6 +28,7 @@ FEATURES:
   ** Consul Secret Backend
   ** Cubbyhole Secret Backend
   ** Generic Secret Backend
+  ** MongoDB Secret Backend
 
 IMPROVEMENTS:
 

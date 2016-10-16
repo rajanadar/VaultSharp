@@ -1137,10 +1137,14 @@ namespace VaultSharp
         /// <param name="mongoDbBackendMountPoint"><para>[optional]</para>
         /// The mount point for the MongoDb backend. Defaults to <see cref="SecretBackendType.MongoDb" />
         /// Provide a value only if you have customized the MongoDb mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task<Secret<object>> MongoDbConfigureConnectionAsync(MongoDbConnectionInfo mongoDbConnectionInfo, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
+        Task<Secret<object>> MongoDbConfigureConnectionAsync(MongoDbConnectionInfo mongoDbConnectionInfo, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb, string wrapTimeToLive = null);
 
         /// <summary>
         /// Queries the connection configuration. Access to this endpoint should be controlled via ACLs as it will 
@@ -1149,10 +1153,14 @@ namespace VaultSharp
         /// <param name="mongoDbBackendMountPoint"><para>[optional]</para>
         /// The mount point for the MongoDb backend. Defaults to <see cref="SecretBackendType.MongoDb" />
         /// Provide a value only if you have customized the MongoDb mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The MongoDb connection information.
         /// </returns>
-        Task<Secret<MongoDbConnectionInfo>> MongoDbReadConnectionInfoAsync(string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
+        Task<Secret<MongoDbConnectionInfo>> MongoDbReadConnectionInfoAsync(string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb, string wrapTimeToLive = null);
 
         /// <summary>
         /// Configures the lease settings for generated credentials.
@@ -1173,10 +1181,14 @@ namespace VaultSharp
         /// <param name="mongoDbBackendMountPoint"><para>[optional]</para>
         /// The mount point for the MongoDb backend. Defaults to <see cref="SecretBackendType.MongoDb" />
         /// Provide a value only if you have customized the MongoDb mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The MongoDb lease settings.
         /// </returns>
-        Task<Secret<CredentialTimeToLiveSettings>> MongoDbReadCredentialLeaseSettingsAsync(string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
+        Task<Secret<CredentialTimeToLiveSettings>> MongoDbReadCredentialLeaseSettingsAsync(string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb, string wrapTimeToLive = null);
         
         /// <summary>
         /// Creates or updates a named MongoDb role.
@@ -1201,10 +1213,14 @@ namespace VaultSharp
         /// <param name="mongoDbBackendMountPoint"><para>[optional]</para>
         /// The mount point for the MongoDb backend. Defaults to <see cref="SecretBackendType.MongoDb" />
         /// Provide a value only if you have customized the MongoDb mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the MongoDb role definition with the creation, rollback query and lease information.
         /// </returns>
-        Task<Secret<MongoDbRoleDefinition>> MongoDbReadNamedRoleAsync(string mongoDbRoleName, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
+        Task<Secret<MongoDbRoleDefinition>> MongoDbReadNamedRoleAsync(string mongoDbRoleName, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb, string wrapTimeToLive = null);
 
         /// <summary>
         /// Returns a list of available roles. Only the role names are returned, not any values.
@@ -1212,10 +1228,14 @@ namespace VaultSharp
         /// <param name="mongoDbBackendMountPoint"><para>[optional]</para>
         /// The mount point for the MongoDb backend. Defaults to <see cref="SecretBackendType.MongoDb" />
         /// Provide a value only if you have customized the MongoDb mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// A list of available roles. Only the role names are returned, not any values.
         /// </returns>
-        Task<Secret<ListInfo>> MongoDbReadRoleListAsync(string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
+        Task<Secret<ListInfo>> MongoDbReadRoleListAsync(string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb, string wrapTimeToLive = null);
 
         /// <summary>
         /// Deletes a named MongoDb role definition
@@ -1238,10 +1258,14 @@ namespace VaultSharp
         /// <param name="mongoDbBackendMountPoint"><para>[optional]</para>
         /// The mount point for the MongoDb backend. Defaults to <see cref="SecretBackendType.MongoDb" />
         /// Provide a value only if you have customized the MongoDb mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the <see cref="MongoDbUsernamePasswordCredentials" /> as the data.
         /// </returns>
-        Task<Secret<MongoDbUsernamePasswordCredentials>> MongoDbGenerateDynamicCredentialsAsync(string mongoDbRoleName, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
+        Task<Secret<MongoDbUsernamePasswordCredentials>> MongoDbGenerateDynamicCredentialsAsync(string mongoDbRoleName, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb, string wrapTimeToLive = null);
 
         /// <summary>
         /// Configures the connection information used to communicate with Microsoft Sql Server.
