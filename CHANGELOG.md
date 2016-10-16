@@ -10,6 +10,8 @@ DEPRECATIONS/CHANGES:
 
   * The `InitializeAsync` method now takes a single container object for all parameters, instead of primitive parameters.
   * The File Audit backend path json key internally changed from `path` to `file_path`.
+  * The `MongoDbGenerateDynamicCredentialsAsync` method now returns `MongoDbUsernamePasswordCredentials` instead of `MongoDbUsernamePasswordCredentials`.
+    This ensures you get the `database` field back as well.
 
 FEATURES:
 
@@ -31,6 +33,7 @@ IMPROVEMENTS:
 
   * Overall intellisense comments are updated to match the Vault documentation site.
   * The `CassandraRoleDefinition` now supports a consistency level parameter. (defaults to `Quorum`)
+  * The `MongoDbGenerateDynamicCredentialsAsync` now returns the database name as well, related to the credentials. 
 
 BUG FIXES:
 

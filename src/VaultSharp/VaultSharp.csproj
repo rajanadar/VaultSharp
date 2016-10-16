@@ -85,6 +85,7 @@
     <Compile Include="Backends\Secret\Models\MicrosoftSql\MicrosoftSqlRoleDefinition.cs" />
     <Compile Include="Backends\Secret\Models\MongoDb\MongoDbConnectionInfo.cs" />
     <Compile Include="Backends\Secret\Models\MongoDb\MongoDbRoleDefinition.cs" />
+    <Compile Include="Backends\Secret\Models\MongoDb\MongoDbUsernamePasswordCredentials.cs" />
     <Compile Include="Backends\Secret\Models\MySql\MySqlRoleDefinition.cs" />
     <Compile Include="Backends\Secret\Models\MySql\MySqlConnectionInfo.cs" />
     <Compile Include="Backends\Secret\Models\PKI\CertificateEndpointOptions.cs" />

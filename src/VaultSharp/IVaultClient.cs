@@ -1140,12 +1140,11 @@ namespace VaultSharp
         /// <returns>
         /// The task.
         /// </returns>
-        Task MongoDbConfigureConnectionAsync(MongoDbConnectionInfo mongoDbConnectionInfo, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
+        Task<Secret<object>> MongoDbConfigureConnectionAsync(MongoDbConnectionInfo mongoDbConnectionInfo, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
 
         /// <summary>
         /// Queries the connection configuration. Access to this endpoint should be controlled via ACLs as it will 
         /// return the connection URI as it is, including passwords, if any.
-        /// This API is a root protected call.
         /// </summary>
         /// <param name="mongoDbBackendMountPoint"><para>[optional]</para>
         /// The mount point for the MongoDb backend. Defaults to <see cref="SecretBackendType.MongoDb" />
@@ -1157,7 +1156,6 @@ namespace VaultSharp
 
         /// <summary>
         /// Configures the lease settings for generated credentials.
-        /// This API is a root protected call.
         /// </summary>
         /// <param name="credentialTimeToLiveSettings"><para>[required]</para>
         /// The credential lease settings.</param>
@@ -1241,9 +1239,9 @@ namespace VaultSharp
         /// The mount point for the MongoDb backend. Defaults to <see cref="SecretBackendType.MongoDb" />
         /// Provide a value only if you have customized the MongoDb mount point.</param>
         /// <returns>
-        /// The secret with the <see cref="UsernamePasswordCredentials" /> as the data.
+        /// The secret with the <see cref="MongoDbUsernamePasswordCredentials" /> as the data.
         /// </returns>
-        Task<Secret<UsernamePasswordCredentials>> MongoDbGenerateDynamicCredentialsAsync(string mongoDbRoleName, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
+        Task<Secret<MongoDbUsernamePasswordCredentials>> MongoDbGenerateDynamicCredentialsAsync(string mongoDbRoleName, string mongoDbBackendMountPoint = SecretBackendDefaultMountPoints.MongoDb);
 
         /// <summary>
         /// Configures the connection information used to communicate with Microsoft Sql Server.

@@ -73,7 +73,9 @@ namespace VaultSharp.UnitTests
             // https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
             // create a root user as follows: http://stackoverflow.com/a/29090991/1174414
 
-            // startup mongodb server as follows: "C:\Program Files\MongoDB\Server\3.2\bin\mongod.exe"
+            // startup mongodb server as follows: 
+            // cd "C:\Program Files\MongoDB\Server\3.2\bin"
+            // mongod.exe
             public const bool RunMongoDbSecretBackendAcceptanceTests = false;
             public const string MongoDbCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\mongodb.txt";
 
@@ -975,7 +977,26 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private static async Task RunMongoDbSecretBackendApiTests()
         {
-            if (SetupData.RunMongoDbSecretBackendAcceptanceTests)
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MongoDbConfigureConnectionAsync(null, null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MongoDbReadConnectionInfoAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MongoDbConfigureCredentialLeaseSettingsAsync(null, null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MongoDbReadCredentialLeaseSettingsAsync(null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MongoDbWriteNamedRoleAsync(null, null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MongoDbWriteNamedRoleAsync("role", null, null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MongoDbReadNamedRoleAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MongoDbReadNamedRoleAsync("role", null));
+            
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MongoDbReadRoleListAsync(null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MongoDbDeleteNamedRoleAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MongoDbDeleteNamedRoleAsync("role", null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MongoDbGenerateDynamicCredentialsAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MongoDbGenerateDynamicCredentialsAsync("role", null));
+
+            if (!SetupData.RunMongoDbSecretBackendAcceptanceTests)
             {
                 try
                 {
@@ -999,7 +1020,9 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     };
 
                     await _authenticatedVaultClient.QuickMountSecretBackendAsync(SecretBackendType.MongoDb);
-                    await _authenticatedVaultClient.MongoDbConfigureConnectionAsync(mongoDbConnectionInfo);
+
+                    var blah = await _authenticatedVaultClient.MongoDbConfigureConnectionAsync(mongoDbConnectionInfo);
+                    Assert.NotNull(blah);
 
                     var connection = await _authenticatedVaultClient.MongoDbReadConnectionInfoAsync();
                     Assert.Equal(mongoDbConnectionInfo.ConnectionStringUri, connection.Data.ConnectionStringUri);
@@ -1043,6 +1066,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     Assert.True(roles.Data.Keys.Count == 2);
 
                     var generatedCreds = await _authenticatedVaultClient.MongoDbGenerateDynamicCredentialsAsync(roleName);
+                    Assert.Equal(role.Database, generatedCreds.Data.Database);
                     Assert.NotNull(generatedCreds.Data.Password);
 
                     await _authenticatedVaultClient.MongoDbDeleteNamedRoleAsync(roleName);
