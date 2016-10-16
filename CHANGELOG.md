@@ -9,9 +9,12 @@ MISC:
 DEPRECATIONS/CHANGES:
 
   * The `InitializeAsync` method now takes a single container object for all parameters, instead of primitive parameters.
+    This single container object now has support for the additional recovery fields supported by Vault 0.6.2's initialization.
   * The File Audit backend path json key internally changed from `path` to `file_path`.
   * The `MongoDbGenerateDynamicCredentialsAsync` method now returns `MongoDbUsernamePasswordCredentials` instead of `MongoDbUsernamePasswordCredentials`.
     This ensures you get the `database` field back as well.
+  * The `MicrosoftSqlReadCredentialLeaseSettingsAsync` method now returns the `CredentialTimeToLiveSettings` instead of the deprecated `CredentialTtlSettings` type.
+    This is in alignment with Vault deprecating `ttl_max` in favor of `max_ttl`.
 
 FEATURES:
 
@@ -29,6 +32,7 @@ FEATURES:
   ** Cubbyhole Secret Backend
   ** Generic Secret Backend
   ** MongoDB Secret Backend
+  ** Microsoft SQL Secret Backend
 
 IMPROVEMENTS:
 

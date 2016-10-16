@@ -1285,7 +1285,6 @@ namespace VaultSharp
 
         /// <summary>
         /// Configures the lease settings for generated credentials.
-        /// This API is a root protected call.
         /// </summary>
         /// <param name="credentialTimeToLiveSettings"><para>[required]</para>
         /// The credential lease settings.</param>
@@ -1295,7 +1294,7 @@ namespace VaultSharp
         /// <returns>
         /// The task.
         /// </returns>
-        Task MicrosoftSqlConfigureCredentialLeaseSettingsAsync(CredentialTtlSettings credentialTimeToLiveSettings, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
+        Task MicrosoftSqlConfigureCredentialLeaseSettingsAsync(CredentialTimeToLiveSettings credentialTimeToLiveSettings, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
 
         /// <summary>
         /// Queries the Microsoft SQL credential lease settings.
@@ -1303,11 +1302,15 @@ namespace VaultSharp
         /// <param name="microsoftSqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the MicrosoftSql backend. Defaults to <see cref="SecretBackendType.MicrosoftSql" />
         /// Provide a value only if you have customized the MicrosoftSql mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>The lease settings.</returns>
-        Task<Secret<CredentialTtlSettings>> MicrosoftSqlReadCredentialLeaseSettingsAsync(string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
+        Task<Secret<CredentialTimeToLiveSettings>> MicrosoftSqlReadCredentialLeaseSettingsAsync(string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql, string wrapTimeToLive = null);
 
         /// <summary>
-        /// Creates or updates a named MicrosoftSql role.
+        /// Creates or updates a named MicrosoftSql role definition.
         /// </summary>
         /// <param name="microsoftSqlRoleName"><para>[required]</para>
         /// Name of the MicrosoftSql role.</param>
@@ -1329,10 +1332,14 @@ namespace VaultSharp
         /// <param name="microsoftSqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the MicrosoftSql backend. Defaults to <see cref="SecretBackendType.MicrosoftSql" />
         /// Provide a value only if you have customized the MicrosoftSql mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the MicrosoftSql role definition with the creation, rollback query and lease information.
         /// </returns>
-        Task<Secret<MicrosoftSqlRoleDefinition>> MicrosoftSqlReadNamedRoleAsync(string microsoftSqlRoleName, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
+        Task<Secret<MicrosoftSqlRoleDefinition>> MicrosoftSqlReadNamedRoleAsync(string microsoftSqlRoleName, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql, string wrapTimeToLive = null);
 
         /// <summary>
         /// Returns a list of available roles. Only the role names are returned, not any values.
@@ -1340,10 +1347,14 @@ namespace VaultSharp
         /// <param name="microsoftSqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the MicrosoftSql backend. Defaults to <see cref="SecretBackendType.MicrosoftSql" />
         /// Provide a value only if you have customized the MicrosoftSql mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// A list of available roles. Only the role names are returned, not any values.
         /// </returns>
-        Task<Secret<ListInfo>> MicrosoftSqlReadRoleListAsync(string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
+        Task<Secret<ListInfo>> MicrosoftSqlReadRoleListAsync(string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql, string wrapTimeToLive = null);
 
         /// <summary>
         /// Deletes a named MicrosoftSql role definition
@@ -1366,10 +1377,14 @@ namespace VaultSharp
         /// <param name="microsoftSqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the MicrosoftSql backend. Defaults to <see cref="SecretBackendType.MicrosoftSql" />
         /// Provide a value only if you have customized the MicrosoftSql mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the <see cref="UsernamePasswordCredentials" /> as the data.
         /// </returns>
-        Task<Secret<UsernamePasswordCredentials>> MicrosoftSqlGenerateDynamicCredentialsAsync(string microsoftSqlRoleName, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql);
+        Task<Secret<UsernamePasswordCredentials>> MicrosoftSqlGenerateDynamicCredentialsAsync(string microsoftSqlRoleName, string microsoftSqlBackendMountPoint = SecretBackendDefaultMountPoints.MicrosoftSql, string wrapTimeToLive = null);
         
         /// <summary>
         /// Configures the connection information used to communicate with MySql.

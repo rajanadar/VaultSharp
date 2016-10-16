@@ -889,7 +889,25 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private static async Task RunMicrosoftSqlSecretBackendApiTests()
         {
-            if (SetupData.RunMicrosoftSqlSecretBackendAcceptanceTests)
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MicrosoftSqlConfigureConnectionAsync(null, null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MicrosoftSqlConfigureCredentialLeaseSettingsAsync(null, null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MicrosoftSqlReadCredentialLeaseSettingsAsync(null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MicrosoftSqlWriteNamedRoleAsync(null, null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MicrosoftSqlWriteNamedRoleAsync("role", null, null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MicrosoftSqlReadNamedRoleAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MicrosoftSqlReadNamedRoleAsync("role", null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MicrosoftSqlReadRoleListAsync(null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MicrosoftSqlDeleteNamedRoleAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MicrosoftSqlDeleteNamedRoleAsync("role", null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MicrosoftSqlGenerateDynamicCredentialsAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MicrosoftSqlGenerateDynamicCredentialsAsync("role", null));
+
+            if (!SetupData.RunMicrosoftSqlSecretBackendAcceptanceTests)
             {
                 try
                 {
@@ -911,16 +929,19 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     {
                         ConnectionString = credentialsFileContent[0],
                         MaximumOpenConnections = 5,
-                        VerifyConnection = true
+                        VerifyConnection = false // raja todo.
                     };
 
                     await _authenticatedVaultClient.QuickMountSecretBackendAsync(SecretBackendType.MicrosoftSql);
                     await _authenticatedVaultClient.MicrosoftSqlConfigureConnectionAsync(microsoftSqlConnectionInfo);
 
+                    // raja todo: the Vault API doesn't support Reading of connection string officially.
+                    // It succeeds, but doesn't return the Connection String.
+                    // The MaxConnection is returned though.
                     // var connection = await _authenticatedVaultClient.MicrosoftSqlReadConnectionInfoAsync();
                     // Assert.Equal(microsoftSqlConnectionInfo.MaximumOpenConnections, connection.Data.MaximumOpenConnections);
 
-                    var lease = new CredentialTtlSettings()
+                    var lease = new CredentialTimeToLiveSettings
                     {
                         TimeToLive = "1m1s",
                         MaximumTimeToLive = "2m1s"
@@ -931,6 +952,10 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var queriedLease = await _authenticatedVaultClient.MicrosoftSqlReadCredentialLeaseSettingsAsync();
                     Assert.Equal(lease.TimeToLive, queriedLease.Data.TimeToLive);
                     Assert.Equal(lease.MaximumTimeToLive, queriedLease.Data.MaximumTimeToLive);
+
+                    await
+                        RunWrapUnwrapCheck(
+                            _authenticatedVaultClient.MicrosoftSqlReadCredentialLeaseSettingsAsync(wrapTimeToLive: "1m"));
 
                     var roleName = "msssqlrole";
 
@@ -944,6 +969,10 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var queriedRole = await _authenticatedVaultClient.MicrosoftSqlReadNamedRoleAsync(roleName);
                     Assert.Equal(role.Sql, queriedRole.Data.Sql);
 
+                    await
+                        RunWrapUnwrapCheck(_authenticatedVaultClient.MicrosoftSqlReadNamedRoleAsync(roleName,
+                            wrapTimeToLive: "1m"));
+
                     var roleName2 = "mssqlrole2";
                     var role2 = new MicrosoftSqlRoleDefinition
                     {
@@ -955,8 +984,16 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var roles = await _authenticatedVaultClient.MicrosoftSqlReadRoleListAsync();
                     Assert.True(roles.Data.Keys.Count == 2);
 
+                    await
+                        RunWrapUnwrapCheck(_authenticatedVaultClient.MicrosoftSqlReadRoleListAsync(wrapTimeToLive: "1m"));
+
                     var generatedCreds = await _authenticatedVaultClient.MicrosoftSqlGenerateDynamicCredentialsAsync(roleName);
                     Assert.NotNull(generatedCreds.Data.Password);
+
+                    await
+                        RunWrapUnwrapCheck(
+                            _authenticatedVaultClient.MicrosoftSqlGenerateDynamicCredentialsAsync(roleName,
+                                wrapTimeToLive: "1m"));
 
                     await _authenticatedVaultClient.MicrosoftSqlDeleteNamedRoleAsync(roleName);
                     await _authenticatedVaultClient.MicrosoftSqlDeleteNamedRoleAsync(roleName2);
