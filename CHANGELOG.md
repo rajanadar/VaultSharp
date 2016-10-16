@@ -33,12 +33,14 @@ FEATURES:
   ** Generic Secret Backend
   ** MongoDB Secret Backend
   ** Microsoft SQL Secret Backend
+  ** MySql Secret Backend
 
 IMPROVEMENTS:
 
   * Overall intellisense comments are updated to match the Vault documentation site.
   * The `CassandraRoleDefinition` now supports a consistency level parameter. (defaults to `Quorum`)
   * The `MongoDbGenerateDynamicCredentialsAsync` now returns the database name as well, related to the credentials. 
+  * The `MySqlRoleDefinition` now supports the `RevocationSql` parameter to revoke an user.
 
 BUG FIXES:
 

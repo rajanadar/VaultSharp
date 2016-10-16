@@ -21,6 +21,19 @@ namespace VaultSharp.Backends.Secret.Models.MySql
         public string Sql { get; set; }
 
         /// <summary>
+        /// <para>[optional]</para>
+        /// Gets or sets the SQL statements executed to revoke a user. 
+        /// Must be a semicolon-separated string, a base64-encoded semicolon-separated string, 
+        /// a serialized JSON string array, or a base64-encoded serialized JSON string array. 
+        /// The '{{name}}' value will be substituted.
+        /// </summary>
+        /// <value>
+        /// The revocation SQL.
+        /// </value>
+        [JsonProperty("revocation_sql")]
+        public string RevocationSql { get; set; }
+
+        /// <summary>
         /// Gets or sets a value determining how many characters from the role name will be used to form the mysql 
         /// username interpolated into the '{{name}}' field of the sql parameter. 
         /// The default is 4.

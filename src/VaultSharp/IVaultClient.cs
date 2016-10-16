@@ -1406,13 +1406,18 @@ namespace VaultSharp
         /// <param name="mySqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the MySql backend. Defaults to <see cref="SecretBackendType.MySql" />
         /// Provide a value only if you have customized the MySql mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The connection information.
         /// </returns>
-        Task<Secret<MySqlConnectionInfo>> MySqlReadConnectionInfoAsync(string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql);
+        Task<Secret<MySqlConnectionInfo>> MySqlReadConnectionInfoAsync(string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql, string wrapTimeToLive = null);
 
         /// <summary>
         /// Configures the lease settings for generated credentials.
+        /// If not configured, leases default to 1 hour.
         /// This API is a root protected call.
         /// </summary>
         /// <param name="credentialLeaseSettings"><para>[required]</para>
@@ -1431,8 +1436,12 @@ namespace VaultSharp
         /// <param name="mySqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the MySql backend. Defaults to <see cref="SecretBackendType.MySql" />
         /// Provide a value only if you have customized the MySql mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>The lease settings.</returns>
-        Task<Secret<CredentialLeaseSettings>> MySqlReadCredentialLeaseSettingsAsync(string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql);
+        Task<Secret<CredentialLeaseSettings>> MySqlReadCredentialLeaseSettingsAsync(string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql, string wrapTimeToLive = null);
 
         /// <summary>
         /// Creates or updates a named MySql role.
@@ -1457,10 +1466,14 @@ namespace VaultSharp
         /// <param name="mySqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the MySql backend. Defaults to <see cref="SecretBackendType.MySql" />
         /// Provide a value only if you have customized the MySql mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the MySql role definition with the creation, rollback query and lease information.
         /// </returns>
-        Task<Secret<MySqlRoleDefinition>> MySqlReadNamedRoleAsync(string mySqlRoleName, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql);
+        Task<Secret<MySqlRoleDefinition>> MySqlReadNamedRoleAsync(string mySqlRoleName, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql, string wrapTimeToLive = null);
 
         /// <summary>
         /// Returns a list of available roles. Only the role names are returned, not any values.
@@ -1468,10 +1481,14 @@ namespace VaultSharp
         /// <param name="mySqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the MySql backend. Defaults to <see cref="SecretBackendType.MySql" />
         /// Provide a value only if you have customized the MySql mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// A list of available roles. Only the role names are returned, not any values.
         /// </returns>
-        Task<Secret<ListInfo>> MySqlReadRoleListAsync(string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql);
+        Task<Secret<ListInfo>> MySqlReadRoleListAsync(string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql, string wrapTimeToLive = null);
 
         /// <summary>
         /// Deletes a named MySql role definition
@@ -1494,10 +1511,14 @@ namespace VaultSharp
         /// <param name="mySqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the MySql backend. Defaults to <see cref="SecretBackendType.MySql" />
         /// Provide a value only if you have customized the MySql mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the <see cref="UsernamePasswordCredentials" /> as the data.
         /// </returns>
-        Task<Secret<UsernamePasswordCredentials>> MySqlGenerateDynamicCredentialsAsync(string mySqlRoleName, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql);
+        Task<Secret<UsernamePasswordCredentials>> MySqlGenerateDynamicCredentialsAsync(string mySqlRoleName, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql, string wrapTimeToLive = null);
 
         /// <summary>
         /// Retrieves the CA certificate as a raw string in the requested format.

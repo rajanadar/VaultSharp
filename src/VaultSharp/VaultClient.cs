@@ -1058,31 +1058,31 @@ namespace VaultSharp
         public async Task MySqlConfigureConnectionAsync(MySqlConnectionInfo mySqlConnectionInfo, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql)
         {
             Checker.NotNull(mySqlBackendMountPoint, "mySqlBackendMountPoint");
-            Checker.NotNull(mySqlConnectionInfo, "mySqlConnectionInfo");
 
             await MakeVaultApiRequest(mySqlBackendMountPoint.Trim('/') + "/config/connection", HttpMethod.Post, mySqlConnectionInfo).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<MySqlConnectionInfo>> MySqlReadConnectionInfoAsync(string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql)
+        // raja todo.. this is not documented in the Vault site.
+        public async Task<Secret<MySqlConnectionInfo>> MySqlReadConnectionInfoAsync(string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql, string wrapTimeToLive = null)
         {
             Checker.NotNull(mySqlBackendMountPoint, "mySqlBackendMountPoint");
 
-            return await MakeVaultApiRequest<Secret<MySqlConnectionInfo>>(mySqlBackendMountPoint.Trim('/') + "/config/connection", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return await MakeVaultApiRequest<Secret<MySqlConnectionInfo>>(mySqlBackendMountPoint.Trim('/') + "/config/connection", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task MySqlConfigureCredentialLeaseSettingsAsync(CredentialLeaseSettings credentialLeaseSettings, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql)
         {
             Checker.NotNull(mySqlBackendMountPoint, "mySqlBackendMountPoint");
-            Checker.NotNull(credentialLeaseSettings, "credentialLeaseSettings");
 
             await MakeVaultApiRequest(mySqlBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Post, credentialLeaseSettings).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<CredentialLeaseSettings>> MySqlReadCredentialLeaseSettingsAsync(string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql)
+        // raja.. not documented in Vault site.
+        public async Task<Secret<CredentialLeaseSettings>> MySqlReadCredentialLeaseSettingsAsync(string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql, string wrapTimeToLive = null)
         {
             Checker.NotNull(mySqlBackendMountPoint, "mySqlBackendMountPoint");
 
-            return await MakeVaultApiRequest<Secret<CredentialLeaseSettings>>(mySqlBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return await MakeVaultApiRequest<Secret<CredentialLeaseSettings>>(mySqlBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task MySqlWriteNamedRoleAsync(string mySqlRoleName, MySqlRoleDefinition mySqlRoleDefinition, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql)
@@ -1093,20 +1093,20 @@ namespace VaultSharp
             await MakeVaultApiRequest(mySqlBackendMountPoint.Trim('/') + "/roles/" + mySqlRoleName, HttpMethod.Post, mySqlRoleDefinition).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<MySqlRoleDefinition>> MySqlReadNamedRoleAsync(string mySqlRoleName, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql)
+        public async Task<Secret<MySqlRoleDefinition>> MySqlReadNamedRoleAsync(string mySqlRoleName, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql, string wrapTimeToLive = null)
         {
             Checker.NotNull(mySqlBackendMountPoint, "mySqlBackendMountPoint");
             Checker.NotNull(mySqlRoleName, "mySqlRoleName");
 
-            var result = await MakeVaultApiRequest<Secret<MySqlRoleDefinition>>(mySqlBackendMountPoint.Trim('/') + "/roles/" + mySqlRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<MySqlRoleDefinition>>(mySqlBackendMountPoint.Trim('/') + "/roles/" + mySqlRoleName, HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
-        public async Task<Secret<ListInfo>> MySqlReadRoleListAsync(string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql)
+        public async Task<Secret<ListInfo>> MySqlReadRoleListAsync(string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql, string wrapTimeToLive = null)
         {
             Checker.NotNull(mySqlBackendMountPoint, "mySqlBackendMountPoint");
 
-            var result = await MakeVaultApiRequest<Secret<ListInfo>>(mySqlBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<ListInfo>>(mySqlBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
@@ -1118,12 +1118,12 @@ namespace VaultSharp
             await MakeVaultApiRequest(mySqlBackendMountPoint.Trim('/') + "/roles/" + mySqlRoleName, HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<UsernamePasswordCredentials>> MySqlGenerateDynamicCredentialsAsync(string mySqlRoleName, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql)
+        public async Task<Secret<UsernamePasswordCredentials>> MySqlGenerateDynamicCredentialsAsync(string mySqlRoleName, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql, string wrapTimeToLive = null)
         {
             Checker.NotNull(mySqlBackendMountPoint, "mySqlBackendMountPoint");
             Checker.NotNull(mySqlRoleName, "mySqlRoleName");
 
-            var result = await MakeVaultApiRequest<Secret<UsernamePasswordCredentials>>(mySqlBackendMountPoint.Trim('/') + "/creds/" + mySqlRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<UsernamePasswordCredentials>>(mySqlBackendMountPoint.Trim('/') + "/creds/" + mySqlRoleName, HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 

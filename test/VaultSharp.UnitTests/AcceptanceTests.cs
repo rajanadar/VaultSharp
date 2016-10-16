@@ -805,6 +805,25 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private static async Task RunMySqlSecretBackendApiTests()
         {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MySqlConfigureConnectionAsync(null, null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MySqlReadConnectionInfoAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MySqlConfigureCredentialLeaseSettingsAsync(null, null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MySqlReadCredentialLeaseSettingsAsync(null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MySqlWriteNamedRoleAsync(null, null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MySqlWriteNamedRoleAsync("role", null, null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MySqlReadNamedRoleAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MySqlReadNamedRoleAsync("role", null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MySqlReadRoleListAsync(null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MySqlDeleteNamedRoleAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MySqlDeleteNamedRoleAsync("role", null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MySqlGenerateDynamicCredentialsAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MySqlGenerateDynamicCredentialsAsync("role", null));
+
             if (SetupData.RunMySqlSecretBackendAcceptanceTests)
             {
                 try
@@ -835,6 +854,9 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var connection = await _authenticatedVaultClient.MySqlReadConnectionInfoAsync();
                     Assert.Equal(connectionInfo.ConnectionUrl, connection.Data.ConnectionUrl);
 
+                    await
+                        RunWrapUnwrapCheck(_authenticatedVaultClient.MySqlReadConnectionInfoAsync(wrapTimeToLive: "1m"));
+
                     var lease = new CredentialLeaseSettings
                     {
                         LeaseTime = "1m1s",
@@ -846,6 +868,9 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var queriedLease = await _authenticatedVaultClient.MySqlReadCredentialLeaseSettingsAsync();
                     Assert.Equal(lease.LeaseTime, queriedLease.Data.LeaseTime);
                     Assert.Equal(lease.MaximumLeaseTime, queriedLease.Data.MaximumLeaseTime);
+
+                    await
+                        RunWrapUnwrapCheck(_authenticatedVaultClient.MySqlReadCredentialLeaseSettingsAsync(wrapTimeToLive: "1m"));
 
                     var roleName = "mysqlrole";
 
@@ -859,6 +884,9 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var queriedRole = await _authenticatedVaultClient.MySqlReadNamedRoleAsync(roleName);
                     Assert.Equal(role.Sql, queriedRole.Data.Sql);
 
+                    await
+                        RunWrapUnwrapCheck(_authenticatedVaultClient.MySqlReadNamedRoleAsync(roleName, wrapTimeToLive: "1m"));
+
                     var roleName2 = "mysqlrole2";
                     var role2 = new MySqlRoleDefinition
                     {
@@ -870,8 +898,12 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var roles = await _authenticatedVaultClient.MySqlReadRoleListAsync();
                     Assert.True(roles.Data.Keys.Count == 2);
 
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.MySqlReadRoleListAsync(wrapTimeToLive: "1m"));
+
                     var generatedCreds = await _authenticatedVaultClient.MySqlGenerateDynamicCredentialsAsync(roleName);
                     Assert.NotNull(generatedCreds.Data.Password);
+
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.MySqlGenerateDynamicCredentialsAsync(roleName, wrapTimeToLive: "1m"));
 
                     await _authenticatedVaultClient.MySqlDeleteNamedRoleAsync(roleName);
                     await _authenticatedVaultClient.MySqlDeleteNamedRoleAsync(roleName2);
