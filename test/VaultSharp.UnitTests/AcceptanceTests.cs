@@ -82,6 +82,9 @@ namespace VaultSharp.UnitTests
             // install sql 2012 express
             // surface area >> open up tcp
             // raja todo: not complete. connection issues with connection string.
+            // doesn't work with sqlexpress.
+            // tried it with the desktop sql server machine, the connection part succeeds, but writing the role fails.
+            // driver: bad connection error. maybe a sql 2012 vs. sql 2014 issue. either ways.. leave it for now.
             public const bool RunMicrosoftSqlSecretBackendAcceptanceTests = false;
             public const string MicrosoftSqlCredentialsFullPath = @"c:\temp\raja\vaultsharp-acceptance-tests\mssql.txt";
 
@@ -907,7 +910,7 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MicrosoftSqlGenerateDynamicCredentialsAsync(null));
             await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.MicrosoftSqlGenerateDynamicCredentialsAsync("role", null));
 
-            if (!SetupData.RunMicrosoftSqlSecretBackendAcceptanceTests)
+            if (SetupData.RunMicrosoftSqlSecretBackendAcceptanceTests)
             {
                 try
                 {
