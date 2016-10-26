@@ -155,10 +155,7 @@ namespace VaultSharp.UnitTests
                 await RunMongoDbSecretBackendApiTests();
                 await RunMicrosoftSqlSecretBackendApiTests();
                 await RunMySqlSecretBackendApiTests();
-
-                // raja todo. pki doesn't work with file system backends. verified with -dev server inmem.
-                // await RunPkiSecretBackendApiTests();
-
+                await RunPkiSecretBackendApiTests();
                 await RunPostgreSqlSecretBackendApiTests();
                 await RunRabbitMQSecretBackendApiTests();
                 await RunSSHSecretBackendApiTests();
@@ -659,6 +656,10 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private static async Task RunPkiSecretBackendApiTests()
         {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _authenticatedVaultClient.PKIReadCACertificateAsync(pkiBackendMountPoint: null));
+
+            // return; // inmem or file backend doesn't work when Vault is started as inline process here.
+
             var mountpoint = "pki" + Guid.NewGuid();
 
             try
@@ -683,6 +684,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
                 var nocaCert = await UnauthenticatedVaultClient.PKIReadCACertificateAsync(CertificateFormat.pem, mountpoint);
                 Assert.Null(nocaCert.CertificateContent);
+
+                return; // inmem or file backend doesn't work when Vault is started as inline process here.
 
                 // generate root certificate
                 var rootCertificateWithoutPrivateKey =
@@ -2297,6 +2300,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
             procStartInfo.FileName = "cmd";
             procStartInfo.Arguments = "/k \"" + startupCommand + "\"";
             procStartInfo.WorkingDirectory = Path.GetPathRoot(vaultFolder);
+            procStartInfo.UseShellExecute = true;
+            procStartInfo.Verb = "runas";
 
             _vaultProcess = new Process();
             _vaultProcess.StartInfo = procStartInfo;

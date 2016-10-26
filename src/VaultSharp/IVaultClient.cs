@@ -1521,8 +1521,9 @@ namespace VaultSharp
         Task<Secret<UsernamePasswordCredentials>> MySqlGenerateDynamicCredentialsAsync(string mySqlRoleName, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.MySql, string wrapTimeToLive = null);
 
         /// <summary>
-        /// Retrieves the CA certificate as a raw string in the requested format.
-        /// This is an unauthenticated call and does not use the credentials.
+        /// Retrieves the CA certificate in raw DER-encoded form. 
+        /// This is a bare endpoint that does not return a standard Vault data structure. 
+        /// The CA certificate can be returned in DER or PEM format. 
         /// </summary>
         /// <param name="certificateFormat"><para>[optional]</para>
         /// The certificate format needed.

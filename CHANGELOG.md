@@ -11,7 +11,7 @@ DEPRECATIONS/CHANGES:
   * The `InitializeAsync` method now takes a single container object for all parameters, instead of primitive parameters.
     This single container object now has support for the additional recovery fields supported by Vault 0.6.2's initialization.
   * The File Audit backend path json key internally changed from `path` to `file_path`.
-  * The `MongoDbGenerateDynamicCredentialsAsync` method now returns `MongoDbUsernamePasswordCredentials` instead of `MongoDbUsernamePasswordCredentials`.
+  * The `MongoDbGenerateDynamicCredentialsAsync` method now returns `MongoDbUsernamePasswordCredentials` instead of `UsernamePasswordCredentials`.
     This ensures you get the `database` field back as well.
   * The `MicrosoftSqlReadCredentialLeaseSettingsAsync` method now returns the `CredentialTimeToLiveSettings` instead of the deprecated `CredentialTtlSettings` type.
     This is in alignment with Vault deprecating `ttl_max` in favor of `max_ttl`.
@@ -26,14 +26,14 @@ FEATURES:
   * Supports the new fields (`hmac_accessor`, `jsonx` format etc.) for File and SysLog Audit Backends.
   * The `AWSGenerateDynamicCredentialsWithSecurityTokenAsync` method now supports the `timeToLive` parameter.
   * All the methods now support wrapping of the secret into a cubbyhole token.
-  ** AWS Secret Backend
-  ** Cassandra Secret Backend
-  ** Consul Secret Backend
-  ** Cubbyhole Secret Backend
-  ** Generic Secret Backend
-  ** MongoDB Secret Backend
-  ** Microsoft SQL Secret Backend
-  ** MySql Secret Backend
+    * AWS Secret Backend
+    * Cassandra Secret Backend
+    * Consul Secret Backend
+    * Cubbyhole Secret Backend
+    * Generic Secret Backend
+    * MongoDB Secret Backend
+    * Microsoft SQL Secret Backend
+    * MySql Secret Backend
 
 IMPROVEMENTS:
 
