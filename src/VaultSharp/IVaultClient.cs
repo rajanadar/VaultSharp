@@ -1851,14 +1851,13 @@ namespace VaultSharp
 
         /// <summary>
         /// Configures the connection information used to communicate with PostgreSql.
-        /// This API is a root protected call.
         /// </summary>
         /// <param name="postgreSqlConnectionInfo"><para>[required]</para>
         /// The PostgreSql connection information.</param>
         /// <param name="postgreSqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the PostgreSql backend. Defaults to <see cref="SecretBackendType.PostgreSql" />
         /// Provide a value only if you have customized the PostgreSql mount point.</param>
-        /// <returns>
+        /// <returns>   
         /// The task.
         /// </returns>
         Task PostgreSqlConfigureConnectionAsync(PostgreSqlConnectionInfo postgreSqlConnectionInfo, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
@@ -1898,7 +1897,7 @@ namespace VaultSharp
         Task<Secret<CredentialLeaseSettings>> PostgreSqlReadCredentialLeaseSettingsAsync(string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
 
         /// <summary>
-        /// Creates or updates a named PostgreSql role.
+        /// Creates or updates a named PostgreSql role definition.
         /// </summary>
         /// <param name="postgreSqlRoleName"><para>[required]</para>
         /// Name of the PostgreSql role.</param>

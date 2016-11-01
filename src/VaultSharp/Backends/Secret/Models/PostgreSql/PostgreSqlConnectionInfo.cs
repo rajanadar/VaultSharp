@@ -69,6 +69,7 @@ namespace VaultSharp.Backends.Secret.Models.PostgreSql
         /// </summary>
         public PostgreSqlConnectionInfo()
         {
+            MaximumOpenConnections = 2;
             VerifyConnection = true;
         }
     }

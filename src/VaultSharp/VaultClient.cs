@@ -1371,7 +1371,6 @@ namespace VaultSharp
         public async Task PostgreSqlConfigureConnectionAsync(PostgreSqlConnectionInfo postgreSqlConnectionInfo, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql)
         {
             Checker.NotNull(postgreSqlBackendMountPoint, "postgreSqlBackendMountPoint");
-            Checker.NotNull(postgreSqlConnectionInfo, "postgreSqlConnectionInfo");
 
             await MakeVaultApiRequest(postgreSqlBackendMountPoint.Trim('/') + "/config/connection", HttpMethod.Post, postgreSqlConnectionInfo).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
@@ -1386,7 +1385,6 @@ namespace VaultSharp
         public async Task PostgreSqlConfigureCredentialLeaseSettingsAsync(CredentialLeaseSettings credentialLeaseSettings, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql)
         {
             Checker.NotNull(postgreSqlBackendMountPoint, "postgreSqlBackendMountPoint");
-            Checker.NotNull(credentialLeaseSettings, "credentialLeaseSettings");
 
             await MakeVaultApiRequest(postgreSqlBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Post, credentialLeaseSettings).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }

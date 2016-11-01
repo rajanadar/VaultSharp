@@ -34,6 +34,8 @@ FEATURES:
     * MongoDB Secret Backend
     * Microsoft SQL Secret Backend
     * MySql Secret Backend
+    * TBD for PKI Secret Backend
+    * PostgreSQL Secret Backend
 
 IMPROVEMENTS:
 
@@ -41,6 +43,7 @@ IMPROVEMENTS:
   * The `CassandraRoleDefinition` now supports a consistency level parameter. (defaults to `Quorum`)
   * The `MongoDbGenerateDynamicCredentialsAsync` now returns the database name as well, related to the credentials. 
   * The `MySqlRoleDefinition` now supports the `RevocationSql` parameter to revoke an user.
+  * Added `RevocationSql` parameter on the `PostgreSqlRoleDefinition` type to enable customization of user revocation SQL statements.
 
 BUG FIXES:
 
