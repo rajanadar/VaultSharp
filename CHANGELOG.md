@@ -25,7 +25,7 @@ FEATURES:
   * Add support for stored shares, recovery parameters etc. during the initialization of Vault.
   * Supports the new fields (`hmac_accessor`, `jsonx` format etc.) for File and SysLog Audit Backends.
   * The `AWSGenerateDynamicCredentialsWithSecurityTokenAsync` method now supports the `timeToLive` parameter.
-  * All the methods now support wrapping of the secret into a cubbyhole token.
+  * All the secret backends now support wrapping of the secret into a cubbyhole token.
     * AWS Secret Backend
     * Cassandra Secret Backend
     * Consul Secret Backend
