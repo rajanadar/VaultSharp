@@ -31,7 +31,6 @@ namespace VaultSharp.UnitTests.End2End
 
             await TokenTests();
 
-            await SecretTests();
             await UsernamePasswordAuthenticationProviderTests();
             await TokenAuthenticationProviderTests();
             await MySqlCredentialTests();
@@ -309,27 +308,6 @@ namespace VaultSharp.UnitTests.End2End
 
             //await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadRawSecretAsync(path1));
             //await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadRawSecretAsync(path2));
-        }
-
-        private async Task SecretTests()
-        {
-            var path = "cubbyhole/foo/test";
-
-            var secretData = new Dictionary<string, object>
-            {
-                {"1", "1"},
-                {"2", 2},
-                {"3", false},
-            };
-
-            await _authenticatedVaultClient.WriteSecretAsync(path, secretData);
-
-            var secret = await _authenticatedVaultClient.ReadSecretAsync(path);
-            Assert.True(secret.Data.Count == 3);
-
-            await _authenticatedVaultClient.DeleteSecretAsync(path);
-
-            await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadSecretAsync(path));
         }
 
         private async Task GithubAuthenticationProviderTests()

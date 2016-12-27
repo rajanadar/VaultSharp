@@ -2716,9 +2716,9 @@ namespace VaultSharp
         /// <param name="values"><para>[required]</para>
         /// The value to be written.</param>
         /// <returns>
-        /// The task.
+        /// The data as a general dictionary if any data is returned by Vault.
         /// </returns>
-        Task WriteSecretAsync(string path, IDictionary<string, object> values);
+        Task<Secret<Dictionary<string, object>>> WriteSecretAsync(string path, IDictionary<string, object> values);
 
         /// <summary>
         /// Deletes the value at the specified path in Vault.

@@ -167,11 +167,35 @@ namespace VaultSharp.UnitTests
                 await RunAppRoleAuthenticationBackendApiTests();
 
                 await RunTokenAuthenticationBackendApiTests();
+
+                await RunPrimitiveWriteReadSecretApiTests();
             }
             finally
             {
                 ShutdownVaultServer();
             }
+        }
+
+        private static async Task RunPrimitiveWriteReadSecretApiTests()
+        {
+            var path = "cubbyhole/foo/test";
+
+            var secretData = new Dictionary<string, object>
+            {
+                {"1", "1"},
+                {"2", 2},
+                {"3", false},
+            };
+
+            var result = await _authenticatedVaultClient.WriteSecretAsync(path, secretData);
+            Assert.Null(result);
+
+            var secret = await _authenticatedVaultClient.ReadSecretAsync(path);
+            Assert.True(secret.Data.Count == 3);
+
+            await _authenticatedVaultClient.DeleteSecretAsync(path);
+
+            await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadSecretAsync(path));
         }
 
         private static async Task RunTokenAuthenticationBackendApiTests()
@@ -249,6 +273,30 @@ namespace VaultSharp.UnitTests
 
                 var authBackends = await _authenticatedVaultClient.GetAllEnabledAuthenticationBackendsAsync();
                 Assert.True(authBackends.Data.Any(b => b.BackendType == AuthenticationBackendType.AppRole));
+
+                var roleName = "testRole";
+                var rolePath = "auth/" + path + "/role/" + roleName;
+
+                // test something that returns data on Write.
+                await
+                    _authenticatedVaultClient.WriteSecretAsync(rolePath,
+                        new Dictionary<string, object>
+                        {
+                            {"secret_id_ttl", "10m"},
+                            {"token_ttl", "20m"},
+                            {"token_max_ttl", "30m"},
+                            {"secret_id_num_uses", 40}
+                        });
+
+                var role = await _authenticatedVaultClient.ReadSecretAsync(rolePath+"/role-id");
+                Assert.True(role.Data.ContainsKey("role_id"));
+
+                // raja todo.. cannot write to temp file.. cert like problem.
+                //var secret = await _authenticatedVaultClient.WriteSecretAsync(rolePath + "/secret-id", null);
+                //Assert.True(secret.Data.ContainsKey("secret_id"));
+                //Assert.True(secret.Data.ContainsKey("secret_id_accessor"));
+
+                // raja todo. add strong API methods as well.
 
                 // raja todo.. run more tests once api work is done.
                 // await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.AppRoleAuthenticationGetRolesAsync());

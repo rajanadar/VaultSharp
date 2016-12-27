@@ -1,10 +1,10 @@
-## 0.6.2 (Unreleased)
+## 0.6.4 (Unreleased)
 
 MISC:
 
-  * Basically the change log for  VaultSharp 0.6.2 follows the changelog 
-    for Vault 0.6.2 here. (https://github.com/hashicorp/vault/blob/master/CHANGELOG.md)
-  * Some of the changes are called out below. But all of Vault 0.6.2 changes are supported by VaultSharp 0.6.2
+  * Basically the change logs for  VaultSharp till 0.6.4 and follows the changelog 
+    for Vault here. (https://github.com/hashicorp/vault/blob/master/CHANGELOG.md)
+  * Some of the changes are called out below. But all of Vault 0.6.4 cumulative changes are supported by VaultSharp 0.6.4
 
 DEPRECATIONS/CHANGES:
 
@@ -44,6 +44,7 @@ IMPROVEMENTS:
   * The `MongoDbGenerateDynamicCredentialsAsync` now returns the database name as well, related to the credentials. 
   * The `MySqlRoleDefinition` now supports the `RevocationSql` parameter to revoke an user.
   * Added `RevocationSql` parameter on the `PostgreSqlRoleDefinition` type to enable customization of user revocation SQL statements.
+  * The WriteSecretAsync method now returns data if the underlying data allows for it. [GH-16]
 
 BUG FIXES:
 

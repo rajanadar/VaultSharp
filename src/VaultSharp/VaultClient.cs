@@ -1845,11 +1845,11 @@ namespace VaultSharp
             return value;
         }
 
-        public async Task WriteSecretAsync(string path, IDictionary<string, object> values)
+        public async Task<Secret<Dictionary<string, object>>> WriteSecretAsync(string path, IDictionary<string, object> values)
         {
             Checker.NotNull(path, "path");
 
-            await MakeVaultApiRequest(path.Trim('/'), HttpMethod.Post, values).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return await MakeVaultApiRequest<Secret<Dictionary<string, object>>>(path.Trim('/'), HttpMethod.Post, values).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task DeleteSecretAsync(string path)
