@@ -15,6 +15,12 @@ DEPRECATIONS/CHANGES:
     This ensures you get the `database` field back as well.
   * The `MicrosoftSqlReadCredentialLeaseSettingsAsync` method now returns the `CredentialTimeToLiveSettings` instead of the deprecated `CredentialTtlSettings` type.
     This is in alignment with Vault deprecating `ttl_max` in favor of `max_ttl`.
+  * VaultSharp 0.6.4 is now strongly named. This breaks compatibility between VaultSharp 0.6.1 and 0.6.4. 
+    In fact, NuGet is going to treat them as 2 separate assemblies. I thought through a couple of options like
+    releasing 2 NuGet packages and adding strongly named packages as part of a major version upgrade, but finally
+    decided to just do it now and have just 1 Package.
+    Because we are at the 0.x.x versions, I am thinking we can get away with this. :)
+    A bit of pain now, for a lot less hassles later. (pretty much the whole conundrum of life!)
 
 FEATURES:
 
