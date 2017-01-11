@@ -1897,9 +1897,9 @@ namespace VaultSharp
             return await MakeVaultApiRequest<Secret<TokenAccessorInfo>>("auth/token/lookup-accessor", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<TokenInfo>> GetCallingTokenInfoAsync()
+        public async Task<Secret<CallingTokenInfo>> GetCallingTokenInfoAsync()
         {
-            return await MakeVaultApiRequest<Secret<TokenInfo>>("auth/token/lookup-self", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return await MakeVaultApiRequest<Secret<CallingTokenInfo>>("auth/token/lookup-self", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task RenewTokenAsync(string token = null, int? incrementSeconds = null)

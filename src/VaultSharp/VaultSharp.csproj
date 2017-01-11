@@ -68,6 +68,7 @@
     <Compile Include="Backends\Authentication\Models\AwsEc2\AwsEc2PublicKeyInfo.cs" />
     <Compile Include="Backends\Authentication\Models\AwsEc2\AwsEc2AccessCredentials.cs" />
     <Compile Include="Backends\Authentication\Models\AwsEc2\AwsEc2AuthenticationInfo.cs" />
+    <Compile Include="Backends\Authentication\Models\Token\CallingTokenInfo.cs" />
     <Compile Include="Backends\Authentication\Models\Token\TokenCreationOptions.cs" />
     <Compile Include="Backends\Authentication\Models\Token\TokenAccessorInfo.cs" />
     <Compile Include="Backends\Authentication\Models\Token\TokenRoleInfo.cs" />

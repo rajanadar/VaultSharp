@@ -21,6 +21,8 @@ DEPRECATIONS/CHANGES:
     decided to just do it now and have just 1 Package.
     Because we are at the 0.x.x versions, I am thinking we can get away with this. :)
     A bit of pain now, for a lot less hassles later. (pretty much the whole conundrum of life!)
+  * The `GetCallingTokenInfoAsync` now returns a new response type `CallingTokenInfo` instead of the previous `TokenInfo`.
+    This supports the latest fields for Vault 0.6.4. [GH-18]
 
 FEATURES:
 

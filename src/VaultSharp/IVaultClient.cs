@@ -2776,9 +2776,9 @@ namespace VaultSharp
         /// Gets the calling client token information. i.e. the token used by the client as part of this call.
         /// </summary>
         /// <returns>
-        /// The secret with <see cref="TokenInfo" />.
+        /// The secret with <see cref="CallingTokenInfo" />.
         /// </returns>
-        Task<Secret<TokenInfo>> GetCallingTokenInfoAsync();
+        Task<Secret<CallingTokenInfo>> GetCallingTokenInfoAsync();
 
         /// <summary>
         /// Renews a lease associated with the calling token.
