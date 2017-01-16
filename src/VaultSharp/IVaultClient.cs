@@ -1868,10 +1868,14 @@ namespace VaultSharp
         /// <param name="postgreSqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the PostgreSql backend. Defaults to <see cref="SecretBackendType.PostgreSql" />
         /// Provide a value only if you have customized the PostgreSql mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The connection information.
         /// </returns>
-        Task<Secret<PostgreSqlConnectionInfo>> PostgreSqlReadConnectionInfoAsync(string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
+        Task<Secret<PostgreSqlConnectionInfo>> PostgreSqlReadConnectionInfoAsync(string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql, string wrapTimeToLive = null);
 
         /// <summary>
         /// Configures the lease settings for generated credentials. If not configured, leases default to 1 hour. 
@@ -1879,13 +1883,13 @@ namespace VaultSharp
         /// </summary>
         /// <param name="credentialLeaseSettings"><para>[required]</para>
         /// The credential lease settings.</param>
-        /// <param name="mySqlBackendMountPoint"><para>[optional]</para>
+        /// <param name="postgreSqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the PostgreSql backend. Defaults to <see cref="SecretBackendType.PostgreSql" />
         /// Provide a value only if you have customized the PostgreSql mount point.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task PostgreSqlConfigureCredentialLeaseSettingsAsync(CredentialLeaseSettings credentialLeaseSettings, string mySqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
+        Task PostgreSqlConfigureCredentialLeaseSettingsAsync(CredentialLeaseSettings credentialLeaseSettings, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
 
         /// <summary>
         /// Queries the PostgreSql credential lease settings.
@@ -1893,8 +1897,12 @@ namespace VaultSharp
         /// <param name="postgreSqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the PostgreSql backend. Defaults to <see cref="SecretBackendType.PostgreSql" />
         /// Provide a value only if you have customized the PostgreSql mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>The lease settings.</returns>
-        Task<Secret<CredentialLeaseSettings>> PostgreSqlReadCredentialLeaseSettingsAsync(string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
+        Task<Secret<CredentialLeaseSettings>> PostgreSqlReadCredentialLeaseSettingsAsync(string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql, string wrapTimeToLive = null);
 
         /// <summary>
         /// Creates or updates a named PostgreSql role definition.
@@ -1919,10 +1927,14 @@ namespace VaultSharp
         /// <param name="postgreSqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the PostgreSql backend. Defaults to <see cref="SecretBackendType.PostgreSql" />
         /// Provide a value only if you have customized the PostgreSql mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the PostgreSql role definition with the creation, rollback query and lease information.
         /// </returns>
-        Task<Secret<PostgreSqlRoleDefinition>> PostgreSqlReadNamedRoleAsync(string postgreSqlRoleName, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
+        Task<Secret<PostgreSqlRoleDefinition>> PostgreSqlReadNamedRoleAsync(string postgreSqlRoleName, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql, string wrapTimeToLive = null);
 
         /// <summary>
         /// Returns a list of available roles. Only the role names are returned, not any values.
@@ -1930,10 +1942,14 @@ namespace VaultSharp
         /// <param name="postgreSqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the PostgreSql backend. Defaults to <see cref="SecretBackendType.PostgreSql" />
         /// Provide a value only if you have customized the PostgreSql mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// A list of available roles. Only the role names are returned, not any values.
         /// </returns>
-        Task<Secret<ListInfo>> PostgreSqlReadRoleListAsync(string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
+        Task<Secret<ListInfo>> PostgreSqlReadRoleListAsync(string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql, string wrapTimeToLive = null);
 
         /// <summary>
         /// Deletes a named PostgreSql role definition
@@ -1956,10 +1972,14 @@ namespace VaultSharp
         /// <param name="postgreSqlBackendMountPoint"><para>[optional]</para>
         /// The mount point for the PostgreSql backend. Defaults to <see cref="SecretBackendType.PostgreSql" />
         /// Provide a value only if you have customized the PostgreSql mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the <see cref="UsernamePasswordCredentials" /> as the data.
         /// </returns>
-        Task<Secret<UsernamePasswordCredentials>> PostgreSqlGenerateDynamicCredentialsAsync(string postgreSqlRoleName, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql);
+        Task<Secret<UsernamePasswordCredentials>> PostgreSqlGenerateDynamicCredentialsAsync(string postgreSqlRoleName, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql, string wrapTimeToLive = null);
 
         /// <summary>
         /// Configures the connection information used to communicate with RabbitMQ.
@@ -2006,8 +2026,12 @@ namespace VaultSharp
         /// <param name="rabbitMQBackendMountPoint"><para>[optional]</para>
         /// The mount point for the RabbitMQ backend. Defaults to <see cref="SecretBackendType.RabbitMQ" />
         /// Provide a value only if you have customized the RabbitMQ mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>The lease settings.</returns>
-        Task<Secret<CredentialTimeToLiveSettings>> RabbitMQReadCredentialLeaseSettingsAsync(string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ);
+        Task<Secret<CredentialTimeToLiveSettings>> RabbitMQReadCredentialLeaseSettingsAsync(string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ, string wrapTimeToLive = null);
 
         /// <summary>
         /// Creates or updates a named RabbitMQ role.
@@ -2032,10 +2056,14 @@ namespace VaultSharp
         /// <param name="rabbitMQBackendMountPoint"><para>[optional]</para>
         /// The mount point for the RabbitMQ backend. Defaults to <see cref="SecretBackendType.RabbitMQ" />
         /// Provide a value only if you have customized the RabbitMQ mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the RabbitMQ role definition with the creation, rollback query and lease information.
         /// </returns>
-        Task<Secret<RabbitMQRoleDefinition>> RabbitMQReadNamedRoleAsync(string rabbitMQRoleName, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ);
+        Task<Secret<RabbitMQRoleDefinition>> RabbitMQReadNamedRoleAsync(string rabbitMQRoleName, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ, string wrapTimeToLive = null);
 
         /// <summary>
         /// Returns a list of available roles. Only the role names are returned, not any values.
@@ -2043,10 +2071,14 @@ namespace VaultSharp
         /// <param name="rabbitMQBackendMountPoint"><para>[optional]</para>
         /// The mount point for the RabbitMQ backend. Defaults to <see cref="SecretBackendType.RabbitMQ" />
         /// Provide a value only if you have customized the RabbitMQ mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// A list of available roles. Only the role names are returned, not any values.
         /// </returns>
-        Task<Secret<ListInfo>> RabbitMQReadRoleListAsync(string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ);
+        Task<Secret<ListInfo>> RabbitMQReadRoleListAsync(string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ, string wrapTimeToLive = null);
 
         /// <summary>
         /// Deletes a named RabbitMQ role definition
@@ -2069,10 +2101,14 @@ namespace VaultSharp
         /// <param name="rabbitMQBackendMountPoint"><para>[optional]</para>
         /// The mount point for the RabbitMQ backend. Defaults to <see cref="SecretBackendType.RabbitMQ" />
         /// Provide a value only if you have customized the RabbitMQ mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the <see cref="UsernamePasswordCredentials" /> as the data.
         /// </returns>
-        Task<Secret<UsernamePasswordCredentials>> RabbitMQGenerateDynamicCredentialsAsync(string rabbitMQRoleName, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ);
+        Task<Secret<UsernamePasswordCredentials>> RabbitMQGenerateDynamicCredentialsAsync(string rabbitMQRoleName, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ, string wrapTimeToLive = null);
 
         /// <summary>
         /// Creates or updates a named key.

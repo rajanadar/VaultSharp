@@ -28,6 +28,8 @@ namespace VaultSharp.Backends.Secret.Models
         [JsonProperty("max_ttl")]
         public string MaximumTimeToLive { get; set; }
 
+        // raja todo: Vault removed this. remove from VaultSharp in a future release.
+
         /// <summary>
         /// This field is deprecated and will be removed in a future release. 
         /// Use <see cref="MaximumTimeToLive"/> instead."

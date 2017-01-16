@@ -5,6 +5,9 @@ MISC:
   * Basically the change logs for  VaultSharp till 0.6.4 and follows the changelog 
     for Vault here. (https://github.com/hashicorp/vault/blob/master/CHANGELOG.md)
   * Some of the changes are called out below. But all of Vault 0.6.4 cumulative changes are supported by VaultSharp 0.6.4
+  * A major breaking change in VaultSharp 0.6.4 is STRONG NAMING of VaultSharp. 
+    Now both strong named and non-strong named assemblies can refer to VaultSharp. 
+    This does mean that Nuget will not detect any upgrade from VaultSharp less than 0.6.4 to 0.6.4. You need to do this MANUALLY!
 
 DEPRECATIONS/CHANGES:
 
@@ -22,7 +25,7 @@ DEPRECATIONS/CHANGES:
     Because we are at the 0.x.x versions, I am thinking we can get away with this. :)
     A bit of pain now, for a lot less hassles later. (pretty much the whole conundrum of life!)
   * The `GetCallingTokenInfoAsync` now returns a new response type `CallingTokenInfo` instead of the previous `TokenInfo`.
-    This supports the latest fields for Vault 0.6.4. [GH-18]
+    This supports the latest fields for Vault 0.6.4. [GH-18] 
 
 FEATURES:
 
@@ -33,7 +36,7 @@ FEATURES:
   * Add support for stored shares, recovery parameters etc. during the initialization of Vault.
   * Supports the new fields (`hmac_accessor`, `jsonx` format etc.) for File and SysLog Audit Backends.
   * The `AWSGenerateDynamicCredentialsWithSecurityTokenAsync` method now supports the `timeToLive` parameter.
-  * All the secret backends now support wrapping of the secret into a cubbyhole token.
+  * All the secret backends now support wrapping of the secret into a cubbyhole token. Wrapping support added for:
     * AWS Secret Backend
     * Cassandra Secret Backend
     * Consul Secret Backend
@@ -44,6 +47,7 @@ FEATURES:
     * MySql Secret Backend
     * TBD for PKI Secret Backend
     * PostgreSQL Secret Backend
+    * RabbitMQ Secret Backend
 
 IMPROVEMENTS:
 

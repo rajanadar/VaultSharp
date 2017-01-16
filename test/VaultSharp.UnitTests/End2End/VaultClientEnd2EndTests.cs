@@ -33,7 +33,6 @@ namespace VaultSharp.UnitTests.End2End
 
             await UsernamePasswordAuthenticationProviderTests();
             await TokenAuthenticationProviderTests();
-            await MySqlCredentialTests();
         }
 
         private static Uri _vaultUri;
@@ -373,42 +372,6 @@ namespace VaultSharp.UnitTests.End2End
 
             var authBackends = await tokenClient.GetAllEnabledAuthenticationBackendsAsync();
             Assert.True(authBackends.Data.Any());
-        }
-
-        private async Task MySqlCredentialTests()
-        {
-            var mountPoint = "mysql" + Guid.NewGuid();
-            var backend = new SecretBackend
-            {
-                MountPoint = mountPoint,
-                BackendType = SecretBackendType.MySql,
-            };
-
-            var role = "readonly";
-
-            await _authenticatedVaultClient.MountSecretBackendAsync(backend);
-            await _authenticatedVaultClient.WriteSecretAsync(mountPoint + "/config/connection", new Dictionary<string, object>
-            {
-                {"value", "root:root@tcp(127.0.0.1:3306)/"}
-            });
-            await _authenticatedVaultClient.WriteSecretAsync(mountPoint + "/config/lease", new Dictionary<string, object>
-            {
-                {"lease", "1h"},
-                {"lease_max", "24h"}
-            });
-            await _authenticatedVaultClient.WriteSecretAsync(mountPoint + "/roles/" + role, new Dictionary<string, object>
-            {
-                {"sql", "CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT SELECT ON *.* TO '{{name}}'@'%';"}
-            });
-
-            var credentials =
-                await _authenticatedVaultClient.MySqlGenerateDynamicCredentialsAsync(role, backend.MountPoint);
-
-            Assert.NotNull(credentials.LeaseId);
-            Assert.NotNull(credentials.Data.Username);
-            Assert.NotNull(credentials.Data.Password);
-
-            await _authenticatedVaultClient.UnmountSecretBackendAsync(backend.MountPoint);
         }
 
         //        [Fact(Skip = "no ldap")]

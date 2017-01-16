@@ -1375,11 +1375,11 @@ namespace VaultSharp
             await MakeVaultApiRequest(postgreSqlBackendMountPoint.Trim('/') + "/config/connection", HttpMethod.Post, postgreSqlConnectionInfo).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<PostgreSqlConnectionInfo>> PostgreSqlReadConnectionInfoAsync(string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql)
+        public async Task<Secret<PostgreSqlConnectionInfo>> PostgreSqlReadConnectionInfoAsync(string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql, string wrapTimeToLive = null)
         {
             Checker.NotNull(postgreSqlBackendMountPoint, "postgreSqlBackendMountPoint");
 
-            return await MakeVaultApiRequest<Secret<PostgreSqlConnectionInfo>>(postgreSqlBackendMountPoint.Trim('/') + "/config/connection", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return await MakeVaultApiRequest<Secret<PostgreSqlConnectionInfo>>(postgreSqlBackendMountPoint.Trim('/') + "/config/connection", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task PostgreSqlConfigureCredentialLeaseSettingsAsync(CredentialLeaseSettings credentialLeaseSettings, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql)
@@ -1389,11 +1389,11 @@ namespace VaultSharp
             await MakeVaultApiRequest(postgreSqlBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Post, credentialLeaseSettings).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<CredentialLeaseSettings>> PostgreSqlReadCredentialLeaseSettingsAsync(string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql)
+        public async Task<Secret<CredentialLeaseSettings>> PostgreSqlReadCredentialLeaseSettingsAsync(string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql, string wrapTimeToLive = null)
         {
             Checker.NotNull(postgreSqlBackendMountPoint, "postgreSqlBackendMountPoint");
 
-            return await MakeVaultApiRequest<Secret<CredentialLeaseSettings>>(postgreSqlBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return await MakeVaultApiRequest<Secret<CredentialLeaseSettings>>(postgreSqlBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task PostgreSqlWriteNamedRoleAsync(string postgreSqlRoleName, PostgreSqlRoleDefinition postgreSqlRoleDefinition, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql)
@@ -1404,20 +1404,20 @@ namespace VaultSharp
             await MakeVaultApiRequest(postgreSqlBackendMountPoint.Trim('/') + "/roles/" + postgreSqlRoleName, HttpMethod.Post, postgreSqlRoleDefinition).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<PostgreSqlRoleDefinition>> PostgreSqlReadNamedRoleAsync(string postgreSqlRoleName, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql)
+        public async Task<Secret<PostgreSqlRoleDefinition>> PostgreSqlReadNamedRoleAsync(string postgreSqlRoleName, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql, string wrapTimeToLive = null)
         {
             Checker.NotNull(postgreSqlBackendMountPoint, "postgreSqlBackendMountPoint");
             Checker.NotNull(postgreSqlRoleName, "postgreSqlRoleName");
 
-            var result = await MakeVaultApiRequest<Secret<PostgreSqlRoleDefinition>>(postgreSqlBackendMountPoint.Trim('/') + "/roles/" + postgreSqlRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<PostgreSqlRoleDefinition>>(postgreSqlBackendMountPoint.Trim('/') + "/roles/" + postgreSqlRoleName, HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
-        public async Task<Secret<ListInfo>> PostgreSqlReadRoleListAsync(string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql)
+        public async Task<Secret<ListInfo>> PostgreSqlReadRoleListAsync(string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql, string wrapTimeToLive = null)
         {
             Checker.NotNull(postgreSqlBackendMountPoint, "postgreSqlBackendMountPoint");
 
-            var result = await MakeVaultApiRequest<Secret<ListInfo>>(postgreSqlBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<ListInfo>>(postgreSqlBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
@@ -1429,12 +1429,12 @@ namespace VaultSharp
             await MakeVaultApiRequest(postgreSqlBackendMountPoint.Trim('/') + "/roles/" + postgreSqlRoleName, HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<UsernamePasswordCredentials>> PostgreSqlGenerateDynamicCredentialsAsync(string postgreSqlRoleName, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql)
+        public async Task<Secret<UsernamePasswordCredentials>> PostgreSqlGenerateDynamicCredentialsAsync(string postgreSqlRoleName, string postgreSqlBackendMountPoint = SecretBackendDefaultMountPoints.PostgreSql, string wrapTimeToLive = null)
         {
             Checker.NotNull(postgreSqlBackendMountPoint, "postgreSqlBackendMountPoint");
             Checker.NotNull(postgreSqlRoleName, "postgreSqlRoleName");
 
-            var result = await MakeVaultApiRequest<Secret<UsernamePasswordCredentials>>(postgreSqlBackendMountPoint.Trim('/') + "/creds/" + postgreSqlRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<UsernamePasswordCredentials>>(postgreSqlBackendMountPoint.Trim('/') + "/creds/" + postgreSqlRoleName, HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
@@ -1461,11 +1461,11 @@ namespace VaultSharp
             await MakeVaultApiRequest(rabbitMQBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Post, credentialTimeToLiveSettings).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<CredentialTimeToLiveSettings>> RabbitMQReadCredentialLeaseSettingsAsync(string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ)
+        public async Task<Secret<CredentialTimeToLiveSettings>> RabbitMQReadCredentialLeaseSettingsAsync(string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ, string wrapTimeToLive = null)
         {
             Checker.NotNull(rabbitMQBackendMountPoint, "rabbitMQBackendMountPoint");
 
-            return await MakeVaultApiRequest<Secret<CredentialTimeToLiveSettings>>(rabbitMQBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return await MakeVaultApiRequest<Secret<CredentialTimeToLiveSettings>>(rabbitMQBackendMountPoint.Trim('/') + "/config/lease", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
         public async Task RabbitMQWriteNamedRoleAsync(string rabbitMQRoleName, RabbitMQRoleDefinition rabbitMQRoleDefinition, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ)
@@ -1476,20 +1476,22 @@ namespace VaultSharp
             await MakeVaultApiRequest(rabbitMQBackendMountPoint.Trim('/') + "/roles/" + rabbitMQRoleName, HttpMethod.Post, rabbitMQRoleDefinition).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<RabbitMQRoleDefinition>> RabbitMQReadNamedRoleAsync(string rabbitMQRoleName, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ)
+        public async Task<Secret<RabbitMQRoleDefinition>> RabbitMQReadNamedRoleAsync(string rabbitMQRoleName, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ, string wrapTimeToLive = null)
         {
             Checker.NotNull(rabbitMQBackendMountPoint, "rabbitMQBackendMountPoint");
             Checker.NotNull(rabbitMQRoleName, "rabbitMQRoleName");
 
-            var result = await MakeVaultApiRequest<Secret<RabbitMQRoleDefinition>>(rabbitMQBackendMountPoint.Trim('/') + "/roles/" + rabbitMQRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<RabbitMQRoleDefinition>>(rabbitMQBackendMountPoint.Trim('/') + "/roles/" + rabbitMQRoleName, HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
-        public async Task<Secret<ListInfo>> RabbitMQReadRoleListAsync(string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ)
+        // raja todo: not in doc site.
+
+        public async Task<Secret<ListInfo>> RabbitMQReadRoleListAsync(string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ, string wrapTimeToLive = null)
         {
             Checker.NotNull(rabbitMQBackendMountPoint, "rabbitMQBackendMountPoint");
 
-            var result = await MakeVaultApiRequest<Secret<ListInfo>>(rabbitMQBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<ListInfo>>(rabbitMQBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
@@ -1501,12 +1503,12 @@ namespace VaultSharp
             await MakeVaultApiRequest(rabbitMQBackendMountPoint.Trim('/') + "/roles/" + rabbitMQRoleName, HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<UsernamePasswordCredentials>> RabbitMQGenerateDynamicCredentialsAsync(string rabbitMQRoleName, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ)
+        public async Task<Secret<UsernamePasswordCredentials>> RabbitMQGenerateDynamicCredentialsAsync(string rabbitMQRoleName, string rabbitMQBackendMountPoint = SecretBackendDefaultMountPoints.RabbitMQ, string wrapTimeToLive = null)
         {
             Checker.NotNull(rabbitMQBackendMountPoint, "rabbitMQBackendMountPoint");
             Checker.NotNull(rabbitMQRoleName, "rabbitMQRoleName");
 
-            var result = await MakeVaultApiRequest<Secret<UsernamePasswordCredentials>>(rabbitMQBackendMountPoint.Trim('/') + "/creds/" + rabbitMQRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<UsernamePasswordCredentials>>(rabbitMQBackendMountPoint.Trim('/') + "/creds/" + rabbitMQRoleName, HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 

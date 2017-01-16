@@ -573,6 +573,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     Assert.Equal("61", queriedLease.Data.TimeToLive);
                     Assert.Equal("121", queriedLease.Data.MaximumTimeToLive);
 
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.RabbitMQReadCredentialLeaseSettingsAsync(wrapTimeToLive: "1m"));
+
                     var roleName = "rabbitmqrole";
 
                     var role = new RabbitMQRoleDefinition
@@ -585,6 +587,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var queriedRole = await _authenticatedVaultClient.RabbitMQReadNamedRoleAsync(roleName);
                     Assert.NotNull(queriedRole.Data.VirtualHostPermissions);
 
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.RabbitMQReadNamedRoleAsync(roleName, wrapTimeToLive: "1m"));
+
                     var roleName2 = "rabbitmq2";
                     var role2 = new RabbitMQRoleDefinition
                     {
@@ -596,8 +600,12 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var roles = await _authenticatedVaultClient.RabbitMQReadRoleListAsync();
                     Assert.True(roles.Data.Keys.Count == 2);
 
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.RabbitMQReadRoleListAsync(wrapTimeToLive: "1m"));
+
                     var generatedCreds = await _authenticatedVaultClient.RabbitMQGenerateDynamicCredentialsAsync(roleName);
                     Assert.NotNull(generatedCreds.Data.Password);
+
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.RabbitMQGenerateDynamicCredentialsAsync(roleName, wrapTimeToLive: "1m"));
 
                     await _authenticatedVaultClient.RabbitMQDeleteNamedRoleAsync(roleName);
                     await _authenticatedVaultClient.RabbitMQDeleteNamedRoleAsync(roleName2);
@@ -617,6 +625,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
         private static async Task RunPostgreSqlSecretBackendApiTests()
         {
+            // raja todo.. add null check assertions. less imp.
+
             if (SetupData.RunPostgreSqlSecretBackendAcceptanceTests)
             {
                 try
@@ -647,6 +657,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var connection = await _authenticatedVaultClient.PostgreSqlReadConnectionInfoAsync();
                     Assert.Equal(connectionInfo.ConnectionUrl, connection.Data.ConnectionUrl);
 
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.PostgreSqlReadConnectionInfoAsync(wrapTimeToLive: "1m"));
+
                     var lease = new CredentialLeaseSettings
                     {
                         LeaseTime = "1m1s",
@@ -658,6 +670,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var queriedLease = await _authenticatedVaultClient.PostgreSqlReadCredentialLeaseSettingsAsync();
                     Assert.Equal(lease.LeaseTime, queriedLease.Data.LeaseTime);
                     Assert.Equal(lease.MaximumLeaseTime, queriedLease.Data.MaximumLeaseTime);
+
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.PostgreSqlReadCredentialLeaseSettingsAsync(wrapTimeToLive: "1m"));
 
                     var roleName = "postgresqlrole";
 
@@ -671,6 +685,8 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var queriedRole = await _authenticatedVaultClient.PostgreSqlReadNamedRoleAsync(roleName);
                     Assert.Equal(role.Sql, queriedRole.Data.Sql);
 
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.PostgreSqlReadNamedRoleAsync(roleName, wrapTimeToLive: "1m"));
+
                     var roleName2 = "postgresqlrole2";
                     var role2 = new PostgreSqlRoleDefinition
                     {
@@ -682,8 +698,12 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     var roles = await _authenticatedVaultClient.PostgreSqlReadRoleListAsync();
                     Assert.True(roles.Data.Keys.Count == 2);
 
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.PostgreSqlReadRoleListAsync(wrapTimeToLive: "1m"));
+
                     var generatedCreds = await _authenticatedVaultClient.PostgreSqlGenerateDynamicCredentialsAsync(roleName);
                     Assert.NotNull(generatedCreds.Data.Password);
+
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.PostgreSqlGenerateDynamicCredentialsAsync(roleName, wrapTimeToLive: "1m"));
 
                     await _authenticatedVaultClient.PostgreSqlDeleteNamedRoleAsync(roleName);
                     await _authenticatedVaultClient.PostgreSqlDeleteNamedRoleAsync(roleName2);
