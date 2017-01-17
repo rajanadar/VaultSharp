@@ -2178,10 +2178,14 @@ namespace VaultSharp
         /// <param name="sshBackendMountPoint"><para>[optional]</para>
         /// The mount point for the SSH backend. Defaults to <see cref="SecretBackendType.SSH" />
         /// Provide a value only if you have customized the SSH mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the role definition.
         /// </returns>
-        Task<Secret<SSHRoleDefinition>> SSHReadNamedRoleAsync(string sshRoleName, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH);
+        Task<Secret<SSHRoleDefinition>> SSHReadNamedRoleAsync(string sshRoleName, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH, string wrapTimeToLive = null);
 
         /// <summary>
         /// Returns a list of available roles. Only the role names are returned, not any values.
@@ -2189,10 +2193,14 @@ namespace VaultSharp
         /// <param name="sshBackendMountPoint"><para>[optional]</para>
         /// The mount point for the SSH backend. Defaults to <see cref="SecretBackendType.SSH" />
         /// Provide a value only if you have customized the SSH mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The list of role names.
         /// </returns>
-        Task<Secret<ListInfo>> SSHReadRoleListAsync(string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH);
+        Task<Secret<ListInfo>> SSHReadRoleListAsync(string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH, string wrapTimeToLive = null);
 
         /// <summary>
         /// Deletes a named role.
@@ -2213,10 +2221,14 @@ namespace VaultSharp
         /// <param name="sshBackendMountPoint"><para>[optional]</para>
         /// The mount point for the SSH backend. Defaults to <see cref="SecretBackendType.SSH" />
         /// Provide a value only if you have customized the SSH mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The roles.
         /// </returns>
-        Task<Secret<SSHRoleData>> SSHReadZeroAddressRolesAsync(string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH);
+        Task<Secret<SSHRoleData>> SSHReadZeroAddressRolesAsync(string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH, string wrapTimeToLive = null);
 
         /// <summary>
         /// Configures zero-address roles.
@@ -2255,10 +2267,14 @@ namespace VaultSharp
         /// <param name="sshBackendMountPoint"><para>[optional]</para>
         /// The mount point for the SSH backend. Defaults to <see cref="SecretBackendType.SSH" />
         /// Provide a value only if you have customized the SSH mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the SSH credentials.
         /// </returns>
-        Task<Secret<SSHCredentials>>  SSHGenerateDynamicCredentialsAsync(string sshRoleName, string ipAddress, string username = null, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH);
+        Task<Secret<SSHCredentials>>  SSHGenerateDynamicCredentialsAsync(string sshRoleName, string ipAddress, string username = null, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH, string wrapTimeToLive = null);
 
         /// <summary>
         /// Lists all of the roles with which the given IP is associated.
@@ -2268,10 +2284,14 @@ namespace VaultSharp
         /// <param name="sshBackendMountPoint"><para>[optional]</para>
         /// The mount point for the SSH backend. Defaults to <see cref="SecretBackendType.SSH" />
         /// Provide a value only if you have customized the SSH mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with list of roles
         /// </returns>
-        Task<Secret<SSHRoleData>> SSHLookupRolesAsync(string ipAddress, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH);
+        Task<Secret<SSHRoleData>> SSHLookupRolesAsync(string ipAddress, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH, string wrapTimeToLive = null);
 
         /// <summary>
         /// Verifies if the given OTP is valid.
@@ -2282,10 +2302,14 @@ namespace VaultSharp
         /// <param name="sshBackendMountPoint"><para>[optional]</para>
         /// The mount point for the SSH backend. Defaults to <see cref="SecretBackendType.SSH" />
         /// Provide a value only if you have customized the SSH mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the OTP verification data.
         /// </returns>
-        Task<Secret<SSHOTPVerificationData>>  SSHVerifyOTPAsync(string otp, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH);
+        Task<Secret<SSHOTPVerificationData>>  SSHVerifyOTPAsync(string otp, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH, string wrapTimeToLive = null);
 
         /// <summary>
         /// Creates a new named encryption key.

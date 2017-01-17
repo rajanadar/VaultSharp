@@ -1544,20 +1544,20 @@ namespace VaultSharp
             await MakeVaultApiRequest(sshBackendMountPoint.Trim('/') + "/roles/" + sshRoleName, HttpMethod.Post, sshRoleDefinition).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<SSHRoleDefinition>> SSHReadNamedRoleAsync(string sshRoleName, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH)
+        public async Task<Secret<SSHRoleDefinition>> SSHReadNamedRoleAsync(string sshRoleName, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH, string wrapTimeToLive = null)
         {
             Checker.NotNull(sshBackendMountPoint, "sshBackendMountPoint");
             Checker.NotNull(sshRoleName, "sshRoleName");
 
-            var result = await MakeVaultApiRequest<Secret<SSHRoleDefinition>>(sshBackendMountPoint.Trim('/') + "/roles/" + sshRoleName, HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<SSHRoleDefinition>>(sshBackendMountPoint.Trim('/') + "/roles/" + sshRoleName, HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
-        public async Task<Secret<ListInfo>> SSHReadRoleListAsync(string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH)
+        public async Task<Secret<ListInfo>> SSHReadRoleListAsync(string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH, string wrapTimeToLive = null)
         {
             Checker.NotNull(sshBackendMountPoint, "sshBackendMountPoint");
 
-            var result = await MakeVaultApiRequest<Secret<ListInfo>>(sshBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<ListInfo>>(sshBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
@@ -1569,11 +1569,11 @@ namespace VaultSharp
             await MakeVaultApiRequest(sshBackendMountPoint.Trim('/') + "/roles/" + sshRoleName, HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<SSHRoleData>> SSHReadZeroAddressRolesAsync(string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH)
+        public async Task<Secret<SSHRoleData>> SSHReadZeroAddressRolesAsync(string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH, string wrapTimeToLive = null)
         {
             Checker.NotNull(sshBackendMountPoint, "sshBackendMountPoint");
 
-            var result = await MakeVaultApiRequest<Secret<SSHRoleData>>(sshBackendMountPoint.Trim('/') + "/config/zeroaddress", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var result = await MakeVaultApiRequest<Secret<SSHRoleData>>(sshBackendMountPoint.Trim('/') + "/config/zeroaddress", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
@@ -1592,33 +1592,33 @@ namespace VaultSharp
             await MakeVaultApiRequest(sshBackendMountPoint.Trim('/') + "/config/zeroaddress", HttpMethod.Delete).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<SSHCredentials>> SSHGenerateDynamicCredentialsAsync(string sshRoleName, string ipAddress, string username = null, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH)
+        public async Task<Secret<SSHCredentials>> SSHGenerateDynamicCredentialsAsync(string sshRoleName, string ipAddress, string username = null, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH, string wrapTimeToLive = null)
         {
             Checker.NotNull(sshBackendMountPoint, "sshBackendMountPoint");
             Checker.NotNull(sshRoleName, "sshRoleName");
             Checker.NotNull(ipAddress, "ipAddress");
 
             var requestData = new { username = username, ip = ipAddress };
-            return await MakeVaultApiRequest<Secret<SSHCredentials>>(sshBackendMountPoint.Trim('/') + "/creds/" + sshRoleName, HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return await MakeVaultApiRequest<Secret<SSHCredentials>>(sshBackendMountPoint.Trim('/') + "/creds/" + sshRoleName, HttpMethod.Post, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<SSHRoleData>> SSHLookupRolesAsync(string ipAddress, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH)
+        public async Task<Secret<SSHRoleData>> SSHLookupRolesAsync(string ipAddress, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH, string wrapTimeToLive = null)
         {
             Checker.NotNull(sshBackendMountPoint, "sshBackendMountPoint");
             Checker.NotNull(ipAddress, "ipAddress");
 
             var requestData = new { ip = ipAddress };
-            return await MakeVaultApiRequest<Secret<SSHRoleData>>(sshBackendMountPoint.Trim('/') + "/lookup", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return await MakeVaultApiRequest<Secret<SSHRoleData>>(sshBackendMountPoint.Trim('/') + "/lookup", HttpMethod.Post, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<SSHOTPVerificationData>> SSHVerifyOTPAsync(string otp, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH)
+        public async Task<Secret<SSHOTPVerificationData>> SSHVerifyOTPAsync(string otp, string sshBackendMountPoint = SecretBackendDefaultMountPoints.SSH, string wrapTimeToLive = null)
         {
             Checker.NotNull(sshBackendMountPoint, "sshBackendMountPoint");
             Checker.NotNull(otp, "otp");
 
             var requestData = new { otp = otp };
 
-            var response = await MakeVaultApiRequest<Secret<SSHOTPVerificationData>>(sshBackendMountPoint.Trim('/') + "/verify", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            var response = await MakeVaultApiRequest<Secret<SSHOTPVerificationData>>(sshBackendMountPoint.Trim('/') + "/verify", HttpMethod.Post, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return response;
         }
 

@@ -48,12 +48,12 @@ namespace VaultSharp.Infrastructure.JsonConverters
         /// </returns>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            JObject jobject = JObject.Load(reader);
+            JToken jtoken = JToken.Load(reader);
             object target = null;
 
-            if (jobject != null)
+            if (jtoken != null && jtoken.HasValues && jtoken["key_type"] != null)
             {
-                var keyType = jobject["key_type"].Value<string>();
+                var keyType = jtoken["key_type"].Value<string>();
 
                 if (string.Equals(keyType, SSHKeyType.otp.ToString(), StringComparison.OrdinalIgnoreCase))
                 {
@@ -70,7 +70,7 @@ namespace VaultSharp.Infrastructure.JsonConverters
 
             if (target != null)
             {
-                serializer.Populate(jobject.CreateReader(), target);
+                serializer.Populate(jtoken.CreateReader(), target);
             }
 
             return target;

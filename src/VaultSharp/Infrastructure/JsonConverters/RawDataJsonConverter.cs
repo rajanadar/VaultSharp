@@ -38,11 +38,11 @@ namespace VaultSharp.Infrastructure.JsonConverters
         /// </returns>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            JObject jobject = JObject.Load(reader);
+            JToken jtoken = JToken.Load(reader);
 
-            if (jobject != null)
+            if (jtoken != null && jtoken.HasValues && jtoken["value"] != null)
             {
-                var value = jobject["value"].Value<string>();
+                var value = jtoken["value"].Value<string>();
 
                 if (!string.IsNullOrWhiteSpace(value))
                 {

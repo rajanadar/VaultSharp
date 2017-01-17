@@ -49,6 +49,7 @@ FEATURES:
     * TBD for PKI Secret Backend
     * PostgreSQL Secret Backend
     * RabbitMQ Secret Backend
+    * SSH Secret Backend
 
 IMPROVEMENTS:
 

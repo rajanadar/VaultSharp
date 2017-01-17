@@ -51,12 +51,12 @@ namespace VaultSharp.Infrastructure.JsonConverters
         /// </returns>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            JObject jobject = JObject.Load(reader);
+            JToken jtoken = JToken.Load(reader);
             object target = null;
 
-            if (jobject != null)
+            if (jtoken != null && jtoken.HasValues && jtoken["type"] != null)
             {
-                var typeValue = jobject["type"].Value<string>();
+                var typeValue = jtoken["type"].Value<string>();
                 var type = new AuditBackendType(typeValue);
 
                 if (type == AuditBackendType.File)
@@ -76,7 +76,7 @@ namespace VaultSharp.Infrastructure.JsonConverters
                     target = new CustomAuditBackend(new AuditBackendType(typeValue));
                 }
 
-                serializer.Populate(jobject.CreateReader(), target);
+                serializer.Populate(jtoken.CreateReader(), target);
             }
 
             return target;

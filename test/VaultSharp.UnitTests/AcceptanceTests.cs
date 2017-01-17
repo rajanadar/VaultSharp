@@ -471,17 +471,23 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                 Assert.True(role.Data.KeyTypeToGenerate == SSHKeyType.otp);
                 Assert.Equal(sshOTPRoleDefinition.CIDRValues, role.Data.CIDRValues);
 
+                await RunWrapUnwrapCheck(_authenticatedVaultClient.SSHReadNamedRoleAsync(sshRoleName, mountPoint, wrapTimeToLive: "1m"));
+
                 var rolename2 = "sshrolename2";
                 await _authenticatedVaultClient.SSHWriteNamedRoleAsync(rolename2, sshOTPRoleDefinition, mountPoint);
 
                 var roleList = await _authenticatedVaultClient.SSHReadRoleListAsync(mountPoint);
                 Assert.True(roleList.Data.Keys.Count == 2);
 
+                await RunWrapUnwrapCheck(_authenticatedVaultClient.SSHReadRoleListAsync(mountPoint, wrapTimeToLive: "1m"));
+
                 var roleNames = string.Join(",", sshRoleName, rolename2);
                 await _authenticatedVaultClient.SSHConfigureZeroAddressRolesAsync(roleNames, mountPoint);
 
                 var readRoles = await _authenticatedVaultClient.SSHReadZeroAddressRolesAsync(mountPoint);
                 Assert.Equal(2, readRoles.Data.Roles.Count);
+
+                await RunWrapUnwrapCheck(_authenticatedVaultClient.SSHReadZeroAddressRolesAsync(mountPoint, wrapTimeToLive: "1m"));
 
                 await _authenticatedVaultClient.SSHDeleteZeroAddressRolesAsync(mountPoint);
 
@@ -491,13 +497,24 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
 
                 Assert.NotNull(credentials.Data.Key);
 
+                await RunWrapUnwrapCheck(_authenticatedVaultClient.SSHGenerateDynamicCredentialsAsync(sshRoleName, ip, sshBackendMountPoint: mountPoint, wrapTimeToLive: "1m"));
+
                 var roles = await _authenticatedVaultClient.SSHLookupRolesAsync(ip, mountPoint);
                 Assert.NotNull(roles.Data.Roles[0]);
+
+                await RunWrapUnwrapCheck(_authenticatedVaultClient.SSHLookupRolesAsync(ip, mountPoint, wrapTimeToLive: "1m"));
 
                 await Assert.ThrowsAsync<Exception>(() => UnauthenticatedVaultClient.SSHVerifyOTPAsync("blahblah", mountPoint));
 
                 var v3 = await _authenticatedVaultClient.SSHVerifyOTPAsync(credentials.Data.Key, mountPoint);
                 Assert.NotNull(v3.Data.RoleName);
+
+                // otp credentials cannot be used to test wrapping. generate new ones.
+                var wrapTestCredentials = await
+                    _authenticatedVaultClient.SSHGenerateDynamicCredentialsAsync(sshRoleName, ip,
+                        sshBackendMountPoint: mountPoint);
+
+                await RunWrapUnwrapCheck(_authenticatedVaultClient.SSHVerifyOTPAsync(wrapTestCredentials.Data.Key, mountPoint, wrapTimeToLive: "1m"));
 
                 var dynamicRoleName = Guid.NewGuid().ToString();
 
@@ -512,9 +529,12 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                 var dynamicRole = await _authenticatedVaultClient.SSHReadNamedRoleAsync(dynamicRoleName, mountPoint);
                 Assert.True(dynamicRole.Data.KeyTypeToGenerate == SSHKeyType.dynamic);
 
+                await RunWrapUnwrapCheck(_authenticatedVaultClient.SSHReadNamedRoleAsync(dynamicRoleName, mountPoint, wrapTimeToLive: "1m"));
+
                 // error adding public key to authorized_keys file in target
                 // var dynamicCredentials = await _authenticatedVaultClient.SSHGenerateDynamicCredentialsAsync(dynamicRoleName, ip, sshBackendMountPoint: mountPoint);
                 // Assert.NotNull(dynamicCredentials.Data.Key);
+                // await RunWrapUnwrapCheck
 
                 await _authenticatedVaultClient.SSHDeleteNamedRoleAsync(sshRoleName, mountPoint);
                 await _authenticatedVaultClient.SSHDeleteNamedRoleAsync(rolename2, mountPoint);
