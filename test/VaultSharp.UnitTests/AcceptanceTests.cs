@@ -22,6 +22,7 @@ using VaultSharp.Backends.Secret.Models.PKI;
 using VaultSharp.Backends.Secret.Models.PostgreSql;
 using VaultSharp.Backends.Secret.Models.RabbitMQ;
 using VaultSharp.Backends.Secret.Models.SSH;
+using VaultSharp.Backends.Secret.Models.Transit;
 using VaultSharp.Backends.System.Models;
 using VaultSharp.DataAccess;
 using Xunit;
@@ -364,11 +365,12 @@ namespace VaultSharp.UnitTests
                 await _authenticatedVaultClient.MountSecretBackendAsync(backend);
 
                 var keyName = "test_key" + Guid.NewGuid();
-                await _authenticatedVaultClient.TransitCreateEncryptionKeyAsync(keyName, true, true, backend.MountPoint);
+                await _authenticatedVaultClient.TransitCreateEncryptionKeyAsync(keyName, TransitKeyType.aes256_gcm96, true, true, backend.MountPoint);
 
                 var keyInfo = await _authenticatedVaultClient.TransitGetEncryptionKeyInfoAsync(keyName, backend.MountPoint);
 
                 Assert.Equal(keyName, keyInfo.Data.Name);
+                Assert.Equal(keyInfo.Data.KeyType, TransitKeyType.aes256_gcm96);
                 Assert.True(keyInfo.Data.MustUseKeyDerivation);
                 Assert.False(keyInfo.Data.IsDeletionAllowed);
 

@@ -2317,6 +2317,11 @@ namespace VaultSharp
         /// </summary>
         /// <param name="encryptionKeyName"><para>[required]</para>
         /// Name of the encryption key.</param>
+        /// <param name="transitKeyType"><para>[required]</para>
+        /// The type of key to create. The currently-supported types are: 
+        /// <see cref="TransitKeyType.aes256_gcm96"/> : AES-256 wrapped with GCM using a 12-byte nonce size(symmetric)
+        /// <see cref="TransitKeyType.ecdsa_p256"/> : ECDSA using the P-256 elliptic curve(asymmetric)
+        /// Defaults to <see cref="TransitKeyType.aes256_gcm96"/>.</param>
         /// <param name="mustUseKeyDerivation"><para>[optional]</para>
         /// Boolean flag indicating if key derivation MUST be used.
         /// If enabled, all encrypt/decrypt requests to this named key must provide a context which is used for key derivation.
@@ -2337,7 +2342,7 @@ namespace VaultSharp
         /// <returns>
         /// The task.
         /// </returns>
-        Task TransitCreateEncryptionKeyAsync(string encryptionKeyName, bool mustUseKeyDerivation = false, bool doConvergentEncryption = false, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+        Task TransitCreateEncryptionKeyAsync(string encryptionKeyName, TransitKeyType transitKeyType = TransitKeyType.aes256_gcm96,  bool mustUseKeyDerivation = false, bool doConvergentEncryption = false, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
 
         /// <summary>
         /// Returns information about a named encryption key.

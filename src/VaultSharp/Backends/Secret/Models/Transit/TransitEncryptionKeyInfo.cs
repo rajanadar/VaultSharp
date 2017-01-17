@@ -9,13 +9,13 @@ namespace VaultSharp.Backends.Secret.Models.Transit
     public class TransitEncryptionKeyInfo
     {
         /// <summary>
-        /// Gets or sets the cipher mode.
+        /// Gets or sets the type of the key.
         /// </summary>
         /// <value>
-        /// The cipher mode.
+        /// The type of the key.
         /// </value>
-        [JsonProperty("cipher_mode")]
-        public string CipherMode { get; set; }
+        [JsonProperty("type")]
+        public TransitKeyType KeyType { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether deletion of this key is allowed.
@@ -65,5 +65,41 @@ namespace VaultSharp.Backends.Secret.Models.Transit
         /// </value>
         [JsonProperty("name")]
         public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [convergent encryption].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [convergent encryption]; otherwise, <c>false</c>.
+        /// </value>
+        [JsonProperty("convergent_encryption")]
+        public bool ConvergentEncryption { get; set; }
+
+        /// <summary>
+        /// Gets or sets the convergent encryption version.
+        /// </summary>
+        /// <value>
+        /// The convergent encryption version.
+        /// </value>
+        [JsonProperty("convergent_encryption_version")]
+        public int ConvergentEncryptionVersion { get; set; }
+
+        /// <summary>
+        /// Gets or sets the key derivation function.
+        /// </summary>
+        /// <value>
+        /// The key derivation function.
+        /// </value>
+        [JsonProperty("kdf")]
+        public string KeyDerivationFunction { get; set; }
+
+        /// <summary>
+        /// Gets or sets the latest version.
+        /// </summary>
+        /// <value>
+        /// The latest version.
+        /// </value>
+        [JsonProperty("latest_version")]
+        public int LatestVersion { get; set; }
     }
 }

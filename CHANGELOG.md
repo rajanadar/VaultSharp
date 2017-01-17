@@ -26,6 +26,8 @@ DEPRECATIONS/CHANGES:
     A bit of pain now, for a lot less hassles later. (pretty much the whole conundrum of life!)
   * The `GetCallingTokenInfoAsync` now returns a new response type `CallingTokenInfo` instead of the previous `TokenInfo`.
     This supports the latest fields for Vault 0.6.4. [GH-18] 
+  * The `TransitCreateEncryptionKeyAsync` now supports the `transitKeyType` parameter to specify the type of key needed.
+  * The `TransitGetEncryptionKeyInfoAsync` method now returns `TransitEncryptionKeyInfo` with a lot more fields like `KeyDerivationFunction`, `ConvergentEncryptionVersion`, etc.
 
 FEATURES:
 
@@ -50,6 +52,7 @@ FEATURES:
     * PostgreSQL Secret Backend
     * RabbitMQ Secret Backend
     * SSH Secret Backend
+    * Transit Secret Backend
 
 IMPROVEMENTS:
 

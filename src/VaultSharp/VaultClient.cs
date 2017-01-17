@@ -474,7 +474,7 @@ namespace VaultSharp
 
         public async Task<Secret<TokenWrapInfo>> LookupTokenWrapInfoAsync(string tokenId)
         {
-            var requestData = new {token = tokenId};
+            var requestData = new { token = tokenId };
             return await MakeVaultApiRequest<Secret<TokenWrapInfo>>("sys/wrapping/lookup", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
@@ -758,7 +758,7 @@ namespace VaultSharp
             Checker.NotNull(awsBackendMountPoint, "awsBackendMountPoint");
             Checker.NotNull(awsRoleName, "awsRoleName");
 
-            object requestData = string.IsNullOrWhiteSpace(timeToLive) ? null : new {ttl = timeToLive};
+            object requestData = string.IsNullOrWhiteSpace(timeToLive) ? null : new { ttl = timeToLive };
             var method = string.IsNullOrWhiteSpace(timeToLive) ? HttpMethod.Get : HttpMethod.Post;
 
             var result = await MakeVaultApiRequest<Secret<AWSCredentials>>(awsBackendMountPoint.Trim('/') + "/sts/" + awsRoleName, method, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
@@ -1582,7 +1582,7 @@ namespace VaultSharp
             Checker.NotNull(sshBackendMountPoint, "sshBackendMountPoint");
             Checker.NotNull(roleNames, "roleNames");
 
-            var requestData = new {roles = roleNames};
+            var requestData = new { roles = roleNames };
             await MakeVaultApiRequest(sshBackendMountPoint.Trim('/') + "/config/zeroaddress", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
@@ -1622,12 +1622,13 @@ namespace VaultSharp
             return response;
         }
 
-        public async Task TransitCreateEncryptionKeyAsync(string encryptionKeyName, bool mustUseKeyDerivation = false, bool doConvergentEncryption = false, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit)
+        public async Task TransitCreateEncryptionKeyAsync(string encryptionKeyName, TransitKeyType transitKeyType = TransitKeyType.aes256_gcm96, bool mustUseKeyDerivation = false, bool doConvergentEncryption = false, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit)
         {
             Checker.NotNull(transitBackendMountPoint, "transitBackendMountPoint");
             Checker.NotNull(encryptionKeyName, "encryptionKeyName");
 
-            var requestData = new { derived = mustUseKeyDerivation, convergent_encryption = doConvergentEncryption };
+            // keep type as enum so that the natural json converter will kick-in for hyphen handling. don't convert to string.
+            var requestData = new { type = transitKeyType, derived = mustUseKeyDerivation, convergent_encryption = doConvergentEncryption };
             await MakeVaultApiRequest(transitBackendMountPoint.Trim('/') + "/keys/" + encryptionKeyName, HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
@@ -1715,7 +1716,7 @@ namespace VaultSharp
             Checker.NotNull(appId, "appId");
             Checker.NotNull(policyValue, "policyValue");
 
-            var requestData = new {value = policyValue, display_name = displayName};
+            var requestData = new { value = policyValue, display_name = displayName };
             await MakeVaultApiRequest("auth/" + authenticationPath.Trim('/') + "/map/app-id/" + appId.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
@@ -1951,7 +1952,7 @@ namespace VaultSharp
             Checker.NotNull(token, "token");
 
             var action = revokeAllChildTokens ? "revoke" : "revoke-orphan";
-            var requestData = new {token = token};
+            var requestData = new { token = token };
 
             await MakeVaultApiRequest("auth/token/" + action, HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
