@@ -1,5 +1,5 @@
 
-# VaultSharp 0.6.4 is in progress and will be available by January 16, 2017.
+# VaultSharp 0.6.4 is being finalized for NuGet release. Expect the packages to be available by January 18, 2017.
 ###  A couple of things that are delaying the release of 0.6.4 are 'strong naming thought process' and holidays :)
 
 ## VaultSharp 0.6.1 is now released and available via NuGet.
