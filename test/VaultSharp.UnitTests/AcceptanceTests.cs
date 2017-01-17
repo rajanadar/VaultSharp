@@ -374,11 +374,16 @@ namespace VaultSharp.UnitTests
                 Assert.True(keyInfo.Data.MustUseKeyDerivation);
                 Assert.False(keyInfo.Data.IsDeletionAllowed);
 
+                // raja todo vault gives internal errors.
+                // await RunWrapUnwrapCheck(_authenticatedVaultClient.TransitGetEncryptionKeyInfoAsync(keyName, backend.MountPoint, wrapTimeToLive: "1m"));
+
                 var keyName2 = "test_key" + Guid.NewGuid();
                 await _authenticatedVaultClient.TransitCreateEncryptionKeyAsync(keyName2, TransitKeyType.ecdsa_p256, false, false, backend.MountPoint);
 
                 var keyList = await _authenticatedVaultClient.TransitGetEncryptionKeyListAsync(backend.MountPoint);
                 Assert.True(keyList.Data.Keys.Count == 2);
+
+                await RunWrapUnwrapCheck(_authenticatedVaultClient.TransitGetEncryptionKeyListAsync(backend.MountPoint, wrapTimeToLive: "1m"));
 
                 await _authenticatedVaultClient.TransitConfigureEncryptionKeyAsync(keyName, isDeletionAllowed: true, transitBackendMountPoint: backend.MountPoint);
 
@@ -397,6 +402,9 @@ namespace VaultSharp.UnitTests
 
                 Assert.Equal(convergentCipherText.Data.CipherText, cipherText.Data.CipherText);
 
+                // raja todo. vault internal errors
+                // await RunWrapUnwrapCheck(_authenticatedVaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce, transitBackendMountPoint: backend.MountPoint, wrapTimeToLive: "1m"));
+
                 // raja todo: fix this
                 // var nonConvergentCipherText = await _authenticatedVaultClient.TransitEncryptAsync(keyName, encodedPlainText, context, nonce2, transitBackendMountPoint: backend.MountPoint);
                 // Assert.NotEqual(nonConvergentCipherText.Data.CipherText, cipherText.Data.CipherText);
@@ -414,21 +422,34 @@ namespace VaultSharp.UnitTests
                 var newKey1 = await _authenticatedVaultClient.TransitCreateDataKeyAsync(keyName, false, context, nonce, 128, backend.MountPoint);
                 Assert.Null(newKey1.Data.PlainTextKey);
 
+                // raja todo. vault internal errors
+                // await RunWrapUnwrapCheck(_authenticatedVaultClient.TransitCreateDataKeyAsync(keyName, false, context, nonce, 128, backend.MountPoint, wrapTimeToLive: "1m"));
+
                 newKey1 = await _authenticatedVaultClient.TransitCreateDataKeyAsync(keyName, true, context, nonce, 128, backend.MountPoint);
                 Assert.NotNull(newKey1.Data.PlainTextKey);
 
                 var randomBytes = await _authenticatedVaultClient.TransitGenerateRandomBytes(64, transitBackendMountPoint: backend.MountPoint);
                 Assert.NotNull(randomBytes.Data.random_bytes);
 
+                await RunWrapUnwrapCheck(_authenticatedVaultClient.TransitGenerateRandomBytes(64, transitBackendMountPoint: backend.MountPoint, wrapTimeToLive: "1m"));
+
                 var hash = await _authenticatedVaultClient.TransitHashInput(encodedPlainText, transitBackendMountPoint: backend.MountPoint);
                 Assert.NotNull(hash.Data.sum);
+
+                await RunWrapUnwrapCheck(_authenticatedVaultClient.TransitHashInput(encodedPlainText, transitBackendMountPoint: backend.MountPoint, wrapTimeToLive: "1m"));
 
                 var hmac = await _authenticatedVaultClient.TransitDigestInput(keyName, encodedPlainText, transitBackendMountPoint: backend.MountPoint);
                 Assert.NotNull(hmac.Data.hmac);
 
+                // raja todo. vault internal errors
+                // await RunWrapUnwrapCheck(_authenticatedVaultClient.TransitDigestInput(keyName, encodedPlainText, transitBackendMountPoint: backend.MountPoint, wrapTimeToLive: "1m"));
+
                 // aes key is not good for signing. use other one.
                 var sign = await _authenticatedVaultClient.TransitSignInput(keyName2, encodedPlainText, transitBackendMountPoint: backend.MountPoint);
                 Assert.NotNull(sign.Data.signature);
+
+                // raja todo. vault internal errors
+                // await RunWrapUnwrapCheck(_authenticatedVaultClient.TransitSignInput(keyName2, encodedPlainText, transitBackendMountPoint: backend.MountPoint, wrapTimeToLive: "1m"));
 
                 var hmacValid =
                     await
@@ -436,11 +457,17 @@ namespace VaultSharp.UnitTests
                             transitBackendMountPoint: backend.MountPoint);
                 Assert.True((bool)hmacValid.Data.valid);
 
+                // raja todo. vault internal errors
+                // await RunWrapUnwrapCheck(_authenticatedVaultClient.TransitVerifySignature(keyName, encodedPlainText, null, (string)hmac.Data.hmac, transitBackendMountPoint: backend.MountPoint, wrapTimeToLive: "1m"));
+
                 var signValid =
                     await
                         _authenticatedVaultClient.TransitVerifySignature(keyName2, encodedPlainText, (string)sign.Data.signature, null,
                             transitBackendMountPoint: backend.MountPoint);
                 Assert.True((bool)signValid.Data.valid);
+
+                // raja todo. vault internal errors
+                // await RunWrapUnwrapCheck(_authenticatedVaultClient.TransitVerifySignature(keyName2, encodedPlainText, (string)sign.Data.signature, null, transitBackendMountPoint: backend.MountPoint, wrapTimeToLive: "1m"));
 
                 await _authenticatedVaultClient.TransitDeleteEncryptionKeyAsync(keyName, backend.MountPoint);
             }

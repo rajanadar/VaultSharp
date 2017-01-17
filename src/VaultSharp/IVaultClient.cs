@@ -2353,10 +2353,14 @@ namespace VaultSharp
         /// <param name="transitBackendMountPoint"><para>[optional]</para>
         /// The mount point for the Transit backend. Defaults to <see cref="SecretBackendType.Transit" />
         /// Provide a value only if you have customized the Transit mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the key information.
         /// </returns>
-        Task<Secret<TransitEncryptionKeyInfo>> TransitGetEncryptionKeyInfoAsync(string encryptionKeyName, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+        Task<Secret<TransitEncryptionKeyInfo>> TransitGetEncryptionKeyInfoAsync(string encryptionKeyName, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit, string wrapTimeToLive = null);
 
         /// <summary>
         /// Returns a list of keys. Only the key names are returned.
@@ -2364,8 +2368,12 @@ namespace VaultSharp
         /// <param name="transitBackendMountPoint"><para>[optional]</para>
         /// The mount point for the Transit backend. Defaults to <see cref="SecretBackendType.Transit" />
         /// Provide a value only if you have customized the Transit mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>The list of key names.</returns>
-        Task<Secret<ListInfo>> TransitGetEncryptionKeyListAsync(string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+        Task<Secret<ListInfo>> TransitGetEncryptionKeyListAsync(string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit, string wrapTimeToLive = null);
 
         /// <summary>
         /// Deletes a named encryption key.
@@ -2441,10 +2449,14 @@ namespace VaultSharp
         /// <param name="transitBackendMountPoint"><para>[optional]</para>
         /// The mount point for the transit backend. Defaults to <see cref="SecretBackendType.Transit" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with cipher text.
         /// </returns>
-        Task<Secret<CipherTextData>> TransitEncryptAsync(string encryptionKeyName, string base64EncodedPlainText, string base64EncodedKeyDerivationContext = null, string convergentEncryptionBase64EncodedNonce = null, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+        Task<Secret<CipherTextData>> TransitEncryptAsync(string encryptionKeyName, string base64EncodedPlainText, string base64EncodedKeyDerivationContext = null, string convergentEncryptionBase64EncodedNonce = null, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit, string wrapTimeToLive = null);
 
         /// <summary>
         /// Decrypts the provided ciphertext using the named key.
@@ -2461,10 +2473,14 @@ namespace VaultSharp
         /// <param name="transitBackendMountPoint"><para>[optional]</para>
         /// The mount point for the transit backend. Defaults to <see cref="SecretBackendType.Transit" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with plain text.
         /// </returns>
-        Task<Secret<PlainTextData>> TransitDecryptAsync(string encryptionKeyName, string cipherText, string base64EncodedKeyDerivationContext = null, string convergentEncryptionBase64EncodedNonce = null, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+        Task<Secret<PlainTextData>> TransitDecryptAsync(string encryptionKeyName, string cipherText, string base64EncodedKeyDerivationContext = null, string convergentEncryptionBase64EncodedNonce = null, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit, string wrapTimeToLive = null);
 
         /// <summary>
         /// Transits the rewrap with latest encryption key asynchronous.
@@ -2481,10 +2497,14 @@ namespace VaultSharp
         /// <param name="transitBackendMountPoint"><para>[optional]</para>
         /// The mount point for the transit backend. Defaults to <see cref="SecretBackendType.Transit" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with cipher text.
         /// </returns>
-        Task<Secret<CipherTextData>> TransitRewrapWithLatestEncryptionKeyAsync(string encryptionKeyName, string cipherText, string base64EncodedKeyDerivationContext = null, string convergentEncryptionBase64EncodedNonce = null, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+        Task<Secret<CipherTextData>> TransitRewrapWithLatestEncryptionKeyAsync(string encryptionKeyName, string cipherText, string base64EncodedKeyDerivationContext = null, string convergentEncryptionBase64EncodedNonce = null, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit, string wrapTimeToLive = null);
 
         /// <summary>
         /// Generate a new high-entropy key and the valued encrypted with the named key.
@@ -2510,12 +2530,16 @@ namespace VaultSharp
         /// <param name="transitBackendMountPoint"><para>[optional]</para>
         /// The mount point for the transit backend. Defaults to <see cref="SecretBackendType.Transit" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the cipher text key.
         /// If <see cref="returnKeyAsPlainText" /> is true, the plaintext key will be returned along with the ciphertext.
         /// If false, only the ciphertext value will be returned.
         /// </returns>
-        Task<Secret<TransitKeyData>> TransitCreateDataKeyAsync(string encryptionKeyName, bool returnKeyAsPlainText = false, string base64EncodedKeyDerivationContext = null, string convergentEncryptionBase64EncodedNonce = null, int keyBits = 256, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+        Task<Secret<TransitKeyData>> TransitCreateDataKeyAsync(string encryptionKeyName, bool returnKeyAsPlainText = false, string base64EncodedKeyDerivationContext = null, string convergentEncryptionBase64EncodedNonce = null, int keyBits = 256, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit, string wrapTimeToLive = null);
 
         /// <summary>
         /// Return high-quality random bytes of the specified length.
@@ -2528,8 +2552,12 @@ namespace VaultSharp
         /// <param name="transitBackendMountPoint"><para>[optional]</para>
         /// The mount point for the transit backend. Defaults to <see cref="SecretBackendType.Transit" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>Random bytes in the field 'random_bytes'.</returns>
-        Task<Secret<dynamic>> TransitGenerateRandomBytes(int bytesToReturn = 32, string format = "base64", string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+        Task<Secret<dynamic>> TransitGenerateRandomBytes(int bytesToReturn = 32, string format = "base64", string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit, string wrapTimeToLive = null);
 
         /// <summary>
         /// Returns the hash of given data using the specified algorithm. 
@@ -2549,8 +2577,12 @@ namespace VaultSharp
         /// <param name="transitBackendMountPoint"><para>[optional]</para>
         /// The mount point for the transit backend. Defaults to <see cref="SecretBackendType.Transit" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>The hashed value in the field 'sum'.</returns>
-        Task<Secret<dynamic>> TransitHashInput(string base64EncodedInput, string algorithm = "sha2-256", string format = "base64", string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+        Task<Secret<dynamic>> TransitHashInput(string base64EncodedInput, string algorithm = "sha2-256", string format = "base64", string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit, string wrapTimeToLive = null);
 
         /// <summary>
         /// Returns the digest of given data using the specified hash algorithm and the named key. 
@@ -2574,8 +2606,12 @@ namespace VaultSharp
         /// <param name="transitBackendMountPoint"><para>[optional]</para>
         /// The mount point for the transit backend. Defaults to <see cref="SecretBackendType.Transit" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>The hashed value in the field 'hmac'.</returns>
-        Task<Secret<dynamic>> TransitDigestInput(string keyName, string base64EncodedInput, string algorithm = "sha2-256", string format = "base64", string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+        Task<Secret<dynamic>> TransitDigestInput(string keyName, string base64EncodedInput, string algorithm = "sha2-256", string format = "base64", string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit, string wrapTimeToLive = null);
 
         /// <summary>
         /// Returns the cryptographic signature of the given data using the named key and the specified hash algorithm.
@@ -2594,8 +2630,12 @@ namespace VaultSharp
         /// <param name="transitBackendMountPoint"><para>[optional]</para>
         /// The mount point for the transit backend. Defaults to <see cref="SecretBackendType.Transit" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>The signed value in the field 'signature'.</returns>
-        Task<Secret<dynamic>> TransitSignInput(string keyName, string base64EncodedInput, string algorithm = "sha2-256", string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+        Task<Secret<dynamic>> TransitSignInput(string keyName, string base64EncodedInput, string algorithm = "sha2-256", string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit, string wrapTimeToLive = null);
 
         /// <summary>
         /// Returns whether the provided signature is valid for the given data.
@@ -2618,8 +2658,12 @@ namespace VaultSharp
         /// <param name="transitBackendMountPoint"><para>[optional]</para>
         /// The mount point for the transit backend. Defaults to <see cref="SecretBackendType.Transit" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>The boolean verification result value in the field 'valid'.</returns>
-        Task<Secret<dynamic>> TransitVerifySignature(string keyName, string base64EncodedInput, string signature = null, string hmac = null, string algorithm = "sha2-256", string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+        Task<Secret<dynamic>> TransitVerifySignature(string keyName, string base64EncodedInput, string signature = null, string hmac = null, string algorithm = "sha2-256", string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit, string wrapTimeToLive = null);
 
         /// <summary>
         /// Creates an App Id that associates with the policy value.
