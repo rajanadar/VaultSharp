@@ -374,6 +374,12 @@ namespace VaultSharp.UnitTests
                 Assert.True(keyInfo.Data.MustUseKeyDerivation);
                 Assert.False(keyInfo.Data.IsDeletionAllowed);
 
+                var keyName2 = "test_key" + Guid.NewGuid();
+                await _authenticatedVaultClient.TransitCreateEncryptionKeyAsync(keyName2, TransitKeyType.ecdsa_p256, false, false, backend.MountPoint);
+
+                var keyList = await _authenticatedVaultClient.TransitGetEncryptionKeyListAsync(backend.MountPoint);
+                Assert.True(keyList.Data.Keys.Count == 2);
+
                 await _authenticatedVaultClient.TransitConfigureEncryptionKeyAsync(keyName, isDeletionAllowed: true, transitBackendMountPoint: backend.MountPoint);
 
                 keyInfo = await _authenticatedVaultClient.TransitGetEncryptionKeyInfoAsync(keyName, backend.MountPoint);
@@ -410,6 +416,31 @@ namespace VaultSharp.UnitTests
 
                 newKey1 = await _authenticatedVaultClient.TransitCreateDataKeyAsync(keyName, true, context, nonce, 128, backend.MountPoint);
                 Assert.NotNull(newKey1.Data.PlainTextKey);
+
+                var randomBytes = await _authenticatedVaultClient.TransitGenerateRandomBytes(64, transitBackendMountPoint: backend.MountPoint);
+                Assert.NotNull(randomBytes.Data.random_bytes);
+
+                var hash = await _authenticatedVaultClient.TransitHashInput(encodedPlainText, transitBackendMountPoint: backend.MountPoint);
+                Assert.NotNull(hash.Data.sum);
+
+                var hmac = await _authenticatedVaultClient.TransitDigestInput(keyName, encodedPlainText, transitBackendMountPoint: backend.MountPoint);
+                Assert.NotNull(hmac.Data.hmac);
+
+                // aes key is not good for signing. use other one.
+                var sign = await _authenticatedVaultClient.TransitSignInput(keyName2, encodedPlainText, transitBackendMountPoint: backend.MountPoint);
+                Assert.NotNull(sign.Data.signature);
+
+                var hmacValid =
+                    await
+                        _authenticatedVaultClient.TransitVerifySignature(keyName, encodedPlainText, null, (string)hmac.Data.hmac,
+                            transitBackendMountPoint: backend.MountPoint);
+                Assert.True((bool)hmacValid.Data.valid);
+
+                var signValid =
+                    await
+                        _authenticatedVaultClient.TransitVerifySignature(keyName2, encodedPlainText, (string)sign.Data.signature, null,
+                            transitBackendMountPoint: backend.MountPoint);
+                Assert.True((bool)signValid.Data.valid);
 
                 await _authenticatedVaultClient.TransitDeleteEncryptionKeyAsync(keyName, backend.MountPoint);
             }

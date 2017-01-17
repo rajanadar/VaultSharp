@@ -2359,6 +2359,15 @@ namespace VaultSharp
         Task<Secret<TransitEncryptionKeyInfo>> TransitGetEncryptionKeyInfoAsync(string encryptionKeyName, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
 
         /// <summary>
+        /// Returns a list of keys. Only the key names are returned.
+        /// </summary>
+        /// <param name="transitBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretBackendType.Transit" />
+        /// Provide a value only if you have customized the Transit mount point.</param>
+        /// <returns>The list of key names.</returns>
+        Task<Secret<ListInfo>> TransitGetEncryptionKeyListAsync(string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+
+        /// <summary>
         /// Deletes a named encryption key.
         /// This API is a root protected call.
         /// It will no longer be possible to decrypt any data encrypted with the named key.
@@ -2507,6 +2516,110 @@ namespace VaultSharp
         /// If false, only the ciphertext value will be returned.
         /// </returns>
         Task<Secret<TransitKeyData>> TransitCreateDataKeyAsync(string encryptionKeyName, bool returnKeyAsPlainText = false, string base64EncodedKeyDerivationContext = null, string convergentEncryptionBase64EncodedNonce = null, int keyBits = 256, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+
+        /// <summary>
+        /// Return high-quality random bytes of the specified length.
+        /// </summary>
+        /// <param name="bytesToReturn"><para>[optional]</para>
+        /// The number of bytes to return. Defaults to 32 (256 bits). </param>
+        /// <param name="format"><para>[optional]</para>
+        ///  The output encoding; can be either hex or base64. Defaults to base64.
+        /// </param>
+        /// <param name="transitBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the transit backend. Defaults to <see cref="SecretBackendType.Transit" />
+        /// Provide a value only if you have customized the mount point.</param>
+        /// <returns>Random bytes in the field 'random_bytes'.</returns>
+        Task<Secret<dynamic>> TransitGenerateRandomBytes(int bytesToReturn = 32, string format = "base64", string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+
+        /// <summary>
+        /// Returns the hash of given data using the specified algorithm. 
+        /// </summary>
+        /// <param name="base64EncodedInput"><para>[required]</para>
+        /// The base64 encoded input.</param>
+        /// <param name="algorithm"><para>[optional]</para>The hash algorithm to use. 
+        /// Currently-supported algorithms are:
+        /// sha2-224
+        /// sha2-256
+        /// sha2-384
+        /// sha2-512
+        /// Defaults to sha2-256.</param>
+        /// <param name="format"><para>[optional]</para>
+        ///  The output encoding; can be either hex or base64. Defaults to base64.
+        /// </param>
+        /// <param name="transitBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the transit backend. Defaults to <see cref="SecretBackendType.Transit" />
+        /// Provide a value only if you have customized the mount point.</param>
+        /// <returns>The hashed value in the field 'sum'.</returns>
+        Task<Secret<dynamic>> TransitHashInput(string base64EncodedInput, string algorithm = "sha2-256", string format = "base64", string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+
+        /// <summary>
+        /// Returns the digest of given data using the specified hash algorithm and the named key. 
+        /// </summary>
+        /// <param name="keyName"><para>[required]</para>
+        /// The key can be of any type supported by transit; the raw key will be marshalled into bytes 
+        /// to be used for the HMAC function. 
+        /// If the key is of a type that supports rotation, the latest (current) version will be used.</param>
+        /// <param name="base64EncodedInput"><para>[required]</para>
+        /// The base64 encoded input.</param>
+        /// <param name="algorithm"><para>[optional]</para>The hash algorithm to use. 
+        /// Currently-supported algorithms are:
+        /// sha2-224
+        /// sha2-256
+        /// sha2-384
+        /// sha2-512
+        /// Defaults to sha2-256.</param>
+        /// <param name="format"><para>[optional]</para>
+        ///  The output encoding; can be either hex or base64. Defaults to base64.
+        /// </param>
+        /// <param name="transitBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the transit backend. Defaults to <see cref="SecretBackendType.Transit" />
+        /// Provide a value only if you have customized the mount point.</param>
+        /// <returns>The hashed value in the field 'hmac'.</returns>
+        Task<Secret<dynamic>> TransitDigestInput(string keyName, string base64EncodedInput, string algorithm = "sha2-256", string format = "base64", string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+
+        /// <summary>
+        /// Returns the cryptographic signature of the given data using the named key and the specified hash algorithm.
+        /// </summary>
+        /// <param name="keyName"><para>[required]</para>
+        ///  The key must be of a type that supports signing.</param>
+        /// <param name="base64EncodedInput"><para>[required]</para>
+        /// The base64 encoded input.</param>
+        /// <param name="algorithm"><para>[optional]</para>The hash algorithm to use. 
+        /// Currently-supported algorithms are:
+        /// sha2-224
+        /// sha2-256
+        /// sha2-384
+        /// sha2-512
+        /// Defaults to sha2-256.</param>
+        /// <param name="transitBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the transit backend. Defaults to <see cref="SecretBackendType.Transit" />
+        /// Provide a value only if you have customized the mount point.</param>
+        /// <returns>The signed value in the field 'signature'.</returns>
+        Task<Secret<dynamic>> TransitSignInput(string keyName, string base64EncodedInput, string algorithm = "sha2-256", string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
+
+        /// <summary>
+        /// Returns whether the provided signature is valid for the given data.
+        /// </summary>
+        /// <param name="keyName"><para>[required]</para>
+        ///  The key must be of a type that supports signing.</param>
+        /// <param name="base64EncodedInput"><para>[required]</para>
+        /// The base64 encoded input.</param>
+        /// <param name="signature"><para>[optional]</para>
+        /// The signature string. Either this must be supplied or <see cref="hmac"/> must be supplied.</param>
+        /// <param name="hmac"><para>[optional]</para>
+        /// The hmac string. Either this must be supplied or <see cref = "signature" /> must be supplied.</param>
+        /// <param name="algorithm"><para>[optional]</para>The hash algorithm to use. 
+        /// Currently-supported algorithms are:
+        /// sha2-224
+        /// sha2-256
+        /// sha2-384
+        /// sha2-512
+        /// Defaults to sha2-256.</param>
+        /// <param name="transitBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the transit backend. Defaults to <see cref="SecretBackendType.Transit" />
+        /// Provide a value only if you have customized the mount point.</param>
+        /// <returns>The boolean verification result value in the field 'valid'.</returns>
+        Task<Secret<dynamic>> TransitVerifySignature(string keyName, string base64EncodedInput, string signature = null, string hmac = null, string algorithm = "sha2-256", string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit);
 
         /// <summary>
         /// Creates an App Id that associates with the policy value.

@@ -1641,6 +1641,14 @@ namespace VaultSharp
             return result;
         }
 
+        public async Task<Secret<ListInfo>> TransitGetEncryptionKeyListAsync(string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit)
+        {
+            Checker.NotNull(transitBackendMountPoint, "transitBackendMountPoint");
+
+            var result = await MakeVaultApiRequest<Secret<ListInfo>>(transitBackendMountPoint.Trim('/') + "/keys?list=true", HttpMethod.Get).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return result;
+        }
+
         public async Task TransitDeleteEncryptionKeyAsync(string encryptionKeyName, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit)
         {
             Checker.NotNull(transitBackendMountPoint, "transitBackendMountPoint");
@@ -1708,6 +1716,70 @@ namespace VaultSharp
             var requestData = new { context = base64EncodedKeyDerivationContext, nonce = convergentEncryptionBase64EncodedNonce, bits = keyBits };
 
             var result = await MakeVaultApiRequest<Secret<TransitKeyData>>(transitBackendMountPoint.Trim('/') + "/datakey/" + plainorWrapped + "/" + encryptionKeyName, HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return result;
+        }
+
+        public async Task<Secret<dynamic>> TransitGenerateRandomBytes(int bytesToReturn = 32, string format = "base64", string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit)
+        {
+            Checker.NotNull(transitBackendMountPoint, "transitBackendMountPoint");
+            Checker.NotNull(format, "format");
+
+            var requestData = new { bytes = bytesToReturn, format = format };
+
+            var result = await MakeVaultApiRequest<Secret<dynamic>>(transitBackendMountPoint.Trim('/') + "/random", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return result;
+        }
+
+        public async Task<Secret<dynamic>> TransitHashInput(string base64EncodedInput, string algorithm = "sha2-256", string format = "base64", string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit)
+        {
+            Checker.NotNull(transitBackendMountPoint, "transitBackendMountPoint");
+            Checker.NotNull(base64EncodedInput, "base64EncodedInput");
+            Checker.NotNull(algorithm, "algorithm");
+            Checker.NotNull(format, "format");
+
+            var requestData = new { algorithm = algorithm, input = base64EncodedInput, format = format };
+
+            var result = await MakeVaultApiRequest<Secret<dynamic>>(transitBackendMountPoint.Trim('/') + "/hash", HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return result;
+        }
+
+        public async Task<Secret<dynamic>> TransitDigestInput(string keyName, string base64EncodedInput, string algorithm = "sha2-256", string format = "base64", string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit)
+        {
+            Checker.NotNull(transitBackendMountPoint, "transitBackendMountPoint");
+            Checker.NotNull(keyName, "keyName");
+            Checker.NotNull(base64EncodedInput, "base64EncodedInput");
+            Checker.NotNull(algorithm, "algorithm");
+            Checker.NotNull(format, "format");
+
+            var requestData = new { algorithm = algorithm, input = base64EncodedInput, format = format };
+
+            var result = await MakeVaultApiRequest<Secret<dynamic>>(transitBackendMountPoint.Trim('/') + "/hmac/" + keyName.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return result;
+        }
+
+        public async Task<Secret<dynamic>> TransitSignInput(string keyName, string base64EncodedInput, string algorithm = "sha2-256", string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit)
+        {
+            Checker.NotNull(transitBackendMountPoint, "transitBackendMountPoint");
+            Checker.NotNull(keyName, "keyName");
+            Checker.NotNull(base64EncodedInput, "base64EncodedInput");
+            Checker.NotNull(algorithm, "algorithm");
+
+            var requestData = new { algorithm = algorithm, input = base64EncodedInput };
+
+            var result = await MakeVaultApiRequest<Secret<dynamic>>(transitBackendMountPoint.Trim('/') + "/sign/" + keyName.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+            return result;
+        }
+
+        public async Task<Secret<dynamic>> TransitVerifySignature(string keyName, string base64EncodedInput, string signature = null, string hmac = null, string algorithm = "sha2-256", string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit)
+        {
+            Checker.NotNull(transitBackendMountPoint, "transitBackendMountPoint");
+            Checker.NotNull(keyName, "keyName");
+            Checker.NotNull(base64EncodedInput, "base64EncodedInput");
+            Checker.NotNull(algorithm, "algorithm");
+
+            var requestData = new {algorithm = algorithm, input = base64EncodedInput, signature = signature, hmac = hmac};
+
+            var result = await MakeVaultApiRequest<Secret<dynamic>>(transitBackendMountPoint.Trim('/') + "/verify/" + keyName.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;
         }
 
