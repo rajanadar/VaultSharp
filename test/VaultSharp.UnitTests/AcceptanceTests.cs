@@ -1424,12 +1424,21 @@ TRzfAZxw7q483/Y7mZ63/RuPYKFei4xFBfjzMDYm1lT4AQ==
                     queriedRole = await _authenticatedVaultClient.ConsulReadNamedRoleAsync(roleName);
                     Assert.Equal(role.LeaseDuration, queriedRole.Data.LeaseDuration);
 
+                    var roleName2 = "consul-role2";
+                    await _authenticatedVaultClient.ConsulWriteNamedRoleAsync(roleName2, role);
+
+                    var roleList = await _authenticatedVaultClient.ConsulReadRoleListAsync();
+                    Assert.True(roleList.Data.Keys.Count == 2);
+
+                    await RunWrapUnwrapCheck(_authenticatedVaultClient.ConsulReadRoleListAsync(wrapTimeToLive: "1m"));
+
                     var generatedCreds = await _authenticatedVaultClient.ConsulGenerateDynamicCredentialsAsync(roleName);
                     Assert.NotNull(generatedCreds.Data.Token);
 
                     await RunWrapUnwrapCheck(_authenticatedVaultClient.ConsulGenerateDynamicCredentialsAsync(roleName, wrapTimeToLive: "1m"));
 
                     await _authenticatedVaultClient.ConsulDeleteNamedRoleAsync(roleName);
+                    await _authenticatedVaultClient.ConsulDeleteNamedRoleAsync(roleName2);
                 }
                 finally
                 {

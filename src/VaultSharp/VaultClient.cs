@@ -843,6 +843,12 @@ namespace VaultSharp
             return result;
         }
 
+        public async Task<Secret<ListInfo>> ConsulReadRoleListAsync(string consulBackendMountPoint = SecretBackendDefaultMountPoints.Consul, string wrapTimeToLive = null)
+        {
+            Checker.NotNull(consulBackendMountPoint, "consulBackendMountPoint");
+            return await MakeVaultApiRequest<Secret<ListInfo>>(consulBackendMountPoint.Trim('/') + "/roles/?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+        }
+
         public async Task ConsulDeleteNamedRoleAsync(string consulRoleName, string consulBackendMountPoint = SecretBackendDefaultMountPoints.Consul)
         {
             Checker.NotNull(consulBackendMountPoint, "consulBackendMountPoint");

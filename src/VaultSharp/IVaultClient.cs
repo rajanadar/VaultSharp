@@ -981,6 +981,21 @@ namespace VaultSharp
         Task<Secret<ConsulRoleDefinition>> ConsulReadNamedRoleAsync(string consulRoleName, string consulBackendMountPoint = SecretBackendDefaultMountPoints.Consul, string wrapTimeToLive = null);
 
         /// <summary>
+        /// Returns a list of available roles. Only the role names are returned, not any values.
+        /// </summary>
+        /// <param name="consulBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the Consul backend. Defaults to <see cref="SecretBackendType.Consul" />
+        /// Provide a value only if you have customized the Consul mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
+        /// <returns>
+        /// A list of available roles. Only the role names are returned, not any values.
+        /// </returns>
+        Task<Secret<ListInfo>> ConsulReadRoleListAsync(string consulBackendMountPoint = SecretBackendDefaultMountPoints.Consul, string wrapTimeToLive = null);
+
+        /// <summary>
         /// Deletes a Consul role definition.
         /// </summary>
         /// <param name="consulRoleName"><para>[required]</para>
