@@ -1,9 +1,7 @@
 
-# VaultSharp 0.6.4 is being finalized for NuGet release. Expect the packages to be available by January 18, 2017.
-###  A couple of things that are delaying the release of 0.6.4 are 'strong naming thought process' and holidays :)
-
-## VaultSharp 0.6.1 is now released and available via NuGet.
-### VaultSharp 0.6.1 supports all backends (auth + secret) of Vault 0.6.1
+# VaultSharp 0.6.4 is now released and available via NuGet.
+### VaultSharp is now cross-platform (.NET Standard 1.4 other than .NET 4.5.x and .NET 4.6.x compliant)
+### VaultSharp is also strong named starting 0.6.4. So you might have to do a manual NuGet upgrade, as a one time thing.
 
 # VaultSharp
 A .NET Library for HashiCorp's Vault - A Secret Management System.
