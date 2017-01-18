@@ -152,6 +152,7 @@ publish/
 #!**/packages/repositories.config
 #Official VaultSharp Packages
 !VaultSharpNugetPackages/*/*
+!VaultSharpNugetPackages/*/*/*
 
 # Microsoft Azure Build Output
 csx/
