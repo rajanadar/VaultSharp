@@ -1,7 +1,10 @@
-## 0.6.4 (Unreleased)
+## 0.6.4 (January 18, 2017)
 
 MISC:
 
+  * **VaultSharp 0.6.4 is now cross-platform! It supports .NET Standard 1.4 along with .NET 4.5.x and .NET 4.6.x.**
+  * VaultSharp 0.6.4 is also strongly named now. This means your previous NuGet package may not automatically upgrade. 
+    **YOU MAY NEED TO MANUALLY UPGRADE THE VAULTSHARP NUGET PACKAGE ONCE.**
   * Basically the change logs for  VaultSharp till 0.6.4 and follows the changelog 
     for Vault here. (https://github.com/hashicorp/vault/blob/master/CHANGELOG.md)
   * Some of the changes are called out below. But all of Vault 0.6.4 cumulative changes are supported by VaultSharp 0.6.4
@@ -11,6 +14,8 @@ MISC:
 
 DEPRECATIONS/CHANGES:
 
+  * VaultSharp 0.6.4 is also strongly named now. This means your previous NuGet package may not automatically upgrade. 
+    **YOU MAY NEED TO MANUALLY UPGRADE THE VAULTSHARP NUGET PACKAGE ONCE.**
   * The `InitializeAsync` method now takes a single container object for all parameters, instead of primitive parameters.
     This single container object now has support for the additional recovery fields supported by Vault 0.6.2's initialization.
   * The File Audit backend path json key internally changed from `path` to `file_path`.
