@@ -2,7 +2,7 @@
 
 MISC:
 
-  * **VaultSharp 0.6.4 now supports .NET Core (>=1.4), .NET 4.5.x and .NET 4.6.x. Cross-platform!**
+  * **VaultSharp 0.6.4 is now cross-platform! It supports .NET Core (>=1.4) along with .NET 4.5.x and .NET 4.6.x.**
   * VaultSharp 0.6.4 is also strongly named now. This means your previous NuGet package may not automatically upgrade. 
     YOU MAY NEED TO MANUALLY UPGRADE THE VAULTSHARP NUGET PACKAGE ONCE.
   * Basically the change logs for  VaultSharp till 0.6.4 and follows the changelog 
