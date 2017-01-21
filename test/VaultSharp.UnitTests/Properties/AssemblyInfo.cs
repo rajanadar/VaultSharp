@@ -11,7 +11,7 @@ using Xunit;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Raja Nadar")]
 [assembly: AssemblyProduct("VaultSharp")]
-[assembly: AssemblyCopyright("Copyright ©  2016 Raja Nadar")]
+[assembly: AssemblyCopyright("Copyright ©  2017 Raja Nadar")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

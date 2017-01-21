@@ -125,7 +125,8 @@ namespace VaultSharp.UnitTests
         /// The one stop test for all the Vault APIs.
         /// </summary>
         /// <returns></returns>
-        [Fact]
+        [Fact(Skip = "Invoke this manually since this is an acceptance test set with server processes.")]
+        // [Fact]
         public async Task RunAllAcceptanceTestsAsync()
         {
             try
