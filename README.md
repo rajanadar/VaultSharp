@@ -5,7 +5,8 @@ A cross-platform .NET Library for HashiCorp's Vault - A Secret Management System
 
 [![Build status](https://ci.appveyor.com/api/projects/status/aldh4a6n2t7hthdv/branch/master?svg=true)](https://ci.appveyor.com/project/rajanadar/vaultsharp/branch/master)
 
-# VaultSharp 0.6.4 is now released and available via NuGet. https://www.nuget.org/packages/VaultSharp/
+## VaultSharp 0.6.4 is now released and available via NuGet. https://www.nuget.org/packages/VaultSharp/
+
 ### VaultSharp is now cross-platform (.NET Standard 1.4 other than .NET 4.5.x and .NET 4.6.x compliant)
 ### VaultSharp is also strong named starting 0.6.4. So you might have to do a manual NuGet upgrade, as a one time thing.
 
