@@ -1,7 +1,7 @@
 VaultSharp
 ==========
 
-A .NET Library for HashiCorp's Vault - A Secret Management System.
+A cross-platform .NET Library for HashiCorp's Vault - A Secret Management System.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/aldh4a6n2t7hthdv/branch/master?svg=true)](https://ci.appveyor.com/project/rajanadar/vaultsharp/branch/master)
 
