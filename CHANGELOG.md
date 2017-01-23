@@ -8,6 +8,8 @@ FEATURES:
 
 IMPROVEMENTS:
 
+  * Add nonce to `SealStatus` type to allow seeing if the operation has reset. [https://github.com/hashicorp/vault/pull/2276/]
+
 BUG FIXES:
 
 ## 0.6.4 (January 18, 2017)
