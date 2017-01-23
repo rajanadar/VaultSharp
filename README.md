@@ -1,12 +1,10 @@
 VaultSharp
 ==========
 
-[![Join the chat at https://gitter.im/rajanadar-VaultSharp/Lobby](https://badges.gitter.im/rajanadar-VaultSharp/Lobby.svg)](https://gitter.im/rajanadar-VaultSharp/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 A cross-platform .NET Library for HashiCorp's Vault - A Secret Management System.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/aldh4a6n2t7hthdv/branch/master?svg=true)](https://ci.appveyor.com/project/rajanadar/vaultsharp/branch/master)
-(https://gitter.im/rajanadar-VaultSharp/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge)
+[![Join the chat at https://gitter.im/rajanadar-VaultSharp/Lobby](https://badges.gitter.im/rajanadar-VaultSharp/Lobby.svg)](https://gitter.im/rajanadar-VaultSharp/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## VaultSharp 0.6.4 is now released and available via NuGet. https://www.nuget.org/packages/VaultSharp/
 
