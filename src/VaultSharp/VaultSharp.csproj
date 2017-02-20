@@ -128,6 +128,7 @@
     <Compile Include="Backends\Secret\Models\SSH\SSHRoleDefinition.cs" />
     <Compile Include="Backends\Secret\Models\Transit\PlainTextData.cs" />
     <Compile Include="Backends\Secret\Models\Transit\CipherTextData.cs" />
+    <Compile Include="Backends\Secret\Models\Transit\BatchInputItem.cs" />
     <Compile Include="Backends\Secret\Models\Transit\TransitKeyType.cs" />
     <Compile Include="Backends\Secret\Models\Transit\TransitKeyData.cs" />
     <Compile Include="Backends\Secret\Models\Transit\TransitEncryptionKeyInfo.cs" />

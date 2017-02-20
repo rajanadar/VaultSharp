@@ -1,4 +1,4 @@
-## 0.6.5 (Unreleased)
+## 0.6.5-beta1 (Unreleased)
 
 MISC:
 
@@ -9,6 +9,8 @@ FEATURES:
 IMPROVEMENTS:
 
   * Add nonce to `SealStatus` type to allow seeing if the operation has reset. [https://github.com/hashicorp/vault/pull/2276/]
+  * Add support for batch Transit operations:
+    * `TransitEncryptAsync`
 
 BUG FIXES:
 

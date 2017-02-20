@@ -1674,12 +1674,28 @@ namespace VaultSharp
             await MakeVaultApiRequest(transitBackendMountPoint.Trim('/') + "/keys/" + encryptionKeyName + "/rotate", HttpMethod.Post).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<CipherTextData>> TransitEncryptAsync(string encryptionKeyName, string base64EncodedPlainText, string base64EncodedKeyDerivationContext = null, string convergentEncryptionBase64EncodedNonce = null, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit, string wrapTimeToLive = null)
+        public async Task<Secret<CipherTextData>> TransitEncryptAsync(string encryptionKeyName, string base64EncodedPlainText, string base64EncodedKeyDerivationContext = null, string convergentEncryptionBase64EncodedNonce = null, BatchInputItem[] batchInputItems = null, TransitKeyType? transitKeyType = TransitKeyType.aes256_gcm96, bool doConvergentEncryption = false, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit, string wrapTimeToLive = null)
         {
             Checker.NotNull(transitBackendMountPoint, "transitBackendMountPoint");
             Checker.NotNull(encryptionKeyName, "encryptionKeyName");
 
-            var requestData = new { plaintext = base64EncodedPlainText, context = base64EncodedKeyDerivationContext, nonce = convergentEncryptionBase64EncodedNonce };
+            var requestData = new Dictionary<string, object>
+            {
+                {"plaintext", base64EncodedPlainText},
+                {"context", base64EncodedKeyDerivationContext},
+                {"nonce", convergentEncryptionBase64EncodedNonce},
+                {"convergent_encryption", doConvergentEncryption},
+            };
+
+            if (batchInputItems != null && batchInputItems.Any())
+            {
+                requestData.Add("batch_input", batchInputItems);
+            }
+
+            if (transitKeyType != null)
+            {
+                requestData.Add("type", transitKeyType.Value.ToString());
+            }
 
             var result = await MakeVaultApiRequest<Secret<CipherTextData>>(transitBackendMountPoint.Trim('/') + "/encrypt/" + encryptionKeyName, HttpMethod.Post, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
             return result;

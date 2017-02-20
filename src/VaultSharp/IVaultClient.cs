@@ -2446,6 +2446,26 @@ namespace VaultSharp
         /// The nonce value, provided as base64 encoded. Must be provided if convergent encryption is enabled for this key. 
         /// The value must be exactly 96 bits (12 bytes) long and the user must ensure that for any given context 
         /// (and thus, any given encryption key) this nonce value is never reused.</param>
+        /// <param name="batchInputItems"><para>[optional]</para>
+        /// List of items to be encrypted in a single batch. 
+        /// When this parameter is set, if the parameters <see cref="base64EncodedPlainText"/>, 
+        /// <see cref="base64EncodedKeyDerivationContext"/> and <see cref="convergentEncryptionBase64EncodedNonce"/> 
+        /// are also set, they will be ignored.</param>
+        /// <param name="transitKeyType"><para>[optional]</para>
+        /// This parameter is required when encryption key is expected to be created. 
+        /// When performing an upsert operation, the type of key to create. 
+        /// Currently, <see cref="TransitKeyType.aes256_gcm96"/> (symmetric) is the only type supported. 
+        /// Defaults to <see cref="TransitKeyType.aes256_gcm96"/>.</param>
+        /// <param name="doConvergentEncryption"><para>[optional]</para>
+        /// This parameter will only be used when a key is expected to be created. 
+        /// Whether to support convergent encryption. 
+        /// This is only supported when using a key with key derivation enabled and 
+        /// will require all requests to carry both a context and 96-bit (12-byte) nonce. 
+        /// The given nonce will be used in place of a randomly generated nonce. 
+        /// As a result, when the same context and nonce are supplied, the same ciphertext is 
+        /// generated. It is very important when using this mode that you ensure 
+        /// that all nonces are unique for a given context. 
+        /// Failing to do so will severely impact the ciphertext's security.</param>
         /// <param name="transitBackendMountPoint"><para>[optional]</para>
         /// The mount point for the transit backend. Defaults to <see cref="SecretBackendType.Transit" />
         /// Provide a value only if you have customized the mount point.</param>
@@ -2456,7 +2476,7 @@ namespace VaultSharp
         /// <returns>
         /// The secret with cipher text.
         /// </returns>
-        Task<Secret<CipherTextData>> TransitEncryptAsync(string encryptionKeyName, string base64EncodedPlainText, string base64EncodedKeyDerivationContext = null, string convergentEncryptionBase64EncodedNonce = null, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit, string wrapTimeToLive = null);
+        Task<Secret<CipherTextData>> TransitEncryptAsync(string encryptionKeyName, string base64EncodedPlainText, string base64EncodedKeyDerivationContext = null, string convergentEncryptionBase64EncodedNonce = null, BatchInputItem[] batchInputItems = null, TransitKeyType? transitKeyType = TransitKeyType.aes256_gcm96, bool doConvergentEncryption = false, string transitBackendMountPoint = SecretBackendDefaultMountPoints.Transit, string wrapTimeToLive = null);
 
         /// <summary>
         /// Decrypts the provided ciphertext using the named key.
