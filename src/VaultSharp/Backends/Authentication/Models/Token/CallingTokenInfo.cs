@@ -33,5 +33,14 @@ namespace VaultSharp.Backends.Authentication.Models.Token
         /// </value>
         [JsonProperty("renewable")]
         public bool Renewable { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating when this token was last renewed.
+        /// </summary>
+        /// <value>
+        ///   The epoch of the last renewal time
+        /// </value>
+        [JsonProperty("last_renewal_time", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public int LastRenewalTime { get; set; }
     }
 }
