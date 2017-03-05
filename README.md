@@ -169,7 +169,7 @@ var data = secret.Data; // this is the original dictionary back.
 * This library allows you to set the 'continueAsyncTasksOnCapturedContext' option when you initialize the client.
 * It is an optional parameter and defaults to 'false'
 * Setting it to false, allows you to access the .Result property of the task with reduced/zero deadlock issues.
-* There are other ways as well to invoke it synchronously, and  I leave it to you guys. (Task.Run etc.) 
+* There are other ways as well to invoke it synchronously, and  I leave it to the users of the library. (Task.Run etc.) 
 * But please note that as much as possible, use it in an async manner. 
 
 ```cs
