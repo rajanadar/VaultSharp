@@ -195,6 +195,8 @@
     <Compile Include="Backends\Authentication\Providers\UsernamePassword\UsernamePasswordAuthenticationProvider.cs" />
     <Compile Include="Backends\Authentication\Models\Token\TokenInfo.cs" />
     <Compile Include="Backends\Secret\Models\PKI\RawCertificateData.cs" />
+    <Compile Include="Exceptions\VaultException.cs" />
+    <Compile Include="Exceptions\VaultRequestFailedException.cs" />
     <Compile Include="VaultClientFactory.cs" />
     <Compile Include="VaultClient.cs" />
   </ItemGroup>
