@@ -120,6 +120,11 @@ namespace VaultSharp.Samples
             sealStatus = UnauthenticatedVaultClient.V1.System.GetSealStatusAsync().Result;
             DisplayJson(sealStatus);
             Assert.True(sealStatus.Sealed);
+
+            // quick unseal
+            sealStatus = UnauthenticatedVaultClient.V1.System.QuickUnsealAsync(masterCredentials.MasterKeys).Result;
+            DisplayJson(sealStatus);
+            Assert.False(sealStatus.Sealed);
         }
 
         private static VaultClientSettings GetVaultClientSettings()

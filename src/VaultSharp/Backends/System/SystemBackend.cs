@@ -49,6 +49,18 @@ namespace VaultSharp.Backends.System
             return response;
         }
 
+        public async Task<SealStatus> QuickUnsealAsync(string[] allMasterShareKeys)
+        {
+            SealStatus finalStatus = null;
+
+            foreach (var masterShareKey in allMasterShareKeys)
+            {
+                finalStatus = await UnsealAsync(masterShareKey);
+            }
+
+            return finalStatus;
+        }
+
         public Task<string> HashWithAuditBackendAsync(string mountPoint, string inputToHash)
         {
             throw new NotImplementedException();

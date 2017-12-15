@@ -95,5 +95,13 @@ namespace VaultSharp.Backends.System
         /// The seal status of the Vault.
         /// </returns>
         Task<SealStatus> UnsealAsync(string masterShareKey = null, bool resetCompletely = false);
+
+        /// <summary>
+        /// Unseals the Vault in a single call.
+        /// Provide all the master keys together.
+        /// </summary>
+        /// <param name="allMasterShareKeys">All the master share keys.</param>
+        /// <returns>The final Seal Status after all the share keys are applied.</returns>
+        Task<SealStatus> QuickUnsealAsync(string[] allMasterShareKeys);
     }
 }
