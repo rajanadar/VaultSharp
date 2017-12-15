@@ -6,7 +6,7 @@ namespace VaultSharp.Backends.Auth
 {
     internal static class AuthProviderFactory
     {
-        public static IAuthProvider CreateAuthenticationProvider(IAuthInfo authInfo, BackendConnector backendConnector)
+        public static IAuthProvider CreateAuthenticationProvider(IAuthInfo authInfo, Polymath polymath)
         {
             if (authInfo.BackendType == AuthBackendType.Token)
             {

@@ -11,34 +11,34 @@ using VaultSharp.Backends.Auth;
 
 namespace VaultSharp.Core
 {
-    internal class BackendConnector
+    internal class Polymath
     {
         private const string VaultTokenHeaderKey = "X-Vault-Token";
         private const string VaultWrapTimeToLiveHeaderKey = "X-Vault-Wrap-TTL";
 
-        private readonly HttpClient httpClient;
-        private readonly Lazy<Task<string>> lazyVaultToken;
+        private readonly HttpClient _httpClient;
+        private readonly Lazy<Task<string>> _lazyVaultToken;
 
-        private VaultClientSettings vaultClientSettings;
+        public VaultClientSettings VaultClientSettings { get; }
 
-        public VaultClientSettings VaultClientSettings => vaultClientSettings;
-
-        public BackendConnector(VaultClientSettings vaultClientSettings)
+        public Polymath(VaultClientSettings vaultClientSettings)
         {
-            this.vaultClientSettings = vaultClientSettings;
+            VaultClientSettings = vaultClientSettings;
 
-            httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(vaultClientSettings.VaultServerUriWithPort);
+            _httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(vaultClientSettings.VaultServerUriWithPort)
+            };
 
             if (vaultClientSettings.VaultServiceTimeout != null)
             {
-                httpClient.Timeout = vaultClientSettings.VaultServiceTimeout.Value;
+                _httpClient.Timeout = vaultClientSettings.VaultServiceTimeout.Value;
             }
 
             if (vaultClientSettings.AuthInfo != null)
             {
                 var authProvider = AuthProviderFactory.CreateAuthenticationProvider(vaultClientSettings.AuthInfo, this);
-                lazyVaultToken = new Lazy<Task<string>>(authProvider.GetVaultTokenAsync);
+                _lazyVaultToken = new Lazy<Task<string>>(authProvider.GetVaultTokenAsync);
             }
         }
 
@@ -51,9 +51,9 @@ namespace VaultSharp.Core
         {
             var headers = new Dictionary<string, string>();
 
-            if (lazyVaultToken != null)
+            if (_lazyVaultToken != null)
             {
-                headers.Add(VaultTokenHeaderKey, await lazyVaultToken.Value);
+                headers.Add(VaultTokenHeaderKey, await _lazyVaultToken.Value);
             }
 
             if (wrapTimeToLive != null)
@@ -64,13 +64,28 @@ namespace VaultSharp.Core
             return await MakeRequestAsync(resourcePath, httpMethod, requestData, headers, rawResponse, customProcessor);
         }
 
+        public Secret<T2> GetMappedSecret<T1, T2>(Secret<T1> sourceSecret, T2 destinationData)
+        {
+            return new Secret<T2>
+            {
+                Data = destinationData,
+                LeaseDurationSeconds = sourceSecret.LeaseDurationSeconds,
+                RequestId = sourceSecret.RequestId,
+                Warnings = sourceSecret.Warnings,
+                LeaseId = sourceSecret.LeaseId,
+                Renewable = sourceSecret.Renewable,
+                AuthInfo = sourceSecret.AuthInfo,
+                WrapInfo = sourceSecret.WrapInfo
+            };
+        }
+
         /// //////
 
         protected async Task<TResponse> MakeRequestAsync<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, IDictionary<string, string> headers = null, bool rawResponse = false, Func<int, string, TResponse> customProcessor = null) where TResponse : class
         {
             try
             {
-                var requestUri = new Uri(httpClient.BaseAddress, resourcePath);
+                var requestUri = new Uri(_httpClient.BaseAddress, resourcePath);
 
                 var requestContent = requestData != null
                     ? new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8)
@@ -126,15 +141,15 @@ namespace VaultSharp.Core
                     }
                 }
 
-                vaultClientSettings.BeforeApiRequestAction?.Invoke(httpClient, httpRequestMessage);
+                VaultClientSettings.BeforeApiRequestAction?.Invoke(_httpClient, httpRequestMessage);
 
-                var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(vaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+                var httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
-                vaultClientSettings.AfterApiResponseAction?.Invoke(httpResponseMessage);
+                VaultClientSettings.AfterApiResponseAction?.Invoke(httpResponseMessage);
 
                 var responseText =
                     await
-                        httpResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(vaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+                        httpResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
@@ -169,7 +184,7 @@ namespace VaultSharp.Core
                         using (var stream = new StreamReader(response.GetResponseStream()))
                         {
                             responseText =
-                                await stream.ReadToEndAsync().ConfigureAwait(vaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+                                await stream.ReadToEndAsync().ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
                         }
 
                         if (customProcessor != null)

@@ -10,7 +10,7 @@ namespace VaultSharp
     /// </summary>
     public class VaultClient : IVaultClient
     {
-        private readonly BackendConnector backendConnector;
+        private readonly Polymath polymath;
         private readonly IVaultClientV1 vaultClient1;
 
         /// <summary>
@@ -19,8 +19,8 @@ namespace VaultSharp
         /// <param name="vaultClientSettings"></param>
         public VaultClient(VaultClientSettings vaultClientSettings)
         {
-            backendConnector = new BackendConnector(vaultClientSettings);
-            vaultClient1 = new VaultClientV1(backendConnector);
+            polymath = new Polymath(vaultClientSettings);
+            vaultClient1 = new VaultClientV1(polymath);
         }
 
         /// <summary>
@@ -31,6 +31,6 @@ namespace VaultSharp
         /// <summary>
         /// 
         /// </summary>
-        public VaultClientSettings Settings => backendConnector.VaultClientSettings;
+        public VaultClientSettings Settings => polymath.VaultClientSettings;
     }
 }

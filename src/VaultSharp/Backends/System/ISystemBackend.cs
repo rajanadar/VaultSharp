@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using VaultSharp.Core;
 
 namespace VaultSharp.Backends.System
 {
@@ -7,6 +9,14 @@ namespace VaultSharp.Backends.System
     /// </summary>
     public interface ISystemBackend
     {
+        /// <summary>
+        /// Gets all the mounted audit backends (it does not list all available audit backends).
+        /// </summary>
+        /// <returns>
+        /// The mounted audit backends.
+        /// </returns>
+        Task<Secret<IEnumerable<AbstractAuditBackend>>> GetAuditBackendsAsync();
+
         /// <summary>
         /// Gets the initialization status of Vault.
         /// This is an unauthenticated call and does not use the credentials.

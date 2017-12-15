@@ -13,9 +13,9 @@ namespace VaultSharp.V1
         private IAuthBackend authBackend;
         private ISystemBackend systemBackend;
 
-        public VaultClientV1(BackendConnector backendConnector)
+        public VaultClientV1(Polymath polymath)
         { 
-            this.systemBackend = new SystemBackend(backendConnector);
+            this.systemBackend = new SystemBackend(polymath);
         }
 
         public ISecretBackend Secret => secretBackend;

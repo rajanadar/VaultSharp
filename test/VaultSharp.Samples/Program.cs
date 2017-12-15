@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Newtonsoft.Json;
 using VaultSharp.Backends.Auth.Token;
 using VaultSharp.Backends.System;
@@ -125,22 +126,29 @@ namespace VaultSharp.Samples
             sealStatus = UnauthenticatedVaultClient.V1.System.QuickUnsealAsync(masterCredentials.MasterKeys).Result;
             DisplayJson(sealStatus);
             Assert.False(sealStatus.Sealed);
+
+            // audit backends
+            var audits = AuthenticatedVaultClient.V1.System.GetAuditBackendsAsync().Result;
+            DisplayJson(audits);
+            Assert.False(audits.Data.Any());
         }
 
         private static VaultClientSettings GetVaultClientSettings()
         {
-            var settings = new VaultClientSettings();
-            settings.VaultServerUriWithPort = "http://localhost:8200";
-            settings.AfterApiResponseAction = r =>
+            var settings = new VaultClientSettings
             {
-                var value = ((int)r.StatusCode + "-" + r.StatusCode) + "\n";
-                var content = r.Content != null ? r.Content.ReadAsStringAsync().Result : string.Empty;
-
-                ResponseContent = value + content;
-
-                if (string.IsNullOrWhiteSpace(content))
+                VaultServerUriWithPort = "http://localhost:8200",
+                AfterApiResponseAction = r =>
                 {
-                    Console.WriteLine(ResponseContent);
+                    var value = ((int)r.StatusCode + "-" + r.StatusCode) + "\n";
+                    var content = r.Content != null ? r.Content.ReadAsStringAsync().Result : string.Empty;
+
+                    ResponseContent = value + content;
+
+                    if (string.IsNullOrWhiteSpace(content))
+                    {
+                        Console.WriteLine(ResponseContent);
+                    }
                 }
             };
 
