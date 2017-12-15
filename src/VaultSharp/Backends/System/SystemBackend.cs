@@ -25,9 +25,26 @@ namespace VaultSharp.Backends.System
             return response;
         }
 
+        public async Task SealAsync()
+        {
+            await backendConnector.MakeVaultApiRequest("v1/sys/seal", HttpMethod.Put).ConfigureAwait(backendConnector.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
         public async Task<SealStatus> GetSealStatusAsync()
         {
             var response = await backendConnector.MakeVaultApiRequest<SealStatus>("v1/sys/seal-status", HttpMethod.Get).ConfigureAwait(backendConnector.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return response;
+        }
+
+        public async Task<SealStatus> UnsealAsync(string masterShareKey = null, bool resetCompletely = false)
+        {
+            var requestData = new
+            {
+                key = masterShareKey,
+                reset = resetCompletely
+            };
+
+            var response = await backendConnector.MakeVaultApiRequest<SealStatus>("v1/sys/unseal", HttpMethod.Put, requestData).ConfigureAwait(backendConnector.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             return response;
         }
 

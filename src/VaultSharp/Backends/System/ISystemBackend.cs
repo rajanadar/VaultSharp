@@ -56,6 +56,16 @@ namespace VaultSharp.Backends.System
         Task<string> HashWithAuditBackendAsync(string mountPoint, string inputToHash);
 
         /// <summary>
+        /// Seals the Vault. In HA mode, only an active node can be sealed. 
+        /// Standby nodes should be restarted to get the same effect. 
+        /// Requires a token with root policy or sudo capability on the path.
+        /// </summary>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task SealAsync();
+
+        /// <summary>
         /// Gets the seal status of the Vault.
         /// This is an unauthenticated call and does not need credentials.
         /// </summary>
@@ -63,5 +73,27 @@ namespace VaultSharp.Backends.System
         /// The seal status of the Vault.
         /// </returns>
         Task<SealStatus> GetSealStatusAsync();
+
+        /// <summary>
+        /// Progresses the unsealing of the Vault.
+        /// Enter a single master key share to progress the unsealing of the Vault.
+        /// If the threshold number of master key shares is reached, Vault will attempt to unseal the Vault.
+        /// Otherwise, this API must be called multiple times until that threshold is met.
+        /// <para>
+        /// Either the <see cref="masterShareKey" /> or <see cref="resetCompletely" /> parameter must be provided; 
+        /// if both are provided, <see cref="resetCompletely" /> takes precedence.
+        /// </para>
+        /// This is an unauthenticated call and does not use the credentials.
+        /// </summary>
+        /// <param name="masterShareKey">A single master share key.</param>
+        /// <param name="resetCompletely">When <value>true</value>, the previously-provided unseal keys are discarded from memory 
+        /// and the unseal process is completely reset.
+        /// Default value is <value>false</value>.
+        /// If you make a call with the value as <value>true</value>, it doesn't matter if this call has a valid unused <see cref="masterShareKey" />. 
+        /// It'll be ignored.</param>
+        /// <returns>
+        /// The seal status of the Vault.
+        /// </returns>
+        Task<SealStatus> UnsealAsync(string masterShareKey = null, bool resetCompletely = false);
     }
 }

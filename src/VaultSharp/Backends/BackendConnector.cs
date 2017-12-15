@@ -34,13 +34,13 @@ namespace VaultSharp.Backends
                 httpClient.Timeout = vaultClientSettings.VaultServiceTimeout.Value;
             }
 
-            lazyVaultToken = new Lazy<Task<string>>(()=> Task.FromResult("abc"));
+            lazyVaultToken = new Lazy<Task<string>>(() => Task.FromResult("abc"));
         }
 
-        // public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false)
-        // {
-           // await MakeVaultApiRequest<dynamic>(resourcePath, httpMethod, requestData, rawResponse);
-        // }
+        public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false)
+        {
+            await MakeVaultApiRequest<dynamic>(resourcePath, httpMethod, requestData, rawResponse);
+        }
 
         public async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Func<int, string, TResponse> customProcessor = null, string wrapTimeToLive = null) where TResponse : class
         {

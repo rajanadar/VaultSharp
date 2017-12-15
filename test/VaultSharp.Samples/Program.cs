@@ -45,6 +45,7 @@ namespace VaultSharp.Samples
             var exception = Assert.ThrowsAsync<Exception>(() => UnauthenticatedVaultClient.V1.System.GetSealStatusAsync()).Result;
             Assert.Contains("not yet initialized", exception.Message);
 
+            // init
             var initStatus = UnauthenticatedVaultClient.V1.System.GetInitStatusAsync().Result;
             Assert.False(initStatus);
 
@@ -65,10 +66,36 @@ namespace VaultSharp.Samples
 
             Assert.True(initStatus);
 
+            // unseal
+
             var sealStatus = UnauthenticatedVaultClient.V1.System.GetSealStatusAsync().Result;
             DisplayJson(sealStatus);
-
             Assert.True(sealStatus.Sealed);
+
+            var threshold = 0;
+
+            foreach(var masterKey in masterCredentials.MasterKeys)
+            {
+                ++threshold;
+                var unsealStatus = UnauthenticatedVaultClient.V1.System.UnsealAsync(masterKey).Result;
+
+                DisplayJson(unsealStatus);
+
+                if (threshold < initOptions.SecretThreshold)
+                {
+                    Assert.Equal(threshold, unsealStatus.Progress);
+                    Assert.True(unsealStatus.Sealed);
+                }
+                else
+                {
+                    Assert.Equal(0, unsealStatus.Progress);
+                    Assert.False(unsealStatus.Sealed);
+                }
+            }
+
+            // UnauthenticatedVaultClient.V1.System.SealAsync().RunSynchronously();
+
+            // unseal with reset now.
         }
 
         private static void DisplayJson<T>(T value)
