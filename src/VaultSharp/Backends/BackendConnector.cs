@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using VaultSharp.Backends.Auth;
 
 namespace VaultSharp.Backends
 {
@@ -34,7 +35,11 @@ namespace VaultSharp.Backends
                 httpClient.Timeout = vaultClientSettings.VaultServiceTimeout.Value;
             }
 
-            lazyVaultToken = new Lazy<Task<string>>(() => Task.FromResult("abc"));
+            if (vaultClientSettings.AuthInfo != null)
+            {
+                var authProvider = AuthProviderFactory.CreateAuthenticationProvider(vaultClientSettings.AuthInfo, this);
+                lazyVaultToken = new Lazy<Task<string>>(authProvider.GetVaultTokenAsync);
+            }
         }
 
         public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false)

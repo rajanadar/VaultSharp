@@ -1,4 +1,6 @@
-﻿namespace VaultSharp
+﻿using VaultSharp.Backends.Auth.Token;
+
+namespace VaultSharp.Backends.Auth
 {
     /// <summary>
     /// 

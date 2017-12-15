@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
+using VaultSharp.Backends.Auth.Token;
 using VaultSharp.Backends.System;
 using Xunit;
 
@@ -8,25 +9,27 @@ namespace VaultSharp.Samples
     class Program
     {
         private static IVaultClient UnauthenticatedVaultClient;
+        private static IVaultClient AuthenticatedVaultClient;
 
         private static string ResponseContent;
 
         public static void Main(string[] args)
         {
-            var settings = new VaultClientSettings();
-            settings.VaultServerUriWithPort = "http://localhost:8200";
-
-            settings.AfterApiResponseAction = r => ResponseContent = r.Content.ReadAsStringAsync().Result;
-
+            var settings = GetVaultClientSettings();
             UnauthenticatedVaultClient = new VaultClient(settings);
 
             RunAllSamples();
 
+            Console.WriteLine();
+            Console.Write("I think we are done here...");
             Console.ReadLine();
         }
 
         private static void RunAllSamples()
         {
+            // before runnig these tests, just start your local vault server with a file backend.
+            // don't init or unseal it.
+
             RunSystemBackendSamples();
             RunAuthBackendSamples();
             RunSecretBackendSamples();
@@ -73,8 +76,9 @@ namespace VaultSharp.Samples
             Assert.True(sealStatus.Sealed);
 
             var threshold = 0;
+            var reset = false;
 
-            foreach(var masterKey in masterCredentials.MasterKeys)
+            foreach (var masterKey in masterCredentials.MasterKeys)
             {
                 ++threshold;
                 var unsealStatus = UnauthenticatedVaultClient.V1.System.UnsealAsync(masterKey).Result;
@@ -85,6 +89,19 @@ namespace VaultSharp.Samples
                 {
                     Assert.Equal(threshold, unsealStatus.Progress);
                     Assert.True(unsealStatus.Sealed);
+
+                    // unseal with reset now.
+
+                    if (!reset && (threshold == initOptions.SecretThreshold - 2))
+                    {
+                        unsealStatus = UnauthenticatedVaultClient.V1.System.UnsealAsync(masterKey, true).Result;
+
+                        Assert.Equal(0, unsealStatus.Progress);
+                        Assert.True(unsealStatus.Sealed);
+
+                        threshold = 0;
+                        reset = true;
+                    }
                 }
                 else
                 {
@@ -93,9 +110,24 @@ namespace VaultSharp.Samples
                 }
             }
 
-            // UnauthenticatedVaultClient.V1.System.SealAsync().RunSynchronously();
+            // seal it
 
-            // unseal with reset now.
+            var authSettings = GetVaultClientSettings();
+            authSettings.AuthInfo = new TokenAuthInfo(masterCredentials.RootToken);
+            AuthenticatedVaultClient = new VaultClient(authSettings);
+
+            AuthenticatedVaultClient.V1.System.SealAsync().Wait();
+            sealStatus = UnauthenticatedVaultClient.V1.System.GetSealStatusAsync().Result;
+            DisplayJson(sealStatus);
+            Assert.True(sealStatus.Sealed);
+        }
+
+        private static VaultClientSettings GetVaultClientSettings()
+        {
+            var settings = new VaultClientSettings();
+            settings.VaultServerUriWithPort = "http://localhost:8200";
+            settings.AfterApiResponseAction = r => ResponseContent = r.Content.ReadAsStringAsync().Result;
+            return settings;
         }
 
         private static void DisplayJson<T>(T value)

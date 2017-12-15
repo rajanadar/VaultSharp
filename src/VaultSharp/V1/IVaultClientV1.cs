@@ -1,4 +1,5 @@
-﻿using VaultSharp.Backends.Secret;
+﻿using VaultSharp.Backends.Auth;
+using VaultSharp.Backends.Secret;
 using VaultSharp.Backends.System;
 
 namespace VaultSharp

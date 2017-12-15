@@ -1,5 +1,6 @@
 ﻿using System;
 using VaultSharp.Backends;
+using VaultSharp.Backends.Auth;
 using VaultSharp.Backends.Secret;
 using VaultSharp.Backends.System;
 
