@@ -8,6 +8,28 @@ namespace VaultSharp.Backends.System
     public interface ISystemBackend
     {
         /// <summary>
+        /// Gets the initialization status of Vault.
+        /// This is an unauthenticated call and does not use the credentials.
+        /// </summary>
+        /// <returns>
+        /// The initialization status of Vault.
+        /// </returns>
+        Task<bool> GetInitStatusAsync();
+
+        /// <summary>
+        /// Initializes a new Vault. The Vault must not have been previously initialized. 
+        /// The recovery options, as well as the stored shares option, are only available when using Vault HSM.
+        /// </summary>
+        /// <param name="initOptions"><para>[required]</para>
+        /// The initialization options.
+        /// </param>
+        /// <returns>
+        /// An object including the (possibly encrypted, if pgp_keys was provided) master keys and initial root token.
+        /// </returns>
+        Task<MasterCredentials> InitAsync(InitOptions initOptions);
+
+
+        /// <summary>
         /// Lists only the mounted audit backends (it does not list all available audit backends).
         /// </summary>
         /// <returns>

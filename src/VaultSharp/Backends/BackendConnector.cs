@@ -37,6 +37,11 @@ namespace VaultSharp.Backends
             lazyVaultToken = new Lazy<Task<string>>(()=> Task.FromResult("abc"));
         }
 
+        // public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false)
+        // {
+           // await MakeVaultApiRequest<dynamic>(resourcePath, httpMethod, requestData, rawResponse);
+        // }
+
         public async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Func<int, string, TResponse> customProcessor = null, string wrapTimeToLive = null) where TResponse : class
         {
             var headers = new Dictionary<string, string>();
@@ -116,7 +121,12 @@ namespace VaultSharp.Backends
                     }
                 }
 
+                vaultClientSettings.BeforeApiRequestAction?.Invoke(httpClient, httpRequestMessage);
+
                 var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(vaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+
+                vaultClientSettings.AfterApiResponseAction?.Invoke(httpResponseMessage);
+
                 var responseText =
                     await
                         httpResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(vaultClientSettings.ContinueAsyncTasksOnCapturedContext);

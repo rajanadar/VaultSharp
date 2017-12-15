@@ -8,6 +8,12 @@ namespace VaultSharp.Backends.System
     public class SealStatus
     {
         /// <summary>
+        /// Gets or sets a value indicating the type.
+        /// </summary>
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating about the <see cref="SealStatus"/>.
         /// </summary>
         /// <value>

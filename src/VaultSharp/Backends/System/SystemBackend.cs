@@ -13,6 +13,18 @@ namespace VaultSharp.Backends.System
             this.backendConnector = backendConnector;
         }
 
+        public async Task<bool> GetInitStatusAsync()
+        {
+            var response = await backendConnector.MakeVaultApiRequest<dynamic>("v1/sys/init", HttpMethod.Get).ConfigureAwait(backendConnector.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return response.initialized;
+        }
+
+        public async Task<MasterCredentials> InitAsync(InitOptions initOptions)
+        {
+            var response = await backendConnector.MakeVaultApiRequest<MasterCredentials>("v1/sys/init", HttpMethod.Put, initOptions).ConfigureAwait(backendConnector.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return response;
+        }
+
         public async Task<SealStatus> GetSealStatusAsync()
         {
             var response = await backendConnector.MakeVaultApiRequest<SealStatus>("v1/sys/seal-status", HttpMethod.Get).ConfigureAwait(backendConnector.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
