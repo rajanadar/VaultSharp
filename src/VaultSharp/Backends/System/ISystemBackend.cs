@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
-using VaultSharp.Backends.System;
 
-namespace VaultSharp
+namespace VaultSharp.Backends.System
 {
     /// <summary>
     /// 

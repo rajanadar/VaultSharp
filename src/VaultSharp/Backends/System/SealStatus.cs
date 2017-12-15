@@ -71,8 +71,6 @@ namespace VaultSharp.Backends.System
         [JsonProperty("cluster_id")]
         public string ClusterId { get; set; }
 
-        // raja todo: check if this went away.
-
         /// <summary>
         /// Gets or sets the nonce.
         /// </summary>

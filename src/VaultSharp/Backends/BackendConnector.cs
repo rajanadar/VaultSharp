@@ -15,18 +15,35 @@ namespace VaultSharp.Backends
         private const string VaultTokenHeaderKey = "X-Vault-Token";
         private const string VaultWrapTimeToLiveHeaderKey = "X-Vault-Wrap-TTL";
 
-        private readonly HttpClient _httpClient;
-        private readonly Lazy<Task<string>> _lazyVaultToken;
+        private readonly HttpClient httpClient;
+        private readonly Lazy<Task<string>> lazyVaultToken;
 
-        protected readonly bool _continueAsyncTasksOnCapturedContext;
+        private VaultClientSettings vaultClientSettings;
 
-        protected async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Func<int, string, TResponse> customProcessor = null, string wrapTimeToLive = null) where TResponse : class
+        public VaultClientSettings VaultClientSettings => vaultClientSettings;
+
+        public BackendConnector(VaultClientSettings vaultClientSettings)
+        {
+            this.vaultClientSettings = vaultClientSettings;
+
+            httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri(vaultClientSettings.VaultServerUriWithPort);
+
+            if (vaultClientSettings.VaultServiceTimeout != null)
+            {
+                httpClient.Timeout = vaultClientSettings.VaultServiceTimeout.Value;
+            }
+
+            lazyVaultToken = new Lazy<Task<string>>(()=> Task.FromResult("abc"));
+        }
+
+        public async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Func<int, string, TResponse> customProcessor = null, string wrapTimeToLive = null) where TResponse : class
         {
             var headers = new Dictionary<string, string>();
 
-            if (_lazyVaultToken != null)
+            if (lazyVaultToken != null)
             {
-                headers.Add(VaultTokenHeaderKey, await _lazyVaultToken.Value);
+                headers.Add(VaultTokenHeaderKey, await lazyVaultToken.Value);
             }
 
             if (wrapTimeToLive != null)
@@ -37,11 +54,13 @@ namespace VaultSharp.Backends
             return await MakeRequestAsync(resourcePath, httpMethod, requestData, headers, rawResponse, customProcessor);
         }
 
+        /// //////
+
         protected async Task<TResponse> MakeRequestAsync<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, IDictionary<string, string> headers = null, bool rawResponse = false, Func<int, string, TResponse> customProcessor = null) where TResponse : class
         {
             try
             {
-                var requestUri = new Uri(_httpClient.BaseAddress, resourcePath);
+                var requestUri = new Uri(httpClient.BaseAddress, resourcePath);
 
                 var requestContent = requestData != null
                     ? new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8)
@@ -97,10 +116,10 @@ namespace VaultSharp.Backends
                     }
                 }
 
-                var httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage).ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+                var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage).ConfigureAwait(vaultClientSettings.ContinueAsyncTasksOnCapturedContext);
                 var responseText =
                     await
-                        httpResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+                        httpResponseMessage.Content.ReadAsStringAsync().ConfigureAwait(vaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
@@ -135,7 +154,7 @@ namespace VaultSharp.Backends
                         using (var stream = new StreamReader(response.GetResponseStream()))
                         {
                             responseText =
-                                await stream.ReadToEndAsync().ConfigureAwait(continueOnCapturedContext: _continueAsyncTasksOnCapturedContext);
+                                await stream.ReadToEndAsync().ConfigureAwait(vaultClientSettings.ContinueAsyncTasksOnCapturedContext);
                         }
 
                         if (customProcessor != null)

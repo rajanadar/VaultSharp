@@ -1,13 +1,25 @@
 ﻿using System;
+using VaultSharp.Backends;
+using VaultSharp.Backends.Secret;
+using VaultSharp.Backends.System;
 
 namespace VaultSharp
 {
-    public class VaultClientV1 : IVaultClientV1
+    internal class VaultClientV1 : IVaultClientV1
     {
-        public ISecretBackend Secret => throw new NotImplementedException();
+        private ISecretBackend secretBackend;
+        private IAuthBackend authBackend;
+        private ISystemBackend systemBackend;
 
-        public IAuthBackend Auth => throw new NotImplementedException();
+        public VaultClientV1(BackendConnector backendConnector)
+        { 
+            this.systemBackend = new SystemBackend(backendConnector);
+        }
 
-        public ISystemBackend System => throw new NotImplementedException();
+        public ISecretBackend Secret => secretBackend;
+
+        public IAuthBackend Auth => authBackend;
+
+        public ISystemBackend System => systemBackend;
     }
 }

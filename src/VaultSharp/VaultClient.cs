@@ -1,11 +1,15 @@
-﻿namespace VaultSharp
+﻿using System;
+using VaultSharp.Backends;
+
+namespace VaultSharp
 {
     /// <summary>
     /// 
     /// </summary>
     public class VaultClient : IVaultClient
     {
-        private VaultClientSettings vaultClientSettings;
+        private readonly BackendConnector backendConnector;
+        private readonly IVaultClientV1 vaultClient1;
 
         /// <summary>
         /// 
@@ -13,17 +17,18 @@
         /// <param name="vaultClientSettings"></param>
         public VaultClient(VaultClientSettings vaultClientSettings)
         {
-            this.vaultClientSettings = vaultClientSettings;
+            backendConnector = new BackendConnector(vaultClientSettings);
+            vaultClient1 = new VaultClientV1(backendConnector);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public IVaultClientV1 V1 => new VaultClientV1();
+        public IVaultClientV1 V1 => vaultClient1;
 
         /// <summary>
         /// 
         /// </summary>
-        public VaultClientSettings Settings => vaultClientSettings;
+        public VaultClientSettings Settings => backendConnector.VaultClientSettings;
     }
 }

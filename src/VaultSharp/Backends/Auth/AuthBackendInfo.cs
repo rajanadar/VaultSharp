@@ -5,7 +5,7 @@ namespace VaultSharp.Backends.Auth.Models
     /// <summary>
     /// Represents an authentication backend.
     /// </summary>
-    public class AuthBackend
+    public class AuthBackendInfo
     {
         /// <summary>
         /// Gets or sets the authentication path. If not set, the value will default to the <see cref="BackendType"/> value.

@@ -1,4 +1,7 @@
-﻿namespace VaultSharp
+﻿using VaultSharp.Backends.Secret;
+using VaultSharp.Backends.System;
+
+namespace VaultSharp
 {
     public interface IVaultClientV1
     {

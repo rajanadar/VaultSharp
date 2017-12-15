@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27130.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VaultSharp", "src\VaultSharp\VaultSharp.csproj", "{3D1A52B5-1270-437C-A7A0-0BD3AB026EF9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VaultSharp.Samples", "test\VaultSharp.Samples\VaultSharp.Samples.csproj", "{66FDCB93-2EA9-46CE-A54C-4B9522CD62E0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{3D1A52B5-1270-437C-A7A0-0BD3AB026EF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D1A52B5-1270-437C-A7A0-0BD3AB026EF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D1A52B5-1270-437C-A7A0-0BD3AB026EF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66FDCB93-2EA9-46CE-A54C-4B9522CD62E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66FDCB93-2EA9-46CE-A54C-4B9522CD62E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66FDCB93-2EA9-46CE-A54C-4B9522CD62E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66FDCB93-2EA9-46CE-A54C-4B9522CD62E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
