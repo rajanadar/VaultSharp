@@ -9,7 +9,7 @@
         /// <summary>
         /// 
         /// </summary>
-        VaultClientSettings VaultClientSettings { get; }
+        VaultClientSettings Settings { get; }
 
         /// <summary>
         /// 

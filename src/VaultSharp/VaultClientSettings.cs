@@ -1,21 +1,24 @@
 ﻿
+using System;
+using System.Net.Http;
+using VaultSharp.Backends.Auth;
+
 namespace VaultSharp
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class VaultClientSettings
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public string VaultServerUriWithPort { get; }
+        public string VaultServerUriWithPort { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        // public IAuthenticationInfo AuthenticationInfo { get; }
+        public IAuthInfo AuthInfo { get; set; }
 
-        // pre and post request handlers
+        public bool ContinueAsyncTasksOnCapturedContext { get; set; }
+
+        public TimeSpan? VaultServiceTimeout { get; set; }
+
+        public Action<HttpClient, HttpRequestMessage> BeforeApiRequestAction { get; set; }
+
+        public Action<HttpResponseMessage> AfterApiResponseAction { get; set; }
+
+        public Action<HttpResponseMessage> OnErrorApiResponseAction { get; set; }
     }
 }

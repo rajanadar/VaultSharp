@@ -24,6 +24,6 @@
         /// <summary>
         /// 
         /// </summary>
-        public VaultClientSettings VaultClientSettings => vaultClientSettings;
+        public VaultClientSettings Settings => vaultClientSettings;
     }
 }

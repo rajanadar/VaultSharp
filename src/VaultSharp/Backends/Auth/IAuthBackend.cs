@@ -18,12 +18,12 @@
         /// <summary>
         /// 
         /// </summary>
-        IGithubAuthBackend Github { get; }
+        // IGithubAuthBackend Github { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        IGoogleCloudAuthBackend GoogleCloud { get; }
+        IGitHubAuthBackend GoogleCloud { get; }
 
         /// <summary>
         /// 
