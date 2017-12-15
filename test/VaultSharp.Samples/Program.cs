@@ -126,7 +126,19 @@ namespace VaultSharp.Samples
         {
             var settings = new VaultClientSettings();
             settings.VaultServerUriWithPort = "http://localhost:8200";
-            settings.AfterApiResponseAction = r => ResponseContent = r.Content.ReadAsStringAsync().Result;
+            settings.AfterApiResponseAction = r =>
+            {
+                var value = ((int)r.StatusCode + "-" + r.StatusCode) + "\n";
+                var content = r.Content != null ? r.Content.ReadAsStringAsync().Result : string.Empty;
+
+                ResponseContent = value + content;
+
+                if (string.IsNullOrWhiteSpace(content))
+                {
+                    Console.WriteLine(ResponseContent);
+                }
+            };
+
             return settings;
         }
 
