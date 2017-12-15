@@ -13,17 +13,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Infrastructure\JsonConverters\**" />
-    <EmbeddedResource Remove="Infrastructure\JsonConverters\**" />
-    <None Remove="Infrastructure\JsonConverters\**" />
+    <Compile Remove="Common\**" />
+    <EmbeddedResource Remove="Common\**" />
+    <None Remove="Common\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Common\Models\" />
   </ItemGroup>
 
 </Project>

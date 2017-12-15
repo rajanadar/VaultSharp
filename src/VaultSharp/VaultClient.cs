@@ -1,5 +1,7 @@
 ﻿using System;
 using VaultSharp.Backends;
+using VaultSharp.Core;
+using VaultSharp.V1;
 
 namespace VaultSharp
 {

@@ -2,7 +2,7 @@
 using VaultSharp.Backends.Secret;
 using VaultSharp.Backends.System;
 
-namespace VaultSharp
+namespace VaultSharp.V1
 {
     public interface IVaultClientV1
     {

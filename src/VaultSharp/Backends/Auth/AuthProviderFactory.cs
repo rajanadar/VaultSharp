@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Net.Http;
 using VaultSharp.Backends.Auth.Token;
+using VaultSharp.Core;
 
 namespace VaultSharp.Backends.Auth
 {

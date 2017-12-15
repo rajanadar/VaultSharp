@@ -1,4 +1,13 @@
-﻿using VaultSharp.Backends.Auth.Token;
+﻿using VaultSharp.Backends.Auth.AppRole;
+using VaultSharp.Backends.Auth.AWS;
+using VaultSharp.Backends.Auth.Cert;
+using VaultSharp.Backends.Auth.GitHub;
+using VaultSharp.Backends.Auth.Kubernetes;
+using VaultSharp.Backends.Auth.LDAP;
+using VaultSharp.Backends.Auth.Okta;
+using VaultSharp.Backends.Auth.RADIUS;
+using VaultSharp.Backends.Auth.Token;
+using VaultSharp.Backends.Auth.UserPass;
 
 namespace VaultSharp.Backends.Auth
 {

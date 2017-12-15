@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace VaultSharp.Backends.Auth.Models
+namespace VaultSharp.Backends.Auth
 {
     /// <summary>
     /// Represents an authentication backend.

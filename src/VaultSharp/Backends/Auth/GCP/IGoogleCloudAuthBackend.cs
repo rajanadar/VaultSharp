@@ -1,9 +1,9 @@
-﻿namespace VaultSharp
+﻿namespace VaultSharp.Backends.Auth.GoogleCloud
 {
     /// <summary>
     /// 
     /// </summary>
-    public interface IGitHubAuthBackend
+    public interface IGoogleCloudAuthBackend
     {
     }
 }

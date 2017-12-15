@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using VaultSharp.Backends.Auth;
 
-namespace VaultSharp.Backends
+namespace VaultSharp.Core
 {
     internal class BackendConnector
     {

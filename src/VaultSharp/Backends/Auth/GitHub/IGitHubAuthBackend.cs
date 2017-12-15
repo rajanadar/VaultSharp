@@ -1,4 +1,4 @@
-﻿namespace VaultSharp.Backends.Auth
+﻿namespace VaultSharp.Backends.Auth.GitHub
 {
     /// <summary>
     /// 

@@ -1,4 +1,6 @@
-﻿namespace VaultSharp
+﻿using VaultSharp.V1;
+
+namespace VaultSharp
 {
     /// <summary>
     /// Provides an interface to interact with Vault as a client.

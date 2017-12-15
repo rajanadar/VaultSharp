@@ -1,6 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
-using VaultSharp.Infrastructure.Validation;
+using VaultSharp.Core;
 
 namespace VaultSharp.Backends.Auth
 {

@@ -1,4 +1,4 @@
-﻿namespace VaultSharp
+﻿namespace VaultSharp.Backends.Auth.AppRole
 {
     /// <summary>
     /// 

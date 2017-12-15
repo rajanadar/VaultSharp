@@ -3,8 +3,9 @@ using VaultSharp.Backends;
 using VaultSharp.Backends.Auth;
 using VaultSharp.Backends.Secret;
 using VaultSharp.Backends.System;
+using VaultSharp.Core;
 
-namespace VaultSharp
+namespace VaultSharp.V1
 {
     internal class VaultClientV1 : IVaultClientV1
     {
