@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using VaultSharp.Backends.System;
 
 namespace VaultSharp
 {
@@ -32,5 +33,14 @@ namespace VaultSharp
         /// The hashed value.
         /// </returns>
         Task<string> HashWithAuditBackendAsync(string mountPoint, string inputToHash);
+
+        /// <summary>
+        /// Gets the seal status of the Vault.
+        /// This is an unauthenticated call and does not need credentials.
+        /// </summary>
+        /// <returns>
+        /// The seal status of the Vault.
+        /// </returns>
+        Task<SealStatus> GetSealStatusAsync();
     }
 }

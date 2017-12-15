@@ -52,7 +52,7 @@
         /// <summary>
         /// 
         /// </summary>
-        ICertificateAuthBackend Certificate { get; }
+        ICertAuthBackend Cert { get; }
 
 
         /// <summary>
