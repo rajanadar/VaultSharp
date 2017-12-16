@@ -5,6 +5,7 @@ using VaultSharp.Backends;
 using VaultSharp.Backends.Auth;
 using VaultSharp.Backends.Auth.Token;
 using VaultSharp.Backends.System;
+using VaultSharp.Core;
 using Xunit;
 
 namespace VaultSharp.Samples
@@ -240,6 +241,11 @@ namespace VaultSharp.Samples
             var oldAuthBackends = _authenticatedVaultClient.V1.System.GetAuthBackendsAsync().Result;
             DisplayJson(oldAuthBackends);
             Assert.Equal(authBackends.Data.Count(), oldAuthBackends.Data.Count());
+
+            // capabilities
+            var caps = _authenticatedVaultClient.V1.System.GetTokenCapabilitiesAsync("v1/sys", masterCredentials.RootToken).Result;
+            DisplayJson(caps);
+            Assert.True(caps.Data.Capabilities.Any());
         }
 
         private static VaultClientSettings GetVaultClientSettings()

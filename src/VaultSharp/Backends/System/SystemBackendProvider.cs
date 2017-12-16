@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using VaultSharp.Backends.Auth;
+using VaultSharp.Backends.Auth.Token;
 using VaultSharp.Core;
 
 namespace VaultSharp.Backends.System
@@ -89,6 +90,12 @@ namespace VaultSharp.Backends.System
         {
             var resourcePath = string.Format(CultureInfo.InvariantCulture, "v1/sys/auth/{0}/tune", path.Trim('/'));
             await _polymath.MakeVaultApiRequest(resourcePath, HttpMethod.Post, backendConfig).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<TokenCapability>> GetTokenCapabilitiesAsync(string path, string token)
+        {
+            var requestData = new { path = path, token = token };
+            return await _polymath.MakeVaultApiRequest<Secret<TokenCapability>>("v1/sys/capabilities", HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<bool> GetInitStatusAsync()
