@@ -11,6 +11,11 @@ namespace VaultSharp.Backends.System
     {
         private readonly Polymath _polymath;
 
+        public SystemBackend(Polymath polymath)
+        {
+            _polymath = polymath;
+        }
+
         public async Task<Secret<Dictionary<string, AbstractAuditBackend>>> GetAuditBackendsAsync()
         {
             var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, AbstractAuditBackend>>>("v1/sys/audit", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
@@ -38,9 +43,10 @@ namespace VaultSharp.Backends.System
             await _polymath.MakeVaultApiRequest("v1/sys/audit/" + mountPoint.Trim('/'), HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public SystemBackend(Polymath polymath)
+        public async Task<Secret<AuditHash>> AuditHashAsync(string mountPoint, string inputToHash)
         {
-            _polymath = polymath;
+            var requestData = new { input = inputToHash };
+            return await _polymath.MakeVaultApiRequest<Secret<AuditHash>>("v1/sys/audit-hash/" + mountPoint.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<bool> GetInitStatusAsync()

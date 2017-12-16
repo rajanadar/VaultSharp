@@ -168,8 +168,9 @@ namespace VaultSharp.Samples
             Assert.Equal(audits.Data.Count() + 2, newAudits.Data.Count());
 
             // hash with audit
-            // var hash = await _authenticatedVaultClient.HashWithAuditBackendAsync(newFileAudit.MountPoint, "testinput");
-            // Assert.NotNull(hash);
+            var hash = AuthenticatedVaultClient.V1.System.AuditHashAsync(newFileAudit.MountPoint, "testinput").Result;
+            DisplayJson(hash);
+            Assert.NotNull(hash.Data.Hash);
 
             // disabled audit
             AuthenticatedVaultClient.V1.System.UnmountAuditBackendAsync(newFileAudit.MountPoint).Wait();

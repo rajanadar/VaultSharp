@@ -37,6 +37,24 @@ namespace VaultSharp.Backends.System
         Task UnmountAuditBackendAsync(string mountPoint);
 
         /// <summary>
+        /// Hash the given input data with the specified audit backend's hash function and salt.
+        /// This endpoint can be used to discover whether a given plaintext string (the input parameter) appears in
+        /// the audit log in obfuscated form.
+        /// Note that the audit log records requests and responses; since the Vault API is JSON-based,
+        /// any binary data returned from an API call (such as a DER-format certificate) is base64-encoded by
+        /// the Vault server in the response, and as a result such information should also be base64-encoded
+        /// to supply into the <see cref="inputToHash" /> parameter.
+        /// </summary>
+        /// <param name="mountPoint"><para>[required]</para>
+        /// The mount point for the audit backend. (with or without trailing slashes. it doesn't matter)</param>
+        /// <param name="inputToHash"><para>[required]</para>
+        /// The input value to hash</param>
+        /// <returns>
+        /// The hashed value.
+        /// </returns>
+        Task<Secret<AuditHash>> AuditHashAsync(string mountPoint, string inputToHash);
+
+        /// <summary>
         /// Gets the initialization status of Vault.
         /// This is an unauthenticated call and does not use the credentials.
         /// </summary>
@@ -57,32 +75,6 @@ namespace VaultSharp.Backends.System
         /// </returns>
         Task<MasterCredentials> InitAsync(InitOptions initOptions);
 
-
-        /// <summary>
-        /// Lists only the mounted audit backends (it does not list all available audit backends).
-        /// </summary>
-        /// <returns>
-        /// The mounted audit backends.
-        /// </returns>
-        // Task<Secret<IEnumerable<AuditBackend>>> GetMountedAuditBackendsAsync();
-
-        /// <summary>
-        /// This endpoint hashes the given input data with the specified audit backend's hash function and salt. 
-        /// This endpoint can be used to discover whether a given plaintext string (the input parameter) appears in the audit log in obfuscated form.
-        /// The audit log records requests and responses.
-        /// Since the Vault API is JSON-based, any binary data returned from an API call(such as a DER-format certificate) is base64-encoded by the Vault 
-        /// server in the response.
-        /// As a result such information should also be base64-encoded to supply into the input parameter.
-        /// </summary>
-        /// <param name="mountPoint"><para>[required]</para>
-        /// The mount point for the audit backend. (with or without trailing slashes. it doesn't matter)</param>
-        /// <param name="inputToHash"><para>[required]</para>
-        /// The input value to hash</param>
-        /// <remarks>https://www.vaultproject.io/api/system/audit-hash.html</remarks>
-        /// <returns>
-        /// The hashed value.
-        /// </returns>
-        Task<string> HashWithAuditBackendAsync(string mountPoint, string inputToHash);
 
         /// <summary>
         /// Seals the Vault. In HA mode, only an active node can be sealed. 
