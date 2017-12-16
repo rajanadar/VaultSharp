@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using VaultSharp.Exceptions;
 
 namespace VaultSharp.DataAccess
 {
@@ -32,7 +33,13 @@ namespace VaultSharp.DataAccess
             }
         }
 
-        public async Task<TResponse> MakeRequestAsync<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, IDictionary<string, string> headers = null, bool rawResponse = false, Func<int, string, TResponse> customProcessor = null) where TResponse : class
+        public async Task<TResponse> MakeRequestAsync<TResponse>(
+            string resourcePath,
+            HttpMethod httpMethod,
+            object requestData = null,
+            IDictionary<string, string> headers = null,
+            bool rawResponse = false,
+            Func<int, string, TResponse> customProcessor = null) where TResponse : class
         {
             try
             {
@@ -113,9 +120,7 @@ namespace VaultSharp.DataAccess
                     return customProcessor((int)httpResponseMessage.StatusCode, responseText);
                 }
 
-                throw new Exception(string.Format(CultureInfo.InvariantCulture,
-                    "{0} {1}. {2}",
-                    (int)httpResponseMessage.StatusCode, httpResponseMessage.StatusCode, responseText));
+                throw new VaultRequestFailedException("Server request failed: " + httpResponseMessage.StatusCode, httpResponseMessage.StatusCode, responseText);
             }
             catch (WebException ex)
             {
@@ -138,9 +143,7 @@ namespace VaultSharp.DataAccess
                             return customProcessor((int)response.StatusCode, responseText);
                         }
 
-                        throw new Exception(string.Format(CultureInfo.InvariantCulture,
-                            "{0} {1}. {2}",
-                            (int)response.StatusCode, response.StatusCode, responseText), ex);
+                        throw new VaultRequestFailedException("Server request failed: " + response.StatusCode, response.StatusCode, responseText, ex);
                     }
 
                     throw;
