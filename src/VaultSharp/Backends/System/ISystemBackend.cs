@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using VaultSharp.Backends.Auth;
-using VaultSharp.Backends.Auth.Token;
 using VaultSharp.Core;
 
 namespace VaultSharp.Backends.System
@@ -118,6 +117,16 @@ namespace VaultSharp.Backends.System
         /// Token for which capabilities are being queried.</param>
         /// <returns>The list of capabilities.</returns>
         Task<Secret<TokenCapability>> GetTokenCapabilitiesAsync(string path, string token);
+
+        /// <summary>
+        /// Gets the capabilities of the token associated with the accessor on the given path.
+        /// </summary>
+        /// <param name="path"><para>[required]</para>
+        /// Path on which the token's capabilities will be checked.</param>
+        /// <param name="tokenAccessor"><para>[required]</para>
+        /// Accessor to the Token for which capabilities are being queried.</param>
+        /// <returns>The list of capabilities.</returns>
+        Task<Secret<TokenCapability>> GetTokenCapabilitiesByAcessorAsync(string path, string tokenAccessor);
 
         /// <summary>
         /// Gets the initialization status of Vault.

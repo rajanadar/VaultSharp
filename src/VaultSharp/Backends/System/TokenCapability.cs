@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace VaultSharp.Backends.Auth.Token
+namespace VaultSharp.Backends.System
 {
     /// <summary>
     /// Represents the capabilities of a token.
