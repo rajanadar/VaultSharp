@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
+using VaultSharp.Backends.Auth;
 using VaultSharp.Core;
 
 namespace VaultSharp.Backends.System
 {
-    internal class SystemBackend : ISystemBackend
+    internal class SystemBackendProvider : ISystemBackend
     {
         private readonly Polymath _polymath;
 
-        public SystemBackend(Polymath polymath)
+        public SystemBackendProvider(Polymath polymath)
         {
             _polymath = polymath;
         }
@@ -47,6 +48,47 @@ namespace VaultSharp.Backends.System
         {
             var requestData = new { input = inputToHash };
             return await _polymath.MakeVaultApiRequest<Secret<AuditHash>>("v1/sys/audit-hash/" + mountPoint.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<Dictionary<string, AuthBackend>>> GetAuthBackendsAsync()
+        {
+            var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, AuthBackend>>>("v1/sys/auth", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+
+            foreach (var kv in response.Data)
+            {
+                kv.Value.Path = kv.Key;
+            }
+
+            return response;
+        }
+
+        public async Task MountAuthBackendAsync(AuthBackend authBackend)
+        {
+            if (string.IsNullOrWhiteSpace(authBackend.Path))
+            {
+                authBackend.Path = authBackend.Type.Type;
+            }
+
+            var resourcePath = string.Format(CultureInfo.InvariantCulture, "v1/sys/auth/{0}", authBackend.Path.Trim('/'));
+            await _polymath.MakeVaultApiRequest(resourcePath, HttpMethod.Post, authBackend).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task UnmountAuthBackendAsync(string mountPoint)
+        {
+            var resourcePath = string.Format(CultureInfo.InvariantCulture, "v1/sys/auth/{0}", mountPoint.Trim('/'));
+            await _polymath.MakeVaultApiRequest(resourcePath, HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<BackendConfig>> GetAuthBackendConfigAsync(string path)
+        {
+            var resourcePath = string.Format(CultureInfo.InvariantCulture, "v1/sys/auth/{0}/tune", path.Trim('/'));
+            return await _polymath.MakeVaultApiRequest<Secret<BackendConfig>>(resourcePath, HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task ConfigureAuthBackendAsync(string path, BackendConfig backendConfig)
+        {
+            var resourcePath = string.Format(CultureInfo.InvariantCulture, "v1/sys/auth/{0}/tune", path.Trim('/'));
+            await _polymath.MakeVaultApiRequest(resourcePath, HttpMethod.Post, backendConfig).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<bool> GetInitStatusAsync()

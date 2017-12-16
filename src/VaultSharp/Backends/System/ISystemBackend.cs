@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using VaultSharp.Backends.Auth;
 using VaultSharp.Core;
 
 namespace VaultSharp.Backends.System
@@ -29,12 +30,12 @@ namespace VaultSharp.Backends.System
         /// <summary>
         /// Unmounts the audit backend at the given mount point.
         /// </summary>
-        /// <param name="mountPoint"><para>[required]</para>
+        /// <param name="path"><para>[required]</para>
         /// The mount point for the audit backend. (with or without trailing slashes. it doesn't matter)</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task UnmountAuditBackendAsync(string mountPoint);
+        Task UnmountAuditBackendAsync(string path);
 
         /// <summary>
         /// Hash the given input data with the specified audit backend's hash function and salt.
@@ -45,14 +46,67 @@ namespace VaultSharp.Backends.System
         /// the Vault server in the response, and as a result such information should also be base64-encoded
         /// to supply into the <see cref="inputToHash" /> parameter.
         /// </summary>
-        /// <param name="mountPoint"><para>[required]</para>
+        /// <param name="path"><para>[required]</para>
         /// The mount point for the audit backend. (with or without trailing slashes. it doesn't matter)</param>
         /// <param name="inputToHash"><para>[required]</para>
         /// The input value to hash</param>
         /// <returns>
         /// The hashed value.
         /// </returns>
-        Task<Secret<AuditHash>> AuditHashAsync(string mountPoint, string inputToHash);
+        Task<Secret<AuditHash>> AuditHashAsync(string path, string inputToHash);
+
+        /// <summary>
+        /// Gets all the enabled authentication backends.
+        /// </summary>
+        /// <returns>
+        /// The enabled authentication backends.
+        /// </returns>
+        Task<Secret<Dictionary<string, AuthBackend>>> GetAuthBackendsAsync();
+
+        /// <summary>
+        /// Mounts a new authentication backend.
+        /// The auth backend can be accessed and configured via the auth path specified in the URL. 
+        /// </summary>
+        /// <param name="authBackend">The authentication backend.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task MountAuthBackendAsync(AuthBackend authBackend);
+
+        /// <summary>
+        /// Unmounts the authentication backend at the given mount point.
+        /// </summary>
+        /// <param name="path"><para>[required]</para>
+        /// The authentication path for the authentication backend. (with or without trailing slashes. it doesn't matter)</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task UnmountAuthBackendAsync(string path);
+
+        /// <summary>
+        /// Gets the mounted authentication backend's configuration values.
+        /// The lease values for each TTL may be the system default ("0" or "system") or a mount-specific value.
+        /// </summary>
+        /// <param name="path"><para>[required]</para>
+        /// The authentication path for the authentication backend in which to tune. 
+        /// (with or without trailing slashes. it doesn't matter)</param>
+        /// <returns>
+        /// The mounted secret backend's configuration values.
+        /// </returns>
+        Task<Secret<BackendConfig>> GetAuthBackendConfigAsync(string path);
+
+        /// <summary>
+        /// Tunes the mount configuration parameters for the given <see cref="path" />.
+        /// </summary>
+        /// <param name="path"><para>[required]</para>
+        /// The authentication path for the authentication backend. (with or without trailing slashes. it doesn't matter)</param>
+        /// <param name="backendConfig"><para>[required]</para>
+        /// The mount configuration with the required setting values.
+        /// Provide a value of <value>"0"</value> for the TTL settings if you want to use the system defaults.</param>
+        /// <returns>
+        /// A task
+        /// </returns>
+        Task ConfigureAuthBackendAsync(string path, BackendConfig backendConfig);
 
         /// <summary>
         /// Gets the initialization status of Vault.

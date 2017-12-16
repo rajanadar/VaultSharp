@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Newtonsoft.Json;
+using VaultSharp.Backends;
+using VaultSharp.Backends.Auth;
 using VaultSharp.Backends.Auth.Token;
 using VaultSharp.Backends.System;
 using Xunit;
@@ -9,15 +11,15 @@ namespace VaultSharp.Samples
 {
     class Program
     {
-        private static IVaultClient UnauthenticatedVaultClient;
-        private static IVaultClient AuthenticatedVaultClient;
+        private static IVaultClient _unauthenticatedVaultClient;
+        private static IVaultClient _authenticatedVaultClient;
 
-        private static string ResponseContent;
+        private static string _responseContent;
 
         public static void Main(string[] args)
         {
             var settings = GetVaultClientSettings();
-            UnauthenticatedVaultClient = new VaultClient(settings);
+            _unauthenticatedVaultClient = new VaultClient(settings);
 
             RunAllSamples();
 
@@ -46,11 +48,11 @@ namespace VaultSharp.Samples
 
         private static void RunSystemBackendSamples()
         {
-            var exception = Assert.ThrowsAsync<Exception>(() => UnauthenticatedVaultClient.V1.System.GetSealStatusAsync()).Result;
+            var exception = Assert.ThrowsAsync<Exception>(() => _unauthenticatedVaultClient.V1.System.GetSealStatusAsync()).Result;
             Assert.Contains("not yet initialized", exception.Message);
 
             // init
-            var initStatus = UnauthenticatedVaultClient.V1.System.GetInitStatusAsync().Result;
+            var initStatus = _unauthenticatedVaultClient.V1.System.GetInitStatusAsync().Result;
             Assert.False(initStatus);
 
             var initOptions = new InitOptions
@@ -59,20 +61,20 @@ namespace VaultSharp.Samples
                 SecretThreshold = 5
             };
 
-            var masterCredentials = UnauthenticatedVaultClient.V1.System.InitAsync(initOptions).Result;
+            var masterCredentials = _unauthenticatedVaultClient.V1.System.InitAsync(initOptions).Result;
             DisplayJson(masterCredentials);
 
             Assert.Equal(initOptions.SecretShares, masterCredentials.MasterKeys.Length);
             Assert.Equal(initOptions.SecretShares, masterCredentials.Base64MasterKeys.Length);
 
-            initStatus = UnauthenticatedVaultClient.V1.System.GetInitStatusAsync().Result;
+            initStatus = _unauthenticatedVaultClient.V1.System.GetInitStatusAsync().Result;
             DisplayJson(initStatus);
 
             Assert.True(initStatus);
 
             // unseal
 
-            var sealStatus = UnauthenticatedVaultClient.V1.System.GetSealStatusAsync().Result;
+            var sealStatus = _unauthenticatedVaultClient.V1.System.GetSealStatusAsync().Result;
             DisplayJson(sealStatus);
             Assert.True(sealStatus.Sealed);
 
@@ -82,7 +84,7 @@ namespace VaultSharp.Samples
             foreach (var masterKey in masterCredentials.MasterKeys)
             {
                 ++threshold;
-                var unsealStatus = UnauthenticatedVaultClient.V1.System.UnsealAsync(masterKey).Result;
+                var unsealStatus = _unauthenticatedVaultClient.V1.System.UnsealAsync(masterKey).Result;
 
                 DisplayJson(unsealStatus);
 
@@ -95,7 +97,7 @@ namespace VaultSharp.Samples
 
                     if (!reset && (threshold == initOptions.SecretThreshold - 2))
                     {
-                        unsealStatus = UnauthenticatedVaultClient.V1.System.UnsealAsync(masterKey, true).Result;
+                        unsealStatus = _unauthenticatedVaultClient.V1.System.UnsealAsync(masterKey, true).Result;
 
                         Assert.Equal(0, unsealStatus.Progress);
                         Assert.True(unsealStatus.Sealed);
@@ -115,20 +117,20 @@ namespace VaultSharp.Samples
 
             var authSettings = GetVaultClientSettings();
             authSettings.AuthInfo = new TokenAuthInfo(masterCredentials.RootToken);
-            AuthenticatedVaultClient = new VaultClient(authSettings);
+            _authenticatedVaultClient = new VaultClient(authSettings);
 
-            AuthenticatedVaultClient.V1.System.SealAsync().Wait();
-            sealStatus = UnauthenticatedVaultClient.V1.System.GetSealStatusAsync().Result;
+            _authenticatedVaultClient.V1.System.SealAsync().Wait();
+            sealStatus = _unauthenticatedVaultClient.V1.System.GetSealStatusAsync().Result;
             DisplayJson(sealStatus);
             Assert.True(sealStatus.Sealed);
 
             // quick unseal
-            sealStatus = UnauthenticatedVaultClient.V1.System.QuickUnsealAsync(masterCredentials.MasterKeys).Result;
+            sealStatus = _unauthenticatedVaultClient.V1.System.QuickUnsealAsync(masterCredentials.MasterKeys).Result;
             DisplayJson(sealStatus);
             Assert.False(sealStatus.Sealed);
 
             // audit backends
-            var audits = AuthenticatedVaultClient.V1.System.GetAuditBackendsAsync().Result;
+            var audits = _authenticatedVaultClient.V1.System.GetAuditBackendsAsync().Result;
             DisplayJson(audits);
             Assert.False(audits.Data.Any());
 
@@ -145,7 +147,7 @@ namespace VaultSharp.Samples
                 }
             };
 
-            AuthenticatedVaultClient.V1.System.MountAuditBackendAsync(newFileAudit).Wait();
+            _authenticatedVaultClient.V1.System.MountAuditBackendAsync(newFileAudit).Wait();
 
             var newFileAudit2 = new FileAuditBackend
             {
@@ -160,27 +162,84 @@ namespace VaultSharp.Samples
                 }
             };
 
-            AuthenticatedVaultClient.V1.System.MountAuditBackendAsync(newFileAudit2).Wait();
+            _authenticatedVaultClient.V1.System.MountAuditBackendAsync(newFileAudit2).Wait();
 
             // get audits
-            var newAudits = AuthenticatedVaultClient.V1.System.GetAuditBackendsAsync().Result;
+            var newAudits = _authenticatedVaultClient.V1.System.GetAuditBackendsAsync().Result;
             DisplayJson(newAudits);
             Assert.Equal(audits.Data.Count() + 2, newAudits.Data.Count());
 
             // hash with audit
-            var hash = AuthenticatedVaultClient.V1.System.AuditHashAsync(newFileAudit.MountPoint, "testinput").Result;
+            var hash = _authenticatedVaultClient.V1.System.AuditHashAsync(newFileAudit.MountPoint, "testinput").Result;
             DisplayJson(hash);
             Assert.NotNull(hash.Data.Hash);
 
             // disabled audit
-            AuthenticatedVaultClient.V1.System.UnmountAuditBackendAsync(newFileAudit.MountPoint).Wait();
-            AuthenticatedVaultClient.V1.System.UnmountAuditBackendAsync(newFileAudit2.MountPoint).Wait();
+            _authenticatedVaultClient.V1.System.UnmountAuditBackendAsync(newFileAudit.MountPoint).Wait();
+            _authenticatedVaultClient.V1.System.UnmountAuditBackendAsync(newFileAudit2.MountPoint).Wait();
 
             // get audits
-            var oldAudits = AuthenticatedVaultClient.V1.System.GetAuditBackendsAsync().Result;
+            var oldAudits = _authenticatedVaultClient.V1.System.GetAuditBackendsAsync().Result;
             Assert.Equal(audits.Data.Count(), oldAudits.Data.Count());
 
-            // syslog is not supported on windows. so no acceptance tests possible.
+            // syslog is not supported on windows. so no acceptance tests possible on my machine.
+            // this being a netstandard compliant library, some non-ironic folks can write tests for non-windows boxes and comment it out.
+
+            // auth backend mounting and tuning.
+
+            // get Authentication backends
+            var authBackends = _authenticatedVaultClient.V1.System.GetAuthBackendsAsync().Result;
+            DisplayJson(authBackends);
+            Assert.True(authBackends.Data.Any());  // default mounted
+
+            var backendConfig = _authenticatedVaultClient.V1.System.GetAuthBackendConfigAsync(authBackends.Data.First().Value.Path).Result;
+            DisplayJson(backendConfig);
+            Assert.NotNull(backendConfig);
+
+            // enable new auth
+            var newAuth = new AuthBackend
+            {
+                Path = "github1",
+                Type = AuthBackendType.GitHub,
+                Description = "Github auth - test cases"
+            };
+
+            _authenticatedVaultClient.V1.System.MountAuthBackendAsync(newAuth).Wait();
+
+            backendConfig = _authenticatedVaultClient.V1.System.GetAuthBackendConfigAsync(newAuth.Path).Result;
+            DisplayJson(backendConfig);
+            Assert.Equal(2764800, backendConfig.Data.DefaultLeaseTtl);
+            Assert.Equal(2764800, backendConfig.Data.MaximumLeaseTtl);
+
+            var newBackendConfig = new BackendConfig
+            {
+                DefaultLeaseTtl = 3600,
+                MaximumLeaseTtl = 4200,
+                ForceNoCache = true
+            };
+
+            _authenticatedVaultClient.V1.System.ConfigureAuthBackendAsync(newAuth.Path, newBackendConfig).Wait();
+
+            backendConfig = _authenticatedVaultClient.V1.System.GetAuthBackendConfigAsync(newAuth.Path).Result;
+            DisplayJson(backendConfig);
+            Assert.Equal(newBackendConfig.DefaultLeaseTtl, backendConfig.Data.DefaultLeaseTtl);
+            Assert.Equal(newBackendConfig.MaximumLeaseTtl, backendConfig.Data.MaximumLeaseTtl);
+
+            // raja todo: this is not heeded by vault. look into it.
+            // Assert.Equal(newBackendConfig.ForceNoCache, backendConfig.Data.ForceNoCache);
+
+            // get all auths
+            var newAuthBackends = _authenticatedVaultClient.V1.System.GetAuthBackendsAsync().Result;
+            DisplayJson(newAuthBackends);
+            Assert.Equal(authBackends.Data.Count() + 1, newAuthBackends.Data.Count());
+
+            // disable auth
+            _authenticatedVaultClient.V1.System.UnmountAuthBackendAsync(newAuth.Path).Wait();
+
+            // get all auths
+            var oldAuthBackends = _authenticatedVaultClient.V1.System.GetAuthBackendsAsync().Result;
+            DisplayJson(oldAuthBackends);
+            Assert.Equal(authBackends.Data.Count(), oldAuthBackends.Data.Count());
         }
 
         private static VaultClientSettings GetVaultClientSettings()
@@ -193,11 +252,11 @@ namespace VaultSharp.Samples
                     var value = ((int)r.StatusCode + "-" + r.StatusCode) + "\n";
                     var content = r.Content != null ? r.Content.ReadAsStringAsync().Result : string.Empty;
 
-                    ResponseContent = value + content;
+                    _responseContent = value + content;
 
                     if (string.IsNullOrWhiteSpace(content))
                     {
-                        Console.WriteLine(ResponseContent);
+                        Console.WriteLine(_responseContent);
                     }
                 }
             };
@@ -208,10 +267,54 @@ namespace VaultSharp.Samples
         private static void DisplayJson<T>(T value)
         {
             string line = "============";
-            Console.WriteLine(typeof(T).Name);
+
+            var type = typeof(T);
+            var genTypes = type.GenericTypeArguments;
+
+            if (genTypes != null && genTypes.Length == 1)
+            {
+                var genType = genTypes[0];
+                var subGenTypes = genType.GenericTypeArguments;
+
+                // single generic. e.g. Secret<AuthBackend>
+                if (subGenTypes == null || subGenTypes.Length == 0)
+                {
+                    Console.WriteLine(type.Name.Substring(0, type.Name.IndexOf('`')) + "<" + genType.Name + ">");
+                }
+                else
+                {
+                    // single sub-generic e.g. Secret<IEnumerable<AuthBackend>>
+                    if (subGenTypes.Length == 1)
+                    {
+                        var subGenType = subGenTypes[0];
+
+                        Console.WriteLine(type.Name.Substring(0, type.Name.IndexOf('`')) + "<" +
+                                          genType.Name.Substring(0, genType.Name.IndexOf('`')) +
+                                          "<" + subGenType.Name + ">>");
+                    }
+                    else
+                    {
+                        // double generic. e.g. Secret<Dictionary<string, AuthBackend>>
+                        if (subGenTypes.Length == 2)
+                        {
+                            var subGenType1 = subGenTypes[0];
+                            var subGenType2 = subGenTypes[1];
+
+                            Console.WriteLine(type.Name.Substring(0, type.Name.IndexOf('`')) + "<" +
+                                              genType.Name.Substring(0, genType.Name.IndexOf('`')) +
+                                              "<" + subGenType1.Name + ", " + subGenType2.Name + ">>");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // non-generic.
+                Console.WriteLine(type.Name);
+            }
 
             Console.WriteLine(line + line);
-            Console.WriteLine(ResponseContent);
+            Console.WriteLine(_responseContent);
             Console.WriteLine(JsonConvert.SerializeObject(value));
             Console.WriteLine(line + line);
             Console.WriteLine();
