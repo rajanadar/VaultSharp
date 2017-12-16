@@ -131,6 +131,55 @@ namespace VaultSharp.Samples
             var audits = AuthenticatedVaultClient.V1.System.GetAuditBackendsAsync().Result;
             DisplayJson(audits);
             Assert.False(audits.Data.Any());
+
+            // enable new file audit
+            var newFileAudit = new FileAuditBackend
+            {
+                Description = "store logs in a file - test cases",
+                Options = new FileAuditBackendOptions
+                {
+                    FilePath = "/var/log/file",
+                    LogSensitiveDataInRawFormat = true.ToString().ToLowerInvariant(),
+                    HmacAccessor = false.ToString().ToLowerInvariant(),
+                    Format = "jsonx"
+                }
+            };
+
+            AuthenticatedVaultClient.V1.System.MountAuditBackendAsync(newFileAudit).Wait();
+
+            var newFileAudit2 = new FileAuditBackend
+            {
+                MountPoint = "file2/test",
+                Description = "2 store logs in a file - test cases",
+                Options = new FileAuditBackendOptions
+                {
+                    FilePath = "/var/log/file2",
+                    LogSensitiveDataInRawFormat = true.ToString().ToLowerInvariant(),
+                    HmacAccessor = false.ToString().ToLowerInvariant(),
+                    Format = "jsonx"
+                }
+            };
+
+            AuthenticatedVaultClient.V1.System.MountAuditBackendAsync(newFileAudit2).Wait();
+
+            // get audits
+            var newAudits = AuthenticatedVaultClient.V1.System.GetAuditBackendsAsync().Result;
+            DisplayJson(newAudits);
+            Assert.Equal(audits.Data.Count() + 2, newAudits.Data.Count());
+
+            // hash with audit
+            // var hash = await _authenticatedVaultClient.HashWithAuditBackendAsync(newFileAudit.MountPoint, "testinput");
+            // Assert.NotNull(hash);
+
+            // disabled audit
+            AuthenticatedVaultClient.V1.System.UnmountAuditBackendAsync(newFileAudit.MountPoint).Wait();
+            AuthenticatedVaultClient.V1.System.UnmountAuditBackendAsync(newFileAudit2.MountPoint).Wait();
+
+            // get audits
+            var oldAudits = AuthenticatedVaultClient.V1.System.GetAuditBackendsAsync().Result;
+            Assert.Equal(audits.Data.Count(), oldAudits.Data.Count());
+
+            // syslog is not supported on windows. so no acceptance tests possible.
         }
 
         private static VaultClientSettings GetVaultClientSettings()

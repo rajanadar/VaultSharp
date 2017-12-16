@@ -15,7 +15,26 @@ namespace VaultSharp.Backends.System
         /// <returns>
         /// The mounted audit backends.
         /// </returns>
-        Task<Secret<IEnumerable<AbstractAuditBackend>>> GetAuditBackendsAsync();
+        Task<Secret<Dictionary<string, AbstractAuditBackend>>> GetAuditBackendsAsync();
+
+        /// <summary>
+        /// Mounts a new audit backend at the specified mount point.
+        /// </summary>
+        /// <param name="abstractAuditBackend">The audit backend.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task MountAuditBackendAsync(AbstractAuditBackend abstractAuditBackend);
+
+        /// <summary>
+        /// Unmounts the audit backend at the given mount point.
+        /// </summary>
+        /// <param name="mountPoint"><para>[required]</para>
+        /// The mount point for the audit backend. (with or without trailing slashes. it doesn't matter)</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task UnmountAuditBackendAsync(string mountPoint);
 
         /// <summary>
         /// Gets the initialization status of Vault.

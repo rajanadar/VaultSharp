@@ -20,7 +20,7 @@ namespace VaultSharp.Backends.System
 
             if (auditBackendType != null)
             {
-                writer.WriteValue(auditBackendType.Type);
+                writer.WriteValue(auditBackendType.Value);
             }
         }
 

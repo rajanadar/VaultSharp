@@ -11,7 +11,7 @@ namespace VaultSharp.Backends.System
     {
         private readonly Polymath _polymath;
 
-        public async Task<Secret<IEnumerable<AbstractAuditBackend>>> GetAuditBackendsAsync()
+        public async Task<Secret<Dictionary<string, AbstractAuditBackend>>> GetAuditBackendsAsync()
         {
             var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, AbstractAuditBackend>>>("v1/sys/audit", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
@@ -20,12 +20,27 @@ namespace VaultSharp.Backends.System
                 kv.Value.MountPoint = kv.Key;
             }
 
-            return _polymath.GetMappedSecret(response, response.Data.Values.AsEnumerable());
+            return response;
+        }
+
+        public async Task MountAuditBackendAsync(AbstractAuditBackend abstractAuditBackend)
+        {
+            if (string.IsNullOrWhiteSpace(abstractAuditBackend.MountPoint))
+            {
+                abstractAuditBackend.MountPoint = abstractAuditBackend.Type.Value;
+            }
+
+            await _polymath.MakeVaultApiRequest("v1/sys/audit/" + abstractAuditBackend.MountPoint.Trim('/'), HttpMethod.Put, abstractAuditBackend).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task UnmountAuditBackendAsync(string mountPoint)
+        {
+            await _polymath.MakeVaultApiRequest("v1/sys/audit/" + mountPoint.Trim('/'), HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public SystemBackend(Polymath polymath)
         {
-            this._polymath = polymath;
+            _polymath = polymath;
         }
 
         public async Task<bool> GetInitStatusAsync()

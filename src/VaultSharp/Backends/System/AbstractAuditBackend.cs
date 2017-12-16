@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace VaultSharp.Backends.System
 {
@@ -37,5 +38,20 @@ namespace VaultSharp.Backends.System
         /// </value>
         [JsonProperty("description")]
         public string Description { get; set; }
+
+        //
+
+        /// <summary>
+        /// <para>[optional]</para>
+        /// Gets or sets a flag indicating if this is a local mount.
+        /// </summary>
+        /// <remarks>
+        /// The option is allowed in Vault open-source, but relevant functionality is only supported in Vault Enterprise:
+        /// </remarks>
+        /// <value>
+        /// The flag.
+        /// </value>
+        [JsonProperty("local")]
+        public bool Local { get; set; }
     }
 }

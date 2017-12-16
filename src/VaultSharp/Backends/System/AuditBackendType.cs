@@ -13,7 +13,7 @@ namespace VaultSharp.Backends.System
         /// <summary>
         /// The _type
         /// </summary>
-        private readonly string _type;
+        private readonly string _value;
 
         /// <summary>
         /// Gets the file.
@@ -37,17 +37,17 @@ namespace VaultSharp.Backends.System
         /// <value>
         /// The type.
         /// </value>
-        public string Type => _type;
+        public string Value => _value;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AuditBackendType"/> class.
         /// </summary>
-        /// <param name="type">The type.</param>
-        public AuditBackendType(string type)
+        /// <param name="value">The value.</param>
+        public AuditBackendType(string value)
         {
-            Checker.NotNull(type, "type");
+            Checker.NotNull(value, "type");
 
-            _type = type;
+            _value = value;
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace VaultSharp.Backends.System
                 return false;
             }
 
-            return string.Equals(left.Type, right.Type, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(left.Value, right.Value, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace VaultSharp.Backends.System
             if ((object)other == null)
                 return false;
 
-            return string.Compare(_type, other._type, StringComparison.OrdinalIgnoreCase) == 0;
+            return string.Compare(_value, other._value, StringComparison.OrdinalIgnoreCase) == 0;
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace VaultSharp.Backends.System
         /// </returns>
         public override int GetHashCode()
         {
-            return _type.ToUpperInvariant().GetHashCode();
+            return _value.ToUpperInvariant().GetHashCode();
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace VaultSharp.Backends.System
         /// </returns>
         public override string ToString()
         {
-            return _type;
+            return _value;
         }
     }
 }
