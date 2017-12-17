@@ -249,6 +249,36 @@ namespace VaultSharp.Samples
             // var accessCaps = _authenticatedVaultClient.V1.System.GetTokenCapabilitiesByAcessorAsync("v1/sys", "raja todo").Result;
             // DisplayJson(accessCaps);
             // Assert.True(accessCaps.Data.Capabilities.Any());
+
+            var callingCaps = _authenticatedVaultClient.V1.System.GetCallingTokenCapabilitiesAsync("v1/sys").Result;
+            DisplayJson(callingCaps);
+            Assert.True(callingCaps.Data.Capabilities.Any());
+
+            // audit headers
+            var reqHeaders = _authenticatedVaultClient.V1.System.GetAuditRequestHeadersAsync().Result;
+            DisplayJson(reqHeaders);
+
+            string headerValue = "X-Forwarded-For";
+            string headerValue2 = "X-RequestId";
+
+            _authenticatedVaultClient.V1.System.PutAuditRequestHeaderAsync(headerValue, true).Wait();
+            _authenticatedVaultClient.V1.System.PutAuditRequestHeaderAsync(headerValue2).Wait();
+
+            var newReqHeaders = _authenticatedVaultClient.V1.System.GetAuditRequestHeadersAsync().Result;
+            DisplayJson(newReqHeaders);
+            Assert.Equal(reqHeaders.Data.Headers.Count + 2, newReqHeaders.Data.Headers.Count);
+
+            // needs to be lowercase
+            // https://github.com/hashicorp/vault/issues/3701
+            var header = _authenticatedVaultClient.V1.System.GetAuditRequestHeaderAsync(headerValue.ToLowerInvariant()).Result;
+            DisplayJson(header);
+            Assert.True(header.Data.HMAC);
+
+            _authenticatedVaultClient.V1.System.DeleteAuditRequestHeaderAsync(headerValue).Wait();
+            _authenticatedVaultClient.V1.System.DeleteAuditRequestHeaderAsync(headerValue2).Wait();
+
+            reqHeaders = _authenticatedVaultClient.V1.System.GetAuditRequestHeadersAsync().Result;
+            Assert.False(reqHeaders.Data.Headers.Any());
         }
 
         private static VaultClientSettings GetVaultClientSettings()

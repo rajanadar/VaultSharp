@@ -129,6 +129,46 @@ namespace VaultSharp.Backends.System
         Task<Secret<TokenCapability>> GetTokenCapabilitiesByAcessorAsync(string path, string tokenAccessor);
 
         /// <summary>
+        /// Gets the capabilities of the calling token.
+        /// </summary>
+        /// <param name="path"><para>[required]</para>
+        /// Path on which the token's capabilities will be checked.</param>
+        /// <returns>The list of capabilities.</returns>
+        Task<Secret<TokenCapability>> GetCallingTokenCapabilitiesAsync(string path);
+
+        /// <summary>
+        /// Gets the request headers configured to be audited.
+        /// </summary>
+        /// <returns></returns>
+        Task<Secret<RequestHeaderSet>> GetAuditRequestHeadersAsync();
+
+        /// <summary>
+        /// Gets a particular request header.
+        /// </summary>
+        /// <param name="name">The name of the header.</param>
+        /// <returns>Header details.</returns>
+        Task<Secret<RequestHeader>> GetAuditRequestHeaderAsync(string name);
+
+        /// <summary>
+        /// Creates/updates the request header to be audited.
+        /// </summary>
+        /// <param name="name"><para>[required]</para>
+        /// The name fo the header.
+        /// </param>
+        /// <param name="hmac"><para>[optional]</para>
+        /// Specifies if this header's value should be HMAC'ed in the audit logs.
+        /// </param>
+        /// <returns>The task.</returns>
+        Task PutAuditRequestHeaderAsync(string name, bool hmac = false);
+
+        /// <summary>
+        /// Deletes a particular request header.
+        /// </summary>
+        /// <param name="name">The name of the header.</param>
+        /// <returns>Header details.</returns>
+        Task DeleteAuditRequestHeaderAsync(string name);
+
+        /// <summary>
         /// Gets the initialization status of Vault.
         /// This is an unauthenticated call and does not use the credentials.
         /// </summary>
@@ -148,7 +188,6 @@ namespace VaultSharp.Backends.System
         /// An object including the (possibly encrypted, if pgp_keys was provided) master keys and initial root token.
         /// </returns>
         Task<MasterCredentials> InitAsync(InitOptions initOptions);
-
 
         /// <summary>
         /// Seals the Vault. In HA mode, only an active node can be sealed. 

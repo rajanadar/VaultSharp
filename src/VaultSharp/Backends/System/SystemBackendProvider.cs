@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using VaultSharp.Backends.Auth;
@@ -101,6 +102,67 @@ namespace VaultSharp.Backends.System
         {
             var requestData = new { path = path, accessor = tokenAccessor };
             return await _polymath.MakeVaultApiRequest<Secret<TokenCapability>>("v1/sys/capabilities-accessor", HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<TokenCapability>> GetCallingTokenCapabilitiesAsync(string path)
+        {
+            var requestData = new { path = path };
+            return await _polymath.MakeVaultApiRequest<Secret<TokenCapability>>("v1/sys/capabilities-self", HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<RequestHeaderSet>> GetAuditRequestHeadersAsync()
+        {
+            var response = new RequestHeaderSet();
+
+            var result = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, Dictionary<string, Dictionary<string, bool>>>>>("v1/sys/config/auditing/request-headers", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+
+            if (result.Data != null && result.Data.Count == 1)
+            {
+                foreach (var keyValuePair in result.Data.First().Value)
+                {
+                    var header = new RequestHeader
+                    {
+                        Name = keyValuePair.Key,
+                        HMAC = keyValuePair.Value.First().Value
+                    };
+
+                    response.Headers.Add(header);
+                }
+            }
+
+
+            return _polymath.GetMappedSecret(result, response);
+        }
+
+        public async Task<Secret<RequestHeader>> GetAuditRequestHeaderAsync(string name)
+        {
+            var result = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, Dictionary<string, bool>>>>("v1/sys/config/auditing/request-headers/" + name, HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+
+            if (result.Data != null && result.Data.Count == 1)
+            {
+                return _polymath.GetMappedSecret(result, new RequestHeader
+                {
+                    Name = result.Data.First().Key,
+                    HMAC = result.Data.First().Value.First().Value
+                });
+            }
+
+            return null;
+        }
+
+        public async Task PutAuditRequestHeaderAsync(string name, bool hmac = false)
+        {
+            var requestData = new
+            {
+                hmac = hmac
+            };
+
+            await _polymath.MakeVaultApiRequest<Secret<dynamic>>("v1/sys/config/auditing/request-headers/" + name, HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task DeleteAuditRequestHeaderAsync(string name)
+        {
+            await _polymath.MakeVaultApiRequest<Secret<dynamic>>("v1/sys/config/auditing/request-headers/" + name, HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<bool> GetInitStatusAsync()
