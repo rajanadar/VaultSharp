@@ -157,12 +157,27 @@ namespace VaultSharp.Backends.System
                 hmac = hmac
             };
 
-            await _polymath.MakeVaultApiRequest<Secret<dynamic>>("v1/sys/config/auditing/request-headers/" + name, HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/sys/config/auditing/request-headers/" + name, HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task DeleteAuditRequestHeaderAsync(string name)
         {
-            await _polymath.MakeVaultApiRequest<Secret<dynamic>>("v1/sys/config/auditing/request-headers/" + name, HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/sys/config/auditing/request-headers/" + name, HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<ControlGroup>> GetControlGroupConfigAsync()
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<ControlGroup>>("v1/sys/config/control-group", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task ConfigureControlGroupAsync(string maxTimeToLive)
+        {
+            await _polymath.MakeVaultApiRequest("v1/sys/config/control-group", HttpMethod.Put, new { max_ttl = maxTimeToLive }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task DeleteControlGroupConfigAsync()
+        {
+            await _polymath.MakeVaultApiRequest("v1/sys/config/control-group", HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<bool> GetInitStatusAsync()

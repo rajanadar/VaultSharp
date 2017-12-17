@@ -268,7 +268,7 @@ namespace VaultSharp.Samples
             DisplayJson(newReqHeaders);
             Assert.Equal(reqHeaders.Data.Headers.Count + 2, newReqHeaders.Data.Headers.Count);
 
-            // needs to be lowercase
+            // needs to be lowercase for now. there is a bug in Vault.
             // https://github.com/hashicorp/vault/issues/3701
             var header = _authenticatedVaultClient.V1.System.GetAuditRequestHeaderAsync(headerValue.ToLowerInvariant()).Result;
             DisplayJson(header);
@@ -279,6 +279,21 @@ namespace VaultSharp.Samples
 
             reqHeaders = _authenticatedVaultClient.V1.System.GetAuditRequestHeadersAsync().Result;
             Assert.False(reqHeaders.Data.Headers.Any());
+
+            // control group config
+            // blocked due to https://github.com/hashicorp/vault/issues/3702
+            /*
+            var cgconfig = _authenticatedVaultClient.V1.System.GetControlGroupConfigAsync().Result;
+            DisplayJson(cgconfig);
+
+            _authenticatedVaultClient.V1.System.ConfigureControlGroupAsync("4h").Wait();
+
+            cgconfig = _authenticatedVaultClient.V1.System.GetControlGroupConfigAsync().Result;
+            DisplayJson(cgconfig);
+            Assert.Equal("4h", cgconfig.Data.MaxTimeToLive);
+
+            _authenticatedVaultClient.V1.System.DeleteControlGroupConfigAsync().Wait();
+            */
         }
 
         private static VaultClientSettings GetVaultClientSettings()

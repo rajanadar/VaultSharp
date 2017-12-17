@@ -169,6 +169,25 @@ namespace VaultSharp.Backends.System
         Task DeleteAuditRequestHeaderAsync(string name);
 
         /// <summary>
+        /// Gets the current Control Group configuration.
+        /// </summary>
+        /// <returns>Config</returns>
+        Task<Secret<ControlGroup>> GetControlGroupConfigAsync();
+
+        /// <summary>
+        /// Configures control groups.
+        /// </summary>
+        /// <param name="maxTimeToLive">The maximum ttl for a control group wrapping token. This can be provided in seconds or duration (2h).</param>
+        /// <returns>Task</returns>
+        Task ConfigureControlGroupAsync(string maxTimeToLive);
+
+        /// <summary>
+        /// Removes any control group configuration.
+        /// </summary>
+        /// <returns>Task</returns>
+        Task DeleteControlGroupConfigAsync();
+
+        /// <summary>
         /// Gets the initialization status of Vault.
         /// This is an unauthenticated call and does not use the credentials.
         /// </summary>
