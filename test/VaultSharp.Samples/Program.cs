@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using Newtonsoft.Json;
 using VaultSharp.Backends;
 using VaultSharp.Backends.Auth;
 using VaultSharp.Backends.Auth.Token;
 using VaultSharp.Backends.System;
+using VaultSharp.Core;
 using Xunit;
 
 namespace VaultSharp.Samples
@@ -48,8 +50,11 @@ namespace VaultSharp.Samples
 
         private static void RunSystemBackendSamples()
         {
-            var exception = Assert.ThrowsAsync<Exception>(() => _unauthenticatedVaultClient.V1.System.GetSealStatusAsync()).Result;
+            var exception = Assert.ThrowsAsync<VaultApiException>(() => _unauthenticatedVaultClient.V1.System.GetSealStatusAsync()).Result;
             Assert.Contains("not yet initialized", exception.Message);
+            Assert.Equal(HttpStatusCode.BadRequest, exception.HttpStatusCode);
+            Assert.Equal((int)HttpStatusCode.BadRequest, exception.StatusCode);
+            Assert.Contains("not yet initialized", exception.ApiErrors.First());
 
             // init
             var initStatus = _unauthenticatedVaultClient.V1.System.GetInitStatusAsync().Result;

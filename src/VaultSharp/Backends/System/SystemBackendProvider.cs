@@ -231,5 +231,15 @@ namespace VaultSharp.Backends.System
         {
             throw new NotImplementedException();
         }
+
+        public Task<Secret<CORSConfig>> GetCORSConfigAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ConfigureCORSAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

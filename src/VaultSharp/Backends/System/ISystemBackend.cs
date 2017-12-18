@@ -171,12 +171,18 @@ namespace VaultSharp.Backends.System
         /// <summary>
         /// Gets the current Control Group configuration.
         /// </summary>
+        /// <remarks>
+        /// Requires Enterprise Vault.
+        /// </remarks>
         /// <returns>Config</returns>
         Task<Secret<ControlGroup>> GetControlGroupConfigAsync();
 
         /// <summary>
         /// Configures control groups.
         /// </summary>
+        /// <remarks>
+        /// Requires Enterprise Vault.
+        /// </remarks>
         /// <param name="maxTimeToLive">The maximum ttl for a control group wrapping token. This can be provided in seconds or duration (2h).</param>
         /// <returns>Task</returns>
         Task ConfigureControlGroupAsync(string maxTimeToLive);
@@ -184,8 +190,23 @@ namespace VaultSharp.Backends.System
         /// <summary>
         /// Removes any control group configuration.
         /// </summary>
+        /// <remarks>
+        /// Requires Enterprise Vault.
+        /// </remarks>
         /// <returns>Task</returns>
         Task DeleteControlGroupConfigAsync();
+
+        /// <summary>
+        /// Gets the current CORS configuration.
+        /// </summary>
+        /// <returns>Config</returns>
+        Task<Secret<CORSConfig>> GetCORSConfigAsync();
+
+        /// <summary>
+        /// Gets the current CORS configuration.
+        /// </summary>
+        /// <returns>Config</returns>
+        Task ConfigureCORSAsync();
 
         /// <summary>
         /// Gets the initialization status of Vault.
