@@ -240,6 +240,63 @@ namespace VaultSharp.Backends.System
         Task<Secret<ControlGroupRequestStatus>> CheckControlGroupStatusAsync(string accessor);
 
         /// <summary>
+        /// Gets the configuration and progress of the current root generation attempt.
+        /// </summary>
+        /// <returns>The root status</returns>
+        Task<RootTokenGenerationStatus> GetRootTokenGenerationStatusAsync();
+
+        /// <summary>
+        /// Initializes a new root generation attempt. 
+        /// Only a single root generation attempt can take place at a time. 
+        /// One (and only one) of <see cref="base64EncodedOneTimePassword"/> or <see cref="pgpKey"/> are required.
+        /// </summary>
+        /// <param name="base64EncodedOneTimePassword"><para>[optional]</para>
+        /// A base64-encoded 16-byte value. The raw bytes of the token will be XOR'd with this 
+        /// value before being returned to the final unseal key provider.</param>
+        /// <param name="pgpKey"><para>[optional]</para>
+        /// A base64-encoded PGP public key. The raw bytes of the token will be encrypted with this value before being 
+        /// returned to the final unseal key provider.</param>
+        /// <returns>The root token generation status.</returns>
+        Task<RootTokenGenerationStatus> InitiateRootTokenGenerationAsync(string base64EncodedOneTimePassword, string pgpKey);
+
+        /// <summary>
+        /// Cancels any in-progress root generation attempt. 
+        /// This clears any progress made. 
+        /// This must be called to change the OTP or PGP key being used.
+        /// </summary>
+        /// <returns>The task.</returns>
+        Task CancelRootTokenGenerationAsync();
+
+        /// <summary>
+        /// Continues the root generation process.
+        /// Enter a single master key share to progress the root generation attempt. 
+        /// If the threshold number of master key shares is reached, 
+        /// Vault will complete the root generation and issue the new token. 
+        /// Otherwise, this API must be called multiple times until that threshold is met. 
+        /// The attempt nonce must be provided with each call.
+        /// </summary>
+        /// <param name="masterShareKey"><para>[required]</para>
+        /// A single master share key.</param>
+        /// <param name="nonce"><para>[required]</para>
+        /// The nonce of the root generation attempt.</param>
+        /// <returns>
+        /// An object indicating the attempt nonce, and completion status, 
+        /// and the encoded root token, if the attempt is complete.
+        /// </returns>
+        Task<RootTokenGenerationStatus> ContinueRootTokenGenerationAsync(string masterShareKey, string nonce);
+
+        /// <summary>
+        /// Generates a root token in a single call. 
+        /// Call this after calling the <see cref="InitiateRootTokenGenerationAsync"/> method.
+        /// Provide all the master keys together.
+        /// </summary>
+        /// <param name="thresholdMasterShareKeys">Threshold master share keys.</param>
+        /// <param name="nonce"><para>[required]</para>
+        /// The nonce of the root generation attempt.</param>
+        /// <returns>The final Status after all the share keys are applied.</returns>
+        Task<RootTokenGenerationStatus> QuickRootTokenGenerationAsync(string[] thresholdMasterShareKeys, string nonce);
+
+        /// <summary>
         /// Gets the initialization status of Vault.
         /// This is an unauthenticated call and does not use the credentials.
         /// </summary>

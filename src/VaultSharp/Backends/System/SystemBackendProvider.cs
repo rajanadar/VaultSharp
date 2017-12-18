@@ -205,6 +205,51 @@ namespace VaultSharp.Backends.System
             return await _polymath.MakeVaultApiRequest<Secret<ControlGroupRequestStatus>>("v1/sys/control-group/request", HttpMethod.Post, new { accessor = accessor }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<RootTokenGenerationStatus> GetRootTokenGenerationStatusAsync()
+        {
+            return await _polymath.MakeVaultApiRequest<RootTokenGenerationStatus>("v1/sys/generate-root/attempt", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<RootTokenGenerationStatus> InitiateRootTokenGenerationAsync(string base64EncodedOneTimePassword, string pgpKey)
+        {
+            var requestData = new { otp = base64EncodedOneTimePassword, pgpKey = pgpKey };
+            return await _polymath.MakeVaultApiRequest<RootTokenGenerationStatus>("v1/sys/generate-root/attempt", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task CancelRootTokenGenerationAsync()
+        {
+            await _polymath.MakeVaultApiRequest("v1/sys/generate-root/attempt", HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<RootTokenGenerationStatus> ContinueRootTokenGenerationAsync(string masterShareKey, string nonce)
+        {
+            var requestData = new
+            {
+                key = masterShareKey,
+                nonce = nonce
+            };
+
+            return await _polymath.MakeVaultApiRequest<RootTokenGenerationStatus>("v1/sys/generate-root/update", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<RootTokenGenerationStatus> QuickRootTokenGenerationAsync(string[] thresholdMasterShareKeys, string nonce)
+        {
+            RootTokenGenerationStatus finalStatus = null;
+
+            foreach (var masterShareKey in thresholdMasterShareKeys)
+            {
+                finalStatus = await ContinueRootTokenGenerationAsync(masterShareKey, nonce);
+
+                // don't continue, once threshold keys are achieved.
+                if (finalStatus.Complete)
+                {
+                    break;
+                }
+            }
+
+            return finalStatus;
+        }
+
         public async Task<bool> GetInitStatusAsync()
         {
             var response = await _polymath.MakeVaultApiRequest<dynamic>("v1/sys/init", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);

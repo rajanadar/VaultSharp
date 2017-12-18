@@ -352,6 +352,52 @@ namespace VaultSharp.Samples
             DisplayJson(cgStatus);
             Assert.True(cgStatus.Data.Approved);
             */
+
+            // root token generation
+            var rootStatus = _unauthenticatedVaultClient.V1.System.GetRootTokenGenerationStatusAsync().Result;
+            DisplayJson(rootStatus);
+            Assert.False(rootStatus.Started);
+
+            var otp = Convert.ToBase64String(Enumerable.Range(0, 16).Select(i => (byte)i).ToArray());
+            rootStatus = _unauthenticatedVaultClient.V1.System.InitiateRootTokenGenerationAsync(otp, null).Result;
+            DisplayJson(rootStatus);
+            Assert.True(rootStatus.Started);
+            Assert.NotNull(rootStatus.Nonce);
+
+            foreach (var masterKey in masterCredentials.MasterKeys)
+            {
+                rootStatus = _unauthenticatedVaultClient.V1.System.ContinueRootTokenGenerationAsync(masterKey, rootStatus.Nonce).Result;
+                DisplayJson(rootStatus);
+
+                if (rootStatus.Complete)
+                {
+                    break;
+                }
+            }
+
+            Assert.True(rootStatus.Complete);
+            Assert.NotNull(rootStatus.EncodedRootToken);
+
+            rootStatus = _unauthenticatedVaultClient.V1.System.InitiateRootTokenGenerationAsync(otp, null).Result;
+            DisplayJson(rootStatus);
+
+            rootStatus = _unauthenticatedVaultClient.V1.System.ContinueRootTokenGenerationAsync(masterCredentials.MasterKeys[0], rootStatus.Nonce).Result;
+            DisplayJson(rootStatus);
+            Assert.True(rootStatus.Started);
+
+            _unauthenticatedVaultClient.V1.System.CancelRootTokenGenerationAsync().Wait();
+
+            rootStatus = _unauthenticatedVaultClient.V1.System.GetRootTokenGenerationStatusAsync().Result;
+            DisplayJson(rootStatus);
+            Assert.False(rootStatus.Started);
+
+            rootStatus = _unauthenticatedVaultClient.V1.System.InitiateRootTokenGenerationAsync(otp, null).Result;
+            DisplayJson(rootStatus);
+
+            rootStatus = _unauthenticatedVaultClient.V1.System.QuickRootTokenGenerationAsync(masterCredentials.MasterKeys, rootStatus.Nonce).Result;
+            DisplayJson(rootStatus);
+            Assert.True(rootStatus.Complete);
+            Assert.NotNull(rootStatus.EncodedRootToken);
         }
 
         private static VaultClientSettings GetVaultClientSettings()
