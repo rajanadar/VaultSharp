@@ -195,6 +195,16 @@ namespace VaultSharp.Backends.System
             await _polymath.MakeVaultApiRequest("v1/sys/config/cors", HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<Secret<ControlGroupRequestStatus>> AuthorizeControlGroupAsync(string accessor)
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<ControlGroupRequestStatus>>("v1/sys/control-group/authorize", HttpMethod.Post, new {accessor = accessor}).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<ControlGroupRequestStatus>> CheckControlGroupStatusAsync(string accessor)
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<ControlGroupRequestStatus>>("v1/sys/control-group/request", HttpMethod.Post, new { accessor = accessor }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
         public async Task<bool> GetInitStatusAsync()
         {
             var response = await _polymath.MakeVaultApiRequest<dynamic>("v1/sys/init", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);

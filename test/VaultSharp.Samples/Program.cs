@@ -301,6 +301,8 @@ namespace VaultSharp.Samples
             _authenticatedVaultClient.V1.System.DeleteControlGroupConfigAsync().Wait();
             */
 
+            // cors config
+
             var corsConfig = _authenticatedVaultClient.V1.System.GetCORSConfigAsync().Result;
             DisplayJson(corsConfig);
             Assert.False(corsConfig.Data.Enabled);
@@ -331,6 +333,25 @@ namespace VaultSharp.Samples
             corsConfig = _authenticatedVaultClient.V1.System.GetCORSConfigAsync().Result;
             DisplayJson(corsConfig);
             Assert.False(corsConfig.Data.Enabled);
+
+            // control group config.
+            // only enterpise vault.
+
+            /*
+            var cgTokenAccessor = "0ad21b78-e9bb-64fa-88b8-1e38db217bde";
+
+            var cgStatus = _authenticatedVaultClient.V1.System.CheckControlGroupStatusAsync(cgTokenAccessor).Result;
+            DisplayJson(cgStatus);
+            Assert.False(cgStatus.Data.Approved);
+
+            cgStatus = _authenticatedVaultClient.V1.System.AuthorizeControlGroupAsync(cgTokenAccessor).Result;
+            DisplayJson(cgStatus);
+            Assert.False(cgStatus.Data.Approved);
+
+            cgStatus = _authenticatedVaultClient.V1.System.CheckControlGroupStatusAsync(cgTokenAccessor).Result;
+            DisplayJson(cgStatus);
+            Assert.True(cgStatus.Data.Approved);
+            */
         }
 
         private static VaultClientSettings GetVaultClientSettings()

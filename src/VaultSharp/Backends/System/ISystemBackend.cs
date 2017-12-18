@@ -218,6 +218,28 @@ namespace VaultSharp.Backends.System
         Task DeleteCORSConfigAsync();
 
         /// <summary>
+        /// Authorizes a control group request.
+        /// </summary>
+        /// <param name="accessor"><para>[required]</para>
+        /// The accessor for the control group wrapping token.</param>
+        /// <remarks>
+        /// Requires Enterprise Vault.
+        /// </remarks>
+        /// <returns>Authorization.</returns>
+        Task<Secret<ControlGroupRequestStatus>> AuthorizeControlGroupAsync(string accessor);
+
+        /// <summary>
+        /// Checks the status of a control group request.
+        /// </summary>
+        /// <param name="accessor"><para>[required]</para>
+        /// The accessor for the control group wrapping token.</param>
+        /// <remarks>
+        /// Requires Enterprise Vault.
+        /// </remarks>
+        /// <returns>The status.</returns>
+        Task<Secret<ControlGroupRequestStatus>> CheckControlGroupStatusAsync(string accessor);
+
+        /// <summary>
         /// Gets the initialization status of Vault.
         /// This is an unauthenticated call and does not use the credentials.
         /// </summary>
