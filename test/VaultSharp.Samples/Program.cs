@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
@@ -299,6 +300,37 @@ namespace VaultSharp.Samples
 
             _authenticatedVaultClient.V1.System.DeleteControlGroupConfigAsync().Wait();
             */
+
+            var corsConfig = _authenticatedVaultClient.V1.System.GetCORSConfigAsync().Result;
+            DisplayJson(corsConfig);
+            Assert.False(corsConfig.Data.Enabled);
+
+            var newCorsConfig = new CORSConfig
+            {
+                Enabled = true,
+                AllowedHeaders = new List<string>
+                {
+                    "header1",
+                    "header2"
+                },
+                AllowedOrigins = new List<string>
+                {
+                    "https://origin1",
+                    "https://origin2"
+                }
+            };
+
+            _authenticatedVaultClient.V1.System.ConfigureCORSAsync(newCorsConfig).Wait();
+
+            corsConfig = _authenticatedVaultClient.V1.System.GetCORSConfigAsync().Result;
+            DisplayJson(corsConfig);
+            Assert.True(corsConfig.Data.Enabled);
+            Assert.Contains("header1", corsConfig.Data.AllowedHeaders);
+
+            _authenticatedVaultClient.V1.System.DeleteCORSConfigAsync().Wait();
+            corsConfig = _authenticatedVaultClient.V1.System.GetCORSConfigAsync().Result;
+            DisplayJson(corsConfig);
+            Assert.False(corsConfig.Data.Enabled);
         }
 
         private static VaultClientSettings GetVaultClientSettings()

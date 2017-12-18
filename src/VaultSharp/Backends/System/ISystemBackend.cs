@@ -203,10 +203,19 @@ namespace VaultSharp.Backends.System
         Task<Secret<CORSConfig>> GetCORSConfigAsync();
 
         /// <summary>
-        /// Gets the current CORS configuration.
+        /// Configures CORS.
         /// </summary>
-        /// <returns>Config</returns>
-        Task ConfigureCORSAsync();
+        /// <param name="corsConfig">
+        /// The CORS Configuration.
+        /// </param>
+        /// <returns>Task</returns>
+        Task ConfigureCORSAsync(CORSConfig corsConfig);
+
+        /// <summary>
+        /// Deletes the current CORS configuration.
+        /// </summary>
+        /// <returns>Task</returns>
+        Task DeleteCORSConfigAsync();
 
         /// <summary>
         /// Gets the initialization status of Vault.

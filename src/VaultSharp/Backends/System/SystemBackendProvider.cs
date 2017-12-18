@@ -180,6 +180,21 @@ namespace VaultSharp.Backends.System
             await _polymath.MakeVaultApiRequest("v1/sys/config/control-group", HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<Secret<CORSConfig>> GetCORSConfigAsync()
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<CORSConfig>>("v1/sys/config/cors", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task ConfigureCORSAsync(CORSConfig corsConfig)
+        {
+            await _polymath.MakeVaultApiRequest("v1/sys/config/cors", HttpMethod.Put, corsConfig).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task DeleteCORSConfigAsync()
+        {
+            await _polymath.MakeVaultApiRequest("v1/sys/config/cors", HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
         public async Task<bool> GetInitStatusAsync()
         {
             var response = await _polymath.MakeVaultApiRequest<dynamic>("v1/sys/init", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
@@ -228,16 +243,6 @@ namespace VaultSharp.Backends.System
         }
 
         public Task<string> HashWithAuditBackendAsync(string mountPoint, string inputToHash)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Secret<CORSConfig>> GetCORSConfigAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task ConfigureCORSAsync()
         {
             throw new NotImplementedException();
         }
