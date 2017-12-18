@@ -61,6 +61,25 @@ namespace VaultSharp.Samples
             var initStatus = _unauthenticatedVaultClient.V1.System.GetInitStatusAsync().Result;
             Assert.False(initStatus);
 
+            // pre-init health checks.
+
+            var health = _unauthenticatedVaultClient.V1.System.GetHealthStatusAsync().Result;
+            DisplayJson(health);
+            Assert.False(health.HealthCheckSucceeded);
+            Assert.False(health.Initialized);
+
+            health = _unauthenticatedVaultClient.V1.System.GetHealthStatusAsync(uninitializedStatusCode: 300).Result;
+            DisplayJson(health);
+            Assert.False(health.HealthCheckSucceeded);
+            Assert.False(health.Initialized);
+
+            health = _unauthenticatedVaultClient.V1.System.GetHealthStatusAsync(uninitializedStatusCode: 200).Result;
+            DisplayJson(health);
+            Assert.True(health.HealthCheckSucceeded);
+            Assert.False(health.Initialized);
+
+            // do the init
+
             var initOptions = new InitOptions
             {
                 SecretShares = 10,
@@ -398,6 +417,12 @@ namespace VaultSharp.Samples
             DisplayJson(rootStatus);
             Assert.True(rootStatus.Complete);
             Assert.NotNull(rootStatus.EncodedRootToken);
+
+            // post init health checks.
+            health = _unauthenticatedVaultClient.V1.System.GetHealthStatusAsync().Result;
+            DisplayJson(health);
+            Assert.True(health.HealthCheckSucceeded);
+            Assert.True(health.Initialized);
         }
 
         private static VaultClientSettings GetVaultClientSettings()

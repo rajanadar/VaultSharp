@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using VaultSharp.Backends.Auth;
 using VaultSharp.Core;
@@ -295,6 +297,45 @@ namespace VaultSharp.Backends.System
         /// The nonce of the root generation attempt.</param>
         /// <returns>The final Status after all the share keys are applied.</returns>
         Task<RootTokenGenerationStatus> QuickRootTokenGenerationAsync(string[] thresholdMasterShareKeys, string nonce);
+
+        /// <summary>
+        /// Gets the health status of Vault. This provides a simple way to monitor the health of a Vault instance.
+        /// This is an unauthenticated call and does not use the credentials.
+        /// </summary>
+        /// <param name="standbyOk"><para>[optional]</para>
+        /// A flag to indicate that being a standby should still return the active status code 
+        /// instead of the standby status code of HTTP 429 (or whatever is provided as standbyStatusCode)
+        /// DEFAULTs to <value>false</value>, meaning a standby code will be returned.
+        /// This is useful when Vault is behind a non-configurable load balance that just wants a 200-level response.
+        /// </param>
+        /// <param name="activeStatusCode"><para>[optional]</para>
+        /// A user defined status code provided to indicate the status code that should be returned 
+        /// for an active node instead of the default successful response of HTTP 200.
+        /// DEFAULTs to <value>200</value>, meaning the default HTTP 200 Status code will be returned.
+        /// </param>
+        /// <param name="standbyStatusCode"><para>[optional]</para>
+        /// A user defined status code provided to indicate the status code that should be returned 
+        /// for an standby node instead of the default error response of HTTP 429.
+        /// DEFAULTs to <value>429</value>, meaning the default HTTP 429 Status code will be returned.
+        /// </param>
+        /// <param name="sealedStatusCode"><para>[optional]</para>
+        /// A user defined status code provided to indicate the status code that should be returned 
+        /// for an sealed node instead of the default error response of HTTP 503.
+        /// DEFAULTs to <value>503</value>, meaning the default HTTP 503 Status code will be returned.
+        /// </param>
+        /// <param name="uninitializedStatusCode"><para>[optional]</para>
+        /// A user defined status code provided to indicate the status code that should be returned 
+        /// for an uninitialized vault node instead of the default error response of HTTP 501.
+        /// DEFAULTs to <value>501</value>, meaning the default HTTP 501 Status code will be returned.
+        /// </param>
+        /// <param name="queryHttpMethod"><para>[optional]</para>
+        /// The <see cref="HttpMethod"/> to be used to query vault. By default <see cref="HttpMethod.Get"/> will be used.
+        /// You can change it to <see cref="HttpMethod.Head"/>.
+        /// </param>
+        /// <returns>
+        /// The health status.
+        /// </returns>
+        Task<HealthStatus> GetHealthStatusAsync(bool standbyOk = false, int activeStatusCode = (int)HttpStatusCode.OK, int standbyStatusCode = 429, int sealedStatusCode = (int)HttpStatusCode.ServiceUnavailable, int uninitializedStatusCode = (int)HttpStatusCode.NotImplemented, HttpMethod queryHttpMethod = null);
 
         /// <summary>
         /// Gets the initialization status of Vault.

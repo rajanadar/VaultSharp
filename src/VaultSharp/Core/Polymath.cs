@@ -47,7 +47,7 @@ namespace VaultSharp.Core
             await MakeVaultApiRequest<dynamic>(resourcePath, httpMethod, requestData, rawResponse);
         }
 
-        public async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Func<int, string, TResponse> customProcessor = null, string wrapTimeToLive = null) where TResponse : class
+        public async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, string wrapTimeToLive = null) where TResponse : class
         {
             var headers = new Dictionary<string, string>();
 
@@ -61,7 +61,7 @@ namespace VaultSharp.Core
                 headers.Add(VaultWrapTimeToLiveHeaderKey, wrapTimeToLive);
             }
 
-            return await MakeRequestAsync(resourcePath, httpMethod, requestData, headers, rawResponse, customProcessor);
+            return await MakeRequestAsync<TResponse>(resourcePath, httpMethod, requestData, headers, rawResponse);
         }
 
         public Secret<T2> GetMappedSecret<T1, T2>(Secret<T1> sourceSecret, T2 destinationData)
@@ -81,7 +81,7 @@ namespace VaultSharp.Core
 
         /// //////
 
-        protected async Task<TResponse> MakeRequestAsync<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, IDictionary<string, string> headers = null, bool rawResponse = false, Func<int, string, TResponse> customProcessor = null) where TResponse : class
+        protected async Task<TResponse> MakeRequestAsync<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, IDictionary<string, string> headers = null, bool rawResponse = false, Action<int, string> customProcessor = null) where TResponse : class
         {
             try
             {
@@ -162,11 +162,6 @@ namespace VaultSharp.Core
                     return default(TResponse);
                 }
 
-                if (customProcessor != null)
-                {
-                    return customProcessor((int)httpResponseMessage.StatusCode, responseText);
-                }
-
                 throw new VaultApiException(httpResponseMessage.StatusCode, responseText);
             }
             catch (WebException ex)
@@ -181,11 +176,6 @@ namespace VaultSharp.Core
                         {
                             responseText =
                                 await stream.ReadToEndAsync().ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
-                        }
-
-                        if (customProcessor != null)
-                        {
-                            return customProcessor((int)response.StatusCode, responseText);
                         }
 
                         throw new VaultApiException(response.StatusCode, responseText);

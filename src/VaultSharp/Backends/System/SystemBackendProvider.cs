@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using VaultSharp.Backends.Auth;
 using VaultSharp.Core;
 
@@ -197,7 +199,7 @@ namespace VaultSharp.Backends.System
 
         public async Task<Secret<ControlGroupRequestStatus>> AuthorizeControlGroupAsync(string accessor)
         {
-            return await _polymath.MakeVaultApiRequest<Secret<ControlGroupRequestStatus>>("v1/sys/control-group/authorize", HttpMethod.Post, new {accessor = accessor}).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<ControlGroupRequestStatus>>("v1/sys/control-group/authorize", HttpMethod.Post, new { accessor = accessor }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<ControlGroupRequestStatus>> CheckControlGroupStatusAsync(string accessor)
@@ -248,6 +250,102 @@ namespace VaultSharp.Backends.System
             }
 
             return finalStatus;
+        }
+
+        public async Task<HealthStatus> GetHealthStatusAsync(bool standbyOk = false,
+            int activeStatusCode = (int)HttpStatusCode.OK, int standbyStatusCode = 429,
+            int sealedStatusCode = (int)HttpStatusCode.ServiceUnavailable,
+            int uninitializedStatusCode = (int)HttpStatusCode.NotImplemented, HttpMethod queryHttpMethod = null)
+        {
+            return await Task.FromResult(new HealthStatus());
+
+            /*
+
+            var healthStatus = new HealthStatus();
+            var expectedFailure = false;
+
+
+            if (queryHttpMethod != HttpMethod.Head)
+            {
+                queryHttpMethod = HttpMethod.Get;
+            }
+
+            var queryStringBuilder = new List<string>();
+
+            if (standbyOk)
+            {
+                queryStringBuilder.Add("standbyok=true");
+            }
+
+            if (activeStatusCode != (int)HttpStatusCode.OK)
+            {
+                queryStringBuilder.Add("activecode=" + activeStatusCode);
+            }
+
+            if (standbyStatusCode != 429)
+            {
+                queryStringBuilder.Add("standbycode=" + standbyStatusCode);
+            }
+
+            if (sealedStatusCode != (int)HttpStatusCode.ServiceUnavailable)
+            {
+                queryStringBuilder.Add("sealedcode=" + sealedStatusCode);
+            }
+
+            if (uninitializedStatusCode != (int)HttpStatusCode.NotImplemented)
+            {
+                queryStringBuilder.Add("uninitcode=" + uninitializedStatusCode);
+            }
+
+            var resourcePath = "v1/sys/health" + (queryStringBuilder.Any() ? ("?" + string.Join("&", queryStringBuilder)) : string.Empty);
+
+            try
+            {
+                healthStatus = await _polymath.MakeVaultApiRequest<HealthStatus>(resourcePath, queryHttpMethod);
+
+            }
+            catch (VaultApiException vaultApiException)
+            {
+                healthStatus = JsonConvert.DeserializeObject<HealthStatus>(vaultApiException.Message);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+
+            var healthStatus = await _polymath.MakeVaultApiRequest<HealthStatus>(resourcePath, queryHttpMethod,
+                    customProcessor: (statusCode, responseText) =>
+                    {
+                        if (statusCode == activeStatusCode
+                            || (statusCode == standbyStatusCode && !standbyOk)
+                            || statusCode == sealedStatusCode
+                            || statusCode == uninitializedStatusCode)
+                        {
+                            expectedFailure = true;
+
+                            if (!string.IsNullOrWhiteSpace(responseText))
+                            {
+                                failureHealthStatus = JsonConvert.DeserializeObject<HealthStatus>(responseText);
+                            }
+
+                            failureHealthStatus.HttpStatusCode = statusCode;
+
+                            return failureHealthStatus;
+
+                            // there is a bad case, of empty response but matching code here.
+                            // the status will have default values populated which might confuse the callers.
+                            // the workaround is for the callers to mess with the http status codes too much.
+                            // see https://github.com/hashicorp/vault/issues/1849
+                        }
+
+                        throw new VaultApiException((HttpStatusCode)statusCode, responseText);
+
+                    }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+
+            healthStatus.HealthCheckSucceeded = !expectedFailure;
+            return healthStatus;
+
+    */
         }
 
         public async Task<bool> GetInitStatusAsync()
