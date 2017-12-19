@@ -359,6 +359,14 @@ namespace VaultSharp.Backends.System
         Task<MasterCredentials> InitAsync(InitOptions initOptions);
 
         /// <summary>
+        /// Gets information about the current encryption key used by Vault
+        /// </summary>
+        /// <returns>
+        /// The status of the encryption key.
+        /// </returns>
+        Task<Secret<EncryptionKeyStatus>> GetKeyStatusAsync();
+
+        /// <summary>
         /// Seals the Vault. In HA mode, only an active node can be sealed. 
         /// Standby nodes should be restarted to get the same effect. 
         /// Requires a token with root policy or sudo capability on the path.

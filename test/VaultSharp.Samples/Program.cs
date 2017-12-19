@@ -450,6 +450,12 @@ namespace VaultSharp.Samples
             DisplayJson(rootStatus);
             Assert.True(rootStatus.Complete);
             Assert.NotNull(rootStatus.EncodedRootToken);
+
+            // get encryption key status
+
+            var keyStatus = _authenticatedVaultClient.V1.System.GetKeyStatusAsync().Result;
+            DisplayJson(keyStatus);
+            Assert.True(keyStatus.Data.SequentialKeyNumber == 1);
         }
 
         private static VaultClientSettings GetVaultClientSettings()
