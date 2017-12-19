@@ -10,14 +10,6 @@ namespace VaultSharp.Backends.System
     public class HealthStatus
     {
         /// <summary>
-        /// Gets or sets a value indicating whether [health check succeeded].
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if [health check succeeded]; otherwise, <c>false</c>.
-        /// </value>
-        public bool HealthCheckSucceeded { get; set; }
-
-        /// <summary>
         /// Gets or sets the cluster identifier.
         /// </summary>
         /// <value>
@@ -97,16 +89,10 @@ namespace VaultSharp.Backends.System
         public bool Initialized { get; set; }
 
         /// <summary>
-        /// Gets or sets the error message.
-        /// </summary>
-        /// <value>
-        /// The error message.
-        /// </value>
-        public string ErrorMessage { get; set; }
-
-        /// <summary>
         /// Gets or sets the status code returned by the Vault Server.
         /// </summary>
-        public int HttpStatusCode { get; set; }
+        /// <remarks>Our own field. Does not belong to Vault Api.</remarks>
+        [JsonProperty("status")]
+        public int? HttpStatusCode { get; set; }
     }
 }

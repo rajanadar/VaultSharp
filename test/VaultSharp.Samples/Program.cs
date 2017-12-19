@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using Newtonsoft.Json;
 using VaultSharp.Backends;
 using VaultSharp.Backends.Auth;
@@ -65,18 +66,24 @@ namespace VaultSharp.Samples
 
             var health = _unauthenticatedVaultClient.V1.System.GetHealthStatusAsync().Result;
             DisplayJson(health);
-            Assert.False(health.HealthCheckSucceeded);
             Assert.False(health.Initialized);
+            Assert.True(health.Sealed);
+            Assert.Equal((int)HttpStatusCode.NotImplemented, health.HttpStatusCode);
+
+            // do just one head check.
+            health = _unauthenticatedVaultClient.V1.System.GetHealthStatusAsync(queryHttpMethod: HttpMethod.Head).Result;
+            DisplayJson(health);
+            Assert.Equal((int)HttpStatusCode.NotImplemented, health.HttpStatusCode);
 
             health = _unauthenticatedVaultClient.V1.System.GetHealthStatusAsync(uninitializedStatusCode: 300).Result;
             DisplayJson(health);
-            Assert.False(health.HealthCheckSucceeded);
             Assert.False(health.Initialized);
+            Assert.Equal(300, health.HttpStatusCode);
 
             health = _unauthenticatedVaultClient.V1.System.GetHealthStatusAsync(uninitializedStatusCode: 200).Result;
             DisplayJson(health);
-            Assert.True(health.HealthCheckSucceeded);
             Assert.False(health.Initialized);
+            Assert.Equal((int)HttpStatusCode.OK, health.HttpStatusCode);
 
             // do the init
 
@@ -96,6 +103,19 @@ namespace VaultSharp.Samples
             DisplayJson(initStatus);
 
             Assert.True(initStatus);
+
+            // health check for initialized but sealed vault.
+            health = _unauthenticatedVaultClient.V1.System.GetHealthStatusAsync().Result;
+            DisplayJson(health);
+            Assert.True(health.Initialized);
+            Assert.True(health.Sealed);
+            Assert.Equal((int)HttpStatusCode.ServiceUnavailable, health.HttpStatusCode);
+
+            health = _unauthenticatedVaultClient.V1.System.GetHealthStatusAsync(sealedStatusCode: 404).Result;
+            DisplayJson(health);
+            Assert.True(health.Initialized);
+            Assert.True(health.Sealed);
+            Assert.Equal((int)HttpStatusCode.NotFound, health.HttpStatusCode);
 
             // unseal
 
@@ -137,6 +157,19 @@ namespace VaultSharp.Samples
                     Assert.False(unsealStatus.Sealed);
                 }
             }
+
+            // health check for unsealed and active.
+            health = _unauthenticatedVaultClient.V1.System.GetHealthStatusAsync().Result;
+            DisplayJson(health);
+            Assert.True(health.Initialized);
+            Assert.False(health.Sealed);
+            Assert.Equal((int)HttpStatusCode.OK, health.HttpStatusCode);
+
+            health = _unauthenticatedVaultClient.V1.System.GetHealthStatusAsync(activeStatusCode: 405).Result;
+            DisplayJson(health);
+            Assert.True(health.Initialized);
+            Assert.False(health.Sealed);
+            Assert.Equal((int)HttpStatusCode.MethodNotAllowed, health.HttpStatusCode);
 
             // seal it
 
@@ -417,12 +450,6 @@ namespace VaultSharp.Samples
             DisplayJson(rootStatus);
             Assert.True(rootStatus.Complete);
             Assert.NotNull(rootStatus.EncodedRootToken);
-
-            // post init health checks.
-            health = _unauthenticatedVaultClient.V1.System.GetHealthStatusAsync().Result;
-            DisplayJson(health);
-            Assert.True(health.HealthCheckSucceeded);
-            Assert.True(health.Initialized);
         }
 
         private static VaultClientSettings GetVaultClientSettings()

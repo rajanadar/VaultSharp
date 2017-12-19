@@ -47,7 +47,7 @@ namespace VaultSharp.Core
             await MakeVaultApiRequest<dynamic>(resourcePath, httpMethod, requestData, rawResponse);
         }
 
-        public async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, string wrapTimeToLive = null) where TResponse : class
+        public async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null, string wrapTimeToLive = null) where TResponse : class
         {
             var headers = new Dictionary<string, string>();
 
@@ -61,7 +61,7 @@ namespace VaultSharp.Core
                 headers.Add(VaultWrapTimeToLiveHeaderKey, wrapTimeToLive);
             }
 
-            return await MakeRequestAsync<TResponse>(resourcePath, httpMethod, requestData, headers, rawResponse);
+            return await MakeRequestAsync<TResponse>(resourcePath, httpMethod, requestData, headers, rawResponse, postResponseAction);
         }
 
         public Secret<T2> GetMappedSecret<T1, T2>(Secret<T1> sourceSecret, T2 destinationData)
@@ -81,7 +81,7 @@ namespace VaultSharp.Core
 
         /// //////
 
-        protected async Task<TResponse> MakeRequestAsync<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, IDictionary<string, string> headers = null, bool rawResponse = false, Action<int, string> customProcessor = null) where TResponse : class
+        protected async Task<TResponse> MakeRequestAsync<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, IDictionary<string, string> headers = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null) where TResponse : class
         {
             try
             {
@@ -144,6 +144,12 @@ namespace VaultSharp.Core
                 VaultClientSettings.BeforeApiRequestAction?.Invoke(_httpClient, httpRequestMessage);
 
                 var httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+
+                // internal delegate.
+                if (postResponseAction != null)
+                {
+                    postResponseAction(httpResponseMessage);
+                }
 
                 VaultClientSettings.AfterApiResponseAction?.Invoke(httpResponseMessage);
 

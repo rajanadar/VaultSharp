@@ -257,14 +257,6 @@ namespace VaultSharp.Backends.System
             int sealedStatusCode = (int)HttpStatusCode.ServiceUnavailable,
             int uninitializedStatusCode = (int)HttpStatusCode.NotImplemented, HttpMethod queryHttpMethod = null)
         {
-            return await Task.FromResult(new HealthStatus());
-
-            /*
-
-            var healthStatus = new HealthStatus();
-            var expectedFailure = false;
-
-
             if (queryHttpMethod != HttpMethod.Head)
             {
                 queryHttpMethod = HttpMethod.Get;
@@ -301,51 +293,21 @@ namespace VaultSharp.Backends.System
 
             try
             {
-                healthStatus = await _polymath.MakeVaultApiRequest<HealthStatus>(resourcePath, queryHttpMethod);
+                // we don't what status code out of 2xx was returned. hence the delegate.
 
+                int? statusCode = null;
+                var healthStatus = await _polymath.MakeVaultApiRequest<HealthStatus>(resourcePath, queryHttpMethod, postResponseAction: message => statusCode = (int)message.StatusCode);
+                healthStatus.HttpStatusCode = statusCode;
+                return healthStatus;
             }
             catch (VaultApiException vaultApiException)
             {
-                healthStatus = JsonConvert.DeserializeObject<HealthStatus>(vaultApiException.Message);
+                // for head calls, the status may be null.
+                var healthStatus = JsonConvert.DeserializeObject<HealthStatus>(vaultApiException.Message) ?? new HealthStatus();
+                healthStatus.HttpStatusCode = vaultApiException.StatusCode;
+
+                return healthStatus;
             }
-            catch (Exception e)
-            {
-                throw;
-            }
-
-            var healthStatus = await _polymath.MakeVaultApiRequest<HealthStatus>(resourcePath, queryHttpMethod,
-                    customProcessor: (statusCode, responseText) =>
-                    {
-                        if (statusCode == activeStatusCode
-                            || (statusCode == standbyStatusCode && !standbyOk)
-                            || statusCode == sealedStatusCode
-                            || statusCode == uninitializedStatusCode)
-                        {
-                            expectedFailure = true;
-
-                            if (!string.IsNullOrWhiteSpace(responseText))
-                            {
-                                failureHealthStatus = JsonConvert.DeserializeObject<HealthStatus>(responseText);
-                            }
-
-                            failureHealthStatus.HttpStatusCode = statusCode;
-
-                            return failureHealthStatus;
-
-                            // there is a bad case, of empty response but matching code here.
-                            // the status will have default values populated which might confuse the callers.
-                            // the workaround is for the callers to mess with the http status codes too much.
-                            // see https://github.com/hashicorp/vault/issues/1849
-                        }
-
-                        throw new VaultApiException((HttpStatusCode)statusCode, responseText);
-
-                    }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
-
-            healthStatus.HealthCheckSucceeded = !expectedFailure;
-            return healthStatus;
-
-    */
         }
 
         public async Task<bool> GetInitStatusAsync()
