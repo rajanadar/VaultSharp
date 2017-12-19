@@ -367,6 +367,14 @@ namespace VaultSharp.Backends.System
         Task<Secret<EncryptionKeyStatus>> GetKeyStatusAsync();
 
         /// <summary>
+        /// Gets the high availability status and current leader instance of Vault.
+        /// </summary>
+        /// <returns>
+        /// The leader info.
+        /// </returns>
+        Task<Leader> GetLeaderAsync();
+
+        /// <summary>
         /// Seals the Vault. In HA mode, only an active node can be sealed. 
         /// Standby nodes should be restarted to get the same effect. 
         /// Requires a token with root policy or sudo capability on the path.

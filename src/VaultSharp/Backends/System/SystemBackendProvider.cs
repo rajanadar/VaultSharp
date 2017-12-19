@@ -327,6 +327,11 @@ namespace VaultSharp.Backends.System
             return await _polymath.MakeVaultApiRequest<Secret<EncryptionKeyStatus>>("v1/sys/key-status", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<Leader> GetLeaderAsync()
+        {
+            return await _polymath.MakeVaultApiRequest<Leader>("v1/sys/leader", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
         public async Task SealAsync()
         {
             await _polymath.MakeVaultApiRequest("v1/sys/seal", HttpMethod.Put).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
