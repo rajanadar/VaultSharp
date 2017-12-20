@@ -375,6 +375,45 @@ namespace VaultSharp.Backends.System
         Task<Leader> GetLeaderAsync();
 
         /// <summary>
+        /// Gets the lease metadata.
+        /// </summary>
+        /// <param name="leaseId"><para>[required]</para>
+        /// The lease id.
+        /// </param>
+        /// <returns>Info.</returns>
+        Task<Secret<Lease>> GetLeaseAsync(string leaseId);
+
+        /// <summary>
+        /// Gets the list of lease ids.
+        /// </summary>
+        /// <param name="prefix"><para>[required]</para>
+        /// The prefix for the leases.
+        /// </param>
+        /// <returns>The lease ids.</returns>
+        Task<Secret<ListInfo>> GetAllLeasesAsync(string prefix);
+
+        /// <summary>
+        /// Gets the lease metadata.
+        /// </summary>
+        /// <param name="leaseId"><para>[required]</para>
+        /// The ID of the lease to extend.
+        /// </param>
+        /// <param name="incrementSeconds"><para>[required]</para>
+        /// Specifies the requested amount of time (in seconds) to extend the lease.
+        /// </param
+        /// <returns>Info.</returns>
+        Task<Secret<RenewedLease>> RenewLeaseAsync(string leaseId, int incrementSeconds);
+
+        /// <summary>
+        /// Revokes a lease immediately.
+        /// </summary>
+        /// <param name="leaseId"><para>[required]</para>
+        /// The lease id.
+        /// </param>
+        /// <returns>Task.</returns>
+        Task RevokeLeaseAsync(string leaseId);
+
+        /// <summary>
         /// Seals the Vault. In HA mode, only an active node can be sealed. 
         /// Standby nodes should be restarted to get the same effect. 
         /// Requires a token with root policy or sudo capability on the path.

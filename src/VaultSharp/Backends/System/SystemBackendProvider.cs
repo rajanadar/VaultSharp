@@ -332,6 +332,42 @@ namespace VaultSharp.Backends.System
             return await _polymath.MakeVaultApiRequest<Leader>("v1/sys/leader", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<Secret<Lease>> GetLeaseAsync(string leaseId)
+        {
+            var requestData = new
+            {
+                lease_id = leaseId
+            };
+
+            return await _polymath.MakeVaultApiRequest<Secret<Lease>>("v1/sys/leases/lookup", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<ListInfo>> GetAllLeasesAsync(string prefix)
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/sys/leases/lookup/" + prefix.TrimStart('/') + "?list=true", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<RenewedLease>> RenewLeaseAsync(string leaseId, int incrementSeconds)
+        {
+            var requestData = new
+            {
+                lease_id = leaseId,
+                increment = incrementSeconds
+            };
+
+            return await _polymath.MakeVaultApiRequest<Secret<RenewedLease>>("v1/sys/leases/renew", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task RevokeLeaseAsync(string leaseId)
+        {
+            var requestData = new
+            {
+                lease_id = leaseId
+            };
+
+            await _polymath.MakeVaultApiRequest("v1/sys/leases/revoke", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
         public async Task SealAsync()
         {
             await _polymath.MakeVaultApiRequest("v1/sys/seal", HttpMethod.Put).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
@@ -351,8 +387,7 @@ namespace VaultSharp.Backends.System
                 reset = resetCompletely
             };
 
-            var response = await _polymath.MakeVaultApiRequest<SealStatus>("v1/sys/unseal", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
-            return response;
+            return await _polymath.MakeVaultApiRequest<SealStatus>("v1/sys/unseal", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<SealStatus> QuickUnsealAsync(string[] allMasterShareKeys)

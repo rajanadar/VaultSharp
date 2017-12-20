@@ -458,7 +458,7 @@ namespace VaultSharp.Samples
             Assert.True(keyStatus.Data.SequentialKeyNumber == 1);
 
             // get leader
-            var leader = _authenticatedVaultClient.V1.System.GetLeaderAsync().Result;
+            var leader = _unauthenticatedVaultClient.V1.System.GetLeaderAsync().Result;
             DisplayJson(leader);
             Assert.NotNull(leader.Address);
         }
