@@ -5,6 +5,22 @@
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>VaultSharp.snk</AssemblyOriginatorKeyFile>
+    <Version>0.9.1.0</Version>
+    <Authors>Raja Nadar</Authors>
+    <Copyright>Copyright ©  2018 Raja Nadar. All rights reserved.</Copyright>
+    <PackageIconUrl>https://raw.githubusercontent.com/rajanadar/VaultSharp/master/VaultSharpIcon.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/rajanadar/VaultSharp</PackageProjectUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/rajanadar/VaultSharp/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/rajanadar/VaultSharp</RepositoryUrl>
+    <PackageTags>c# vault hashicorp .net netcore netstandard api secret transit encryption</PackageTags>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <Description>The most comprehensive .NET Standard 2.0 Library for HashiCorp's Vault - A Secret Management System.
+This library 
+
+supports all the APIs supported by Hashicorp's Vault. 
+
+This includes all Auth backends, all Secret Backends, System backend apis and Enterprise Vault APIs.</Description>
+    <RepositoryType>Github</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using VaultSharp.Backends.Auth;
+using VaultSharp.Backends.System.MFA;
 using VaultSharp.Core;
 
 namespace VaultSharp.Backends.System
@@ -19,9 +20,12 @@ namespace VaultSharp.Backends.System
         {
             _polymath = polymath;
             Enterprise = new EnterpriseProvider(_polymath);
+            MFA = new MFAProvider(_polymath);
         }
 
         public IEnterprise Enterprise { get; }
+
+        public IMFA MFA { get; }
 
         public async Task<Secret<Dictionary<string, AbstractAuditBackend>>> GetAuditBackendsAsync()
         {

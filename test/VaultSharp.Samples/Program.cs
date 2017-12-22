@@ -9,6 +9,7 @@ using VaultSharp.Backends;
 using VaultSharp.Backends.Auth;
 using VaultSharp.Backends.Auth.Token;
 using VaultSharp.Backends.System;
+using VaultSharp.Backends.System.MFA.Duo;
 using VaultSharp.Core;
 using Xunit;
 
@@ -483,6 +484,28 @@ namespace VaultSharp.Samples
             // lease tests. raja todo: do it when we have a call with a lease_id.
 
             // raja todo: license apis. enterprise vault only.
+
+            // mfa test cases.
+
+            // duo
+
+            /* do auth mount and then come back here. raja todo
+
+            var duoConfig = new DuoConfig
+            {
+                Name = "duo-name",
+                MountAccessor = "test_mount"
+            };
+
+            _authenticatedVaultClient.V1.System.MFA.Duo.ConfigureAsync(duoConfig).Wait();
+
+            var readDuo = _authenticatedVaultClient.V1.System.MFA.Duo.GetConfigAsync(duoConfig.Name).Result;
+            DisplayJson(readDuo);
+            Assert.Equal(duoConfig.MountAccessor, readDuo.Data.MountAccessor);
+
+            _authenticatedVaultClient.V1.System.MFA.Duo.DeleteConfigAsync(duoConfig.Name).Wait();
+
+            */
         }
 
         private static VaultClientSettings GetVaultClientSettings()

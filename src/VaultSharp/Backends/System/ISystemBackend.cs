@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using VaultSharp.Backends.Auth;
+using VaultSharp.Backends.System.MFA;
 using VaultSharp.Core;
 
 namespace VaultSharp.Backends.System
@@ -12,7 +13,15 @@ namespace VaultSharp.Backends.System
     /// </summary>
     public interface ISystemBackend
     {
+        /// <summary>
+        /// Gets the enterprise functionality provider.
+        /// </summary>
         IEnterprise Enterprise { get; }
+
+        /// <summary>
+        /// Gets the MFA provider.
+        /// </summary>
+        IMFA MFA { get; }
 
         /// <summary>
         /// Gets all the mounted audit backends (it does not list all available audit backends).
