@@ -414,6 +414,32 @@ namespace VaultSharp.Backends.System
         Task RevokeLeaseAsync(string leaseId);
 
         /// <summary>
+        /// Revokes all secrets or tokens generated under a given prefix immediately. 
+        /// Unlike <see cref="RevokePrefixLeaseAsync"/>, this path ignores backend errors encountered during revocation. 
+        /// This is potentially very dangerous and should only be used in specific emergency situations where 
+        /// errors in the backend or the connected backend service prevent normal revocation. 
+        /// By ignoring these errors, Vault abdicates responsibility for ensuring that the issued 
+        /// credentials or secrets are properly revoked and/or cleaned up.
+        /// Access to this endpoint should be tightly controlled.
+        /// </summary>
+        /// <param name="prefix"><para>[required]</para>
+        /// Specifies the prefix to revoke.
+        /// </param>
+        /// <returns>Task.</returns>
+        Task ForceRevokeLeaseAsync(string prefix);
+
+        /// <summary>
+        /// Revokes revokes all secrets (via a lease ID prefix) or tokens (via the tokens' path property) generated under a given prefix immediately. 
+        /// This requires sudo capability and access to it should be tightly controlled as it can be used 
+        /// to revoke very large numbers of secrets/tokens at once.
+        /// </summary>
+        /// <param name="prefix"><para>[required]</para>
+        /// Specifies the prefix to revoke.
+        /// </param>
+        /// <returns>Task.</returns>
+        Task RevokePrefixLeaseAsync(string prefix);
+
+        /// <summary>
         /// Seals the Vault. In HA mode, only an active node can be sealed. 
         /// Standby nodes should be restarted to get the same effect. 
         /// Requires a token with root policy or sudo capability on the path.

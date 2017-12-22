@@ -52,7 +52,8 @@ namespace VaultSharp.Samples
         private static void RunAllSamples()
         {
             // before runnig these tests, just start your local vault server with a file backend.
-            // don't init or unseal it.
+            // don't init or unseal it. these tests will do all of that.
+            // i dev on a Windows 10 x64 bit OS.
 
             RunSystemBackendSamples();
             RunAuthBackendSamples();
@@ -478,6 +479,8 @@ namespace VaultSharp.Samples
             var leader = _unauthenticatedVaultClient.V1.System.GetLeaderAsync().Result;
             DisplayJson(leader);
             Assert.NotNull(leader.Address);
+
+            // lease tests. raja todo: do it when we have a call with a lease_id.
         }
 
         private static VaultClientSettings GetVaultClientSettings()
