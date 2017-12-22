@@ -235,4 +235,4 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 
-**/**/ProgramOutput.txt
+test/VaultSharp.Samples/ProgramOutput.txt
