@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -22,14 +23,30 @@ namespace VaultSharp.Samples
 
         public static void Main(string[] args)
         {
-            var settings = GetVaultClientSettings();
-            _unauthenticatedVaultClient = new VaultClient(settings);
+            const string path = "ProgramOutput.txt";
 
-            RunAllSamples();
+            using (var fs = new FileStream(path, FileMode.Create))
+            {
+                using (var sw = new StreamWriter(fs))
+                {
+                    Console.WriteLine();
+                    Console.Write("Writing results to file. Hang tight...");
 
-            Console.WriteLine();
-            Console.Write("I think we are done here...");
-            Console.ReadLine();
+                    var existingOut = Console.Out;
+                    Console.SetOut(sw);
+
+                    var settings = GetVaultClientSettings();
+                    _unauthenticatedVaultClient = new VaultClient(settings);
+
+                    RunAllSamples();
+
+                    Console.SetOut(existingOut);
+
+                    Console.WriteLine();
+                    Console.Write("I think we are done here. Press any key to exit...");
+                    Console.ReadLine();
+                }
+            }
         }
 
         private static void RunAllSamples()

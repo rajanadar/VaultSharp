@@ -14,4 +14,10 @@
     <ProjectReference Include="..\..\src\VaultSharp\VaultSharp.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="ProgramOutput.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
