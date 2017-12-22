@@ -57,5 +57,20 @@ namespace VaultSharp.Backends.System
         /// </remarks>
         /// <returns>The status.</returns>
         Task<Secret<ControlGroupRequestStatus>> CheckControlGroupStatusAsync(string accessor);
+
+        /// <summary>
+        /// Returns information about the currently installed license.
+        /// </summary>
+        /// <returns>License.</returns>
+        Task<Secret<License>> GetLicenseAsync();
+
+        /// <summary>
+        /// Used to install a license into Vault.
+        /// </summary>
+        /// <param name="licenceText"><para>[required]</para>
+        /// The license text.
+        /// </param>
+        /// <returns>Task.</returns>
+        Task InstallLicenseAsync(string licenceText);
     }
 }

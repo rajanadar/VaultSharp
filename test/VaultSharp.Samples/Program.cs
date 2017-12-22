@@ -481,6 +481,8 @@ namespace VaultSharp.Samples
             Assert.NotNull(leader.Address);
 
             // lease tests. raja todo: do it when we have a call with a lease_id.
+
+            // raja todo: license apis. enterprise vault only.
         }
 
         private static VaultClientSettings GetVaultClientSettings()

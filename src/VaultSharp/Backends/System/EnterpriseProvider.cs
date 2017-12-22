@@ -40,5 +40,20 @@ namespace VaultSharp.Backends.System
         {
             return await _polymath.MakeVaultApiRequest<Secret<ControlGroupRequestStatus>>("v1/sys/control-group/request", HttpMethod.Post, new { accessor = accessor }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
+
+        public async Task<Secret<License>> GetLicenseAsync()
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<License>>("v1/sys/license", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task InstallLicenseAsync(string licenseText)
+        {
+            var requestData = new
+            {
+                text = licenseText
+            };
+
+            await _polymath.MakeVaultApiRequest<Secret<License>>("v1/sys/license", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
     }
 }
