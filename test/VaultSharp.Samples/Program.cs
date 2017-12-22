@@ -356,19 +356,19 @@ namespace VaultSharp.Samples
             reqHeaders = _authenticatedVaultClient.V1.System.GetAuditRequestHeadersAsync().Result;
             Assert.False(reqHeaders.Data.Headers.Any());
 
-            // control group config
-            // blocked due to https://github.com/hashicorp/vault/issues/3702
+            // control group config. Enterprise only.
+            // https://github.com/hashicorp/vault/issues/3702
             /*
-            var cgconfig = _authenticatedVaultClient.V1.System.GetControlGroupConfigAsync().Result;
+            var cgconfig = _authenticatedVaultClient.V1.System.Enterprise.GetControlGroupConfigAsync().Result;
             DisplayJson(cgconfig);
 
-            _authenticatedVaultClient.V1.System.ConfigureControlGroupAsync("4h").Wait();
+            _authenticatedVaultClient.V1.System.Enterprise.ConfigureControlGroupAsync("4h").Wait();
 
-            cgconfig = _authenticatedVaultClient.V1.System.GetControlGroupConfigAsync().Result;
+            cgconfig = _authenticatedVaultClient.V1.System.Enterprise.GetControlGroupConfigAsync().Result;
             DisplayJson(cgconfig);
             Assert.Equal("4h", cgconfig.Data.MaxTimeToLive);
 
-            _authenticatedVaultClient.V1.System.DeleteControlGroupConfigAsync().Wait();
+            _authenticatedVaultClient.V1.System.Enterprise.DeleteControlGroupConfigAsync().Wait();
             */
 
             // cors config
@@ -410,15 +410,15 @@ namespace VaultSharp.Samples
             /*
             var cgTokenAccessor = "0ad21b78-e9bb-64fa-88b8-1e38db217bde";
 
-            var cgStatus = _authenticatedVaultClient.V1.System.CheckControlGroupStatusAsync(cgTokenAccessor).Result;
+            var cgStatus = _authenticatedVaultClient.V1.System.Enterprise.CheckControlGroupStatusAsync(cgTokenAccessor).Result;
             DisplayJson(cgStatus);
             Assert.False(cgStatus.Data.Approved);
 
-            cgStatus = _authenticatedVaultClient.V1.System.AuthorizeControlGroupAsync(cgTokenAccessor).Result;
+            cgStatus = _authenticatedVaultClient.V1.System.Enterprise.AuthorizeControlGroupAsync(cgTokenAccessor).Result;
             DisplayJson(cgStatus);
             Assert.False(cgStatus.Data.Approved);
 
-            cgStatus = _authenticatedVaultClient.V1.System.CheckControlGroupStatusAsync(cgTokenAccessor).Result;
+            cgStatus = _authenticatedVaultClient.V1.System.Enterprise.CheckControlGroupStatusAsync(cgTokenAccessor).Result;
             DisplayJson(cgStatus);
             Assert.True(cgStatus.Data.Approved);
             */

@@ -18,7 +18,10 @@ namespace VaultSharp.Backends.System
         public SystemBackendProvider(Polymath polymath)
         {
             _polymath = polymath;
+            Enterprise = new EnterpriseProvider(_polymath);
         }
+
+        public IEnterprise Enterprise { get; }
 
         public async Task<Secret<Dictionary<string, AbstractAuditBackend>>> GetAuditBackendsAsync()
         {
@@ -167,21 +170,6 @@ namespace VaultSharp.Backends.System
             await _polymath.MakeVaultApiRequest("v1/sys/config/auditing/request-headers/" + name, HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<ControlGroup>> GetControlGroupConfigAsync()
-        {
-            return await _polymath.MakeVaultApiRequest<Secret<ControlGroup>>("v1/sys/config/control-group", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
-        }
-
-        public async Task ConfigureControlGroupAsync(string maxTimeToLive)
-        {
-            await _polymath.MakeVaultApiRequest("v1/sys/config/control-group", HttpMethod.Put, new { max_ttl = maxTimeToLive }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
-        }
-
-        public async Task DeleteControlGroupConfigAsync()
-        {
-            await _polymath.MakeVaultApiRequest("v1/sys/config/control-group", HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
-        }
-
         public async Task<Secret<CORSConfig>> GetCORSConfigAsync()
         {
             return await _polymath.MakeVaultApiRequest<Secret<CORSConfig>>("v1/sys/config/cors", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
@@ -195,16 +183,6 @@ namespace VaultSharp.Backends.System
         public async Task DeleteCORSConfigAsync()
         {
             await _polymath.MakeVaultApiRequest("v1/sys/config/cors", HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
-        }
-
-        public async Task<Secret<ControlGroupRequestStatus>> AuthorizeControlGroupAsync(string accessor)
-        {
-            return await _polymath.MakeVaultApiRequest<Secret<ControlGroupRequestStatus>>("v1/sys/control-group/authorize", HttpMethod.Post, new { accessor = accessor }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
-        }
-
-        public async Task<Secret<ControlGroupRequestStatus>> CheckControlGroupStatusAsync(string accessor)
-        {
-            return await _polymath.MakeVaultApiRequest<Secret<ControlGroupRequestStatus>>("v1/sys/control-group/request", HttpMethod.Post, new { accessor = accessor }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<RootTokenGenerationStatus> GetRootTokenGenerationStatusAsync()

@@ -15,7 +15,7 @@ namespace VaultSharp.V1
 
         public VaultClientV1(Polymath polymath)
         { 
-            this.systemBackend = new SystemBackendProvider(polymath);
+            systemBackend = new SystemBackendProvider(polymath);
         }
 
         public ISecretBackend Secret => secretBackend;
