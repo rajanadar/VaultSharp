@@ -10,22 +10,40 @@ namespace VaultSharp.Backends.System
     public class HealthStatus
     {
         /// <summary>
-        /// Gets or sets the cluster identifier.
+        /// Gets or sets a value indicating whether this instance of Vault is initialized.
         /// </summary>
         /// <value>
-        /// The cluster identifier.
+        ///   <c>true</c> if initialized; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("cluster_id")]
-        public string ClusterId { get; set; }
+        [JsonProperty("initialized")]
+        public bool Initialized { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the cluster.
+        /// Gets or sets a value indicating whether this instance of Vault is sealed.
         /// </summary>
         /// <value>
-        /// The name of the cluster.
+        ///   <c>true</c> if sealed; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("cluster_name")]
-        public string ClusterName { get; set; }
+        [JsonProperty("sealed")]
+        public bool Sealed { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance of Vault is a standby.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if standby; otherwise, <c>false</c>.
+        /// </value>
+        [JsonProperty("standby")]
+        public bool Standby { get; set; }
+
+        /// <summary>
+        /// Gets or sets the server time UTC unix timestamp.
+        /// </summary>
+        /// <value>
+        /// The server time UTC unix timestamp.
+        /// </value>
+        [JsonProperty("server_time_utc")]
+        public double ServerTimeUtcUnixTimestamp { get; set; }
 
         /// <summary>
         /// Gets or sets the version.
@@ -37,13 +55,29 @@ namespace VaultSharp.Backends.System
         public string Version { get; set; }
 
         /// <summary>
-        /// Gets or sets the server time UTC unix timestamp.
+        /// Gets or sets the name of the cluster.
         /// </summary>
         /// <value>
-        /// The server time UTC unix timestamp.
+        /// The name of the cluster.
         /// </value>
-        [JsonProperty("server_time_utc")]
-        public double ServerTimeUtcUnixTimestamp { get; set; }
+        [JsonProperty("cluster_name")]
+        public string ClusterName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the cluster identifier.
+        /// </summary>
+        /// <value>
+        /// The cluster identifier.
+        /// </value>
+        [JsonProperty("cluster_id")]
+        public string ClusterId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the status code returned by the Vault Server.
+        /// </summary>
+        /// <remarks>Our own field. Does not belong to Vault Api.</remarks>
+        [JsonProperty("status")]
+        public int? HttpStatusCode { get; set; }
 
         /// <summary>
         /// Gets the friendly server time from ServerTimeUtcUnixTimestamp 
@@ -60,39 +94,5 @@ namespace VaultSharp.Backends.System
                 return new DateTimeOffset(date, TimeSpan.Zero).AddSeconds(ServerTimeUtcUnixTimestamp);
             }
         }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance of Vault is a standby.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if standby; otherwise, <c>false</c>.
-        /// </value>
-        [JsonProperty("standby")]
-        public bool Standby { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance of Vault is sealed.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if sealed; otherwise, <c>false</c>.
-        /// </value>
-        [JsonProperty("sealed")]
-        public bool Sealed { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance of Vault is initialized.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if initialized; otherwise, <c>false</c>.
-        /// </value>
-        [JsonProperty("initialized")]
-        public bool Initialized { get; set; }
-
-        /// <summary>
-        /// Gets or sets the status code returned by the Vault Server.
-        /// </summary>
-        /// <remarks>Our own field. Does not belong to Vault Api.</remarks>
-        [JsonProperty("status")]
-        public int? HttpStatusCode { get; set; }
     }
 }

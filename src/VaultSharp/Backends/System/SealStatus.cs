@@ -51,6 +51,15 @@ namespace VaultSharp.Backends.System
         public int Progress { get; set; }
 
         /// <summary>
+        /// Gets or sets the nonce.
+        /// </summary>
+        /// <value>
+        /// The nonce.
+        /// </value>
+        [JsonProperty("nonce")]
+        public string Nonce { get; set; }
+
+        /// <summary>
         /// Gets or sets the vault version.
         /// </summary>
         /// <value>
@@ -76,14 +85,5 @@ namespace VaultSharp.Backends.System
         /// </value>
         [JsonProperty("cluster_id")]
         public string ClusterId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the nonce.
-        /// </summary>
-        /// <value>
-        /// The nonce.
-        /// </value>
-        [JsonProperty("nonce")]
-        public string Nonce { get; set; }
     }
 }

@@ -20,16 +20,6 @@ namespace VaultSharp.Backends.System
         public string MountPoint { get; set; }
 
         /// <summary>
-        /// <para>[required]</para>
-        /// Gets or sets the type of the backend.
-        /// </summary>
-        /// <value>
-        /// The type of the backend.
-        /// </value>
-        [JsonProperty("type")]
-        public abstract AuditBackendType Type { get; }
-
-        /// <summary>
         /// <para>[optional]</para>
         /// Gets or sets the description.
         /// </summary>
@@ -38,8 +28,6 @@ namespace VaultSharp.Backends.System
         /// </value>
         [JsonProperty("description")]
         public string Description { get; set; }
-
-        //
 
         /// <summary>
         /// <para>[optional]</para>
@@ -53,5 +41,15 @@ namespace VaultSharp.Backends.System
         /// </value>
         [JsonProperty("local")]
         public bool Local { get; set; }
+
+        /// <summary>
+        /// <para>[required]</para>
+        /// Gets or sets the type of the backend.
+        /// </summary>
+        /// <value>
+        /// The type of the backend.
+        /// </value>
+        [JsonProperty("type")]
+        public abstract AuditBackendType Type { get; }
     }
 }

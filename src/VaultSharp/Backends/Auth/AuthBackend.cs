@@ -19,24 +19,6 @@ namespace VaultSharp.Backends.Auth
         public string Path { get; set; }
 
         /// <summary>
-        /// Gets or sets the type of the backend.
-        /// </summary>
-        /// <value>
-        /// The type of the backend.
-        /// </value>
-        [JsonProperty("type")]
-        public AuthBackendType Type { get; set; }
-
-        /// <summary>
-        /// Gets or sets a human-friendly description of the auth backend.
-        /// </summary>
-        /// <value>
-        /// The description.
-        /// </value>
-        [JsonProperty("description")]
-        public string Description { get; set; }
-
-        /// <summary>
         /// Gets or sets the accessor.
         /// </summary>
         /// <value>
@@ -44,24 +26,6 @@ namespace VaultSharp.Backends.Auth
         /// </value>
         [JsonProperty("accessor")]
         public string Accessor { get; set; }
-
-        /// <summary>
-        /// Gets or sets a seal wrap flag for the auth backend.
-        /// </summary>
-        /// <value>
-        /// The flag.
-        /// </value>
-        [JsonProperty("seal_wrap")]
-        public bool SealWrap { get; set; }
-
-        /// <summary>
-        /// Gets or sets the plugin name.
-        /// </summary>
-        /// <value>
-        /// The plugin name.
-        /// </value>
-        [JsonProperty("plugin_name")]
-        public string PluginName { get; set; }
 
         // raja todo: see if these Config options are strong typable or predicatble.
 
@@ -73,6 +37,15 @@ namespace VaultSharp.Backends.Auth
         /// </value>
         [JsonProperty("config")]
         public Dictionary<string, string> Config { get; set; }
+
+        /// <summary>
+        /// Gets or sets a human-friendly description of the auth backend.
+        /// </summary>
+        /// <value>
+        /// The description.
+        /// </value>
+        [JsonProperty("description")]
+        public string Description { get; set; }
 
         //
 
@@ -88,5 +61,32 @@ namespace VaultSharp.Backends.Auth
         /// </value>
         [JsonProperty("local")]
         public bool Local { get; set; }
+
+        /// <summary>
+        /// Gets or sets a seal wrap flag for the auth backend.
+        /// </summary>
+        /// <value>
+        /// The flag.
+        /// </value>
+        [JsonProperty("seal_wrap")]
+        public bool SealWrap { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the backend.
+        /// </summary>
+        /// <value>
+        /// The type of the backend.
+        /// </value>
+        [JsonProperty("type")]
+        public AuthBackendType Type { get; set; }
+
+        /// <summary>
+        /// Gets or sets the plugin name.
+        /// </summary>
+        /// <value>
+        /// The plugin name.
+        /// </value>
+        [JsonProperty("plugin_name")]
+        public string PluginName { get; set; }
     }
 }

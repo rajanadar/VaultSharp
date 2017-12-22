@@ -18,6 +18,15 @@ namespace VaultSharp.Backends
         public int DefaultLeaseTtl { get; set; }
 
         /// <summary>
+        /// Gets or sets the cache flag.
+        /// </summary>
+        /// <value>
+        /// The cache flag.
+        /// </value>
+        [JsonProperty("force_no_cache")]
+        public bool ForceNoCache { get; set; }
+
+        /// <summary>
         /// Gets or sets the maximum lease TTL.
         /// A value of "0" means that the system defaults are used by this backend.
         /// </summary>
@@ -26,15 +35,6 @@ namespace VaultSharp.Backends
         /// </value>
         [JsonProperty("max_lease_ttl")]
         public int MaximumLeaseTtl { get; set; }
-
-        /// <summary>
-        /// Gets or sets the cache flag.
-        /// </summary>
-        /// <value>
-        /// The cache flag.
-        /// </value>
-        [JsonProperty("force_no_cache")]
-        public bool ForceNoCache { get; set; }
 
         /// <summary>
         /// Gets or sets the plugin name.

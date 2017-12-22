@@ -8,15 +8,15 @@ namespace VaultSharp.Backends.System
     public abstract class AbstractAuditBackendOptions
     {
         /// <summary>
-        /// <para>[optional]</para>
-        /// Gets or sets a value indicating whether [log sensitive data in raw format].
-        /// Defaults to <value>"false"</value>.
+        /// Gets or sets the format.
+        /// Allows selecting the output format. 
+        /// Valid values are json (the default) and jsonx, which formats the normal log entries as XML.
         /// </summary>
         /// <value>
-        /// <c>true</c> if [log sensitive data in raw format]; otherwise, <c>false</c>.
+        /// The format.
         /// </value>
-        [JsonProperty("log_raw")]
-        public string LogSensitiveDataInRawFormat { get; set; }
+        [JsonProperty("format")]
+        public string Format { get; set; }
 
         /// <summary>
         /// <para>[optional]</para>
@@ -32,15 +32,15 @@ namespace VaultSharp.Backends.System
         public string HmacAccessor { get; set; }
 
         /// <summary>
-        /// Gets or sets the format.
-        /// Allows selecting the output format. 
-        /// Valid values are json (the default) and jsonx, which formats the normal log entries as XML.
+        /// <para>[optional]</para>
+        /// Gets or sets a value indicating whether [log sensitive data in raw format].
+        /// Defaults to <value>"false"</value>.
         /// </summary>
         /// <value>
-        /// The format.
+        /// <c>true</c> if [log sensitive data in raw format]; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("format")]
-        public string Format { get; set; }
+        [JsonProperty("log_raw")]
+        public string LogSensitiveDataInRawFormat { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractAuditBackendOptions"/> class.

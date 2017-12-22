@@ -9,15 +9,6 @@ namespace VaultSharp.Backends.System
     public class EncryptionKeyStatus
     {
         /// <summary>
-        /// Gets or sets the sequential key number.
-        /// </summary>
-        /// <value>
-        /// The sequential key number.
-        /// </value>
-        [JsonProperty("term")]
-        public int SequentialKeyNumber { get; set; }
-
-        /// <summary>
         /// Gets or sets the install time for the key.
         /// </summary>
         /// <value>
@@ -25,5 +16,14 @@ namespace VaultSharp.Backends.System
         /// </value>
         [JsonProperty("install_time")]
         public DateTimeOffset InstallTime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the sequential key number.
+        /// </summary>
+        /// <value>
+        /// The sequential key number.
+        /// </value>
+        [JsonProperty("term")]
+        public int SequentialKeyNumber { get; set; }
     }
 }
