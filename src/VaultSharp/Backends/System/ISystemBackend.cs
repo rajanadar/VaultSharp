@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using VaultSharp.Backends.Auth;
+using VaultSharp.Backends.Secret;
 using VaultSharp.Backends.System.MFA;
 using VaultSharp.Core;
 
@@ -399,6 +400,80 @@ namespace VaultSharp.Backends.System
         /// </param>
         /// <returns>Task.</returns>
         Task RevokePrefixLeaseAsync(string prefix);
+
+        /// <summary>
+        /// Gets all the mounted secret backends.
+        /// </summary>
+        /// <returns>
+        /// The mounted secret backends.
+        /// </returns>
+        Task<Secret<Dictionary<string, SecretBackend>>> GetSecretBackendsAsync();
+
+        /// <summary>
+        /// Mounts the new secret backend to the mount point in the URL.
+        /// </summary>
+        /// <param name="secretBackend">The secret backend.</param>
+        /// <returns>
+        /// A task
+        /// </returns>
+        Task MountSecretBackendAsync(SecretBackend secretBackend);
+
+        /// <summary>
+        /// Quick api to mount the secret backend with default settings.
+        /// </summary>
+        /// <param name="secretBackendType"><para>[required]</para>
+        /// The backend type to mount.</param>
+        /// <returns>
+        /// A task
+        /// </returns>
+        Task QuickMountSecretBackendAsync(SecretBackendType secretBackendType);
+
+        /// <summary>
+        /// Unmounts the mount point specified in the URL.
+        /// </summary>
+        /// <param name="mountPoint"><para>[required]</para>
+        /// The mount point for the secret backend. (with or without trailing slashes. it doesn't matter)</param>
+        /// <returns>
+        /// A task
+        /// </returns>
+        Task UnmountSecretBackendAsync(string mountPoint);
+
+        /// <summary>
+        /// Quick api to unmounts the secret backend from the default mount point.
+        /// </summary>
+        /// <param name="secretBackendType"><para>[required]</para>
+        /// The backend type to unmount.</param>
+        /// <returns>
+        /// A task
+        /// </returns>
+        Task QuickUnmountSecretBackendAsync(SecretBackendType secretBackendType);
+
+        /// <summary>
+        /// Gets the mounted secret backend's configuration values.
+        /// Unlike the <see cref="GetSecretBackendsAsync"/> method, 
+        /// this will return the current time in seconds for each TTL, 
+        /// which may be the system default or a mount-specific value.
+        /// </summary>
+        /// <param name="mountPoint"><para>[required]</para>
+        /// The mount point for the secret backend. (with or without trailing slashes. it doesn't matter)</param>
+        /// <returns>
+        /// The mounted secret backend's configuration values.
+        /// </returns>
+        Task<Secret<BackendConfig>> GetSecretBackendConfigAsync(string mountPoint);
+
+        /// <summary>
+        /// Tunes the mount configuration parameters for the given <see cref="mountPoint" />.
+        /// </summary>
+        /// <param name="mountPoint"><para>[required]</para>
+        /// The mount point for the secret backend. (with or without trailing slashes. it doesn't matter)</param>
+        /// <param name="backendConfig"><para>[optional]</para>
+        /// The mount configuration with the required setting values.
+        /// Provide a value of <value>"0"</value> or <value>"system"</value> for the TTL settings 
+        /// if you want to use the system defaults.</param>
+        /// <returns>
+        /// A task
+        /// </returns>
+        Task TuneSecretBackendConfigAsync(string mountPoint, BackendConfig backendConfig = null);
 
         /// <summary>
         /// Seals the Vault. In HA mode, only an active node can be sealed. 

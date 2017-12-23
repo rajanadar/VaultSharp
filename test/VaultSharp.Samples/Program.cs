@@ -506,6 +506,12 @@ namespace VaultSharp.Samples
             _authenticatedVaultClient.V1.System.MFA.Duo.DeleteConfigAsync(duoConfig.Name).Wait();
 
             */
+
+            // mounted secret backends.
+
+            var secretBackends = _authenticatedVaultClient.V1.System.GetSecretBackendsAsync().Result;
+            DisplayJson(secretBackends);
+            Assert.True(secretBackends.Data.Any());
         }
 
         private static VaultClientSettings GetVaultClientSettings()

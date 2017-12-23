@@ -1,93 +1,46 @@
 ﻿using System;
 using Newtonsoft.Json;
+using VaultSharp.Core;
 
-namespace VaultSharp.Backends.Auth
+namespace VaultSharp.Backends.System
 {
     /// <summary>
-    /// A helper class for retrieving and comparing Authentication Backend types.
+    /// A helper class for retrieving and comparing Secret Backend types.
     /// </summary>
-    [JsonConverter(typeof(AuthBackendTypeJsonConverter))] 
-    public class AuthBackendType : IEquatable<AuthBackendType>
+    [JsonConverter(typeof(SecretBackendTypeJsonConverter))]
+    public class SecretBackendType : IEquatable<SecretBackendType>
     {
         /// <summary>
-        /// Gets the application role.
+        /// Gets the system type.
         /// </summary>
         /// <value>
-        /// The application role.
+        /// The system.
         /// </value>
-        public static AuthBackendType AppRole { get; } = new AuthBackendType(AuthBackendDefaultPaths.AppRole);
+        public static SecretBackendType System { get; } = new SecretBackendType(SecretBackendDefaultPaths.System);
 
         /// <summary>
         /// Gets the aws type.
         /// </summary>
         /// <value>
-        /// The aws type.
+        /// The aws.
         /// </value>
-        public static AuthBackendType AWSRole { get; } = new AuthBackendType(AuthBackendDefaultPaths.AWS);
+        public static SecretBackendType AWS { get; } = new SecretBackendType(SecretBackendDefaultPaths.AWS);
 
         /// <summary>
-        /// Gets the git hub type.
+        /// Gets the consul type.
         /// </summary>
         /// <value>
-        /// The git hub.
+        /// The consul.
         /// </value>
-        public static AuthBackendType GitHub { get; } = new AuthBackendType(AuthBackendDefaultPaths.GitHub);
+        public static SecretBackendType Consul { get; } = new SecretBackendType(SecretBackendDefaultPaths.Consul);
 
         /// <summary>
-        /// Gets the GoogleCloud type.
+        /// Gets the cubby hole type.
         /// </summary>
         /// <value>
-        /// The GoogleCloud.
+        /// The cubby hole.
         /// </value>
-        public static AuthBackendType GoogleCloud { get; } = new AuthBackendType(AuthBackendDefaultPaths.GoogleCloud);
-
-        /// <summary>
-        /// Gets the Kubernetes type.
-        /// </summary>
-        /// <value>
-        /// The Kubernetes.
-        /// </value>
-        public static AuthBackendType Kubernetes { get; } = new AuthBackendType(AuthBackendDefaultPaths.Kubernetes);
-
-        /// <summary>
-        /// Gets the LDAP type.
-        /// </summary>
-        /// <value>
-        /// The LDAP.
-        /// </value>
-        public static AuthBackendType LDAP { get; } = new AuthBackendType(AuthBackendDefaultPaths.LDAP);
-
-        /// <summary>
-        /// Gets the Okta type.
-        /// </summary>
-        /// <value>
-        /// The Okta.
-        /// </value>
-        public static AuthBackendType Okta { get; } = new AuthBackendType(AuthBackendDefaultPaths.Okta);
-
-        /// <summary>
-        /// Gets the RADIUS type.
-        /// </summary>
-        /// <value>
-        /// The RADIUS.
-        /// </value>
-        public static AuthBackendType RADIUS { get; } = new AuthBackendType(AuthBackendDefaultPaths.RADIUS);
-
-        /// <summary>
-        /// Gets the certificate type.
-        /// </summary>
-        /// <value>
-        /// The certificate.
-        /// </value>
-        public static AuthBackendType Cert { get; } = new AuthBackendType(AuthBackendDefaultPaths.Cert);
-
-        /// <summary>
-        /// Gets the token type.
-        /// </summary>
-        /// <value>
-        /// The token.
-        /// </value>
-        public static AuthBackendType Token { get; } = new AuthBackendType(AuthBackendDefaultPaths.Token);
+        public static SecretBackendType CubbyHole { get; } = new SecretBackendType(SecretBackendDefaultPaths.Cubbyhole);
 
         /// <summary>
         /// Gets the generic type.
@@ -95,10 +48,66 @@ namespace VaultSharp.Backends.Auth
         /// <value>
         /// The generic.
         /// </value>
-        public static AuthBackendType UserPass { get; } = new AuthBackendType(AuthBackendDefaultPaths.UserPass);
+        public static SecretBackendType KeyValue { get; } = new SecretBackendType(SecretBackendDefaultPaths.KeyValue);
 
         /// <summary>
-        /// Gets the type type.
+        /// Gets the Identity type.
+        /// </summary>
+        /// <value>
+        /// The Identity.
+        /// </value>
+        public static SecretBackendType Identity { get; } = new SecretBackendType(SecretBackendDefaultPaths.Identity);
+
+        /// <summary>
+        /// Gets the Nomad type.
+        /// </summary>
+        /// <value>
+        /// The Nomad.
+        /// </value>
+        public static SecretBackendType Nomad { get; } = new SecretBackendType(SecretBackendDefaultPaths.Nomad);
+
+        /// <summary>
+        /// Gets the pki type.
+        /// </summary>
+        /// <value>
+        /// The pki.
+        /// </value>
+        public static SecretBackendType PKI { get; } = new SecretBackendType(SecretBackendDefaultPaths.PKI);
+
+        /// <summary>
+        /// Gets the rabbit mq type.
+        /// </summary>
+        /// <value>
+        /// The rabbit mq.
+        /// </value>
+        public static SecretBackendType RabbitMQ { get; } = new SecretBackendType(SecretBackendDefaultPaths.RabbitMQ);
+
+        /// <summary>
+        /// Gets the SSH type.
+        /// </summary>
+        /// <value>
+        /// The SSH.
+        /// </value>
+        public static SecretBackendType SSH { get; } = new SecretBackendType(SecretBackendDefaultPaths.SSH);
+
+        /// <summary>
+        /// Gets the TOTP type.
+        /// </summary>
+        /// <value>
+        /// The TOTP.
+        /// </value>
+        public static SecretBackendType TOTP { get; } = new SecretBackendType(SecretBackendDefaultPaths.TOTP);
+
+        /// <summary>
+        /// Gets the transit type.
+        /// </summary>
+        /// <value>
+        /// The transit.
+        /// </value>
+        public static SecretBackendType Transit { get; } = new SecretBackendType(SecretBackendDefaultPaths.Transit);
+
+        /// <summary>
+        /// Gets the type.
         /// </summary>
         /// <value>
         /// The type.
@@ -106,10 +115,10 @@ namespace VaultSharp.Backends.Auth
         public string Type { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AuthBackendType" /> class.
+        /// Initializes a new instance of the <see cref="SecretBackendType"/> class.
         /// </summary>
         /// <param name="type">The type.</param>
-        public AuthBackendType(string type)
+        public SecretBackendType(string type)
         {
             Type = type;
         }
@@ -122,7 +131,7 @@ namespace VaultSharp.Backends.Auth
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator ==(AuthBackendType left, AuthBackendType right)
+        public static bool operator ==(SecretBackendType left, SecretBackendType right)
         {
             // If both are null, or both are same instance, return true.
             if (ReferenceEquals(left, right))
@@ -147,7 +156,7 @@ namespace VaultSharp.Backends.Auth
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator !=(AuthBackendType left, AuthBackendType right)
+        public static bool operator !=(SecretBackendType left, SecretBackendType right)
         {
             return !(left == right);
         }
@@ -159,7 +168,7 @@ namespace VaultSharp.Backends.Auth
         /// <returns>
         /// true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
         /// </returns>
-        public bool Equals(AuthBackendType other)
+        public bool Equals(SecretBackendType other)
         {
             if ((object)other == null)
                 return false;
@@ -176,14 +185,14 @@ namespace VaultSharp.Backends.Auth
         /// </returns>
         public override bool Equals(object obj)
         {
-            return Equals(obj as AuthBackendType);
+            return Equals(obj as SecretBackendType);
         }
 
         /// <summary>
         /// Returns a hash code for this instance.
         /// </summary>
         /// <returns>
-        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
         /// </returns>
         public override int GetHashCode()
         {

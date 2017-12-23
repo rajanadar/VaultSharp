@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json;
+using VaultSharp.Backends.System;
 
-namespace VaultSharp.Backends.Auth
+namespace VaultSharp.Backends.Secret
 {
     /// <summary>
-    /// Represents an auth backend.
+    /// Represents a secret backend.
     /// </summary>
-    public class AuthBackend : AbstractBackendBase
+    public class SecretBackend : AbstractBackendBase
     {
         /// <summary>
         /// Gets or sets the type of the backend.
@@ -14,6 +15,6 @@ namespace VaultSharp.Backends.Auth
         /// The type of the backend.
         /// </value>
         [JsonProperty("type")]
-        public AuthBackendType Type { get; set; }
+        public SecretBackendType Type { get; set; }
     }
 }

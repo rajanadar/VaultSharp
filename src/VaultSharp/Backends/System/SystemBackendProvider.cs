@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using VaultSharp.Backends.Auth;
+using VaultSharp.Backends.Secret;
 using VaultSharp.Backends.System.MFA;
 using VaultSharp.Core;
 
@@ -358,6 +359,48 @@ namespace VaultSharp.Backends.System
         public async Task RevokePrefixLeaseAsync(string prefix)
         {
             await _polymath.MakeVaultApiRequest("v1/sys/leases/revoke-prefix/" + prefix.TrimStart('/'), HttpMethod.Put).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<Dictionary<string, SecretBackend>>> GetSecretBackendsAsync()
+        {
+            var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, SecretBackend>>>("v1/sys/mounts", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+
+            foreach (var kv in response.Data)
+            {
+                kv.Value.Path = kv.Key;
+            }
+
+            return response;
+        }
+
+        public async Task MountSecretBackendAsync(SecretBackend secretBackend)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task QuickMountSecretBackendAsync(SecretBackendType secretBackendType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task UnmountSecretBackendAsync(string mountPoint)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task QuickUnmountSecretBackendAsync(SecretBackendType secretBackendType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Secret<BackendConfig>> GetSecretBackendConfigAsync(string mountPoint)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task TuneSecretBackendConfigAsync(string mountPoint, BackendConfig backendConfig = null)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task SealAsync()
