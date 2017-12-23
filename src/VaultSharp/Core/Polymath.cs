@@ -146,10 +146,7 @@ namespace VaultSharp.Core
                 var httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
                 // internal delegate.
-                if (postResponseAction != null)
-                {
-                    postResponseAction(httpResponseMessage);
-                }
+                postResponseAction?.Invoke(httpResponseMessage);
 
                 VaultClientSettings.AfterApiResponseAction?.Invoke(httpResponseMessage);
 

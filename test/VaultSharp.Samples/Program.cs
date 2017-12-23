@@ -490,12 +490,15 @@ namespace VaultSharp.Samples
 
             // duo
 
-            /* do auth mount and then come back here. raja todo
+            // gives path not supported errors?. raja todo
+            /*
+            var duoAuthBackend = authBackends.Data.Values.First(); 
 
             var duoConfig = new DuoConfig
             {
                 Name = "duo-name",
-                MountAccessor = "test_mount"
+                MountAccessor = duoAuthBackend.Accessor,
+                Type = "duo" // raja todo. change into getter only types.
             };
 
             _authenticatedVaultClient.V1.System.MFA.Duo.ConfigureAsync(duoConfig).Wait();
@@ -505,7 +508,6 @@ namespace VaultSharp.Samples
             Assert.Equal(duoConfig.MountAccessor, readDuo.Data.MountAccessor);
 
             _authenticatedVaultClient.V1.System.MFA.Duo.DeleteConfigAsync(duoConfig.Name).Wait();
-
             */
 
             // mounted secret backends.
