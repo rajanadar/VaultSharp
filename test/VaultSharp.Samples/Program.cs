@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using VaultSharp.Backends;
 using VaultSharp.Backends.Auth;
 using VaultSharp.Backends.Auth.Token;
+using VaultSharp.Backends.Secret;
 using VaultSharp.Backends.System;
 using VaultSharp.Backends.System.MFA.Duo;
 using VaultSharp.Core;
@@ -512,6 +513,69 @@ namespace VaultSharp.Samples
             var secretBackends = _authenticatedVaultClient.V1.System.GetSecretBackendsAsync().Result;
             DisplayJson(secretBackends);
             Assert.True(secretBackends.Data.Any());
+
+            var mountConfig = _authenticatedVaultClient.V1.System.GetSecretBackendConfigAsync(secretBackends.Data.First().Key).Result;
+            DisplayJson(mountConfig);
+            Assert.True(mountConfig.Data.MaximumLeaseTtl > 0);
+
+            // mount a new secret backend
+            var newSecretBackend = new SecretBackend
+            {
+                Type = SecretBackendType.AWS,
+                Path = "aws1",
+                Description = "e2e tests"
+            };
+
+            _authenticatedVaultClient.V1.System.MountSecretBackendAsync(newSecretBackend).Wait();
+
+            var ttl = 36000;
+
+            _authenticatedVaultClient.V1.System.ConfigureSecretBackendAsync(newSecretBackend.Path, new BackendConfig { DefaultLeaseTtl = ttl, MaximumLeaseTtl = ttl, ForceNoCache = true }).Wait();
+
+            var newMountConfig = _authenticatedVaultClient.V1.System.GetSecretBackendConfigAsync(newSecretBackend.Path).Result;
+            DisplayJson(newMountConfig);
+            Assert.Equal(ttl, newMountConfig.Data.DefaultLeaseTtl);
+
+            // get secret backends
+            var newSecretBackends = _authenticatedVaultClient.V1.System.GetSecretBackendsAsync().Result;
+            DisplayJson(newSecretBackends);
+            Assert.Equal(secretBackends.Data.Count() + 1, newSecretBackends.Data.Count());
+
+            // unmount
+            _authenticatedVaultClient.V1.System.UnmountSecretBackendAsync(newSecretBackend.Path).Wait();
+
+            // get secret backends
+            var oldSecretBackends = _authenticatedVaultClient.V1.System.GetSecretBackendsAsync().Result;
+            DisplayJson(oldSecretBackends);
+            Assert.Equal(secretBackends.Data.Count(), oldSecretBackends.Data.Count());
+
+            // remount - raja todo
+
+            /*
+             
+            // mount a new secret backend
+            _authenticatedVaultClient.V1.System.MountSecretBackendAsync(newSecretBackend).Wait();
+             
+            // var newPath = "aws2";
+            // _authenticatedVaultClient.V1.System.RemountSecretBackendAsync(newSecretBackend.Path, new Path);
+
+            // get new secret backend config
+            var config = _authenticatedVaultClient.GetMountedSecretBackendConfigurationAsync(newMountPoint);
+            Assert.NotNull(config);
+
+            // unmount
+            await _authenticatedVaultClient.UnmountSecretBackendAsync(newMountPoint);
+
+            // quick
+            secretBackends = await _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();
+            await _authenticatedVaultClient.QuickMountSecretBackendAsync(SecretBackendType.AWS);
+            newSecretBackends = await _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();
+            Assert.Equal(secretBackends.Data.Count() + 1, newSecretBackends.Data.Count());
+
+            await _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.AWS);
+            newSecretBackends = await _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();
+            Assert.Equal(secretBackends.Data.Count(), newSecretBackends.Data.Count());
+            */
         }
 
         private static VaultClientSettings GetVaultClientSettings()

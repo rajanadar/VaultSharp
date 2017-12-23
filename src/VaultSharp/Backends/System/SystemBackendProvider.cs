@@ -84,9 +84,9 @@ namespace VaultSharp.Backends.System
             await _polymath.MakeVaultApiRequest(resourcePath, HttpMethod.Post, authBackend).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task UnmountAuthBackendAsync(string mountPoint)
+        public async Task UnmountAuthBackendAsync(string path)
         {
-            var resourcePath = string.Format(CultureInfo.InvariantCulture, "v1/sys/auth/{0}", mountPoint.Trim('/'));
+            var resourcePath = string.Format(CultureInfo.InvariantCulture, "v1/sys/auth/{0}", path.Trim('/'));
             await _polymath.MakeVaultApiRequest(resourcePath, HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
@@ -375,32 +375,31 @@ namespace VaultSharp.Backends.System
 
         public async Task MountSecretBackendAsync(SecretBackend secretBackend)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(secretBackend.Path))
+            {
+                secretBackend.Path = secretBackend.Type.Type;
+            }
+
+            var resourcePath = string.Format(CultureInfo.InvariantCulture, "v1/sys/mounts/{0}", secretBackend.Path.Trim('/'));
+            await _polymath.MakeVaultApiRequest(resourcePath, HttpMethod.Post, secretBackend).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task QuickMountSecretBackendAsync(SecretBackendType secretBackendType)
+        public async Task UnmountSecretBackendAsync(string path)
         {
-            throw new NotImplementedException();
+            var resourcePath = string.Format(CultureInfo.InvariantCulture, "v1/sys/mounts/{0}", path.Trim('/'));
+            await _polymath.MakeVaultApiRequest(resourcePath, HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task UnmountSecretBackendAsync(string mountPoint)
+        public async Task<Secret<BackendConfig>> GetSecretBackendConfigAsync(string path)
         {
-            throw new NotImplementedException();
+            var resourcePath = string.Format(CultureInfo.InvariantCulture, "v1/sys/mounts/{0}/tune", path.Trim('/'));
+            return await _polymath.MakeVaultApiRequest<Secret<BackendConfig>>(resourcePath, HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task QuickUnmountSecretBackendAsync(SecretBackendType secretBackendType)
+        public async Task ConfigureSecretBackendAsync(string path, BackendConfig backendConfig)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<Secret<BackendConfig>> GetSecretBackendConfigAsync(string mountPoint)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task TuneSecretBackendConfigAsync(string mountPoint, BackendConfig backendConfig = null)
-        {
-            throw new NotImplementedException();
+            var resourcePath = string.Format(CultureInfo.InvariantCulture, "v1/sys/mounts/{0}/tune", path.Trim('/'));
+            await _polymath.MakeVaultApiRequest(resourcePath, HttpMethod.Post, backendConfig).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task SealAsync()

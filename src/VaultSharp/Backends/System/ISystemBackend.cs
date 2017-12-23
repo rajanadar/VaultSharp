@@ -419,34 +419,14 @@ namespace VaultSharp.Backends.System
         Task MountSecretBackendAsync(SecretBackend secretBackend);
 
         /// <summary>
-        /// Quick api to mount the secret backend with default settings.
-        /// </summary>
-        /// <param name="secretBackendType"><para>[required]</para>
-        /// The backend type to mount.</param>
-        /// <returns>
-        /// A task
-        /// </returns>
-        Task QuickMountSecretBackendAsync(SecretBackendType secretBackendType);
-
-        /// <summary>
         /// Unmounts the mount point specified in the URL.
         /// </summary>
-        /// <param name="mountPoint"><para>[required]</para>
+        /// <param name="path"><para>[required]</para>
         /// The mount point for the secret backend. (with or without trailing slashes. it doesn't matter)</param>
         /// <returns>
         /// A task
         /// </returns>
-        Task UnmountSecretBackendAsync(string mountPoint);
-
-        /// <summary>
-        /// Quick api to unmounts the secret backend from the default mount point.
-        /// </summary>
-        /// <param name="secretBackendType"><para>[required]</para>
-        /// The backend type to unmount.</param>
-        /// <returns>
-        /// A task
-        /// </returns>
-        Task QuickUnmountSecretBackendAsync(SecretBackendType secretBackendType);
+        Task UnmountSecretBackendAsync(string path);
 
         /// <summary>
         /// Gets the mounted secret backend's configuration values.
@@ -464,16 +444,16 @@ namespace VaultSharp.Backends.System
         /// <summary>
         /// Tunes the mount configuration parameters for the given <see cref="mountPoint" />.
         /// </summary>
-        /// <param name="mountPoint"><para>[required]</para>
+        /// <param name="path"><para>[required]</para>
         /// The mount point for the secret backend. (with or without trailing slashes. it doesn't matter)</param>
-        /// <param name="backendConfig"><para>[optional]</para>
+        /// <param name="backendConfig"><para>[required]</para>
         /// The mount configuration with the required setting values.
-        /// Provide a value of <value>"0"</value> or <value>"system"</value> for the TTL settings 
+        /// Provide a value of <value>0</value> for the TTL settings 
         /// if you want to use the system defaults.</param>
         /// <returns>
         /// A task
         /// </returns>
-        Task TuneSecretBackendConfigAsync(string mountPoint, BackendConfig backendConfig = null);
+        Task ConfigureSecretBackendAsync(string path, BackendConfig backendConfig);
 
         /// <summary>
         /// Seals the Vault. In HA mode, only an active node can be sealed. 
