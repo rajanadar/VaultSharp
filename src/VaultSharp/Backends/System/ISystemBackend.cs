@@ -25,6 +25,11 @@ namespace VaultSharp.Backends.System
         IMFA MFA { get; }
 
         /// <summary>
+        /// Gets the plugin provider.
+        /// </summary>
+        IPlugin Plugin { get; }
+
+        /// <summary>
         /// Gets all the mounted audit backends (it does not list all available audit backends).
         /// </summary>
         /// <returns>

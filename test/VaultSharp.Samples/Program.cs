@@ -578,6 +578,9 @@ namespace VaultSharp.Samples
             newSecretBackends = await _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();
             Assert.Equal(secretBackends.Data.Count(), newSecretBackends.Data.Count());
             */
+
+            // reload plugin
+
         }
 
         private static VaultClientSettings GetVaultClientSettings()
