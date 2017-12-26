@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using VaultSharp.Backends.Auth;
 using VaultSharp.Backends.Secret;
 using VaultSharp.Backends.System.MFA;
+using VaultSharp.Backends.System.Plugin;
 using VaultSharp.Core;
 
 namespace VaultSharp.Backends.System
