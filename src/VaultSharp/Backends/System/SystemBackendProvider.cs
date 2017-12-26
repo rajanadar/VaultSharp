@@ -24,14 +24,14 @@ namespace VaultSharp.Backends.System
 
             Enterprise = new EnterpriseProvider(_polymath);
             MFA = new MFAProvider(_polymath);
-            Plugin = new PluginProvider(_polymath);
+            Plugins = new PluginProvider(_polymath);
         }
 
         public IEnterprise Enterprise { get; }
 
         public IMFA MFA { get; }
 
-        public IPlugin Plugin { get; }
+        public IPlugin Plugins { get; }
 
         public async Task<Secret<Dictionary<string, AbstractAuditBackend>>> GetAuditBackendsAsync()
         {

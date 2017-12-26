@@ -28,7 +28,7 @@ namespace VaultSharp.Backends.System
         /// <summary>
         /// Gets the plugin provider.
         /// </summary>
-        IPlugin Plugin { get; }
+        IPlugin Plugins { get; }
 
         /// <summary>
         /// Gets all the mounted audit backends (it does not list all available audit backends).

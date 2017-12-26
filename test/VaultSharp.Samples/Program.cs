@@ -11,6 +11,7 @@ using VaultSharp.Backends.Auth.Token;
 using VaultSharp.Backends.Secret;
 using VaultSharp.Backends.System;
 using VaultSharp.Backends.System.MFA.Duo;
+using VaultSharp.Backends.System.Plugin;
 using VaultSharp.Core;
 using Xunit;
 
@@ -579,8 +580,38 @@ namespace VaultSharp.Samples
             Assert.Equal(secretBackends.Data.Count(), newSecretBackends.Data.Count());
             */
 
-            // reload plugin
+            // catalog and plugin apis.
 
+            var plugins = _authenticatedVaultClient.V1.System.Plugins.GetCatalogAsync().Result;
+            DisplayJson(plugins);
+            Assert.True(plugins.Data.Keys.Any());
+
+            var pluginConfig = _authenticatedVaultClient.V1.System.Plugins.GetConfigAsync(plugins.Data.Keys.First()).Result;
+            DisplayJson(pluginConfig);
+            Assert.Equal(plugins.Data.Keys.First(), pluginConfig.Data.Name);
+
+            // cannot unregister inbuilt plugins. try our own. raja todo.
+            // _authenticatedVaultClient.V1.System.Plugins.UnregisterAsync(pluginConfig.Data.Name).Wait();
+
+            // var lessPlugins = _authenticatedVaultClient.V1.System.Plugins.GetCatalogAsync().Result;
+            // DisplayJson(lessPlugins);
+
+            // Assert.Equal(plugins.Data.Keys.Count - 1, lessPlugins.Data.Keys.Count);
+
+            // // cannot reload inbuilt plugins. try our own. raja todo
+
+            var newPluginConfig = new PluginConfig
+            {
+                Name = pluginConfig.Data.Name,
+                Command = pluginConfig.Data.Command + " ",
+                Sha256 = pluginConfig.Data.Sha256
+            };
+
+            // _authenticatedVaultClient.V1.System.Plugins.RegisterAsync(newPluginConfig).Wait();
+
+            pluginConfig = _authenticatedVaultClient.V1.System.Plugins.GetConfigAsync(newPluginConfig.Name).Result;
+            DisplayJson(pluginConfig);
+            // Assert.Equal(newPluginConfig.Command, pluginConfig.Data.Command);
         }
 
         private static VaultClientSettings GetVaultClientSettings()

@@ -27,5 +27,31 @@ namespace VaultSharp.Backends.System.Plugin
 
             await _polymath.MakeVaultApiRequest("v1/sys/plugin/reload/backend", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
+
+        public async Task<Secret<ListInfo>> GetCatalogAsync()
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/sys/plugins/catalog?list=true", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task RegisterAsync(PluginConfig pluginConfig)
+        {
+            var requestData = new
+            {
+                sha256 = pluginConfig.Sha256,
+                command = pluginConfig.Command
+            };
+
+            await _polymath.MakeVaultApiRequest("v1/sys/plugins/catalog/" + pluginConfig.Name, HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<PluginConfig>> GetConfigAsync(string pluginName)
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<PluginConfig>>("v1/sys/plugins/catalog/" + pluginName, HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task UnregisterAsync(string pluginName)
+        {
+            await _polymath.MakeVaultApiRequest("v1/sys/plugins/catalog/" + pluginName, HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
     }
 }
