@@ -567,16 +567,16 @@ namespace VaultSharp.Samples
             Assert.NotNull(config);
 
             // unmount
-            await _authenticatedVaultClient.UnmountSecretBackendAsync(newMountPoint);
+            _authenticatedVaultClient.UnmountSecretBackendAsync(newMountPoint);
 
             // quick
-            secretBackends = await _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();
-            await _authenticatedVaultClient.QuickMountSecretBackendAsync(SecretBackendType.AWS);
-            newSecretBackends = await _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();
+            secretBackends = _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();
+            _authenticatedVaultClient.QuickMountSecretBackendAsync(SecretBackendType.AWS);
+            newSecretBackends = _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();
             Assert.Equal(secretBackends.Data.Count() + 1, newSecretBackends.Data.Count());
 
-            await _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.AWS);
-            newSecretBackends = await _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();
+            _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.AWS);
+            newSecretBackends = _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();
             Assert.Equal(secretBackends.Data.Count(), newSecretBackends.Data.Count());
             */
 
@@ -612,6 +612,53 @@ namespace VaultSharp.Samples
             pluginConfig = _authenticatedVaultClient.V1.System.Plugins.GetConfigAsync(newPluginConfig.Name).Result;
             DisplayJson(pluginConfig);
             // Assert.Equal(newPluginConfig.Command, pluginConfig.Data.Command);
+
+            // raja todo ReloadBackendsAsync. do it after we do mounting tests for particular plugin backends.
+            // in-built
+            // ["cassandra-database-plugin","hana-database-plugin","mongodb-database-plugin","mssql-database-plugin","mysql-aurora-database-plugin",
+            //  "mysql-database-plugin","mysql-legacy-database-plugin","mysql-rds-database-plugin","postgresql-database-plugin"]
+
+            // policy apis.
+
+            var policies = _authenticatedVaultClient.V1.System.GetAllPoliciesAsync().Result;
+            DisplayJson(policies);
+            Assert.True(policies.Data.Keys.Any());
+
+            var policy = _authenticatedVaultClient.V1.System.GetPolicyAsync(policies.Data.Keys[0]).Result;
+            DisplayJson(policy);
+            Assert.NotNull(policy);
+
+            // write a new policy
+            var newPolicy = new Policy
+            {
+                Name = "gubdu",
+                Rules = "path \"sys/*\" {  policy = \"deny\" }"
+            };
+
+            _authenticatedVaultClient.V1.System.WritePolicyAsync(newPolicy).Wait();
+
+            // get new policy
+            var newPolicyGet = _authenticatedVaultClient.V1.System.GetPolicyAsync(newPolicy.Name).Result;
+            DisplayJson(newPolicyGet);
+            Assert.Equal(newPolicy.Rules, newPolicyGet.Data.Rules);
+
+            // write updates to a new policy
+            newPolicy.Rules = "path \"sys/*\" {  policy = \"read\" }";
+
+            _authenticatedVaultClient.V1.System.WritePolicyAsync(newPolicy).Wait();
+
+            // get new policy
+            newPolicyGet = _authenticatedVaultClient.V1.System.GetPolicyAsync(newPolicy.Name).Result;
+            DisplayJson(newPolicyGet);
+            Assert.Equal(newPolicy.Rules, newPolicyGet.Data.Rules);
+
+            // delete policy
+            _authenticatedVaultClient.V1.System.DeletePolicyAsync(newPolicy.Name).Wait();
+
+            // get all policies
+            var oldPolicies = _authenticatedVaultClient.V1.System.GetAllPoliciesAsync().Result;
+            DisplayJson(oldPolicies);
+            Assert.Equal(policies.Data.Keys.Count, oldPolicies.Data.Keys.Count);
         }
 
         private static VaultClientSettings GetVaultClientSettings()

@@ -448,7 +448,7 @@ namespace VaultSharp.Backends.System
         Task<Secret<BackendConfig>> GetSecretBackendConfigAsync(string mountPoint);
 
         /// <summary>
-        /// Tunes the mount configuration parameters for the given <see cref="mountPoint" />.
+        /// Tunes the mount configuration parameters for the given <see cref="path" />.
         /// </summary>
         /// <param name="path"><para>[required]</para>
         /// The mount point for the secret backend. (with or without trailing slashes. it doesn't matter)</param>
@@ -460,6 +460,46 @@ namespace VaultSharp.Backends.System
         /// A task
         /// </returns>
         Task ConfigureSecretBackendAsync(string path, BackendConfig backendConfig);
+
+        /// <summary>
+        /// Gets all the available policy names in the system.
+        /// </summary>
+        /// <returns>
+        /// The policy names.
+        /// </returns>
+        Task<Secret<ListInfo>> GetAllPoliciesAsync();
+
+        /// <summary>
+        /// Gets the rules for the named policy.
+        /// </summary>
+        /// <param name="policyName">
+        /// <para>[required]</para>
+        /// The name of the policy.</param>
+        /// <returns>
+        /// The rules for the policy.
+        /// </returns>
+        Task<Secret<Policy>> GetPolicyAsync(string policyName);
+
+        /// <summary>
+        /// Adds or updates the policy.
+        /// Once a policy is updated, it takes effect immediately to all associated users.
+        /// </summary>
+        /// <param name="policy"><para>[required]</para>
+        /// The policy to be added or updated.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task WritePolicyAsync(Policy policy);
+
+        /// <summary>
+        /// Deletes the named policy. This will immediately affect all associated users.
+        /// </summary>
+        /// <param name="policyName"><para>[required]</para>
+        /// The name of the policy.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task DeletePolicyAsync(string policyName);
 
         /// <summary>
         /// Seals the Vault. In HA mode, only an active node can be sealed. 

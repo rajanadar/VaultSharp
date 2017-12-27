@@ -407,6 +407,31 @@ namespace VaultSharp.Backends.System
             await _polymath.MakeVaultApiRequest(resourcePath, HttpMethod.Post, backendConfig).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<Secret<ListInfo>> GetAllPoliciesAsync()
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/sys/policy", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<Policy>> GetPolicyAsync(string policyName)
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<Policy>>("v1/sys/policy/" + policyName, HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task WritePolicyAsync(Policy policy)
+        {
+            var requestData = new
+            {
+                rules = policy.Rules
+            };
+
+            await _polymath.MakeVaultApiRequest("v1/sys/policy/" + policy.Name, HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task DeletePolicyAsync(string policyName)
+        {
+            await _polymath.MakeVaultApiRequest("v1/sys/policy/" + policyName, HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
         public async Task SealAsync()
         {
             await _polymath.MakeVaultApiRequest("v1/sys/seal", HttpMethod.Put).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);

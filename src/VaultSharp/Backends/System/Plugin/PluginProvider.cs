@@ -37,7 +37,7 @@ namespace VaultSharp.Backends.System.Plugin
         {
             var requestData = new
             {
-                sha256 = pluginConfig.Sha256,
+                sha_256 = pluginConfig.Sha256, // raja todo: check this https://www.vaultproject.io/api/system/plugins-catalog.html
                 command = pluginConfig.Command
             };
 
