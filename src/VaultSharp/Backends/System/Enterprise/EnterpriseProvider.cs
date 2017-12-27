@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using VaultSharp.Core;
 
-namespace VaultSharp.Backends.System
+namespace VaultSharp.Backends.System.Enterprise
 {
     /// <summary>
     /// Enterprise System backend APIs
@@ -54,6 +54,56 @@ namespace VaultSharp.Backends.System
             };
 
             await _polymath.MakeVaultApiRequest<Secret<License>>("v1/sys/license", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<ListInfo>> GetRGPPoliciesAsync()
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/sys/policies/rgp?list=true", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<RGPPolicy>> GetRGPPolicyAsync(string policyName)
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<RGPPolicy>>("v1/sys/policies/rgp/" + policyName, HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task WriteRGPPolicyAsync(RGPPolicy policy)
+        {
+            var requestData = new
+            {
+                policy = policy.Policy
+            };
+
+            await _polymath.MakeVaultApiRequest("v1/sys/policies/rgp/" + policy.Name, HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task DeleteRGPPolicyAsync(string policyName)
+        {
+            await _polymath.MakeVaultApiRequest("v1/sys/policies/rgp/" + policyName, HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<ListInfo>> GetEGPPoliciesAsync()
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/sys/policies/egp?list=true", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<EGPPolicy>> GetEGPPolicyAsync(string policyName)
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<EGPPolicy>>("v1/sys/policies/egp/" + policyName, HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task WriteEGPPolicyAsync(EGPPolicy policy)
+        {
+            var requestData = new
+            {
+                policy = policy.Policy
+            };
+
+            await _polymath.MakeVaultApiRequest("v1/sys/policies/egp/" + policy.Name, HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task DeleteEGPPolicyAsync(string policyName)
+        {
+            await _polymath.MakeVaultApiRequest("v1/sys/policies/egp/" + policyName, HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

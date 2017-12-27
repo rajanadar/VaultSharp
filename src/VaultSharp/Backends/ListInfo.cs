@@ -15,6 +15,6 @@ namespace VaultSharp.Backends
         /// The keys.
         /// </value>
         [JsonProperty("keys")]
-        public List<string> Keys { get; set; }
+        public IEnumerable<string> Keys { get; set; }
     }
 }

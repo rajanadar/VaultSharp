@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using VaultSharp.Backends.Auth;
 using VaultSharp.Backends.Secret;
+using VaultSharp.Backends.System.Enterprise;
 using VaultSharp.Backends.System.MFA;
 using VaultSharp.Backends.System.Plugin;
 using VaultSharp.Core;
@@ -454,7 +455,7 @@ namespace VaultSharp.Backends.System
 
         public async Task DeleteACLPolicyAsync(string policyName)
         {
-            await _polymath.MakeVaultApiRequest("v1/sys/policy/" + policyName, HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/sys/policies/acl/" + policyName, HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task SealAsync()

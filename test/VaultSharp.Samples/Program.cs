@@ -624,7 +624,7 @@ namespace VaultSharp.Samples
             DisplayJson(policies);
             Assert.True(policies.Data.Keys.Any());
 
-            var policy = _authenticatedVaultClient.V1.System.GetPolicyAsync(policies.Data.Keys[0]).Result;
+            var policy = _authenticatedVaultClient.V1.System.GetPolicyAsync(policies.Data.Keys.ElementAt(0)).Result;
             DisplayJson(policy);
             Assert.NotNull(policy);
 
@@ -652,13 +652,17 @@ namespace VaultSharp.Samples
             DisplayJson(newPolicyGet);
             Assert.Equal(newPolicy.Rules, newPolicyGet.Data.Rules);
 
+            var newPolicies = _authenticatedVaultClient.V1.System.GetPoliciesAsync().Result;
+            DisplayJson(newPolicies);
+            Assert.True(newPolicies.Data.Keys.Any());
+
             // delete policy
             _authenticatedVaultClient.V1.System.DeletePolicyAsync(newPolicy.Name).Wait();
 
             // get all policies
             var oldPolicies = _authenticatedVaultClient.V1.System.GetPoliciesAsync().Result;
             DisplayJson(oldPolicies);
-            Assert.Equal(policies.Data.Keys.Count, oldPolicies.Data.Keys.Count);
+            Assert.Equal(newPolicies.Data.Keys.Count(), oldPolicies.Data.Keys.Count() + 1);
 
             // get ACL policy apis.
 
@@ -666,7 +670,7 @@ namespace VaultSharp.Samples
             DisplayJson(aclPolicies);
             Assert.True(aclPolicies.Data.Keys.Any());
 
-            var aclPolicy = _authenticatedVaultClient.V1.System.GetACLPolicyAsync(aclPolicies.Data.Keys[0]).Result;
+            var aclPolicy = _authenticatedVaultClient.V1.System.GetACLPolicyAsync(aclPolicies.Data.Keys.ElementAt(0)).Result;
             DisplayJson(aclPolicy);
             Assert.NotNull(aclPolicy);
 
@@ -694,13 +698,19 @@ namespace VaultSharp.Samples
             DisplayJson(newAclPolicyGet);
             Assert.Equal(newAclPolicy.Policy, newAclPolicyGet.Data.Policy);
 
+            var newAclPolicies = _authenticatedVaultClient.V1.System.GetACLPoliciesAsync().Result;
+            DisplayJson(newAclPolicies);
+            Assert.True(newAclPolicies.Data.Keys.Any());
+
             // delete policy
             _authenticatedVaultClient.V1.System.DeleteACLPolicyAsync(newAclPolicy.Name).Wait();
 
             // get all policies
             var oldAclPolicies = _authenticatedVaultClient.V1.System.GetACLPoliciesAsync().Result;
             DisplayJson(oldAclPolicies);
-            Assert.Equal(aclPolicies.Data.Keys.Count, oldAclPolicies.Data.Keys.Count);
+            Assert.Equal(newAclPolicies.Data.Keys.Count(), oldAclPolicies.Data.Keys.Count() + 1);
+
+            // raja todo: enterprise RGP and EGP policy APIs.
         }
 
         private static VaultClientSettings GetVaultClientSettings()

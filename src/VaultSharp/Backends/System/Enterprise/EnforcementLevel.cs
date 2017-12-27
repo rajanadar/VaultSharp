@@ -1,14 +1,13 @@
 ﻿using System;
 using Newtonsoft.Json;
-using VaultSharp.Core;
 
-namespace VaultSharp.Backends.System
+namespace VaultSharp.Backends.System.Enterprise
 {
     /// <summary>
-    /// A helper class for retrieving and comparing Audit Backend types.
+    /// The EnforcementLevel class.
     /// </summary>
-    [JsonConverter(typeof(AuditBackendTypeJsonConverter))] 
-    public class AuditBackendType : IEquatable<AuditBackendType>
+    [JsonConverter(typeof(EnforcementLevelJsonConverter))] 
+    public class EnforcementLevel : IEquatable<EnforcementLevel>
     {
         /// <summary>
         /// The _type
@@ -16,20 +15,28 @@ namespace VaultSharp.Backends.System
         private readonly string _value;
 
         /// <summary>
-        /// Gets the file.
+        /// Gets the Advisory level.
         /// </summary>
         /// <value>
-        /// The file.
+        /// The level.
         /// </value>
-        public static AuditBackendType File { get; } = new AuditBackendType("file");
+        public static EnforcementLevel Advisory { get; } = new EnforcementLevel("advisory");
 
         /// <summary>
-        /// Gets the syslog.
+        /// Gets the SoftMandatory level.
         /// </summary>
         /// <value>
-        /// The syslog.
+        /// The level.
         /// </value>
-        public static AuditBackendType Syslog { get; } = new AuditBackendType("syslog");
+        public static EnforcementLevel SoftMandatory { get; } = new EnforcementLevel("soft-mandatory");
+
+        /// <summary>
+        /// Gets the HardMandatory level.
+        /// </summary>
+        /// <value>
+        /// The level.
+        /// </value>
+        public static EnforcementLevel HardMandatory { get; } = new EnforcementLevel("hard-mandatory");
 
         /// <summary>
         /// Gets the type.
@@ -40,10 +47,10 @@ namespace VaultSharp.Backends.System
         public string Value => _value;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AuditBackendType"/> class.
+        /// Initializes a new instance of the <see cref="EnforcementLevel"/> class.
         /// </summary>
         /// <param name="value">The value.</param>
-        public AuditBackendType(string value)
+        public EnforcementLevel(string value)
         {
             _value = value;
         }
@@ -56,7 +63,7 @@ namespace VaultSharp.Backends.System
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator ==(AuditBackendType left, AuditBackendType right)
+        public static bool operator ==(EnforcementLevel left, EnforcementLevel right)
         {
             // If both are null, or both are same instance, return true.
             if (ReferenceEquals(left, right))
@@ -81,7 +88,7 @@ namespace VaultSharp.Backends.System
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator !=(AuditBackendType left, AuditBackendType right)
+        public static bool operator !=(EnforcementLevel left, EnforcementLevel right)
         {
             return !(left == right);
         }
@@ -93,7 +100,7 @@ namespace VaultSharp.Backends.System
         /// <returns>
         /// true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
         /// </returns>
-        public bool Equals(AuditBackendType other)
+        public bool Equals(EnforcementLevel other)
         {
             if ((object)other == null)
                 return false;
@@ -110,7 +117,7 @@ namespace VaultSharp.Backends.System
         /// </returns>
         public override bool Equals(object obj)
         {
-            return Equals(obj as AuditBackendType);
+            return Equals(obj as EnforcementLevel);
         }
 
         /// <summary>

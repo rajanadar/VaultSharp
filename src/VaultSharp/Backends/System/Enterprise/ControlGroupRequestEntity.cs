@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace VaultSharp.Backends.System
+namespace VaultSharp.Backends.System.Enterprise
 {
     /// <summary>
     /// The requesting entity.

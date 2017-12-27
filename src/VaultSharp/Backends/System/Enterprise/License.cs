@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace VaultSharp.Backends.System
+namespace VaultSharp.Backends.System.Enterprise
 {
     /// <summary>
     /// License information.
