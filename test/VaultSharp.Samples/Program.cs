@@ -711,6 +711,26 @@ namespace VaultSharp.Samples
             Assert.Equal(newAclPolicies.Data.Keys.Count(), oldAclPolicies.Data.Keys.Count() + 1);
 
             // raja todo: enterprise RGP and EGP policy APIs.
+            // raja todo: vault-override-policy header.
+
+            // raw secret apis.
+            // ** THis RAW path is OFF by default. Turn it on from the vault startup config file.
+            // https://www.vaultproject.io/docs/configuration/index.html#raw_storage_endpoint
+
+            var rawPath = "secret/rawpath";
+            var rawValues = new Dictionary<string, object>
+            {
+                {"foo", "bar"},
+                {"foo2", 345 }
+            };
+
+            _authenticatedVaultClient.V1.System.WriteRawSecretAsync(rawPath, rawValues).Wait();
+
+            var readRawValues = _authenticatedVaultClient.V1.System.ReadRawSecretAsync(rawPath).Result;
+            DisplayJson(readRawValues);
+            Assert.True(readRawValues.Data.Count == 2);
+
+            _authenticatedVaultClient.V1.System.DeleteRawSecretAsync(rawPath).Wait();
         }
 
         private static VaultClientSettings GetVaultClientSettings()

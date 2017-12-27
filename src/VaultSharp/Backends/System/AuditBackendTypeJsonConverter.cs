@@ -6,7 +6,7 @@ namespace VaultSharp.Backends.System
     /// <summary>
     /// Converts the <see cref="AuditBackendType" /> object to and from JSON.
     /// </summary>
-    public class AuditBackendTypeJsonConverter : JsonConverter
+    internal class AuditBackendTypeJsonConverter : JsonConverter
     {
         /// <summary>
         /// Writes the JSON representation of the object.

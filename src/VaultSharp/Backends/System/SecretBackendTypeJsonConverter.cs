@@ -6,7 +6,7 @@ namespace VaultSharp.Backends.System
     /// <summary>
     /// Converts the <see cref="SecretBackendType" /> object to and from JSON.
     /// </summary>
-    public class SecretBackendTypeJsonConverter : JsonConverter
+    internal class SecretBackendTypeJsonConverter : JsonConverter
     {
         /// <summary>
         /// Writes the JSON representation of the object.

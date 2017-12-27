@@ -7,7 +7,7 @@ namespace VaultSharp.Backends.System
     /// <summary>
     /// Converts the <see cref="AbstractAuditBackend" /> object from JSON.
     /// </summary>
-    public class AuditBackendJsonConverter : JsonConverter
+    internal class AuditBackendJsonConverter : JsonConverter
     {
         /// <summary>
         /// Gets a value indicating whether this <see cref="T:Newtonsoft.Json.JsonConverter" /> can write JSON.

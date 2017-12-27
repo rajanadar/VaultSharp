@@ -543,6 +543,41 @@ namespace VaultSharp.Backends.System
         Task DeleteACLPolicyAsync(string policyName);
 
         /// <summary>
+        /// Reads the value of the key at the given path.
+        /// This is the raw path in the sorage backend and not the logical path that is exposed via the mount system.
+        /// </summary>
+        /// <param name="storagePath"><para>[required]</para>
+        /// Raw path in the storage backend and not the logical path that is exposed via the mount system.</param>
+        /// <returns>
+        /// The Secret with raw data.
+        /// </returns>
+        Task<Secret<Dictionary<string, object>>> ReadRawSecretAsync(string storagePath);
+
+        /// <summary>
+        /// Update the value of the key at the given path.
+        /// This is the raw path in the storage backend and not the logical path that is exposed via the mount system.
+        /// </summary>
+        /// <param name="storagePath"><para>[required]</para>
+        /// Raw path in the storage backend and not the logical path that is exposed via the mount system.</param>
+        /// <param name="values"><para>[required]</para>
+        /// The values to write. The dictionary will be JSONized as a raw value string before being written.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task WriteRawSecretAsync(string storagePath, Dictionary<string, object> values);
+
+        /// <summary>
+        /// Delete the key with given path.
+        /// This is the raw path in the storage backend and not the logical path that is exposed via the mount system.
+        /// </summary>
+        /// <param name="storagePath"><para>[required]</para>
+        /// Raw path in the storage backend and not the logical path that is exposed via the mount system.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task DeleteRawSecretAsync(string storagePath);
+
+        /// <summary>
         /// Seals the Vault. In HA mode, only an active node can be sealed. 
         /// Standby nodes should be restarted to get the same effect. 
         /// Requires a token with root policy or sudo capability on the path.

@@ -6,7 +6,7 @@ namespace VaultSharp.Backends.System.Enterprise
     /// <summary>
     /// Converts the <see cref="EnforcementLevel" /> object to and from JSON.
     /// </summary>
-    public class EnforcementLevelJsonConverter : JsonConverter
+    internal class EnforcementLevelJsonConverter : JsonConverter
     {
         /// <summary>
         /// Writes the JSON representation of the object.

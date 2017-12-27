@@ -458,6 +458,31 @@ namespace VaultSharp.Backends.System
             await _polymath.MakeVaultApiRequest("v1/sys/policies/acl/" + policyName, HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<Secret<Dictionary<string, object>>> ReadRawSecretAsync(string storagePath)
+        {
+            var response = await _polymath.MakeVaultApiRequest<Secret<dynamic>>("v1/sys/raw/" + storagePath.Trim('/'), HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+
+            string value = response.Data.value;
+            var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(value);
+
+            return _polymath.GetMappedSecret(response, data);
+        }
+
+        public async Task WriteRawSecretAsync(string storagePath, Dictionary<string, object> values)
+        {
+            var requestData = new
+            {
+                value = JsonConvert.SerializeObject(values)
+            };
+
+            await _polymath.MakeVaultApiRequest("v1/sys/raw/" + storagePath.Trim('/'), HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task DeleteRawSecretAsync(string storagePath)
+        {
+            await _polymath.MakeVaultApiRequest("v1/sys/raw/" + storagePath.Trim('/'), HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
         public async Task SealAsync()
         {
             await _polymath.MakeVaultApiRequest("v1/sys/seal", HttpMethod.Put).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);

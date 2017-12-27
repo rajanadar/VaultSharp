@@ -5,19 +5,19 @@ namespace VaultSharp.Backends.Auth.Token
 {
     internal class TokenAuthProvider : IAuthProvider
     {
-        private readonly TokenAuthInfo tokenAuthInfo;
+        private readonly TokenAuthInfo _tokenAuthInfo;
 
         public TokenAuthProvider(TokenAuthInfo tokenAuthInfo)
         {
             Checker.NotNull(tokenAuthInfo, "tokenAuthInfo");
             Checker.NotNull(tokenAuthInfo.VaultToken, "tokenAuthInfo.VaultToken");
 
-            this.tokenAuthInfo = tokenAuthInfo;
+            this._tokenAuthInfo = tokenAuthInfo;
         }
 
         public async Task<string> GetVaultTokenAsync()
         {
-            return await Task.FromResult(tokenAuthInfo.VaultToken);
+            return await Task.FromResult(_tokenAuthInfo.VaultToken);
         }
     }
 }
