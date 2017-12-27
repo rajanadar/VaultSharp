@@ -407,7 +407,7 @@ namespace VaultSharp.Backends.System
             await _polymath.MakeVaultApiRequest(resourcePath, HttpMethod.Post, backendConfig).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<ListInfo>> GetAllPoliciesAsync()
+        public async Task<Secret<ListInfo>> GetPoliciesAsync()
         {
             return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/sys/policy", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
@@ -428,6 +428,31 @@ namespace VaultSharp.Backends.System
         }
 
         public async Task DeletePolicyAsync(string policyName)
+        {
+            await _polymath.MakeVaultApiRequest("v1/sys/policy/" + policyName, HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<ListInfo>> GetACLPoliciesAsync()
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/sys/policies/acl?list=true", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<ACLPolicy>> GetACLPolicyAsync(string policyName)
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<ACLPolicy>>("v1/sys/policies/acl/" + policyName, HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task WriteACLPolicyAsync(ACLPolicy policy)
+        {
+            var requestData = new
+            {
+                policy = policy.Policy
+            };
+
+            await _polymath.MakeVaultApiRequest("v1/sys/policies/acl/" + policy.Name, HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task DeleteACLPolicyAsync(string policyName)
         {
             await _polymath.MakeVaultApiRequest("v1/sys/policy/" + policyName, HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }

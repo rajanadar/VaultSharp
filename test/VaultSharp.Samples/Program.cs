@@ -620,7 +620,7 @@ namespace VaultSharp.Samples
 
             // policy apis.
 
-            var policies = _authenticatedVaultClient.V1.System.GetAllPoliciesAsync().Result;
+            var policies = _authenticatedVaultClient.V1.System.GetPoliciesAsync().Result;
             DisplayJson(policies);
             Assert.True(policies.Data.Keys.Any());
 
@@ -656,9 +656,51 @@ namespace VaultSharp.Samples
             _authenticatedVaultClient.V1.System.DeletePolicyAsync(newPolicy.Name).Wait();
 
             // get all policies
-            var oldPolicies = _authenticatedVaultClient.V1.System.GetAllPoliciesAsync().Result;
+            var oldPolicies = _authenticatedVaultClient.V1.System.GetPoliciesAsync().Result;
             DisplayJson(oldPolicies);
             Assert.Equal(policies.Data.Keys.Count, oldPolicies.Data.Keys.Count);
+
+            // get ACL policy apis.
+
+            var aclPolicies = _authenticatedVaultClient.V1.System.GetACLPoliciesAsync().Result;
+            DisplayJson(aclPolicies);
+            Assert.True(aclPolicies.Data.Keys.Any());
+
+            var aclPolicy = _authenticatedVaultClient.V1.System.GetACLPolicyAsync(aclPolicies.Data.Keys[0]).Result;
+            DisplayJson(aclPolicy);
+            Assert.NotNull(aclPolicy);
+
+            // write a new policy
+            var newAclPolicy = new ACLPolicy
+            {
+                Name = "gubdu",
+                Policy = "path \"sys/*\" {  policy = \"deny\" }"
+            };
+
+            _authenticatedVaultClient.V1.System.WriteACLPolicyAsync(newAclPolicy).Wait();
+
+            // get new policy
+            var newAclPolicyGet = _authenticatedVaultClient.V1.System.GetACLPolicyAsync(newPolicy.Name).Result;
+            DisplayJson(newAclPolicyGet);
+            Assert.Equal(newAclPolicy.Policy, newAclPolicyGet.Data.Policy);
+
+            // write updates to a new policy
+            newAclPolicy.Policy = "path \"sys/*\" {  policy = \"read\" }";
+
+            _authenticatedVaultClient.V1.System.WriteACLPolicyAsync(newAclPolicy).Wait();
+
+            // get new policy
+            newAclPolicyGet = _authenticatedVaultClient.V1.System.GetACLPolicyAsync(newAclPolicy.Name).Result;
+            DisplayJson(newAclPolicyGet);
+            Assert.Equal(newAclPolicy.Policy, newAclPolicyGet.Data.Policy);
+
+            // delete policy
+            _authenticatedVaultClient.V1.System.DeleteACLPolicyAsync(newAclPolicy.Name).Wait();
+
+            // get all policies
+            var oldAclPolicies = _authenticatedVaultClient.V1.System.GetACLPoliciesAsync().Result;
+            DisplayJson(oldAclPolicies);
+            Assert.Equal(aclPolicies.Data.Keys.Count, oldAclPolicies.Data.Keys.Count);
         }
 
         private static VaultClientSettings GetVaultClientSettings()

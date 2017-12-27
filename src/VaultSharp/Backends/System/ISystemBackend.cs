@@ -467,7 +467,7 @@ namespace VaultSharp.Backends.System
         /// <returns>
         /// The policy names.
         /// </returns>
-        Task<Secret<ListInfo>> GetAllPoliciesAsync();
+        Task<Secret<ListInfo>> GetPoliciesAsync();
 
         /// <summary>
         /// Gets the rules for the named policy.
@@ -500,6 +500,46 @@ namespace VaultSharp.Backends.System
         /// The task.
         /// </returns>
         Task DeletePolicyAsync(string policyName);
+
+        /// <summary>
+        /// Gets all the ACL policy names in the system.
+        /// </summary>
+        /// <returns>
+        /// The policy names.
+        /// </returns>
+        Task<Secret<ListInfo>> GetACLPoliciesAsync();
+
+        /// <summary>
+        /// Gets the rules for the named ACL policy.
+        /// </summary>
+        /// <param name="policyName">
+        /// <para>[required]</para>
+        /// The name of the policy.</param>
+        /// <returns>
+        /// The rules for the policy.
+        /// </returns>
+        Task<Secret<ACLPolicy>> GetACLPolicyAsync(string policyName);
+
+        /// <summary>
+        /// Adds or updates the ACL policy.
+        /// Once a policy is updated, it takes effect immediately to all associated users.
+        /// </summary>
+        /// <param name="policy"><para>[required]</para>
+        /// The policy to be added or updated.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task WriteACLPolicyAsync(ACLPolicy policy);
+
+        /// <summary>
+        /// Deletes the named ACL policy. This will immediately affect all associated users.
+        /// </summary>
+        /// <param name="policyName"><para>[required]</para>
+        /// The name of the policy.</param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task DeleteACLPolicyAsync(string policyName);
 
         /// <summary>
         /// Seals the Vault. In HA mode, only an active node can be sealed. 

@@ -5,17 +5,8 @@ namespace VaultSharp.Backends.System
     /// <summary>
     /// Represents a Vault Policy entity.
     /// </summary>
-    public class Policy
+    public class Policy : AbstractPolicyBase
     {
-        /// <summary>
-        /// Gets or sets the name of the policy.
-        /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
         /// <summary>
         /// Gets or sets the rules for the policy.
         /// <para>
