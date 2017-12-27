@@ -543,6 +543,14 @@ namespace VaultSharp.Backends.System
         Task DeleteACLPolicyAsync(string policyName);
 
         /// <summary>
+        ///  Returns a list keys for a given path prefix.
+        /// </summary>
+        /// <param name="storagePathPrefix"><para>[required]</para>
+        /// Raw path in the storage backend and not the logical path that is exposed via the mount system.</param>
+        /// <returns>Keys.</returns>
+        Task<Secret<ListInfo>> GetRawSecretKeysAsync(string storagePathPrefix);
+
+        /// <summary>
         /// Reads the value of the key at the given path.
         /// This is the raw path in the sorage backend and not the logical path that is exposed via the mount system.
         /// </summary>

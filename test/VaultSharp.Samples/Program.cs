@@ -717,20 +717,41 @@ namespace VaultSharp.Samples
             // ** THis RAW path is OFF by default. Turn it on from the vault startup config file.
             // https://www.vaultproject.io/docs/configuration/index.html#raw_storage_endpoint
 
-            var rawPath = "secret/rawpath";
-            var rawValues = new Dictionary<string, object>
+            var rawPath1 = "secret/raw/path1";
+            var rawValues1 = new Dictionary<string, object>
             {
                 {"foo", "bar"},
                 {"foo2", 345 }
             };
 
-            _authenticatedVaultClient.V1.System.WriteRawSecretAsync(rawPath, rawValues).Wait();
+            _authenticatedVaultClient.V1.System.WriteRawSecretAsync(rawPath1, rawValues1).Wait();
 
-            var readRawValues = _authenticatedVaultClient.V1.System.ReadRawSecretAsync(rawPath).Result;
-            DisplayJson(readRawValues);
-            Assert.True(readRawValues.Data.Count == 2);
+            var readRawValues1 = _authenticatedVaultClient.V1.System.ReadRawSecretAsync(rawPath1).Result;
+            DisplayJson(readRawValues1);
+            Assert.True(readRawValues1.Data.Count == 2);
 
-            _authenticatedVaultClient.V1.System.DeleteRawSecretAsync(rawPath).Wait();
+            rawValues1["foo"] = "bar42";
+            _authenticatedVaultClient.V1.System.WriteRawSecretAsync(rawPath1, rawValues1).Wait();
+
+            readRawValues1 = _authenticatedVaultClient.V1.System.ReadRawSecretAsync(rawPath1).Result;
+            DisplayJson(readRawValues1);
+            Assert.Equal("bar42", readRawValues1.Data["foo"]);
+
+            var rawPath2 = "secret/raw/path2";
+            var rawValues2 = new Dictionary<string, object>
+            {
+                {"foo", "bar2"},
+                {"foo2", 346 }
+            };
+
+            _authenticatedVaultClient.V1.System.WriteRawSecretAsync(rawPath2, rawValues2).Wait();
+
+            var rawKeys = _authenticatedVaultClient.V1.System.GetRawSecretKeysAsync("secret/raw/").Result;
+            DisplayJson(rawKeys);
+            Assert.True(rawKeys.Data.Keys.Count() == 2);
+
+            _authenticatedVaultClient.V1.System.DeleteRawSecretAsync(rawPath1).Wait();
+            _authenticatedVaultClient.V1.System.DeleteRawSecretAsync(rawPath2).Wait();
         }
 
         private static VaultClientSettings GetVaultClientSettings()

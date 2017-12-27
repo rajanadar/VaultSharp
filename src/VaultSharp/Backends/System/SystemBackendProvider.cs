@@ -458,6 +458,13 @@ namespace VaultSharp.Backends.System
             await _polymath.MakeVaultApiRequest("v1/sys/policies/acl/" + policyName, HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<Secret<ListInfo>> GetRawSecretKeysAsync(string storagePathPrefix)
+        {
+            return await _polymath
+                .MakeVaultApiRequest<Secret<ListInfo>>("v1/sys/raw/" + storagePathPrefix.TrimStart('/') + "?list=true",
+                    HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
         public async Task<Secret<Dictionary<string, object>>> ReadRawSecretAsync(string storagePath)
         {
             var response = await _polymath.MakeVaultApiRequest<Secret<dynamic>>("v1/sys/raw/" + storagePath.Trim('/'), HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
