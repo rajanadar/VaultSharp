@@ -490,6 +490,63 @@ namespace VaultSharp.Backends.System
             await _polymath.MakeVaultApiRequest("v1/sys/raw/" + storagePath.Trim('/'), HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<RekeyStatus> GetRekeyStatusAsync()
+        {
+            return await _polymath.MakeVaultApiRequest<RekeyStatus>("v1/sys/rekey/init", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<RekeyStatus> InitiateRekeyAsync(int secretShares, int secretThreshold, string[] pgpKeys = null, bool backup = false)
+        {
+            var requestData = new { secret_shares = secretShares, secret_threshold = secretThreshold, pgp_keys = pgpKeys, backup = backup };
+            return await _polymath.MakeVaultApiRequest<RekeyStatus>("v1/sys/rekey/init", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task CancelRekeyAsync()
+        {
+            await _polymath.MakeVaultApiRequest("v1/sys/rekey/init", HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<RekeyBackupInfo>> GetRekeyBackupKeysAsync()
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<RekeyBackupInfo>>("v1/sys/rekey/backup", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task DeleteRekeyBackupKeysAsync()
+        {
+            await _polymath.MakeVaultApiRequest("v1/sys/rekey/backup", HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<RekeyProgress> ContinueRekeyAsync(string masterShareKey, string rekeyNonce)
+        {
+            var requestData = new
+            {
+                key = masterShareKey,
+                nonce = rekeyNonce
+            };
+
+            return await _polymath.MakeVaultApiRequest<RekeyProgress>("v1/sys/rekey/update", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<RekeyProgress> QuickRekeyAsync(string[] allMasterShareKeys, string rekeyNonce)
+        {
+            Checker.NotNull(allMasterShareKeys, "allMasterShareKeys");
+
+            RekeyProgress finalRekeyProgress = null;
+
+            foreach (var masterShareKey in allMasterShareKeys)
+            {
+                finalRekeyProgress = await ContinueRekeyAsync(masterShareKey, rekeyNonce);
+
+                // don't continue, once threshold keys are achieved.
+                if (finalRekeyProgress.Complete)
+                {
+                    break;
+                }
+            }
+
+            return finalRekeyProgress;
+        }
+
         public async Task SealAsync()
         {
             await _polymath.MakeVaultApiRequest("v1/sys/seal", HttpMethod.Put).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
@@ -519,6 +576,12 @@ namespace VaultSharp.Backends.System
             foreach (var masterShareKey in allMasterShareKeys)
             {
                 finalStatus = await UnsealAsync(masterShareKey);
+
+                // don't continue, once threshold keys are achieved.
+                if (!finalStatus.Sealed)
+                {
+                    break;
+                }
             }
 
             return finalStatus;

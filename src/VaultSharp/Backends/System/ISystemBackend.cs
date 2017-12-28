@@ -586,6 +586,98 @@ namespace VaultSharp.Backends.System
         Task DeleteRawSecretAsync(string storagePath);
 
         /// <summary>
+        /// Gets the configuration and progress of the current rekey attempt.
+        /// Information about the new shares to generate and the threshold required for the new shares,
+        /// the number of unseal keys provided for this rekey and the required number of unseal keys is returned.
+        /// This is an unauthenticated call and does not need credentials.
+        /// </summary>
+        /// <returns>
+        /// The rekey status.
+        /// </returns>
+        Task<RekeyStatus> GetRekeyStatusAsync();
+
+        /// <summary>
+        /// Initiates a new rekey attempt.
+        /// Only a single rekey attempt can take place at a time, and changing the parameters of a rekey requires canceling and starting a new rekey.
+        /// This is an unauthenticated call and does not need credentials.
+        /// </summary>
+        /// <param name="secretShares"><para>[required]</para>
+        /// The number of shares to split the master key into.</param>
+        /// <param name="secretThreshold"><para>[required]</para>
+        /// The number of shares required to reconstruct the master key.
+        /// This must be less than or equal to <see cref="secretShares" />.</param>
+        /// <param name="pgpKeys"><para>[optional]</para>
+        /// An array of PGP public keys used to encrypt the output unseal keys.
+        /// Ordering is preserved.
+        /// The keys must be base64-encoded from their original binary representation.
+        /// The size of this array must be the same as <see cref="secretShares" />.</param>
+        /// <param name="backup"><para>[optional]</para>
+        /// If using PGP-encrypted keys, whether Vault should also back them up to a well-known 
+        /// location in physical storage. These can then be retrieved and removed 
+        /// via the GetRekeyBackupAsync endpoint. Makes sense only when pgp keys are provided.
+        /// Defaults to 'false', meaning no backup.
+        /// </param>
+        /// <returns>
+        /// The rekey status.
+        /// </returns>
+        Task<RekeyStatus> InitiateRekeyAsync(int secretShares, int secretThreshold, string[] pgpKeys = null, bool backup = false);
+
+        /// <summary>
+        /// Cancels any in-progress rekey. This clears the rekey settings as well as any progress made.
+        /// This must be called to change the parameters of the rekey.
+        /// This is an unauthenticated call and does not need credentials.
+        /// </summary>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task CancelRekeyAsync();
+
+        /// <summary>
+        /// Gets the the backup copy of PGP-encrypted unseal keys. 
+        /// The returned value is the nonce of the rekey operation and a map of PGP key 
+        /// fingerprint to hex-encoded PGP-encrypted key.
+        /// </summary>
+        /// <returns>The rekey backup info.</returns>
+        Task<Secret<RekeyBackupInfo>> GetRekeyBackupKeysAsync();
+
+        /// <summary>
+        /// Deletes the backup copy of PGP-encrypted unseal keys.
+        /// </summary>
+        /// <returns>The task.</returns>
+        Task DeleteRekeyBackupKeysAsync();
+
+        /// <summary>
+        /// Continues the rekey process. Enter a single master key share to progress the rekey of the Vault.
+        /// If the threshold number of master key shares is reached, Vault will complete the rekey.
+        /// Otherwise, this API must be called multiple times until that threshold is met.
+        /// This is an unauthenticated call and does not need credentials.
+        /// </summary>
+        /// <param name="masterShareKey"><para>[required]</para>
+        /// A single master share key.</param>
+        /// <param name="rekeyNonce"><para>[required]</para>
+        /// The nonce of the rekey operation.</param>
+        /// <returns>
+        /// An object indicating the rekey operation nonce and completion status; 
+        /// if completed, the new master keys are returned. 
+        /// If the keys are PGP-encrypted, an array of key fingerprints will also be provided 
+        /// (with the order in which the keys were used for encryption) along with whether 
+        /// or not the keys were backed up to physical storage.
+        /// </returns>
+        Task<RekeyProgress> ContinueRekeyAsync(string masterShareKey, string rekeyNonce);
+
+        /// <summary>
+        /// Rekeys the Vault in a single call.
+        /// Call this after calling the <see cref="InitiateRekeyAsync"/> method.
+        /// Provide all the master keys together.
+        /// This is an unauthenticated call and does not need credentials.
+        /// </summary>
+        /// <param name="thresholdMasterShareKeys">Threshold master share keys.</param>
+        /// <param name="rekeyNonce"><para>[required]</para>
+        /// The nonce of the rekey operation.</param>
+        /// <returns>The final Rekey progress after all the share keys are applied.</returns>
+        Task<RekeyProgress> QuickRekeyAsync(string[] thresholdMasterShareKeys, string rekeyNonce);
+
+        /// <summary>
         /// Seals the Vault. In HA mode, only an active node can be sealed. 
         /// Standby nodes should be restarted to get the same effect. 
         /// Requires a token with root policy or sudo capability on the path.
@@ -630,8 +722,8 @@ namespace VaultSharp.Backends.System
         /// Unseals the Vault in a single call.
         /// Provide all the master keys together.
         /// </summary>
-        /// <param name="allMasterShareKeys">All the master share keys.</param>
+        /// <param name="thresholdMasterShareKeys">Threshold Master share keys.</param>
         /// <returns>The final Seal Status after all the share keys are applied.</returns>
-        Task<SealStatus> QuickUnsealAsync(string[] allMasterShareKeys);
+        Task<SealStatus> QuickUnsealAsync(string[] thresholdMasterShareKeys);
     }
 }

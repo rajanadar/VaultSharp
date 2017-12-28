@@ -752,6 +752,105 @@ namespace VaultSharp.Samples
 
             _authenticatedVaultClient.V1.System.DeleteRawSecretAsync(rawPath1).Wait();
             _authenticatedVaultClient.V1.System.DeleteRawSecretAsync(rawPath2).Wait();
+
+            // rekey apis.
+
+            var rekeyStatus = _unauthenticatedVaultClient.V1.System.GetRekeyStatusAsync().Result;
+            DisplayJson(rekeyStatus);
+            Assert.False(rekeyStatus.Started);
+
+            var newInitOptions = new InitOptions
+            {
+                SecretThreshold = 4,
+                SecretShares = 8
+            };
+
+            rekeyStatus = _unauthenticatedVaultClient.V1.System.InitiateRekeyAsync(newInitOptions.SecretShares, newInitOptions.SecretThreshold).Result;
+            DisplayJson(rekeyStatus);
+            Assert.True(rekeyStatus.Started);
+            Assert.True(rekeyStatus.UnsealKeysProvided == 0);
+            Assert.NotNull(rekeyStatus.Nonce);
+
+            // raja todo: test the rekey backup API, after giving good pgp encrypted keys.
+
+            // var backups = _authenticatedVaultClient.V1.System.GetRekeyBackupKeysAsync().Result;
+            // DisplayJson(backups);
+            // Assert.NotNull(backups);
+
+            _authenticatedVaultClient.V1.System.DeleteRekeyBackupKeysAsync().Wait();
+
+            var rekeyNonce = rekeyStatus.Nonce;
+            RekeyProgress rekeyProgress = null;
+            int j = 0;
+
+            for (j = 0; j < initOptions.SecretThreshold - 1; ++j)
+            {
+                rekeyProgress = _unauthenticatedVaultClient.V1.System.ContinueRekeyAsync(masterCredentials.MasterKeys[j], rekeyNonce).Result;
+                DisplayJson(rekeyProgress);
+                Assert.False(rekeyProgress.Complete);
+                Assert.Null(rekeyProgress.MasterKeys);
+
+                rekeyStatus = _unauthenticatedVaultClient.V1.System.GetRekeyStatusAsync().Result;
+                DisplayJson(rekeyStatus);
+                Assert.True(rekeyStatus.Started);
+                Assert.True(rekeyStatus.UnsealKeysProvided == (j+1));
+            }
+
+            rekeyProgress = _unauthenticatedVaultClient.V1.System.ContinueRekeyAsync(masterCredentials.MasterKeys[j], rekeyNonce).Result;
+            DisplayJson(rekeyProgress);
+            Assert.True(rekeyProgress.Complete);
+            Assert.NotNull(rekeyProgress.MasterKeys);
+            Assert.Equal(newInitOptions.SecretShares, rekeyProgress.MasterKeys.Length);
+
+            // new keys.
+            masterCredentials.MasterKeys = rekeyProgress.MasterKeys;
+            masterCredentials.Base64MasterKeys = rekeyProgress.Base64MasterKeys;
+
+            rekeyStatus = _unauthenticatedVaultClient.V1.System.GetRekeyStatusAsync().Result;
+            DisplayJson(rekeyStatus);
+
+            Assert.False(rekeyStatus.Started);
+            Assert.True(rekeyStatus.SecretThreshold == 0);
+            Assert.True(rekeyStatus.RequiredUnsealKeys == newInitOptions.SecretThreshold);
+            Assert.True(rekeyStatus.SecretShares == 0);
+            Assert.True(rekeyStatus.UnsealKeysProvided == 0);
+            Assert.Equal(string.Empty, rekeyStatus.Nonce);
+            Assert.False(rekeyStatus.Backup);
+
+            _unauthenticatedVaultClient.V1.System.InitiateRekeyAsync(5, 5).Wait();
+
+            rekeyStatus = _unauthenticatedVaultClient.V1.System.GetRekeyStatusAsync().Result;
+            DisplayJson(rekeyStatus);
+            Assert.True(rekeyStatus.Started);
+            Assert.True(rekeyStatus.SecretThreshold == 5);
+            Assert.True(rekeyStatus.RequiredUnsealKeys == newInitOptions.SecretThreshold);
+            Assert.True(rekeyStatus.SecretShares == 5);
+            Assert.True(rekeyStatus.UnsealKeysProvided == 0);
+            Assert.NotNull(rekeyStatus.Nonce);
+            Assert.False(rekeyStatus.Backup);
+
+            _unauthenticatedVaultClient.V1.System.CancelRekeyAsync().Wait();
+            rekeyStatus = _unauthenticatedVaultClient.V1.System.GetRekeyStatusAsync().Result;
+            DisplayJson(rekeyStatus);
+            Assert.False(rekeyStatus.Started);
+            Assert.True(rekeyStatus.SecretThreshold == 0);
+            Assert.True(rekeyStatus.RequiredUnsealKeys == newInitOptions.SecretThreshold);
+            Assert.True(rekeyStatus.SecretShares == 0);
+            Assert.True(rekeyStatus.UnsealKeysProvided == 0);
+            Assert.Equal(string.Empty, rekeyStatus.Nonce);
+            Assert.False(rekeyStatus.Backup);
+
+            _unauthenticatedVaultClient.V1.System.InitiateRekeyAsync(2, 2).Wait();
+
+            rekeyStatus = _unauthenticatedVaultClient.V1.System.GetRekeyStatusAsync().Result;
+            DisplayJson(rekeyStatus);
+
+            var quick = _unauthenticatedVaultClient.V1.System.QuickRekeyAsync(masterCredentials.MasterKeys, rekeyStatus.Nonce).Result;
+            DisplayJson(quick);
+            Assert.True(quick.Complete);
+
+            masterCredentials.MasterKeys = quick.MasterKeys;
+            masterCredentials.Base64MasterKeys = quick.Base64MasterKeys;
         }
 
         private static VaultClientSettings GetVaultClientSettings()
