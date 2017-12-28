@@ -8,6 +8,15 @@ namespace VaultSharp.Backends.System
     public class RekeyProgress
     {
         /// <summary>
+        /// Gets or sets the nonce for the current rekey operation..
+        /// </summary>
+        /// <value>
+        /// The nonce.
+        /// </value>
+        [JsonProperty("nonce")]
+        public string Nonce { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this <see cref="RekeyProgress"/> is complete.
         /// </summary>
         /// <value>
@@ -26,13 +35,13 @@ namespace VaultSharp.Backends.System
         public string[] MasterKeys { get; set; }
 
         /// <summary>
-        /// Gets or sets the nonce for the current rekey operation..
+        /// Gets or sets the new base 64 master keys. (possibly pgp encrypted)
         /// </summary>
         /// <value>
-        /// The nonce.
+        /// The master keys.
         /// </value>
-        [JsonProperty("nonce")]
-        public string Nonce { get; set; }
+        [JsonProperty("keys_base64")]
+        public string[] Base64MasterKeys { get; set; }
 
         /// <summary>
         /// Gets or sets the PGP finger prints if PGP keys are being used to encrypt the final shares.
@@ -42,15 +51,6 @@ namespace VaultSharp.Backends.System
         /// </value>
         [JsonProperty("pgp_fingerprints")]
         public string[] PGPFingerPrints { get; set; }
-
-        /// <summary>
-        /// Gets or sets the new base 64 master keys. (possibly pgp encrypted)
-        /// </summary>
-        /// <value>
-        /// The master keys.
-        /// </value>
-        [JsonProperty("keys_base64")]
-        public string[] Base64MasterKeys { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the final keys will be backed up to physical storage.

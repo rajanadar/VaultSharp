@@ -663,6 +663,12 @@ namespace VaultSharp.Backends.System
         /// (with the order in which the keys were used for encryption) along with whether 
         /// or not the keys were backed up to physical storage.
         /// </returns>
+        /// <remarks>
+        /// This method returns <see cref="RekeyStatus" /> till the rekey is complete.
+        /// Then it returns <see cref="RekeyProgress" /> type, when the rekey is complete.
+        /// Unfortunately, in C# we can return only one type, and it is not worth all the inheritance/jugaad.
+        /// So for most-valued simplicity, the method returns the final data type. [potential future raja todo]
+        /// </remarks>
         Task<RekeyProgress> ContinueRekeyAsync(string masterShareKey, string rekeyNonce);
 
         /// <summary>
