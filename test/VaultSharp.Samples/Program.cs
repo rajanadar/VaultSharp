@@ -10,7 +10,6 @@ using VaultSharp.Backends.Auth;
 using VaultSharp.Backends.Auth.Token;
 using VaultSharp.Backends.Secret;
 using VaultSharp.Backends.System;
-using VaultSharp.Backends.System.MFA.Duo;
 using VaultSharp.Backends.System.Plugin;
 using VaultSharp.Core;
 using Xunit;
@@ -19,6 +18,8 @@ namespace VaultSharp.Samples
 {
     class Program
     {
+        private const string ExpectedVaultVersion = "0.9.1";
+
         private static IVaultClient _unauthenticatedVaultClient;
         private static IVaultClient _authenticatedVaultClient;
 
@@ -87,6 +88,9 @@ namespace VaultSharp.Samples
 
             var health = _unauthenticatedVaultClient.V1.System.GetHealthStatusAsync().Result;
             DisplayJson(health);
+
+            Assert.Equal(ExpectedVaultVersion, health.Version);
+
             Assert.False(health.Initialized);
             Assert.True(health.Sealed);
             Assert.Equal((int)HttpStatusCode.NotImplemented, health.HttpStatusCode);
