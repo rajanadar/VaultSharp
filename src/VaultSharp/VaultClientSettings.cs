@@ -15,6 +15,8 @@ namespace VaultSharp
 
         public TimeSpan? VaultServiceTimeout { get; set; }
 
+        public Action<HttpClientHandler> PostProcessHttpClientHandlerAction { get; set; }
+
         public Action<HttpClient, HttpRequestMessage> BeforeApiRequestAction { get; set; }
 
         public Action<HttpResponseMessage> AfterApiResponseAction { get; set; }

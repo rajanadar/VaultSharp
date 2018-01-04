@@ -25,10 +25,19 @@ namespace VaultSharp.Core
         {
             VaultClientSettings = vaultClientSettings;
 
-            _httpClient = new HttpClient
+            if (vaultClientSettings.PostProcessHttpClientHandlerAction != null)
             {
-                BaseAddress = new Uri(vaultClientSettings.VaultServerUriWithPort)
-            };
+                var handler = new HttpClientHandler();
+                vaultClientSettings.PostProcessHttpClientHandlerAction(handler);
+
+                _httpClient = new HttpClient(handler);
+            }
+            else
+            {
+                _httpClient = new HttpClient();
+            }
+
+            _httpClient.BaseAddress = new Uri(vaultClientSettings.VaultServerUriWithPort);
 
             if (vaultClientSettings.VaultServiceTimeout != null)
             {
