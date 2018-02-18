@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using Newtonsoft.Json;
 using VaultSharp.Backends;
 using VaultSharp.Backends.Auth;
@@ -27,6 +28,16 @@ namespace VaultSharp.Samples
 
         public static void Main(string[] args)
         {
+            var valueWithNullCharacter = "This string has a hidden null character just before the period\u0000.";
+            File.AppendAllText("d:\\tt.txt", valueWithNullCharacter);
+
+            valueWithNullCharacter = File.ReadAllText("d:\\tt.txt");
+
+            Console.WriteLine(valueWithNullCharacter);
+            Console.Write(valueWithNullCharacter.Contains('\u0000'));
+            Console.ReadLine();
+            return;
+
             const string path = "ProgramOutput.txt";
 
             using (var fs = new FileStream(path, FileMode.Create))
