@@ -72,6 +72,24 @@ namespace VaultSharp.Backends.System
         public string Version { get; set; }
 
         /// <summary>
+        /// Gets or sets the name of the cluster.
+        /// </summary>
+        /// <value>
+        /// The name of the cluster.
+        /// </value>
+        [JsonProperty("cluster_name")]
+        public string ClusterName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the cluster identifier.
+        /// </summary>
+        /// <value>
+        /// The cluster identifier.
+        /// </value>
+        [JsonProperty("cluster_id")]
+        public string ClusterId { get; set; }
+
+        /// <summary>
         /// Gets the friendly server time from ServerTimeUtcUnixTimestamp 
         /// which is in seconds since January 1, 1970 12:00:00 a.m. UTC.
         /// </summary>
