@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using Newtonsoft.Json;
 
 namespace VaultSharp.Backends.System
@@ -37,13 +36,31 @@ namespace VaultSharp.Backends.System
         public bool Standby { get; set; }
 
         /// <summary>
+        /// Gets or sets the replication_performance_mode.
+        /// </summary>
+        /// <value>
+        /// The replication_performance_mode.
+        /// </value>
+        [JsonProperty("replication_performance_mode")]
+        public string ReplicationPerformanceMode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the replication_dr_mode.
+        /// </summary>
+        /// <value>
+        /// The replication_dr_mode.
+        /// </value>
+        [JsonProperty("replication_dr_mode")]
+        public string ReplicationDrMode { get; set; }
+
+        /// <summary>
         /// Gets or sets the server time UTC unix timestamp.
         /// </summary>
         /// <value>
         /// The server time UTC unix timestamp.
         /// </value>
         [JsonProperty("server_time_utc")]
-        public double ServerTimeUtcUnixTimestamp { get; set; }
+        public long ServerTimeUtcUnixTimestamp { get; set; }
 
         /// <summary>
         /// Gets or sets the version.
@@ -55,37 +72,13 @@ namespace VaultSharp.Backends.System
         public string Version { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the cluster.
-        /// </summary>
-        /// <value>
-        /// The name of the cluster.
-        /// </value>
-        [JsonProperty("cluster_name")]
-        public string ClusterName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the cluster identifier.
-        /// </summary>
-        /// <value>
-        /// The cluster identifier.
-        /// </value>
-        [JsonProperty("cluster_id")]
-        public string ClusterId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the status code returned by the Vault Server.
-        /// </summary>
-        /// <remarks>Our own field. Does not belong to Vault Api.</remarks>
-        [JsonProperty("status")]
-        public int? HttpStatusCode { get; set; }
-
-        /// <summary>
         /// Gets the friendly server time from ServerTimeUtcUnixTimestamp 
         /// which is in seconds since January 1, 1970 12:00:00 a.m. UTC.
         /// </summary>
         /// <value>
         /// The server time in UTC. (zero offset)
         /// </value>
+        [JsonIgnore]
         public DateTimeOffset ServerTimeUtc
         {
             get
@@ -94,5 +87,14 @@ namespace VaultSharp.Backends.System
                 return new DateTimeOffset(date, TimeSpan.Zero).AddSeconds(ServerTimeUtcUnixTimestamp);
             }
         }
+
+        /// <summary>
+        /// Gets or sets the code.
+        /// </summary>
+        /// <value>
+        /// The code.
+        /// </value>
+        [JsonIgnore]
+        public int? HttpStatusCode { get; set; }
     }
 }
