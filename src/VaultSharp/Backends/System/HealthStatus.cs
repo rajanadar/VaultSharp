@@ -37,6 +37,18 @@ namespace VaultSharp.Backends.System
         public bool Standby { get; set; }
 
         /// <summary>
+        /// Gets or sets the replication performance mode.
+        /// </summary>
+        [JsonProperty("replication_performance_mode")]
+        public string ReplicationPerformanceMode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the replication dr mode.
+        /// </summary>
+        [JsonProperty("replication_dr_mode")]
+        public string ReplicationDisasterRecoverymode { get; set; }
+
+        /// <summary>
         /// Gets or sets the server time UTC unix timestamp.
         /// </summary>
         /// <value>

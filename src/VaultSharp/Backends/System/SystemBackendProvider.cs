@@ -282,7 +282,7 @@ namespace VaultSharp.Backends.System
 
             try
             {
-                // we don't what status code out of 2xx was returned. hence the delegate.
+                // we don't know what status code out of 2xx was returned. hence the delegate.
 
                 int? statusCode = null;
                 var healthStatus = await _polymath.MakeVaultApiRequest<HealthStatus>(resourcePath, queryHttpMethod, postResponseAction: message => statusCode = (int)message.StatusCode);
@@ -291,8 +291,14 @@ namespace VaultSharp.Backends.System
             }
             catch (VaultApiException vaultApiException)
             {
-                // for head calls, the status may be null.
-                var healthStatus = JsonConvert.DeserializeObject<HealthStatus>(vaultApiException.Message) ?? new HealthStatus();
+                // if response body is empty, don't construct misleading POCO.
+                if (string.IsNullOrWhiteSpace(vaultApiException.Message))
+                {
+                    throw;
+                }
+
+                // for head calls, the response is empty. So return a null object, to avoid misleading callers.
+                var healthStatus = JsonConvert.DeserializeObject<HealthStatus>(vaultApiException.Message);
                 healthStatus.HttpStatusCode = vaultApiException.StatusCode;
 
                 return healthStatus;

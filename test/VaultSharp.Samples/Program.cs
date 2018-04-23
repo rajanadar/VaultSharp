@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using Newtonsoft.Json;
 using VaultSharp.Backends;
 using VaultSharp.Backends.Auth;
@@ -19,7 +18,7 @@ namespace VaultSharp.Samples
 {
     class Program
     {
-        private const string ExpectedVaultVersion = "0.9.1";
+        private const string ExpectedVaultVersion = "0.10.0";
 
         private static IVaultClient _unauthenticatedVaultClient;
         private static IVaultClient _authenticatedVaultClient;
@@ -28,16 +27,6 @@ namespace VaultSharp.Samples
 
         public static void Main(string[] args)
         {
-            var valueWithNullCharacter = "This string has a hidden null character just before the period\u0000.";
-            File.AppendAllText("d:\\tt.txt", valueWithNullCharacter);
-
-            valueWithNullCharacter = File.ReadAllText("d:\\tt.txt");
-
-            Console.WriteLine(valueWithNullCharacter);
-            Console.Write(valueWithNullCharacter.Contains('\u0000'));
-            Console.ReadLine();
-            return;
-
             const string path = "ProgramOutput.txt";
 
             using (var fs = new FileStream(path, FileMode.Create))
@@ -59,7 +48,6 @@ namespace VaultSharp.Samples
 
                     Console.WriteLine();
                     Console.Write("I think we are done here. Press any key to exit...");
-                    Console.ReadLine();
                 }
             }
         }
@@ -107,9 +95,8 @@ namespace VaultSharp.Samples
             Assert.Equal((int)HttpStatusCode.NotImplemented, health.HttpStatusCode);
 
             // do just one head check.
-            health = _unauthenticatedVaultClient.V1.System.GetHealthStatusAsync(queryHttpMethod: HttpMethod.Head).Result;
-            DisplayJson(health);
-            Assert.Equal((int)HttpStatusCode.NotImplemented, health.HttpStatusCode);
+            var headException = Assert.ThrowsAsync<VaultApiException>(() => _unauthenticatedVaultClient.V1.System.GetHealthStatusAsync(queryHttpMethod: HttpMethod.Head)).Result;
+            Assert.Equal((int)HttpStatusCode.NotImplemented, headException.StatusCode);
 
             health = _unauthenticatedVaultClient.V1.System.GetHealthStatusAsync(uninitializedStatusCode: 300).Result;
             DisplayJson(health);
@@ -878,7 +865,7 @@ namespace VaultSharp.Samples
                     var value = ((int)r.StatusCode + "-" + r.StatusCode) + "\n";
                     var content = r.Content != null ? r.Content.ReadAsStringAsync().Result : string.Empty;
 
-                    _responseContent = value + content;
+                    _responseContent = "From Vault Server: " + value + content;
 
                     if (string.IsNullOrWhiteSpace(content))
                     {
@@ -892,7 +879,7 @@ namespace VaultSharp.Samples
 
         private static void DisplayJson<T>(T value)
         {
-            string line = "============";
+            string line = "===========";
 
             var type = typeof(T);
             var genTypes = type.GenericTypeArguments;
