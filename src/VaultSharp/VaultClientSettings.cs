@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Net.Http;
-using VaultSharp.AuthMethods;
+using VaultSharp.V1.AuthMethods;
 
 namespace VaultSharp
 {

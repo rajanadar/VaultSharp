@@ -1,6 +1,6 @@
-﻿using VaultSharp.AuthMethods;
-using VaultSharp.SecretEngines;
-using VaultSharp.SystemBackend;
+﻿using VaultSharp.V1.AuthMethods;
+using VaultSharp.V1.SecretEngines;
+using VaultSharp.V1.SystemBackend;
 
 namespace VaultSharp.V1
 {

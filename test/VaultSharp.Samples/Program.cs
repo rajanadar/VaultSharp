@@ -5,13 +5,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using Newtonsoft.Json;
-using VaultSharp.AuthMethods;
-using VaultSharp.AuthMethods.Token;
+using VaultSharp.V1.AuthMethods;
+using VaultSharp.V1.AuthMethods.Token;
 using VaultSharp.Backends;
-using VaultSharp.Core;
-using VaultSharp.SecretEngines;
-using VaultSharp.SystemBackend;
-using VaultSharp.SystemBackend.Plugin;
+using VaultSharp.V1.Core;
+using VaultSharp.V1.SecretEngines;
+using VaultSharp.V1.SystemBackend;
+using VaultSharp.V1.SystemBackend.Plugin;
 using Xunit;
 
 namespace VaultSharp.Samples
