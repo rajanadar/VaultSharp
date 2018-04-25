@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace VaultSharp.Core
 {
     /// <summary>
-    /// Represents a Vault Secret with lease information and generic data.
+    /// Represents a Vault SecretEngine with lease information and generic data.
     /// </summary>
     /// <typeparam name="TData">The type of the data contained in the secret.</typeparam>
     public class Secret<TData>
@@ -28,7 +28,7 @@ namespace VaultSharp.Core
         public string LeaseId { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="Secret{TData}"/> is renewable.
+        /// Gets or sets a value indicating whether this <see cref="SecretEngine{TData}"/> is renewable.
         /// </summary>
         /// <value>
         ///   <c>true</c> if renewable; otherwise, <c>false</c>.

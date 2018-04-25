@@ -1,7 +1,6 @@
-﻿
-using System;
+﻿using System;
 using System.Net.Http;
-using VaultSharp.Backends.Auth;
+using VaultSharp.AuthMethods;
 
 namespace VaultSharp
 {

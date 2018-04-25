@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using VaultSharp.Backends.Auth;
+using VaultSharp.AuthMethods;
 
 namespace VaultSharp.Core
 {

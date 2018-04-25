@@ -1,27 +1,23 @@
-﻿using System;
-using VaultSharp.Backends;
-using VaultSharp.Backends.Auth;
-using VaultSharp.Backends.Secret;
-using VaultSharp.Backends.System;
+﻿using VaultSharp.AuthMethods;
 using VaultSharp.Core;
+using VaultSharp.SecretEngines;
+using VaultSharp.SystemBackend;
 
 namespace VaultSharp.V1
 {
     internal class VaultClientV1 : IVaultClientV1
     {
-        private ISecretBackend secretBackend;
-        private IAuthBackend authBackend;
-        private ISystemBackend systemBackend;
-
         public VaultClientV1(Polymath polymath)
         { 
-            systemBackend = new SystemBackendProvider(polymath);
+            SystemBackend = new SystemBackendProvider(polymath);
+            AuthMethod = null;
+            SecretEngine = null;
         }
 
-        public ISecretBackend Secret => secretBackend;
+        public ISecretEngine SecretEngine { get; }
 
-        public IAuthBackend Auth => authBackend;
+        public IAuthBackend AuthMethod { get; }
 
-        public ISystemBackend System => systemBackend;
+        public ISystemBackend SystemBackend { get; }
     }
 }
