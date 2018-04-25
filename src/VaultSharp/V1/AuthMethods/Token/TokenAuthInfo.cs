@@ -13,7 +13,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// <value>
         /// The type of the authentication backend.
         /// </value>
-        public AuthBackendType BackendType => AuthBackendType.Token;
+        public AuthMethodType BackendType => AuthMethodType.Token;
 
         /// <summary>
         /// Gets the token.

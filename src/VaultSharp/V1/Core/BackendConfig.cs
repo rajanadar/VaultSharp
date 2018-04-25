@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace VaultSharp.Backends
+namespace VaultSharp.Core
 {
     /// <summary>
     /// Represents the configuration values for a backend.

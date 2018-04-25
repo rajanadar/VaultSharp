@@ -15,6 +15,6 @@ namespace VaultSharp.V1.AuthMethods
         /// The type of the backend.
         /// </value>
         [JsonProperty("type")]
-        public AuthBackendType Type { get; set; }
+        public AuthMethodType Type { get; set; }
     }
 }

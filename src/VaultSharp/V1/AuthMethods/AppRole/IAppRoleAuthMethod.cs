@@ -3,7 +3,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public interface IAppRoleAuthBackend
+    public interface IAppRoleAuthMethod
     {
     }
 }

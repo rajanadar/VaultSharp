@@ -2,8 +2,8 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods;
-using VaultSharp.Backends;
 using VaultSharp.V1.Core;
 using VaultSharp.V1.SecretEngines;
 using VaultSharp.V1.SystemBackend.Enterprise;

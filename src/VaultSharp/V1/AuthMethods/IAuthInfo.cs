@@ -11,6 +11,6 @@
         /// <value>
         /// The type of the authentication backend.
         /// </value>
-        AuthBackendType BackendType { get; }
+        AuthMethodType BackendType { get; }
     }
 }

@@ -16,7 +16,7 @@ namespace VaultSharp.V1
 
         public ISecretEngine SecretEngine { get; }
 
-        public IAuthBackend AuthMethod { get; }
+        public IAuthMethod AuthMethod { get; }
 
         public ISystemBackend SystemBackend { get; }
     }

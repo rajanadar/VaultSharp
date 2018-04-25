@@ -14,12 +14,12 @@ namespace VaultSharp.V1.AuthMethods
     /// <summary>
     /// 
     /// </summary>
-    public interface IAuthBackend
+    public interface IAuthMethod
     {
         /// <summary>
         /// 
         /// </summary>
-        IAppRoleAuthBackend AppRole { get; }
+        IAppRoleAuthMethod AppRole { get; }
 
         /// <summary>
         /// 

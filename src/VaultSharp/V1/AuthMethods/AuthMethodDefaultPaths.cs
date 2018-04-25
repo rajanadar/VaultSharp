@@ -1,6 +1,6 @@
 ﻿namespace VaultSharp.V1.AuthMethods
 {
-    public class AuthBackendDefaultPaths
+    public class AuthMethodDefaultPaths
     {
         public const string AppRole = "approle";
         public const string AWS = "aws";

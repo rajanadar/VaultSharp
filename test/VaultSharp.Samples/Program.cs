@@ -5,9 +5,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using Newtonsoft.Json;
+using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods;
 using VaultSharp.V1.AuthMethods.Token;
-using VaultSharp.Backends;
 using VaultSharp.V1.Core;
 using VaultSharp.V1.SecretEngines;
 using VaultSharp.V1.SystemBackend;
@@ -300,7 +300,7 @@ namespace VaultSharp.Samples
             var newAuth = new AuthMethod
             {
                 Path = "github1",
-                Type = AuthBackendType.GitHub,
+                Type = AuthMethodType.GitHub,
                 Description = "Github auth - test cases"
             };
 

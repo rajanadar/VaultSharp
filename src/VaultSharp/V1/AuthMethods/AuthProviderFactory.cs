@@ -8,7 +8,7 @@ namespace VaultSharp.V1.AuthMethods
     {
         public static IAuthProvider CreateAuthenticationProvider(IAuthInfo authInfo, Polymath polymath)
         {
-            if (authInfo.BackendType == AuthBackendType.Token)
+            if (authInfo.BackendType == AuthMethodType.Token)
             {
                 return new TokenAuthProvider(authInfo as TokenAuthInfo);
             }

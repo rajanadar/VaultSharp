@@ -6,8 +6,8 @@ namespace VaultSharp.V1.AuthMethods
     /// <summary>
     /// A helper class for retrieving and comparing Authentication Backend types.
     /// </summary>
-    [JsonConverter(typeof(AuthBackendTypeJsonConverter))] 
-    public class AuthBackendType : IEquatable<AuthBackendType>
+    [JsonConverter(typeof(AuthMethodTypeJsonConverter))] 
+    public class AuthMethodType : IEquatable<AuthMethodType>
     {
         /// <summary>
         /// Gets the application role.
@@ -15,7 +15,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <value>
         /// The application role.
         /// </value>
-        public static AuthBackendType AppRole { get; } = new AuthBackendType(AuthBackendDefaultPaths.AppRole);
+        public static AuthMethodType AppRole { get; } = new AuthMethodType(AuthMethodDefaultPaths.AppRole);
 
         /// <summary>
         /// Gets the aws type.
@@ -23,7 +23,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <value>
         /// The aws type.
         /// </value>
-        public static AuthBackendType AWSRole { get; } = new AuthBackendType(AuthBackendDefaultPaths.AWS);
+        public static AuthMethodType AWSRole { get; } = new AuthMethodType(AuthMethodDefaultPaths.AWS);
 
         /// <summary>
         /// Gets the git hub type.
@@ -31,7 +31,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <value>
         /// The git hub.
         /// </value>
-        public static AuthBackendType GitHub { get; } = new AuthBackendType(AuthBackendDefaultPaths.GitHub);
+        public static AuthMethodType GitHub { get; } = new AuthMethodType(AuthMethodDefaultPaths.GitHub);
 
         /// <summary>
         /// Gets the GoogleCloud type.
@@ -39,7 +39,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <value>
         /// The GoogleCloud.
         /// </value>
-        public static AuthBackendType GoogleCloud { get; } = new AuthBackendType(AuthBackendDefaultPaths.GoogleCloud);
+        public static AuthMethodType GoogleCloud { get; } = new AuthMethodType(AuthMethodDefaultPaths.GoogleCloud);
 
         /// <summary>
         /// Gets the Kubernetes type.
@@ -47,7 +47,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <value>
         /// The Kubernetes.
         /// </value>
-        public static AuthBackendType Kubernetes { get; } = new AuthBackendType(AuthBackendDefaultPaths.Kubernetes);
+        public static AuthMethodType Kubernetes { get; } = new AuthMethodType(AuthMethodDefaultPaths.Kubernetes);
 
         /// <summary>
         /// Gets the LDAP type.
@@ -55,7 +55,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <value>
         /// The LDAP.
         /// </value>
-        public static AuthBackendType LDAP { get; } = new AuthBackendType(AuthBackendDefaultPaths.LDAP);
+        public static AuthMethodType LDAP { get; } = new AuthMethodType(AuthMethodDefaultPaths.LDAP);
 
         /// <summary>
         /// Gets the Okta type.
@@ -63,7 +63,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <value>
         /// The Okta.
         /// </value>
-        public static AuthBackendType Okta { get; } = new AuthBackendType(AuthBackendDefaultPaths.Okta);
+        public static AuthMethodType Okta { get; } = new AuthMethodType(AuthMethodDefaultPaths.Okta);
 
         /// <summary>
         /// Gets the RADIUS type.
@@ -71,7 +71,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <value>
         /// The RADIUS.
         /// </value>
-        public static AuthBackendType RADIUS { get; } = new AuthBackendType(AuthBackendDefaultPaths.RADIUS);
+        public static AuthMethodType RADIUS { get; } = new AuthMethodType(AuthMethodDefaultPaths.RADIUS);
 
         /// <summary>
         /// Gets the certificate type.
@@ -79,7 +79,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <value>
         /// The certificate.
         /// </value>
-        public static AuthBackendType Cert { get; } = new AuthBackendType(AuthBackendDefaultPaths.Cert);
+        public static AuthMethodType Cert { get; } = new AuthMethodType(AuthMethodDefaultPaths.Cert);
 
         /// <summary>
         /// Gets the token type.
@@ -87,7 +87,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <value>
         /// The token.
         /// </value>
-        public static AuthBackendType Token { get; } = new AuthBackendType(AuthBackendDefaultPaths.Token);
+        public static AuthMethodType Token { get; } = new AuthMethodType(AuthMethodDefaultPaths.Token);
 
         /// <summary>
         /// Gets the generic type.
@@ -95,7 +95,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <value>
         /// The generic.
         /// </value>
-        public static AuthBackendType UserPass { get; } = new AuthBackendType(AuthBackendDefaultPaths.UserPass);
+        public static AuthMethodType UserPass { get; } = new AuthMethodType(AuthMethodDefaultPaths.UserPass);
 
         /// <summary>
         /// Gets the type type.
@@ -106,10 +106,10 @@ namespace VaultSharp.V1.AuthMethods
         public string Type { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AuthBackendType" /> class.
+        /// Initializes a new instance of the <see cref="AuthMethodType" /> class.
         /// </summary>
         /// <param name="type">The type.</param>
-        public AuthBackendType(string type)
+        public AuthMethodType(string type)
         {
             Type = type;
         }
@@ -122,7 +122,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator ==(AuthBackendType left, AuthBackendType right)
+        public static bool operator ==(AuthMethodType left, AuthMethodType right)
         {
             // If both are null, or both are same instance, return true.
             if (ReferenceEquals(left, right))
@@ -147,7 +147,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator !=(AuthBackendType left, AuthBackendType right)
+        public static bool operator !=(AuthMethodType left, AuthMethodType right)
         {
             return !(left == right);
         }
@@ -159,7 +159,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <returns>
         /// true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
         /// </returns>
-        public bool Equals(AuthBackendType other)
+        public bool Equals(AuthMethodType other)
         {
             if ((object)other == null)
                 return false;
@@ -176,7 +176,7 @@ namespace VaultSharp.V1.AuthMethods
         /// </returns>
         public override bool Equals(object obj)
         {
-            return Equals(obj as AuthBackendType);
+            return Equals(obj as AuthMethodType);
         }
 
         /// <summary>
