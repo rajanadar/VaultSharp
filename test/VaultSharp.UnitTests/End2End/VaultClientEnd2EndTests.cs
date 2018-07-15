@@ -16,42 +16,22 @@ using Xunit;
 
 namespace VaultSharp.UnitTests.End2End
 {
-    // for all the tests to run smoothly, this is the only method,
-    // you need to setup your initial values.
-    // Ensure you have an instance of Vault Server started up but not initialized.
-
-    /*
-
-        backend "file" {
-          path = "e:\raja\work\vault\file_backend"
-        }
-
-        listener "tcp" {
-          address = "127.0.0.1:8200"
-          tls_disable = 1
-        }
-
-        rd file_backend /S /Q
-        vault server -config f.hcl
-
-    */
-
+    /// <summary>
+    /// This class expects the currently supported version of vault.exe file 
+    /// in the bin/Debug folder of the Testing solution.
+    /// The config is Configs\end2end.hcl
+    /// </summary>
     public class VaultClientEnd2EndTests : IDisposable
     {
         private const string MasterKey = "86332b94ffc41576c967d177f069ab52540f165b2821d1dbf4267a4b43b1370e";
         private const string RootToken = "a3d54c99-75fc-5bf3-e1e9-b6cb5b775e92";
-        private const string VaultWorkingDirectory = "";
-        private const string VaultExecutable = "vault.exe";
-        private const string VaultStartupArguments = "server -log-level debug -config config.hcl";
 
-        private static readonly bool DevServer = false;
-
-        private static Uri _vaultUri;
+        private Uri _vaultUri;
         private static MasterCredentials _masterCredentials;
-
         private static IVaultClient _authenticatedVaultClient;
         private static IVaultClient _unauthenticatedVaultClient;
         private static Process _vaultServerProcess;
+        private string _workingDirectory;
 
         /// <summary>
         ///  Parameterless setup method that will run before each test
@@ -102,6 +82,7 @@ namespace VaultSharp.UnitTests.End2End
             var tokenInfoByAccessor = await _authenticatedVaultClient.GetTokenInfoByAccessorAsync(accessors.Data.Keys.First());
             Assert.NotNull(tokenInfoByAccessor);
 
+            // TODO: Write another tests that tests revoking the token in isolation
             //await _authenticatedVaultClient.RevokeTokenByAccessorAsync(accessors.Data.Keys.First());
 
             var accessors2 = await _authenticatedVaultClient.GetTokenAccessorListAsync();
@@ -173,57 +154,7 @@ namespace VaultSharp.UnitTests.End2End
         }
 
         [Fact]
-        private async Task PGPKeysMustMatch()
-        {
-            // try to initialize with mismatched PGP Key
-            var invalidPgpException =
-                Assert.Throws<AggregateException>(
-                    () =>
-                        _masterCredentials =
-                            _unauthenticatedVaultClient.InitializeAsync(new InitializeOptions
-                            {
-                                SecretShares = 5,
-                                SecretThreshold = 3,
-                                PgpKeys = new[] { Convert.ToBase64String(Encoding.UTF8.GetBytes("pgp_key1")) }
-                            }).Result);
-
-            Assert.NotNull(invalidPgpException.InnerException);
-            Assert.True(invalidPgpException.InnerException.Message.Contains("400 BadRequest"));
-
-            _masterCredentials = _unauthenticatedVaultClient.InitializeAsync(new InitializeOptions
-            {
-                SecretShares = 7,
-                SecretThreshold = 6
-            }).Result;
-
-            Assert.NotNull(_masterCredentials);
-            Assert.NotNull(_masterCredentials.RootToken);
-            Assert.NotNull(_masterCredentials.MasterKeys);
-
-            Assert.True(_masterCredentials.MasterKeys.Length == 7);
-
-            // todo find valid PGP keys
-            //var pgpKeys = new[] { Convert.ToBase64String(Encoding.UTF8.GetBytes("pgp_key1")), Convert.ToBase64String(Encoding.UTF8.GetBytes("pgp_key2")) };
-
-            //_masterCredentials = _unauthenticatedVaultClient.InitializeAsync(2, 2, pgpKeys).Result;
-
-            //Assert.NotNull(_masterCredentials);
-            //Assert.NotNull(_masterCredentials.RootToken);
-            //Assert.NotNull(_masterCredentials.MasterKeys);
-
-            //Assert.True(_masterCredentials.MasterKeys.Length == 5);
-
-            //process.CloseMainWindow();
-            //process.WaitForExit();
-
-            //process = Process.Start(new ProcessStartInfo(fileName));
-            //Assert.NotNull(process);
-
-            //_vaultServerProcessId = process.Id;
-        }
-
-        [Fact]
-        private async Task CannotInitializeMoreThanOnce()
+        private void CannotInitializeMoreThanOnce()
         {
             // try to initialize an already initialized vault.
             var aggregateException =
@@ -237,6 +168,8 @@ namespace VaultSharp.UnitTests.End2End
             Assert.NotNull(aggregateException.InnerException);
             Assert.True(aggregateException.InnerException.Message.Contains("Vault is already initialized"));
         }
+
+        [Fact(Skip = "Need Auth Credentials")]
         private async Task GithubAuthenticationProviderTests()
         {
             // github auth 
@@ -261,7 +194,6 @@ namespace VaultSharp.UnitTests.End2End
 
             await _authenticatedVaultClient.DisableAuthenticationBackendAsync(githubAuthBackend.AuthenticationPath);
         }
-
         private async Task RawSecretAndMoreTests()
         {
             // renew secret
@@ -295,24 +227,62 @@ namespace VaultSharp.UnitTests.End2End
         public void Dispose()
         {
             _vaultServerProcess.CloseMainWindow();
-            _vaultServerProcess.WaitForExit();
+            // Todo: Figure out why WaitToExit() here doesn't work.
+            // If WaitToExit() was used, the process was not shut down correctly
+            // It had a lock on the config directory and the next Test could not run
+            //_vaultServerProcess.WaitForExit(100);
+            _vaultServerProcess.Kill();
         }
 
-        private static void RunAsDevServer()
+        /// <summary>
+        /// Run the vault.exe that is expected to be in the bin/Debug folder of this project
+        /// </summary>
+        /// <returns>
+        /// <see cref="System.Diagnostics.Process"/> running the vault.exe
+        /// </returns>
+        private Process StartVaultServerProcess()
         {
-            _masterCredentials = new MasterCredentials
+            // Create fresh file_directory in the testing folder
+            _workingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "file_backend");
+            if (Directory.Exists(_workingDirectory))
+                Directory.Delete(_workingDirectory, true);
+
+            Directory.CreateDirectory(_workingDirectory);
+            // Todo: Create Load Config helper methods
+            var configPath = Path.Combine(Directory.GetCurrentDirectory(), "Configs", "end2end.hcl");
+            var startupArguements = $"server -log-level debug -config={configPath}";
+
+            var processStartInfo = new ProcessStartInfo("vault.exe");
+            processStartInfo.WorkingDirectory = _workingDirectory;
+            processStartInfo.Arguments = startupArguements;
+            processStartInfo.RedirectStandardError = true;
+            processStartInfo.RedirectStandardOutput = true;
+            processStartInfo.UseShellExecute = false;
+
+            var process = new Process();
+            process.StartInfo = processStartInfo;
+            process.Start();
+
+            Thread.Sleep(100);
+            if (process.HasExited)
             {
-                MasterKeys = new[] { MasterKey },
-                RootToken = RootToken
-            };
+                var err = process.StandardError.ReadToEnd();
+                var output = process.StandardOutput.ReadToEnd();
+                throw new Exception("The vault server executable used in these tests had trouble starting. \n" +
+                    $"STDOUT: \"{output}\"\n" +
+                    $"STDERR: \"{err}\"\n" +
+                    "The End2End tests expect a vault executable in the bin/Debug folder."
+                    );
+            }
 
-            IAuthenticationInfo devRootTokenInfo = new TokenAuthenticationInfo(_masterCredentials.RootToken);
-            _authenticatedVaultClient = VaultClientFactory.CreateVaultClient(_vaultUri, devRootTokenInfo);
-
-            return;
+            return process;
         }
 
-        private static MasterCredentials InitializeVault()
+        /// <summary>
+        /// Initialize the vault server. Basic health checks
+        /// </summary>
+        /// <returns><see cref="MasterCredentials"/> of the Vault instance sealed and initialized</returns>
+        private MasterCredentials InitializeVault()
         {
             var initialized = _unauthenticatedVaultClient.GetInitializationStatusAsync().Result;
             Assert.False(initialized);
@@ -334,24 +304,10 @@ namespace VaultSharp.UnitTests.End2End
             return masterCredentials;
         }
 
-        private static Process StartVaultServerProcess()
-        {
-            var path = Path.Combine(VaultWorkingDirectory, "file_backend");
-            if (Directory.Exists(path))
-                Directory.Delete(path, true);
-            Directory.CreateDirectory(path);
-
-            var processStartInfo = new ProcessStartInfo(VaultExecutable);
-            processStartInfo.WorkingDirectory = VaultWorkingDirectory;
-            processStartInfo.Arguments = VaultStartupArguments;
-
-            var process = new Process();
-            process.StartInfo = processStartInfo;
-            process.Start();
-            return process;
-        }
-
-        private static void Unseal()
+        /// <summary>
+        /// Unseal the vault instance
+        /// </summary>
+        private void Unseal()
         {
             foreach (var masterKey in _masterCredentials.MasterKeys)
             {
@@ -374,6 +330,24 @@ namespace VaultSharp.UnitTests.End2End
             }
         }
 
+        //[Fact]
+        //private async Task PGPOptionsMustMatch()
+        //{
+        //    // try to initialize with mismatched PGP Key
+        //    var vaultUri =
+        //    var unauthenticatedVaultClient = VaultClientFactory.CreateVaultClient(_vaultUri, null);
+        //    var invalidPgpException = await Assert.ThrowsAsync<System.Exception>(
+        //            () => unauthenticatedVaultClient.InitializeAsync(new InitializeOptions
+        //            {
+        //                SecretShares = 5,
+        //                SecretThreshold = 3,
+        //                PgpKeys = new[] { Convert.ToBase64String(Encoding.UTF8.GetBytes("pgp_key1")) }
+        //            }));
+
+        //    Assert.NotNull(invalidPgpException.InnerException);
+        //    Assert.True(invalidPgpException.InnerException.Message.Contains("400 BadRequest"));
+        //    // todo find valid PGP keys
+        //}
 
         //        [Fact(Skip = "no ldap")]
         //        public async Task LDAPAuthenticationProviderTest()
