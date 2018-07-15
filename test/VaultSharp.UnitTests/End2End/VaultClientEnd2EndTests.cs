@@ -16,6 +16,26 @@ using Xunit;
 
 namespace VaultSharp.UnitTests.End2End
 {
+    // for all the tests to run smoothly, this is the only method,
+    // you need to setup your initial values.
+    // Ensure you have an instance of Vault Server started up but not initialized.
+
+    /*
+
+        backend "file" {
+          path = "e:\raja\work\vault\file_backend"
+        }
+
+        listener "tcp" {
+          address = "127.0.0.1:8200"
+          tls_disable = 1
+        }
+
+        rd file_backend /S /Q
+        vault server -config f.hcl
+
+    */
+
     public class VaultClientEnd2EndTests : IDisposable
     {
         private const string MasterKey = "86332b94ffc41576c967d177f069ab52540f165b2821d1dbf4267a4b43b1370e";
@@ -44,7 +64,27 @@ namespace VaultSharp.UnitTests.End2End
         /// </remarks>
         public VaultClientEnd2EndTests()
         {
-            InitializeVault();
+            var vaultUriWithPort = "http://127.0.0.1:8200";
+            _vaultUri = new Uri(vaultUriWithPort);
+            _unauthenticatedVaultClient = VaultClientFactory.CreateVaultClient(_vaultUri, null);
+            _vaultServerProcess = StartVaultServerProcess();
+            _masterCredentials = InitializeVault();
+            Unseal();
+        }
+
+        [Fact]
+        private void VaultServerProcessIsNotNull()
+        {
+            Assert.NotNull(_vaultServerProcess);
+        }
+
+        [Fact]
+        private void MasterCredentialsAreNotNull()
+        {
+            Assert.NotNull(_masterCredentials);
+            Assert.NotNull(_masterCredentials.RootToken);
+            Assert.NotNull(_masterCredentials.MasterKeys);
+            Assert.True(_masterCredentials.MasterKeys.Length == 5);
         }
 
         [Fact]
@@ -132,6 +172,71 @@ namespace VaultSharp.UnitTests.End2End
             await _authenticatedVaultClient.DisableAuthenticationBackendAsync(authBackend.AuthenticationPath);
         }
 
+        [Fact]
+        private async Task PGPKeysMustMatch()
+        {
+            // try to initialize with mismatched PGP Key
+            var invalidPgpException =
+                Assert.Throws<AggregateException>(
+                    () =>
+                        _masterCredentials =
+                            _unauthenticatedVaultClient.InitializeAsync(new InitializeOptions
+                            {
+                                SecretShares = 5,
+                                SecretThreshold = 3,
+                                PgpKeys = new[] { Convert.ToBase64String(Encoding.UTF8.GetBytes("pgp_key1")) }
+                            }).Result);
+
+            Assert.NotNull(invalidPgpException.InnerException);
+            Assert.True(invalidPgpException.InnerException.Message.Contains("400 BadRequest"));
+
+            _masterCredentials = _unauthenticatedVaultClient.InitializeAsync(new InitializeOptions
+            {
+                SecretShares = 7,
+                SecretThreshold = 6
+            }).Result;
+
+            Assert.NotNull(_masterCredentials);
+            Assert.NotNull(_masterCredentials.RootToken);
+            Assert.NotNull(_masterCredentials.MasterKeys);
+
+            Assert.True(_masterCredentials.MasterKeys.Length == 7);
+
+            // todo find valid PGP keys
+            //var pgpKeys = new[] { Convert.ToBase64String(Encoding.UTF8.GetBytes("pgp_key1")), Convert.ToBase64String(Encoding.UTF8.GetBytes("pgp_key2")) };
+
+            //_masterCredentials = _unauthenticatedVaultClient.InitializeAsync(2, 2, pgpKeys).Result;
+
+            //Assert.NotNull(_masterCredentials);
+            //Assert.NotNull(_masterCredentials.RootToken);
+            //Assert.NotNull(_masterCredentials.MasterKeys);
+
+            //Assert.True(_masterCredentials.MasterKeys.Length == 5);
+
+            //process.CloseMainWindow();
+            //process.WaitForExit();
+
+            //process = Process.Start(new ProcessStartInfo(fileName));
+            //Assert.NotNull(process);
+
+            //_vaultServerProcessId = process.Id;
+        }
+
+        [Fact]
+        private async Task CannotInitializeMoreThanOnce()
+        {
+            // try to initialize an already initialized vault.
+            var aggregateException =
+                Assert.Throws<AggregateException>(
+                    () => _masterCredentials = _unauthenticatedVaultClient.InitializeAsync(new InitializeOptions
+                    {
+                        SecretShares = 5,
+                        SecretThreshold = 3
+                    }).Result);
+
+            Assert.NotNull(aggregateException.InnerException);
+            Assert.True(aggregateException.InnerException.Message.Contains("Vault is already initialized"));
+        }
         private async Task GithubAuthenticationProviderTests()
         {
             // github auth 
@@ -193,164 +298,40 @@ namespace VaultSharp.UnitTests.End2End
             _vaultServerProcess.WaitForExit();
         }
 
-        private static void InitializeVault()
+        private static void RunAsDevServer()
         {
-            // for all the tests to run smoothly, this is the only method,
-            // you need to setup your initial values.
-            // Ensure you have an instance of Vault Server started up but not initialized.
-
-            /*
-
-                backend "file" {
-                  path = "e:\raja\work\vault\file_backend"
-                }
-
-                listener "tcp" {
-                  address = "127.0.0.1:8200"
-                  tls_disable = 1
-                }
-
-                rd file_backend /S /Q
-                vault server -config f.hcl
-
-            */
-
-            var vaultUriWithPort = "http://127.0.0.1:8200";
-
-            _vaultUri = new Uri(vaultUriWithPort);
-            _unauthenticatedVaultClient = VaultClientFactory.CreateVaultClient(_vaultUri, null);
-
-            if (DevServer)
+            _masterCredentials = new MasterCredentials
             {
-                _masterCredentials = new MasterCredentials
-                {
-                    MasterKeys = new[] { MasterKey },
-                    RootToken = RootToken
-                };
+                MasterKeys = new[] { MasterKey },
+                RootToken = RootToken
+            };
 
-                IAuthenticationInfo devRootTokenInfo = new TokenAuthenticationInfo(_masterCredentials.RootToken);
-                _authenticatedVaultClient = VaultClientFactory.CreateVaultClient(_vaultUri, devRootTokenInfo);
+            IAuthenticationInfo devRootTokenInfo = new TokenAuthenticationInfo(_masterCredentials.RootToken);
+            _authenticatedVaultClient = VaultClientFactory.CreateVaultClient(_vaultUri, devRootTokenInfo);
 
-                return;
-            }
+            return;
+        }
 
-            // Start vault server process
-            _vaultServerProcess = StartVaultServerProcess();
-
-            Assert.NotNull(_vaultServerProcess);
-
-            //_vaultServerProcess = process;
-
+        private static MasterCredentials InitializeVault()
+        {
             var initialized = _unauthenticatedVaultClient.GetInitializationStatusAsync().Result;
             Assert.False(initialized);
 
             var healthStatus = _unauthenticatedVaultClient.GetHealthStatusAsync().Result;
             Assert.False(healthStatus.Initialized);
 
-            // try to initialize with mismatched PGP Key
-            var invalidPgpException =
-                Assert.Throws<AggregateException>(
-                    () =>
-                        _masterCredentials =
-                            _unauthenticatedVaultClient.InitializeAsync(new InitializeOptions
-                            {
-                                SecretShares = 5,
-                                SecretThreshold = 3,
-                                PgpKeys = new[] { Convert.ToBase64String(Encoding.UTF8.GetBytes("pgp_key1")) }
-                            }).Result);
-
-            Assert.NotNull(invalidPgpException.InnerException);
-            Assert.True(invalidPgpException.InnerException.Message.Contains("400 BadRequest"));
-
-            _masterCredentials = _unauthenticatedVaultClient.InitializeAsync(new InitializeOptions
-            {
-                SecretShares = 7,
-                SecretThreshold = 6
-            }).Result;
-
-            Assert.NotNull(_masterCredentials);
-            Assert.NotNull(_masterCredentials.RootToken);
-            Assert.NotNull(_masterCredentials.MasterKeys);
-
-            Assert.True(_masterCredentials.MasterKeys.Length == 7);
-
-            _vaultServerProcess.CloseMainWindow();
-            _vaultServerProcess.WaitForExit();
-
-            _vaultServerProcess = StartVaultServerProcess();
-            Assert.NotNull(_vaultServerProcess);
-
-            // todo find valid PGP keys
-            //var pgpKeys = new[] { Convert.ToBase64String(Encoding.UTF8.GetBytes("pgp_key1")), Convert.ToBase64String(Encoding.UTF8.GetBytes("pgp_key2")) };
-
-            //_masterCredentials = _unauthenticatedVaultClient.InitializeAsync(2, 2, pgpKeys).Result;
-
-            //Assert.NotNull(_masterCredentials);
-            //Assert.NotNull(_masterCredentials.RootToken);
-            //Assert.NotNull(_masterCredentials.MasterKeys);
-
-            //Assert.True(_masterCredentials.MasterKeys.Length == 5);
-
-            //process.CloseMainWindow();
-            //process.WaitForExit();
-
-            //process = Process.Start(new ProcessStartInfo(fileName));
-            //Assert.NotNull(process);
-
-            //_vaultServerProcessId = process.Id;
-
-            _masterCredentials = _unauthenticatedVaultClient.InitializeAsync(new InitializeOptions
+            // Initialize Vault
+            var masterCredentials = _unauthenticatedVaultClient.InitializeAsync(new InitializeOptions
             {
                 SecretShares = 5,
                 SecretThreshold = 3
             }).Result;
 
-            Assert.NotNull(_masterCredentials);
-            Assert.NotNull(_masterCredentials.RootToken);
-            Assert.NotNull(_masterCredentials.MasterKeys);
-
-            Assert.True(_masterCredentials.MasterKeys.Length == 5);
-
             healthStatus = _unauthenticatedVaultClient.GetHealthStatusAsync().Result;
             Assert.True(healthStatus.Initialized);
             Assert.True(healthStatus.Sealed);
 
-            // try to initialize an already initialized vault.
-            var aggregateException =
-                Assert.Throws<AggregateException>(
-                    () => _masterCredentials = _unauthenticatedVaultClient.InitializeAsync(new InitializeOptions
-                    {
-                        SecretShares = 5,
-                        SecretThreshold = 3
-                    }).Result);
-
-            Assert.NotNull(aggregateException.InnerException);
-            Assert.True(aggregateException.InnerException.Message.Contains("Vault is already initialized"));
-
-            var sealStatus = _unauthenticatedVaultClient.GetSealStatusAsync().Result;
-
-            if (sealStatus.Sealed)
-            {
-                foreach (var masterKey in _masterCredentials.MasterKeys)
-                {
-                    sealStatus = _unauthenticatedVaultClient.UnsealAsync(masterKey).Result;
-
-                    if (!sealStatus.Sealed)
-                    {
-                        healthStatus = _unauthenticatedVaultClient.GetHealthStatusAsync().Result;
-                        Assert.True(healthStatus.Initialized);
-                        Assert.False(healthStatus.Sealed);
-
-                        // we are acting as the root user here.
-
-                        IAuthenticationInfo tokenAuthenticationInfo =
-                            new TokenAuthenticationInfo(_masterCredentials.RootToken);
-                        _authenticatedVaultClient = VaultClientFactory.CreateVaultClient(_vaultUri, tokenAuthenticationInfo);
-
-                        break;
-                    }
-                }
-            }
+            return masterCredentials;
         }
 
         private static Process StartVaultServerProcess()
@@ -368,6 +349,29 @@ namespace VaultSharp.UnitTests.End2End
             process.StartInfo = processStartInfo;
             process.Start();
             return process;
+        }
+
+        private static void Unseal()
+        {
+            foreach (var masterKey in _masterCredentials.MasterKeys)
+            {
+                var sealStatus = _unauthenticatedVaultClient.UnsealAsync(masterKey).Result;
+
+                if (!sealStatus.Sealed)
+                {
+                    var healthStatus = _unauthenticatedVaultClient.GetHealthStatusAsync().Result;
+                    Assert.True(healthStatus.Initialized);
+                    Assert.False(healthStatus.Sealed);
+
+                    // we are acting as the root user here.
+
+                    IAuthenticationInfo tokenAuthenticationInfo =
+                        new TokenAuthenticationInfo(_masterCredentials.RootToken);
+                    _authenticatedVaultClient = VaultClientFactory.CreateVaultClient(_vaultUri, tokenAuthenticationInfo);
+
+                    break;
+                }
+            }
         }
 
 
