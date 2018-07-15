@@ -16,7 +16,7 @@ using Xunit;
 
 namespace VaultSharp.UnitTests.End2End
 {
-    public class VaultClientEnd2EndTests
+    public class VaultClientEnd2EndTests : IDisposable
     {
         private const string MasterKey = "86332b94ffc41576c967d177f069ab52540f165b2821d1dbf4267a4b43b1370e";
         private const string RootToken = "a3d54c99-75fc-5bf3-e1e9-b6cb5b775e92";
@@ -26,20 +26,6 @@ namespace VaultSharp.UnitTests.End2End
 
         private static readonly bool DevServer = false;
 
-        [Fact]
-        public async Task AllTests()
-        {
-            if (!DevServer)
-            {
-                await RawSecretAndMoreTests();
-            }
-
-            await TokenTests();
-
-            await UsernamePasswordAuthenticationProviderTests();
-            await TokenAuthenticationProviderTests();
-        }
-
         private static Uri _vaultUri;
         private static MasterCredentials _masterCredentials;
 
@@ -47,25 +33,162 @@ namespace VaultSharp.UnitTests.End2End
         private static IVaultClient _unauthenticatedVaultClient;
         private static int _vaultServerProcessId;
 
-        static VaultClientEnd2EndTests()
+        /// <summary>
+        ///  Parameterless setup method that will run before each test
+        ///  Per method teardown is justified in order to have a clean
+        ///   Vault server for each test
+        /// </summary>
+        /// <remarks>
+        /// https://xunit.github.io/docs/comparisons.html
+        /// http://mrshipley.com/2018/01/10/implementing-a-teardown-method-in-xunit/
+        /// </remarks>
+        public VaultClientEnd2EndTests()
         {
             InitializeVault();
         }
 
-        ~VaultClientEnd2EndTests()
+        [Fact]
+        private async Task TokenTests()
         {
-            if (!DevServer)
-            {
-                Dispose();
-            }
+            var secret1 = await _authenticatedVaultClient.CreateTokenAsync();
+            Assert.NotNull(secret1);
+
+            var secret2 = await _authenticatedVaultClient.CreateTokenAsync(new TokenCreationOptions { NoParent = true });
+            Assert.NotNull(secret2);
+
+            var accessors = await _authenticatedVaultClient.GetTokenAccessorListAsync();
+            Assert.True(accessors.Data.Keys.Any());
+
+            var tokenInfoByAccessor = await _authenticatedVaultClient.GetTokenInfoByAccessorAsync(accessors.Data.Keys.First());
+            Assert.NotNull(tokenInfoByAccessor);
+
+            //await _authenticatedVaultClient.RevokeTokenByAccessorAsync(accessors.Data.Keys.First());
+
+            var accessors2 = await _authenticatedVaultClient.GetTokenAccessorListAsync();
+            Assert.True(accessors.Data.Keys.Count == accessors2.Data.Keys.Count);
+
+            var secret3 = await _authenticatedVaultClient.CreateTokenAsync(new TokenCreationOptions { NoParent = true });
+            Assert.NotNull(secret3);
+
+            var callingTokenInfo = await _authenticatedVaultClient.GetCallingTokenInfoAsync();
+            Assert.Equal(_masterCredentials.RootToken, callingTokenInfo.Data.Id);
+
+            var tokenInfo1 = await _authenticatedVaultClient.GetTokenInfoAsync(secret1.AuthorizationInfo.ClientToken);
+            Assert.Equal(secret1.AuthorizationInfo.ClientToken, tokenInfo1.Data.Id);
+
+            var tokenInfo2 = await _authenticatedVaultClient.GetTokenInfoAsync(secret2.AuthorizationInfo.ClientToken);
+            Assert.Equal(secret2.AuthorizationInfo.ClientToken, tokenInfo2.Data.Id);
+
+            await _authenticatedVaultClient.RevokeTokenAsync(secret1.AuthorizationInfo.ClientToken, true);
+            await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.GetTokenInfoAsync(secret1.AuthorizationInfo.ClientToken));
+
+            // check if renewal of same token calls renew-self.
+            // do it with lease id.
+
+            // await _authenticatedVaultClient.RenewTokenAsync(_masterCredentials.RootToken);
+
+            // renew calls need a lease id. raja todo
+        }
+
+        [Fact]
+        private async Task TokenAuthenticationProviderTests()
+        {
+            // token auth 
+
+            var secret = await _authenticatedVaultClient.CreateTokenAsync();
+
+            var tokenAuthenticationInfo = new TokenAuthenticationInfo(secret.AuthorizationInfo.ClientToken);
+            var tokenClient = VaultClientFactory.CreateVaultClient(_vaultUri, tokenAuthenticationInfo);
+
+            var authBackends = await tokenClient.GetAllEnabledAuthenticationBackendsAsync();
+            Assert.True(authBackends.Data.Any());
+        }
+
+        [Fact]
+        private async Task UsernamePasswordAuthenticationProviderTests()
+        {
+            // userpass auth 
+
+            var path = "userpass" + Guid.NewGuid();
+            var prefix = "auth/" + path;
+            var username = "user1";
+            var password = "pass1";
+
+            var authenticationInfo = new UsernamePasswordAuthenticationInfo(path, username, password);
+
+            var userPassClient = VaultClientFactory.CreateVaultClient(_vaultUri, authenticationInfo);
+            var authBackend = new AuthenticationBackend { BackendType = AuthenticationBackendType.UsernamePassword, AuthenticationPath = authenticationInfo.MountPoint };
+
+            await _authenticatedVaultClient.EnableAuthenticationBackendAsync(authBackend);
+            await _authenticatedVaultClient.WriteSecretAsync(prefix + "/users/" + username, new Dictionary<string, object>
+                    {
+                        { "password", password },
+                        { "policies", "root" }
+                    });
+
+            var authBackends = await _authenticatedVaultClient.GetAllEnabledAuthenticationBackendsAsync();
+            Assert.True(authBackends.Data.Any());
+
+            await _authenticatedVaultClient.DisableAuthenticationBackendAsync(authBackend.AuthenticationPath);
+        }
+
+        private async Task GithubAuthenticationProviderTests()
+        {
+            // github auth 
+
+            var personalAccessToken = "2ba5fecdddbf09b2b6facc495bdae12f3067d9d4";
+            var path = "github" + Guid.NewGuid();
+            var prefix = "auth/" + path;
+            var organization = "testingalib";
+            var team = "testalibteam1";
+
+            var githubAuthenticationInfo = new GitHubAuthenticationInfo(path, personalAccessToken);
+
+            var githubClient = VaultClientFactory.CreateVaultClient(_vaultUri, githubAuthenticationInfo);
+            var githubAuthBackend = new AuthenticationBackend { BackendType = AuthenticationBackendType.GitHub, AuthenticationPath = githubAuthenticationInfo.MountPoint };
+
+            await _authenticatedVaultClient.EnableAuthenticationBackendAsync(githubAuthBackend);
+            await _authenticatedVaultClient.WriteSecretAsync(prefix + "/config", new Dictionary<string, object> { { "organization", organization } });
+            await _authenticatedVaultClient.WriteSecretAsync(prefix + "/map/teams/" + team, new Dictionary<string, object> { { "value", "root" } });
+
+            var authBackends = await githubClient.GetAllEnabledAuthenticationBackendsAsync();
+            Assert.True(authBackends.Data.Any());
+
+            await _authenticatedVaultClient.DisableAuthenticationBackendAsync(githubAuthBackend.AuthenticationPath);
+        }
+
+        private async Task RawSecretAndMoreTests()
+        {
+            // renew secret
+            //var secret = await _authenticatedVaultClient.RenewSecretAsync(readRawValues.LeaseId);
+            // Assert.NotNull(secret);
+
+            // revoke secret (only applicable for secrets with leases)
+            // renew secret
+            // await _authenticatedVaultClient.RevokeSecretAsync(readRawValues.LeaseId);
+            // await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadRawSecretAsync(rawPath));
+
+            // write 2 secrets and revoke prefix.
+
+            //var path1 = rawPath + "a/key1";
+            //var path2 = rawPath + "a/key2";
+
+            //var rawValues2 = new Dictionary<string, object>(rawValues);
+            //rawValues2.Add("foo2", 10);
+
+            //await _authenticatedVaultClient.WriteRawSecretAsync(path1, rawValues);
+            //await _authenticatedVaultClient.WriteRawSecretAsync(path2, rawValues2);
+
+            //await _authenticatedVaultClient.RevokeAllSecretsUnderPrefixAsync(rawPath + "a");
+
+            //var v1 = await _authenticatedVaultClient.ReadRawSecretAsync(path1);
+
+            //await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadRawSecretAsync(path1));
+            //await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadRawSecretAsync(path2));
         }
 
         public void Dispose()
         {
-            GC.SuppressFinalize(this);
-
-            // Run at end
-
             var process = Process.GetProcesses().FirstOrDefault(p => p.Id == _vaultServerProcessId);
 
             if (process != null)
@@ -254,142 +377,6 @@ namespace VaultSharp.UnitTests.End2End
             return process;
         }
 
-        private async Task TokenTests()
-        {
-             var secret1 = await _authenticatedVaultClient.CreateTokenAsync();
-            Assert.NotNull(secret1);
-
-            var secret2 = await _authenticatedVaultClient.CreateTokenAsync(new TokenCreationOptions { NoParent = true });
-            Assert.NotNull(secret2);
-
-            var accessors = await _authenticatedVaultClient.GetTokenAccessorListAsync();
-            Assert.True(accessors.Data.Keys.Any());
-
-            var tokenInfoByAccessor = await _authenticatedVaultClient.GetTokenInfoByAccessorAsync(accessors.Data.Keys.First());
-            Assert.NotNull(tokenInfoByAccessor);
-
-            //await _authenticatedVaultClient.RevokeTokenByAccessorAsync(accessors.Data.Keys.First());
-
-            var accessors2 = await _authenticatedVaultClient.GetTokenAccessorListAsync();
-            Assert.True(accessors.Data.Keys.Count == accessors2.Data.Keys.Count);
-
-            var secret3 = await _authenticatedVaultClient.CreateTokenAsync(new TokenCreationOptions { NoParent = true });
-            Assert.NotNull(secret3);
-
-            var callingTokenInfo = await _authenticatedVaultClient.GetCallingTokenInfoAsync();
-            Assert.Equal(_masterCredentials.RootToken, callingTokenInfo.Data.Id);
-
-            var tokenInfo1 = await _authenticatedVaultClient.GetTokenInfoAsync(secret1.AuthorizationInfo.ClientToken);
-            Assert.Equal(secret1.AuthorizationInfo.ClientToken, tokenInfo1.Data.Id);
-
-            var tokenInfo2 = await _authenticatedVaultClient.GetTokenInfoAsync(secret2.AuthorizationInfo.ClientToken);
-            Assert.Equal(secret2.AuthorizationInfo.ClientToken, tokenInfo2.Data.Id);
-
-            await _authenticatedVaultClient.RevokeTokenAsync(secret1.AuthorizationInfo.ClientToken, true);
-            await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.GetTokenInfoAsync(secret1.AuthorizationInfo.ClientToken));
-
-            // check if renewal of same token calls renew-self.
-            // do it with lease id.
-
-            // await _authenticatedVaultClient.RenewTokenAsync(_masterCredentials.RootToken);
-
-            // renew calls need a lease id. raja todo
-        }
-
-        private async Task RawSecretAndMoreTests()
-        {
-            // renew secret
-            //var secret = await _authenticatedVaultClient.RenewSecretAsync(readRawValues.LeaseId);
-            // Assert.NotNull(secret);
-
-            // revoke secret (only applicable for secrets with leases)
-            // renew secret
-            // await _authenticatedVaultClient.RevokeSecretAsync(readRawValues.LeaseId);
-            // await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadRawSecretAsync(rawPath));
-
-            // write 2 secrets and revoke prefix.
-
-            //var path1 = rawPath + "a/key1";
-            //var path2 = rawPath + "a/key2";
-
-            //var rawValues2 = new Dictionary<string, object>(rawValues);
-            //rawValues2.Add("foo2", 10);
-
-            //await _authenticatedVaultClient.WriteRawSecretAsync(path1, rawValues);
-            //await _authenticatedVaultClient.WriteRawSecretAsync(path2, rawValues2);
-
-            //await _authenticatedVaultClient.RevokeAllSecretsUnderPrefixAsync(rawPath + "a");
-
-            //var v1 = await _authenticatedVaultClient.ReadRawSecretAsync(path1);
-
-            //await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadRawSecretAsync(path1));
-            //await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.ReadRawSecretAsync(path2));
-        }
-
-        private async Task GithubAuthenticationProviderTests()
-        {
-            // github auth 
-
-            var personalAccessToken = "2ba5fecdddbf09b2b6facc495bdae12f3067d9d4";
-            var path = "github" + Guid.NewGuid();
-            var prefix = "auth/" + path;
-            var organization = "testingalib";
-            var team = "testalibteam1";
-
-            var githubAuthenticationInfo = new GitHubAuthenticationInfo(path, personalAccessToken);
-
-            var githubClient = VaultClientFactory.CreateVaultClient(_vaultUri, githubAuthenticationInfo);
-            var githubAuthBackend = new AuthenticationBackend { BackendType = AuthenticationBackendType.GitHub, AuthenticationPath = githubAuthenticationInfo.MountPoint };
-
-            await _authenticatedVaultClient.EnableAuthenticationBackendAsync(githubAuthBackend);
-            await _authenticatedVaultClient.WriteSecretAsync(prefix + "/config", new Dictionary<string, object> { { "organization", organization } });
-            await _authenticatedVaultClient.WriteSecretAsync(prefix + "/map/teams/" + team, new Dictionary<string, object> { { "value", "root" } });
-
-            var authBackends = await githubClient.GetAllEnabledAuthenticationBackendsAsync();
-            Assert.True(authBackends.Data.Any());
-
-            await _authenticatedVaultClient.DisableAuthenticationBackendAsync(githubAuthBackend.AuthenticationPath);
-        }
-
-        private async Task UsernamePasswordAuthenticationProviderTests()
-        {
-            // userpass auth 
-
-            var path = "userpass" + Guid.NewGuid();
-            var prefix = "auth/" + path;
-            var username = "user1";
-            var password = "pass1";
-
-            var authenticationInfo = new UsernamePasswordAuthenticationInfo(path, username, password);
-
-            var userPassClient = VaultClientFactory.CreateVaultClient(_vaultUri, authenticationInfo);
-            var authBackend = new AuthenticationBackend { BackendType = AuthenticationBackendType.UsernamePassword, AuthenticationPath = authenticationInfo.MountPoint };
-
-            await _authenticatedVaultClient.EnableAuthenticationBackendAsync(authBackend);
-            await _authenticatedVaultClient.WriteSecretAsync(prefix + "/users/" + username, new Dictionary<string, object>
-                    {
-                        { "password", password },
-                        { "policies", "root" }
-                    });
-
-            var authBackends = await userPassClient.GetAllEnabledAuthenticationBackendsAsync();
-            Assert.True(authBackends.Data.Any());
-
-            await _authenticatedVaultClient.DisableAuthenticationBackendAsync(authBackend.AuthenticationPath);
-        }
-
-        private async Task TokenAuthenticationProviderTests()
-        {
-            // token auth 
-
-            var secret = await _authenticatedVaultClient.CreateTokenAsync();
-
-            var tokenAuthenticationInfo = new TokenAuthenticationInfo(secret.AuthorizationInfo.ClientToken);
-            var tokenClient = VaultClientFactory.CreateVaultClient(_vaultUri, tokenAuthenticationInfo);
-
-            var authBackends = await tokenClient.GetAllEnabledAuthenticationBackendsAsync();
-            Assert.True(authBackends.Data.Any());
-        }
 
         //        [Fact(Skip = "no ldap")]
         //        public async Task LDAPAuthenticationProviderTest()
