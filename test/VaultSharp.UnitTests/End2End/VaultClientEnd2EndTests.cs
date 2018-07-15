@@ -25,6 +25,7 @@ namespace VaultSharp.UnitTests.End2End
     {
         private const string MasterKey = "86332b94ffc41576c967d177f069ab52540f165b2821d1dbf4267a4b43b1370e";
         private const string RootToken = "a3d54c99-75fc-5bf3-e1e9-b6cb5b775e92";
+        private const string VaultUriWithPort = "http://127.0.0.1:8200";
 
         private Uri _vaultUri;
         private static MasterCredentials _masterCredentials;
@@ -43,9 +44,8 @@ namespace VaultSharp.UnitTests.End2End
         /// http://mrshipley.com/2018/01/10/implementing-a-teardown-method-in-xunit/
         /// </remarks>
         public VaultClientEnd2EndTests()
-        {
-            var vaultUriWithPort = "http://127.0.0.1:8200";
-            _vaultUri = new Uri(vaultUriWithPort);
+        { 
+            _vaultUri = new Uri(VaultUriWithPort);
             _unauthenticatedVaultClient = VaultClientFactory.CreateVaultClient(_vaultUri, null);
             _vaultServerProcess = StartVaultServerProcess();
             _masterCredentials = InitializeVault();
