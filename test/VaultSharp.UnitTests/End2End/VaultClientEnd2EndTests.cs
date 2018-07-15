@@ -31,7 +31,7 @@ namespace VaultSharp.UnitTests.End2End
 
         private static IVaultClient _authenticatedVaultClient;
         private static IVaultClient _unauthenticatedVaultClient;
-        private static int _vaultServerProcessId;
+        private static Process _vaultServerProcess;
 
         /// <summary>
         ///  Parameterless setup method that will run before each test
@@ -189,13 +189,8 @@ namespace VaultSharp.UnitTests.End2End
 
         public void Dispose()
         {
-            var process = Process.GetProcesses().FirstOrDefault(p => p.Id == _vaultServerProcessId);
-
-            if (process != null)
-            {
-                process.CloseMainWindow();
-                process.WaitForExit();
-            }
+            _vaultServerProcess.CloseMainWindow();
+            _vaultServerProcess.WaitForExit();
         }
 
         private static void InitializeVault()
@@ -240,11 +235,11 @@ namespace VaultSharp.UnitTests.End2End
             }
 
             // Start vault server process
-            Process process = StartVaultServerProcess();
+            _vaultServerProcess = StartVaultServerProcess();
 
-            Assert.NotNull(process);
+            Assert.NotNull(_vaultServerProcess);
 
-            _vaultServerProcessId = process.Id;
+            //_vaultServerProcess = process;
 
             var initialized = _unauthenticatedVaultClient.GetInitializationStatusAsync().Result;
             Assert.False(initialized);
@@ -279,13 +274,11 @@ namespace VaultSharp.UnitTests.End2End
 
             Assert.True(_masterCredentials.MasterKeys.Length == 7);
 
-            process.CloseMainWindow();
-            process.WaitForExit();
+            _vaultServerProcess.CloseMainWindow();
+            _vaultServerProcess.WaitForExit();
 
-            process = StartVaultServerProcess();
-            Assert.NotNull(process);
-
-            _vaultServerProcessId = process.Id;
+            _vaultServerProcess = StartVaultServerProcess();
+            Assert.NotNull(_vaultServerProcess);
 
             // todo find valid PGP keys
             //var pgpKeys = new[] { Convert.ToBase64String(Encoding.UTF8.GetBytes("pgp_key1")), Convert.ToBase64String(Encoding.UTF8.GetBytes("pgp_key2")) };
