@@ -10,6 +10,7 @@ using Xunit;
 namespace VaultSharp.UnitTests.End2End
 {
     /// <summary>
+    /// Handles runnning the Vault server and exposes a master client and an unauthenticated client
     /// This class expects the currently supported version of vault.exe file 
     /// in the bin/Debug folder of the Testing solution.
     /// The config is Configs\end2end.hcl
@@ -22,6 +23,11 @@ namespace VaultSharp.UnitTests.End2End
         private Process _vaultServerProcess;
         private string _workingDirectory;
 
+        /// <summary>
+        /// Constructor with sane defaults
+        /// </summary>
+        /// <param name="vaultUri">URI override for where the vault server expects to be listening</param>
+        /// <param name="unseal">Whether or not to autounseal the Vault server</param>
         public DebugVaultClient(Uri vaultUri = null, bool unseal = true)
         {
             if (vaultUri == null)
@@ -41,7 +47,25 @@ namespace VaultSharp.UnitTests.End2End
             if (unseal) Unseal(vaultUri);
         }
 
-        // Create fresh file_directory in the testing folder
+
+        /// <summary>
+        /// Expects vault.exe in the folder passed to this method
+        /// Currently this is hardcoded to the bin/Debug folder
+        /// </summary>
+        /// <param name="folderPathToVaultExecutable">Path the to vault executable</param>
+        private void CheckForVaultInstallation(string folderPathToVaultExecutable)
+        {
+            var path = Path.Combine(folderPathToVaultExecutable, "vault.exe");
+            if (!File.Exists(path))
+            {
+                throw new FileNotFoundException($"Could not find the Vault executable. Excepted path: {path}");
+            }
+        }
+
+        /// <summary>
+        /// Create fresh file_directory in the testing folder
+        /// </summary>
+        /// <returns></returns>
         private string CreateLocalFileBackend()
         {
             var workingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "file_backend");
@@ -53,20 +77,11 @@ namespace VaultSharp.UnitTests.End2End
             return workingDirectory;
         }
 
-        private void CheckForVaultInstallation(string folderPathToVaultExecutable)
-        {
-            var path = Path.Combine(folderPathToVaultExecutable, "vault.exe");
-            if (!File.Exists(path))
-            {
-                throw new FileNotFoundException($"Could not find the Vault executable. Excepted path: {path}");
-            }
-        }
-
         /// <summary>
         /// Run the vault.exe that is expected to be in the bin/Debug folder of this project
         /// </summary>
         /// <returns>
-        /// <see cref="System.Diagnostics.Process"/> running the vault.exe
+        /// <see cref="Process"/> running the vault.exe
         /// </returns>
         private Process StartVaultServerProcess()
         {
