@@ -21,18 +21,15 @@ namespace VaultSharp.UnitTests.End2End
     /// in the bin/Debug folder of the Testing solution.
     /// The config is Configs\end2end.hcl
     /// </summary>
+    [Collection("Sequential")]
     public class VaultClientEnd2EndTests : IDisposable
     {
         private const string MasterKey = "86332b94ffc41576c967d177f069ab52540f165b2821d1dbf4267a4b43b1370e";
         private const string RootToken = "a3d54c99-75fc-5bf3-e1e9-b6cb5b775e92";
         private const string VaultUriWithPort = "http://127.0.0.1:8200";
-
+        private DebugVaultClient _vaultClient;
         private Uri _vaultUri;
-        private static MasterCredentials _masterCredentials;
-        private static IVaultClient _authenticatedVaultClient;
-        private static IVaultClient _unauthenticatedVaultClient;
-        private static Process _vaultServerProcess;
-        private string _workingDirectory;
+
 
         /// <summary>
         ///  Parameterless setup method that will run before each test
@@ -44,64 +41,55 @@ namespace VaultSharp.UnitTests.End2End
         /// http://mrshipley.com/2018/01/10/implementing-a-teardown-method-in-xunit/
         /// </remarks>
         public VaultClientEnd2EndTests()
-        { 
-            _vaultUri = new Uri(VaultUriWithPort);
-            _unauthenticatedVaultClient = VaultClientFactory.CreateVaultClient(_vaultUri, null);
-            _vaultServerProcess = StartVaultServerProcess();
-            _masterCredentials = InitializeVault();
-            Unseal();
-        }
-
-        [Fact]
-        private void VaultServerProcessIsNotNull()
         {
-            Assert.NotNull(_vaultServerProcess);
+            _vaultUri = new Uri(VaultUriWithPort);
+            _vaultClient = new DebugVaultClient(new Uri(VaultUriWithPort));
         }
 
         [Fact]
         private void MasterCredentialsAreNotNull()
         {
-            Assert.NotNull(_masterCredentials);
-            Assert.NotNull(_masterCredentials.RootToken);
-            Assert.NotNull(_masterCredentials.MasterKeys);
-            Assert.True(_masterCredentials.MasterKeys.Length == 5);
+            Assert.NotNull(_vaultClient.MasterCredentials);
+            Assert.NotNull(_vaultClient.MasterCredentials.RootToken);
+            Assert.NotNull(_vaultClient.MasterCredentials.MasterKeys);
+            Assert.True(_vaultClient.MasterCredentials.MasterKeys.Length == 5);
         }
 
         [Fact]
         private async Task TokenTests()
         {
-            var secret1 = await _authenticatedVaultClient.CreateTokenAsync();
+            var secret1 = await _vaultClient.AuthenticatedVaultClient.CreateTokenAsync();
             Assert.NotNull(secret1);
 
-            var secret2 = await _authenticatedVaultClient.CreateTokenAsync(new TokenCreationOptions { NoParent = true });
+            var secret2 = await _vaultClient.AuthenticatedVaultClient.CreateTokenAsync(new TokenCreationOptions { NoParent = true });
             Assert.NotNull(secret2);
 
-            var accessors = await _authenticatedVaultClient.GetTokenAccessorListAsync();
+            var accessors = await _vaultClient.AuthenticatedVaultClient.GetTokenAccessorListAsync();
             Assert.True(accessors.Data.Keys.Any());
 
-            var tokenInfoByAccessor = await _authenticatedVaultClient.GetTokenInfoByAccessorAsync(accessors.Data.Keys.First());
+            var tokenInfoByAccessor = await _vaultClient.AuthenticatedVaultClient.GetTokenInfoByAccessorAsync(accessors.Data.Keys.First());
             Assert.NotNull(tokenInfoByAccessor);
 
             // TODO: Write another tests that tests revoking the token in isolation
             //await _authenticatedVaultClient.RevokeTokenByAccessorAsync(accessors.Data.Keys.First());
 
-            var accessors2 = await _authenticatedVaultClient.GetTokenAccessorListAsync();
+            var accessors2 = await _vaultClient.AuthenticatedVaultClient.GetTokenAccessorListAsync();
             Assert.True(accessors.Data.Keys.Count == accessors2.Data.Keys.Count);
 
-            var secret3 = await _authenticatedVaultClient.CreateTokenAsync(new TokenCreationOptions { NoParent = true });
+            var secret3 = await _vaultClient.AuthenticatedVaultClient.CreateTokenAsync(new TokenCreationOptions { NoParent = true });
             Assert.NotNull(secret3);
 
-            var callingTokenInfo = await _authenticatedVaultClient.GetCallingTokenInfoAsync();
-            Assert.Equal(_masterCredentials.RootToken, callingTokenInfo.Data.Id);
+            var callingTokenInfo = await _vaultClient.AuthenticatedVaultClient.GetCallingTokenInfoAsync();
+            Assert.Equal(_vaultClient.MasterCredentials.RootToken, callingTokenInfo.Data.Id);
 
-            var tokenInfo1 = await _authenticatedVaultClient.GetTokenInfoAsync(secret1.AuthorizationInfo.ClientToken);
+            var tokenInfo1 = await _vaultClient.AuthenticatedVaultClient.GetTokenInfoAsync(secret1.AuthorizationInfo.ClientToken);
             Assert.Equal(secret1.AuthorizationInfo.ClientToken, tokenInfo1.Data.Id);
 
-            var tokenInfo2 = await _authenticatedVaultClient.GetTokenInfoAsync(secret2.AuthorizationInfo.ClientToken);
+            var tokenInfo2 = await _vaultClient.AuthenticatedVaultClient.GetTokenInfoAsync(secret2.AuthorizationInfo.ClientToken);
             Assert.Equal(secret2.AuthorizationInfo.ClientToken, tokenInfo2.Data.Id);
 
-            await _authenticatedVaultClient.RevokeTokenAsync(secret1.AuthorizationInfo.ClientToken, true);
-            await Assert.ThrowsAsync<Exception>(() => _authenticatedVaultClient.GetTokenInfoAsync(secret1.AuthorizationInfo.ClientToken));
+            await _vaultClient.AuthenticatedVaultClient.RevokeTokenAsync(secret1.AuthorizationInfo.ClientToken, true);
+            await Assert.ThrowsAsync<Exception>(() => _vaultClient.AuthenticatedVaultClient.GetTokenInfoAsync(secret1.AuthorizationInfo.ClientToken));
 
             // check if renewal of same token calls renew-self.
             // do it with lease id.
@@ -114,9 +102,7 @@ namespace VaultSharp.UnitTests.End2End
         [Fact]
         private async Task TokenAuthenticationProviderTests()
         {
-            // token auth 
-
-            var secret = await _authenticatedVaultClient.CreateTokenAsync();
+            var secret = await _vaultClient.AuthenticatedVaultClient.CreateTokenAsync();
 
             var tokenAuthenticationInfo = new TokenAuthenticationInfo(secret.AuthorizationInfo.ClientToken);
             var tokenClient = VaultClientFactory.CreateVaultClient(_vaultUri, tokenAuthenticationInfo);
@@ -128,8 +114,7 @@ namespace VaultSharp.UnitTests.End2End
         [Fact]
         private async Task UsernamePasswordAuthenticationProviderTests()
         {
-            // userpass auth 
-
+            // userpass auth
             var path = "userpass" + Guid.NewGuid();
             var prefix = "auth/" + path;
             var username = "user1";
@@ -140,17 +125,17 @@ namespace VaultSharp.UnitTests.End2End
             var userPassClient = VaultClientFactory.CreateVaultClient(_vaultUri, authenticationInfo);
             var authBackend = new AuthenticationBackend { BackendType = AuthenticationBackendType.UsernamePassword, AuthenticationPath = authenticationInfo.MountPoint };
 
-            await _authenticatedVaultClient.EnableAuthenticationBackendAsync(authBackend);
-            await _authenticatedVaultClient.WriteSecretAsync(prefix + "/users/" + username, new Dictionary<string, object>
+            await _vaultClient.AuthenticatedVaultClient.EnableAuthenticationBackendAsync(authBackend);
+            await _vaultClient.AuthenticatedVaultClient.WriteSecretAsync(prefix + "/users/" + username, new Dictionary<string, object>
                     {
                         { "password", password },
                         { "policies", "root" }
                     });
 
-            var authBackends = await _authenticatedVaultClient.GetAllEnabledAuthenticationBackendsAsync();
+            var authBackends = await _vaultClient.AuthenticatedVaultClient.GetAllEnabledAuthenticationBackendsAsync();
             Assert.True(authBackends.Data.Any());
 
-            await _authenticatedVaultClient.DisableAuthenticationBackendAsync(authBackend.AuthenticationPath);
+            await _vaultClient.AuthenticatedVaultClient.DisableAuthenticationBackendAsync(authBackend.AuthenticationPath);
         }
 
         [Fact]
@@ -159,7 +144,7 @@ namespace VaultSharp.UnitTests.End2End
             // try to initialize an already initialized vault.
             var aggregateException =
                 Assert.Throws<AggregateException>(
-                    () => _masterCredentials = _unauthenticatedVaultClient.InitializeAsync(new InitializeOptions
+                    () => _vaultClient.UnauthenticatedVaultClient.InitializeAsync(new InitializeOptions
                     {
                         SecretShares = 5,
                         SecretThreshold = 3
@@ -172,8 +157,7 @@ namespace VaultSharp.UnitTests.End2End
         [Fact(Skip = "Need Auth Credentials")]
         private async Task GithubAuthenticationProviderTests()
         {
-            // github auth 
-
+            // github auth
             var personalAccessToken = "2ba5fecdddbf09b2b6facc495bdae12f3067d9d4";
             var path = "github" + Guid.NewGuid();
             var prefix = "auth/" + path;
@@ -185,15 +169,19 @@ namespace VaultSharp.UnitTests.End2End
             var githubClient = VaultClientFactory.CreateVaultClient(_vaultUri, githubAuthenticationInfo);
             var githubAuthBackend = new AuthenticationBackend { BackendType = AuthenticationBackendType.GitHub, AuthenticationPath = githubAuthenticationInfo.MountPoint };
 
-            await _authenticatedVaultClient.EnableAuthenticationBackendAsync(githubAuthBackend);
-            await _authenticatedVaultClient.WriteSecretAsync(prefix + "/config", new Dictionary<string, object> { { "organization", organization } });
-            await _authenticatedVaultClient.WriteSecretAsync(prefix + "/map/teams/" + team, new Dictionary<string, object> { { "value", "root" } });
+            await _vaultClient.AuthenticatedVaultClient.EnableAuthenticationBackendAsync(githubAuthBackend);
+            await _vaultClient.AuthenticatedVaultClient.WriteSecretAsync(prefix + "/config", new Dictionary<string, object> { { "organization", organization } });
+            await _vaultClient.AuthenticatedVaultClient.WriteSecretAsync(prefix + "/map/teams/" + team, new Dictionary<string, object> { { "value", "root" } });
 
             var authBackends = await githubClient.GetAllEnabledAuthenticationBackendsAsync();
             Assert.True(authBackends.Data.Any());
 
-            await _authenticatedVaultClient.DisableAuthenticationBackendAsync(githubAuthBackend.AuthenticationPath);
+            await _vaultClient.AuthenticatedVaultClient.DisableAuthenticationBackendAsync(githubAuthBackend.AuthenticationPath);
+
+            _vaultClient.Dispose();
         }
+
+
         private async Task RawSecretAndMoreTests()
         {
             // renew secret
@@ -226,108 +214,7 @@ namespace VaultSharp.UnitTests.End2End
 
         public void Dispose()
         {
-            _vaultServerProcess.CloseMainWindow();
-            // Todo: Figure out why WaitToExit() here doesn't work.
-            // If WaitToExit() was used, the process was not shut down correctly
-            // It had a lock on the config directory and the next Test could not run
-            //_vaultServerProcess.WaitForExit(100);
-            _vaultServerProcess.Kill();
-        }
-
-        /// <summary>
-        /// Run the vault.exe that is expected to be in the bin/Debug folder of this project
-        /// </summary>
-        /// <returns>
-        /// <see cref="System.Diagnostics.Process"/> running the vault.exe
-        /// </returns>
-        private Process StartVaultServerProcess()
-        {
-            // Create fresh file_directory in the testing folder
-            _workingDirectory = Path.Combine(Directory.GetCurrentDirectory(), "file_backend");
-            if (Directory.Exists(_workingDirectory))
-                Directory.Delete(_workingDirectory, true);
-
-            Directory.CreateDirectory(_workingDirectory);
-            // Todo: Create Load Config helper methods
-            var configPath = Path.Combine(Directory.GetCurrentDirectory(), "Configs", "end2end.hcl");
-            var startupArguements = $"server -log-level debug -config={configPath}";
-
-            var processStartInfo = new ProcessStartInfo("vault.exe");
-            processStartInfo.WorkingDirectory = _workingDirectory;
-            processStartInfo.Arguments = startupArguements;
-            processStartInfo.RedirectStandardError = true;
-            processStartInfo.RedirectStandardOutput = true;
-            processStartInfo.UseShellExecute = false;
-
-            var process = new Process();
-            process.StartInfo = processStartInfo;
-            process.Start();
-
-            Thread.Sleep(100);
-            if (process.HasExited)
-            {
-                var err = process.StandardError.ReadToEnd();
-                var output = process.StandardOutput.ReadToEnd();
-                throw new Exception("The vault server executable used in these tests had trouble starting. \n" +
-                    $"STDOUT: \"{output}\"\n" +
-                    $"STDERR: \"{err}\"\n" +
-                    "The End2End tests expect a vault executable in the bin/Debug folder."
-                    );
-            }
-
-            return process;
-        }
-
-        /// <summary>
-        /// Initialize the vault server. Basic health checks
-        /// </summary>
-        /// <returns><see cref="MasterCredentials"/> of the Vault instance sealed and initialized</returns>
-        private MasterCredentials InitializeVault()
-        {
-            var initialized = _unauthenticatedVaultClient.GetInitializationStatusAsync().Result;
-            Assert.False(initialized);
-
-            var healthStatus = _unauthenticatedVaultClient.GetHealthStatusAsync().Result;
-            Assert.False(healthStatus.Initialized);
-
-            // Initialize Vault
-            var masterCredentials = _unauthenticatedVaultClient.InitializeAsync(new InitializeOptions
-            {
-                SecretShares = 5,
-                SecretThreshold = 3
-            }).Result;
-
-            healthStatus = _unauthenticatedVaultClient.GetHealthStatusAsync().Result;
-            Assert.True(healthStatus.Initialized);
-            Assert.True(healthStatus.Sealed);
-
-            return masterCredentials;
-        }
-
-        /// <summary>
-        /// Unseal the vault instance
-        /// </summary>
-        private void Unseal()
-        {
-            foreach (var masterKey in _masterCredentials.MasterKeys)
-            {
-                var sealStatus = _unauthenticatedVaultClient.UnsealAsync(masterKey).Result;
-
-                if (!sealStatus.Sealed)
-                {
-                    var healthStatus = _unauthenticatedVaultClient.GetHealthStatusAsync().Result;
-                    Assert.True(healthStatus.Initialized);
-                    Assert.False(healthStatus.Sealed);
-
-                    // we are acting as the root user here.
-
-                    IAuthenticationInfo tokenAuthenticationInfo =
-                        new TokenAuthenticationInfo(_masterCredentials.RootToken);
-                    _authenticatedVaultClient = VaultClientFactory.CreateVaultClient(_vaultUri, tokenAuthenticationInfo);
-
-                    break;
-                }
-            }
+            _vaultClient.Dispose();
         }
 
         //[Fact]

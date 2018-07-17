@@ -79,7 +79,7 @@
   <ItemGroup>
     <Compile Include="DataAccess\HttpDataAccessManagerTests.cs" />
     <Compile Include="AcceptanceTests.cs" />
-    <Compile Include="End2End\DebugTestRunner.cs" />
+    <Compile Include="End2End\DebugVaultClient.cs" />
     <Compile Include="Infrastructure\Validation\CheckerTests.cs" />
     <Compile Include="VaultClientFactoryTests.cs" />
     <Compile Include="End2End\VaultClientEnd2EndTests.cs" />

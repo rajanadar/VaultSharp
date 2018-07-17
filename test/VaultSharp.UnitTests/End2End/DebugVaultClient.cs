@@ -14,7 +14,7 @@ namespace VaultSharp.UnitTests.End2End
     /// in the bin/Debug folder of the Testing solution.
     /// The config is Configs\end2end.hcl
     /// </summary>
-    public class DebugVaultServer : IDisposable
+    public class DebugVaultClient : IDisposable
     {
         public MasterCredentials MasterCredentials { get; private set; }
         public IVaultClient AuthenticatedVaultClient { get; private set; }
@@ -22,7 +22,7 @@ namespace VaultSharp.UnitTests.End2End
         private Process _vaultServerProcess;
         private string _workingDirectory;
 
-        public DebugVaultServer(Uri vaultUri = null, bool unseal = true)
+        public DebugVaultClient(Uri vaultUri = null, bool unseal = true)
         {
             if (vaultUri == null)
             {
@@ -32,6 +32,7 @@ namespace VaultSharp.UnitTests.End2End
             CheckForVaultInstallation(Directory.GetCurrentDirectory());
 
             _workingDirectory = CreateLocalFileBackend();
+
             _vaultServerProcess = StartVaultServerProcess();
 
             UnauthenticatedVaultClient = VaultClientFactory.CreateVaultClient(vaultUri, null);
