@@ -6,9 +6,16 @@ namespace VaultSharp
 {
     public class VaultClientSettings
     {
-        public string VaultServerUriWithPort { get; set; }
+        // raja todo: make all params be from constructor.
+        public VaultClientSettings(string vaultServerUriWithPort, IAuthMethodInfo authMethodInfo)
+        {
+            VaultServerUriWithPort = vaultServerUriWithPort;
+            AuthMethodInfo = authMethodInfo;
+        }
 
-        public IAuthInfo AuthInfo { get; set; }
+        public string VaultServerUriWithPort { get; }
+
+        public IAuthMethodInfo AuthMethodInfo { get; }
 
         public bool ContinueAsyncTasksOnCapturedContext { get; set; }
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace VaultSharp.V1.Core
+namespace VaultSharp.V1.Commons
 {
     /// <summary>
     /// Represents backend.

@@ -7,8 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using VaultSharp.V1.AuthMethods;
+using VaultSharp.V1.Commons;
 
-namespace VaultSharp.V1.Core
+namespace VaultSharp.Core
 {
     internal class Polymath
     {
@@ -43,9 +44,9 @@ namespace VaultSharp.V1.Core
                 _httpClient.Timeout = vaultClientSettings.VaultServiceTimeout.Value;
             }
 
-            if (vaultClientSettings.AuthInfo != null)
+            if (vaultClientSettings.AuthMethodInfo != null)
             {
-                var authProvider = AuthProviderFactory.CreateAuthenticationProvider(vaultClientSettings.AuthInfo, this);
+                var authProvider = AuthProviderFactory.CreateAuthenticationProvider(vaultClientSettings.AuthMethodInfo, this);
                 _lazyVaultToken = new Lazy<Task<string>>(authProvider.GetVaultTokenAsync);
             }
         }
@@ -69,7 +70,7 @@ namespace VaultSharp.V1.Core
                 headers.Add(VaultWrapTimeToLiveHeaderKey, wrapTimeToLive);
             }
 
-            return await MakeRequestAsync<TResponse>(resourcePath, httpMethod, requestData, headers, rawResponse, postResponseAction);
+            return await MakeRequestAsync<TResponse>(resourcePath, httpMethod, requestData, headers, rawResponse, postResponseAction).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public Secret<T2> GetMappedSecret<T1, T2>(Secret<T1> sourceSecret, T2 destinationData)

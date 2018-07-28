@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using VaultSharp.V1.SecretEngines;
 
-namespace VaultSharp.V1.Core
+namespace VaultSharp.V1.Commons
 {
     /// <summary>
     /// Represents a Vault SecretEngine with lease information and generic data.

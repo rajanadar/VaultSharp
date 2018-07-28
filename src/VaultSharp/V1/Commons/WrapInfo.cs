@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace VaultSharp.V1.Core
+namespace VaultSharp.V1.Commons
 {
     /// <summary>
     /// Represents the wrapped information in Vault.

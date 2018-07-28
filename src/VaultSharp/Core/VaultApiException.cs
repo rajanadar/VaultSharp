@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Net;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
-namespace VaultSharp.V1.Core
+namespace VaultSharp.Core
 {
     public class VaultApiException : Exception
     {

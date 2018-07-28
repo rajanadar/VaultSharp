@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using VaultSharp.V1.Core;
+using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.SecretEngines
 {

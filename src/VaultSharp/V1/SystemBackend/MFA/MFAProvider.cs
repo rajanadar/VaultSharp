@@ -1,4 +1,5 @@
-﻿using VaultSharp.V1.Core;
+﻿using VaultSharp.Core;
+using VaultSharp.V1.Commons;
 using VaultSharp.V1.SystemBackend.MFA.Duo;
 using VaultSharp.V1.SystemBackend.MFA.Okta;
 using VaultSharp.V1.SystemBackend.MFA.PingID;

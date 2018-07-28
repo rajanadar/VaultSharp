@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VaultSharp.V1.Core
+namespace VaultSharp.Core
 {
     internal class Checker
     {

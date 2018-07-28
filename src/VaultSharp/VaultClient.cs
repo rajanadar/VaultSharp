@@ -1,4 +1,5 @@
-﻿using VaultSharp.V1.Core;
+﻿using VaultSharp.Core;
+using VaultSharp.V1.Commons;
 using VaultSharp.V1;
 
 namespace VaultSharp

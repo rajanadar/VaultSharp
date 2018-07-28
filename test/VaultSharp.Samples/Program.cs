@@ -7,8 +7,8 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods;
+using VaultSharp.V1.AuthMethods.AppRole;
 using VaultSharp.V1.AuthMethods.Token;
-using VaultSharp.V1.Core;
 using VaultSharp.V1.SecretEngines;
 using VaultSharp.V1.SystemBackend;
 using VaultSharp.V1.SystemBackend.Plugin;
@@ -77,16 +77,38 @@ namespace VaultSharp.Samples
             // don't init or unseal it. these tests will do all of that.
             // i dev on a Windows 10 x64 bit OS.
 
-            RunSystemBackendSamples();
-            RunAuthBackendSamples();
-            RunSecretBackendSamples();
+            // RunSystemBackendSamples();
+            RunAuthMethodSamples();
+            RunSecretEngineSamples();
         }
 
-        private static void RunAuthBackendSamples()
+        private static void RunAuthMethodSamples()
         {
+            // Needs Manual pre-steps.
+            /*
+                vault auth enable approle
+                vault write auth/approle/role/my-role secret_id_ttl=10m  token_num_uses=10  token_ttl=20m   token_max_ttl=30m  secret_id_num_uses=40
+                vault read auth/approle/role/my-role/role-id
+                << note roleid >>
+                vault write -f auth/approle/role/my-role/secret-id
+                << note secret id >>
+
+                vault write auth/approle/login role_id=859e3dba-8888-9489-af31-1fc977b96caa  secret_id=aa826053-0441-70a1-7aca-d6b40753e9bc
+             */
+
+            string appRoleId = "859e3dba-8888-9489-af31-1fc977b96caa";
+            string secretId = "aa826053-0441-70a1-7aca-d6b40753e9bc";
+
+            IAuthMethodInfo appRoleAuthMethodInfo = new AppRoleAuthMethodInfo(appRoleId, secretId);
+
+            VaultClientSettings authVaultClientSettings = GetVaultClientSettings(appRoleAuthMethodInfo);
+            IVaultClient vaultClient = new VaultClient(authVaultClientSettings);
+
+            var result = vaultClient.V1.SystemBackend.GetCallingTokenCapabilitiesAsync("v1/sys").Result;
+            Assert.True(result.Data.Capabilities.Any());
         }
 
-        private static void RunSecretBackendSamples()
+        private static void RunSecretEngineSamples()
         {
         }
 
@@ -215,8 +237,7 @@ namespace VaultSharp.Samples
 
             // seal it
 
-            var authSettings = GetVaultClientSettings();
-            authSettings.AuthInfo = new TokenAuthInfo(masterCredentials.RootToken);
+            var authSettings = GetVaultClientSettings(new TokenAuthInfo(masterCredentials.RootToken));
             _authenticatedVaultClient = new VaultClient(authSettings);
 
             _authenticatedVaultClient.V1.SystemBackend.SealAsync().Wait();
@@ -874,11 +895,10 @@ namespace VaultSharp.Samples
             masterCredentials.Base64MasterKeys = quick.Base64MasterKeys;
         }
 
-        private static VaultClientSettings GetVaultClientSettings()
+        private static VaultClientSettings GetVaultClientSettings(IAuthMethodInfo authMethodInfo = null)
         {
-            var settings = new VaultClientSettings
+            var settings = new VaultClientSettings("http://localhost:8200", authMethodInfo)
             {
-                VaultServerUriWithPort = "http://localhost:8200",
                 AfterApiResponseAction = r =>
                 {
                     var value = ((int)r.StatusCode + "-" + r.StatusCode) + "\n";

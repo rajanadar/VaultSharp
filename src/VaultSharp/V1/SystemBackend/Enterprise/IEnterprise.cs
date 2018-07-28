@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using VaultSharp.V1.Core;
+using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.SystemBackend.Enterprise
 {

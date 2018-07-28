@@ -1,19 +1,25 @@
 ﻿using System;
+using VaultSharp.Core;
+using VaultSharp.V1.AuthMethods.AppRole;
 using VaultSharp.V1.AuthMethods.Token;
-using VaultSharp.V1.Core;
 
 namespace VaultSharp.V1.AuthMethods
 {
     internal static class AuthProviderFactory
     {
-        public static IAuthProvider CreateAuthenticationProvider(IAuthInfo authInfo, Polymath polymath)
+        public static IAuthProvider CreateAuthenticationProvider(IAuthMethodInfo authInfo, Polymath polymath)
         {
-            if (authInfo.BackendType == AuthMethodType.Token)
+            if (authInfo.AuthMethodType == AuthMethodType.AppRole)
+            {
+                return new AppRoleAuthenticationProvider(authInfo as AppRoleAuthMethodInfo, polymath);
+            }
+
+            if (authInfo.AuthMethodType == AuthMethodType.Token)
             {
                 return new TokenAuthProvider(authInfo as TokenAuthInfo);
             }
 
-            throw new NotSupportedException("The requested authentication backend type is not supported: " + authInfo.BackendType);
+            throw new NotSupportedException("The requested authentication backend type is not supported: " + authInfo.AuthMethodType);
         }
     }
 }
