@@ -31,7 +31,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
                 requestData.Add("secret_id", _appRoleAuthMethodInfo.SecretId);
             }
 
-            var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, requestData);
+            var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, requestData, unauthenticated: true);
 
             if (response?.AuthInfo != null && !string.IsNullOrWhiteSpace(response.AuthInfo.ClientToken))
             {
@@ -45,7 +45,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         {
             get
             {
-                var endpoint = string.Format(CultureInfo.InvariantCulture, "auth/{0}/login", _appRoleAuthMethodInfo.MountPoint.Trim('/'));
+                var endpoint = string.Format(CultureInfo.InvariantCulture, "v1/auth/{0}/login", _appRoleAuthMethodInfo.MountPoint.Trim('/'));
                 return endpoint;
             }
         }

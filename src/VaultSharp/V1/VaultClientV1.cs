@@ -11,7 +11,7 @@ namespace VaultSharp.V1
         public VaultClientV1(Polymath polymath)
         { 
             SystemBackend = new SystemBackendProvider(polymath);
-            AuthMethod = null;
+            AuthMethod = new AuthMethodProvider(polymath);
             SecretEngine = null;
         }
 

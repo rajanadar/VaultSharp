@@ -51,16 +51,16 @@ namespace VaultSharp.Core
             }
         }
 
-        public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false)
+        public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false)
         {
-            await MakeVaultApiRequest<dynamic>(resourcePath, httpMethod, requestData, rawResponse);
+            await MakeVaultApiRequest<dynamic>(resourcePath, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated);
         }
 
-        public async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null, string wrapTimeToLive = null) where TResponse : class
+        public async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null, string wrapTimeToLive = null, bool unauthenticated = false) where TResponse : class
         {
             var headers = new Dictionary<string, string>();
 
-            if (_lazyVaultToken != null)
+            if (!unauthenticated && _lazyVaultToken != null)
             {
                 headers.Add(VaultTokenHeaderKey, await _lazyVaultToken.Value);
             }

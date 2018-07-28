@@ -18,7 +18,7 @@ namespace VaultSharp.Samples
 {
     class Program
     {
-        private const string ExpectedVaultVersion = "0.10.0";
+        private const string ExpectedVaultVersion = "0.10.4";
 
         private static IVaultClient _unauthenticatedVaultClient;
         private static IVaultClient _authenticatedVaultClient;
@@ -50,6 +50,8 @@ namespace VaultSharp.Samples
                     Console.Write("I think we are done here. Press any key to exit...");
                 }
             }
+
+            Console.ReadLine();
         }
 
         private static void RunAllSamples()
@@ -85,19 +87,20 @@ namespace VaultSharp.Samples
         private static void RunAuthMethodSamples()
         {
             // Needs Manual pre-steps.
+            // Startup vault with normal dev mode. not real.
             /*
-                vault auth enable approle
-                vault write auth/approle/role/my-role secret_id_ttl=10m  token_num_uses=10  token_ttl=20m   token_max_ttl=30m  secret_id_num_uses=40
-                vault read auth/approle/role/my-role/role-id
+                .\vault.exe auth enable approle
+                .\vault.exe write auth/approle/role/my-role secret_id_ttl=10m  token_num_uses=10  token_ttl=20m   token_max_ttl=30m  secret_id_num_uses=40
+                .\vault.exe read auth/approle/role/my-role/role-id
                 << note roleid >>
-                vault write -f auth/approle/role/my-role/secret-id
-                << note secret id >>
+                .\vault.exe write -f auth/approle/role/my-role/secret-id
+                << .\vault.exe secret id >>
 
-                vault write auth/approle/login role_id=859e3dba-8888-9489-af31-1fc977b96caa  secret_id=aa826053-0441-70a1-7aca-d6b40753e9bc
+                .]vault.exe write auth/approle/login role_id=335277eb-932a-71ef-825d-d403a1663f0d  secret_id=5ed1d413-4d06-1604-8db3-9000b4bd9204
              */
 
-            string appRoleId = "859e3dba-8888-9489-af31-1fc977b96caa";
-            string secretId = "aa826053-0441-70a1-7aca-d6b40753e9bc";
+            string appRoleId = "335277eb-932a-71ef-825d-d403a1663f0d";
+            string secretId = "bb52c789-939d-cb5e-4d30-22490f6eff59";
 
             IAuthMethodInfo appRoleAuthMethodInfo = new AppRoleAuthMethodInfo(appRoleId, secretId);
 
