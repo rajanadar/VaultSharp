@@ -6,9 +6,9 @@ namespace VaultSharp.V1.AuthMethods.Token
 {
     internal class TokenAuthProvider : IAuthProvider
     {
-        private readonly TokenAuthInfo _tokenAuthInfo;
+        private readonly TokenAuthMethodInfo _tokenAuthInfo;
 
-        public TokenAuthProvider(TokenAuthInfo tokenAuthInfo)
+        public TokenAuthProvider(TokenAuthMethodInfo tokenAuthInfo)
         {
             Checker.NotNull(tokenAuthInfo, "tokenAuthInfo");
             Checker.NotNull(tokenAuthInfo.VaultToken, "tokenAuthInfo.VaultToken");

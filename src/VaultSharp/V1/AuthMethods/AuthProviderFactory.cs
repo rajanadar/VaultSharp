@@ -11,12 +11,12 @@ namespace VaultSharp.V1.AuthMethods
         {
             if (authInfo.AuthMethodType == AuthMethodType.AppRole)
             {
-                return new AppRoleAuthenticationProvider(authInfo as AppRoleAuthMethodInfo, polymath);
+                return new UserPassAuthenticationProvider(authInfo as AppRoleAuthMethodInfo, polymath);
             }
 
             if (authInfo.AuthMethodType == AuthMethodType.Token)
             {
-                return new TokenAuthProvider(authInfo as TokenAuthInfo);
+                return new TokenAuthProvider(authInfo as TokenAuthMethodInfo);
             }
 
             throw new NotSupportedException("The requested authentication backend type is not supported: " + authInfo.AuthMethodType);

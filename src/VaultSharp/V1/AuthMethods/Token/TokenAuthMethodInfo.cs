@@ -1,12 +1,11 @@
 using VaultSharp.Core;
-using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.AuthMethods.Token
 {
     /// <summary>
     /// Represents the login information for the Token Authentication backend.
     /// </summary>
-    public class TokenAuthInfo : IAuthMethodInfo
+    public class TokenAuthMethodInfo : IAuthMethodInfo
     {
         /// <summary>
         /// Gets the type of the authentication backend.
@@ -28,7 +27,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// Initializes a new instance of the <see cref="TokenAuthInfo" /> class.
         /// </summary>
         /// <param name="vaultToken">The token.</param>
-        public TokenAuthInfo(string vaultToken)
+        public TokenAuthMethodInfo(string vaultToken)
         {
             Checker.NotNull(vaultToken, "vaultToken");
 

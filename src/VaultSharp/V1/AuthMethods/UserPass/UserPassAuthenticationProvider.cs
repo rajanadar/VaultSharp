@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
 
-namespace VaultSharp.V1.AuthMethods.AppRole
+namespace VaultSharp.V1.AuthMethods.UserPass
 {
     internal class UserPassAuthenticationProvider : IAuthProvider
     {
-        private readonly AppRoleAuthMethodInfo _appRoleAuthMethodInfo;
+        private readonly UserPassAuthMethodInfo _userPassAuthMethodInfo;
         private readonly Polymath _polymath;
 
-        public UserPassAuthenticationProvider(AppRoleAuthMethodInfo appRoleAuthenticationInfo, Polymath polymath)
+        public UserPassAuthenticationProvider(UserPassAuthMethodInfo userPassAuthenticationInfo, Polymath polymath)
         {
-            _appRoleAuthMethodInfo = appRoleAuthenticationInfo;
+            _userPassAuthMethodInfo = userPassAuthenticationInfo;
             _polymath = polymath;
         }
 
@@ -23,13 +23,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         {
             var requestData = new Dictionary<string, object>
             {
-                {"role_id", _appRoleAuthMethodInfo.RoleId}
+                {"password", _userPassAuthMethodInfo.Password }
             };
-
-            if (!string.IsNullOrWhiteSpace(_appRoleAuthMethodInfo.SecretId))
-            {
-                requestData.Add("secret_id", _appRoleAuthMethodInfo.SecretId);
-            }
 
             // make an unauthenticated call to Vault, since this is the call to get the token. It shouldn't need a token.
             var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, requestData, unauthenticated: true);
@@ -46,7 +41,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         {
             get
             {
-                var endpoint = string.Format(CultureInfo.InvariantCulture, "v1/auth/{0}/login", _appRoleAuthMethodInfo.MountPoint.Trim('/'));
+                var endpoint = string.Format(CultureInfo.InvariantCulture, "v1/auth/{0}/login/{1}", _userPassAuthMethodInfo.MountPoint.Trim('/'), _userPassAuthMethodInfo.Username);
                 return endpoint;
             }
         }
