@@ -1,7 +1,10 @@
 ﻿using System;
 using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods.AppRole;
+using VaultSharp.V1.AuthMethods.Cert;
+using VaultSharp.V1.AuthMethods.LDAP;
 using VaultSharp.V1.AuthMethods.Token;
+using VaultSharp.V1.AuthMethods.UserPass;
 
 namespace VaultSharp.V1.AuthMethods
 {
@@ -11,12 +14,28 @@ namespace VaultSharp.V1.AuthMethods
         {
             if (authInfo.AuthMethodType == AuthMethodType.AppRole)
             {
-                return new UserPassAuthenticationProvider(authInfo as AppRoleAuthMethodInfo, polymath);
+                return new AppRoleAuthenticationProvider(authInfo as AppRoleAuthMethodInfo, polymath);
+            }
+
+            if (authInfo.AuthMethodType == AuthMethodType.LDAP)
+            {
+                return new LDAPAuthenticationProvider(authInfo as LDAPAuthMethodInfo, polymath);
+            }
+
+            if (authInfo.AuthMethodType == AuthMethodType.Cert)
+            {
+                // we have attached the certificates to request elsewhere.
+                return new CertAuthenticationProvider(authInfo as CertAuthMethodInfo, polymath);
             }
 
             if (authInfo.AuthMethodType == AuthMethodType.Token)
             {
                 return new TokenAuthProvider(authInfo as TokenAuthMethodInfo);
+            }
+
+            if (authInfo.AuthMethodType == AuthMethodType.UserPass)
+            {
+                return new UserPassAuthenticationProvider(authInfo as UserPassAuthMethodInfo, polymath);
             }
 
             throw new NotSupportedException("The requested authentication backend type is not supported: " + authInfo.AuthMethodType);

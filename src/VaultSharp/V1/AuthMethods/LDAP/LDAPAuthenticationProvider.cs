@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
 
-namespace VaultSharp.V1.AuthMethods.AppRole
+namespace VaultSharp.V1.AuthMethods.LDAP
 {
-    internal class AppRoleAuthenticationProvider : IAuthProvider
+    internal class LDAPAuthenticationProvider : IAuthProvider
     {
-        private readonly AppRoleAuthMethodInfo _appRoleAuthMethodInfo;
+        private readonly LDAPAuthMethodInfo _ldapAuthMethodInfo;
         private readonly Polymath _polymath;
 
-        public AppRoleAuthenticationProvider(AppRoleAuthMethodInfo appRoleAuthenticationInfo, Polymath polymath)
+        public LDAPAuthenticationProvider(LDAPAuthMethodInfo ldapAuthMethodInfo, Polymath polymath)
         {
-            _appRoleAuthMethodInfo = appRoleAuthenticationInfo;
+            _ldapAuthMethodInfo = ldapAuthMethodInfo;
             _polymath = polymath;
         }
 
@@ -23,13 +23,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         {
             var requestData = new Dictionary<string, object>
             {
-                {"role_id", _appRoleAuthMethodInfo.RoleId}
+                {"password", _ldapAuthMethodInfo.Password }
             };
-
-            if (!string.IsNullOrWhiteSpace(_appRoleAuthMethodInfo.SecretId))
-            {
-                requestData.Add("secret_id", _appRoleAuthMethodInfo.SecretId);
-            }
 
             // make an unauthenticated call to Vault, since this is the call to get the token. It shouldn't need a token.
             var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, requestData, unauthenticated: true);
@@ -46,7 +41,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         {
             get
             {
-                var endpoint = string.Format(CultureInfo.InvariantCulture, "v1/auth/{0}/login", _appRoleAuthMethodInfo.MountPoint.Trim('/'));
+                var endpoint = string.Format(CultureInfo.InvariantCulture, "v1/auth/{0}/login/{1}", _ldapAuthMethodInfo.MountPoint.Trim('/'), _ldapAuthMethodInfo.Username);
                 return endpoint;
             }
         }

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using VaultSharp.V1.AuthMethods;
+using VaultSharp.V1.AuthMethods.Cert;
 using VaultSharp.V1.Commons;
 
 namespace VaultSharp.Core
@@ -28,6 +29,14 @@ namespace VaultSharp.Core
             if (vaultClientSettings.PostProcessHttpClientHandlerAction != null)
             {
                 var handler = new HttpClientHandler();
+
+                // not the best place, but a very convenient place to add cert of certauthmethod.
+                if (vaultClientSettings.AuthMethodInfo.AuthMethodType == AuthMethodType.Cert)
+                {
+                    var certAuthMethodInfo = vaultClientSettings.AuthMethodInfo as CertAuthMethodInfo;
+                    handler.ClientCertificates.Add(certAuthMethodInfo.ClientCertificate);
+                }
+
                 vaultClientSettings.PostProcessHttpClientHandlerAction(handler);
 
                 _httpClient = new HttpClient(handler);
