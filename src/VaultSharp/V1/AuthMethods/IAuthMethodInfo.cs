@@ -1,4 +1,6 @@
-﻿namespace VaultSharp.V1.AuthMethods
+﻿using VaultSharp.V1.Commons;
+
+namespace VaultSharp.V1.AuthMethods
 {
     /// <summary>
     /// 
@@ -12,5 +14,11 @@
         /// The type of the authentication method.
         /// </value>
         AuthMethodType AuthMethodType { get; }
+
+        /// <summary>
+        /// Gets the returned Login Auth info from Vault.
+        /// It'll have the vault login token, accessors and any login metadata.
+        /// </summary>
+        AuthInfo ReturnedLoginAuthInfo { get; }
     }
 }

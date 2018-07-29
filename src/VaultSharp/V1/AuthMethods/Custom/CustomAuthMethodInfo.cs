@@ -7,7 +7,7 @@ namespace VaultSharp.V1.AuthMethods.Custom
     /// <summary>
     /// Represents the login information for the Custom Authentication backend.
     /// </summary>
-    public class CustomAuthMethodInfo : IAuthMethodInfo
+    public class CustomAuthMethodInfo : AbstractAuthMethodInfo
     {
         private readonly Lazy<AuthMethodType> _lazyAuthMethodType;
 
@@ -17,7 +17,7 @@ namespace VaultSharp.V1.AuthMethods.Custom
         /// <value>
         /// The type of the authentication backend.
         /// </value>
-        public AuthMethodType AuthMethodType
+        public override AuthMethodType AuthMethodType
         {
             get { return _lazyAuthMethodType.Value; }
         }

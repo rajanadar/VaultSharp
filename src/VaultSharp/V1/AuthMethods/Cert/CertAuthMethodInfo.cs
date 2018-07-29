@@ -7,7 +7,7 @@ namespace VaultSharp.V1.AuthMethods.Cert
     /// <summary>
     /// Represents the login information for the Cert Authentication backend.
     /// </summary>
-    public class CertAuthMethodInfo : IAuthMethodInfo
+    public class CertAuthMethodInfo : AbstractAuthMethodInfo
     {
         /// <summary>
         /// Gets the type of the authentication backend.
@@ -15,7 +15,7 @@ namespace VaultSharp.V1.AuthMethods.Cert
         /// <value>
         /// The type of the authentication backend.
         /// </value>
-        public AuthMethodType AuthMethodType => AuthMethodType.Cert;
+        public override AuthMethodType AuthMethodType => AuthMethodType.Cert;
 
         /// <summary>
         /// Gets the mount point.

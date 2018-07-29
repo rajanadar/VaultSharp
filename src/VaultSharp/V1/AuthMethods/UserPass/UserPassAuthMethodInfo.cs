@@ -5,7 +5,7 @@ namespace VaultSharp.V1.AuthMethods.UserPass
     /// <summary>
     /// Represents the login information for the UserPass Authentication backend.
     /// </summary>
-    public class UserPassAuthMethodInfo : IAuthMethodInfo
+    public class UserPassAuthMethodInfo : AbstractAuthMethodInfo
     {
         /// <summary>
         /// Gets the type of the authentication backend.
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.AuthMethods.UserPass
         /// <value>
         /// The type of the authentication backend.
         /// </value>
-        public AuthMethodType AuthMethodType => AuthMethodType.UserPass;
+        public override AuthMethodType AuthMethodType => AuthMethodType.UserPass;
 
         /// <summary>
         /// Gets the mount point.

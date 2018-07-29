@@ -23,7 +23,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <value>
         /// The aws type.
         /// </value>
-        public static AuthMethodType AWSRole { get; } = new AuthMethodType(AuthMethodDefaultPaths.AWS);
+        public static AuthMethodType AWS { get; } = new AuthMethodType(AuthMethodDefaultPaths.AWS);
 
         /// <summary>
         /// Gets the git hub type.

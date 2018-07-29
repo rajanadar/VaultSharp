@@ -5,7 +5,7 @@ namespace VaultSharp.V1.AuthMethods.Token
     /// <summary>
     /// Represents the login information for the Token Authentication backend.
     /// </summary>
-    public class TokenAuthMethodInfo : IAuthMethodInfo
+    public class TokenAuthMethodInfo : AbstractAuthMethodInfo
     {
         /// <summary>
         /// Gets the type of the authentication backend.
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// <value>
         /// The type of the authentication backend.
         /// </value>
-        public AuthMethodType AuthMethodType => AuthMethodType.Token;
+        public override AuthMethodType AuthMethodType => AuthMethodType.Token;
 
         /// <summary>
         /// Gets the token.
@@ -24,7 +24,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         public string VaultToken { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TokenAuthInfo" /> class.
+        /// Initializes a new instance of the <see cref="TokenAuthMethodInfo" /> class.
         /// </summary>
         /// <param name="vaultToken">The token.</param>
         public TokenAuthMethodInfo(string vaultToken)

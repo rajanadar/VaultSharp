@@ -5,7 +5,7 @@ namespace VaultSharp.V1.AuthMethods.LDAP
     /// <summary>
     /// Represents the login information for the LDAP Authentication backend.
     /// </summary>
-    public class LDAPAuthMethodInfo : IAuthMethodInfo
+    public class LDAPAuthMethodInfo : AbstractAuthMethodInfo
     {
         /// <summary>
         /// Gets the type of the authentication backend.
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.AuthMethods.LDAP
         /// <value>
         /// The type of the authentication backend.
         /// </value>
-        public AuthMethodType AuthMethodType => AuthMethodType.LDAP;
+        public override AuthMethodType AuthMethodType => AuthMethodType.LDAP;
 
         /// <summary>
         /// Gets the mount point.

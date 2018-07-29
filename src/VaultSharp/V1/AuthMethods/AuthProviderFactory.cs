@@ -1,6 +1,7 @@
 ﻿using System;
 using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods.AppRole;
+using VaultSharp.V1.AuthMethods.AWS;
 using VaultSharp.V1.AuthMethods.Cert;
 using VaultSharp.V1.AuthMethods.Custom;
 using VaultSharp.V1.AuthMethods.LDAP;
@@ -16,6 +17,11 @@ namespace VaultSharp.V1.AuthMethods
             if (authInfo.AuthMethodType == AuthMethodType.AppRole)
             {
                 return new AppRoleAuthenticationProvider(authInfo as AppRoleAuthMethodInfo, polymath);
+            }
+
+            if (authInfo.AuthMethodType == AuthMethodType.AWS)
+            {
+                return new AWSAuthenticationProvider(authInfo as AbstractAWSAuthMethodInfo, polymath);
             }
 
             if (authInfo.AuthMethodType == AuthMethodType.LDAP)
