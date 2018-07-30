@@ -79,8 +79,8 @@ namespace VaultSharp.Samples
             // don't init or unseal it. these tests will do all of that.
             // i dev on a Windows 10 x64 bit OS.
 
-            // RunSystemBackendSamples();
-            RunAuthMethodSamples();
+            RunSystemBackendSamples();
+            // RunAuthMethodSamples();
             RunSecretEngineSamples();
         }
 
@@ -132,6 +132,13 @@ namespace VaultSharp.Samples
 
         private static void RunSecretEngineSamples()
         {
+            // manually wtite a kv v1 secret
+
+            // env var for VAULT_TOKEN
+            // ./ vault.exe secrets enable -version = 1 kv
+            // ./ vault.exe kv put kv / name1 my - value = s3cr3t
+            var kv1Secret = _authenticatedVaultClient.V1.SecretsEngine.KeyValue.V1.ReadSecretAsync("name1").Result;
+            Assert.True(kv1Secret.Data.Any());
         }
 
         private static void RunSystemBackendSamples()

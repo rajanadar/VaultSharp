@@ -14,10 +14,14 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the KeyValue backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValue" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret with the data.
         /// </returns>
-        Task<Secret<Dictionary<string, object>>> ReadSecretAsync(string path, string mountPoint = SecretsEngineDefaultPaths.KeyValue);
+        Task<Secret<Dictionary<string, object>>> ReadSecretAsync(string path, string mountPoint = SecretsEngineDefaultPaths.KeyValue, string wrapTimeToLive = null);
 
         /// <summary>
         /// Retrieves the secret location path entries at the specified location.
@@ -29,9 +33,13 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValue" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>
         /// The secret list with the data.
         /// </returns>
-        Task<Secret<ListInfo>> GenericReadSecretLocationPathListAsync(string path, string mountPoint = SecretsEngineDefaultPaths.KeyValue);
+        Task<Secret<ListInfo>> ReadSecretPathListAsync(string path, string mountPoint = SecretsEngineDefaultPaths.KeyValue, string wrapTimeToLive = null);
     }
 }

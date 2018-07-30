@@ -8,7 +8,7 @@
         public const string Consul = "consul";
         public const string Cubbyhole = "cubbyhole";
         public const string Databases = "database";
-        public const string KeyValue = "secret"; // this is the generic backend.
+        public const string KeyValue = "kv";
         public const string Identity = "identity";
         public const string Nomad = "nomad";
         public const string PKI = "pki";
