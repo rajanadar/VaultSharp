@@ -374,9 +374,9 @@ namespace VaultSharp.V1.SystemBackend
             await _polymath.MakeVaultApiRequest("v1/sys/leases/revoke-prefix/" + prefix.TrimStart('/'), HttpMethod.Put).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<Dictionary<string, SecretEngine>>> GetSecretBackendsAsync()
+        public async Task<Secret<Dictionary<string, SecretsEngine>>> GetSecretBackendsAsync()
         {
-            var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, SecretEngine>>>("v1/sys/mounts", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, SecretsEngine>>>("v1/sys/mounts", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
             foreach (var kv in response.Data)
             {
@@ -386,7 +386,7 @@ namespace VaultSharp.V1.SystemBackend
             return response;
         }
 
-        public async Task MountSecretBackendAsync(SecretEngine secretBackend)
+        public async Task MountSecretBackendAsync(SecretsEngine secretBackend)
         {
             if (string.IsNullOrWhiteSpace(secretBackend.Path))
             {

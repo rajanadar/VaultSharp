@@ -1,7 +1,6 @@
 ﻿using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods;
-using VaultSharp.V1.Commons;
-using VaultSharp.V1.SecretEngines;
+using VaultSharp.V1.SecretsEngines;
 using VaultSharp.V1.SystemBackend;
 
 namespace VaultSharp.V1
@@ -12,10 +11,10 @@ namespace VaultSharp.V1
         { 
             SystemBackend = new SystemBackendProvider(polymath);
             AuthMethod = new AuthMethodProvider(polymath);
-            SecretEngine = null;
+            SecretsEngine = new SecretsEngineProvider(polymath);
         }
 
-        public ISecretEngine SecretEngine { get; }
+        public ISecretsEngine SecretsEngine { get; }
 
         public IAuthMethod AuthMethod { get; }
 

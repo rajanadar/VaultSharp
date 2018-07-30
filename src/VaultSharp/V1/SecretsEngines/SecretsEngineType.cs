@@ -6,8 +6,8 @@ namespace VaultSharp.V1.SecretEngines
     /// <summary>
     /// A helper class for retrieving and comparing SecretEngine Backend types.
     /// </summary>
-    [JsonConverter(typeof(SecretEngineTypeJsonConverter))]
-    public class SecretEngineType : IEquatable<SecretEngineType>
+    [JsonConverter(typeof(SecretsEngineTypeJsonConverter))]
+    public class SecretsEngineType : IEquatable<SecretsEngineType>
     {
         /// <summary>
         /// Gets the system type.
@@ -15,7 +15,7 @@ namespace VaultSharp.V1.SecretEngines
         /// <value>
         /// The system.
         /// </value>
-        public static SecretEngineType System { get; } = new SecretEngineType(SecretEngineDefaultPaths.System);
+        public static SecretsEngineType System { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.System);
 
         /// <summary>
         /// Gets the aws type.
@@ -23,7 +23,7 @@ namespace VaultSharp.V1.SecretEngines
         /// <value>
         /// The aws.
         /// </value>
-        public static SecretEngineType AWS { get; } = new SecretEngineType(SecretEngineDefaultPaths.AWS);
+        public static SecretsEngineType AWS { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.AWS);
 
         /// <summary>
         /// Gets the consul type.
@@ -31,7 +31,7 @@ namespace VaultSharp.V1.SecretEngines
         /// <value>
         /// The consul.
         /// </value>
-        public static SecretEngineType Consul { get; } = new SecretEngineType(SecretEngineDefaultPaths.Consul);
+        public static SecretsEngineType Consul { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.Consul);
 
         /// <summary>
         /// Gets the cubby hole type.
@@ -39,7 +39,7 @@ namespace VaultSharp.V1.SecretEngines
         /// <value>
         /// The cubby hole.
         /// </value>
-        public static SecretEngineType CubbyHole { get; } = new SecretEngineType(SecretEngineDefaultPaths.Cubbyhole);
+        public static SecretsEngineType CubbyHole { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.Cubbyhole);
 
         /// <summary>
         /// Gets the generic type.
@@ -47,7 +47,7 @@ namespace VaultSharp.V1.SecretEngines
         /// <value>
         /// The generic.
         /// </value>
-        public static SecretEngineType KeyValue { get; } = new SecretEngineType(SecretEngineDefaultPaths.KeyValue);
+        public static SecretsEngineType KeyValue { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.KeyValue);
 
         /// <summary>
         /// Gets the Identity type.
@@ -55,7 +55,7 @@ namespace VaultSharp.V1.SecretEngines
         /// <value>
         /// The Identity.
         /// </value>
-        public static SecretEngineType Identity { get; } = new SecretEngineType(SecretEngineDefaultPaths.Identity);
+        public static SecretsEngineType Identity { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.Identity);
 
         /// <summary>
         /// Gets the Nomad type.
@@ -63,7 +63,7 @@ namespace VaultSharp.V1.SecretEngines
         /// <value>
         /// The Nomad.
         /// </value>
-        public static SecretEngineType Nomad { get; } = new SecretEngineType(SecretEngineDefaultPaths.Nomad);
+        public static SecretsEngineType Nomad { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.Nomad);
 
         /// <summary>
         /// Gets the pki type.
@@ -71,7 +71,7 @@ namespace VaultSharp.V1.SecretEngines
         /// <value>
         /// The pki.
         /// </value>
-        public static SecretEngineType PKI { get; } = new SecretEngineType(SecretEngineDefaultPaths.PKI);
+        public static SecretsEngineType PKI { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.PKI);
 
         /// <summary>
         /// Gets the rabbit mq type.
@@ -79,7 +79,7 @@ namespace VaultSharp.V1.SecretEngines
         /// <value>
         /// The rabbit mq.
         /// </value>
-        public static SecretEngineType RabbitMQ { get; } = new SecretEngineType(SecretEngineDefaultPaths.RabbitMQ);
+        public static SecretsEngineType RabbitMQ { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.RabbitMQ);
 
         /// <summary>
         /// Gets the SSH type.
@@ -87,7 +87,7 @@ namespace VaultSharp.V1.SecretEngines
         /// <value>
         /// The SSH.
         /// </value>
-        public static SecretEngineType SSH { get; } = new SecretEngineType(SecretEngineDefaultPaths.SSH);
+        public static SecretsEngineType SSH { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.SSH);
 
         /// <summary>
         /// Gets the TOTP type.
@@ -95,7 +95,7 @@ namespace VaultSharp.V1.SecretEngines
         /// <value>
         /// The TOTP.
         /// </value>
-        public static SecretEngineType TOTP { get; } = new SecretEngineType(SecretEngineDefaultPaths.TOTP);
+        public static SecretsEngineType TOTP { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.TOTP);
 
         /// <summary>
         /// Gets the transit type.
@@ -103,7 +103,7 @@ namespace VaultSharp.V1.SecretEngines
         /// <value>
         /// The transit.
         /// </value>
-        public static SecretEngineType Transit { get; } = new SecretEngineType(SecretEngineDefaultPaths.Transit);
+        public static SecretsEngineType Transit { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.Transit);
 
         /// <summary>
         /// Gets the type.
@@ -114,10 +114,10 @@ namespace VaultSharp.V1.SecretEngines
         public string Type { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SecretEngineType"/> class.
+        /// Initializes a new instance of the <see cref="SecretsEngineType"/> class.
         /// </summary>
         /// <param name="type">The type.</param>
-        public SecretEngineType(string type)
+        public SecretsEngineType(string type)
         {
             Type = type;
         }
@@ -130,7 +130,7 @@ namespace VaultSharp.V1.SecretEngines
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator ==(SecretEngineType left, SecretEngineType right)
+        public static bool operator ==(SecretsEngineType left, SecretsEngineType right)
         {
             // If both are null, or both are same instance, return true.
             if (ReferenceEquals(left, right))
@@ -155,7 +155,7 @@ namespace VaultSharp.V1.SecretEngines
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator !=(SecretEngineType left, SecretEngineType right)
+        public static bool operator !=(SecretsEngineType left, SecretsEngineType right)
         {
             return !(left == right);
         }
@@ -167,7 +167,7 @@ namespace VaultSharp.V1.SecretEngines
         /// <returns>
         /// true if the current object is equal to the <paramref name="other" /> parameter; otherwise, false.
         /// </returns>
-        public bool Equals(SecretEngineType other)
+        public bool Equals(SecretsEngineType other)
         {
             if ((object)other == null)
                 return false;
@@ -184,7 +184,7 @@ namespace VaultSharp.V1.SecretEngines
         /// </returns>
         public override bool Equals(object obj)
         {
-            return Equals(obj as SecretEngineType);
+            return Equals(obj as SecretsEngineType);
         }
 
         /// <summary>

@@ -6,7 +6,7 @@ namespace VaultSharp.V1.SecretEngines
     /// <summary>
     /// Represents a secret backend.
     /// </summary>
-    public class SecretEngine : AbstractBackend
+    public class SecretsEngine : AbstractBackend
     {
         /// <summary>
         /// Gets or sets the type of the backend.
@@ -15,6 +15,6 @@ namespace VaultSharp.V1.SecretEngines
         /// The type of the backend.
         /// </value>
         [JsonProperty("type")]
-        public SecretEngineType Type { get; set; }
+        public SecretsEngineType Type { get; set; }
     }
 }

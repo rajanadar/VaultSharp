@@ -4,9 +4,9 @@ using Newtonsoft.Json;
 namespace VaultSharp.V1.SecretEngines
 {
     /// <summary>
-    /// Converts the <see cref="SecretEngineType" /> object to and from JSON.
+    /// Converts the <see cref="SecretsEngineType" /> object to and from JSON.
     /// </summary>
-    internal class SecretEngineTypeJsonConverter : JsonConverter
+    internal class SecretsEngineTypeJsonConverter : JsonConverter
     {
         /// <summary>
         /// Writes the JSON representation of the object.
@@ -16,7 +16,7 @@ namespace VaultSharp.V1.SecretEngines
         /// <param name="serializer">The calling serializer.</param>
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var secretBackendType = value as SecretEngineType;
+            var secretBackendType = value as SecretsEngineType;
 
             if (secretBackendType != null)
             {
@@ -37,7 +37,7 @@ namespace VaultSharp.V1.SecretEngines
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var type = reader.Value as string;
-            return new SecretEngineType(type);
+            return new SecretsEngineType(type);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace VaultSharp.V1.SecretEngines
         /// </returns>
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(SecretEngineType);
+            return objectType == typeof(SecretsEngineType);
         }
     }
 }

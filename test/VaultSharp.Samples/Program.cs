@@ -586,9 +586,9 @@ namespace VaultSharp.Samples
             Assert.True(mountConfig.Data.MaximumLeaseTtl > 0);
 
             // mount a new secret backend
-            var newSecretBackend = new SecretEngine
+            var newSecretBackend = new SecretsEngine
             {
-                Type = SecretEngineType.AWS,
+                Type = SecretsEngineType.AWS,
                 Path = "aws1",
                 Description = "e2e tests"
             };

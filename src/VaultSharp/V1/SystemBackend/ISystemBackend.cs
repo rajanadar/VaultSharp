@@ -415,7 +415,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <returns>
         /// The mounted secret backends.
         /// </returns>
-        Task<Secret<Dictionary<string, SecretEngine>>> GetSecretBackendsAsync();
+        Task<Secret<Dictionary<string, SecretsEngine>>> GetSecretBackendsAsync();
 
         /// <summary>
         /// Mounts the new secret backend to the mount point in the URL.
@@ -424,7 +424,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <returns>
         /// A task
         /// </returns>
-        Task MountSecretBackendAsync(SecretEngine secretBackend);
+        Task MountSecretBackendAsync(SecretsEngine secretBackend);
 
         /// <summary>
         /// Unmounts the mount point specified in the URL.

@@ -29,7 +29,7 @@ namespace VaultSharp.V1.Commons
         public string LeaseId { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="SecretEngine"/> is renewable.
+        /// Gets or sets a value indicating whether this <see cref="SecretsEngine"/> is renewable.
         /// </summary>
         /// <value>
         ///   <c>true</c> if renewable; otherwise, <c>false</c>.

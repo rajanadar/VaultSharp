@@ -1,6 +1,6 @@
 ﻿namespace VaultSharp.V1.SecretEngines
 {
-    public class SecretEngineDefaultPaths
+    public class SecretsEngineDefaultPaths
     {
         public const string System = "system";
 

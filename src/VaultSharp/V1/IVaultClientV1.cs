@@ -1,12 +1,12 @@
 ﻿using VaultSharp.V1.AuthMethods;
-using VaultSharp.V1.SecretEngines;
+using VaultSharp.V1.SecretsEngines;
 using VaultSharp.V1.SystemBackend;
 
 namespace VaultSharp.V1
 {
     public interface IVaultClientV1
     {
-        ISecretEngine SecretEngine { get; }
+        ISecretsEngine SecretsEngine { get; }
 
         IAuthMethod AuthMethod { get; }
 
