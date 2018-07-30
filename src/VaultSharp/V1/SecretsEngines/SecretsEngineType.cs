@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace VaultSharp.V1.SecretEngines
+namespace VaultSharp.V1.SecretsEngines
 {
     /// <summary>
     /// A helper class for retrieving and comparing SecretEngine Backend types.

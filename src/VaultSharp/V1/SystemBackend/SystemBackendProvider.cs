@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using VaultSharp.V1.AuthMethods;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
-using VaultSharp.V1.SecretEngines;
+using VaultSharp.V1.SecretsEngines;
 using VaultSharp.V1.SystemBackend.Enterprise;
 using VaultSharp.V1.SystemBackend.MFA;
 using VaultSharp.V1.SystemBackend.Plugin;

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
-using VaultSharp.V1.SecretEngines;
+using VaultSharp.V1.SecretsEngines;
 
 namespace VaultSharp.V1.Commons
 {

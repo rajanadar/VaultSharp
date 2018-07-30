@@ -9,7 +9,7 @@ using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods;
 using VaultSharp.V1.AuthMethods.AppRole;
 using VaultSharp.V1.AuthMethods.Token;
-using VaultSharp.V1.SecretEngines;
+using VaultSharp.V1.SecretsEngines;
 using VaultSharp.V1.SystemBackend;
 using VaultSharp.V1.SystemBackend.Plugin;
 using Xunit;

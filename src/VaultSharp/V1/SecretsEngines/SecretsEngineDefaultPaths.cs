@@ -1,4 +1,4 @@
-﻿namespace VaultSharp.V1.SecretEngines
+﻿namespace VaultSharp.V1.SecretsEngines
 {
     public class SecretsEngineDefaultPaths
     {

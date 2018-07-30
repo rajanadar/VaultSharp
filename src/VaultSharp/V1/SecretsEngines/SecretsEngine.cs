@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using VaultSharp.V1.Commons;
 
-namespace VaultSharp.V1.SecretEngines
+namespace VaultSharp.V1.SecretsEngines
 {
     /// <summary>
     /// Represents a secret backend.

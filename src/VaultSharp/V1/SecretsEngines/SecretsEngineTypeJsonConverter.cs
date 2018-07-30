@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace VaultSharp.V1.SecretEngines
+namespace VaultSharp.V1.SecretsEngines
 {
     /// <summary>
     /// Converts the <see cref="SecretsEngineType" /> object to and from JSON.
