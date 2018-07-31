@@ -81,7 +81,7 @@ namespace VaultSharp.Samples
 
             RunSystemBackendSamples();
             // RunAuthMethodSamples();
-            RunSecretsEngineSamples();
+            // RunSecretsEngineSamples();
         }
 
         private static void RunAuthMethodSamples()
