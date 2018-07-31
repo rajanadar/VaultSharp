@@ -35,7 +35,7 @@ namespace VaultSharp.V1.SystemBackend.MFA.Duo
         public string UsernameFormat { get; set; }
 
         /// <summary>
-        /// Gets or sets the SecretEngine key for Duo.
+        /// Gets or sets the SecretsEngine key for Duo.
         /// </summary>
         [JsonProperty("secret_key")]
         public string SecretKey  { get; set; }

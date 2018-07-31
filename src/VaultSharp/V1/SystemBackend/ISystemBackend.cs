@@ -558,7 +558,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="storagePath"><para>[required]</para>
         /// Raw path in the storage backend and not the logical path that is exposed via the mount system.</param>
         /// <returns>
-        /// The SecretEngine with raw data.
+        /// The SecretsEngine with raw data.
         /// </returns>
         Task<Secret<Dictionary<string, object>>> ReadRawSecretAsync(string storagePath);
 

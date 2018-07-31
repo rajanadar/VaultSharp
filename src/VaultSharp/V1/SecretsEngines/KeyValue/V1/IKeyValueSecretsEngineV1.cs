@@ -4,6 +4,9 @@ using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
 {
+    /// <summary>
+    /// V1 of Key Value Secrets Engine
+    /// </summary>
     public interface IKeyValueSecretsEngineV1
     {
         /// <summary>

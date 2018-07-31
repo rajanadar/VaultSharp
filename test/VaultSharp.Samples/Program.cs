@@ -81,7 +81,7 @@ namespace VaultSharp.Samples
 
             RunSystemBackendSamples();
             // RunAuthMethodSamples();
-            RunSecretEngineSamples();
+            RunSecretsEngineSamples();
         }
 
         private static void RunAuthMethodSamples()
@@ -130,15 +130,25 @@ namespace VaultSharp.Samples
             Assert.True(result.Data.Capabilities.Any());
         }
 
-        private static void RunSecretEngineSamples()
+        private static void RunSecretsEngineSamples()
         {
-            // manually wtite a kv v1 secret
+            // manually write a kv v1 secret
 
             // env var for VAULT_TOKEN
-            // ./ vault.exe secrets enable -version = 1 kv
-            // ./ vault.exe kv put kv / name1 my - value = s3cr3t
+            // ./vault.exe secrets enable -version=1 kv
+            // ./vault.exe kv put kv/name1 my-value=s3cr3t222
             var kv1Secret = _authenticatedVaultClient.V1.SecretsEngine.KeyValue.V1.ReadSecretAsync("name1").Result;
             Assert.True(kv1Secret.Data.Any());
+
+            // manually write a kv v2 secret
+            var kv2Secret = _authenticatedVaultClient.V1.SecretsEngine.KeyValue.V2.ReadSecretAsync("name1").Result;
+            Assert.NotNull(kv2Secret.Data.Data);
+
+            var kv2Keys = _authenticatedVaultClient.V1.SecretsEngine.KeyValue.V2.ReadSecretPathListAsync("").Result;
+            Assert.True(kv2Keys.Data.Keys.Any());
+
+            var kv2metadata = _authenticatedVaultClient.V1.SecretsEngine.KeyValue.V2.ReadSecretMetadataAsync("name1").Result;
+            Assert.True(kv2metadata.Data.CurrentVersion > 0);
         }
 
         private static void RunSystemBackendSamples()
@@ -957,14 +967,14 @@ namespace VaultSharp.Samples
                 var genType = genTypes[0];
                 var subGenTypes = genType.GenericTypeArguments;
 
-                // single generic. e.g. SecretEngine<AuthBackend>
+                // single generic. e.g. SecretsEngine<AuthBackend>
                 if (subGenTypes == null || subGenTypes.Length == 0)
                 {
                     Console.WriteLine(type.Name.Substring(0, type.Name.IndexOf('`')) + "<" + genType.Name + ">");
                 }
                 else
                 {
-                    // single sub-generic e.g. SecretEngine<IEnumerable<AuthBackend>>
+                    // single sub-generic e.g. SecretsEngine<IEnumerable<AuthBackend>>
                     if (subGenTypes.Length == 1)
                     {
                         var subGenType = subGenTypes[0];
@@ -975,7 +985,7 @@ namespace VaultSharp.Samples
                     }
                     else
                     {
-                        // double generic. e.g. SecretEngine<Dictionary<string, AuthBackend>>
+                        // double generic. e.g. SecretsEngine<Dictionary<string, AuthBackend>>
                         if (subGenTypes.Length == 2)
                         {
                             var subGenType1 = subGenTypes[0];

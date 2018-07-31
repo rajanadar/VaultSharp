@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace VaultSharp.V1.SecretsEngines
 {
     /// <summary>
-    /// A helper class for retrieving and comparing SecretEngine Backend types.
+    /// A helper class for retrieving and comparing SecretsEngine Backend types.
     /// </summary>
     [JsonConverter(typeof(SecretsEngineTypeJsonConverter))]
     public class SecretsEngineType : IEquatable<SecretsEngineType>

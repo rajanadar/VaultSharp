@@ -5,7 +5,7 @@ using VaultSharp.V1.SecretsEngines;
 namespace VaultSharp.V1.Commons
 {
     /// <summary>
-    /// Represents a Vault SecretEngine with lease information and generic data.
+    /// Represents a Vault SecretsEngine with lease information and generic data.
     /// </summary>
     /// <typeparam name="TData">The type of the data contained in the secret.</typeparam>
     public class Secret<TData>
