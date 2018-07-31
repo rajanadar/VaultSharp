@@ -4,29 +4,56 @@ using VaultSharp.V1.AuthMethods;
 
 namespace VaultSharp
 {
+    /// <summary>
+    /// The vault client settings.
+    /// </summary>
     public class VaultClientSettings
     {
-        // raja todo: make all params be from constructor.
+        /// <summary>
+        /// Constructor with bare minimal required fields.
+        /// </summary>
+        /// <param name="vaultServerUriWithPort"></param>
+        /// <param name="authMethodInfo"></param>
         public VaultClientSettings(string vaultServerUriWithPort, IAuthMethodInfo authMethodInfo)
         {
             VaultServerUriWithPort = vaultServerUriWithPort;
             AuthMethodInfo = authMethodInfo;
         }
 
+        /// <summary>
+        /// The Vault Server Uri with port.
+        /// </summary>
         public string VaultServerUriWithPort { get; }
 
+        /// <summary>
+        /// The auth method to be used to acquire a vault token.
+        /// </summary>
         public IAuthMethodInfo AuthMethodInfo { get; }
 
+        /// <summary>
+        /// Flag to indicate async context.
+        /// </summary>
         public bool ContinueAsyncTasksOnCapturedContext { get; set; }
 
+        /// <summary>
+        /// The Api timeout.
+        /// </summary>
         public TimeSpan? VaultServiceTimeout { get; set; }
 
+        /// <summary>
+        /// The one time http client's http client handler delegate.
+        /// Use this to set proxy settings etc.
+        /// </summary>
         public Action<HttpClientHandler> PostProcessHttpClientHandlerAction { get; set; }
 
+        /// <summary>
+        /// The per http request delegate invoked before every vault api http request.
+        /// </summary>
         public Action<HttpClient, HttpRequestMessage> BeforeApiRequestAction { get; set; }
 
+        /// <summary>
+        /// The per http response delegate invoked after every vault api http response.
+        /// </summary>
         public Action<HttpResponseMessage> AfterApiResponseAction { get; set; }
-
-        public Action<HttpResponseMessage> OnErrorApiResponseAction { get; set; }
     }
 }

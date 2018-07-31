@@ -5,7 +5,7 @@ using VaultSharp.V1;
 namespace VaultSharp
 {
     /// <summary>
-    /// 
+    /// The concrete Vault client class.
     /// </summary>
     public class VaultClient : IVaultClient
     {
@@ -23,12 +23,12 @@ namespace VaultSharp
         }
 
         /// <summary>
-        /// 
+        /// Gets the V1 Client interface for Vault Api.
         /// </summary>
         public IVaultClientV1 V1 => vaultClient1;
 
         /// <summary>
-        /// 
+        /// Gets the Vault Client Settings.
         /// </summary>
         public VaultClientSettings Settings => polymath.VaultClientSettings;
     }

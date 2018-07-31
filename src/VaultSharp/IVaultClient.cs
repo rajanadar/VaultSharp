@@ -9,12 +9,12 @@ namespace VaultSharp
     public interface IVaultClient
     {
         /// <summary>
-        /// 
+        /// Gets the Vault Client Settings.
         /// </summary>
         VaultClientSettings Settings { get; }
 
         /// <summary>
-        /// 
+        /// Gets the V1 Client interface for Vault Api.
         /// </summary>
         IVaultClientV1 V1 { get; }
     }
