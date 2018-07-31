@@ -5,27 +5,28 @@
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>VaultSharp.snk</AssemblyOriginatorKeyFile>
-    <Version>0.10.4.0</Version>
+    <Version>0.10.4000</Version>
     <Authors>Raja Nadar</Authors>
     <Copyright>Copyright ©  2019 Raja Nadar. All rights reserved.</Copyright>
     <PackageIconUrl>https://raw.githubusercontent.com/rajanadar/VaultSharp/master/VaultSharpIcon.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/rajanadar/VaultSharp</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/rajanadar/VaultSharp/master/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/rajanadar/VaultSharp</RepositoryUrl>
-    <PackageTags>c# vault hashicorp .net netcore netstandard api secret transit encryption</PackageTags>
+    <PackageTags>c# vault hashicorp .net netcore netstandard api secret consul kv ldap aws ec2 iam userpass</PackageTags>
     <PackageReleaseNotes></PackageReleaseNotes>
     <Description>The most comprehensive .NET Library for HashiCorp's Vault - A Secret Management System.
-This library is built with .NET Standard 2.0 and hence is cross-platform.
-
-supports all the APIs supported by Hashicorp's Vault. 
-
-This includes all Auth backends, all Secret Backends, System backend apis and Enterprise Vault APIs.</Description>
+This library is built with .NET Standard 2.0 and hence is cross-platform.</Description>
     <RepositoryType>Github</RepositoryType>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>bin\Debug\netstandard2.0\VaultSharp.xml</DocumentationFile>
     <NoWarn>1701;1702;1705;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\VaultSharp.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,7 +36,8 @@ This includes all Auth backends, all Secret Backends, System backend apis and En
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
 </Project>
