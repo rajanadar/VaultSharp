@@ -1,3 +1,5 @@
+## 0.10.4.0 (July 30, 2018)
+
 ## 0.6.5-beta1 (Unreleased)
 
 MISC:
