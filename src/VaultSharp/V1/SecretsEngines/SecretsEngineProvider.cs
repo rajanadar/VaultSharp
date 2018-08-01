@@ -23,7 +23,8 @@ namespace VaultSharp.V1.SecretsEngines
             _polymath = polymath;
 
             Consul = new ConsulSecretsEngineProvider(polymath);
-            KeyValue = new KeyValueSecretsEngineProvider(polymath);            
+            KeyValue = new KeyValueSecretsEngineProvider(polymath);
+            PKI = new PKISecretsEngineProvider(polymath);
         }
 
         public IAWSSecretsEngine AWS => throw new NotImplementedException();
@@ -38,7 +39,7 @@ namespace VaultSharp.V1.SecretsEngines
 
         public IIdentitySecretsEngine Identity => throw new NotImplementedException();
 
-        public IPKISecretsEngine PKI => throw new NotImplementedException();
+        public IPKISecretsEngine PKI { get; }
 
         public IRabbitMQSecretsEngine RabbitMQ => throw new NotImplementedException();
 

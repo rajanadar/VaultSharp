@@ -18,66 +18,66 @@ namespace VaultSharp.V1.SecretsEngines
     public interface ISecretsEngine
     {
         /// <summary>
-        /// 
+        /// The AWS Secrets Engine.
         /// </summary>
         IAWSSecretsEngine AWS { get; }
 
         /// <summary>
-        /// 
+        /// The Consul Secrets Engine.
         /// </summary>
         IConsulSecretsEngine Consul { get; }
 
 
         /// <summary>
-        /// 
+        /// The Cubbyhole Secrets Engine.
         /// </summary>
         ICubbyholeSecretsEngine Cubbyhole { get; }
 
 
         /// <summary>
-        /// 
+        /// The Database Secrets Engine.
         /// </summary>
         IDatabaseSecretsEngine Database { get; }
 
 
         /// <summary>
-        /// 
+        /// The KeyValue Secrets Engine.
         /// </summary>
         IKeyValueSecretsEngine KeyValue { get; }
 
 
         /// <summary>
-        /// 
+        /// The Identity Secrets Engine.
         /// </summary>
         IIdentitySecretsEngine Identity { get; }
 
 
         /// <summary>
-        /// 
+        /// The PKI Secrets Engine.
         /// </summary>
         IPKISecretsEngine PKI { get; }
 
 
         /// <summary>
-        /// 
+        /// The RabbitMQ Secrets Engine.
         /// </summary>
         IRabbitMQSecretsEngine RabbitMQ { get; }
 
 
         /// <summary>
-        /// 
+        /// The SSH Secrets Engine.
         /// </summary>
         ISSHSecretsEngine SSH { get; }
 
 
         /// <summary>
-        /// 
+        /// The TOTP Secrets Engine.
         /// </summary>
         ITOTPSecretsEngine TOTP { get; }
 
 
         /// <summary>
-        /// 
+        /// The Transit Secrets Engine.
         /// </summary>
         ITransitSecretsEngine Transit { get; }
     }

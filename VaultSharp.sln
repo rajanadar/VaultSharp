@@ -5,7 +5,13 @@ VisualStudioVersion = 15.0.27130.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VaultSharp", "src\VaultSharp\VaultSharp.csproj", "{3D1A52B5-1270-437C-A7A0-0BD3AB026EF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VaultSharp.Samples", "test\VaultSharp.Samples\VaultSharp.Samples.csproj", "{66FDCB93-2EA9-46CE-A54C-4B9522CD62E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VaultSharp.Samples", "test\VaultSharp.Samples\VaultSharp.Samples.csproj", "{66FDCB93-2EA9-46CE-A54C-4B9522CD62E0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4701F2E9-860E-4200-9D66-52D201EE9D8D}"
+	ProjectSection(SolutionItems) = preProject
+		CHANGELOG.md = CHANGELOG.md
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

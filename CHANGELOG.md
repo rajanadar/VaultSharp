@@ -1,4 +1,10 @@
-## 0.10.4.0 (July 30, 2018)
+## 0.10.4001 (Unreleased)
+
+FEATURES:
+
+  * Add support for PKI dynamic credentials.
+
+## 0.10.4000 (July 30, 2018)
 
 ## 0.6.5-beta1 (Unreleased)
 
