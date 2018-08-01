@@ -3,6 +3,8 @@ VaultSharp
 
 A cross-platform .NET Library for HashiCorp's Vault - A Secret Management System.
 
+## << Code Samples coming up by 8/4. Please see https://github.com/rajanadar/VaultSharp/blob/master/test/VaultSharp.Samples/Program.cs in the meanwhile >>
+
 [![Join the chat at https://gitter.im/rajanadar-VaultSharp/Lobby](https://badges.gitter.im/rajanadar-VaultSharp/Lobby.svg)](https://gitter.im/rajanadar-VaultSharp/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)	
 [![License](https://img.shields.io/:license-apache%202.0-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)	
  
@@ -13,4 +15,3 @@ A cross-platform .NET Library for HashiCorp's Vault - A Secret Management System
  ## Nuget Package: https://www.nuget.org/packages/VaultSharp/	
  ## Report Feedback/Issues Here: https://github.com/rajanadar/VaultSharp/issues/new
 
- For code samples, please look at: https://github.com/rajanadar/VaultSharp/blob/master/test/VaultSharp.Samples/Program.cs
