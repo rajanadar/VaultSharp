@@ -38,7 +38,7 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 var kv2Secret = await vaultClient.V1.SecretsEngine.KeyValue.V2.ReadSecretAsync("secret-name");
 
 // Generate a dynamic Consul credential
-var consulCredentials = await vaultClient.V1.SecretsEngine.Consul.GenerateCredentialsAsync(consulRoleName, consulMountPoint);	
+var consulCreds = await vaultClient.V1.SecretsEngine.Consul.GenerateCredentialsAsync(consulRole, consulMount);	
 var consulToken = consulCredentials.Data.Token;
 ```
 
