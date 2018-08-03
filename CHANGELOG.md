@@ -3,6 +3,7 @@
 FEATURES:
 
   * Add support for PKI dynamic credentials.
+  * Add support for GitHub auth method.
 
 ## 0.10.4000 (July 30, 2018)
 
