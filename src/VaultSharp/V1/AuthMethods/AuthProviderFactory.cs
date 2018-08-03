@@ -4,6 +4,7 @@ using VaultSharp.V1.AuthMethods.AppRole;
 using VaultSharp.V1.AuthMethods.AWS;
 using VaultSharp.V1.AuthMethods.Cert;
 using VaultSharp.V1.AuthMethods.Custom;
+using VaultSharp.V1.AuthMethods.GitHub;
 using VaultSharp.V1.AuthMethods.LDAP;
 using VaultSharp.V1.AuthMethods.Token;
 using VaultSharp.V1.AuthMethods.UserPass;
@@ -22,6 +23,11 @@ namespace VaultSharp.V1.AuthMethods
             if (authInfo.AuthMethodType == AuthMethodType.AWS)
             {
                 return new AWSAuthenticationProvider(authInfo as AbstractAWSAuthMethodInfo, polymath);
+            }
+
+            if (authInfo.AuthMethodType == AuthMethodType.GitHub)
+            {
+                return new GitHubAuthenticationProvider(authInfo as GitHubAuthMethodInfo, polymath);
             }
 
             if (authInfo.AuthMethodType == AuthMethodType.LDAP)
