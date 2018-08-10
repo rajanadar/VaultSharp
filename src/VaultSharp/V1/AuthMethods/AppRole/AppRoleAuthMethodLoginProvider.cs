@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
 
-namespace VaultSharp.V1.AuthMethods.GitHub
+namespace VaultSharp.V1.AuthMethods.AppRole
 {
-    internal class GitHubAuthenticationProvider : IAuthProvider
+    internal class AppRoleAuthMethodLoginProvider : IAuthMethodLoginProvider
     {
-        private readonly GitHubAuthMethodInfo _gitHubAuthMethodInfo;
+        private readonly AppRoleAuthMethodInfo _appRoleAuthMethodInfo;
         private readonly Polymath _polymath;
 
-        public GitHubAuthenticationProvider(GitHubAuthMethodInfo gitHubAuthMethodInfo, Polymath polymath)
+        public AppRoleAuthMethodLoginProvider(AppRoleAuthMethodInfo appRoleAuthenticationInfo, Polymath polymath)
         {
-            _gitHubAuthMethodInfo = gitHubAuthMethodInfo;
+            _appRoleAuthMethodInfo = appRoleAuthenticationInfo;
             _polymath = polymath;
         }
 
@@ -23,12 +23,17 @@ namespace VaultSharp.V1.AuthMethods.GitHub
         {
             var requestData = new Dictionary<string, object>
             {
-                {"token", _gitHubAuthMethodInfo.PersonalAccessToken }
+                {"role_id", _appRoleAuthMethodInfo.RoleId}
             };
+
+            if (!string.IsNullOrWhiteSpace(_appRoleAuthMethodInfo.SecretId))
+            {
+                requestData.Add("secret_id", _appRoleAuthMethodInfo.SecretId);
+            }
 
             // make an unauthenticated call to Vault, since this is the call to get the token. It shouldn't need a token.
             var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, requestData, unauthenticated: true);
-            _gitHubAuthMethodInfo.ReturnedLoginAuthInfo = response?.AuthInfo;
+            _appRoleAuthMethodInfo.ReturnedLoginAuthInfo = response?.AuthInfo;
 
             if (response?.AuthInfo != null && !string.IsNullOrWhiteSpace(response.AuthInfo.ClientToken))
             {
@@ -42,7 +47,7 @@ namespace VaultSharp.V1.AuthMethods.GitHub
         {
             get
             {
-                var endpoint = string.Format(CultureInfo.InvariantCulture, "v1/auth/{0}/login", _gitHubAuthMethodInfo.MountPoint.Trim('/'));
+                var endpoint = string.Format(CultureInfo.InvariantCulture, "v1/auth/{0}/login", _appRoleAuthMethodInfo.MountPoint.Trim('/'));
                 return endpoint;
             }
         }

@@ -4,8 +4,15 @@ FEATURES:
 
   * Add support for PKI dynamic credentials.
   * Add support for GitHub auth method.
+  * Add support for 
 
 ## 0.10.4000 (July 30, 2018)
+
+FEATURES:
+
+  * Secret Engines: Consul, KeyValue, PKI for dynamic credentials
+  * Auth methods: AppRole, AWS, LDAP, TLS Certificates, Tokens, Username & password - Login method.
+  * System Backend Apis.
 
 ## 0.6.5-beta1 (Unreleased)
 

@@ -6,24 +6,29 @@ using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
 
-namespace VaultSharp.V1.AuthMethods.Cert
+namespace VaultSharp.V1.AuthMethods.LDAP
 {
-    internal class CertAuthenticationProvider : IAuthProvider
+    internal class LDAPAuthMethodLoginProvider : IAuthMethodLoginProvider
     {
-        private readonly CertAuthMethodInfo _certAuthMethodInfo;
+        private readonly LDAPAuthMethodInfo _ldapAuthMethodInfo;
         private readonly Polymath _polymath;
 
-        public CertAuthenticationProvider(CertAuthMethodInfo certAuthMethodInfo, Polymath polymath)
+        public LDAPAuthMethodLoginProvider(LDAPAuthMethodInfo ldapAuthMethodInfo, Polymath polymath)
         {
-            _certAuthMethodInfo = certAuthMethodInfo;
+            _ldapAuthMethodInfo = ldapAuthMethodInfo;
             _polymath = polymath;
         }
 
         public async Task<string> GetVaultTokenAsync()
         {
+            var requestData = new Dictionary<string, object>
+            {
+                {"password", _ldapAuthMethodInfo.Password }
+            };
+
             // make an unauthenticated call to Vault, since this is the call to get the token. It shouldn't need a token.
-            var response = await _polymath.MakeVaultApiRequest<Secret<dynamic>>(LoginResourcePath, HttpMethod.Post, unauthenticated: true);
-            _certAuthMethodInfo.ReturnedLoginAuthInfo = response?.AuthInfo;
+            var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, requestData, unauthenticated: true);
+            _ldapAuthMethodInfo.ReturnedLoginAuthInfo = response?.AuthInfo;
 
             if (response?.AuthInfo != null && !string.IsNullOrWhiteSpace(response.AuthInfo.ClientToken))
             {
@@ -37,7 +42,7 @@ namespace VaultSharp.V1.AuthMethods.Cert
         {
             get
             {
-                var endpoint = string.Format(CultureInfo.InvariantCulture, "v1/auth/{0}/login", _certAuthMethodInfo.MountPoint.Trim('/'));
+                var endpoint = string.Format(CultureInfo.InvariantCulture, "v1/auth/{0}/login/{1}", _ldapAuthMethodInfo.MountPoint.Trim('/'), _ldapAuthMethodInfo.Username);
                 return endpoint;
             }
         }

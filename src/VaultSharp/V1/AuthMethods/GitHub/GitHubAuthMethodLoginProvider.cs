@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
 
-namespace VaultSharp.V1.AuthMethods.UserPass
+namespace VaultSharp.V1.AuthMethods.GitHub
 {
-    internal class UserPassAuthenticationProvider : IAuthProvider
+    internal class GitHubAuthMethodLoginProvider : IAuthMethodLoginProvider
     {
-        private readonly UserPassAuthMethodInfo _userPassAuthMethodInfo;
+        private readonly GitHubAuthMethodInfo _gitHubAuthMethodInfo;
         private readonly Polymath _polymath;
 
-        public UserPassAuthenticationProvider(UserPassAuthMethodInfo userPassAuthenticationInfo, Polymath polymath)
+        public GitHubAuthMethodLoginProvider(GitHubAuthMethodInfo gitHubAuthMethodInfo, Polymath polymath)
         {
-            _userPassAuthMethodInfo = userPassAuthenticationInfo;
+            _gitHubAuthMethodInfo = gitHubAuthMethodInfo;
             _polymath = polymath;
         }
 
@@ -23,12 +23,12 @@ namespace VaultSharp.V1.AuthMethods.UserPass
         {
             var requestData = new Dictionary<string, object>
             {
-                {"password", _userPassAuthMethodInfo.Password }
+                {"token", _gitHubAuthMethodInfo.PersonalAccessToken }
             };
 
             // make an unauthenticated call to Vault, since this is the call to get the token. It shouldn't need a token.
             var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, requestData, unauthenticated: true);
-            _userPassAuthMethodInfo.ReturnedLoginAuthInfo = response?.AuthInfo;
+            _gitHubAuthMethodInfo.ReturnedLoginAuthInfo = response?.AuthInfo;
 
             if (response?.AuthInfo != null && !string.IsNullOrWhiteSpace(response.AuthInfo.ClientToken))
             {
@@ -42,7 +42,7 @@ namespace VaultSharp.V1.AuthMethods.UserPass
         {
             get
             {
-                var endpoint = string.Format(CultureInfo.InvariantCulture, "v1/auth/{0}/login/{1}", _userPassAuthMethodInfo.MountPoint.Trim('/'), _userPassAuthMethodInfo.Username);
+                var endpoint = string.Format(CultureInfo.InvariantCulture, "v1/auth/{0}/login", _gitHubAuthMethodInfo.MountPoint.Trim('/'));
                 return endpoint;
             }
         }

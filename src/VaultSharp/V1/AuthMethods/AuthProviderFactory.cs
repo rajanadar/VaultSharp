@@ -13,49 +13,49 @@ namespace VaultSharp.V1.AuthMethods
 {
     internal static class AuthProviderFactory
     {
-        public static IAuthProvider CreateAuthenticationProvider(IAuthMethodInfo authInfo, Polymath polymath)
+        public static IAuthMethodLoginProvider CreateAuthenticationProvider(IAuthMethodInfo authInfo, Polymath polymath)
         {
             if (authInfo.AuthMethodType == AuthMethodType.AppRole)
             {
-                return new AppRoleAuthenticationProvider(authInfo as AppRoleAuthMethodInfo, polymath);
+                return new AppRoleAuthMethodLoginProvider(authInfo as AppRoleAuthMethodInfo, polymath);
             }
 
             if (authInfo.AuthMethodType == AuthMethodType.AWS)
             {
-                return new AWSAuthenticationProvider(authInfo as AbstractAWSAuthMethodInfo, polymath);
+                return new AWSAuthMethodLoginProvider(authInfo as AbstractAWSAuthMethodInfo, polymath);
             }
 
             if (authInfo.AuthMethodType == AuthMethodType.GitHub)
             {
-                return new GitHubAuthenticationProvider(authInfo as GitHubAuthMethodInfo, polymath);
+                return new GitHubAuthMethodLoginProvider(authInfo as GitHubAuthMethodInfo, polymath);
             }
 
             if (authInfo.AuthMethodType == AuthMethodType.LDAP)
             {
-                return new LDAPAuthenticationProvider(authInfo as LDAPAuthMethodInfo, polymath);
+                return new LDAPAuthMethodLoginProvider(authInfo as LDAPAuthMethodInfo, polymath);
             }
 
             if (authInfo.AuthMethodType == AuthMethodType.Cert)
             {
                 // we have attached the certificates to request elsewhere.
-                return new CertAuthenticationProvider(authInfo as CertAuthMethodInfo, polymath);
+                return new CertAuthMethodLoginProvider(authInfo as CertAuthMethodInfo, polymath);
             }
 
             if (authInfo.AuthMethodType == AuthMethodType.Token)
             {
-                return new TokenAuthProvider(authInfo as TokenAuthMethodInfo);
+                return new TokenAuthMethodLoginProvider(authInfo as TokenAuthMethodInfo);
             }
 
             if (authInfo.AuthMethodType == AuthMethodType.UserPass)
             {
-                return new UserPassAuthenticationProvider(authInfo as UserPassAuthMethodInfo, polymath);
+                return new UserPassAuthMethodLoginProvider(authInfo as UserPassAuthMethodInfo, polymath);
             }
 
             var customAuthMethodInfo = authInfo as CustomAuthMethodInfo;
 
             if (customAuthMethodInfo != null)
             {
-                return new CustomAuthenticationProvider(customAuthMethodInfo, polymath);
+                return new CustomAuthMethodLoginProvider(customAuthMethodInfo, polymath);
             }
 
             throw new NotSupportedException("The requested authentication backend type is not supported: " + authInfo.AuthMethodType);

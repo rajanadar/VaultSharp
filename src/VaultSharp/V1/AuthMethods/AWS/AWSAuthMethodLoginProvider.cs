@@ -8,12 +8,12 @@ using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.AuthMethods.AWS
 {
-    internal class AWSAuthenticationProvider : IAuthProvider
+    internal class AWSAuthMethodLoginProvider : IAuthMethodLoginProvider
     {
         private readonly AbstractAWSAuthMethodInfo _awsAuthMethodInfo;
         private readonly Polymath _polymath;
 
-        public AWSAuthenticationProvider(AbstractAWSAuthMethodInfo awsAuthMethodInfo, Polymath polymath)
+        public AWSAuthMethodLoginProvider(AbstractAWSAuthMethodInfo awsAuthMethodInfo, Polymath polymath)
         {
             _awsAuthMethodInfo = awsAuthMethodInfo;
             _polymath = polymath;

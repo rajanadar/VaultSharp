@@ -9,15 +9,15 @@ namespace VaultSharp.V1
     {
         public VaultClientV1(Polymath polymath)
         { 
-            SystemBackend = new SystemBackendProvider(polymath);
-            AuthMethod = new AuthMethodProvider(polymath);
-            SecretsEngine = new SecretsEngineProvider(polymath);
+            System = new SystemBackendProvider(polymath);
+            Auth = new AuthMethodProvider(polymath);
+            Secrets = new SecretsEngineProvider(polymath);
         }
 
-        public ISecretsEngine SecretsEngine { get; }
+        public ISecretsEngine Secrets { get; }
 
-        public IAuthMethod AuthMethod { get; }
+        public IAuthMethod Auth { get; }
 
-        public ISystemBackend SystemBackend { get; }
+        public ISystemBackend System { get; }
     }
 }

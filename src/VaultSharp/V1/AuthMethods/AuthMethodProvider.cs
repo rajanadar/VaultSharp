@@ -20,6 +20,8 @@ namespace VaultSharp.V1.AuthMethods
         public AuthMethodProvider(Polymath polymath)
         {
             _polymath = polymath;
+
+            Token = new TokenAuthMethodProvider(_polymath);
         }
 
         public IAppRoleAuthMethod AppRole => throw new NotImplementedException();
@@ -38,7 +40,7 @@ namespace VaultSharp.V1.AuthMethods
 
         public ICertAuthBackend Cert => throw new NotImplementedException();
 
-        public ITokenAuthBackend Token => throw new NotImplementedException();
+        public ITokenAuthMethod Token { get; }
 
         public IUserPassAuthBackend UserPass => throw new NotImplementedException();
     }

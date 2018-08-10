@@ -12,16 +12,16 @@ namespace VaultSharp.V1
         /// <summary>
         /// The Secrets Engine interface.
         /// </summary>
-        ISecretsEngine SecretsEngine { get; }
+        ISecretsEngine Secrets { get; }
 
         /// <summary>
         /// The Auth Method interface.
         /// </summary>
-        IAuthMethod AuthMethod { get; }
+        IAuthMethod Auth { get; }
 
         /// <summary>
         /// The System Backend interface.
         /// </summary>
-        ISystemBackend SystemBackend { get; }
+        ISystemBackend System { get; }
     }
 }

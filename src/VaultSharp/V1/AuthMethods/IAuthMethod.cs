@@ -69,7 +69,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <summary>
         /// 
         /// </summary>
-        ITokenAuthBackend Token { get; }
+        ITokenAuthMethod Token { get; }
 
         /// <summary>
         /// 

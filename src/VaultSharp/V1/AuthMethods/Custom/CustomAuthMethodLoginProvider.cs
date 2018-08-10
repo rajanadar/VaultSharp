@@ -4,12 +4,12 @@ using VaultSharp.Core;
 
 namespace VaultSharp.V1.AuthMethods.Custom
 {
-    internal class CustomAuthenticationProvider : IAuthProvider
+    internal class CustomAuthMethodLoginProvider : IAuthMethodLoginProvider
     {
         private readonly CustomAuthMethodInfo _customAuthMethodInfo;
         private readonly Polymath _polymath;
 
-        public CustomAuthenticationProvider(CustomAuthMethodInfo customAuthMethodInfo, Polymath polymath)
+        public CustomAuthMethodLoginProvider(CustomAuthMethodInfo customAuthMethodInfo, Polymath polymath)
         {
             _customAuthMethodInfo = customAuthMethodInfo;
             _polymath = polymath;
