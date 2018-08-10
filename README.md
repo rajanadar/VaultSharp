@@ -5,9 +5,9 @@ A cross-platform .NET Library for HashiCorp's Vault - A Secret Management System
 
 **Latest release: [0.10.4000](https://www.nuget.org/packages/VaultSharp) [Install-Package VaultSharp -Version 0.10.4000]**
 
-**Latest Documentation:** [Below]
+**Latest Documentation:** Inline Below and also at: http://rajanadar.github.io/VaultSharp/
 
-**VaultSharp 0.6.x Documentation:** [0.6.x Docs](https://github.com/rajanadar/VaultSharp/blob/master/README-0.6.x.md)
+**Older VaultSharp 0.6.x Documentation:** [0.6.x Docs](https://github.com/rajanadar/VaultSharp/blob/master/README-0.6.x.md)
 
 **Report Issues/Feedback:** [Create a VaultSharp GitHub issue](https://github.com/rajanadar/VaultSharp/issues/new)
 
@@ -25,7 +25,7 @@ Also, the Intellisense on IVaultClient class should help. I have tried to add a 
 
 ### Give me a quick snippet for use!
 
- * Add a Nuget reference to VaultSharp as follows ```Install-Package VaultSharp -Version 0.10.4000```
+ * Add a Nuget reference to VaultSharp as follows ```Install-Package VaultSharp -Version <latest_version>```
  * Instantiate a IVaultClient as follows:
 
  ```cs	
@@ -44,6 +44,11 @@ var kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("secret
 var consulCreds = await vaultClient.V1.Secrets.Consul.GenerateCredentialsAsync(consulRole, consulMount);	
 var consulToken = consulCredentials.Data.Token;
 ```
+
+### VaultSharp and Consul Support
+
+* VaultSharp supports dynamic Consul credential generation.
+* Please look at the API usage in the 'Consul' section of 'Secrets Engines' below, to see all the Consul related methods in action.
 
 ### Auth Methods
 
@@ -227,13 +232,133 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 * So VaultSharp doesn't support App Id natively. 
 * If you are in dire need of the App Id support, please raise an issue.
 
+#### MFA (LEGACY/UNSUPPORTED)
+
+* Please note that this legacy Auth Method is not supported by Vault anymore.
+* Instead Vault Enterprise contains a fully-supported MFA system.
+* It is significantly more complete and flexible and which can be used throughout Vault's API. 
+* Please see the *System Backend* section of the docs for the Enterprise MFA apis.
+
 ### Secrets Engines
 
-Documentation coming soon...
+* VaultSharp supports all secrets engines supported by the Vault Service
+* Here is a sample to instantiate the vault client with each of the secrets engine
+
+All of the below examples assume that you have a vault client instance ready. e.g.
+
+ ```cs	
+// Initialize one of the several auth methods.
+IAuthMethodInfo authMethod = new TokenAuthMethodInfo("MY_VAULT_TOKEN");
+
+// Initialize settings. You can also set proxies, custom delegates etc. here.
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+```
+
+#### Active Directory
+
+Coming soon...
+
+#### AWS
+
+Coming soon...
+
+#### Consul
+
+```cs
+
+// Generate a dynamic Consul credential
+var consulCreds = await vaultClient.V1.Secrets.Consul.GenerateCredentialsAsync(consulRole);	
+var consulToken = consulCredentials.Data.Token;
+
+```
+
+#### Cubbyhole
+
+Coming soon...
+
+#### Databases
+
+Coming soon...
+
+#### Google Cloud
+
+Coming soon...
+
+#### Key Value
+
+ * VaultSharp supports both v1 and v2 of the Key Value Secrets Engine.
+ * Here are examples for both.
+
+##### Key Value - V1
+
+```cs
+
+// Use client to read a v1 key-value secret.
+var kv1Secret = await vaultClient.V1.Secrets.KeyValue.V1.ReadSecretAsync("v1-secret-name");
+
+```
+
+##### Key Value - V2
+
+```cs
+
+// Use client to read a v2 key-value secret.
+var kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("v2-secret-name");
+
+```
+
+#### Identity
+
+Coming soon...
+
+#### Nomad
+
+Coming soon...
+
+#### PKI (Cerificates)
+
+```cs
+
+var certificateCredentialsRequestOptions = new CertificateCredentialsRequestOptions { // initialize };
+var certSecret = await vaultClient.V1.Secrets.PKI.GenerateCredentialsAsync(pkiRoleName, certificateCredentialsRequestOptions);
+
+var privateKeyContent = certSecret.Data.PrivateKeyContent;
+
+```
+
+#### RabbitMQ
+
+Coming soon...
+
+#### SSH
+
+Coming soon...
+
+#### TOTP
+
+Coming soon...
+
+#### Transit
+
+Coming soon...
 
 ### System Backend
 
-Documentation coming soon...
+ * The system backend is a default backend in Vault that is mounted at the /sys endpoint. 
+ * This endpoint cannot be disabled or moved, and is used to configure Vault and interact with many of Vault's internal features.
+
+VaultSharp already supports several of the System backend features.
+
+```cs
+
+// vaultClient.V1.System.<method> The method you are looking for.
+
+```
+
+Additional documentation coming soon...
 
 ### What is the deal with the Versioning of VaultSharp?
 
