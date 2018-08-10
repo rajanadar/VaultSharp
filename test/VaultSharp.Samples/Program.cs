@@ -90,6 +90,10 @@ namespace VaultSharp.Samples
             var callingTokenInfo = _authenticatedVaultClient.V1.Auth.Token.LookupSelfAsync().Result;
             DisplayJson(callingTokenInfo);
 
+            // use a renewable token here.
+            // var renewInfo = _authenticatedVaultClient.V1.Auth.Token.RenewSelfAsync().Result;
+            // DisplayJson(renewInfo);
+
             // Needs Manual pre-steps.
             // Startup vault with normal dev mode. not real.
             /*
