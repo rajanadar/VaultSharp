@@ -45,4 +45,35 @@ var consulCreds = await vaultClient.V1.Secrets.Consul.GenerateCredentialsAsync(c
 var consulToken = consulCredentials.Data.Token;
 ```
 
+### What is the deal with the Versioning of VaultSharp?
+
+* This library is written for Hashicorp's Vault Service
+* The Vault service is evolving constantly and the Hashicorp team is rapidly working on it.
+* Pretty soon, they should have an 1.0.0 version of the Vault Service from Hashicorp.
+* Because this client library is intended to facilititate the Vault Service operations, this library makes it easier for its consumers to relate to the Vault service it supports.
+* Hence a version of 0.10.x denotes that this library will support the Vault 0.10.x Service Apis.
+* Tomorrow when Vault Service gets upgraded to 1.0.0, this library will be modified accordingly and versioned as 1.0.0
+
+### Can I use it in my PowerShell Automation?
+
+* Absolutely. VaultSharp is a .NET Library. 
+* This means, apart from using it in your C#, VB.NET, J#.NET and any .NET application, you can use it in PowerShell automation as well.
+* Load up the DLL in your PowerShell code and execute the methods. PowerShell can totally work with .NET Dlls.
+
+### All the methods are async. How do I use them synchronously?
+
+* The methods are async as the defacto implementation. The recommended usage.
+* However, there are innumerable scenarios where you would continue to want to use it synchronously.
+* For all those cases, there are various options available to you.
+* There is a lot of discussion around the right usage, avoiding deadlocks etc.
+* This library allows you to set the 'continueAsyncTasksOnCapturedContext' option when you initialize the client.
+* It is an optional parameter and defaults to 'false'
+* Setting it to false, allows you to access the .Result property of the task with reduced/zero deadlock issues.
+* There are other ways as well to invoke it synchronously, and  I leave it to the users of the library. (Task.Run etc.) 
+* But please note that as much as possible, use it in an async manner. 
+
+### In Conclusion
+
+* If the above documentation doesn't help you, feel free to create an issue or email me. https://github.com/rajanadar/VaultSharp/issues/new
+
 ### Happy Coding folks!
