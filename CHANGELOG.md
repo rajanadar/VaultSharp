@@ -1,4 +1,4 @@
-## 0.10.4001 (Unreleased)
+## 0.10.4001 (August 10, 2018)
 
 FEATURES:
 
@@ -6,6 +6,7 @@ FEATURES:
   * Add support for GitHub auth method.
   * Add support for Get, Renew and Revoke calling token info.
   * Add docs for VaultSharp 0.6.x
+  * Add docs for current VaultSharp
  
 BREAKING CHANGES:
 
