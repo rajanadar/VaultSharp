@@ -28,5 +28,14 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// The auth info.
         /// </returns>
         Task<AuthInfo> RenewSelfAsync(string increment = null);
+
+        /// <summary>
+        /// Revokes the calling client token and all child tokens.
+        /// When the token is revoked, all secrets generated with it are also revoked.
+        /// </summary>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task RevokeSelfAsync();
     }
 }

@@ -94,6 +94,8 @@ namespace VaultSharp.Samples
             // var renewInfo = _authenticatedVaultClient.V1.Auth.Token.RenewSelfAsync().Result;
             // DisplayJson(renewInfo);
 
+            _authenticatedVaultClient.V1.Auth.Token.RevokeSelfAsync().Wait();
+
             // Needs Manual pre-steps.
             // Startup vault with normal dev mode. not real.
             /*

@@ -28,5 +28,10 @@ namespace VaultSharp.V1.AuthMethods.Token
             var result = await _polymath.MakeVaultApiRequest<Secret<dynamic>>("v1/auth/token/renew-self", HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             return result.AuthInfo;
         }
+
+        public async Task RevokeSelfAsync()
+        {
+            await _polymath.MakeVaultApiRequest<Secret<dynamic>>("v1/auth/token/revoke-self", HttpMethod.Post).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
     }
 }
