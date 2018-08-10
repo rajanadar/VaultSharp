@@ -33,7 +33,7 @@ Also, the Intellisense on IVaultClient class should help. I have tried to add a 
 IAuthMethodInfo authMethod = new TokenAuthMethodInfo("MY_VAULT_TOKEN");
 
 // Initialize settings. You can also set proxies, custom delegates etc. here.
-VaultClientSettings vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
 
 IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
@@ -44,6 +44,196 @@ var kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("secret
 var consulCreds = await vaultClient.V1.Secrets.Consul.GenerateCredentialsAsync(consulRole, consulMount);	
 var consulToken = consulCredentials.Data.Token;
 ```
+
+### Auth Methods
+
+* VaultSharp supports all authentication methods supported by the Vault Service
+* Here is a sample to instantiate the vault client with each of the authentication backends.
+
+#### App Role Auth Method
+
+```cs
+
+// setup the AppRole based auth to get the right token.
+
+IAuthMethodInfo authMethod = new AppRoleAuthMethodInfo(roleId, secretId);
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the app role and secret id.
+
+```
+
+#### AWS Auth Method
+
+##### AWS Auth Method - EC2
+
+```cs
+
+// setup the AWS-EC2 based auth to get the right token.
+
+IAuthMethodInfo authMethod = new EC2AWSAuthMethodInfo(pkcs7, null, null, nonce, roleName);
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the aws-ec2 role
+
+```
+
+```cs
+
+// setup the AWS-EC2 based auth to get the right token.
+
+IAuthMethodInfo authMethod = new EC2AWSAuthMethodInfo(null, identity, signature, nonce, roleName);
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the aws-ec2 role
+
+```
+
+##### AWS Auth Method - IAM
+
+```cs
+
+// setup the AWS-IAM based auth to get the right token.
+
+IAuthMethodInfo authMethod = new IAMAWSAuthMethodInfo(nonce, roleName); // uses default requestHeaders
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the aws-iam role
+
+```
+
+#### Azure Auth Method
+
+Coming soon...
+
+#### GitHub Auth Method
+
+```cs
+IAuthMethodInfo authMethod = new GitHubAuthMethodInfo(personalAccessToken);
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the github token.
+
+```
+
+#### Google Cloud Auth Method
+
+Coming soon...
+
+#### JWT/OIDC Auth Method
+
+Coming soon...
+
+#### Kubernetes Auth Method
+
+Coming soon...
+
+#### LDAP Authentication Backend
+
+```cs
+IAuthMethodInfo authMethod = new LDAPAuthMethodInfo(userName, password);
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the LDAP username and password.
+
+```
+
+#### Okta Auth Method
+
+Coming soon...
+
+#### RADIUS Auth Method
+
+Coming soon...
+
+#### Certificate (TLS) Auth Method
+
+```cs
+var clientCertificate = new X509Certificate2(certificatePath, certificatePassword, 
+                            X509KeyStorageFlags.Exportable | X509KeyStorageFlags.PersistKeySet);
+
+IAuthMethodInfo authMethod = new CertAuthMethodInfo(clientCertificate);
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+vault token/policies mapped to the client certificate.
+
+```
+
+#### Token Auth Method
+
+```cs
+IAuthMethodInfo authMethod = new TokenAuthMethodInfo(vaultToken);
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+vault token/policies mapped to the vault token.
+
+```
+
+#### Username and Password Auth Method
+
+```cs
+IAuthMethodInfo authMethod = new UserPassAuthMethodInfo(username, password);
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+vault token/policies mapped to the username/password.
+
+```
+
+#### Custom Auth Method - Bring your own Vault Token
+
+ * VaultSharp also supports a custom way to provide the Vault auth token to VaultSharp.
+ * In this approach, you are free to provide any delegate that returns the Vault token.
+ * The token can be retrieved from a database, another secret engine, from a file, etc.
+
+```cs
+// Func<Task<String>> getTokenAsync = a custom async method to return the vault token.
+IAuthMethodInfo authMethod = new CustomAuthMethodInfo("my-own-token-auth-method", getTokenAsync);
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+```
+
+#### App Id Auth Method (DEPRECATED)
+
+* Please note that the app-id auth backend has been deprecated by Vault. They recommend us to use the AppRole backend.
+* So VaultSharp doesn't support App Id natively. 
+* If you are in dire need of the App Id support, please raise an issue.
+
+### Secrets Engines
+
+Documentation coming soon...
+
+### System Backend
+
+Documentation coming soon...
 
 ### What is the deal with the Versioning of VaultSharp?
 
