@@ -5,6 +5,7 @@ FEATURES:
   * Add support for PKI dynamic credentials.
   * Add support for GitHub auth method.
   * Add support for Get, Renew and Revoke calling token info.
+  * Add docs for VaultSharp 0.6.x
  
 BREAKING CHANGES:
 
