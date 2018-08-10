@@ -22,7 +22,7 @@ namespace VaultSharp.V1.AuthMethods.Cert
         public async Task<string> GetVaultTokenAsync()
         {
             // make an unauthenticated call to Vault, since this is the call to get the token. It shouldn't need a token.
-            var response = await _polymath.MakeVaultApiRequest<Secret<dynamic>>(LoginResourcePath, HttpMethod.Post, unauthenticated: true);
+            var response = await _polymath.MakeVaultApiRequest<Secret<dynamic>>(LoginResourcePath, HttpMethod.Post, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             _certAuthMethodInfo.ReturnedLoginAuthInfo = response?.AuthInfo;
 
             if (response?.AuthInfo != null && !string.IsNullOrWhiteSpace(response.AuthInfo.ClientToken))

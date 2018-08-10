@@ -40,4 +40,8 @@ This library is built with .NET Standard 2.0 and hence is cross-platform.</Descr
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="V1\AuthMethods\GitHub\Models\" />
+  </ItemGroup>
+
 </Project>

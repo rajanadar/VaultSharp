@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 using VaultSharp.Core;
+using VaultSharp.V1.AuthMethods.Token.Models;
+using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.AuthMethods.Token
 {
@@ -13,9 +16,9 @@ namespace VaultSharp.V1.AuthMethods.Token
             this._polymath = polymath;
         }
 
-        public Task<string> LoginAsync()
+        public async Task<Secret<CallingTokenInfo>> LookupSelfAsync()
         {
-            throw new System.NotImplementedException();
+            return await _polymath.MakeVaultApiRequest<Secret<CallingTokenInfo>>("v1/auth/token/lookup-self", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

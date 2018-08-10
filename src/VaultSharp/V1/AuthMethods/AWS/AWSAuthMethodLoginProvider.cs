@@ -22,7 +22,7 @@ namespace VaultSharp.V1.AuthMethods.AWS
         public async Task<string> GetVaultTokenAsync()
         {
             // make an unauthenticated call to Vault, since this is the call to get the token. It shouldn't need a token.
-            var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, _awsAuthMethodInfo, unauthenticated: true);
+            var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, _awsAuthMethodInfo, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             _awsAuthMethodInfo.ReturnedLoginAuthInfo = response?.AuthInfo;
 
             if (response?.AuthInfo != null && !string.IsNullOrWhiteSpace(response.AuthInfo.ClientToken))

@@ -87,8 +87,8 @@ namespace VaultSharp.Samples
         private static void RunAuthMethodSamples()
         {
             // Token Apis.
-
-
+            var callingTokenInfo = _authenticatedVaultClient.V1.Auth.Token.LookupSelfAsync().Result;
+            DisplayJson(callingTokenInfo);
 
             // Needs Manual pre-steps.
             // Startup vault with normal dev mode. not real.
@@ -125,10 +125,10 @@ namespace VaultSharp.Samples
             // Assert.True(result.Data.Capabilities.Any());
 
             // token
-            IAuthMethodInfo tokenAuthMethodInfo = new TokenAuthMethodInfo(token);
+            // IAuthMethodInfo tokenAuthMethodInfo = new TokenAuthMethodInfo(token); // throws null
 
-            authVaultClientSettings = GetVaultClientSettings(tokenAuthMethodInfo);
-            vaultClient = new VaultClient(authVaultClientSettings);
+            // authVaultClientSettings = GetVaultClientSettings(tokenAuthMethodInfo);
+            // vaultClient = new VaultClient(authVaultClientSettings);
 
             // result = vaultClient.V1.System.GetCallingTokenCapabilitiesAsync("v1/sys").Result;
             // Assert.True(result.Data.Capabilities.Any());
@@ -936,6 +936,9 @@ namespace VaultSharp.Samples
 
             masterCredentials.MasterKeys = quick.MasterKeys;
             masterCredentials.Base64MasterKeys = quick.Base64MasterKeys;
+
+            authSettings = GetVaultClientSettings(new TokenAuthMethodInfo(masterCredentials.RootToken));
+            _authenticatedVaultClient = new VaultClient(authSettings);
         }
 
         private static VaultClientSettings GetVaultClientSettings(IAuthMethodInfo authMethodInfo = null)
