@@ -4,7 +4,11 @@ FEATURES:
 
   * Add support for PKI dynamic credentials.
   * Add support for GitHub auth method.
-  * Add support for 
+  * Add support for Get, Renew and Revoke calling token info.
+ 
+BREAKING CHANGES:
+
+  * Changed the property names in VaultClient.V1 from SecretsEngine to just Secrets, AuthMethod to Auth and SystemBackend to System.
 
 ## 0.10.4000 (July 30, 2018)
 

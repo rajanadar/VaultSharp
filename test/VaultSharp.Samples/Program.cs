@@ -80,12 +80,16 @@ namespace VaultSharp.Samples
             // i dev on a Windows 10 x64 bit OS.
 
             RunSystemBackendSamples();
-            // RunAuthMethodSamples();
+            RunAuthMethodSamples();
             // RunSecretsEngineSamples();
         }
 
         private static void RunAuthMethodSamples()
         {
+            // Token Apis.
+
+
+
             // Needs Manual pre-steps.
             // Startup vault with normal dev mode. not real.
             /*
@@ -117,8 +121,8 @@ namespace VaultSharp.Samples
 
             IVaultClient vaultClient = new VaultClient(authVaultClientSettings);
 
-            var result = vaultClient.V1.System.GetCallingTokenCapabilitiesAsync("v1/sys").Result;
-            Assert.True(result.Data.Capabilities.Any());
+            // var result = vaultClient.V1.System.GetCallingTokenCapabilitiesAsync("v1/sys").Result;
+            // Assert.True(result.Data.Capabilities.Any());
 
             // token
             IAuthMethodInfo tokenAuthMethodInfo = new TokenAuthMethodInfo(token);
@@ -126,8 +130,8 @@ namespace VaultSharp.Samples
             authVaultClientSettings = GetVaultClientSettings(tokenAuthMethodInfo);
             vaultClient = new VaultClient(authVaultClientSettings);
 
-            result = vaultClient.V1.System.GetCallingTokenCapabilitiesAsync("v1/sys").Result;
-            Assert.True(result.Data.Capabilities.Any());
+            // result = vaultClient.V1.System.GetCallingTokenCapabilitiesAsync("v1/sys").Result;
+            // Assert.True(result.Data.Capabilities.Any());
         }
 
         private static void RunSecretsEngineSamples()

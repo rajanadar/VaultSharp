@@ -5,5 +5,6 @@
     /// </summary>
     public interface ITokenAuthMethod
     {
+        // Task<object> LookupSelfAsync();
     }
 }
