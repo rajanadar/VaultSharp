@@ -1,5 +1,6 @@
 ﻿using VaultSharp.V1.AuthMethods.AppRole;
 using VaultSharp.V1.AuthMethods.AWS;
+using VaultSharp.V1.AuthMethods.Azure;
 using VaultSharp.V1.AuthMethods.Cert;
 using VaultSharp.V1.AuthMethods.GitHub;
 using VaultSharp.V1.AuthMethods.Kubernetes;
@@ -27,14 +28,19 @@ namespace VaultSharp.V1.AuthMethods
         IAWSAuthBackend AWS { get; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        IAzureAuthMethod Azure { get; }
+
+        /// <summary>
         /// Hmm.
         /// </summary>
-        // IGithubAuthBackend Github { get; }
+        IGitHubAuthMethod GitHub { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        IGitHubAuthBackend GoogleCloud { get; }
+        IGitHubAuthMethod GoogleCloud { get; }
 
         /// <summary>
         /// 

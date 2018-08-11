@@ -4,6 +4,7 @@
     {
         public const string AppRole = "approle";
         public const string AWS = "aws";
+        public const string Azure = "azure";
         public const string GitHub = "github";
         public const string GoogleCloud = "gcp";
         public const string Kubernetes = "kubernetes";

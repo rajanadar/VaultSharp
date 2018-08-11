@@ -2,6 +2,7 @@
 using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods.AppRole;
 using VaultSharp.V1.AuthMethods.AWS;
+using VaultSharp.V1.AuthMethods.Azure;
 using VaultSharp.V1.AuthMethods.Cert;
 using VaultSharp.V1.AuthMethods.Custom;
 using VaultSharp.V1.AuthMethods.GitHub;
@@ -23,6 +24,11 @@ namespace VaultSharp.V1.AuthMethods
             if (authInfo.AuthMethodType == AuthMethodType.AWS)
             {
                 return new AWSAuthMethodLoginProvider(authInfo as AbstractAWSAuthMethodInfo, polymath);
+            }
+
+            if (authInfo.AuthMethodType == AuthMethodType.Azure)
+            {
+                return new AzureAuthMethodLoginProvider(authInfo as AzureAuthMethodInfo, polymath);
             }
 
             if (authInfo.AuthMethodType == AuthMethodType.GitHub)

@@ -18,7 +18,7 @@ namespace VaultSharp.Core
 
             if (string.IsNullOrWhiteSpace(value))
             {
-                throw new ArgumentException("value is empty or contains white-space characters only.", name);
+                throw new ArgumentException("'" + name + "' value is empty or contains white-space characters only.", name);
             }
         }
     }

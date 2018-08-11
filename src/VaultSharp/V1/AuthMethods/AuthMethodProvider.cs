@@ -2,6 +2,7 @@
 using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods.AppRole;
 using VaultSharp.V1.AuthMethods.AWS;
+using VaultSharp.V1.AuthMethods.Azure;
 using VaultSharp.V1.AuthMethods.Cert;
 using VaultSharp.V1.AuthMethods.GitHub;
 using VaultSharp.V1.AuthMethods.Kubernetes;
@@ -28,7 +29,11 @@ namespace VaultSharp.V1.AuthMethods
 
         public IAWSAuthBackend AWS => throw new NotImplementedException();
 
-        public IGitHubAuthBackend GoogleCloud => throw new NotImplementedException();
+        public IAzureAuthMethod Azure => throw new NotImplementedException();
+
+        public IGitHubAuthMethod GitHub => throw new NotImplementedException();
+
+        public IGitHubAuthMethod GoogleCloud => throw new NotImplementedException();
 
         public IKubernetesAuthBackend Kubernetes => throw new NotImplementedException();
 

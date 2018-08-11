@@ -121,7 +121,19 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 #### Azure Auth Method
 
-Coming soon...
+```cs
+
+// setup the Azure based auth to get the right token.
+
+IAuthMethodInfo authMethod = new AzureAuthMethodInfo(roleName, jwt); 
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the azure jwt
+
+```
 
 #### GitHub Auth Method
 

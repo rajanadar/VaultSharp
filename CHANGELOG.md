@@ -1,3 +1,11 @@
+## 0.10.4002 (Unreleased)
+
+FEATURES:
+
+  * Add support for Azure dynamic credentials.
+ 
+BREAKING CHANGES:
+
 ## 0.10.4001 (August 10, 2018)
 
 FEATURES:

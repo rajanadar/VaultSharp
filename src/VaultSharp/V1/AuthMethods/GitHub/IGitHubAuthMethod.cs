@@ -3,7 +3,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public interface IGitHubAuthBackend
+    public interface IGitHubAuthMethod
     {
     }
 }
