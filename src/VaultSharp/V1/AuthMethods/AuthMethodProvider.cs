@@ -41,7 +41,7 @@ namespace VaultSharp.V1.AuthMethods
 
         public IOktaAuthMethod Okta => throw new NotImplementedException();
 
-        public IRADIUSAuthBackend RADIUS => throw new NotImplementedException();
+        public IRADIUSAuthMethod RADIUS => throw new NotImplementedException();
 
         public ICertAuthBackend Cert => throw new NotImplementedException();
 

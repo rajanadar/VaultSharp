@@ -11,6 +11,7 @@ using VaultSharp.V1.AuthMethods.JWT;
 using VaultSharp.V1.AuthMethods.Kubernetes;
 using VaultSharp.V1.AuthMethods.LDAP;
 using VaultSharp.V1.AuthMethods.Okta;
+using VaultSharp.V1.AuthMethods.RADIUS;
 using VaultSharp.V1.AuthMethods.Token;
 using VaultSharp.V1.AuthMethods.UserPass;
 
@@ -63,6 +64,11 @@ namespace VaultSharp.V1.AuthMethods
             if (authInfo.AuthMethodType == AuthMethodType.Okta)
             {
                 return new OktaAuthMethodLoginProvider(authInfo as OktaAuthMethodInfo, polymath);
+            }
+
+            if (authInfo.AuthMethodType == AuthMethodType.RADIUS)
+            {
+                return new RADIUSAuthMethodLoginProvider(authInfo as RADIUSAuthMethodInfo, polymath);
             }
 
             if (authInfo.AuthMethodType == AuthMethodType.Cert)

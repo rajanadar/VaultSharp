@@ -7,6 +7,7 @@
   * Add support for JWT/OIDC Auth method login.
   * Add support for Kubernetes Auth method login.
   * Add support for Okta Auth method login.
+  * Add support for RADIUS Auth method login.
 
 ## 0.10.4001 (August 10, 2018)
 

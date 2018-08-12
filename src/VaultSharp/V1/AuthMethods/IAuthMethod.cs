@@ -63,7 +63,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <summary>
         /// 
         /// </summary>
-        IRADIUSAuthBackend RADIUS { get; }
+        IRADIUSAuthMethod RADIUS { get; }
 
 
         /// <summary>

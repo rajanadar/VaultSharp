@@ -223,9 +223,19 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 // vault token/policies mapped to the Okta username and password.
 
 ```
+
 #### RADIUS Auth Method
 
-Coming soon...
+```cs
+IAuthMethodInfo authMethod = new RADIUSAuthMethodInfo(userName, password);
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the RADIUS username and password.
+
+```
 
 #### Certificate (TLS) Auth Method
 
