@@ -2,7 +2,8 @@
 
 FEATURES:
 
-  * Add support for Azure dynamic credentials.
+  * Add support for Azure Auth method login.
+  * Add support for GoogleCloud Auth method login.
  
 BREAKING CHANGES:
 

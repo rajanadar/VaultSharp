@@ -3,7 +3,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public interface IGoogleCloudAuthBackend
+    public interface IGoogleCloudAuthMethod
     {
     }
 }

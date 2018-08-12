@@ -15,6 +15,7 @@ namespace VaultSharp.V1.AuthMethods.Azure
         /// <value>
         /// The type of the authentication backend.
         /// </value>
+        [JsonIgnore]
         public override AuthMethodType AuthMethodType => AuthMethodType.Azure;
 
         /// <summary>
@@ -24,6 +25,7 @@ namespace VaultSharp.V1.AuthMethods.Azure
         /// <value>
         /// The mount point.
         /// </value>
+        [JsonIgnore]
         public string MountPoint { get; }
 
         /// <summary>

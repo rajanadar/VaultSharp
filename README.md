@@ -73,6 +73,8 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 #### AWS Auth Method
 
+AWS Auth method has 2 flavors. An EC2 way and an IAM way. Here are examples for both.
+
 ##### AWS Auth Method - EC2
 
 ```cs
@@ -150,7 +152,19 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 #### Google Cloud Auth Method
 
-Coming soon...
+```cs
+
+// setup the Google Cloud based auth to get the right token.
+
+IAuthMethodInfo authMethod = new GoogleCloudAuthMethodInfo(roleName, jwt); 
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the Google Cloud jwt
+
+```
 
 #### JWT/OIDC Auth Method
 
