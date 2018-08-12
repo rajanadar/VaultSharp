@@ -168,7 +168,19 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 #### JWT/OIDC Auth Method
 
-Coming soon...
+```cs
+
+// setup the JWT/OIDC based auth to get the right token.
+
+IAuthMethodInfo authMethod = new JWTAuthMethodInfo(roleName, jwt); 
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the jwt
+
+```
 
 #### Kubernetes Auth Method
 

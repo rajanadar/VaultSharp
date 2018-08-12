@@ -51,6 +51,14 @@ namespace VaultSharp.V1.AuthMethods
         public static AuthMethodType GoogleCloud { get; } = new AuthMethodType(AuthMethodDefaultPaths.GoogleCloud);
 
         /// <summary>
+        /// Gets the JWT type.
+        /// </summary>
+        /// <value>
+        /// The JWT.
+        /// </value>
+        public static AuthMethodType JWT { get; } = new AuthMethodType(AuthMethodDefaultPaths.JWT);
+
+        /// <summary>
         /// Gets the Kubernetes type.
         /// </summary>
         /// <value>

@@ -7,6 +7,7 @@
         public const string Azure = "azure";
         public const string GitHub = "github";
         public const string GoogleCloud = "gcp";
+        public const string JWT = "jwt";
         public const string Kubernetes = "kubernetes";
         public const string LDAP = "ldap";
         public const string Okta = "okta";

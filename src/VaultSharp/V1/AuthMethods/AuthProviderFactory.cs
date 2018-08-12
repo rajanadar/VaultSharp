@@ -7,6 +7,7 @@ using VaultSharp.V1.AuthMethods.Cert;
 using VaultSharp.V1.AuthMethods.Custom;
 using VaultSharp.V1.AuthMethods.GitHub;
 using VaultSharp.V1.AuthMethods.GoogleCloud;
+using VaultSharp.V1.AuthMethods.JWT;
 using VaultSharp.V1.AuthMethods.LDAP;
 using VaultSharp.V1.AuthMethods.Token;
 using VaultSharp.V1.AuthMethods.UserPass;
@@ -40,6 +41,11 @@ namespace VaultSharp.V1.AuthMethods
             if (authInfo.AuthMethodType == AuthMethodType.GoogleCloud)
             {
                 return new GoogleCloudAuthMethodLoginProvider(authInfo as GoogleCloudAuthMethodInfo, polymath);
+            }
+
+            if (authInfo.AuthMethodType == AuthMethodType.JWT)
+            {
+                return new JWTAuthMethodLoginProvider(authInfo as JWTAuthMethodInfo, polymath);
             }
 
             if (authInfo.AuthMethodType == AuthMethodType.LDAP)
