@@ -57,7 +57,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <summary>
         /// 
         /// </summary>
-        IOktaAuthBackend Okta { get; }
+        IOktaAuthMethod Okta { get; }
 
 
         /// <summary>

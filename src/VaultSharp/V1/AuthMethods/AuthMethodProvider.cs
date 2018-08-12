@@ -39,7 +39,7 @@ namespace VaultSharp.V1.AuthMethods
 
         public ILDAPAuthBackend LDAP => throw new NotImplementedException();
 
-        public IOktaAuthBackend Okta => throw new NotImplementedException();
+        public IOktaAuthMethod Okta => throw new NotImplementedException();
 
         public IRADIUSAuthBackend RADIUS => throw new NotImplementedException();
 

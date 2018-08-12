@@ -213,8 +213,16 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 #### Okta Auth Method
 
-Coming soon...
+```cs
+IAuthMethodInfo authMethod = new OktaAuthMethodInfo(userName, password);
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
 
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the Okta username and password.
+
+```
 #### RADIUS Auth Method
 
 Coming soon...

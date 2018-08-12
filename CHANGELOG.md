@@ -1,17 +1,16 @@
 ## 0.10.4002 (Unreleased)
 
-FEATURES:
+**FEATURES:**
 
   * Add support for Azure Auth method login.
   * Add support for GoogleCloud Auth method login.
   * Add support for JWT/OIDC Auth method login.
   * Add support for Kubernetes Auth method login.
- 
-BREAKING CHANGES:
+  * Add support for Okta Auth method login.
 
 ## 0.10.4001 (August 10, 2018)
 
-FEATURES:
+**FEATURES:**
 
   * Add support for PKI dynamic credentials.
   * Add support for GitHub auth method.
@@ -19,17 +18,21 @@ FEATURES:
   * Add docs for VaultSharp 0.6.x
   * Add docs for current VaultSharp
  
-BREAKING CHANGES:
+**BREAKING CHANGES:**
 
-  * Changed the property names in VaultClient.V1 from SecretsEngine to just Secrets, AuthMethod to Auth and SystemBackend to System.
+  * Changed the property names in VaultClient.V1 from SecretsEngine to just Secrets, AuthMethod to Auth and SystemBackend to System. Apologies.
 
 ## 0.10.4000 (July 30, 2018)
 
-FEATURES:
+**FEATURES:**
 
   * Secret Engines: Consul, KeyValue, PKI for dynamic credentials
   * Auth methods: AppRole, AWS, LDAP, TLS Certificates, Tokens, Username & password - Login method.
   * System Backend Apis.
+
+**BREAKING CHANGES:**
+
+  * VaultSharp has been redesigned from scratch to make the usage very intuitive and structured across the Secrets Engines, Auth Methods and Sys Apis.
 
 ## 0.6.5-beta1 (Unreleased)
 

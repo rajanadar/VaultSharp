@@ -8,7 +8,9 @@ using VaultSharp.V1.AuthMethods.Custom;
 using VaultSharp.V1.AuthMethods.GitHub;
 using VaultSharp.V1.AuthMethods.GoogleCloud;
 using VaultSharp.V1.AuthMethods.JWT;
+using VaultSharp.V1.AuthMethods.Kubernetes;
 using VaultSharp.V1.AuthMethods.LDAP;
+using VaultSharp.V1.AuthMethods.Okta;
 using VaultSharp.V1.AuthMethods.Token;
 using VaultSharp.V1.AuthMethods.UserPass;
 
@@ -48,9 +50,19 @@ namespace VaultSharp.V1.AuthMethods
                 return new JWTAuthMethodLoginProvider(authInfo as JWTAuthMethodInfo, polymath);
             }
 
+            if (authInfo.AuthMethodType == AuthMethodType.Kubernetes)
+            {
+                return new KubernetesAuthMethodLoginProvider(authInfo as KubernetesAuthMethodInfo, polymath);
+            }
+
             if (authInfo.AuthMethodType == AuthMethodType.LDAP)
             {
                 return new LDAPAuthMethodLoginProvider(authInfo as LDAPAuthMethodInfo, polymath);
+            }
+
+            if (authInfo.AuthMethodType == AuthMethodType.Okta)
+            {
+                return new OktaAuthMethodLoginProvider(authInfo as OktaAuthMethodInfo, polymath);
             }
 
             if (authInfo.AuthMethodType == AuthMethodType.Cert)

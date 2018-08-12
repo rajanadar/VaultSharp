@@ -1,6 +1,6 @@
 ﻿namespace VaultSharp.V1.AuthMethods.Okta
 {
-    public interface IOktaAuthBackend
+    public interface IOktaAuthMethod
     {
     }
 }
