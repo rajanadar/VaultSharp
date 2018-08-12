@@ -5,6 +5,7 @@ FEATURES:
   * Add support for Azure Auth method login.
   * Add support for GoogleCloud Auth method login.
   * Add support for JWT/OIDC Auth method login.
+  * Add support for Kubernetes Auth method login.
  
 BREAKING CHANGES:
 

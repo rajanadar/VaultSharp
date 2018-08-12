@@ -3,7 +3,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public interface IKubernetesAuthBackend
+    public interface IKubernetesAuthMethod
     {
     }
 }

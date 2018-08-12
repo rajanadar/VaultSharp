@@ -45,7 +45,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <summary>
         /// 
         /// </summary>
-        IKubernetesAuthBackend Kubernetes { get; }
+        IKubernetesAuthMethod Kubernetes { get; }
 
 
         /// <summary>

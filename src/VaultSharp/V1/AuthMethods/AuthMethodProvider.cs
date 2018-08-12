@@ -35,7 +35,7 @@ namespace VaultSharp.V1.AuthMethods
 
         public IGitHubAuthMethod GoogleCloud => throw new NotImplementedException();
 
-        public IKubernetesAuthBackend Kubernetes => throw new NotImplementedException();
+        public IKubernetesAuthMethod Kubernetes => throw new NotImplementedException();
 
         public ILDAPAuthBackend LDAP => throw new NotImplementedException();
 
