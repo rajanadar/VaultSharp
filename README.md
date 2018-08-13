@@ -325,15 +325,15 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 ```
 
-#### Active Directory
+#### Active Directory Secrets Engine
 
 Coming soon...
 
-#### AWS
+#### AWS Secrets Engine
 
 Coming soon...
 
-#### Consul
+#### Consul Secrets Engine
 
 ```cs
 
@@ -343,24 +343,24 @@ var consulToken = consulCredentials.Data.Token;
 
 ```
 
-#### Cubbyhole
+#### Cubbyhole Secrets Engine
 
 Coming soon...
 
-#### Databases
+#### Databases Secrets Engine
 
 Coming soon...
 
-#### Google Cloud
+#### Google Cloud Secrets Engine
 
 Coming soon...
 
-#### Key Value
+#### Key Value Secrets Engine
 
  * VaultSharp supports both v1 and v2 of the Key Value Secrets Engine.
  * Here are examples for both.
 
-##### Key Value - V1
+##### Key Value Secrets Engine - V1
 
 ```cs
 
@@ -369,7 +369,7 @@ var kv1Secret = await vaultClient.V1.Secrets.KeyValue.V1.ReadSecretAsync("v1-sec
 
 ```
 
-##### Key Value - V2
+##### Key Value Secrets Engine - V2
 
 ```cs
 
@@ -378,15 +378,15 @@ var kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("v2-sec
 
 ```
 
-#### Identity
+#### Identity Secrets Engine
 
 Coming soon...
 
-#### Nomad
+#### Nomad Secrets Engine
 
 Coming soon...
 
-#### PKI (Cerificates)
+#### PKI (Cerificates) Secrets Engine
 
 ```cs
 
@@ -397,21 +397,98 @@ var privateKeyContent = certSecret.Data.PrivateKeyContent;
 
 ```
 
-#### RabbitMQ
+#### RabbitMQ Secrets Engine
 
 Coming soon...
 
-#### SSH
+#### SSH Secrets Engine
 
 Coming soon...
 
-#### TOTP
+#### TOTP Secrets Engine
 
 Coming soon...
 
-#### Transit
+#### Transit Secrets Engine
 
-Coming soon...
+##### Encrypt Method
+
+###### Encrypt Single Item
+
+```cs
+
+var keyName = "test_key";
+
+var context = "context1";
+var plainText = "raja";
+var encodedPlainText = Convert.ToBase64String(Encoding.UTF8.GetBytes(plainText));
+var encodedContext = Convert.ToBase64String(Encoding.UTF8.GetBytes(context));
+
+var encryptOptions = new EncryptRequestOptions
+{
+    Base64EncodedPlainText = encodedPlainText,
+    Base64EncodedContext = encodedContext,
+};
+
+var encryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.EncryptAsync(keyName, encryptOptions);
+var cipherText = encryptionResponse.Data.CipherText;
+
+```
+
+###### Encrypt Batched Items
+
+```cs
+
+var encryptOptions = new EncryptRequestOptions
+{
+    BatchedEncryptionItems = new List<EncryptionItem>
+    {
+        new EncryptionItem { Base64EncodedContext = encodedContext1, Base64EncodedPlainText = encodedPlainText1 },
+        new EncryptionItem { Base64EncodedContext = encodedContext2, Base64EncodedPlainText = encodedPlainText2 },
+        new EncryptionItem { Base64EncodedContext = encodedContext3, Base64EncodedPlainText = encodedPlainText3 },
+    }
+};
+
+var encryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.EncryptAsync(keyName, encryptOptions);
+var firstCipherText = encryptionResponse.Data.BatchedResults.First().CipherText;
+
+```
+
+##### Decrypt Method
+
+###### Decrypt Single Item
+
+```cs
+
+var decryptOptions = new DecryptRequestOptions
+{
+    CipherText = cipherText,
+    Base64EncodedContext = encodedContext,
+};
+
+var decryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions);
+var encodedPlainText = decryptionResponse.Data.Base64EncodedPlainText;
+
+```
+
+###### Decrypt Batched Item
+
+```cs
+
+var decryptOptions = new DecryptRequestOptions
+{
+    BatchedDecryptionItems = new List<DecryptionItem>
+    {
+        new DecryptionItem { Base64EncodedContext = encodedContext1, CipherText = cipherText1 },
+        new DecryptionItem { Base64EncodedContext = encodedContext2, CipherText = cipherText2 },
+        new DecryptionItem { Base64EncodedContext = encodedContext3, CipherText = cipherText3 },
+    }
+};
+
+var decryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions);
+var firstEncodedPlainText = decryptionResponse.Data.BatchedResults.First().Base64EncodedPlainText;
+
+```
 
 ### System Backend
 

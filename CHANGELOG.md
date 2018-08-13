@@ -9,6 +9,8 @@
   * Add support for Okta Auth method login.
   * Add support for RADIUS Auth method login.
 
+  * Transit Secrets Engine: Add support for Encrypt & Decrypt including Batched input.
+
 ## 0.10.4001 (August 10, 2018)
 
 **FEATURES:**

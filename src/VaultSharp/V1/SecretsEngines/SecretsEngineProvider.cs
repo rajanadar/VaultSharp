@@ -25,6 +25,8 @@ namespace VaultSharp.V1.SecretsEngines
             Consul = new ConsulSecretsEngineProvider(polymath);
             KeyValue = new KeyValueSecretsEngineProvider(polymath);
             PKI = new PKISecretsEngineProvider(polymath);
+
+            Transit = new TransitSecretsEngineProvider(polymath);
         }
 
         public IAWSSecretsEngine AWS => throw new NotImplementedException();
@@ -47,6 +49,6 @@ namespace VaultSharp.V1.SecretsEngines
 
         public ITOTPSecretsEngine TOTP => throw new NotImplementedException();
 
-        public ITransitSecretsEngine Transit => throw new NotImplementedException();
+        public ITransitSecretsEngine Transit { get; }
     }
 }

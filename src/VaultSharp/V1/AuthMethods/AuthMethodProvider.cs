@@ -27,7 +27,7 @@ namespace VaultSharp.V1.AuthMethods
 
         public IAppRoleAuthMethod AppRole => throw new NotImplementedException();
 
-        public IAWSAuthBackend AWS => throw new NotImplementedException();
+        public IAWSAuthMethod AWS => throw new NotImplementedException();
 
         public IAzureAuthMethod Azure => throw new NotImplementedException();
 
@@ -37,16 +37,16 @@ namespace VaultSharp.V1.AuthMethods
 
         public IKubernetesAuthMethod Kubernetes => throw new NotImplementedException();
 
-        public ILDAPAuthBackend LDAP => throw new NotImplementedException();
+        public ILDAPAuthMethod LDAP => throw new NotImplementedException();
 
         public IOktaAuthMethod Okta => throw new NotImplementedException();
 
         public IRADIUSAuthMethod RADIUS => throw new NotImplementedException();
 
-        public ICertAuthBackend Cert => throw new NotImplementedException();
+        public ICertAuthMethod Cert => throw new NotImplementedException();
 
         public ITokenAuthMethod Token { get; }
 
-        public IUserPassAuthBackend UserPass => throw new NotImplementedException();
+        public IUserPassAuthMethod UserPass => throw new NotImplementedException();
     }
 }

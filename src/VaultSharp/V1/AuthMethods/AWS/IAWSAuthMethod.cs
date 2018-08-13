@@ -3,7 +3,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public interface IAWSAuthBackend
+    public interface IAWSAuthMethod
     {
     }
 }

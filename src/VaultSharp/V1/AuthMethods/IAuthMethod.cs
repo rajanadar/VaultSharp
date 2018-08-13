@@ -25,7 +25,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <summary>
         /// 
         /// </summary>
-        IAWSAuthBackend AWS { get; }
+        IAWSAuthMethod AWS { get; }
 
         /// <summary>
         /// 
@@ -51,7 +51,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <summary>
         /// 
         /// </summary>
-        ILDAPAuthBackend LDAP { get; }
+        ILDAPAuthMethod LDAP { get; }
 
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <summary>
         /// 
         /// </summary>
-        ICertAuthBackend Cert { get; }
+        ICertAuthMethod Cert { get; }
 
 
         /// <summary>
@@ -80,6 +80,6 @@ namespace VaultSharp.V1.AuthMethods
         /// <summary>
         /// 
         /// </summary>
-        IUserPassAuthBackend UserPass { get; }
+        IUserPassAuthMethod UserPass { get; }
     }
 }

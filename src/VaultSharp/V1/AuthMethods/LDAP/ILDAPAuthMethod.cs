@@ -3,7 +3,7 @@
     /// <summary>
     /// LDAP Auth method.
     /// </summary>
-    public interface ILDAPAuthBackend
+    public interface ILDAPAuthMethod
     {
     }
 }

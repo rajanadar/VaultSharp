@@ -4,12 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using Newtonsoft.Json;
 using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods;
 using VaultSharp.V1.AuthMethods.AppRole;
 using VaultSharp.V1.AuthMethods.Token;
 using VaultSharp.V1.SecretsEngines;
+using VaultSharp.V1.SecretsEngines.Transit;
 using VaultSharp.V1.SystemBackend;
 using VaultSharp.V1.SystemBackend.Plugin;
 using Xunit;
@@ -81,7 +83,7 @@ namespace VaultSharp.Samples
 
             RunSystemBackendSamples();
             RunAuthMethodSamples();
-            // RunSecretsEngineSamples();
+            RunSecretsEngineSamples();
         }
 
         private static void RunAuthMethodSamples()
@@ -94,7 +96,7 @@ namespace VaultSharp.Samples
             // var renewInfo = _authenticatedVaultClient.V1.Auth.Token.RenewSelfAsync().Result;
             // DisplayJson(renewInfo);
 
-            _authenticatedVaultClient.V1.Auth.Token.RevokeSelfAsync().Wait();
+            // _authenticatedVaultClient.V1.Auth.Token.RevokeSelfAsync().Wait();
 
             // Needs Manual pre-steps.
             // Startup vault with normal dev mode. not real.
@@ -125,7 +127,7 @@ namespace VaultSharp.Samples
                 }
             };
 
-            IVaultClient vaultClient = new VaultClient(authVaultClientSettings);
+            // IVaultClient vaultClient = new VaultClient(authVaultClientSettings);
 
             // var result = vaultClient.V1.System.GetCallingTokenCapabilitiesAsync("v1/sys").Result;
             // Assert.True(result.Data.Capabilities.Any());
@@ -142,6 +144,7 @@ namespace VaultSharp.Samples
 
         private static void RunSecretsEngineSamples()
         {
+            /*
             // manually write a kv v1 secret
 
             // env var for VAULT_TOKEN
@@ -159,6 +162,71 @@ namespace VaultSharp.Samples
 
             var kv2metadata = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretMetadataAsync("name1").Result;
             Assert.True(kv2metadata.Data.CurrentVersion > 0);
+            */
+
+            // Transit
+
+            // manually setup the following.
+
+            var keyName = "test_key";
+
+            // .\vault.exe secrets enable transit
+            // .\vault.exe write -f transit/keys/test_key
+
+            var context = "context1";
+            var plainText = "raja";
+            var encodedPlainText = Convert.ToBase64String(Encoding.UTF8.GetBytes(plainText));
+            var encodedContext = Convert.ToBase64String(Encoding.UTF8.GetBytes(context));
+
+            var nonce = Convert.ToBase64String(Enumerable.Range(0, 12).Select(i => (byte)i).ToArray());
+            var nonce2 = Convert.ToBase64String(Enumerable.Range(0, 12).Select(i => (byte)(i + 1)).ToArray());
+
+            var encryptOptions = new EncryptRequestOptions
+            {
+                Base64EncodedPlainText = encodedPlainText,
+                Base64EncodedContext = encodedContext,
+                ConvergentEncryption = true,
+                Nonce = nonce
+            };
+
+            var encryptionResponse = _authenticatedVaultClient.V1.Secrets.Transit.EncryptAsync(keyName, encryptOptions).Result;
+            var cipherText = encryptionResponse.Data.CipherText;
+
+            encryptOptions = new EncryptRequestOptions
+            {
+                BatchedEncryptionItems = new List<EncryptionItem>
+                {
+                    new EncryptionItem { Base64EncodedContext = encodedContext, Base64EncodedPlainText = encodedPlainText },
+                    new EncryptionItem { Base64EncodedContext = encodedContext, Base64EncodedPlainText = encodedPlainText },
+                    new EncryptionItem { Base64EncodedContext = encodedContext, Base64EncodedPlainText = encodedPlainText },
+                }
+            };
+
+            var batchedEncryptionResponse = _authenticatedVaultClient.V1.Secrets.Transit.EncryptAsync(keyName, encryptOptions).Result;
+            var firstCipherText = batchedEncryptionResponse.Data.BatchedResults.First().CipherText;
+
+            var decryptOptions = new DecryptRequestOptions
+            {
+                CipherText = cipherText,
+                Base64EncodedContext = encodedContext,
+                Nonce = nonce
+            };
+
+            var decryptionResponse = _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions).Result;
+            var gotPlainText = decryptionResponse.Data.Base64EncodedPlainText;
+
+            decryptOptions = new DecryptRequestOptions
+            {
+                BatchedDecryptionItems = new List<DecryptionItem>
+                {
+                    new DecryptionItem { Base64EncodedContext = encodedContext, CipherText = batchedEncryptionResponse.Data.BatchedResults.ElementAt(0).CipherText },
+                    new DecryptionItem { Base64EncodedContext = encodedContext, CipherText = batchedEncryptionResponse.Data.BatchedResults.ElementAt(1).CipherText },
+                    new DecryptionItem { Base64EncodedContext = encodedContext, CipherText = batchedEncryptionResponse.Data.BatchedResults.ElementAt(2).CipherText },
+                }
+            };
+
+            var batchedDecryptionResponse = _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions).Result;
+            var firstPlainText = batchedDecryptionResponse.Data.BatchedResults.First().Base64EncodedPlainText;
         }
 
         private static void RunSystemBackendSamples()

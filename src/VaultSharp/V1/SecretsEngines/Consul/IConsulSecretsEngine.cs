@@ -17,7 +17,7 @@ namespace VaultSharp.V1.SecretsEngines.Consul
         /// The mount point for the Consul backend. Defaults to <see cref="SecretsEngineDefaultPaths.Consul" />
         /// Provide a value only if you have customized the Consul mount point.</param>
         /// <param name="wrapTimeToLive">
-        /// <para>[required]</para>
+        /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
         /// <returns>
