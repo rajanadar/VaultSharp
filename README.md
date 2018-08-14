@@ -388,7 +388,15 @@ await vaultClient.V1.Secrets.Cubbyhole.DeleteSecretAsync(secretPath);
 
 #### Databases Secrets Engine
 
-Coming soon...
+##### Generate dynamic DB credentials
+
+ * This endpoint generates a new set of dynamic credentials based on the named role.
+
+ ```cs	
+var dbCreds = await vaultClient.V1.Secrets.Database.GenerateCredentialsAsync(role);
+var username = dbCreds.Data.Username;
+var password = dbCreds.Data.Password;
+```
 
 #### Google Cloud Secrets Engine
 

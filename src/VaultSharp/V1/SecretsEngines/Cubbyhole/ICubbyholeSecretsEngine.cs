@@ -5,7 +5,7 @@ using VaultSharp.V1.Commons;
 namespace VaultSharp.V1.SecretsEngines.Cubbyhole
 {
     /// <summary>
-    /// Cubbyhole Engine.
+    /// Cubbyhole Secrets Engine.
     /// </summary>
     public interface ICubbyholeSecretsEngine
     {

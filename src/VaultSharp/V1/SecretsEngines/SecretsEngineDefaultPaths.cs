@@ -8,7 +8,7 @@
         public const string AWS = "aws";
         public const string Consul = "consul";
         public const string Cubbyhole = "cubbyhole";
-        public const string Databases = "database";
+        public const string Database = "database";
         public const string KeyValue = "kv";
         public const string Identity = "identity";
         public const string Nomad = "nomad";

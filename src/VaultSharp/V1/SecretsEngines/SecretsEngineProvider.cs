@@ -27,6 +27,7 @@ namespace VaultSharp.V1.SecretsEngines
             AWS = new AWSSecretsEngineProvider(polymath);
             Consul = new ConsulSecretsEngineProvider(polymath);
             Cubbyhole = new CubbyholeSecretsEngineProvider(polymath);
+            Database = new DatabaseSecretsEngineProvider(polymath);
 
             KeyValue = new KeyValueSecretsEngineProvider(polymath);
             PKI = new PKISecretsEngineProvider(polymath);
@@ -41,7 +42,7 @@ namespace VaultSharp.V1.SecretsEngines
 
         public ICubbyholeSecretsEngine Cubbyhole { get; }
 
-        public IDatabaseSecretsEngine Database => throw new NotImplementedException();
+        public IDatabaseSecretsEngine Database { get; }
 
         public IKeyValueSecretsEngine KeyValue { get; }
 
