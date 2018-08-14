@@ -24,6 +24,7 @@ namespace VaultSharp.V1.SecretsEngines
             _polymath = polymath;
 
             ActiveDirectory = new ActiveDirectorySecretsEngineProvider(polymath);
+            AWS = new AWSSecretsEngineProvider(polymath);
 
             Consul = new ConsulSecretsEngineProvider(polymath);
             KeyValue = new KeyValueSecretsEngineProvider(polymath);
@@ -34,7 +35,7 @@ namespace VaultSharp.V1.SecretsEngines
 
         public IActiveDirectorySecretsEngine ActiveDirectory { get; }
 
-        public IAWSSecretsEngine AWS => throw new NotImplementedException();
+        public IAWSSecretsEngine AWS { get; }
 
         public IConsulSecretsEngine Consul { get; }
 

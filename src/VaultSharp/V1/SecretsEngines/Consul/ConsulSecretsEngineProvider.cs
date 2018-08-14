@@ -16,6 +16,9 @@ namespace VaultSharp.V1.SecretsEngines.Consul
 
         public async Task<Secret<ConsulCredentials>> GenerateCredentialsAsync(string consulRoleName, string consulBackendMountPoint = SecretsEngineDefaultPaths.Consul, string wrapTimeToLive = null)
         {
+            Checker.NotNull(consulBackendMountPoint, "consulBackendMountPoint");
+            Checker.NotNull(consulRoleName, "consulRoleName");
+
             return await _polymath.MakeVaultApiRequest<Secret<ConsulCredentials>>("v1/" + consulBackendMountPoint.Trim('/') + "/creds/" + consulRoleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }

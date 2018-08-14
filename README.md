@@ -340,7 +340,31 @@ var currentPassword = adCreds.Data.CurrentPassword;
 
 #### AWS Secrets Engine
 
-Coming soon...
+##### Generate IAM Credentials
+
+ * This endpoint generates dynamic IAM credentials based on the named role.
+
+ ```cs	
+var awsCreds = await vaultClient.V1.Secrets.AWS.GenerateCredentialsAsync(role);
+
+var accessKey = awsCreds.Data.AccessKey;
+var secretKey = awsCreds.Data.SecretKey;
+var securityToken = awsCreds.Data.SecurityToken;
+
+```
+
+##### Generate IAM Credentials with STS
+
+ * This generates a dynamic IAM credential with an STS token based on the named role.
+
+ ```cs	
+var awsCreds = await vaultClient.V1.Secrets.AWS.GenerateSTSCredentialsAsync(role, ttl);
+
+var accessKey = awsCreds.Data.AccessKey;
+var secretKey = awsCreds.Data.SecretKey;
+var securityToken = awsCreds.Data.SecurityToken;
+
+```
 
 #### Consul Secrets Engine
 
