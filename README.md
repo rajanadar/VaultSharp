@@ -327,7 +327,16 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 #### Active Directory Secrets Engine
 
-Coming soon...
+##### Retrieving Passwords (offering credentials)
+
+ * This method offers the credential information for a given role.
+
+
+ ```cs	
+var adCreds = await vaultClient.V1.Secrets.ActiveDirectory.GetCredentialsAsync(role);
+var currentPassword = adCreds.Data.CurrentPassword;
+
+```
 
 #### AWS Secrets Engine
 

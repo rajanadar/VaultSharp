@@ -4,6 +4,7 @@
     {
         public const string System = "system";
 
+        public const string ActiveDirectory = "ad";
         public const string AWS = "aws";
         public const string Consul = "consul";
         public const string Cubbyhole = "cubbyhole";

@@ -10,6 +10,7 @@
   * Add support for RADIUS Auth method login.
 
   * Transit Secrets Engine: Add support for Encrypt & Decrypt including Batched input.
+  * Active Directory Secrets Engine: Add support for offering credentials.
 
 ## 0.10.4001 (August 10, 2018)
 

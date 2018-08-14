@@ -1,5 +1,6 @@
 ﻿using System;
 using VaultSharp.Core;
+using VaultSharp.V1.SecretsEngines.ActiveDirectory;
 using VaultSharp.V1.SecretsEngines.AWS;
 using VaultSharp.V1.SecretsEngines.Consul;
 using VaultSharp.V1.SecretsEngines.Cubbyhole;
@@ -22,12 +23,16 @@ namespace VaultSharp.V1.SecretsEngines
         {
             _polymath = polymath;
 
+            ActiveDirectory = new ActiveDirectorySecretsEngineProvider(polymath);
+
             Consul = new ConsulSecretsEngineProvider(polymath);
             KeyValue = new KeyValueSecretsEngineProvider(polymath);
             PKI = new PKISecretsEngineProvider(polymath);
 
             Transit = new TransitSecretsEngineProvider(polymath);
         }
+
+        public IActiveDirectorySecretsEngine ActiveDirectory { get; }
 
         public IAWSSecretsEngine AWS => throw new NotImplementedException();
 
