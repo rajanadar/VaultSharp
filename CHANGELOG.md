@@ -12,6 +12,7 @@
   * Transit Secrets Engine: Add support for Encrypt & Decrypt including Batched input.
   * Active Directory Secrets Engine: Add support for offering credentials.
   * AWS Secrets Engine: Add support for generating dynamic IAM credentials & STS IAM credentials.
+  * Cubbhole Secrets Engine: Add support for read secret, read paths, write secret and delete secret APIs.
 
 ## 0.10.4001 (August 10, 2018)
 

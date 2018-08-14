@@ -58,7 +58,6 @@ var consulToken = consulCredentials.Data.Token;
 #### App Role Auth Method
 
 ```cs
-
 // setup the AppRole based auth to get the right token.
 
 IAuthMethodInfo authMethod = new AppRoleAuthMethodInfo(roleId, secretId);
@@ -68,7 +67,6 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 // vault token/policies mapped to the app role and secret id.
-
 ```
 
 #### AWS Auth Method
@@ -78,7 +76,6 @@ AWS Auth method has 2 flavors. An EC2 way and an IAM way. Here are examples for 
 ##### AWS Auth Method - EC2
 
 ```cs
-
 // setup the AWS-EC2 based auth to get the right token.
 
 IAuthMethodInfo authMethod = new EC2AWSAuthMethodInfo(pkcs7, null, null, nonce, roleName);
@@ -88,11 +85,9 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 // vault token/policies mapped to the aws-ec2 role
-
 ```
 
 ```cs
-
 // setup the AWS-EC2 based auth to get the right token.
 
 IAuthMethodInfo authMethod = new EC2AWSAuthMethodInfo(null, identity, signature, nonce, roleName);
@@ -102,13 +97,11 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 // vault token/policies mapped to the aws-ec2 role
-
 ```
 
 ##### AWS Auth Method - IAM
 
 ```cs
-
 // setup the AWS-IAM based auth to get the right token.
 
 IAuthMethodInfo authMethod = new IAMAWSAuthMethodInfo(nonce, roleName); // uses default requestHeaders
@@ -118,13 +111,11 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 // vault token/policies mapped to the aws-iam role
-
 ```
 
 #### Azure Auth Method
 
 ```cs
-
 // setup the Azure based auth to get the right token.
 
 IAuthMethodInfo authMethod = new AzureAuthMethodInfo(roleName, jwt); 
@@ -134,7 +125,6 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 // vault token/policies mapped to the azure jwt
-
 ```
 
 #### GitHub Auth Method
@@ -147,13 +137,11 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 // vault token/policies mapped to the github token.
-
 ```
 
 #### Google Cloud Auth Method
 
 ```cs
-
 // setup the Google Cloud based auth to get the right token.
 
 IAuthMethodInfo authMethod = new GoogleCloudAuthMethodInfo(roleName, jwt); 
@@ -163,13 +151,11 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 // vault token/policies mapped to the Google Cloud jwt
-
 ```
 
 #### JWT/OIDC Auth Method
 
 ```cs
-
 // setup the JWT/OIDC based auth to get the right token.
 
 IAuthMethodInfo authMethod = new JWTAuthMethodInfo(roleName, jwt); 
@@ -179,13 +165,11 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 // vault token/policies mapped to the jwt
-
 ```
 
 #### Kubernetes Auth Method
 
 ```cs
-
 // setup the Kubernetes based auth to get the right token.
 
 IAuthMethodInfo authMethod = new KubernetesAuthMethodInfo(roleName, jwt); 
@@ -195,7 +179,6 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 // vault token/policies mapped to the Kubernetes jwt
-
 ```
 
 #### LDAP Authentication Backend
@@ -208,7 +191,6 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 // vault token/policies mapped to the LDAP username and password.
-
 ```
 
 #### Okta Auth Method
@@ -221,7 +203,6 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 // vault token/policies mapped to the Okta username and password.
-
 ```
 
 #### RADIUS Auth Method
@@ -234,7 +215,6 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 // vault token/policies mapped to the RADIUS username and password.
-
 ```
 
 #### Certificate (TLS) Auth Method
@@ -250,7 +230,6 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 vault token/policies mapped to the client certificate.
-
 ```
 
 #### Token Auth Method
@@ -263,7 +242,6 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 vault token/policies mapped to the vault token.
-
 ```
 
 #### Username and Password Auth Method
@@ -276,7 +254,6 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 vault token/policies mapped to the username/password.
-
 ```
 
 #### Custom Auth Method - Bring your own Vault Token
@@ -291,7 +268,6 @@ IAuthMethodInfo authMethod = new CustomAuthMethodInfo("my-own-token-auth-method"
 var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
 
 IVaultClient vaultClient = new VaultClient(vaultClientSettings);
-
 ```
 
 #### App Id Auth Method (DEPRECATED)
@@ -322,7 +298,6 @@ IAuthMethodInfo authMethod = new TokenAuthMethodInfo("MY_VAULT_TOKEN");
 var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
 
 IVaultClient vaultClient = new VaultClient(vaultClientSettings);
-
 ```
 
 #### Active Directory Secrets Engine
@@ -331,11 +306,9 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
  * This method offers the credential information for a given role.
 
-
  ```cs	
 var adCreds = await vaultClient.V1.Secrets.ActiveDirectory.GetCredentialsAsync(role);
 var currentPassword = adCreds.Data.CurrentPassword;
-
 ```
 
 #### AWS Secrets Engine
@@ -350,7 +323,6 @@ var awsCreds = await vaultClient.V1.Secrets.AWS.GenerateCredentialsAsync(role);
 var accessKey = awsCreds.Data.AccessKey;
 var secretKey = awsCreds.Data.SecretKey;
 var securityToken = awsCreds.Data.SecurityToken;
-
 ```
 
 ##### Generate IAM Credentials with STS
@@ -363,22 +335,56 @@ var awsCreds = await vaultClient.V1.Secrets.AWS.GenerateSTSCredentialsAsync(role
 var accessKey = awsCreds.Data.AccessKey;
 var secretKey = awsCreds.Data.SecretKey;
 var securityToken = awsCreds.Data.SecurityToken;
-
 ```
 
 #### Consul Secrets Engine
 
-```cs
+ * This endpoint generates a dynamic Consul token based on the given role definition.
 
+```cs
 // Generate a dynamic Consul credential
 var consulCreds = await vaultClient.V1.Secrets.Consul.GenerateCredentialsAsync(consulRole);	
 var consulToken = consulCredentials.Data.Token;
-
 ```
 
 #### Cubbyhole Secrets Engine
 
-Coming soon...
+##### Read Secret
+
+ * This endpoint retrieves the secret at the specified location.
+
+ ```cs	
+var secret = await vaultClient.V1.Secrets.Cubbyhole.ReadSecretAsync(secretPath);
+var secretValues = secret.Data;
+```
+
+##### List Secrets
+
+ * This endpoint returns a list of secret entries at the specified location. 
+ * Folders are suffixed with /. The input must be a folder; list on a file will not return a value. 
+ * The values themselves are not accessible via this command.
+
+ ```cs	
+var secret = await vaultClient.V1.Secrets.Cubbyhole.ReadSecretPathsAsync(folderPath);
+var paths = secret.Data;
+```
+
+##### Create/Update Secret
+
+ * This endpoint stores a secret at the specified location.
+
+ ```cs	
+var value = new Dictionary<string, object> { { "key1", "val1" }, { "key2", 2 } };
+await vaultClient.V1.Secrets.Cubbyhole.WriteSecretAsync(secretPath, value);
+```
+
+##### Delete Secret
+
+ * This endpoint deletes the secret at the specified location.
+
+ ```cs	
+await vaultClient.V1.Secrets.Cubbyhole.DeleteSecretAsync(secretPath);
+```
 
 #### Databases Secrets Engine
 
@@ -396,19 +402,15 @@ Coming soon...
 ##### Key Value Secrets Engine - V1
 
 ```cs
-
 // Use client to read a v1 key-value secret.
 var kv1Secret = await vaultClient.V1.Secrets.KeyValue.V1.ReadSecretAsync("v1-secret-name");
-
 ```
 
 ##### Key Value Secrets Engine - V2
 
 ```cs
-
 // Use client to read a v2 key-value secret.
 var kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("v2-secret-name");
-
 ```
 
 #### Identity Secrets Engine
@@ -422,12 +424,10 @@ Coming soon...
 #### PKI (Cerificates) Secrets Engine
 
 ```cs
-
 var certificateCredentialsRequestOptions = new CertificateCredentialsRequestOptions { // initialize };
 var certSecret = await vaultClient.V1.Secrets.PKI.GenerateCredentialsAsync(pkiRoleName, certificateCredentialsRequestOptions);
 
 var privateKeyContent = certSecret.Data.PrivateKeyContent;
-
 ```
 
 #### RabbitMQ Secrets Engine
@@ -449,7 +449,6 @@ Coming soon...
 ###### Encrypt Single Item
 
 ```cs
-
 var keyName = "test_key";
 
 var context = "context1";
@@ -465,13 +464,11 @@ var encryptOptions = new EncryptRequestOptions
 
 var encryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.EncryptAsync(keyName, encryptOptions);
 var cipherText = encryptionResponse.Data.CipherText;
-
 ```
 
 ###### Encrypt Batched Items
 
 ```cs
-
 var encryptOptions = new EncryptRequestOptions
 {
     BatchedEncryptionItems = new List<EncryptionItem>
@@ -484,7 +481,6 @@ var encryptOptions = new EncryptRequestOptions
 
 var encryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.EncryptAsync(keyName, encryptOptions);
 var firstCipherText = encryptionResponse.Data.BatchedResults.First().CipherText;
-
 ```
 
 ##### Decrypt Method
@@ -492,7 +488,6 @@ var firstCipherText = encryptionResponse.Data.BatchedResults.First().CipherText;
 ###### Decrypt Single Item
 
 ```cs
-
 var decryptOptions = new DecryptRequestOptions
 {
     CipherText = cipherText,
@@ -501,13 +496,11 @@ var decryptOptions = new DecryptRequestOptions
 
 var decryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions);
 var encodedPlainText = decryptionResponse.Data.Base64EncodedPlainText;
-
 ```
 
 ###### Decrypt Batched Item
 
 ```cs
-
 var decryptOptions = new DecryptRequestOptions
 {
     BatchedDecryptionItems = new List<DecryptionItem>
@@ -520,7 +513,6 @@ var decryptOptions = new DecryptRequestOptions
 
 var decryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions);
 var firstEncodedPlainText = decryptionResponse.Data.BatchedResults.First().Base64EncodedPlainText;
-
 ```
 
 ### System Backend
@@ -531,9 +523,7 @@ var firstEncodedPlainText = decryptionResponse.Data.BatchedResults.First().Base6
 VaultSharp already supports several of the System backend features.
 
 ```cs
-
 // vaultClient.V1.System.<method> The method you are looking for.
-
 ```
 
 Additional documentation coming soon...

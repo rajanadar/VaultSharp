@@ -144,26 +144,34 @@ namespace VaultSharp.Samples
 
         private static void RunSecretsEngineSamples()
         {
-            /*
-            // manually write a kv v1 secret
+            RunCubbyholeSamples();
 
-            // env var for VAULT_TOKEN
-            // ./vault.exe secrets enable -version=1 kv
-            // ./vault.exe kv put kv/name1 my-value=s3cr3t222
-            var kv1Secret = _authenticatedVaultClient.V1.Secrets.KeyValue.V1.ReadSecretAsync("name1").Result;
-            Assert.True(kv1Secret.Data.Any());
+            // RunKeyValueSamples();
+            // RunTransitSamples();
+        }
 
-            // manually write a kv v2 secret
-            var kv2Secret = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("name1").Result;
-            Assert.NotNull(kv2Secret.Data.Data);
+        private static void RunCubbyholeSamples()
+        {
+            var secretPath = "test-path";
 
-            var kv2Keys = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretPathListAsync("").Result;
-            Assert.True(kv2Keys.Data.Keys.Any());
+            var value = new Dictionary<string, object> { { "key1", "val1" }, { "key2", 2 } };
+            _authenticatedVaultClient.V1.Secrets.Cubbyhole.WriteSecretAsync(secretPath, value).Wait();
 
-            var kv2metadata = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretMetadataAsync("name1").Result;
-            Assert.True(kv2metadata.Data.CurrentVersion > 0);
-            */
+            var read1 = _authenticatedVaultClient.V1.Secrets.Cubbyhole.ReadSecretAsync(secretPath).Result;
+            Assert.True(read1.Data.Count == 2);
 
+            value.Add("key3", true);
+            _authenticatedVaultClient.V1.Secrets.Cubbyhole.WriteSecretAsync(secretPath, value).Wait();
+
+            var read2 = _authenticatedVaultClient.V1.Secrets.Cubbyhole.ReadSecretAsync(secretPath).Result;
+            Assert.True(read2.Data.Count == 3);
+
+            _authenticatedVaultClient.V1.Secrets.Cubbyhole.DeleteSecretAsync(secretPath).Wait();
+            Assert.ThrowsAsync<VaultApiException>(() => _authenticatedVaultClient.V1.Secrets.Cubbyhole.ReadSecretAsync(secretPath)).Wait();
+        }
+
+        private static void RunTransitSamples()
+        {
             // Transit
 
             // manually setup the following.
@@ -227,6 +235,29 @@ namespace VaultSharp.Samples
 
             var batchedDecryptionResponse = _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions).Result;
             var firstPlainText = batchedDecryptionResponse.Data.BatchedResults.First().Base64EncodedPlainText;
+        }
+
+        private static void RunKeyValueSamples()
+        {
+            /*
+            // manually write a kv v1 secret
+
+            // env var for VAULT_TOKEN
+            // ./vault.exe secrets enable -version=1 kv
+            // ./vault.exe kv put kv/name1 my-value=s3cr3t222
+            var kv1Secret = _authenticatedVaultClient.V1.Secrets.KeyValue.V1.ReadSecretAsync("name1").Result;
+            Assert.True(kv1Secret.Data.Any());
+
+            // manually write a kv v2 secret
+            var kv2Secret = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("name1").Result;
+            Assert.NotNull(kv2Secret.Data.Data);
+
+            var kv2Keys = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretPathListAsync("").Result;
+            Assert.True(kv2Keys.Data.Keys.Any());
+
+            var kv2metadata = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretMetadataAsync("name1").Result;
+            Assert.True(kv2metadata.Data.CurrentVersion > 0);
+            */
         }
 
         private static void RunSystemBackendSamples()

@@ -25,11 +25,11 @@ namespace VaultSharp.V1.SecretsEngines
 
             ActiveDirectory = new ActiveDirectorySecretsEngineProvider(polymath);
             AWS = new AWSSecretsEngineProvider(polymath);
-
             Consul = new ConsulSecretsEngineProvider(polymath);
+            Cubbyhole = new CubbyholeSecretsEngineProvider(polymath);
+
             KeyValue = new KeyValueSecretsEngineProvider(polymath);
             PKI = new PKISecretsEngineProvider(polymath);
-
             Transit = new TransitSecretsEngineProvider(polymath);
         }
 
@@ -39,7 +39,7 @@ namespace VaultSharp.V1.SecretsEngines
 
         public IConsulSecretsEngine Consul { get; }
 
-        public ICubbyholeSecretsEngine Cubbyhole => throw new NotImplementedException();
+        public ICubbyholeSecretsEngine Cubbyhole { get; }
 
         public IDatabaseSecretsEngine Database => throw new NotImplementedException();
 
