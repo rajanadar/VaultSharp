@@ -1,7 +1,9 @@
-﻿using VaultSharp.V1.SecretsEngines.AWS;
+﻿using VaultSharp.V1.SecretsEngines.ActiveDirectory;
+using VaultSharp.V1.SecretsEngines.AWS;
 using VaultSharp.V1.SecretsEngines.Consul;
 using VaultSharp.V1.SecretsEngines.Cubbyhole;
 using VaultSharp.V1.SecretsEngines.Database;
+using VaultSharp.V1.SecretsEngines.GoogleCloud;
 using VaultSharp.V1.SecretsEngines.Identity;
 using VaultSharp.V1.SecretsEngines.KeyValue;
 using VaultSharp.V1.SecretsEngines.PKI;
@@ -13,10 +15,15 @@ using VaultSharp.V1.SecretsEngines.Transit;
 namespace VaultSharp.V1.SecretsEngines
 {
     /// <summary>
-    /// 
+    /// The secrets engine interface.
     /// </summary>
     public interface ISecretsEngine
     {
+        /// <summary>
+        /// The ActiveDirectory Secrets Engine.
+        /// </summary>
+        IActiveDirectorySecretsEngine ActiveDirectory { get; }
+
         /// <summary>
         /// The AWS Secrets Engine.
         /// </summary>
@@ -27,54 +34,50 @@ namespace VaultSharp.V1.SecretsEngines
         /// </summary>
         IConsulSecretsEngine Consul { get; }
 
-
         /// <summary>
         /// The Cubbyhole Secrets Engine.
         /// </summary>
         ICubbyholeSecretsEngine Cubbyhole { get; }
-
 
         /// <summary>
         /// The Database Secrets Engine.
         /// </summary>
         IDatabaseSecretsEngine Database { get; }
 
+        /// <summary>
+        /// The GoogleCloud Secrets Engine.
+        /// </summary>
+        IGoogleCloudSecretsEngine GoogleCloud { get; }
 
         /// <summary>
         /// The KeyValue Secrets Engine.
         /// </summary>
         IKeyValueSecretsEngine KeyValue { get; }
 
-
         /// <summary>
         /// The Identity Secrets Engine.
         /// </summary>
         IIdentitySecretsEngine Identity { get; }
-
 
         /// <summary>
         /// The PKI Secrets Engine.
         /// </summary>
         IPKISecretsEngine PKI { get; }
 
-
         /// <summary>
         /// The RabbitMQ Secrets Engine.
         /// </summary>
         IRabbitMQSecretsEngine RabbitMQ { get; }
-
 
         /// <summary>
         /// The SSH Secrets Engine.
         /// </summary>
         ISSHSecretsEngine SSH { get; }
 
-
         /// <summary>
         /// The TOTP Secrets Engine.
         /// </summary>
         ITOTPSecretsEngine TOTP { get; }
-
 
         /// <summary>
         /// The Transit Secrets Engine.

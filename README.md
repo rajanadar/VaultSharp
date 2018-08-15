@@ -400,7 +400,22 @@ var password = dbCreds.Data.Password;
 
 #### Google Cloud Secrets Engine
 
-Coming soon...
+##### Generate Secret (IAM Service Account Creds): OAuth2 Access Token
+
+ * Generates an OAuth2 token with the scopes defined on the roleset. This OAuth access token can be used in GCP API calls
+
+ ```cs	
+var oauthSecret = await vaultClient.V1.Secrets.GoogleCloud.GenerateOAuth2TokenAsync(roleset);
+var token = oauthSecret.Data.Token;
+```
+##### Generate Secret (IAM Service Account Creds): Service Account Key
+
+ * Generates a service account key.
+
+ ```cs	
+var privateKeySecret = await vaultClient.V1.Secrets.GoogleCloud.GenerateServiceAccountKeyAsync(roleset, keyAlgorithm, privateKeyType);
+var privateKeyData = privateKeySecret.Data.Base64EncodedPrivateKeyData;
+```
 
 #### Key Value Secrets Engine
 
