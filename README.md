@@ -486,7 +486,23 @@ var sshKey = sshCreds.Data.Key;
 
 #### TOTP Secrets Engine
 
-Coming soon...
+##### Generate Code
+
+This endpoint generates a new time-based one-time use password based on the named key.
+
+```cs
+var totpSecret = await vaultClient.V1.Secrets.TOTP.GetCodeAsync(keyName);
+var code = totpSecret.Data.Code;
+```
+
+##### Validate Code
+
+This endpoint validates a time-based one-time use password generated from the named key.
+
+```cs
+var totpValidity = await vaultClient.V1.Secrets.TOTP.ValidateCodeAsync(keyName, code);
+var valid = totpValidity.Data.Valid;
+```
 
 #### Transit Secrets Engine
 

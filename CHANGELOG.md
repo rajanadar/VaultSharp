@@ -18,6 +18,7 @@
   * Nomad Secrets Engine: Add support for generating dynamic credentials.
   * RabbitMQ Secrets Engine: Add support for generating dynamic credentials.
   * SSH Secrets Engine: Add support for generating dynamic credentials.
+  * TOTP Secrets Engine: Add support for generating and validating TOTP code.
 
 ## 0.10.4001 (August 10, 2018)
 

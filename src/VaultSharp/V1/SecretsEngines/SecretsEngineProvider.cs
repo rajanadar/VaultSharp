@@ -36,6 +36,7 @@ namespace VaultSharp.V1.SecretsEngines
             PKI = new PKISecretsEngineProvider(polymath);
             RabbitMQ = new RabbitMQSecretsEngineProvider(polymath);
             SSH = new SSHSecretsEngineProvider(polymath);
+            TOTP = new TOTPSecretsEngineProvider(polymath);
             Transit = new TransitSecretsEngineProvider(polymath);
         }
 
