@@ -36,7 +36,6 @@ This library is built with .NET Standard 2.0 and hence is cross-platform.</Descr
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 

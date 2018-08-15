@@ -13,6 +13,7 @@ using VaultSharp.V1.SecretsEngines;
 using VaultSharp.V1.SystemBackend.Enterprise;
 using VaultSharp.V1.SystemBackend.MFA;
 using VaultSharp.V1.SystemBackend.Plugin;
+using Newtonsoft.Json.Linq;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -308,8 +309,8 @@ namespace VaultSharp.V1.SystemBackend
 
         public async Task<bool> GetInitStatusAsync()
         {
-            var response = await _polymath.MakeVaultApiRequest<dynamic>("v1/sys/init", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
-            return response.initialized;
+            var response = await _polymath.MakeVaultApiRequest<JToken>("v1/sys/init", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return response["initialized"].Value<bool>();
         }
 
         public async Task<MasterCredentials> InitAsync(InitOptions initOptions)
@@ -474,9 +475,9 @@ namespace VaultSharp.V1.SystemBackend
 
         public async Task<Secret<Dictionary<string, object>>> ReadRawSecretAsync(string storagePath)
         {
-            var response = await _polymath.MakeVaultApiRequest<Secret<dynamic>>("v1/sys/raw/" + storagePath.Trim('/'), HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            var response = await _polymath.MakeVaultApiRequest<Secret<JToken>>("v1/sys/raw/" + storagePath.Trim('/'), HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
-            string value = response.Data.value;
+            string value = response.Data["value"].Value<string>();
             var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(value);
 
             return _polymath.GetMappedSecret(response, data);

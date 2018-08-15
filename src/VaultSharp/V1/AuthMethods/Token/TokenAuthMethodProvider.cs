@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods.Token.Models;
 using VaultSharp.V1.Commons;
@@ -25,13 +26,13 @@ namespace VaultSharp.V1.AuthMethods.Token
         {
             var requestData = !string.IsNullOrWhiteSpace(increment) ? new { increment = increment } : null;
 
-            var result = await _polymath.MakeVaultApiRequest<Secret<dynamic>>("v1/auth/token/renew-self", HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            var result = await _polymath.MakeVaultApiRequest<Secret<JToken>>("v1/auth/token/renew-self", HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             return result.AuthInfo;
         }
 
         public async Task RevokeSelfAsync()
         {
-            await _polymath.MakeVaultApiRequest<Secret<dynamic>>("v1/auth/token/revoke-self", HttpMethod.Post).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest<Secret<JToken>>("v1/auth/token/revoke-self", HttpMethod.Post).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

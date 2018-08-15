@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using VaultSharp.V1.AuthMethods;
 using VaultSharp.V1.AuthMethods.Cert;
 using VaultSharp.V1.Commons;
@@ -62,7 +63,7 @@ namespace VaultSharp.Core
 
         public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false)
         {
-            await MakeVaultApiRequest<dynamic>(resourcePath, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated);
+            await MakeVaultApiRequest<JToken>(resourcePath, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated);
         }
 
         public async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null, string wrapTimeToLive = null, bool unauthenticated = false) where TResponse : class
