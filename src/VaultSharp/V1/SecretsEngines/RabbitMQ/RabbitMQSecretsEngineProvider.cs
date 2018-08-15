@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.RabbitMQ
             _polymath = polymath;
         }
 
-        public async Task<Secret<UsernamePasswordCredentials>> GenerateCredentialsAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.RabbitMQ, string wrapTimeToLive = null)
+        public async Task<Secret<UsernamePasswordCredentials>> GetCredentialsAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.RabbitMQ, string wrapTimeToLive = null)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");

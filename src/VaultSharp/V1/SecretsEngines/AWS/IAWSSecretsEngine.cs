@@ -23,7 +23,7 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// <returns>
         /// The secret with the <see cref="AWSCredentials" /> as the data.
         /// </returns>
-        Task<Secret<AWSCredentials>> GenerateCredentialsAsync(string awsRoleName, string awsMountPoint = SecretsEngineDefaultPaths.AWS, string wrapTimeToLive = null);
+        Task<Secret<AWSCredentials>> GetCredentialsAsync(string awsRoleName, string awsMountPoint = SecretsEngineDefaultPaths.AWS, string wrapTimeToLive = null);
 
         /// <summary>
         /// Generates a dynamic IAM AWS credential  with an STS token based on the named role.

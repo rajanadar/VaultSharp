@@ -3,7 +3,7 @@ using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.SystemBackend.MFA.Okta
 {
-    internal class OktaProvider : MFAProviderBase<OktaConfig>, IOkta
+    internal class OktaProvider : AbstractMFAProviderBase<OktaConfig>, IOkta
     {
         public OktaProvider(Polymath polymath) : base(polymath)
         {

@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.Nomad
             _polymath = polymath;
         }
 
-        public async Task<Secret<NomadCredentials>> GenerateCredentialsAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.Nomad, string wrapTimeToLive = null)
+        public async Task<Secret<NomadCredentials>> GetCredentialsAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.Nomad, string wrapTimeToLive = null)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");

@@ -41,7 +41,7 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 var kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("secret-name");
 
 // Generate a dynamic Consul credential
-var consulCreds = await vaultClient.V1.Secrets.Consul.GenerateCredentialsAsync(consulRole, consulMount);	
+var consulCreds = await vaultClient.V1.Secrets.Consul.GetCredentialsAsync(consulRole, consulMount);	
 var consulToken = consulCredentials.Data.Token;
 ```
 
@@ -318,7 +318,7 @@ var currentPassword = adCreds.Data.CurrentPassword;
  * This endpoint generates dynamic IAM credentials based on the named role.
 
  ```cs	
-var awsCreds = await vaultClient.V1.Secrets.AWS.GenerateCredentialsAsync(role);
+var awsCreds = await vaultClient.V1.Secrets.AWS.GetCredentialsAsync(role);
 
 var accessKey = awsCreds.Data.AccessKey;
 var secretKey = awsCreds.Data.SecretKey;
@@ -343,7 +343,7 @@ var securityToken = awsCreds.Data.SecurityToken;
 
 ```cs
 // Generate a dynamic Consul credential
-var consulCreds = await vaultClient.V1.Secrets.Consul.GenerateCredentialsAsync(consulRole);	
+var consulCreds = await vaultClient.V1.Secrets.Consul.GetCredentialsAsync(consulRole);	
 var consulToken = consulCredentials.Data.Token;
 ```
 
@@ -393,7 +393,7 @@ await vaultClient.V1.Secrets.Cubbyhole.DeleteSecretAsync(secretPath);
  * This endpoint generates a new set of dynamic credentials based on the named role.
 
  ```cs	
-var dbCreds = await vaultClient.V1.Secrets.Database.GenerateCredentialsAsync(role);
+var dbCreds = await vaultClient.V1.Secrets.Database.GetCredentialsAsync(role);
 var username = dbCreds.Data.Username;
 var password = dbCreds.Data.Password;
 ```
@@ -447,7 +447,7 @@ Coming soon...
  * Generates a dynamic Nomad token based on the given role definition.
 
 ```cs
-var nomadCredentials = await vaultClient.V1.Secrets.Nomad.GenerateCredentialsAsync(roleName);
+var nomadCredentials = await vaultClient.V1.Secrets.Nomad.GetCredentialsAsync(roleName);
 var accessorId = nomadCredentials.Data.AccessorId;
 var secretId = nomadCredentials.Data.SecretId;
 ```
@@ -456,7 +456,7 @@ var secretId = nomadCredentials.Data.SecretId;
 
 ```cs
 var certificateCredentialsRequestOptions = new CertificateCredentialsRequestOptions { // initialize };
-var certSecret = await vaultClient.V1.Secrets.PKI.GenerateCredentialsAsync(pkiRoleName, certificateCredentialsRequestOptions);
+var certSecret = await vaultClient.V1.Secrets.PKI.GetCredentialsAsync(pkiRoleName, certificateCredentialsRequestOptions);
 
 var privateKeyContent = certSecret.Data.PrivateKeyContent;
 ```
@@ -468,14 +468,21 @@ var privateKeyContent = certSecret.Data.PrivateKeyContent;
  * This endpoint generates a new set of dynamic credentials based on the named role.
 
  ```cs	
-var secret = await vaultClient.V1.Secrets.RabbitMQ.GenerateCredentialsAsync(role);
+var secret = await vaultClient.V1.Secrets.RabbitMQ.GetCredentialsAsync(role);
 var username = secret.Data.Username;
 var password = secret.Data.Password;
 ```
 
 #### SSH Secrets Engine
 
-Coming soon...
+##### Generate SSH credentials
+
+ * This endpoint creates credentials for a specific username and IP with the parameters defined in the given role.
+
+ ```cs	
+var sshCreds = await vaultClient.V1.Secrets.SSH.GetCredentialsAsync(role, ipAddress, username);
+var sshKey = sshCreds.Data.Key;
+```
 
 #### TOTP Secrets Engine
 

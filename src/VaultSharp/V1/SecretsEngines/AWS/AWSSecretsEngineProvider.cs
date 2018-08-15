@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.AWS
             _polymath = polymath;
         }
 
-        public async Task<Secret<AWSCredentials>> GenerateCredentialsAsync(string awsRoleName, string awsMountPoint = SecretsEngineDefaultPaths.AWS, string wrapTimeToLive = null)
+        public async Task<Secret<AWSCredentials>> GetCredentialsAsync(string awsRoleName, string awsMountPoint = SecretsEngineDefaultPaths.AWS, string wrapTimeToLive = null)
         {
             Checker.NotNull(awsMountPoint, "awsMountPoint");
             Checker.NotNull(awsRoleName, "awsRoleName");

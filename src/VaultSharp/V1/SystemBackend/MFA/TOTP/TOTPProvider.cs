@@ -3,7 +3,7 @@ using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.SystemBackend.MFA.TOTP
 {
-    internal class TOTPProvider : MFAProviderBase<TOTPConfig>, ITOTP
+    internal class TOTPProvider : AbstractMFAProviderBase<TOTPConfig>, ITOTP
     {
         public TOTPProvider(Polymath polymath) : base(polymath)
         {

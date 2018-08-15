@@ -23,6 +23,6 @@ namespace VaultSharp.V1.SecretsEngines.Consul
         /// <returns>
         /// The secret with the <see cref="ConsulCredentials" /> as the data.
         /// </returns>
-        Task<Secret<ConsulCredentials>> GenerateCredentialsAsync(string consulRoleName, string consulBackendMountPoint = SecretsEngineDefaultPaths.Consul, string wrapTimeToLive = null);
+        Task<Secret<ConsulCredentials>> GetCredentialsAsync(string consulRoleName, string consulBackendMountPoint = SecretsEngineDefaultPaths.Consul, string wrapTimeToLive = null);
     }
 }

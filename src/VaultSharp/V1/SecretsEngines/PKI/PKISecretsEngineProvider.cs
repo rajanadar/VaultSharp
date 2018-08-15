@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
             _polymath = polymath;
         }
 
-        public async Task<Secret<CertificateCredentials>> GenerateCredentialsAsync(string pkiRoleName, CertificateCredentialsRequestOptions certificateCredentialRequestOptions, string pkiBackendMountPoint = SecretsEngineDefaultPaths.PKI, string wrapTimeToLive = null)
+        public async Task<Secret<CertificateCredentials>> GetCredentialsAsync(string pkiRoleName, CertificateCredentialsRequestOptions certificateCredentialRequestOptions, string pkiBackendMountPoint = SecretsEngineDefaultPaths.PKI, string wrapTimeToLive = null)
         {
             Checker.NotNull(pkiBackendMountPoint, "pkiBackendMountPoint");
             Checker.NotNull(pkiRoleName, "pkiRoleName");

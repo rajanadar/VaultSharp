@@ -35,6 +35,7 @@ namespace VaultSharp.V1.SecretsEngines
             Nomad = new NomadSecretsEngineProvider(polymath);
             PKI = new PKISecretsEngineProvider(polymath);
             RabbitMQ = new RabbitMQSecretsEngineProvider(polymath);
+            SSH = new SSHSecretsEngineProvider(polymath);
             Transit = new TransitSecretsEngineProvider(polymath);
         }
 
@@ -60,9 +61,9 @@ namespace VaultSharp.V1.SecretsEngines
 
         public IRabbitMQSecretsEngine RabbitMQ { get; }
 
-        public ISSHSecretsEngine SSH => throw new NotImplementedException();
+        public ISSHSecretsEngine SSH { get; }
 
-        public ITOTPSecretsEngine TOTP => throw new NotImplementedException();
+        public ITOTPSecretsEngine TOTP { get; }
 
         public ITransitSecretsEngine Transit { get; }
     }

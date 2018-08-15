@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.Consul
             _polymath = polymath;
         }
 
-        public async Task<Secret<ConsulCredentials>> GenerateCredentialsAsync(string consulRoleName, string consulBackendMountPoint = SecretsEngineDefaultPaths.Consul, string wrapTimeToLive = null)
+        public async Task<Secret<ConsulCredentials>> GetCredentialsAsync(string consulRoleName, string consulBackendMountPoint = SecretsEngineDefaultPaths.Consul, string wrapTimeToLive = null)
         {
             Checker.NotNull(consulBackendMountPoint, "consulBackendMountPoint");
             Checker.NotNull(consulRoleName, "consulRoleName");

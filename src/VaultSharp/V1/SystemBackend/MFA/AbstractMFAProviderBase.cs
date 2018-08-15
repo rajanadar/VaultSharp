@@ -8,11 +8,11 @@ namespace VaultSharp.V1.SystemBackend.MFA
     /// <summary>
     /// The base MFA provider for all types.
     /// </summary>
-    internal abstract class MFAProviderBase<TMFAConfig> : IMFAProviderBase<TMFAConfig> where TMFAConfig : AbstractMFAConfig
+    internal abstract class AbstractMFAProviderBase<TMFAConfig> : IMFAProviderBase<TMFAConfig> where TMFAConfig : AbstractMFAConfig
     {
         private readonly Polymath _polymath;
 
-        protected MFAProviderBase(Polymath polymath) => _polymath = polymath;
+        protected AbstractMFAProviderBase(Polymath polymath) => _polymath = polymath;
 
         /// <summary>
         /// Gets the type of MFA method.

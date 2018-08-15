@@ -31,6 +31,6 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <returns>
         /// The secret with the new Certificate credentials.
         /// </returns>
-        Task<Secret<CertificateCredentials>> GenerateCredentialsAsync(string pkiRoleName, CertificateCredentialsRequestOptions certificateCredentialRequestOptions, string pkiBackendMountPoint = SecretsEngineDefaultPaths.PKI, string wrapTimeToLive = null);
+        Task<Secret<CertificateCredentials>> GetCredentialsAsync(string pkiRoleName, CertificateCredentialsRequestOptions certificateCredentialRequestOptions, string pkiBackendMountPoint = SecretsEngineDefaultPaths.PKI, string wrapTimeToLive = null);
     }
 }
