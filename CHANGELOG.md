@@ -16,6 +16,7 @@
   * Database Secrets Engine: Add support for generating dynamic DB credentials.
   * GoogleCloud Secrets Engine: Add support for generating OAuth2 Token & Service Account Key.
   * Nomad Secrets Engine: Add support for generating dynamic credentials.
+  * RabbitMQ Secrets Engine: Add support for generating dynamic credentials.
 
 ## 0.10.4001 (August 10, 2018)
 

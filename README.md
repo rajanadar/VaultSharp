@@ -442,6 +442,8 @@ Coming soon...
 
 #### Nomad Secrets Engine
 
+##### Generate dynamic DB credentials
+
  * Generates a dynamic Nomad token based on the given role definition.
 
 ```cs
@@ -461,7 +463,15 @@ var privateKeyContent = certSecret.Data.PrivateKeyContent;
 
 #### RabbitMQ Secrets Engine
 
-Coming soon...
+##### Generate dynamic DB credentials
+
+ * This endpoint generates a new set of dynamic credentials based on the named role.
+
+ ```cs	
+var secret = await vaultClient.V1.Secrets.RabbitMQ.GenerateCredentialsAsync(role);
+var username = secret.Data.Username;
+var password = secret.Data.Password;
+```
 
 #### SSH Secrets Engine
 

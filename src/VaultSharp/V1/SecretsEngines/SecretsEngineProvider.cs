@@ -31,10 +31,10 @@ namespace VaultSharp.V1.SecretsEngines
             Cubbyhole = new CubbyholeSecretsEngineProvider(polymath);
             Database = new DatabaseSecretsEngineProvider(polymath);
             GoogleCloud = new GoogleCloudSecretsEngineProvider(polymath);
-            Nomad = new NomadSecretsEngineProvider(polymath);
-
             KeyValue = new KeyValueSecretsEngineProvider(polymath);
+            Nomad = new NomadSecretsEngineProvider(polymath);
             PKI = new PKISecretsEngineProvider(polymath);
+            RabbitMQ = new RabbitMQSecretsEngineProvider(polymath);
             Transit = new TransitSecretsEngineProvider(polymath);
         }
 
@@ -58,7 +58,7 @@ namespace VaultSharp.V1.SecretsEngines
 
         public IPKISecretsEngine PKI { get; }
 
-        public IRabbitMQSecretsEngine RabbitMQ => throw new NotImplementedException();
+        public IRabbitMQSecretsEngine RabbitMQ { get; }
 
         public ISSHSecretsEngine SSH => throw new NotImplementedException();
 
