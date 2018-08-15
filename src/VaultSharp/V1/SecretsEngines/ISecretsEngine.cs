@@ -6,6 +6,7 @@ using VaultSharp.V1.SecretsEngines.Database;
 using VaultSharp.V1.SecretsEngines.GoogleCloud;
 using VaultSharp.V1.SecretsEngines.Identity;
 using VaultSharp.V1.SecretsEngines.KeyValue;
+using VaultSharp.V1.SecretsEngines.Nomad;
 using VaultSharp.V1.SecretsEngines.PKI;
 using VaultSharp.V1.SecretsEngines.RabbitMQ;
 using VaultSharp.V1.SecretsEngines.SSH;
@@ -58,6 +59,11 @@ namespace VaultSharp.V1.SecretsEngines
         /// The Identity Secrets Engine.
         /// </summary>
         IIdentitySecretsEngine Identity { get; }
+
+        /// <summary>
+        /// The Nomad Secrets Engine.
+        /// </summary>
+        INomadSecretsEngine Nomad { get; }
 
         /// <summary>
         /// The PKI Secrets Engine.

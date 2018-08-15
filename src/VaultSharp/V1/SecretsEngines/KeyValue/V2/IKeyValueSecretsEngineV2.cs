@@ -64,6 +64,5 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// The secret metadata.
         /// </returns>
         Task<Secret<FullSecretMetadata>> ReadSecretMetadataAsync(string path, string mountPoint = SecretsEngineDefaultPaths.KeyValue, string wrapTimeToLive = null);
-
     }
 }

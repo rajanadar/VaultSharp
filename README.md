@@ -442,7 +442,13 @@ Coming soon...
 
 #### Nomad Secrets Engine
 
-Coming soon...
+ * Generates a dynamic Nomad token based on the given role definition.
+
+```cs
+var nomadCredentials = await vaultClient.V1.Secrets.Nomad.GenerateCredentialsAsync(roleName);
+var accessorId = nomadCredentials.Data.AccessorId;
+var secretId = nomadCredentials.Data.SecretId;
+```
 
 #### PKI (Cerificates) Secrets Engine
 
