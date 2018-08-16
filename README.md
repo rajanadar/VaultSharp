@@ -45,6 +45,18 @@ var consulCreds = await vaultClient.V1.Secrets.Consul.GetCredentialsAsync(consul
 var consulToken = consulCredentials.Data.Token;
 ```
 
+### Gist of the features
+
+ * VaultSharp 0.10.x supports 
+   - All the Auth Methods for Logging  into Vault. (AppRole, AWS, Azure, GitHub, Google Cloud, JWT/OIDC, Kubernetes, LDAP, Okta, RADIUS, TLS, Tokens & UserPass)
+   - All the secret engines to get dynamic credentials. (AD, AWS EC2 and IAM, Consul, Cubbyhole, Databases, Google Cloud, Key-Value, Nomad, PKI, RabbitMQ, SSH and TOTP)
+   - Several system APIs including enterprise vault apis
+ * You can also bring your own "Auth Method" by providing a custom delegate to fetch a token from anywhere.
+ * VaultSharp has first class support for Consul engine.
+ * KeyValue engine supports both v1 and v2 apis.
+ * Abundant intellisense.
+ * Provides hooks into http-clients to set custom proxy settings etc.
+
 ### VaultSharp - Supported .NET Platforms
 
 VaultSharp is built on **.NET Standard 1.3** & **.NET Framework 4.5**. This makes it highly compatible and cross-platform.
