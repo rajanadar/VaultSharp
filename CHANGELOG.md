@@ -21,6 +21,10 @@
   * TOTP Secrets Engine: Add support for generating and validating TOTP code.
   
   * Supports .Net Standard 1.3 and .NET Framework 4.5. This enables supports for a wide range of platforms.
+  
+**BREAKING CHANGES:**
+
+  * The ```GenerateCredentialsAsyn``` method name changes to ```GetCredentialsAsync```. Apologies.
 
 ## 0.10.4001 (August 10, 2018)
 
