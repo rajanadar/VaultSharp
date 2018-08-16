@@ -1,4 +1,4 @@
-## 0.10.4002 (Unreleased)
+## 0.10.4002 (August 16, 2018)
 
 **FEATURES:**
 
@@ -19,6 +19,8 @@
   * RabbitMQ Secrets Engine: Add support for generating dynamic credentials.
   * SSH Secrets Engine: Add support for generating dynamic credentials.
   * TOTP Secrets Engine: Add support for generating and validating TOTP code.
+  
+  * Supports .Net Standard 1.3 and .NET Framework 4.5. This enables supports for a wide range of platforms.
 
 ## 0.10.4001 (August 10, 2018)
 
