@@ -27,26 +27,18 @@ namespace VaultSharp.Core
         {
             VaultClientSettings = vaultClientSettings;
 
-            if (vaultClientSettings.PostProcessHttpClientHandlerAction != null)
+            var handler = new HttpClientHandler();
+
+            // not the best place, but a very convenient place to add cert of certauthmethod.
+            if (vaultClientSettings.AuthMethodInfo?.AuthMethodType == AuthMethodType.Cert)
             {
-                var handler = new HttpClientHandler();
-
-                // not the best place, but a very convenient place to add cert of certauthmethod.
-                if (vaultClientSettings.AuthMethodInfo.AuthMethodType == AuthMethodType.Cert)
-                {
-                    var certAuthMethodInfo = vaultClientSettings.AuthMethodInfo as CertAuthMethodInfo;
-                    handler.ClientCertificates.Add(certAuthMethodInfo.ClientCertificate);
-                }
-
-                vaultClientSettings.PostProcessHttpClientHandlerAction(handler);
-
-                _httpClient = new HttpClient(handler);
-            }
-            else
-            {
-                _httpClient = new HttpClient();
+                var certAuthMethodInfo = vaultClientSettings.AuthMethodInfo as CertAuthMethodInfo;
+                handler.ClientCertificates.Add(certAuthMethodInfo.ClientCertificate);
             }
 
+            vaultClientSettings.PostProcessHttpClientHandlerAction?.Invoke(handler);
+
+            _httpClient = new HttpClient(handler);
             _httpClient.BaseAddress = new Uri(vaultClientSettings.VaultServerUriWithPort);
 
             if (vaultClientSettings.VaultServiceTimeout != null)
@@ -59,6 +51,11 @@ namespace VaultSharp.Core
                 var authProvider = AuthProviderFactory.CreateAuthenticationProvider(vaultClientSettings.AuthMethodInfo, this);
                 _lazyVaultToken = new Lazy<Task<string>>(authProvider.GetVaultTokenAsync);
             }
+        }
+
+        private HttpMessageHandler GetHttpMessageHandler()
+        {
+            return null;
         }
 
         public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false)

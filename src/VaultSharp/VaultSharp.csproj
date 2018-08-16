@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard1.3</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>VaultSharp.snk</AssemblyOriginatorKeyFile>
@@ -26,7 +26,7 @@ This library is built with .NET Standard 2.0 and hence is cross-platform.</Descr
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard2.0\VaultSharp.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\netstandard1.3\VaultSharp.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -41,6 +41,11 @@ This library is built with .NET Standard 2.0 and hence is cross-platform.</Descr
 
   <ItemGroup>
     <Folder Include="V1\AuthMethods\GitHub\Models\" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
+    <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
+    <PackageReference Include="System.Net.Requests" Version="4.3.0" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace VaultSharp.Core
@@ -83,15 +82,6 @@ namespace VaultSharp.Core
             {
                 // nothing to do.
             }
-        }
-
-        /// <summary>
-        /// Protected constructor.
-        /// </summary>
-        /// <param name="info">Serialization info.</param>
-        /// <param name="context">Streaming context.</param>
-        protected VaultApiException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
         }
     }
 }
