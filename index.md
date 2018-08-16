@@ -3,7 +3,9 @@ VaultSharp
 
 A cross-platform .NET Library for HashiCorp's Vault - A Secret Management System.
 
-**Older VaultSharp 0.6.x Documentation:** [0.6.x Docs](https://github.com/rajanadar/VaultSharp/blob/master/README-0.6.x.md)
+**Latest release: [0.10.4002](https://www.nuget.org/packages/VaultSharp) [Install-Package VaultSharp -Version 0.10.4002]**
+
+** For Older VaultSharp 0.6.x Documentation:** [0.6.x Docs](https://github.com/rajanadar/VaultSharp/blob/master/README-0.6.x.md)
 
 **Report Issues/Feedback:** [Create a VaultSharp GitHub issue](https://github.com/rajanadar/VaultSharp/issues/new)
 
@@ -13,7 +15,7 @@ A cross-platform .NET Library for HashiCorp's Vault - A Secret Management System
 
 ### What is VaultSharp?	
 
-* VaultSharp is a .NET 1.3 Standard (and .NET 4.5) cross-platform C# Library that can be used in any .NET application to interact with Hashicorp's Vault.	
+* VaultSharp is a .NET Standard 1.3 (and .NET 4.5) cross-platform C# Library that can be used in any .NET application to interact with Hashicorp's Vault.	
 * The Vault system is a secret management system built as an Http Service by Hashicorp.
 
 VaultSharp has been re-designed ground up, to give a structured user experience across the various auth methods, secrets engines & system apis.
