@@ -27,6 +27,16 @@ namespace VaultSharp.Core
         {
             VaultClientSettings = vaultClientSettings;
 
+#if NET45
+            var handler = new WebRequestHandler();
+
+            // not the best place, but a very convenient place to add cert of certauthmethod.
+            if (vaultClientSettings.AuthMethodInfo?.AuthMethodType == AuthMethodType.Cert)
+            {
+                var certAuthMethodInfo = vaultClientSettings.AuthMethodInfo as CertAuthMethodInfo;
+                handler.ClientCertificates.Add(certAuthMethodInfo.ClientCertificate);
+            }
+#else   
             var handler = new HttpClientHandler();
 
             // not the best place, but a very convenient place to add cert of certauthmethod.
@@ -35,6 +45,7 @@ namespace VaultSharp.Core
                 var certAuthMethodInfo = vaultClientSettings.AuthMethodInfo as CertAuthMethodInfo;
                 handler.ClientCertificates.Add(certAuthMethodInfo.ClientCertificate);
             }
+#endif
 
             vaultClientSettings.PostProcessHttpClientHandlerAction?.Invoke(handler);
 
