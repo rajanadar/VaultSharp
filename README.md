@@ -17,7 +17,7 @@ A cross-platform .NET Library for HashiCorp's Vault - A Secret Management System
 
 ### What is VaultSharp?	
 
-* VaultSharp is a .NET 1.3 Standard (and .NET 4.5) cross-platform C# Library that can be used in any .NET application to interact with Hashicorp's Vault.	
+* VaultSharp is a .NET Standard 1.3 (and .NET 4.5) cross-platform C# Library that can be used in any .NET application to interact with Hashicorp's Vault.	
 * The Vault system is a secret management system built as an Http Service by Hashicorp.
 
 VaultSharp has been re-designed ground up, to give a structured user experience across the various auth methods, secrets engines & system apis.
