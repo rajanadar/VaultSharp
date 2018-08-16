@@ -13,7 +13,7 @@ A cross-platform .NET Library for HashiCorp's Vault - A Secret Management System
 
 ### What is VaultSharp?	
 
-* VaultSharp is a .NET 2.0 Standard cross-platform C# Library that can be used in any .NET application to interact with Hashicorp's Vault.	
+* VaultSharp is a .NET 1.3 Standard (and .NET 4.5) cross-platform C# Library that can be used in any .NET application to interact with Hashicorp's Vault.	
 * The Vault system is a secret management system built as an Http Service by Hashicorp.
 
 VaultSharp has been re-designed ground up, to give a structured user experience across the various auth methods, secrets engines & system apis.
@@ -37,9 +37,25 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 var kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("secret-name");
 
 // Generate a dynamic Consul credential
-var consulCreds = await vaultClient.V1.Secrets.Consul.GenerateCredentialsAsync(consulRole, consulMount);	
+var consulCreds = await vaultClient.V1.Secrets.Consul.GetCredentialsAsync(consulRole, consulMount);	
 var consulToken = consulCredentials.Data.Token;
 ```
+
+### VaultSharp - Supported .NET Platforms
+
+VaultSharp is built on **.NET Standard 1.3** & **.NET Framework 4.5**. This makes it highly compatible and cross-platform.
+
+The following platforms are supported due to that.
+
+ * .NET Core 1.0 and above including .NET Core 2.0
+ * .NET Framework 4.5 and above
+ * Mono 4.6 and above
+ * Xamarin.iOS 10.0 and above
+ * Xamarin Mac 3.0 and above
+ * Xamarin.Android 7.0 and above
+ * UWP 10.0 and above
+ 
+ Source: https://github.com/dotnet/standard/blob/master/docs/versions.md
 
 ### VaultSharp and Consul Support
 
@@ -54,7 +70,6 @@ var consulToken = consulCredentials.Data.Token;
 #### App Role Auth Method
 
 ```cs
-
 // setup the AppRole based auth to get the right token.
 
 IAuthMethodInfo authMethod = new AppRoleAuthMethodInfo(roleId, secretId);
@@ -64,15 +79,15 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 // vault token/policies mapped to the app role and secret id.
-
 ```
 
 #### AWS Auth Method
 
+AWS Auth method has 2 flavors. An EC2 way and an IAM way. Here are examples for both.
+
 ##### AWS Auth Method - EC2
 
 ```cs
-
 // setup the AWS-EC2 based auth to get the right token.
 
 IAuthMethodInfo authMethod = new EC2AWSAuthMethodInfo(pkcs7, null, null, nonce, roleName);
@@ -82,11 +97,9 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 // vault token/policies mapped to the aws-ec2 role
-
 ```
 
 ```cs
-
 // setup the AWS-EC2 based auth to get the right token.
 
 IAuthMethodInfo authMethod = new EC2AWSAuthMethodInfo(null, identity, signature, nonce, roleName);
@@ -96,13 +109,11 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 // vault token/policies mapped to the aws-ec2 role
-
 ```
 
 ##### AWS Auth Method - IAM
 
 ```cs
-
 // setup the AWS-IAM based auth to get the right token.
 
 IAuthMethodInfo authMethod = new IAMAWSAuthMethodInfo(nonce, roleName); // uses default requestHeaders
@@ -112,12 +123,21 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 // vault token/policies mapped to the aws-iam role
-
 ```
 
 #### Azure Auth Method
 
-Coming soon...
+```cs
+// setup the Azure based auth to get the right token.
+
+IAuthMethodInfo authMethod = new AzureAuthMethodInfo(roleName, jwt); 
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the azure jwt
+```
 
 #### GitHub Auth Method
 
@@ -129,20 +149,49 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 // vault token/policies mapped to the github token.
-
 ```
 
 #### Google Cloud Auth Method
 
-Coming soon...
+```cs
+// setup the Google Cloud based auth to get the right token.
+
+IAuthMethodInfo authMethod = new GoogleCloudAuthMethodInfo(roleName, jwt); 
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the Google Cloud jwt
+```
 
 #### JWT/OIDC Auth Method
 
-Coming soon...
+```cs
+// setup the JWT/OIDC based auth to get the right token.
+
+IAuthMethodInfo authMethod = new JWTAuthMethodInfo(roleName, jwt); 
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the jwt
+```
 
 #### Kubernetes Auth Method
 
-Coming soon...
+```cs
+// setup the Kubernetes based auth to get the right token.
+
+IAuthMethodInfo authMethod = new KubernetesAuthMethodInfo(roleName, jwt); 
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the Kubernetes jwt
+```
 
 #### LDAP Authentication Backend
 
@@ -154,16 +203,31 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 // vault token/policies mapped to the LDAP username and password.
-
 ```
 
 #### Okta Auth Method
 
-Coming soon...
+```cs
+IAuthMethodInfo authMethod = new OktaAuthMethodInfo(userName, password);
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the Okta username and password.
+```
 
 #### RADIUS Auth Method
 
-Coming soon...
+```cs
+IAuthMethodInfo authMethod = new RADIUSAuthMethodInfo(userName, password);
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the RADIUS username and password.
+```
 
 #### Certificate (TLS) Auth Method
 
@@ -178,7 +242,6 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 vault token/policies mapped to the client certificate.
-
 ```
 
 #### Token Auth Method
@@ -191,7 +254,6 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 vault token/policies mapped to the vault token.
-
 ```
 
 #### Username and Password Auth Method
@@ -204,7 +266,6 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the 
 vault token/policies mapped to the username/password.
-
 ```
 
 #### Custom Auth Method - Bring your own Vault Token
@@ -219,7 +280,6 @@ IAuthMethodInfo authMethod = new CustomAuthMethodInfo("my-own-token-auth-method"
 var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
 
 IVaultClient vaultClient = new VaultClient(vaultClientSettings);
-
 ```
 
 #### App Id Auth Method (DEPRECATED)
@@ -250,96 +310,284 @@ IAuthMethodInfo authMethod = new TokenAuthMethodInfo("MY_VAULT_TOKEN");
 var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
 
 IVaultClient vaultClient = new VaultClient(vaultClientSettings);
-
 ```
 
-#### Active Directory
+#### Active Directory Secrets Engine
 
-Coming soon...
+##### Retrieving Passwords (offering credentials)
 
-#### AWS
+ * This method offers the credential information for a given role.
 
-Coming soon...
+ ```cs	
+var adCreds = await vaultClient.V1.Secrets.ActiveDirectory.GetCredentialsAsync(role);
+var currentPassword = adCreds.Data.CurrentPassword;
+```
 
-#### Consul
+#### AWS Secrets Engine
+
+##### Generate IAM Credentials
+
+ * This endpoint generates dynamic IAM credentials based on the named role.
+
+ ```cs	
+var awsCreds = await vaultClient.V1.Secrets.AWS.GetCredentialsAsync(role);
+
+var accessKey = awsCreds.Data.AccessKey;
+var secretKey = awsCreds.Data.SecretKey;
+var securityToken = awsCreds.Data.SecurityToken;
+```
+
+##### Generate IAM Credentials with STS
+
+ * This generates a dynamic IAM credential with an STS token based on the named role.
+
+ ```cs	
+var awsCreds = await vaultClient.V1.Secrets.AWS.GenerateSTSCredentialsAsync(role, ttl);
+
+var accessKey = awsCreds.Data.AccessKey;
+var secretKey = awsCreds.Data.SecretKey;
+var securityToken = awsCreds.Data.SecurityToken;
+```
+
+#### Consul Secrets Engine
+
+ * This endpoint generates a dynamic Consul token based on the given role definition.
 
 ```cs
-
 // Generate a dynamic Consul credential
-var consulCreds = await vaultClient.V1.Secrets.Consul.GenerateCredentialsAsync(consulRole);	
+var consulCreds = await vaultClient.V1.Secrets.Consul.GetCredentialsAsync(consulRole);	
 var consulToken = consulCredentials.Data.Token;
-
 ```
 
-#### Cubbyhole
+#### Cubbyhole Secrets Engine
 
-Coming soon...
+##### Read Secret
 
-#### Databases
+ * This endpoint retrieves the secret at the specified location.
 
-Coming soon...
+ ```cs	
+var secret = await vaultClient.V1.Secrets.Cubbyhole.ReadSecretAsync(secretPath);
+var secretValues = secret.Data;
+```
 
-#### Google Cloud
+##### List Secrets
 
-Coming soon...
+ * This endpoint returns a list of secret entries at the specified location. 
+ * Folders are suffixed with /. The input must be a folder; list on a file will not return a value. 
+ * The values themselves are not accessible via this command.
 
-#### Key Value
+ ```cs	
+var secret = await vaultClient.V1.Secrets.Cubbyhole.ReadSecretPathsAsync(folderPath);
+var paths = secret.Data;
+```
+
+##### Create/Update Secret
+
+ * This endpoint stores a secret at the specified location.
+
+ ```cs	
+var value = new Dictionary<string, object> { { "key1", "val1" }, { "key2", 2 } };
+await vaultClient.V1.Secrets.Cubbyhole.WriteSecretAsync(secretPath, value);
+```
+
+##### Delete Secret
+
+ * This endpoint deletes the secret at the specified location.
+
+ ```cs	
+await vaultClient.V1.Secrets.Cubbyhole.DeleteSecretAsync(secretPath);
+```
+
+#### Databases Secrets Engine
+
+##### Generate dynamic DB credentials
+
+ * This endpoint generates a new set of dynamic credentials based on the named role.
+
+ ```cs	
+var dbCreds = await vaultClient.V1.Secrets.Database.GetCredentialsAsync(role);
+var username = dbCreds.Data.Username;
+var password = dbCreds.Data.Password;
+```
+
+#### Google Cloud Secrets Engine
+
+##### Generate Secret (IAM Service Account Creds): OAuth2 Access Token
+
+ * Generates an OAuth2 token with the scopes defined on the roleset. This OAuth access token can be used in GCP API calls
+
+ ```cs	
+var oauthSecret = await vaultClient.V1.Secrets.GoogleCloud.GenerateOAuth2TokenAsync(roleset);
+var token = oauthSecret.Data.Token;
+```
+##### Generate Secret (IAM Service Account Creds): Service Account Key
+
+ * Generates a service account key.
+
+ ```cs	
+var privateKeySecret = await vaultClient.V1.Secrets.GoogleCloud.GenerateServiceAccountKeyAsync(roleset, keyAlgorithm, privateKeyType);
+var privateKeyData = privateKeySecret.Data.Base64EncodedPrivateKeyData;
+```
+
+#### Key Value Secrets Engine
 
  * VaultSharp supports both v1 and v2 of the Key Value Secrets Engine.
  * Here are examples for both.
 
-##### Key Value - V1
+##### Key Value Secrets Engine - V1
 
 ```cs
-
 // Use client to read a v1 key-value secret.
 var kv1Secret = await vaultClient.V1.Secrets.KeyValue.V1.ReadSecretAsync("v1-secret-name");
-
 ```
 
-##### Key Value - V2
+##### Key Value Secrets Engine - V2
 
 ```cs
-
 // Use client to read a v2 key-value secret.
 var kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("v2-secret-name");
-
 ```
 
-#### Identity
+#### Identity Secrets Engine
 
 Coming soon...
 
-#### Nomad
+#### Nomad Secrets Engine
 
-Coming soon...
+##### Generate dynamic DB credentials
 
-#### PKI (Cerificates)
+ * Generates a dynamic Nomad token based on the given role definition.
 
 ```cs
-
-var certificateCredentialsRequestOptions = new CertificateCredentialsRequestOptions { // initialize };
-var certSecret = await vaultClient.V1.Secrets.PKI.GenerateCredentialsAsync(pkiRoleName, certificateCredentialsRequestOptions);
-
-var privateKeyContent = certSecret.Data.PrivateKeyContent;
-
+var nomadCredentials = await vaultClient.V1.Secrets.Nomad.GetCredentialsAsync(roleName);
+var accessorId = nomadCredentials.Data.AccessorId;
+var secretId = nomadCredentials.Data.SecretId;
 ```
 
-#### RabbitMQ
+#### PKI (Cerificates) Secrets Engine
 
-Coming soon...
+```cs
+var certificateCredentialsRequestOptions = new CertificateCredentialsRequestOptions { // initialize };
+var certSecret = await vaultClient.V1.Secrets.PKI.GetCredentialsAsync(pkiRoleName, certificateCredentialsRequestOptions);
 
-#### SSH
+var privateKeyContent = certSecret.Data.PrivateKeyContent;
+```
 
-Coming soon...
+#### RabbitMQ Secrets Engine
 
-#### TOTP
+##### Generate dynamic DB credentials
 
-Coming soon...
+ * This endpoint generates a new set of dynamic credentials based on the named role.
 
-#### Transit
+ ```cs	
+var secret = await vaultClient.V1.Secrets.RabbitMQ.GetCredentialsAsync(role);
+var username = secret.Data.Username;
+var password = secret.Data.Password;
+```
 
-Coming soon...
+#### SSH Secrets Engine
+
+##### Generate SSH credentials
+
+ * This endpoint creates credentials for a specific username and IP with the parameters defined in the given role.
+
+ ```cs	
+var sshCreds = await vaultClient.V1.Secrets.SSH.GetCredentialsAsync(role, ipAddress, username);
+var sshKey = sshCreds.Data.Key;
+```
+
+#### TOTP Secrets Engine
+
+##### Generate Code
+
+This endpoint generates a new time-based one-time use password based on the named key.
+
+```cs
+var totpSecret = await vaultClient.V1.Secrets.TOTP.GetCodeAsync(keyName);
+var code = totpSecret.Data.Code;
+```
+
+##### Validate Code
+
+This endpoint validates a time-based one-time use password generated from the named key.
+
+```cs
+var totpValidity = await vaultClient.V1.Secrets.TOTP.ValidateCodeAsync(keyName, code);
+var valid = totpValidity.Data.Valid;
+```
+
+#### Transit Secrets Engine
+
+##### Encrypt Method
+
+###### Encrypt Single Item
+
+```cs
+var keyName = "test_key";
+
+var context = "context1";
+var plainText = "raja";
+var encodedPlainText = Convert.ToBase64String(Encoding.UTF8.GetBytes(plainText));
+var encodedContext = Convert.ToBase64String(Encoding.UTF8.GetBytes(context));
+
+var encryptOptions = new EncryptRequestOptions
+{
+    Base64EncodedPlainText = encodedPlainText,
+    Base64EncodedContext = encodedContext,
+};
+
+var encryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.EncryptAsync(keyName, encryptOptions);
+var cipherText = encryptionResponse.Data.CipherText;
+```
+
+###### Encrypt Batched Items
+
+```cs
+var encryptOptions = new EncryptRequestOptions
+{
+    BatchedEncryptionItems = new List<EncryptionItem>
+    {
+        new EncryptionItem { Base64EncodedContext = encodedContext1, Base64EncodedPlainText = encodedPlainText1 },
+        new EncryptionItem { Base64EncodedContext = encodedContext2, Base64EncodedPlainText = encodedPlainText2 },
+        new EncryptionItem { Base64EncodedContext = encodedContext3, Base64EncodedPlainText = encodedPlainText3 },
+    }
+};
+
+var encryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.EncryptAsync(keyName, encryptOptions);
+var firstCipherText = encryptionResponse.Data.BatchedResults.First().CipherText;
+```
+
+##### Decrypt Method
+
+###### Decrypt Single Item
+
+```cs
+var decryptOptions = new DecryptRequestOptions
+{
+    CipherText = cipherText,
+    Base64EncodedContext = encodedContext,
+};
+
+var decryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions);
+var encodedPlainText = decryptionResponse.Data.Base64EncodedPlainText;
+```
+
+###### Decrypt Batched Item
+
+```cs
+var decryptOptions = new DecryptRequestOptions
+{
+    BatchedDecryptionItems = new List<DecryptionItem>
+    {
+        new DecryptionItem { Base64EncodedContext = encodedContext1, CipherText = cipherText1 },
+        new DecryptionItem { Base64EncodedContext = encodedContext2, CipherText = cipherText2 },
+        new DecryptionItem { Base64EncodedContext = encodedContext3, CipherText = cipherText3 },
+    }
+};
+
+var decryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions);
+var firstEncodedPlainText = decryptionResponse.Data.BatchedResults.First().Base64EncodedPlainText;
+```
 
 ### System Backend
 
@@ -349,9 +597,7 @@ Coming soon...
 VaultSharp already supports several of the System backend features.
 
 ```cs
-
 // vaultClient.V1.System.<method> The method you are looking for.
-
 ```
 
 Additional documentation coming soon...
