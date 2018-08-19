@@ -5,7 +5,9 @@ A cross-platform .NET Library for HashiCorp's Vault - A Secret Management System
 
 **Latest release: [0.10.4002](https://www.nuget.org/packages/VaultSharp) [Install-Package VaultSharp -Version 0.10.4002]**
 
-** For Older VaultSharp 0.6.x Documentation:** [0.6.x Docs](https://github.com/rajanadar/VaultSharp/blob/master/README-0.6.x.md)
+**For Older VaultSharp 0.6.x Documentation:** [0.6.x Docs](https://github.com/rajanadar/VaultSharp/blob/master/README-0.6.x.md)
+
+**VaultSharp Gitter Lobby:** [Gitter Lobby](https://gitter.im/rajanadar-VaultSharp/Lobby)
 
 **Report Issues/Feedback:** [Create a VaultSharp GitHub issue](https://github.com/rajanadar/VaultSharp/issues/new)
 
