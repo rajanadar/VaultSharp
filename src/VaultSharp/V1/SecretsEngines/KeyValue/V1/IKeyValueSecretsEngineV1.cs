@@ -43,7 +43,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <returns>
         /// The secret list with the data.
         /// </returns>
-        Task<Secret<ListInfo>> ReadSecretPathListAsync(string path, string mountPoint = SecretsEngineDefaultPaths.KeyValue, string wrapTimeToLive = null);
+        Task<Secret<ListInfo>> ReadSecretPathsAsync(string path, string mountPoint = SecretsEngineDefaultPaths.KeyValue, string wrapTimeToLive = null);
 
         /// <summary>
         /// Stores a secret at the specified location. If the value does not yet exist, the calling token must have an ACL policy granting the create capability. 

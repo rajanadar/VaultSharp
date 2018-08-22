@@ -257,19 +257,48 @@ namespace VaultSharp.Samples
 
             _authenticatedVaultClient.V1.Secrets.KeyValue.V1.WriteSecretAsync(path, values).Wait();
 
+            var paths1 = _authenticatedVaultClient.V1.Secrets.KeyValue.V1.ReadSecretPathsAsync("").Result;
+            Assert.True(paths1.Data.Keys.Count() == 1);
+
             var kv1Secret = _authenticatedVaultClient.V1.Secrets.KeyValue.V1.ReadSecretAsync(path).Result;
             Assert.True(kv1Secret.Data.Count == 2);
 
             _authenticatedVaultClient.V1.Secrets.KeyValue.V1.DeleteSecretAsync(path).Wait();
 
-            //var kv2Secret = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("name1").Result;
-            //Assert.NotNull(kv2Secret.Data.Data);
+            // mount a new v2 kv
+            var kv2SecretsEngine = new SecretsEngine
+            {
+                Type = SecretsEngineType.KeyValue,
+                Config = new Dictionary<string, string>
+                {
+                    {  "version", "2" }
+                },
+                Path = "kv",
+            };
 
-            //var kv2Keys = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretPathListAsync("").Result;
-            //Assert.True(kv2Keys.Data.Keys.Any());
+            values["foo"] = "kv2";
 
-            //var kv2metadata = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretMetadataAsync("name1").Result;
-            //Assert.True(kv2metadata.Data.CurrentVersion > 0);            
+            // Manually set a kv mount with version 2. The programmatic mount doesn't seem to setting up v2.
+            return;
+
+            // .\vault.exe secrets enable -version=2 kv            
+
+            // _authenticatedVaultClient.V1.System.MountSecretBackendAsync(kv2SecretsEngine).Wait();
+
+            _authenticatedVaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync(path, values, mountPoint: kv2SecretsEngine.Path).Wait();
+
+            var kv2Secret = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync(path, mountPoint: kv2SecretsEngine.Path).Result;
+            Assert.True(kv2Secret.Data.Data.Count == 2);
+
+            var paths2 = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretPathsAsync("", mountPoint: kv2SecretsEngine.Path).Result;
+            Assert.True(paths2.Data.Keys.Count() == 1);
+
+            var kv2metadata = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretMetadataAsync(path, mountPoint: kv2SecretsEngine.Path).Result;
+            Assert.True(kv2metadata.Data.CurrentVersion > 0); 
+
+            _authenticatedVaultClient.V1.Secrets.KeyValue.V2.DestroySecretAsync(path, new List<int> { kv2metadata.Data.CurrentVersion }, mountPoint: kv2SecretsEngine.Path).Wait();
+
+            _authenticatedVaultClient.V1.System.UnmountSecretBackendAsync(kv2SecretsEngine.Path).Wait();         
         }
 
         private static void RunSystemBackendSamples()
