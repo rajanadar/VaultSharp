@@ -3,11 +3,11 @@ VaultSharp
 
 A cross-platform .NET Library for HashiCorp's Vault - A Secret Management System.
 
-**Latest release: [0.10.4002](https://www.nuget.org/packages/VaultSharp) [Install-Package VaultSharp -Version 0.10.4002]**
-
-**For Older VaultSharp 0.6.x Documentation:** [0.6.x Docs](https://github.com/rajanadar/VaultSharp/blob/master/README-0.6.x.md)
+**VaultSharp Latest release: [0.10.4003](https://www.nuget.org/packages/VaultSharp) [Install-Package VaultSharp -Version 0.10.4003]**
 
 **VaultSharp Gitter Lobby:** [Gitter Lobby](https://gitter.im/rajanadar-VaultSharp/Lobby)
+
+**Older VaultSharp 0.6.x Documentation:** [0.6.x Docs](https://github.com/rajanadar/VaultSharp/blob/master/README-0.6.x.md)
 
 **Report Issues/Feedback:** [Create a VaultSharp GitHub issue](https://github.com/rajanadar/VaultSharp/issues/new)
 
@@ -44,6 +44,18 @@ var kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("secret
 var consulCreds = await vaultClient.V1.Secrets.Consul.GetCredentialsAsync(consulRole, consulMount);	
 var consulToken = consulCredentials.Data.Token;
 ```
+
+### Gist of the features
+
+ * VaultSharp 0.10.x supports 
+   - All the Auth Methods for Logging  into Vault. (AppRole, AWS, Azure, GitHub, Google Cloud, JWT/OIDC, Kubernetes, LDAP, Okta, RADIUS, TLS, Tokens & UserPass)
+   - All the secret engines to get dynamic credentials. (AD, AWS EC2 and IAM, Consul, Cubbyhole, Databases, Google Cloud, Key-Value, Nomad, PKI, RabbitMQ, SSH and TOTP)
+   - Several system APIs including enterprise vault apis
+ * You can also bring your own "Auth Method" by providing a custom delegate to fetch a token from anywhere.
+ * VaultSharp has first class support for Consul engine.
+ * KeyValue engine supports both v1 and v2 apis.
+ * Abundant intellisense.
+ * Provides hooks into http-clients to set custom proxy settings etc.
 
 ### VaultSharp - Supported .NET Platforms
 
@@ -440,16 +452,96 @@ var privateKeyData = privateKeySecret.Data.Base64EncodedPrivateKeyData;
 
 ##### Key Value Secrets Engine - V1
 
+###### Create/Update Secret
+
+ * This endpoint stores a secret at the specified location. 
+ * If the value does not yet exist, the calling token must have an ACL policy granting the create capability. 
+ * If the value already exists, the calling token must have an ACL policy granting the update capability.
+
+ ```cs	
+var value = new Dictionary<string, object> { { "key1", "val1" }, { "key2", 2 } };
+await vaultClient.V1.Secrets.KeyValue.V1.WriteSecretAsync(secretPath, value);
+```
+
+###### Read Secret
+
+ * Reads the secret at the specified location returning data.
+
 ```cs
 // Use client to read a v1 key-value secret.
 var kv1Secret = await vaultClient.V1.Secrets.KeyValue.V1.ReadSecretAsync("v1-secret-name");
+Dictionary<string, object> dataDictionary = kv1Secret.Data;
+```
+
+###### List Secrets
+
+ * This endpoint returns a list of key names at the specified location. 
+ * Folders are suffixed with /. The input must be a folder; list on a file will not return a value. 
+ * Note that no policy-based filtering is performed on keys; do not encode sensitive information in key names. 
+ * The values themselves are not accessible via this command.
+
+ ```cs	
+var secret = await vaultClient.V1.Secrets.KeyValue.V1.ReadSecretsAsync(path);
+var paths = secret.Data;
+```
+
+###### Delete Secret
+
+ * This endpoint deletes the secret at the specified location.
+
+ ```cs	
+await vaultClient.V1.Secrets.KeyValue.V1.DeleteSecretAsync(secretPath);
 ```
 
 ##### Key Value Secrets Engine - V2
 
+###### Create/Update Secret
+
+ * This endpoint stores a secret at the specified location. 
+ * If the value does not yet exist, the calling token must have an ACL policy granting the create capability. 
+ * If the value already exists, the calling token must have an ACL policy granting the update capability.
+
+ ```cs	
+var value = new Dictionary<string, object> { { "key1", "val1" }, { "key2", 2 } };
+await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync(secretPath, value, checkAndSet);
+```
+
+###### Read Secret
+
+ * Reads the secret at the specified location returning data and metadata.
+
 ```cs
 // Use client to read a v2 key-value secret.
 var kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("v2-secret-name");
+Dictionary<string, object> dataDictionary = kv2Secret.Data;
+```
+
+###### Read Metadata
+
+ * Reads the secret metadata at the specified location returning.
+
+```cs
+var kv2SecretMetadata = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretMetadataAsync("v1-secret-name");
+```
+
+###### List Secrets
+
+ * This endpoint returns a list of key names at the specified location. 
+ * Folders are suffixed with /. The input must be a folder; list on a file will not return a value. 
+ * Note that no policy-based filtering is performed on keys; do not encode sensitive information in key names. 
+ * The values themselves are not accessible via this command.
+
+ ```cs	
+var secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretsAsync(path);
+var paths = secret.Data;
+```
+
+###### Destroy Secret
+
+ * This endpoint destroys the secret at the specified location for the given versions.
+
+ ```cs	
+await vaultClient.V1.Secrets.KeyValue.V2.DestroySecretAsync(secretPath, new List<int> { 1, 2 });
 ```
 
 #### Identity Secrets Engine
