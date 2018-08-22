@@ -14,8 +14,12 @@
     <RepositoryUrl>https://github.com/rajanadar/VaultSharp</RepositoryUrl>
     <PackageTags>c# vault hashicorp .net netcore netstandard api secret consul kv ldap aws ec2 iam userpass</PackageTags>
     <PackageReleaseNotes></PackageReleaseNotes>
-    <Description>The most comprehensive .NET Library for HashiCorp's Vault - A Secret Management System.
-This library is built with .NET Standard 2.0 and hence is cross-platform.</Description>
+    <Description>* The most comprehensive .NET Library for HashiCorp's Vault - A Secret Management System.
+ * VaultSharp supports all Auth methods, all Secrets Engines and most System Apis.
+ * It has first class support for Consul, Enterpise Vault APIs etc.
+
+
+ * This library is built with .NET Standard 1.3 &amp; .NET 4.5 and hence is cross-platform across .NET Core 1.0, .NET 4.5 and more, Xamarin iOS, Android, Mac, UWP etc.</Description>
     <RepositoryType>Github</RepositoryType>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
