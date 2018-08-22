@@ -454,16 +454,96 @@ var privateKeyData = privateKeySecret.Data.Base64EncodedPrivateKeyData;
 
 ##### Key Value Secrets Engine - V1
 
+###### Create/Update Secret
+
+ * This endpoint stores a secret at the specified location. 
+ * If the value does not yet exist, the calling token must have an ACL policy granting the create capability. 
+ * If the value already exists, the calling token must have an ACL policy granting the update capability.
+
+ ```cs	
+var value = new Dictionary<string, object> { { "key1", "val1" }, { "key2", 2 } };
+await vaultClient.V1.Secrets.KeyValue.V1.WriteSecretAsync(secretPath, value);
+```
+
+###### Read Secret
+
+ * Reads the secret at the specified location returning data.
+
 ```cs
 // Use client to read a v1 key-value secret.
 var kv1Secret = await vaultClient.V1.Secrets.KeyValue.V1.ReadSecretAsync("v1-secret-name");
+Dictionary<string, object> dataDictionary = kv1Secret.Data;
+```
+
+###### List Secrets
+
+ * This endpoint returns a list of key names at the specified location. 
+ * Folders are suffixed with /. The input must be a folder; list on a file will not return a value. 
+ * Note that no policy-based filtering is performed on keys; do not encode sensitive information in key names. 
+ * The values themselves are not accessible via this command.
+
+ ```cs	
+var secret = await vaultClient.V1.Secrets.KeyValue.V1.ReadSecretsAsync(path);
+var paths = secret.Data;
+```
+
+###### Delete Secret
+
+ * This endpoint deletes the secret at the specified location.
+
+ ```cs	
+await vaultClient.V1.Secrets.KeyValue.V1.DeleteSecretAsync(secretPath);
 ```
 
 ##### Key Value Secrets Engine - V2
 
+###### Create/Update Secret
+
+ * This endpoint stores a secret at the specified location. 
+ * If the value does not yet exist, the calling token must have an ACL policy granting the create capability. 
+ * If the value already exists, the calling token must have an ACL policy granting the update capability.
+
+ ```cs	
+var value = new Dictionary<string, object> { { "key1", "val1" }, { "key2", 2 } };
+await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync(secretPath, value, checkAndSet);
+```
+
+###### Read Secret
+
+ * Reads the secret at the specified location returning data and metadata.
+
 ```cs
 // Use client to read a v2 key-value secret.
 var kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("v2-secret-name");
+Dictionary<string, object> dataDictionary = kv2Secret.Data;
+```
+
+###### Read Metadata
+
+ * Reads the secret metadata at the specified location returning.
+
+```cs
+var kv2SecretMetadata = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretMetadataAsync("v1-secret-name");
+```
+
+###### List Secrets
+
+ * This endpoint returns a list of key names at the specified location. 
+ * Folders are suffixed with /. The input must be a folder; list on a file will not return a value. 
+ * Note that no policy-based filtering is performed on keys; do not encode sensitive information in key names. 
+ * The values themselves are not accessible via this command.
+
+ ```cs	
+var secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretsAsync(path);
+var paths = secret.Data;
+```
+
+###### Destroy Secret
+
+ * This endpoint destroys the secret at the specified location for the given versions.
+
+ ```cs	
+await vaultClient.V1.Secrets.KeyValue.V2.DestroySecretAsync(secretPath, new List<int> { 1, 2 });
 ```
 
 #### Identity Secrets Engine

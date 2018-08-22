@@ -1,3 +1,14 @@
+## 0.10.4003 (Unreleased)
+
+**FEATURES:**
+
+  * Secrets Engine: Key Value: Version 1: Add support for Writing & Deleting of secrets.
+  * Secrets Engine: Key Value: Version 2: Add support for Writing & Destroying of secrets.
+
+**BREAKING CHANGES:**
+
+  * Secrets Engine: Key Value: The ```ReadSecretPathListAsync``` method name changes to ```ReadSecretPathsAsync```. Apologies.
+
 ## 0.10.4002 (August 16, 2018)
 
 **FEATURES:**
@@ -24,7 +35,7 @@
   
 **BREAKING CHANGES:**
 
-  * The ```GenerateCredentialsAsyn``` method name changes to ```GetCredentialsAsync```. Apologies.
+  * The ```GenerateCredentialsAsync``` method name changes to ```GetCredentialsAsync```. Apologies.
 
 ## 0.10.4001 (August 10, 2018)
 
