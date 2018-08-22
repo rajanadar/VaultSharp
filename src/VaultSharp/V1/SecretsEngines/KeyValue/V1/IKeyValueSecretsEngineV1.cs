@@ -44,5 +44,44 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// The secret list with the data.
         /// </returns>
         Task<Secret<ListInfo>> ReadSecretPathListAsync(string path, string mountPoint = SecretsEngineDefaultPaths.KeyValue, string wrapTimeToLive = null);
+
+        /// <summary>
+        /// Stores a secret at the specified location. If the value does not yet exist, the calling token must have an ACL policy granting the create capability. 
+        /// If the value already exists, the calling token must have an ACL policy granting the update capability.
+        /// </summary>
+        /// <param name="path"><para>[required]</para>
+        /// The path where the value is to be stored.</param>
+        /// <param name="values"><para>[required]</para>
+        /// The value to be written.</param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValue" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        /// <remarks>
+        /// Unlike other secrets engines, the KV secrets engine does not enforce TTLs for expiration. 
+        /// Instead, the lease_duration is a hint for how often consumers should check back for a new value. 
+        /// This is commonly displayed as refresh_interval instead of lease_duration to clarify this in output.
+        /// If provided a key of ttl, the KV secrets engine will utilize this value as the lease duration:
+        /// Even with a ttl set, the secrets engine never removes data on its own.The ttl key is merely advisory.
+        /// When reading a value with a ttl, both the ttl key and the refresh interval will reflect the value:
+        /// </remarks>
+        Task WriteSecretAsync(string path, IDictionary<string, object> values, string mountPoint = SecretsEngineDefaultPaths.KeyValue);
+
+        /// <summary>
+        /// Deletes the value at the specified path in Vault.
+        /// </summary>
+        /// <param name="path"><para>[required]</para>
+        /// The path where the value is to be stored.</param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValue" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task DeleteSecretAsync(string path, string mountPoint = SecretsEngineDefaultPaths.KeyValue);
     }
 }

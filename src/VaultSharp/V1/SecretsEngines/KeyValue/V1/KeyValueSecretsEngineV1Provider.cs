@@ -24,5 +24,15 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         {
             return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/" + mountPoint.Trim('/') + "/" + path.Trim('/') + "?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
+
+        public async Task WriteSecretAsync(string path, IDictionary<string, object> values, string mountPoint = SecretsEngineDefaultPaths.KeyValue)
+        {
+            await _polymath.MakeVaultApiRequest("v1/" + mountPoint.Trim('/') + "/" + path.Trim('/'), HttpMethod.Post, values).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task DeleteSecretAsync(string path, string mountPoint = SecretsEngineDefaultPaths.KeyValue)
+        {
+            await _polymath.MakeVaultApiRequest("v1/" + mountPoint.Trim('/') + "/" + path.Trim('/'), HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
     }
 }

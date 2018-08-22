@@ -47,7 +47,7 @@ namespace VaultSharp.V1.SecretsEngines
         /// <value>
         /// The generic.
         /// </value>
-        public static SecretsEngineType KeyValue { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.KeyValue);
+        public static SecretsEngineType KeyValue { get; } = new SecretsEngineType("kv");
 
         /// <summary>
         /// Gets the Identity type.
@@ -206,7 +206,7 @@ namespace VaultSharp.V1.SecretsEngines
         /// </returns>
         public override string ToString()
         {
-            return Type;
+            return this == KeyValue ? "kv" : Type;
         }
     }
 }

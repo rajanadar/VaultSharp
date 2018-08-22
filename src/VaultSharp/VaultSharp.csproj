@@ -5,7 +5,7 @@
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>VaultSharp.snk</AssemblyOriginatorKeyFile>
-    <Version>0.10.4002</Version>
+    <Version>0.10.4003</Version>
     <Authors>Raja Nadar</Authors>
     <Copyright>Copyright ©  2019 Raja Nadar. All rights reserved.</Copyright>
     <PackageIconUrl>https://raw.githubusercontent.com/rajanadar/VaultSharp/master/VaultSharpIcon.png</PackageIconUrl>

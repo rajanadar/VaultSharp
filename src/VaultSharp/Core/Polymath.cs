@@ -64,11 +64,6 @@ namespace VaultSharp.Core
             }
         }
 
-        private HttpMessageHandler GetHttpMessageHandler()
-        {
-            return null;
-        }
-
         public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false)
         {
             await MakeVaultApiRequest<JToken>(resourcePath, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated);

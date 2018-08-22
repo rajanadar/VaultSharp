@@ -145,8 +145,8 @@ namespace VaultSharp.Samples
         private static void RunSecretsEngineSamples()
         {
             RunCubbyholeSamples();
+            RunKeyValueSamples();
 
-            // RunKeyValueSamples();
             // RunTransitSamples();
         }
 
@@ -247,25 +247,29 @@ namespace VaultSharp.Samples
 
         private static void RunKeyValueSamples()
         {
-            /*
-            // manually write a kv v1 secret
+            var path = "blah";
 
-            // env var for VAULT_TOKEN
-            // ./vault.exe secrets enable -version=1 kv
-            // ./vault.exe kv put kv/name1 my-value=s3cr3t222
-            var kv1Secret = _authenticatedVaultClient.V1.Secrets.KeyValue.V1.ReadSecretAsync("name1").Result;
-            Assert.True(kv1Secret.Data.Any());
+            var values = new Dictionary<string, object>
+            {
+                {"foo", "bar"},
+                {"foo2", 345 }
+            };
 
-            // manually write a kv v2 secret
-            var kv2Secret = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("name1").Result;
-            Assert.NotNull(kv2Secret.Data.Data);
+            _authenticatedVaultClient.V1.Secrets.KeyValue.V1.WriteSecretAsync(path, values).Wait();
 
-            var kv2Keys = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretPathListAsync("").Result;
-            Assert.True(kv2Keys.Data.Keys.Any());
+            var kv1Secret = _authenticatedVaultClient.V1.Secrets.KeyValue.V1.ReadSecretAsync(path).Result;
+            Assert.True(kv1Secret.Data.Count == 2);
 
-            var kv2metadata = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretMetadataAsync("name1").Result;
-            Assert.True(kv2metadata.Data.CurrentVersion > 0);
-            */
+            _authenticatedVaultClient.V1.Secrets.KeyValue.V1.DeleteSecretAsync(path).Wait();
+
+            //var kv2Secret = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("name1").Result;
+            //Assert.NotNull(kv2Secret.Data.Data);
+
+            //var kv2Keys = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretPathListAsync("").Result;
+            //Assert.True(kv2Keys.Data.Keys.Any());
+
+            //var kv2metadata = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretMetadataAsync("name1").Result;
+            //Assert.True(kv2metadata.Data.CurrentVersion > 0);            
         }
 
         private static void RunSystemBackendSamples()
