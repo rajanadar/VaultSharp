@@ -85,6 +85,20 @@ The following platforms are supported due to that.
 * VaultSharp supports all authentication methods supported by the Vault Service
 * Here is a sample to instantiate the vault client with each of the authentication backends.
 
+#### AliCloud Auth Method
+
+```cs
+// setup the AliCloud based auth to get the right token.
+
+IAuthMethodInfo authMethod = new AliCloudAuthMethodInfo(roleName, base64EncodedIdentityRequestUrl, base64EncodedIdentityRequestHeaders); 
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the AliCloud jwt
+```
+
 #### App Role Auth Method
 
 ```cs

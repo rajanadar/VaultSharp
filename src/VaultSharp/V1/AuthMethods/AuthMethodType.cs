@@ -10,6 +10,14 @@ namespace VaultSharp.V1.AuthMethods
     public class AuthMethodType : IEquatable<AuthMethodType>
     {
         /// <summary>
+        /// Gets the ali cloud.
+        /// </summary>
+        /// <value>
+        /// The ali cloud.
+        /// </value>
+        public static AuthMethodType AliCloud { get; } = new AuthMethodType(AuthMethodDefaultPaths.AliCloud);
+
+        /// <summary>
         /// Gets the application role.
         /// </summary>
         /// <value>

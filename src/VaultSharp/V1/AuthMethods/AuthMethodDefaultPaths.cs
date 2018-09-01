@@ -2,6 +2,7 @@
 {
     public class AuthMethodDefaultPaths
     {
+        public const string AliCloud = "alicloud";
         public const string AppRole = "approle";
         public const string AWS = "aws";
         public const string Azure = "azure";

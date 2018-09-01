@@ -1,5 +1,6 @@
 ﻿using System;
 using VaultSharp.Core;
+using VaultSharp.V1.AuthMethods.AliCloud;
 using VaultSharp.V1.AuthMethods.AppRole;
 using VaultSharp.V1.AuthMethods.AWS;
 using VaultSharp.V1.AuthMethods.Azure;
@@ -24,6 +25,8 @@ namespace VaultSharp.V1.AuthMethods
 
             Token = new TokenAuthMethodProvider(_polymath);
         }
+
+        public IAliCloudAuthMethod AliCloud => throw new NotImplementedException();
 
         public IAppRoleAuthMethod AppRole => throw new NotImplementedException();
 

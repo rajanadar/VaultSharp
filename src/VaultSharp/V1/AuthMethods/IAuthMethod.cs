@@ -1,4 +1,5 @@
-﻿using VaultSharp.V1.AuthMethods.AppRole;
+﻿using VaultSharp.V1.AuthMethods.AliCloud;
+using VaultSharp.V1.AuthMethods.AppRole;
 using VaultSharp.V1.AuthMethods.AWS;
 using VaultSharp.V1.AuthMethods.Azure;
 using VaultSharp.V1.AuthMethods.Cert;
@@ -17,6 +18,11 @@ namespace VaultSharp.V1.AuthMethods
     /// </summary>
     public interface IAuthMethod
     {
+        /// <summary>
+        /// The AliCloud Auth method.
+        /// </summary>
+        IAliCloudAuthMethod AliCloud { get; }
+
         /// <summary>
         /// 
         /// </summary>

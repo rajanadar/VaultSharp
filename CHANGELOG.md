@@ -3,6 +3,7 @@
 **FEATURES:**
 
   * Azure Secrets Engine: Add support for generating dynamic Azure credentials.
+  * AliCloud Auth Method: Support for AliCloud login tokens.
 
 ## 0.10.4003 (August 22, 2018)
 

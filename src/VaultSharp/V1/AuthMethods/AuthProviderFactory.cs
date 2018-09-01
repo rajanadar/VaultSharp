@@ -1,5 +1,6 @@
 ﻿using System;
 using VaultSharp.Core;
+using VaultSharp.V1.AuthMethods.AliCloud;
 using VaultSharp.V1.AuthMethods.AppRole;
 using VaultSharp.V1.AuthMethods.AWS;
 using VaultSharp.V1.AuthMethods.Azure;
@@ -21,6 +22,11 @@ namespace VaultSharp.V1.AuthMethods
     {
         public static IAuthMethodLoginProvider CreateAuthenticationProvider(IAuthMethodInfo authInfo, Polymath polymath)
         {
+            if (authInfo.AuthMethodType == AuthMethodType.AliCloud)
+            {
+                return new AliCloudAuthMethodLoginProvider(authInfo as AliCloudAuthMethodInfo, polymath);
+            }
+
             if (authInfo.AuthMethodType == AuthMethodType.AppRole)
             {
                 return new AppRoleAuthMethodLoginProvider(authInfo as AppRoleAuthMethodInfo, polymath);
