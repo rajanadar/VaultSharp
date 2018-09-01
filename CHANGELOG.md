@@ -1,3 +1,9 @@
+## 0.11.000 (August 31, 2018)
+
+**FEATURES:**
+
+  * Azure Secrets Engine: Add support for generating dynamic Azure credentials.
+
 ## 0.10.4003 (August 22, 2018)
 
 **FEATURES:**

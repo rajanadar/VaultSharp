@@ -5,7 +5,7 @@
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>VaultSharp.snk</AssemblyOriginatorKeyFile>
-    <Version>0.10.4003</Version>
+    <Version>0.11.000</Version>
     <Authors>Raja Nadar</Authors>
     <Copyright>Copyright ©  2019 Raja Nadar. All rights reserved.</Copyright>
     <PackageIconUrl>https://raw.githubusercontent.com/rajanadar/VaultSharp/master/VaultSharpIcon.png</PackageIconUrl>
@@ -13,7 +13,7 @@
     <PackageLicenseUrl>https://raw.githubusercontent.com/rajanadar/VaultSharp/master/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/rajanadar/VaultSharp</RepositoryUrl>
     <PackageTags>c# vault hashicorp .net netcore netstandard api secret consul kv ldap aws ec2 iam userpass</PackageTags>
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/rajanadar/VaultSharp/blob/master/CHANGELOG.md</PackageReleaseNotes>
     <Description>* The most comprehensive .NET Library for HashiCorp's Vault - A Secret Management System.
  * VaultSharp supports all Auth methods, all Secrets Engines and most System Apis.
  * It has first class support for Consul, Enterpise Vault APIs etc.

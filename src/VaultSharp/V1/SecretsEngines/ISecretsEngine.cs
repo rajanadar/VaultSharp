@@ -1,5 +1,6 @@
 ﻿using VaultSharp.V1.SecretsEngines.ActiveDirectory;
 using VaultSharp.V1.SecretsEngines.AWS;
+using VaultSharp.V1.SecretsEngines.Azure;
 using VaultSharp.V1.SecretsEngines.Consul;
 using VaultSharp.V1.SecretsEngines.Cubbyhole;
 using VaultSharp.V1.SecretsEngines.Database;
@@ -29,6 +30,11 @@ namespace VaultSharp.V1.SecretsEngines
         /// The AWS Secrets Engine.
         /// </summary>
         IAWSSecretsEngine AWS { get; }
+
+        /// <summary>
+        /// The Azure Secrets Engine.
+        /// </summary>
+        IAzureSecretsEngine Azure { get; }
 
         /// <summary>
         /// The Consul Secrets Engine.

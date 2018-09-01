@@ -367,6 +367,18 @@ var secretKey = awsCreds.Data.SecretKey;
 var securityToken = awsCreds.Data.SecurityToken;
 ```
 
+#### Azure Secrets Engine
+
+##### Generate dynamic Azure credentials
+
+ * This endpoint generates a new service principal based on the named role.
+
+```cs
+var azureCredentials = await vaultClient.V1.Secrets.Azure.GetCredentialsAsync(roleName);
+var clientId = azureCredentials.Data.ClientId;
+var clientSecret = azureCredentials.Data.ClientSecret;
+```
+
 #### Consul Secrets Engine
 
  * This endpoint generates a dynamic Consul token based on the given role definition.

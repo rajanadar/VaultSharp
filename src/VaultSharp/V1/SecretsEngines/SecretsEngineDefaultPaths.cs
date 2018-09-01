@@ -6,6 +6,7 @@
 
         public const string ActiveDirectory = "ad";
         public const string AWS = "aws";
+        public const string Azure = "azure";
         public const string Consul = "consul";
         public const string Cubbyhole = "cubbyhole";
         public const string Database = "database";

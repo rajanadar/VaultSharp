@@ -2,6 +2,7 @@
 using VaultSharp.Core;
 using VaultSharp.V1.SecretsEngines.ActiveDirectory;
 using VaultSharp.V1.SecretsEngines.AWS;
+using VaultSharp.V1.SecretsEngines.Azure;
 using VaultSharp.V1.SecretsEngines.Consul;
 using VaultSharp.V1.SecretsEngines.Cubbyhole;
 using VaultSharp.V1.SecretsEngines.Database;
@@ -27,6 +28,7 @@ namespace VaultSharp.V1.SecretsEngines
 
             ActiveDirectory = new ActiveDirectorySecretsEngineProvider(polymath);
             AWS = new AWSSecretsEngineProvider(polymath);
+            Azure = new AzureSecretsEngineProvider(polymath);
             Consul = new ConsulSecretsEngineProvider(polymath);
             Cubbyhole = new CubbyholeSecretsEngineProvider(polymath);
             Database = new DatabaseSecretsEngineProvider(polymath);
@@ -43,6 +45,8 @@ namespace VaultSharp.V1.SecretsEngines
         public IActiveDirectorySecretsEngine ActiveDirectory { get; }
 
         public IAWSSecretsEngine AWS { get; }
+
+        public IAzureSecretsEngine Azure { get; }
 
         public IConsulSecretsEngine Consul { get; }
 
