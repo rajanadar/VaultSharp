@@ -3,7 +3,9 @@ VaultSharp
 
 A cross-platform .NET Library for HashiCorp's Vault - A Secret Management System.
 
-**VaultSharp Latest release: [0.10.4003](https://www.nuget.org/packages/VaultSharp) [Install-Package VaultSharp -Version 0.10.4003]**
+**VaultSharp Latest release: [0.11.0](https://www.nuget.org/packages/VaultSharp) [Install-Package VaultSharp -Version 0.11.0]**
+
+**VaultSharp Latest Documentation:** Inline Below and also at: http://rajanadar.github.io/VaultSharp/
 
 **VaultSharp Gitter Lobby:** [Gitter Lobby](https://gitter.im/rajanadar-VaultSharp/Lobby)
 
@@ -82,6 +84,20 @@ The following platforms are supported due to that.
 
 * VaultSharp supports all authentication methods supported by the Vault Service
 * Here is a sample to instantiate the vault client with each of the authentication backends.
+
+#### AliCloud Auth Method
+
+```cs
+// setup the AliCloud based auth to get the right token.
+
+IAuthMethodInfo authMethod = new AliCloudAuthMethodInfo(roleName, base64EncodedIdentityRequestUrl, base64EncodedIdentityRequestHeaders); 
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the AliCloud jwt
+```
 
 #### App Role Auth Method
 
@@ -363,6 +379,18 @@ var awsCreds = await vaultClient.V1.Secrets.AWS.GenerateSTSCredentialsAsync(role
 var accessKey = awsCreds.Data.AccessKey;
 var secretKey = awsCreds.Data.SecretKey;
 var securityToken = awsCreds.Data.SecurityToken;
+```
+
+#### Azure Secrets Engine
+
+##### Generate dynamic Azure credentials
+
+ * This endpoint generates a new service principal based on the named role.
+
+```cs
+var azureCredentials = await vaultClient.V1.Secrets.Azure.GetCredentialsAsync(roleName);
+var clientId = azureCredentials.Data.ClientId;
+var clientSecret = azureCredentials.Data.ClientSecret;
 ```
 
 #### Consul Secrets Engine
