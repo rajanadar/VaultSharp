@@ -3,7 +3,7 @@ VaultSharp
 
 A cross-platform .NET Library for HashiCorp's Vault - A Secret Management System.
 
-**VaultSharp Latest release: [0.10.4003](https://www.nuget.org/packages/VaultSharp) [Install-Package VaultSharp -Version 0.10.4003]**
+**VaultSharp Latest release: [0.11.0](https://www.nuget.org/packages/VaultSharp) [Install-Package VaultSharp -Version 0.11.0]**
 
 **VaultSharp Latest Documentation:** Inline Below and also at: http://rajanadar.github.io/VaultSharp/
 
@@ -732,7 +732,7 @@ Additional documentation coming soon...
 * The Vault service is evolving constantly and the Hashicorp team is rapidly working on it.
 * Pretty soon, they should have an 1.0.0 version of the Vault Service from Hashicorp.
 * Because this client library is intended to facilititate the Vault Service operations, this library makes it easier for its consumers to relate to the Vault service it supports.
-* Hence a version of 0.10.x denotes that this library will support the Vault 0.10.x Service Apis.
+* Hence a version of 0.11.x denotes that this library will support the Vault 0.11.x Service Apis.
 * Tomorrow when Vault Service gets upgraded to 1.0.0, this library will be modified accordingly and versioned as 1.0.0
 
 ### Can I use it in my PowerShell Automation?
