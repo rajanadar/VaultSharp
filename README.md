@@ -48,6 +48,49 @@ var consulCreds = await vaultClient.V1.Secrets.Consul.GetCredentialsAsync(consul
 var consulToken = consulCredentials.Data.Token;
 ```
 
+### How to reuse Vault Client Token?
+
+* **TLDR:** The same Vault Client Token will be intelligently **reused** for the lifetime of the client.
+* **NOTE:** The Vault Client Token is lazy loaded; it becomes available via the ReturnedLoginAuthInfo method once the first Vault API is requested.
+Example:
+```cs
+ // Setup Vault Client via Github Auth Method
+ IAuthMethodInfo authMethod = new GitHubAuthMethodInfo(personalAccessToken);
+ var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+ 
+ // If the token is attempted to be read at this time; it is null as it is lazy loaded on first Vault API call
+ // var token = authMethod.ReturnedLoginAuthInfo.ClientToken; -->null!
+
+ // Use client to read a key-value secret and trigger the load of ClientToken
+var kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("secret-name");
+ // now ReturnedLoginAuthInfo method will provide a valid ClientToken for further use
+ var token = authMethod.ReturnedLoginAuthInfo.ClientToken;
+```
+* The Vault Client Token can be persisted and shared across clients via a store like Redis. Redis TTL capabilities can be leveraged so that the token will be expired automatically using the returned LeaseDurationSeconds value.
+**Pseudo-code** flow could be like below:
+```cs
+ // Start Vault Client initialization
+ if VaultClient initialized => continue 
+ // Vault Client Token not found in Redis
+ // or within 1 hour of expiring
+ if NotExistOrNearlyExpireToken(appName) {
+    settingFromGithubAuth <= LoginWithPersonalToken(pToken)
+    NewVaultClient(settingFromGithubAuth)
+ } else {
+    vToken <= ReadFromRedis(appName)
+    settingFromToken <= LoginWithClientToken(vToken)
+    NewVaultClient(settingFromToken)
+ }
+ // Dummy operation so token will be loaded
+ ReadSecretsKV("secret-name")
+ // Persist token with TTL into Redis
+ token <= authMethod.ReturnedLoginAuthInfo.ClientToken
+ ttls <= authMethod.ReturnedLoginAuthInfo.LeaseDurationSeconds
+ StoreToRedis(token, ttls)
+ // End Vault Client initialization
+```
+
 ### Gist of the features
 
  * VaultSharp 0.10.x supports 
