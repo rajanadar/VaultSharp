@@ -29,6 +29,30 @@ namespace VaultSharp.V1.AuthMethods.AWS
         public string HttpRequestMethod { get; }
 
         /// <summary>
+        /// Gets the Base64-encoded HTTP URL used in the signed request. 
+        /// Most likely just aHR0cHM6Ly9zdHMuYW1hem9uYXdzLmNvbS8= (base64-encoding of https://sts.amazonaws.com/) as most 
+        /// requests will probably use POST with an empty URI.
+        /// This is required when using the iam auth method.
+        /// </summary>
+        /// <value>
+        /// The Request Url used in the signed request.
+        /// </value>
+        [JsonProperty("iam_request_url")]
+        public string RequestUrl { get; }
+
+        /// <summary>
+        /// Gets the Base64-encoded HTTP body used in the signed request. 
+        /// Most likely QWN0aW9uPUdldENhbGxlcklkZW50aXR5JlZlcnNpb249MjAxMS0wNi0xNQ== which is the base64 encoding of 
+        /// Action=GetCallerIdentity&Version=2011-06-15
+        /// This is required when using the iam auth method.
+        /// </summary>
+        /// <value>
+        /// The Request Url used in the signed request.
+        /// </value>
+        [JsonProperty("iam_request_body")]
+        public string RequestBody { get; }
+
+        /// <summary>
         /// Gets the Base64-encoded, JSON-serialized representation of the sts:GetCallerIdentity HTTP request headers. 
         /// The JSON serialization assumes that each header key maps to either a string value or an array of string 
         /// values (though the length of that array will probably only be one). 
@@ -52,6 +76,19 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// Currently only POST is supported, but other methods may be supported in the future. 
         /// This is required when using the iam auth method.
         /// </param>
+        /// <param name="requestUrl">
+        /// <para>[required]</para>
+        /// Base64-encoded HTTP URL used in the signed request. 
+        /// Most likely just aHR0cHM6Ly9zdHMuYW1hem9uYXdzLmNvbS8= (base64-encoding of https://sts.amazonaws.com/) as 
+        /// most requests will probably use POST with an empty URI. 
+        /// This is required when using the iam auth method.
+        /// </param>
+        /// <param name="requestBody">
+        /// <para>[required]</para>
+        /// Base64-encoded body of the signed request. Most likely QWN0aW9uPUdldENhbGxlcklkZW50aXR5JlZlcnNpb249MjAxMS0wNi0xNQ== 
+        /// which is the base64 encoding of Action=GetCallerIdentity&Version=2011-06-15.
+        /// This is required when using the iam auth method.
+        /// </param>
         /// <param name="requestHeaders">
         /// <para>[required]</para>
         /// The Base64-encoded, JSON-serialized representation of the sts:GetCallerIdentity HTTP request headers. 
@@ -87,8 +124,8 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// of the IAM principal authenticated.. 
         /// If a matching role is not found, login fails.
         /// </param>
-        public IAMAWSAuthMethodInfo(string httpRequestMethod = "POST", string requestHeaders = "QWN0aW9uPUdldENhbGxlcklkZW50aXR5JlZlcnNpb249MjAxMS0wNi0xNQ==", string nonce = null, string roleName = null)
-            : this(AuthMethodType.AWS.Type, httpRequestMethod, requestHeaders, nonce, roleName)
+        public IAMAWSAuthMethodInfo(string httpRequestMethod = "POST", string requestUrl = "aHR0cHM6Ly9zdHMuYW1hem9uYXdzLmNvbS8=", string requestBody = "QWN0aW9uPUdldENhbGxlcklkZW50aXR5JlZlcnNpb249MjAxMS0wNi0xNQ==", string requestHeaders = "QWN0aW9uPUdldENhbGxlcklkZW50aXR5JlZlcnNpb249MjAxMS0wNi0xNQ==", string nonce = null, string roleName = null)
+            : this(AuthMethodType.AWS.Type, httpRequestMethod, requestUrl, requestBody, requestHeaders, nonce, roleName)
         {
         }
 
@@ -102,6 +139,19 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// Currently only POST is supported, but other methods may be supported in the future. 
         /// This is required when using the iam auth method.
         /// </param>
+        /// <param name="requestUrl">
+        /// <para>[required]</para>
+        /// Base64-encoded HTTP URL used in the signed request. 
+        /// Most likely just aHR0cHM6Ly9zdHMuYW1hem9uYXdzLmNvbS8= (base64-encoding of https://sts.amazonaws.com/) as 
+        /// most requests will probably use POST with an empty URI. 
+        /// This is required when using the iam auth method.
+        /// </param>
+        /// <param name="requestBody">
+        /// <para>[required]</para>
+        /// Base64-encoded body of the signed request. Most likely QWN0aW9uPUdldENhbGxlcklkZW50aXR5JlZlcnNpb249MjAxMS0wNi0xNQ== 
+        /// which is the base64 encoding of Action=GetCallerIdentity&Version=2011-06-15.
+        /// This is required when using the iam auth method.
+        /// </param>
         /// <param name="requestHeaders">
         /// <para>[required]</para>
         /// The Base64-encoded, JSON-serialized representation of the sts:GetCallerIdentity HTTP request headers. 
@@ -137,13 +187,17 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// of the IAM principal authenticated.. 
         /// If a matching role is not found, login fails.
         /// </param>
-        public IAMAWSAuthMethodInfo(string mountPoint, string httpRequestMethod = "POST", string requestHeaders = "QWN0aW9uPUdldENhbGxlcklkZW50aXR5JlZlcnNpb249MjAxMS0wNi0xNQ==", string nonce = null, string roleName = null)
+        public IAMAWSAuthMethodInfo(string mountPoint, string httpRequestMethod = "POST", string requestUrl = "aHR0cHM6Ly9zdHMuYW1hem9uYXdzLmNvbS8=", string requestBody = "QWN0aW9uPUdldENhbGxlcklkZW50aXR5JlZlcnNpb249MjAxMS0wNi0xNQ==", string requestHeaders = "QWN0aW9uPUdldENhbGxlcklkZW50aXR5JlZlcnNpb249MjAxMS0wNi0xNQ==", string nonce = null, string roleName = null)
             : base(mountPoint, nonce, roleName)
         {
             Checker.NotNull(httpRequestMethod, "httpRequestMethod");
+            Checker.NotNull(requestUrl, "requestUrl");
+            Checker.NotNull(requestBody, "requestBody");
             Checker.NotNull(requestHeaders, "requestHeaders");
 
             HttpRequestMethod = httpRequestMethod;
+            RequestUrl = requestUrl;
+            RequestBody = requestBody;
             RequestHeaders = requestHeaders;
         }
     }

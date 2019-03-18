@@ -1,3 +1,9 @@
+## 0.11.1-beta1 (March 17, 2019)
+
+**BUG FIXES:**
+
+  * Fixes [GH-61] to supply all the necessary values for IAM Auth login.
+
 ## 0.11.0 (August 31, 2018)
 
 **FEATURES:**
