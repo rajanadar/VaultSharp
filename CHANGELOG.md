@@ -1,3 +1,10 @@
+## 0.11.1000 (April 15, 2019)
+
+**BUG FIXES:**
+
+  * Fixes [GH-67] to read array of ca_chain instead of single string.
+  * Removed the misleading default value in IAM Auth requestHeaders. Caller needs to explicitly pass a list of signed IAM STS Headers. Please see docs to generate this.
+
 ## 0.11.1-beta1 (March 17, 2019)
 
 **BUG FIXES:**

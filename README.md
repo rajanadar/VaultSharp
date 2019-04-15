@@ -149,7 +149,44 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 ```cs
 // setup the AWS-IAM based auth to get the right token.
 
-IAuthMethodInfo authMethod = new IAMAWSAuthMethodInfo(nonce, roleName); // uses default requestHeaders
+// Step 1: Pull the following NuGet Packages
+
+// 1. AWSSDK.Core
+// 2. AWSSDK.SecurityToken
+
+// Step 2: Boiler-plate code to generate the Signed AWS STS Headers.
+
+var amazonSecurityTokenServiceConfig = new AmazonSecurityTokenServiceConfig();
+
+// If you are running VaultSharp on a real EC2 instance, use the following line of code.
+// var awsCredentials = new InstanceProfileAWSCredentials();
+
+// If you are running VaultSharp on a non-EC2 instance like local dev boxes or non-AWS environment, use the following line of code.
+
+AWSCredentials awsCredentials = new StoredProfileAWSCredentials(); // picks up the credentials from your profile.
+// AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey: "YOUR_ACCESS_KEY", secretKey: "YOUR_SECRET_KEY"); // explicit credentials
+
+var iamRequest = GetCallerIdentityRequestMarshaller.Instance.Marshall(new GetCallerIdentityRequest());
+
+iamRequest.Endpoint = new Uri(amazonSecurityTokenServiceConfig.DetermineServiceURL());
+iamRequest.ResourcePath = "/";
+
+iamRequest.Headers.Add("User-Agent", "https://github.com/rajanadar/vaultsharp/0.11.1000");
+iamRequest.Headers.Add("X-Amz-Security-Token", awsCredentials.GetCredentials().Token);
+iamRequest.Headers.Add("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+
+new AWS4Signer().Sign(iamRequest, amazonSecurityTokenServiceConfig, new RequestMetrics(), awsCredentials.GetCredentials().AccessKey, awsCredentials.GetCredentials().SecretKey);
+
+// This is the point, when you have the final set of required Headers.
+var iamSTSRequestHeaders = iamRequest.Headers;
+
+// Step 3: Convert the headers into a base64 value needed by Vault.
+
+var base64EncodedIamRequestHeaders = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(iamSTSRequestHeaders)));
+
+// Step 4: Setup the IAM AWS Auth Info.
+
+IAuthMethodInfo authMethod = new IAMAWSAuthMethodInfo(nonce, roleName, base64EncodedIamRequestHeaders);
 var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
 
 IVaultClient vaultClient = new VaultClient(vaultClientSettings);
