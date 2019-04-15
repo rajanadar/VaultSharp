@@ -41,7 +41,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The content of the ca chain.
         /// </value>
         [JsonProperty("ca_chain")]
-        public string CAChainContent { get; set; }
+        public string[] CAChainContent { get; set; }
 
         /// <summary>
         /// Gets or sets the serial number.
