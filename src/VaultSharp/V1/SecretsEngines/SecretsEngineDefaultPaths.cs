@@ -11,7 +11,8 @@
         public const string Cubbyhole = "cubbyhole";
         public const string Database = "database";
         public const string GoogleCloud = "gcp";
-        public const string KeyValue = "secret";
+        public const string KeyValueV2 = "secret";
+        public const string KeyValueV1 = "kv";
         public const string Identity = "identity";
         public const string Nomad = "nomad";
         public const string PKI = "pki";
