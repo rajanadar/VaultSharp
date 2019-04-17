@@ -41,11 +41,11 @@ var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200"
 IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // Use client to read a key-value secret.
-var kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("secret-name");
+Secret<SecretData> kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("secret-name");
 
 // Generate a dynamic Consul credential
-var consulCreds = await vaultClient.V1.Secrets.Consul.GetCredentialsAsync(consulRole, consulMount);	
-var consulToken = consulCredentials.Data.Token;
+Secret<ConsulCredentials> consulCreds = await vaultClient.V1.Secrets.Consul.GetCredentialsAsync(consulRole, consulMount);	
+string consulToken = consulCredentials.Data.Token;
 ```
 
 ### Gist of the features
@@ -389,8 +389,8 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
  * This method offers the credential information for a given role.
 
  ```cs	
-var adCreds = await vaultClient.V1.Secrets.ActiveDirectory.GetCredentialsAsync(role);
-var currentPassword = adCreds.Data.CurrentPassword;
+Secret<ActiveDirectoryCredentials> adCreds = await vaultClient.V1.Secrets.ActiveDirectory.GetCredentialsAsync(role);
+string currentPassword = adCreds.Data.CurrentPassword;
 ```
 
 #### AWS Secrets Engine
@@ -400,11 +400,11 @@ var currentPassword = adCreds.Data.CurrentPassword;
  * This endpoint generates dynamic IAM credentials based on the named role.
 
  ```cs	
-var awsCreds = await vaultClient.V1.Secrets.AWS.GetCredentialsAsync(role);
+Secret<AWSCredentials> awsCreds = await vaultClient.V1.Secrets.AWS.GetCredentialsAsync(role);
 
-var accessKey = awsCreds.Data.AccessKey;
-var secretKey = awsCreds.Data.SecretKey;
-var securityToken = awsCreds.Data.SecurityToken;
+string accessKey = awsCreds.Data.AccessKey;
+string secretKey = awsCreds.Data.SecretKey;
+string securityToken = awsCreds.Data.SecurityToken;
 ```
 
 ##### Generate IAM Credentials with STS
@@ -412,11 +412,11 @@ var securityToken = awsCreds.Data.SecurityToken;
  * This generates a dynamic IAM credential with an STS token based on the named role.
 
  ```cs	
-var awsCreds = await vaultClient.V1.Secrets.AWS.GenerateSTSCredentialsAsync(role, ttl);
+Secret<AWSCredentials> awsCreds = await vaultClient.V1.Secrets.AWS.GenerateSTSCredentialsAsync(role, ttl);
 
-var accessKey = awsCreds.Data.AccessKey;
-var secretKey = awsCreds.Data.SecretKey;
-var securityToken = awsCreds.Data.SecurityToken;
+string accessKey = awsCreds.Data.AccessKey;
+string secretKey = awsCreds.Data.SecretKey;
+string securityToken = awsCreds.Data.SecurityToken;
 ```
 
 #### Azure Secrets Engine
@@ -426,9 +426,9 @@ var securityToken = awsCreds.Data.SecurityToken;
  * This endpoint generates a new service principal based on the named role.
 
 ```cs
-var azureCredentials = await vaultClient.V1.Secrets.Azure.GetCredentialsAsync(roleName);
-var clientId = azureCredentials.Data.ClientId;
-var clientSecret = azureCredentials.Data.ClientSecret;
+Secret<AzureCredentials> azureCredentials = await vaultClient.V1.Secrets.Azure.GetCredentialsAsync(roleName);
+string clientId = azureCredentials.Data.ClientId;
+string clientSecret = azureCredentials.Data.ClientSecret;
 ```
 
 #### Consul Secrets Engine
@@ -437,8 +437,8 @@ var clientSecret = azureCredentials.Data.ClientSecret;
 
 ```cs
 // Generate a dynamic Consul credential
-var consulCreds = await vaultClient.V1.Secrets.Consul.GetCredentialsAsync(consulRole);	
-var consulToken = consulCredentials.Data.Token;
+Secret<ConsulCredentials> consulCreds = await vaultClient.V1.Secrets.Consul.GetCredentialsAsync(consulRole);	
+string consulToken = consulCredentials.Data.Token;
 ```
 
 #### Cubbyhole Secrets Engine
@@ -448,8 +448,8 @@ var consulToken = consulCredentials.Data.Token;
  * This endpoint retrieves the secret at the specified location.
 
  ```cs	
-var secret = await vaultClient.V1.Secrets.Cubbyhole.ReadSecretAsync(secretPath);
-var secretValues = secret.Data;
+Secret<Dictionary<string, object>> secret = await vaultClient.V1.Secrets.Cubbyhole.ReadSecretAsync(secretPath);
+Dictionary<string, object> secretValues = secret.Data;
 ```
 
 ##### List Secrets
@@ -459,8 +459,8 @@ var secretValues = secret.Data;
  * The values themselves are not accessible via this command.
 
  ```cs	
-var secret = await vaultClient.V1.Secrets.Cubbyhole.ReadSecretPathsAsync(folderPath);
-var paths = secret.Data;
+Secret<ListInfo> secret = await vaultClient.V1.Secrets.Cubbyhole.ReadSecretPathsAsync(folderPath);
+ListInfo paths = secret.Data;
 ```
 
 ##### Create/Update Secret
@@ -487,9 +487,9 @@ await vaultClient.V1.Secrets.Cubbyhole.DeleteSecretAsync(secretPath);
  * This endpoint generates a new set of dynamic credentials based on the named role.
 
  ```cs	
-var dbCreds = await vaultClient.V1.Secrets.Database.GetCredentialsAsync(role);
-var username = dbCreds.Data.Username;
-var password = dbCreds.Data.Password;
+Secret<UsernamePasswordCredentials> dbCreds = await vaultClient.V1.Secrets.Database.GetCredentialsAsync(role);
+string username = dbCreds.Data.Username;
+string password = dbCreds.Data.Password;
 ```
 
 #### Google Cloud Secrets Engine
@@ -499,16 +499,16 @@ var password = dbCreds.Data.Password;
  * Generates an OAuth2 token with the scopes defined on the roleset. This OAuth access token can be used in GCP API calls
 
  ```cs	
-var oauthSecret = await vaultClient.V1.Secrets.GoogleCloud.GenerateOAuth2TokenAsync(roleset);
-var token = oauthSecret.Data.Token;
+Secret<GoogleCloudOAuth2Token> oauthSecret = await vaultClient.V1.Secrets.GoogleCloud.GetOAuth2TokenAsync(roleset);
+string token = oauthSecret.Data.Token;
 ```
 ##### Generate Secret (IAM Service Account Creds): Service Account Key
 
  * Generates a service account key.
 
  ```cs	
-var privateKeySecret = await vaultClient.V1.Secrets.GoogleCloud.GenerateServiceAccountKeyAsync(roleset, keyAlgorithm, privateKeyType);
-var privateKeyData = privateKeySecret.Data.Base64EncodedPrivateKeyData;
+Secret<GoogleCloudServiceAccountKey> privateKeySecret = await vaultClient.V1.Secrets.GoogleCloud.GenerateServiceAccountKeyAsync(roleset, keyAlgorithm, privateKeyType);
+string privateKeyData = privateKeySecret.Data.Base64EncodedPrivateKeyData;
 ```
 
 #### Key Value Secrets Engine
@@ -535,7 +535,7 @@ await vaultClient.V1.Secrets.KeyValue.V1.WriteSecretAsync(secretPath, value);
 
 ```cs
 // Use client to read a v1 key-value secret.
-var kv1Secret = await vaultClient.V1.Secrets.KeyValue.V1.ReadSecretAsync("v1-secret-name");
+Secret<Dictionary<string, object>> kv1Secret = await vaultClient.V1.Secrets.KeyValue.V1.ReadSecretAsync("v1-secret-name");
 Dictionary<string, object> dataDictionary = kv1Secret.Data;
 ```
 
@@ -547,8 +547,8 @@ Dictionary<string, object> dataDictionary = kv1Secret.Data;
  * The values themselves are not accessible via this command.
 
  ```cs	
-var secret = await vaultClient.V1.Secrets.KeyValue.V1.ReadSecretsAsync(path);
-var paths = secret.Data;
+Secret<ListInfo> secret = await vaultClient.V1.Secrets.KeyValue.V1.ReadSecretPathsAsync(path);
+ListInfo paths = secret.Data;
 ```
 
 ###### Delete Secret
@@ -578,7 +578,7 @@ await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync(secretPath, value, che
 
 ```cs
 // Use client to read a v2 key-value secret.
-var kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("v2-secret-name");
+Secret<Dictionary<string, object>> kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("v2-secret-name");
 Dictionary<string, object> dataDictionary = kv2Secret.Data;
 ```
 
@@ -587,7 +587,7 @@ Dictionary<string, object> dataDictionary = kv2Secret.Data;
  * Reads the secret metadata at the specified location returning.
 
 ```cs
-var kv2SecretMetadata = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretMetadataAsync("v1-secret-name");
+Secret<FullSecretMetadata> kv2SecretMetadata = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretMetadataAsync("v1-secret-name");
 ```
 
 ###### List Secrets
@@ -598,8 +598,8 @@ var kv2SecretMetadata = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretMetad
  * The values themselves are not accessible via this command.
 
  ```cs	
-var secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretsAsync(path);
-var paths = secret.Data;
+Secret<ListInfo> secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretPathsAsync(path);
+ListInfo paths = secret.Data;
 ```
 
 ###### Destroy Secret
@@ -621,18 +621,18 @@ Coming soon...
  * Generates a dynamic Nomad token based on the given role definition.
 
 ```cs
-var nomadCredentials = await vaultClient.V1.Secrets.Nomad.GetCredentialsAsync(roleName);
-var accessorId = nomadCredentials.Data.AccessorId;
-var secretId = nomadCredentials.Data.SecretId;
+Secret<NomadCredentials> nomadCredentials = await vaultClient.V1.Secrets.Nomad.GetCredentialsAsync(roleName);
+string accessorId = nomadCredentials.Data.AccessorId;
+string secretId = nomadCredentials.Data.SecretId;
 ```
 
 #### PKI (Cerificates) Secrets Engine
 
 ```cs
 var certificateCredentialsRequestOptions = new CertificateCredentialsRequestOptions { // initialize };
-var certSecret = await vaultClient.V1.Secrets.PKI.GetCredentialsAsync(pkiRoleName, certificateCredentialsRequestOptions);
+Secret<CertificateCredentials> certSecret = await vaultClient.V1.Secrets.PKI.GetCredentialsAsync(pkiRoleName, certificateCredentialsRequestOptions);
 
-var privateKeyContent = certSecret.Data.PrivateKeyContent;
+string privateKeyContent = certSecret.Data.PrivateKeyContent;
 ```
 
 #### RabbitMQ Secrets Engine
@@ -642,9 +642,9 @@ var privateKeyContent = certSecret.Data.PrivateKeyContent;
  * This endpoint generates a new set of dynamic credentials based on the named role.
 
  ```cs	
-var secret = await vaultClient.V1.Secrets.RabbitMQ.GetCredentialsAsync(role);
-var username = secret.Data.Username;
-var password = secret.Data.Password;
+Secret<UsernamePasswordCredentials> secret = await vaultClient.V1.Secrets.RabbitMQ.GetCredentialsAsync(role);
+string username = secret.Data.Username;
+string password = secret.Data.Password;
 ```
 
 #### SSH Secrets Engine
@@ -654,8 +654,8 @@ var password = secret.Data.Password;
  * This endpoint creates credentials for a specific username and IP with the parameters defined in the given role.
 
  ```cs	
-var sshCreds = await vaultClient.V1.Secrets.SSH.GetCredentialsAsync(role, ipAddress, username);
-var sshKey = sshCreds.Data.Key;
+Secret<SSHCredentials> sshCreds = await vaultClient.V1.Secrets.SSH.GetCredentialsAsync(role, ipAddress, username);
+string sshKey = sshCreds.Data.Key;
 ```
 
 #### TOTP Secrets Engine
@@ -665,8 +665,8 @@ var sshKey = sshCreds.Data.Key;
 This endpoint generates a new time-based one-time use password based on the named key.
 
 ```cs
-var totpSecret = await vaultClient.V1.Secrets.TOTP.GetCodeAsync(keyName);
-var code = totpSecret.Data.Code;
+Secret<TOTPCode> totpSecret = await vaultClient.V1.Secrets.TOTP.GetCodeAsync(keyName);
+string code = totpSecret.Data.Code;
 ```
 
 ##### Validate Code
@@ -674,8 +674,8 @@ var code = totpSecret.Data.Code;
 This endpoint validates a time-based one-time use password generated from the named key.
 
 ```cs
-var totpValidity = await vaultClient.V1.Secrets.TOTP.ValidateCodeAsync(keyName, code);
-var valid = totpValidity.Data.Valid;
+Secret<TOTPCodeValidity> totpValidity = await vaultClient.V1.Secrets.TOTP.ValidateCodeAsync(keyName, code);
+bool valid = totpValidity.Data.Valid;
 ```
 
 #### Transit Secrets Engine
@@ -698,8 +698,8 @@ var encryptOptions = new EncryptRequestOptions
     Base64EncodedContext = encodedContext,
 };
 
-var encryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.EncryptAsync(keyName, encryptOptions);
-var cipherText = encryptionResponse.Data.CipherText;
+Secret<EncryptionResponse> encryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.EncryptAsync(keyName, encryptOptions);
+string cipherText = encryptionResponse.Data.CipherText;
 ```
 
 ###### Encrypt Batched Items
@@ -715,8 +715,8 @@ var encryptOptions = new EncryptRequestOptions
     }
 };
 
-var encryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.EncryptAsync(keyName, encryptOptions);
-var firstCipherText = encryptionResponse.Data.BatchedResults.First().CipherText;
+Secret<EncryptionResponse> encryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.EncryptAsync(keyName, encryptOptions);
+string firstCipherText = encryptionResponse.Data.BatchedResults.First().CipherText;
 ```
 
 ##### Decrypt Method
@@ -730,8 +730,8 @@ var decryptOptions = new DecryptRequestOptions
     Base64EncodedContext = encodedContext,
 };
 
-var decryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions);
-var encodedPlainText = decryptionResponse.Data.Base64EncodedPlainText;
+Secret<DecryptionResponse> decryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions);
+string encodedPlainText = decryptionResponse.Data.Base64EncodedPlainText;
 ```
 
 ###### Decrypt Batched Item
@@ -747,8 +747,8 @@ var decryptOptions = new DecryptRequestOptions
     }
 };
 
-var decryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions);
-var firstEncodedPlainText = decryptionResponse.Data.BatchedResults.First().Base64EncodedPlainText;
+Secret<DecryptionResponse> decryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions);
+string firstEncodedPlainText = decryptionResponse.Data.BatchedResults.First().Base64EncodedPlainText;
 ```
 
 ### System Backend

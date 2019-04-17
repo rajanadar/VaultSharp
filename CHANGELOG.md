@@ -1,3 +1,9 @@
+## 0.11.1001 (Unknown)
+
+**DOC IMPROVEMENTS:**
+
+  * Fixes [GH-57]. Replaced the use of ```var``` in docs with type info, where the type is hard to infer.
+
 ## 0.11.1000 (April 15, 2019)
 
 **BUG FIXES:**
