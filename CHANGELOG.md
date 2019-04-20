@@ -1,5 +1,10 @@
 ## 0.11.1001 (Unknown)
 
+**BUG FIXES:**
+
+  * Fixes default path of KeyValue version 1 to be kv.
+  * Fixes a bug with IAM Login, for the shorter overload of the ```IAMAWSAuthMethodInfo``` class. Fixes [GH-61].
+
 **DOC IMPROVEMENTS:**
 
   * Fixes [GH-57]. Replaced the use of ```var``` in docs with type info, where the type is hard to infer.

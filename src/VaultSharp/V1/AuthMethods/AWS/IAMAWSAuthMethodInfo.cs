@@ -70,6 +70,17 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// <summary>
         /// Initializes a new instance of the <see cref="IAMAWSAuthMethodInfo"/> class.
         /// </summary>
+        /// <param name="requestHeaders">
+        /// <para>[required]</para>
+        /// The Base64-encoded, JSON-serialized representation of the sts:GetCallerIdentity HTTP request headers. 
+        /// The JSON serialization assumes that each header key maps to either a string value or an array of string 
+        /// values (though the length of that array will probably only be one). 
+        /// If the iam_server_id_header_value is configured in Vault for the aws auth mount, 
+        /// then the headers must include the X-Vault-AWS-IAM-Server-ID header, 
+        /// its value must match the value configured, and the header must be included in the signed headers. 
+        /// This is required when using the iam auth method.
+        /// Please see <see cref="https://github.com/rajanadar/VaultSharp/blob/master/README.md#aws-auth-method---iam"/> on how to construct this.
+        /// </param>
         /// <param name="httpRequestMethod">
         /// <para>[required]</para>
         /// The HTTP method used in the signed request. 
@@ -87,16 +98,6 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// <para>[required]</para>
         /// Base64-encoded body of the signed request. Most likely QWN0aW9uPUdldENhbGxlcklkZW50aXR5JlZlcnNpb249MjAxMS0wNi0xNQ== 
         /// which is the base64 encoding of Action=GetCallerIdentity&Version=2011-06-15.
-        /// This is required when using the iam auth method.
-        /// </param>
-        /// <param name="requestHeaders">
-        /// <para>[required]</para>
-        /// The Base64-encoded, JSON-serialized representation of the sts:GetCallerIdentity HTTP request headers. 
-        /// The JSON serialization assumes that each header key maps to either a string value or an array of string 
-        /// values (though the length of that array will probably only be one). 
-        /// If the iam_server_id_header_value is configured in Vault for the aws auth mount, 
-        /// then the headers must include the X-Vault-AWS-IAM-Server-ID header, 
-        /// its value must match the value configured, and the header must be included in the signed headers. 
         /// This is required when using the iam auth method.
         /// </param>
         /// <param name="nonce">
@@ -124,8 +125,8 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// of the IAM principal authenticated.. 
         /// If a matching role is not found, login fails.
         /// </param>
-        public IAMAWSAuthMethodInfo(string httpRequestMethod = "POST", string requestUrl = "aHR0cHM6Ly9zdHMuYW1hem9uYXdzLmNvbS8=", string requestBody = "QWN0aW9uPUdldENhbGxlcklkZW50aXR5JlZlcnNpb249MjAxMS0wNi0xNQ==", string requestHeaders = "QWN0aW9uPUdldENhbGxlcklkZW50aXR5JlZlcnNpb249MjAxMS0wNi0xNQ==", string nonce = null, string roleName = null)
-            : this(AuthMethodType.AWS.Type, httpRequestMethod, requestUrl, requestBody, requestHeaders, nonce, roleName)
+        public IAMAWSAuthMethodInfo(string requestHeaders, string httpRequestMethod = "POST", string requestUrl = "aHR0cHM6Ly9zdHMuYW1hem9uYXdzLmNvbS8=", string requestBody = "QWN0aW9uPUdldENhbGxlcklkZW50aXR5JlZlcnNpb249MjAxMS0wNi0xNQ==", string nonce = null, string roleName = null)
+            : this(AuthMethodType.AWS.Type, requestHeaders, httpRequestMethod, requestUrl, requestBody, nonce, roleName)
         {
         }
 

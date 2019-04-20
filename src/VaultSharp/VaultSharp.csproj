@@ -5,12 +5,11 @@
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>VaultSharp.snk</AssemblyOriginatorKeyFile>
-    <Version>0.11.1000</Version>
+    <Version>0.11.1001</Version>
     <Authors>Raja Nadar</Authors>
     <Copyright>Copyright ©  2019 Raja Nadar. All rights reserved.</Copyright>
     <PackageIconUrl>https://raw.githubusercontent.com/rajanadar/VaultSharp/master/VaultSharpIcon.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/rajanadar/VaultSharp</PackageProjectUrl>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/rajanadar/VaultSharp/master/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/rajanadar/VaultSharp</RepositoryUrl>
     <PackageTags>c# vault hashicorp .net netcore netstandard api secret consul kv ldap aws ec2 iam userpass</PackageTags>
     <PackageReleaseNotes>https://github.com/rajanadar/VaultSharp/blob/master/CHANGELOG.md</PackageReleaseNotes>
@@ -22,8 +21,8 @@
  * This library is built with .NET Standard 1.3 &amp; .NET 4.5 and hence is cross-platform across .NET Core 1.0, .NET 4.5 and more, Xamarin iOS, Android, Mac, UWP etc.</Description>
     <RepositoryType>Github</RepositoryType>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>0.11.1000.0</AssemblyVersion>
-    <FileVersion>0.11.1000.0</FileVersion>
+    <AssemblyVersion>0.11.1001.0</AssemblyVersion>
+    <FileVersion>0.11.1001.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
