@@ -595,6 +595,29 @@ namespace VaultSharp.V1.SystemBackend
             return finalStatus;
         }
 
+        public async Task<Secret<TokenWrapData>> LookupTokenWrapInfoAsync(string tokenId)
+        {
+            var requestData = new { token = tokenId };
+            return await _polymath.MakeVaultApiRequest<Secret<TokenWrapData>>("v1/sys/wrapping/lookup", HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<object>> RewrapWrappedResponseDataAsync(string tokenId)
+        {
+            var requestData = new { token = tokenId };
+            return await _polymath.MakeVaultApiRequest<Secret<object>>("v1/sys/wrapping/rewrap", HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<TData>> UnwrapWrappedResponseDataAsync<TData>(string tokenId)
+        {
+            var requestData = new { token = tokenId };
+            return await _polymath.MakeVaultApiRequest<Secret<TData>>("v1/sys/wrapping/unwrap", HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<object>> WrapResponseDataAsync(Dictionary<string, object> data, string wrapTimeToLive)
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<object>>("v1/sys/wrapping/wrap", HttpMethod.Post, data, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
         public Task<string> HashWithAuditBackendAsync(string mountPoint, string inputToHash)
         {
             throw new NotImplementedException();

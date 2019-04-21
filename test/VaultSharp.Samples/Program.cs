@@ -1085,6 +1085,40 @@ namespace VaultSharp.Samples
 
             authSettings = GetVaultClientSettings(new TokenAuthMethodInfo(masterCredentials.RootToken));
             _authenticatedVaultClient = new VaultClient(authSettings);
+
+            var data = new Dictionary<string, object>
+            {
+                {"key1", "wrappy"},
+                {"key2", 23},
+                {"key3", true}
+            };
+
+            var wrapTimeToLive = "1h";
+
+            var wrappedResponse = _authenticatedVaultClient.V1.System.WrapResponseDataAsync(data, wrapTimeToLive).Result;
+            DisplayJson(wrappedResponse);
+            Assert.NotNull(wrappedResponse.WrapInfo.Token);
+
+            var tokenWrapInfo = _authenticatedVaultClient.V1.System.LookupTokenWrapInfoAsync(wrappedResponse.WrapInfo.Token).Result;
+            DisplayJson(tokenWrapInfo);
+            Assert.NotEqual(DateTimeOffset.MinValue, tokenWrapInfo.Data.CreationTime);
+
+            var rewrappedResponse = _authenticatedVaultClient.V1.System.RewrapWrappedResponseDataAsync(wrappedResponse.WrapInfo.Token).Result;
+            DisplayJson(rewrappedResponse);
+            Assert.NotNull(rewrappedResponse.WrapInfo.Token);
+            Assert.NotEqual(wrappedResponse.WrapInfo.Token, rewrappedResponse.WrapInfo.Token);
+
+            var unwrappedResponse = _authenticatedVaultClient.V1.System.UnwrapWrappedResponseDataAsync<Dictionary<string, object>>(rewrappedResponse.WrapInfo.Token).Result;
+            DisplayJson(unwrappedResponse);
+            Assert.Equal(data.Count, unwrappedResponse.Data.Count);
+
+            wrappedResponse = _authenticatedVaultClient.V1.System.WrapResponseDataAsync(null, wrapTimeToLive).Result;
+            DisplayJson(wrappedResponse);
+            Assert.NotNull(wrappedResponse.WrapInfo.Token);
+
+            unwrappedResponse = _authenticatedVaultClient.V1.System.UnwrapWrappedResponseDataAsync<Dictionary<string, object>>(wrappedResponse.WrapInfo.Token).Result;
+            DisplayJson(unwrappedResponse);
+            Assert.True(unwrappedResponse.Data.Count == 0);
         }
 
         private static VaultClientSettings GetVaultClientSettings(IAuthMethodInfo authMethodInfo = null)

@@ -732,5 +732,55 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="thresholdMasterShareKeys">Threshold Master share keys.</param>
         /// <returns>The final Seal Status after all the share keys are applied.</returns>
         Task<SealStatus> QuickUnsealAsync(string[] thresholdMasterShareKeys);
+
+        /// <summary>
+        /// Wraps the given user-supplied data inside a response-wrapped token.
+        /// </summary>
+        /// <param name="data">
+        /// <para>[required]</para>
+        /// The user supplied data.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
+        /// <returns>The wrapped response.</returns>
+        Task<Secret<object>> WrapResponseDataAsync(Dictionary<string, object> data, string wrapTimeToLive);
+
+        /// <summary>
+        /// Looks up wrapping properties for the given token.
+        /// </summary>
+        /// <param name="tokenId">
+        /// <para>[required]</para>
+        /// The wrapping token identifier.
+        /// </param>
+        /// <returns>The token wrap info.</returns>
+        Task<Secret<TokenWrapData>> LookupTokenWrapInfoAsync(string tokenId);
+
+        /// <summary>
+        /// Rewraps a response-wrapped token; the new token will use the same creation TTL as 
+        /// the original token and contain the same response. 
+        /// The old token will be invalidated. 
+        /// This can be used for long-term storage of a secret in a response-wrapped 
+        /// token when rotation is a requirement.
+        /// </summary>
+        /// <param name="tokenId">
+        /// <para>[required]</para>
+        /// The wrapping token identifier.
+        /// </param>
+        /// <returns>The secret with re-wrapped info.</returns>
+        Task<Secret<object>> RewrapWrappedResponseDataAsync(string tokenId);
+
+        /// <summary>
+        /// Returns the original response inside the given wrapping token. 
+        /// This endpoint provides additional validation checks on the token, 
+        /// returns the original value on the wire and ensures that the response is properly audit-logged.
+        /// </summary>
+        /// <typeparam name="TData">The type of the data.</typeparam>
+        /// <param name="tokenId">
+        /// <para>[required]</para>
+        /// The wrapping token identifier.
+        /// </param>
+        /// <returns>The unwrapped original data.</returns>
+        Task<Secret<TData>> UnwrapWrappedResponseDataAsync<TData>(string tokenId);
     }
 }

@@ -41,7 +41,16 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The wrapped accessor.
         /// </value>
-        [JsonProperty("wrapped_accessor")]
-        public string WrappedAccessor { get; set; }
+        [JsonProperty("accessor")]
+        public string Accessor { get; set; }
+
+        /// <summary>
+        /// Gets or sets the creation path.
+        /// </summary>
+        /// <value>
+        /// The creation path.
+        /// </value>
+        [JsonProperty("creation_path")]
+        public string CreationPath { get; set; }
     }
 }

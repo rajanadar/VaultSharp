@@ -1,8 +1,9 @@
-## 0.11.1002 (Unknown)
+## 0.11.1002 (April 21, 2019)
 
 **FEATURES:**
 
-  * Added support for .NET Standard 2.0 as well. Implements [GH-74]
+  * [GH-74] Added support for .NET Standard 2.0 as well.
+  * [GH-53] Added Wrapping support to the library.
 
 ## 0.11.1001 (April 20, 2019)
 
