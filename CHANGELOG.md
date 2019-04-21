@@ -1,3 +1,9 @@
+## 0.11.1002 (Unknown)
+
+**FEATURES:**
+
+  * Added support for .NET Standard 2.0 as well. Implements [GH-74]
+
 ## 0.11.1001 (April 20, 2019)
 
 **BUG FIXES:**
