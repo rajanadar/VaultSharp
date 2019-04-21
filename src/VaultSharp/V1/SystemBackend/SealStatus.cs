@@ -14,6 +14,12 @@ namespace VaultSharp.V1.SystemBackend
         public string Type { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating thif initialized.
+        /// </summary>
+        [JsonProperty("initialized")]
+        public bool Initialized { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating about the <see cref="SealStatus"/>.
         /// </summary>
         /// <value>
@@ -67,6 +73,24 @@ namespace VaultSharp.V1.SystemBackend
         /// </value>
         [JsonProperty("version")]
         public string Version { get; set; }
+
+        /// <summary>
+        /// Gets or sets the migration.
+        /// </summary>
+        /// <value>
+        /// The migration.
+        /// </value>
+        [JsonProperty("migration")]
+        public bool Migration { get; set; }
+
+        /// <summary>
+        /// Gets or sets the recovery seal.
+        /// </summary>
+        /// <value>
+        /// The recovery seal.
+        /// </value>
+        [JsonProperty("recovery_seal")]
+        public bool RecoverySeal { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the cluster.

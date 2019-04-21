@@ -1,3 +1,15 @@
+## 1.1.100 (Unknown)
+
+**FEATURES:**
+
+  * Add support for namespaces per VaultSharp client.
+  * Add support to pass Vault token as ```X-Vault-Token``` header or as the standard ```Authorization: Bearer <vault-token>``` header.
+  * Add support to retrieve the help contents for any API.
+
+**BREAKING CHANGES:**
+
+  * ```GetSealStatusAsync``` doesn't throw an exception anymore for a sealed vault.
+
 ## 0.11.1002 (April 21, 2019)
 
 **FEATURES:**

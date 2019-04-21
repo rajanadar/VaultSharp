@@ -28,5 +28,15 @@ namespace VaultSharp.V1.SystemBackend
         /// </value>
         [JsonProperty("options")]
         public FileAuditBackendOptions Options { get; set; }
+
+        /// <summary>
+        /// <para>[optional]</para>
+        /// Gets or sets the path.
+        /// </summary>
+        /// <value>
+        /// The path.
+        /// </value>
+        [JsonProperty("path")]
+        public string Path { get; set; }
     }
 }
