@@ -1,4 +1,4 @@
-## 1.1.100 (Unknown)
+## 1.1.200 (Unknown)
 
 **BREAKING CHANGES:**
 
@@ -24,6 +24,14 @@
 
   **TODO:**
 
+  * Check with Vault 1.1.2
+  * AliCloud, Google Cloud KMS,  Secrets Engine.
+  * auth/jwt: Disallow logins of role_type "oidc" via the /login path [JWT-38]
+  * auth/jwt: Roles now have a "role type" parameter with a default type of "oidc". To configure new JWT roles, a role type of "jwt" must be explicitly specified.
+  * The name "oidc" has been added as an alias for the jwt backend. Either name may be specified in the auth enable command.
+  * Kubernetes Projected Service Account Tokens: Projected Service Account Tokens are now supported in Kubernetes auth
+  * Azure Existing Service Principal Support: Credentials can now be generated against an existing service principal
+  * Check JSON of all AUTH and Secrets Engines.
   * Fix the KV2 reading metadata.
   * Fix the root level response fields.
 
