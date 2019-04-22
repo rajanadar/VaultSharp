@@ -42,5 +42,14 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// </value>
         [JsonProperty("ttl")]
         public int TimeToLive { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type
+        /// </summary>
+        /// <value>
+        /// The type.
+        /// </value>
+        [JsonProperty("type")]
+        public string Type { get; set; }
     }
 }

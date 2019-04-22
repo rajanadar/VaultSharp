@@ -21,7 +21,11 @@
     By default, the ```Authorization: Bearer <vault-token>``` scheme is used.
     You can override it using the ```VaultClientSettings.UseVaultTokenHeaderInsteadOfAuthorizationHeader``` flag.
   * Add support for namespaces per VaultSharp client. 
-  * Add support to retrieve the help contents for any API.
+
+  **TODO:**
+
+  * Fix the KV2 reading metadata.
+  * Fix the root level response fields.
 
 ## 0.11.1002 (April 21, 2019)
 
