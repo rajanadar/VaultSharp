@@ -15,6 +15,7 @@ namespace VaultSharp.Core
 {
     internal class Polymath
     {
+        private const string AuthorizationHeaderKey = "Authorization";
         private const string VaultTokenHeaderKey = "X-Vault-Token";
         private const string VaultWrapTimeToLiveHeaderKey = "X-Vault-Wrap-TTL";
 
@@ -75,7 +76,16 @@ namespace VaultSharp.Core
 
             if (!unauthenticated && _lazyVaultToken != null)
             {
-                headers.Add(VaultTokenHeaderKey, await _lazyVaultToken.Value);
+                var vaultToken = await _lazyVaultToken.Value;
+
+                if (VaultClientSettings.UseVaultTokenHeaderInsteadOfAuthorizationHeader)
+                {
+                    headers.Add(VaultTokenHeaderKey, vaultToken);
+                }
+                else
+                {
+                    headers.Add(AuthorizationHeaderKey, "Bearer " + vaultToken);
+                }
             }
 
             if (wrapTimeToLive != null)

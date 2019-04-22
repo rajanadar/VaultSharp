@@ -1,14 +1,27 @@
 ## 1.1.100 (Unknown)
 
-**FEATURES:**
-
-  * Add support for namespaces per VaultSharp client.
-  * Add support to pass Vault token as ```X-Vault-Token``` header or as the standard ```Authorization: Bearer <vault-token>``` header.
-  * Add support to retrieve the help contents for any API.
-
 **BREAKING CHANGES:**
 
   * ```GetSealStatusAsync``` doesn't throw an exception anymore for a sealed vault.
+
+  **IMPROVEMENTS:**
+
+  * Added the ```path``` field to ```FileAuditBackend``` class.
+  * Added the ```performance_standby``` field to ```HealthStatus``` class.
+  * Added the ```initialized```, ```migration``` and ```recovery_seal``` fields to ```SealStatus``` class.
+  * Added the ```options``` field to all the ```Backend``` classes.
+  * Added the ```token_type``` field to all the ```BackendConfig``` classes.
+  * Added the ```performance_standby``` and ```performance_standby_last_remote_wal``` fields to ```Leader``` class.
+  * Added the ```otp``` and ```otp_length``` fields to ```RootTokenGenerationStatus``` class.
+  * ```TokenCapability``` class now returns additional fields as well other than the ```capabilities``` field.
+
+  **FEATURES:**
+
+  * Add support to pass Vault token as ```X-Vault-Token``` header or as the standard ```Authorization: Bearer <vault-token>``` header.
+    By default, the ```Authorization: Bearer <vault-token>``` scheme is used.
+    You can override it using the ```VaultClientSettings.UseVaultTokenHeaderInsteadOfAuthorizationHeader``` flag.
+  * Add support for namespaces per VaultSharp client. 
+  * Add support to retrieve the help contents for any API.
 
 ## 0.11.1002 (April 21, 2019)
 

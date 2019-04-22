@@ -55,5 +55,11 @@ namespace VaultSharp
         /// The per http response delegate invoked after every vault api http response.
         /// </summary>
         public Action<HttpResponseMessage> AfterApiResponseAction { get; set; }
+
+        /// <summary>
+        /// Flag to indicate how the vault token should be passed to the API.
+        /// Default is to use the Authorization: Bearer &lt;vault-token&gt; scheme.
+        /// </summary>
+        public bool UseVaultTokenHeaderInsteadOfAuthorizationHeader { get; set; }
     }
 }

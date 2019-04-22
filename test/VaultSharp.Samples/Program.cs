@@ -126,6 +126,11 @@ namespace VaultSharp.Samples
                 {
                     token = r.Headers.Single(h => h.Key == "X-Vault-Token").Value.Single();
                 }
+                else if (r.Headers.Contains("Authorization"))
+                {
+                    var val = r.Headers.Single(h => h.Key == "Authorization").Value.Single();
+                    token = val.Substring(val.IndexOf(' ') + 1, val.Length - 1);
+                }
             };
 
             // IVaultClient vaultClient = new VaultClient(authVaultClientSettings);
