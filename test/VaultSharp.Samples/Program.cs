@@ -1142,7 +1142,8 @@ namespace VaultSharp.Samples
                     {
                         Console.WriteLine(_responseContent);
                     }
-                }
+                },
+                Namespace = "bhjk"
             };
 
             return settings;

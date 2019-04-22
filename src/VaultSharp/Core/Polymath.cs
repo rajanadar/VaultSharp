@@ -15,6 +15,7 @@ namespace VaultSharp.Core
 {
     internal class Polymath
     {
+        private const string NamespaceHeaderKey = "X-Vault-Namespace";
         private const string AuthorizationHeaderKey = "Authorization";
         private const string VaultTokenHeaderKey = "X-Vault-Token";
         private const string VaultWrapTimeToLiveHeaderKey = "X-Vault-Wrap-TTL";
@@ -91,6 +92,11 @@ namespace VaultSharp.Core
             if (wrapTimeToLive != null)
             {
                 headers.Add(VaultWrapTimeToLiveHeaderKey, wrapTimeToLive);
+            }
+
+            if (!string.IsNullOrWhiteSpace(VaultClientSettings.Namespace))
+            {
+                headers.Add(NamespaceHeaderKey, VaultClientSettings.Namespace);
             }
 
             return await MakeRequestAsync<TResponse>(resourcePath, httpMethod, requestData, headers, rawResponse, postResponseAction).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);

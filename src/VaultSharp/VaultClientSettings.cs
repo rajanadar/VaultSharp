@@ -61,5 +61,11 @@ namespace VaultSharp
         /// Default is to use the Authorization: Bearer &lt;vault-token&gt; scheme.
         /// </summary>
         public bool UseVaultTokenHeaderInsteadOfAuthorizationHeader { get; set; }
+
+        /// <summary>
+        /// The namespace to use to achieve tenant level isolation.
+        /// Enterprise Vault only.
+        /// </summary>
+        public string Namespace { get; set; }
     }
 }
