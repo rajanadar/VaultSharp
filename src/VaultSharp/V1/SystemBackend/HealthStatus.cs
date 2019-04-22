@@ -39,7 +39,7 @@ namespace VaultSharp.V1.SystemBackend
         /// Gets or sets the performance standby.
         /// </summary>
         [JsonProperty("performance_standby")]
-        public string PerformanceStandby { get; set; }
+        public bool PerformanceStandby { get; set; }
 
         /// <summary>
         /// Gets or sets the replication performance mode.

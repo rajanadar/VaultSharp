@@ -6,6 +6,7 @@ namespace VaultSharp.V1.AuthMethods
     /// <summary>
     /// Represents an auth method.
     /// </summary>
+    
     public class AuthMethod : AbstractBackend
     {
         /// <summary>
