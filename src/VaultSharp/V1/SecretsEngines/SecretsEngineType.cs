@@ -18,6 +18,14 @@ namespace VaultSharp.V1.SecretsEngines
         public static SecretsEngineType System { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.System);
 
         /// <summary>
+        /// Gets the alicloud type.
+        /// </summary>
+        /// <value>
+        /// The aws.
+        /// </value>
+        public static SecretsEngineType AliCloud { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.AliCloud);
+
+        /// <summary>
         /// Gets the aws type.
         /// </summary>
         /// <value>

@@ -393,6 +393,21 @@ Secret<ActiveDirectoryCredentials> adCreds = await vaultClient.V1.Secrets.Active
 string currentPassword = adCreds.Data.CurrentPassword;
 ```
 
+#### AliCloud Secrets Engine
+
+##### Generate RAM Credentials
+
+ * This endpoint generates dynamic RAM credentials based on the named role.
+
+ ```cs	
+Secret<AliCloudCredentials> aliCloudCreds = await vaultClient.V1.Secrets.AliCloud.GetCredentialsAsync(role);
+
+string accessKey = aliCloudCreds.Data.AccessKey;
+string secretKey = aliCloudCreds.Data.SecretKey;
+string securityToken = aliCloudCreds.Data.SecurityToken;
+string expiration = aliCloudCreds.Data.Expiration;
+```
+
 #### AWS Secrets Engine
 
 ##### Generate IAM Credentials

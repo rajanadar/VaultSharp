@@ -1,4 +1,5 @@
 ﻿using VaultSharp.V1.SecretsEngines.ActiveDirectory;
+using VaultSharp.V1.SecretsEngines.AliCloud;
 using VaultSharp.V1.SecretsEngines.AWS;
 using VaultSharp.V1.SecretsEngines.Azure;
 using VaultSharp.V1.SecretsEngines.Consul;
@@ -25,6 +26,11 @@ namespace VaultSharp.V1.SecretsEngines
         /// The ActiveDirectory Secrets Engine.
         /// </summary>
         IActiveDirectorySecretsEngine ActiveDirectory { get; }
+
+        /// <summary>
+        /// The AliCloud Secrets Engine.
+        /// </summary>
+        IAliCloudSecretsEngine AliCloud { get; }
 
         /// <summary>
         /// The AWS Secrets Engine.

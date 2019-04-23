@@ -17,6 +17,7 @@
 
   **FEATURES:**
 
+  * Add support for ```AliPay``` Secrets Engine.
   * Add support to pass Vault token as ```X-Vault-Token``` header or as the standard ```Authorization: Bearer <vault-token>``` header.
     By default, the ```Authorization: Bearer <vault-token>``` scheme is used.
     You can override it using the ```VaultClientSettings.UseVaultTokenHeaderInsteadOfAuthorizationHeader``` flag.
@@ -24,8 +25,7 @@
 
   **TODO:**
 
-  * Check with Vault 1.1.2
-  * AliCloud, Google Cloud KMS,  Secrets Engine.
+  * Google Cloud KMS,  Secrets Engine.
   * auth/jwt: Disallow logins of role_type "oidc" via the /login path [JWT-38]
   * auth/jwt: Roles now have a "role type" parameter with a default type of "oidc". To configure new JWT roles, a role type of "jwt" must be explicitly specified.
   * The name "oidc" has been added as an alias for the jwt backend. Either name may be specified in the auth enable command.

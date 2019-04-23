@@ -5,6 +5,7 @@
         public const string System = "system";
 
         public const string ActiveDirectory = "ad";
+        public const string AliCloud = "alicloud";
         public const string AWS = "aws";
         public const string Azure = "azure";
         public const string Consul = "consul";

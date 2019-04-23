@@ -1,6 +1,7 @@
 ﻿using System;
 using VaultSharp.Core;
 using VaultSharp.V1.SecretsEngines.ActiveDirectory;
+using VaultSharp.V1.SecretsEngines.AliCloud;
 using VaultSharp.V1.SecretsEngines.AWS;
 using VaultSharp.V1.SecretsEngines.Azure;
 using VaultSharp.V1.SecretsEngines.Consul;
@@ -27,6 +28,7 @@ namespace VaultSharp.V1.SecretsEngines
             _polymath = polymath;
 
             ActiveDirectory = new ActiveDirectorySecretsEngineProvider(polymath);
+            AliCloud = new AliCloudSecretsEngineProvider(polymath);
             AWS = new AWSSecretsEngineProvider(polymath);
             Azure = new AzureSecretsEngineProvider(polymath);
             Consul = new ConsulSecretsEngineProvider(polymath);
@@ -43,6 +45,8 @@ namespace VaultSharp.V1.SecretsEngines
         }
 
         public IActiveDirectorySecretsEngine ActiveDirectory { get; }
+
+        public IAliCloudSecretsEngine AliCloud { get; }
 
         public IAWSSecretsEngine AWS { get; }
 
