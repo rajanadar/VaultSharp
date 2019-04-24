@@ -32,5 +32,20 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The secret with the new Certificate credentials.
         /// </returns>
         Task<Secret<CertificateCredentials>> GetCredentialsAsync(string pkiRoleName, CertificateCredentialsRequestOptions certificateCredentialRequestOptions, string pkiBackendMountPoint = SecretsEngineDefaultPaths.PKI, string wrapTimeToLive = null);
+
+        /// <summary>
+        /// Revokes a certificate using its serial number.
+        /// </summary>
+        /// <param name="serialNumber"><para>[required]</para>
+        /// The serial number.
+        /// </param>
+        /// <param name="pkiBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineDefaultPaths.PKI" />
+        /// Provide a value only if you have customized the PKI mount point.
+        /// </param>
+        /// <returns>
+        /// The secret with the Certificate revokation info.
+        /// </returns>
+        Task<Secret<CertificateCredentialRevoke>> RevokeCredentialAsync(string serialNumber, string pkiBackendMountPoint = SecretsEngineDefaultPaths.PKI);
     }
 }
