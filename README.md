@@ -238,6 +238,20 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 // vault token/policies mapped to the LDAP username and password.
 ```
 
+#### Kerberos Authentication Backend
+
+Requires https://github.com/wintoncode/vault-plugin-auth-kerberos .
+
+```cs
+IAuthMethodInfo authMethod = new KerberosAuthMethodInfo();
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the current ActiveDirectory/Kerberos identity.
+```
+
 #### Okta Auth Method
 
 ```cs
