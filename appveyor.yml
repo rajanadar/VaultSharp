@@ -7,5 +7,5 @@ build_script:
   - cmd: dotnet build
 clone_depth: 1
 test_script:
-  - cmd: dotnet test --filter UnitTests
+  - cmd: cd test\\VaultSharp.UnitTests && dotnet test
 deploy: off
