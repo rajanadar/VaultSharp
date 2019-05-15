@@ -36,7 +36,7 @@ namespace VaultSharp.V1.Commons
         /// The config options.
         /// </value>
         [JsonProperty("config")]
-        public Dictionary<string, string> Config { get; set; }
+        public Dictionary<string, object> Config { get; set; }
 
         /// <summary>
         /// Gets or sets a human-friendly description of the backend.
