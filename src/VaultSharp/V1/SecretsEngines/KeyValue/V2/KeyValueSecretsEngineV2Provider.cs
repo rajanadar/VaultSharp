@@ -22,6 +22,14 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
 
             return await _polymath.MakeVaultApiRequest<Secret<SecretData>>("v1/" + mountPoint.Trim('/') + "/data/" + path.Trim('/') + (version != null ? ("?version=" + version) : ""), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
+        
+        public async Task<Secret<SecretData<T>>> ReadSecretAsync<T>(string path, int? version = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2, string wrapTimeToLive = null)
+        {
+            Checker.NotNull(mountPoint, "mountPoint");
+            Checker.NotNull(path, "path");
+
+            return await _polymath.MakeVaultApiRequest<Secret<SecretData<T>>>("v1/" + mountPoint.Trim('/') + "/data/" + path.Trim('/') + (version != null ? ("?version=" + version) : ""), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
 
         public async Task<Secret<FullSecretMetadata>> ReadSecretMetadataAsync(string path, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2, string wrapTimeToLive = null)
         {
@@ -40,6 +48,11 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         }
 
         public async Task WriteSecretAsync(string path, IDictionary<string, object> data, int? checkAndSet = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2)
+        {
+            await WriteSecretAsync<IDictionary<string, object>>(path, data, checkAndSet, mountPoint);
+        }
+        
+        public async Task WriteSecretAsync<T>(string path, T data, int? checkAndSet = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(path, "path");
