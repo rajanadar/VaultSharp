@@ -17,6 +17,7 @@ namespace VaultSharp.Core
     {
         private const string VaultTokenHeaderKey = "X-Vault-Token";
         private const string VaultWrapTimeToLiveHeaderKey = "X-Vault-Wrap-TTL";
+        private const string VaultNamespaceHeaderKey = "X-Vault-Namespace";
 
         private readonly HttpClient _httpClient;
         private readonly Lazy<Task<string>> _lazyVaultToken;
@@ -81,6 +82,11 @@ namespace VaultSharp.Core
             if (wrapTimeToLive != null)
             {
                 headers.Add(VaultWrapTimeToLiveHeaderKey, wrapTimeToLive);
+            }
+
+            if (VaultClientSettings.Namespace != null)
+            {
+                headers.Add(VaultNamespaceHeaderKey, VaultClientSettings.Namespace);
             }
 
             return await MakeRequestAsync<TResponse>(resourcePath, httpMethod, requestData, headers, rawResponse, postResponseAction).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
