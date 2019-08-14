@@ -269,7 +269,7 @@ namespace VaultSharp.Samples
             var kv2SecretsEngine = new SecretsEngine
             {
                 Type = SecretsEngineType.KeyValue,
-                Config = new Dictionary<string, string>
+                Config = new Dictionary<string, object>
                 {
                     {  "version", "2" }
                 },
