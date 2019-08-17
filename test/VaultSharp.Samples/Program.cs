@@ -20,7 +20,7 @@ namespace VaultSharp.Samples
 {
     class Program
     {
-        private const string ExpectedVaultVersion = "1.1.2";
+        private const string ExpectedVaultVersion = "1.2.2";
 
         private static IVaultClient _unauthenticatedVaultClient;
         private static IVaultClient _authenticatedVaultClient;
@@ -59,6 +59,7 @@ namespace VaultSharp.Samples
         private static void RunAllSamples()
         {
             // before runnig these tests, just start your local vault server with a file backend.
+            // ensure the path in .hcl file reflects the right folder structure.
             
             // startvault.cmd OR these 2 lines.
             // rd E:\raja\work\vault\file_backend /S /Q
