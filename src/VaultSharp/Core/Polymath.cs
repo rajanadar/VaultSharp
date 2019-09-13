@@ -13,7 +13,7 @@ using VaultSharp.V1.Commons;
 
 namespace VaultSharp.Core
 {
-    internal class Polymath
+    internal class Polymath : IDisposable
     {
         private const string VaultTokenHeaderKey = "X-Vault-Token";
         private const string VaultWrapTimeToLiveHeaderKey = "X-Vault-Wrap-TTL";
@@ -217,6 +217,11 @@ namespace VaultSharp.Core
 
                 throw;
             }
+        }
+
+        public void Dispose()
+        {
+            _httpClient.Dispose();
         }
     }
 }

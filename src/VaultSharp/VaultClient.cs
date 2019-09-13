@@ -1,13 +1,14 @@
 ﻿using VaultSharp.Core;
 using VaultSharp.V1.Commons;
 using VaultSharp.V1;
+using System;
 
 namespace VaultSharp
 {
     /// <summary>
     /// The concrete Vault client class.
     /// </summary>
-    public class VaultClient : IVaultClient
+    public class VaultClient : IVaultClient, IDisposable
     {
         private readonly Polymath polymath;
 
@@ -30,5 +31,10 @@ namespace VaultSharp
         /// Gets the Vault Client Settings.
         /// </summary>
         public VaultClientSettings Settings => polymath.VaultClientSettings;
+
+        public void Dispose()
+        {
+            polymath.Dispose();
+        }
     }
 }
