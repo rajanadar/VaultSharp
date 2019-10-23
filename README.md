@@ -602,12 +602,20 @@ Secret<ListInfo> secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretPat
 ListInfo paths = secret.Data;
 ```
 
-###### Destroy Secret
+###### Destroy Secret for the given versions
 
  * This endpoint destroys the secret at the specified location for the given versions.
 
  ```cs	
 await vaultClient.V1.Secrets.KeyValue.V2.DestroySecretAsync(secretPath, new List<int> { 1, 2 });
+```
+
+###### Destroy Secret
+
+ * This endpoint destroys the secret at the specified location.
+
+ ```cs	
+await vaultClient.V1.Secrets.KeyValue.V2.DestroySecretAsync(secretPath);
 ```
 
 #### Identity Secrets Engine
