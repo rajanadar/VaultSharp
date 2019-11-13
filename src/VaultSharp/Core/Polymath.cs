@@ -76,7 +76,7 @@ namespace VaultSharp.Core
 
             if (!unauthenticated && _lazyVaultToken != null)
             {
-                headers.Add(VaultTokenHeaderKey, await _lazyVaultToken.Value);
+                headers.Add(VaultTokenHeaderKey, await _lazyVaultToken.Value.ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext));
             }
 
             if (wrapTimeToLive != null)
