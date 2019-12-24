@@ -51,18 +51,38 @@ namespace VaultSharp.Core
             vaultClientSettings.PostProcessHttpClientHandlerAction?.Invoke(handler);
 
             _httpClient = new HttpClient(handler);
-            _httpClient.BaseAddress = new Uri(vaultClientSettings.VaultServerUriWithPort);
+            ConfigureHttpClient();
+            _lazyVaultToken = GetLazyVaultToken();
+        }
 
-            if (vaultClientSettings.VaultServiceTimeout != null)
+        public Polymath(VaultClientSettings vaultClientSettings, HttpClient httpClient)
+        {
+            VaultClientSettings = vaultClientSettings;
+            _httpClient = httpClient;
+
+            ConfigureHttpClient();
+            _lazyVaultToken = GetLazyVaultToken();
+        }
+
+        private void ConfigureHttpClient()
+        {
+            _httpClient.BaseAddress = new Uri(VaultClientSettings.VaultServerUriWithPort);
+
+            if (VaultClientSettings.VaultServiceTimeout != null)
             {
-                _httpClient.Timeout = vaultClientSettings.VaultServiceTimeout.Value;
+                _httpClient.Timeout = VaultClientSettings.VaultServiceTimeout.Value;
+            }
+        }
+
+        private Lazy<Task<string>> GetLazyVaultToken()
+        {
+            if (VaultClientSettings.AuthMethodInfo == null)
+            {
+                return null;
             }
 
-            if (vaultClientSettings.AuthMethodInfo != null)
-            {
-                var authProvider = AuthProviderFactory.CreateAuthenticationProvider(vaultClientSettings.AuthMethodInfo, this);
-                _lazyVaultToken = new Lazy<Task<string>>(authProvider.GetVaultTokenAsync);
-            }
+            var authProvider = AuthProviderFactory.CreateAuthenticationProvider(VaultClientSettings.AuthMethodInfo, this);
+            return new Lazy<Task<string>>(authProvider.GetVaultTokenAsync);
         }
 
         public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false)
