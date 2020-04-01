@@ -16,5 +16,6 @@
         public const string Cert = "cert";
         public const string Token = "token";
         public const string UserPass = "userpass";
+        public const string CloudFoundry = "cf";
     }
 }

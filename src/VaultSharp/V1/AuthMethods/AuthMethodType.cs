@@ -123,6 +123,14 @@ namespace VaultSharp.V1.AuthMethods
         public static AuthMethodType UserPass { get; } = new AuthMethodType(AuthMethodDefaultPaths.UserPass);
 
         /// <summary>
+        /// Gets the Cloud Foundry type.
+        /// </summary>
+        /// <value>
+        /// The Cloud Foundry.
+        /// </value>
+        public static AuthMethodType CloudFoundry { get; } = new AuthMethodType(AuthMethodDefaultPaths.CloudFoundry);
+
+        /// <summary>
         /// Gets the type type.
         /// </summary>
         /// <value>
