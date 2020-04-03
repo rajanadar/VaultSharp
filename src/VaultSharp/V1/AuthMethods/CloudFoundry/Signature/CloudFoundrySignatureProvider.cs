@@ -2,8 +2,6 @@
 using System.IO;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.Pkcs;
 using Org.BouncyCastle.Crypto.Digests;
@@ -12,36 +10,36 @@ using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Crypto.Signers;
 using Org.BouncyCastle.Utilities.IO.Pem;
 
-namespace VaultSharp.V1.AuthMethods.CloudFoundry.Token
+namespace VaultSharp.V1.AuthMethods.CloudFoundry.Signature
 {
-    public class SignatureUtility 
+    public class CloudFoundrySignatureProvider
     {
         private static readonly ReaderWriterLockSlim FileLock = new ReaderWriterLockSlim();
 
-        public async Task<string> GetSignatureToken(string role)
+        public CloudFoundrySignature GetSignatureToken(string roleName)
         {
-            var cfInstanceCert = await GetBodyFromFile("CF_INSTANCE_CERT");
-            
+            var instanceCert = GetBodyFromFile("CF_INSTANCE_CERT");
+
             var signingTime = Iso816UtcNow();
-            var stringToSign = $"{signingTime}{cfInstanceCert}{role}";
-            
-            var cfInstanceKey = await GetBodyFromFile("CF_INSTANCE_KEY");
+            var stringToSign = $"{signingTime}{instanceCert}{roleName}";
+
+            var instanceKey = GetBodyFromFile("CF_INSTANCE_KEY");
 
             var data = Encoding.UTF8.GetBytes(stringToSign);
-            var signatureKey = GenerateSignature(cfInstanceKey, data);
+            var signatureKey = GenerateSignature(instanceKey, data);
 
-            var token = new Signature
+            var token = new CloudFoundrySignature
             {
-                CFInstanceCert = cfInstanceCert,
+                InstanceCert = instanceCert,
                 SigningTime = signingTime,
-                Role = role,
+                RoleName = roleName,
                 SignatureKey = signatureKey
             };
-            
-            return JsonConvert.SerializeObject(token);
+
+            return token;
         }
 
-        public string GenerateSignature(string privateKeyPem, byte[] data)
+        private string GenerateSignature(string privateKeyPem, byte[] data)
         {
             byte[] keyBytes;
             using (var reader = new StringReader(privateKeyPem))
@@ -62,40 +60,26 @@ namespace VaultSharp.V1.AuthMethods.CloudFoundry.Token
             return $"v1:{Convert.ToBase64String(signature)}";
         }
 
-        private string Iso816UtcNow()
-        {
-            return DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
-        }
-
-        private async Task<string> GetBodyFromFile(string filePath)
+        private string GetBodyFromFile(string filePath)
         {
             var path = Environment.GetEnvironmentVariable(filePath);
-            if (path == null)
-            {
-                return null;
-            }
+            if (path == null) { return null; }
 
             try
             {
                 FileLock.EnterReadLock();
-
-                byte[] result;
-
-                using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
-                {
-                    result = new byte[stream.Length];
-                    await stream.ReadAsync(result, 0, (int)stream.Length);
-                }
-
-                return Encoding.UTF8.GetString(result);
+                return File.ReadAllText(path);
             }
             finally
             {
                 FileLock.ExitReadLock();
             }
 
-          
         }
-
+        
+        private string Iso816UtcNow()
+        {
+            return DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
+        }
     }
 }

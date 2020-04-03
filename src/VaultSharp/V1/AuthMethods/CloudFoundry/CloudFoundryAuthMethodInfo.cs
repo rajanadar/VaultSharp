@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using VaultSharp.Core;
+using VaultSharp.V1.AuthMethods.CloudFoundry.Signature;
 
 namespace VaultSharp.V1.AuthMethods.CloudFoundry
 {
@@ -30,27 +31,27 @@ namespace VaultSharp.V1.AuthMethods.CloudFoundry
 
         /// <summary>
         /// [required]
-        /// Gets the signed Token for authenticating a service account.
+        /// Gets the Signature for getting a token for a service account.
         /// </summary>
         /// <value>
-        /// The Token.
+        /// The Signature.
         /// </value>
-        [JsonProperty("token")]
-        public string Token { get; }
+        [JsonProperty("signature")]
+        public CloudFoundrySignature Signature { get; }
 
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFoundryAuthMethodInfo"/> class.
         /// </summary>
         /// <param name="roleName">[required]
         /// The name of the role against which the login is being attempted.
         /// </param>
-        /// <param name="token">
+        /// <param name="signature">
         /// [required]
-        /// The signed Token for authenticating a service account.
+        /// Gets the Signature for getting a token for a service account.
         /// </param>
-        public CloudFoundryAuthMethodInfo(string roleName, string token)
-            : this(AuthMethodType.CloudFoundry.Type, roleName, token)
+        public CloudFoundryAuthMethodInfo(string roleName, CloudFoundrySignature signature)
+            : this(AuthMethodType.CloudFoundry.Type, roleName, signature)
         {
         }
 
@@ -61,19 +62,20 @@ namespace VaultSharp.V1.AuthMethods.CloudFoundry
         /// <param name="roleName">[required]
         /// The name of the role against which the login is being attempted.
         /// </param>
-        /// <param name="token">
+        /// <param name="signature">
         /// [required]
-        /// The signed Token for authenticating a service account.
+        /// Gets the Signature for getting a token for a service account.
         /// </param>
-        public CloudFoundryAuthMethodInfo(string mountPoint, string roleName, string token)
+
+        public CloudFoundryAuthMethodInfo(string mountPoint, string roleName, CloudFoundrySignature signature)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");
-            Checker.NotNull(token, "jwt");
+            Checker.NotNull(signature, "signature");
 
             MountPoint = mountPoint;
             RoleName = roleName;
-            Token = token;
+            Signature = signature;
         }
     }
 }

@@ -12,20 +12,19 @@ namespace VaultSharp.V1.AuthMethods.CloudFoundry
     {
         private readonly CloudFoundryAuthMethodInfo _cloudFoundryAuthMethodInfo;
         private readonly Polymath _polymath;
+        
 
         public CloudFoundryAuthMethodLoginProvider(CloudFoundryAuthMethodInfo cloudFoundryAuthMethodInfo, Polymath polymath)
         {
             _cloudFoundryAuthMethodInfo = cloudFoundryAuthMethodInfo;
             _polymath = polymath;
+
         }
 
         public async Task<string> GetVaultTokenAsync()
         {
-            var requestData = new Dictionary<string, object>
-            {
-                {"application/json", "" }
-            };
-
+            var requestData = _cloudFoundryAuthMethodInfo.Signature;
+            
             // make an unauthenticated call to Vault, since this is the call to get the token. It shouldn't need a token.
             var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, requestData, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             _cloudFoundryAuthMethodInfo.ReturnedLoginAuthInfo = response?.AuthInfo;
@@ -36,6 +35,7 @@ namespace VaultSharp.V1.AuthMethods.CloudFoundry
             }
 
             throw new Exception("The call to the Vault authentication method backend did not yield a client token. Please verify your credentials.");
+
         }
 
         private string LoginResourcePath
@@ -46,5 +46,8 @@ namespace VaultSharp.V1.AuthMethods.CloudFoundry
                 return endpoint;
             }
         }
+
+     
+
     }
 }
