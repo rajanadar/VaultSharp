@@ -1,10 +1,12 @@
-## 1.2.200 (Unknown)
+## 1.4.0000 (Unknown)
+
+Plan: Release 0.11.1003 with key bug fixes in GH. Then work on this vnext.
 
 **BREAKING CHANGES:**
 
   * ```GetSealStatusAsync``` doesn't throw an exception anymore for a sealed vault.
 
-  **IMPROVEMENTS:**
+**IMPROVEMENTS:**
 
   * Added the ```path``` field to ```FileAuditBackend``` class.
   * Added the ```performance_standby``` field to ```HealthStatus``` class.
@@ -15,15 +17,19 @@
   * Added the ```otp``` and ```otp_length``` fields to ```RootTokenGenerationStatus``` class.
   * ```TokenCapability``` class now returns additional fields as well other than the ```capabilities``` field.
 
-  **FEATURES:**
+**FEATURES:**
 
   * Add support for ```AliPay``` Secrets Engine.
   * Add support to pass Vault token as ```X-Vault-Token``` header or as the standard ```Authorization: Bearer <vault-token>``` header.
     By default, the ```Authorization: Bearer <vault-token>``` scheme is used.
     You can override it using the ```VaultClientSettings.UseVaultTokenHeaderInsteadOfAuthorizationHeader``` flag.
-  * Add support for namespaces per VaultSharp client. 
+  * [GH-94] Add support for namespaces per VaultSharp client. 
 
-  **TODO:**
+**BUG FIXES:**
+
+  * [GH-82] Fix the GetSecretBackendsAsync() deserialization error
+
+**TODO:**
 
   * Google Cloud KMS,  Secrets Engine.
   * auth/jwt: Disallow logins of role_type "oidc" via the /login path [JWT-38]
