@@ -3,7 +3,64 @@
 **BUG FIXES:**
 
   * [GH-94] Add namespace support.
-  * [GH-82] GetSecretBackendsAsync() throws json deserialization error
+  * [GH-82] Fix the GetSecretBackendsAsync() deserialization error
+
+  Vault changelog for 0.11.1x is verified and all done. Fix my GH issues and release NuGet.
+  Make others admin.
+  Then move to 1.4.x
+
+TODO
+
+Code TODO
+
+all issues till #123 triaged. woot!
+
+1. https://github.com/rajanadar/VaultSharp/issues/117 keys to transit backend
+2. https://github.com/rajanadar/VaultSharp/issues/116 (deadlock fix from fork)
+3. reply https://github.com/rajanadar/VaultSharp/issues/114 and close. namespace
+4. answer https://github.com/rajanadar/VaultSharp/issues/110
+5. https://github.com/rajanadar/VaultSharp/issues/107 (deadlock fix from fork)
+6. fix cubbhole mountpoint bug: https://github.com/rajanadar/VaultSharp/issues/104 or analyze
+7. https://github.com/rajanadar/VaultSharp/issues/103 namespace
+8. https://github.com/rajanadar/VaultSharp/issues/99 copy from fork
+9. add to readme https://github.com/rajanadar/VaultSharp/issues/98
+10. fix this: https://github.com/rajanadar/VaultSharp/issues/96
+11. confirm and close https://github.com/rajanadar/VaultSharp/issues/90. mention deadlock fix.
+12. https://github.com/rajanadar/VaultSharp/issues/86 fix mount path
+13. fix this: https://github.com/rajanadar/VaultSharp/issues/85
+14. fix this: https://github.com/rajanadar/VaultSharp/issues/80
+15. fix https://github.com/rajanadar/VaultSharp/issues/79
+16. fix https://github.com/rajanadar/VaultSharp/issues/63
+17. 
+
+Non Code
+
+1. https://github.com/rajanadar/VaultSharp/issues/119 Add more details. No code work.
+2. comment on https://github.com/rajanadar/VaultSharp/issues/118 Make hoerup etc. as collaborators.
+3. thank and close https://github.com/rajanadar/VaultSharp/issues/115
+4. https://github.com/rajanadar/VaultSharp/issues/102
+
+
+0.11.2001 (February 12, 2019)
+BUG FIXES:
+	• [GH-9] Avoid deadlock when calling from synchronous code
+0.11.2000 (February 6, 2019)
+First release under new name and github repo
+FEATURES:
+	• [GH-1] Add possibility to revoke certificate
+	• [GH-2] Add expiration to response of GetCertificateCredentials
+	• [GH-3] Extended the TOTP secrets engine with the remaining API methods.
+	• [GH-5] Make Polymath and VaultClient disposable in order to cleanup httpclient
+	• [GH-6] Allow r/w of SecretData
+	• [GH-7] Added httpClient to Vault client constructor
+	• [GH-8] Add method to destroys a secret for a specified location
+	• [upstream/GH-94] Add namespace support
+BUG FIXES:
+	• [GH-4] Avoid deadlock when calling from synchronous code
+	• [upstream/GH-83] GetSecretBackendsAsync() throws json deserialization error
+
+From <https://github.com/VaultSharp/VaultSharp/blob/master/CHANGELOG.md> 
+
 
 ## 0.11.1002 (April 21, 2019)
 
