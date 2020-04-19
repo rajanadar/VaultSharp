@@ -1,3 +1,10 @@
+## 0.11.1003 (April 24, 2020)
+
+**BUG FIXES:**
+
+  * [GH-94] Add namespace support.
+  * [GH-82] GetSecretBackendsAsync() throws json deserialization error
+
 ## 0.11.1002 (April 21, 2019)
 
 **FEATURES:**
