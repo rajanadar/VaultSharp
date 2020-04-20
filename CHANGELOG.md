@@ -14,6 +14,8 @@
   Make others admin.
   Then move to 1.4.x
 
+all issues till #123 triaged. woot!
+
 Done (reply in GH to all)
 
 1. https://github.com/rajanadar/VaultSharp/issues/116 (deadlock fix from fork)
@@ -33,19 +35,9 @@ Done (reply in GH to all)
 2. comment on https://github.com/rajanadar/VaultSharp/issues/118 Make hoerup etc. as collaborators.
 3. thank and close https://github.com/rajanadar/VaultSharp/issues/115
 4. https://github.com/rajanadar/VaultSharp/issues/102
-
-Code TODO
-
-all issues till #123 triaged. woot!
-
 6. fix cubbhole mountpoint bug: https://github.com/rajanadar/VaultSharp/issues/104 or analyze
 
-0.11.2001 (February 12, 2019)
-BUG FIXES:
-	• [GH-9] Avoid deadlock when calling from synchronous code
 0.11.2000 (February 6, 2019)
-First release under new name and github repo
-FEATURES:
 	• [GH-1] Add possibility to revoke certificate
 	• [GH-2] Add expiration to response of GetCertificateCredentials
 	• [GH-3] Extended the TOTP secrets engine with the remaining API methods.
@@ -54,12 +46,8 @@ FEATURES:
 	• [GH-7] Added httpClient to Vault client constructor
 	• [GH-8] Add method to destroys a secret for a specified location
 	• [upstream/GH-94] Add namespace support
-BUG FIXES:
-	• [GH-4] Avoid deadlock when calling from synchronous code
-	• [upstream/GH-83] GetSecretBackendsAsync() throws json deserialization error
 
 From <https://github.com/VaultSharp/VaultSharp/blob/master/CHANGELOG.md> 
-
 
 ## 0.11.1002 (April 21, 2019)
 

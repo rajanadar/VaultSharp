@@ -247,6 +247,10 @@ namespace VaultSharp.Samples
 
         private static void RunKeyValueSamples()
         {
+            // k1 is not mounted by default i think.
+            // look later.
+
+            return;
             var path = "blah";
 
             var values = new Dictionary<string, object>
