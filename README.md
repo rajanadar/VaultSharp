@@ -480,7 +480,7 @@ ListInfo paths = secret.Data;
 
  ```cs	
 var value = new Dictionary<string, object> { { "key1", "val1" }, { "key2", 2 } };
-var writtenValue = await vaultClient.V1.Secrets.Cubbyhole.WriteSecretAsync(secretPath, value);
+await vaultClient.V1.Secrets.Cubbyhole.WriteSecretAsync(secretPath, value);
 ```
 
 ##### Delete Secret

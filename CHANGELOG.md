@@ -8,6 +8,7 @@
   * [GH-85] Add checks for private key and better documentation
   * [GH-80] Fix deserialization error on ReturnedLoginAuthInfo
   * [GH-63] WriteSecretAsync now returns an output
+  * [GH-86] Fix the wrong default mount name for KV1 and KV2 secret engines
 
   Vault changelog for 0.11.1x is verified and all done. Fix my GH issues and release NuGet.
   Make others admin.
@@ -26,23 +27,18 @@ Done (reply in GH to all)
 13. fix this: https://github.com/rajanadar/VaultSharp/issues/85 tls auth not working
 14. fix this: https://github.com/rajanadar/VaultSharp/issues/80 unknown fields in authinfo
 16. fix https://github.com/rajanadar/VaultSharp/issues/63 keyvalue secrets return output.
-
+15. #79 https://github.com/rajanadar/VaultSharp/issues/79 remove expired certs >> ask pr from the good guy.
+12. https://github.com/rajanadar/VaultSharp/issues/86 fix mount path
+1. https://github.com/rajanadar/VaultSharp/issues/119 Add more details. No code work.
+2. comment on https://github.com/rajanadar/VaultSharp/issues/118 Make hoerup etc. as collaborators.
+3. thank and close https://github.com/rajanadar/VaultSharp/issues/115
+4. https://github.com/rajanadar/VaultSharp/issues/102
 
 Code TODO
 
 all issues till #123 triaged. woot!
 
 6. fix cubbhole mountpoint bug: https://github.com/rajanadar/VaultSharp/issues/104 or analyze
-12. https://github.com/rajanadar/VaultSharp/issues/86 fix mount path
-15. fix https://github.com/rajanadar/VaultSharp/issues/79 remove expired certs
-
-Non Code
-
-1. https://github.com/rajanadar/VaultSharp/issues/119 Add more details. No code work.
-2. comment on https://github.com/rajanadar/VaultSharp/issues/118 Make hoerup etc. as collaborators.
-3. thank and close https://github.com/rajanadar/VaultSharp/issues/115
-4. https://github.com/rajanadar/VaultSharp/issues/102
-
 
 0.11.2001 (February 12, 2019)
 BUG FIXES:
