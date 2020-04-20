@@ -67,7 +67,7 @@ namespace VaultSharp.Core
 
         public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false)
         {
-            await MakeVaultApiRequest<JToken>(resourcePath, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated);
+            await MakeVaultApiRequest<JToken>(resourcePath, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null, string wrapTimeToLive = null, bool unauthenticated = false) where TResponse : class
@@ -76,7 +76,7 @@ namespace VaultSharp.Core
 
             if (!unauthenticated && _lazyVaultToken != null)
             {
-                headers.Add(VaultTokenHeaderKey, await _lazyVaultToken.Value);
+                headers.Add(VaultTokenHeaderKey, await _lazyVaultToken.Value.ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext));
             }
 
             if (wrapTimeToLive != null)

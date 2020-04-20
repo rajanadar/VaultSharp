@@ -231,7 +231,7 @@ namespace VaultSharp.V1.SystemBackend
 
             foreach (var masterShareKey in thresholdMasterShareKeys)
             {
-                finalStatus = await ContinueRootTokenGenerationAsync(masterShareKey, nonce);
+                finalStatus = await ContinueRootTokenGenerationAsync(masterShareKey, nonce).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
                 // don't continue, once threshold keys are achieved.
                 if (finalStatus.Complete)
@@ -287,7 +287,7 @@ namespace VaultSharp.V1.SystemBackend
                 // we don't know what status code out of 2xx was returned. hence the delegate.
 
                 int? statusCode = null;
-                var healthStatus = await _polymath.MakeVaultApiRequest<HealthStatus>(resourcePath, queryHttpMethod, postResponseAction: message => statusCode = (int)message.StatusCode);
+                var healthStatus = await _polymath.MakeVaultApiRequest<HealthStatus>(resourcePath, queryHttpMethod, postResponseAction: message => statusCode = (int)message.StatusCode).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
                 healthStatus.HttpStatusCode = statusCode;
                 return healthStatus;
             }
@@ -543,7 +543,7 @@ namespace VaultSharp.V1.SystemBackend
 
             foreach (var masterShareKey in allMasterShareKeys)
             {
-                finalRekeyProgress = await ContinueRekeyAsync(masterShareKey, rekeyNonce);
+                finalRekeyProgress = await ContinueRekeyAsync(masterShareKey, rekeyNonce).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
                 // don't continue, once threshold keys are achieved.
                 if (finalRekeyProgress.Complete)
@@ -583,7 +583,7 @@ namespace VaultSharp.V1.SystemBackend
 
             foreach (var masterShareKey in allMasterShareKeys)
             {
-                finalStatus = await UnsealAsync(masterShareKey);
+                finalStatus = await UnsealAsync(masterShareKey).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
                 // don't continue, once threshold keys are achieved.
                 if (!finalStatus.Sealed)

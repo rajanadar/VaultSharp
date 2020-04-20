@@ -20,7 +20,7 @@ namespace VaultSharp.Samples
 {
     class Program
     {
-        private const string ExpectedVaultVersion = "0.11.0";
+        private const string ExpectedVaultVersion = "0.11.1";
 
         private static IVaultClient _unauthenticatedVaultClient;
         private static IVaultClient _authenticatedVaultClient;

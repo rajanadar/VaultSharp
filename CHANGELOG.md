@@ -4,34 +4,34 @@
 
   * [GH-94] Add namespace support.
   * [GH-82] Fix the GetSecretBackendsAsync() deserialization error
+  * [GH-116] [GH-107] Fix deadlock issues
 
   Vault changelog for 0.11.1x is verified and all done. Fix my GH issues and release NuGet.
   Make others admin.
   Then move to 1.4.x
 
-TODO
+Done (reply in GH to all)
+
+1. https://github.com/rajanadar/VaultSharp/issues/116 (deadlock fix from fork)
+2. reply https://github.com/rajanadar/VaultSharp/issues/114 and close. namespace
+3. answer https://github.com/rajanadar/VaultSharp/issues/110
+5. https://github.com/rajanadar/VaultSharp/issues/107 (deadlock fix from fork)
+7. https://github.com/rajanadar/VaultSharp/issues/103 namespace
+8. https://github.com/rajanadar/VaultSharp/issues/99 copy from fork
+9. add to readme https://github.com/rajanadar/VaultSharp/issues/98 failover
+11. confirm and close https://github.com/rajanadar/VaultSharp/issues/90. mention deadlock fix.
 
 Code TODO
 
 all issues till #123 triaged. woot!
 
-1. https://github.com/rajanadar/VaultSharp/issues/117 keys to transit backend
-2. https://github.com/rajanadar/VaultSharp/issues/116 (deadlock fix from fork)
-3. reply https://github.com/rajanadar/VaultSharp/issues/114 and close. namespace
-4. answer https://github.com/rajanadar/VaultSharp/issues/110
-5. https://github.com/rajanadar/VaultSharp/issues/107 (deadlock fix from fork)
 6. fix cubbhole mountpoint bug: https://github.com/rajanadar/VaultSharp/issues/104 or analyze
-7. https://github.com/rajanadar/VaultSharp/issues/103 namespace
-8. https://github.com/rajanadar/VaultSharp/issues/99 copy from fork
-9. add to readme https://github.com/rajanadar/VaultSharp/issues/98
 10. fix this: https://github.com/rajanadar/VaultSharp/issues/96
-11. confirm and close https://github.com/rajanadar/VaultSharp/issues/90. mention deadlock fix.
 12. https://github.com/rajanadar/VaultSharp/issues/86 fix mount path
-13. fix this: https://github.com/rajanadar/VaultSharp/issues/85
-14. fix this: https://github.com/rajanadar/VaultSharp/issues/80
-15. fix https://github.com/rajanadar/VaultSharp/issues/79
-16. fix https://github.com/rajanadar/VaultSharp/issues/63
-17. 
+13. fix this: https://github.com/rajanadar/VaultSharp/issues/85 tls auth not working
+14. fix this: https://github.com/rajanadar/VaultSharp/issues/80 unknown fields in authinfo
+15. fix https://github.com/rajanadar/VaultSharp/issues/79 remove expired certs
+16. fix https://github.com/rajanadar/VaultSharp/issues/63 keyvalue secrets return output.
 
 Non Code
 

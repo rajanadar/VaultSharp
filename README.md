@@ -81,6 +81,13 @@ The following platforms are supported due to that.
 * VaultSharp supports dynamic Consul credential generation.
 * Please look at the API usage in the 'Consul' section of 'Secrets Engines' below, to see all the Consul related methods in action.
 
+### VaultSharp and Automatic Built-in Client Side failover
+
+* VaultSharp DOES NOT support built-in client-side failover either by supporting multiple endpoint URI's or by supporting roundrobin DNS.
+* I repeat, it DOES NOT.
+* It works off a single URL that you provide. Any sort of fail-over etc. needs to be done by you.
+* You are free to instantiate a new instance of VaultClient with a different URI.
+
 ### Auth Methods
 
 * VaultSharp supports all authentication methods supported by the Vault Service
