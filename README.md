@@ -309,16 +309,20 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 #### Certificate (TLS) Auth Method
 
 ```cs
-var clientCertificate = new X509Certificate2(certificatePath, certificatePassword, 
-                            X509KeyStorageFlags.Exportable | X509KeyStorageFlags.PersistKeySet);
 
-IAuthMethodInfo authMethod = new CertAuthMethodInfo(clientCertificate);
+// Please note that the certificate needs to be in pkcs12 format with a private key.
+// Turn your cert + key into pkcs12 format with the following command:
+
+// openssl pkcs12 -export -out Cert.p12 -in your-cert.pem -inkey your-key.pem
+
+var certificate = new X509Certificate2(your-p12-bytes, your-pass);
+
+IAuthMethodInfo authMethod = new CertAuthMethodInfo(certificate);
 var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
 
 IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
-// any operations done using the vaultClient will use the 
-vault token/policies mapped to the client certificate.
+// any operations done using the vaultClient will use the vault token/policies mapped to the client certificate.
 ```
 
 #### Token Auth Method
