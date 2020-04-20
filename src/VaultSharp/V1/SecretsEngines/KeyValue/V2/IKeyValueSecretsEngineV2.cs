@@ -87,7 +87,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>
-        /// The task.
+        /// The task with the secret.
         /// </returns>
         /// <remarks>
         /// Unlike other secrets engines, the KV secrets engine does not enforce TTLs for expiration. 
@@ -97,7 +97,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// Even with a ttl set, the secrets engine never removes data on its own.The ttl key is merely advisory.
         /// When reading a value with a ttl, both the ttl key and the refresh interval will reflect the value:
         /// </remarks>
-        Task WriteSecretAsync(string path, IDictionary<string, object> data, int? checkAndSet = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2);
+        Task<Secret<Dictionary<string, object>>> WriteSecretAsync(string path, IDictionary<string, object> data, int? checkAndSet = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2);
 
         /// <summary>
         /// Deletes the value at the specified path in Vault.

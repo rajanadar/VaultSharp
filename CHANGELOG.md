@@ -7,6 +7,7 @@
   * [GH-116] [GH-107] Fix deadlock issues
   * [GH-85] Add checks for private key and better documentation
   * [GH-80] Fix deserialization error on ReturnedLoginAuthInfo
+  * [GH-63] WriteSecretAsync now returns an output
 
   Vault changelog for 0.11.1x is verified and all done. Fix my GH issues and release NuGet.
   Make others admin.
@@ -23,17 +24,17 @@ Done (reply in GH to all)
 9. add to readme https://github.com/rajanadar/VaultSharp/issues/98 failover
 11. confirm and close https://github.com/rajanadar/VaultSharp/issues/90. mention deadlock fix.
 13. fix this: https://github.com/rajanadar/VaultSharp/issues/85 tls auth not working
+14. fix this: https://github.com/rajanadar/VaultSharp/issues/80 unknown fields in authinfo
+16. fix https://github.com/rajanadar/VaultSharp/issues/63 keyvalue secrets return output.
+
 
 Code TODO
 
 all issues till #123 triaged. woot!
 
 6. fix cubbhole mountpoint bug: https://github.com/rajanadar/VaultSharp/issues/104 or analyze
-10. fix this: https://github.com/rajanadar/VaultSharp/issues/96
 12. https://github.com/rajanadar/VaultSharp/issues/86 fix mount path
-14. fix this: https://github.com/rajanadar/VaultSharp/issues/80 unknown fields in authinfo
 15. fix https://github.com/rajanadar/VaultSharp/issues/79 remove expired certs
-16. fix https://github.com/rajanadar/VaultSharp/issues/63 keyvalue secrets return output.
 
 Non Code
 

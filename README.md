@@ -480,7 +480,7 @@ ListInfo paths = secret.Data;
 
  ```cs	
 var value = new Dictionary<string, object> { { "key1", "val1" }, { "key2", 2 } };
-await vaultClient.V1.Secrets.Cubbyhole.WriteSecretAsync(secretPath, value);
+var writtenValue = await vaultClient.V1.Secrets.Cubbyhole.WriteSecretAsync(secretPath, value);
 ```
 
 ##### Delete Secret
@@ -537,7 +537,7 @@ string privateKeyData = privateKeySecret.Data.Base64EncodedPrivateKeyData;
 
  ```cs	
 var value = new Dictionary<string, object> { { "key1", "val1" }, { "key2", 2 } };
-await vaultClient.V1.Secrets.KeyValue.V1.WriteSecretAsync(secretPath, value);
+var writtenValue = await vaultClient.V1.Secrets.KeyValue.V1.WriteSecretAsync(secretPath, value);
 ```
 
 ###### Read Secret
@@ -580,7 +580,7 @@ await vaultClient.V1.Secrets.KeyValue.V1.DeleteSecretAsync(secretPath);
 
  ```cs	
 var value = new Dictionary<string, object> { { "key1", "val1" }, { "key2", 2 } };
-await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync(secretPath, value, checkAndSet);
+var writtenValue = await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync(secretPath, value, checkAndSet);
 ```
 
 ###### Read Secret
