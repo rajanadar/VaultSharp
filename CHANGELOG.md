@@ -2,8 +2,8 @@
 
 **FEATURES:**
 
-  * Add possibility to revoke certificate by serial number. #1 https://github.com/rajanadar/VaultSharp/pull/75
-  * todo: 
+  * [GH-75] Add possibility to revoke certificate by serial number. #1 https://github.com/rajanadar/VaultSharp/pull/75
+  * [GH-76] Add expiration to response of GetCertificateCredentials
 
 **BUG FIXES:**
 
@@ -18,8 +18,8 @@
 **DOC IMPROVEMENTS:**
 
   * [GH-85] Add documentation to clearly mention that VaultSharp doesn't support automatic client side failovers.
-  * [GH-76] Add expiration to response of GetCertificateCredentials
 
+0. Add should not fix comment to gh-100. disposable.
 1. https://github.com/rajanadar/VaultSharp/issues/116 (deadlock fix from fork)
 2. reply https://github.com/rajanadar/VaultSharp/issues/114 and close. namespace
 3. answer https://github.com/rajanadar/VaultSharp/issues/110
