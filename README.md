@@ -639,11 +639,20 @@ string secretId = nomadCredentials.Data.SecretId;
 
 #### PKI (Cerificates) Secrets Engine
 
+##### Generate credentials
+
 ```cs
 var certificateCredentialsRequestOptions = new CertificateCredentialsRequestOptions { // initialize };
 Secret<CertificateCredentials> certSecret = await vaultClient.V1.Secrets.PKI.GetCredentialsAsync(pkiRoleName, certificateCredentialsRequestOptions);
 
 string privateKeyContent = certSecret.Data.PrivateKeyContent;
+```
+
+##### Revoke Certificate
+
+```cs
+Secret<RevokeCertificateResponse> revoke = await vaultClient.V1.Secrets.PKI.RevokeCertificateAsync(serialNumber);
+long revocationTime = revoke.Data.RevocationTime;
 ```
 
 #### RabbitMQ Secrets Engine

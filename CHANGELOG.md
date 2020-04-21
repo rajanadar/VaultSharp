@@ -1,5 +1,10 @@
 ## 0.11.1003 (April 24, 2020)
 
+**FEATURES:**
+
+  * Add possibility to revoke certificate by serial number. #1 https://github.com/rajanadar/VaultSharp/pull/75
+  * todo: 
+
 **BUG FIXES:**
 
   * [GH-94] Add namespace support.
@@ -10,13 +15,10 @@
   * [GH-63] WriteSecretAsync now returns an output
   * [GH-86] Fix the wrong default mount name for KV1 and KV2 secret engines
 
-  Vault changelog for 0.11.1x is verified and all done. Fix my GH issues and release NuGet.
-  Make others admin.
-  Then move to 1.4.x
+**DOC IMPROVEMENTS:**
 
-all issues till #123 triaged. woot!
-
-Done (reply in GH to all)
+  * [GH-85] Add documentation to clearly mention that VaultSharp doesn't support automatic client side failovers.
+  * [GH-76] Add expiration to response of GetCertificateCredentials
 
 1. https://github.com/rajanadar/VaultSharp/issues/116 (deadlock fix from fork)
 2. reply https://github.com/rajanadar/VaultSharp/issues/114 and close. namespace
@@ -37,8 +39,6 @@ Done (reply in GH to all)
 4. https://github.com/rajanadar/VaultSharp/issues/102
 6. fix cubbhole mountpoint bug: https://github.com/rajanadar/VaultSharp/issues/104 or analyze
 
-0.11.2000 (February 6, 2019)
-	• [GH-1] Add possibility to revoke certificate
 	• [GH-2] Add expiration to response of GetCertificateCredentials
 	• [GH-3] Extended the TOTP secrets engine with the remaining API methods.
 	• [GH-5] Make Polymath and VaultClient disposable in order to cleanup httpclient
