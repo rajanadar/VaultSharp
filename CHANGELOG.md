@@ -1,5 +1,14 @@
 ## 0.11.1003 (April 24, 2020)
 
+todo
+
+1. issue 5 totp apis
+2. issue 5 : generic read secret
+3. for gh 110 and gh 112, issue 7: read 112 before code changes. resilient requests.
+4. gh 105: issue 8. destroy secret. do
+5. gh 81: skip this. issue 11. not clear yet.
+6. do issue 13. new transit api changes.
+
 **FEATURES:**
 
   * [GH-75] Add possibility to revoke certificate by serial number. #1 https://github.com/rajanadar/VaultSharp/pull/75
