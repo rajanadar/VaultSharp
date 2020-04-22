@@ -1,18 +1,11 @@
 ## 0.11.1003 (April 24, 2020)
 
-todo
-
-1. issue 5 totp apis
-2. issue 5 : generic read secret
-3. for gh 110 and gh 112, issue 7: read 112 before code changes. resilient requests.
-4. gh 105: issue 8. destroy secret. do
-5. gh 81: skip this. issue 11. not clear yet.
-6. do issue 13. new transit api changes.
-
 **FEATURES:**
 
   * [GH-75] Add possibility to revoke certificate by serial number. #1 https://github.com/rajanadar/VaultSharp/pull/75
   * [GH-76] Add expiration to response of GetCertificateCredentials
+  
+  * (pending) [GH-79] Remove expired certificates
 
 **BUG FIXES:**
 
@@ -23,40 +16,11 @@ todo
   * [GH-80] Fix deserialization error on ReturnedLoginAuthInfo
   * [GH-63] WriteSecretAsync now returns an output
   * [GH-86] Fix the wrong default mount name for KV1 and KV2 secret engines
+  * (pending) [GH-104] Fixed the Cubbyhole Mountpoint bug
 
 **DOC IMPROVEMENTS:**
 
   * [GH-85] Add documentation to clearly mention that VaultSharp doesn't support automatic client side failovers.
-
-0. Add should not fix comment to gh-100. disposable.
-1. https://github.com/rajanadar/VaultSharp/issues/116 (deadlock fix from fork)
-2. reply https://github.com/rajanadar/VaultSharp/issues/114 and close. namespace
-3. answer https://github.com/rajanadar/VaultSharp/issues/110
-5. https://github.com/rajanadar/VaultSharp/issues/107 (deadlock fix from fork)
-7. https://github.com/rajanadar/VaultSharp/issues/103 namespace
-8. https://github.com/rajanadar/VaultSharp/issues/99 copy from fork
-9. add to readme https://github.com/rajanadar/VaultSharp/issues/98 failover
-11. confirm and close https://github.com/rajanadar/VaultSharp/issues/90. mention deadlock fix.
-13. fix this: https://github.com/rajanadar/VaultSharp/issues/85 tls auth not working
-14. fix this: https://github.com/rajanadar/VaultSharp/issues/80 unknown fields in authinfo
-16. fix https://github.com/rajanadar/VaultSharp/issues/63 keyvalue secrets return output.
-15. #79 https://github.com/rajanadar/VaultSharp/issues/79 remove expired certs >> ask pr from the good guy.
-12. https://github.com/rajanadar/VaultSharp/issues/86 fix mount path
-1. https://github.com/rajanadar/VaultSharp/issues/119 Add more details. No code work.
-2. comment on https://github.com/rajanadar/VaultSharp/issues/118 Make hoerup etc. as collaborators.
-3. thank and close https://github.com/rajanadar/VaultSharp/issues/115
-4. https://github.com/rajanadar/VaultSharp/issues/102
-6. fix cubbhole mountpoint bug: https://github.com/rajanadar/VaultSharp/issues/104 or analyze
-
-	• [GH-2] Add expiration to response of GetCertificateCredentials
-	• [GH-3] Extended the TOTP secrets engine with the remaining API methods.
-	• [GH-5] Make Polymath and VaultClient disposable in order to cleanup httpclient
-	• [GH-6] Allow r/w of SecretData
-	• [GH-7] Added httpClient to Vault client constructor
-	• [GH-8] Add method to destroys a secret for a specified location
-	• [upstream/GH-94] Add namespace support
-
-From <https://github.com/VaultSharp/VaultSharp/blob/master/CHANGELOG.md> 
 
 ## 0.11.1002 (April 21, 2019)
 
