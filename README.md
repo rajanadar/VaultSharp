@@ -50,7 +50,7 @@ string consulToken = consulCredentials.Data.Token;
 
 ### Gist of the features
 
- * VaultSharp 0.10.x supports 
+ * VaultSharp supports 
    - All the Auth Methods for Logging  into Vault. (AppRole, AWS, Azure, GitHub, Google Cloud, JWT/OIDC, Kubernetes, LDAP, Okta, RADIUS, TLS, Tokens & UserPass)
    - All the secret engines to get dynamic credentials. (AD, AWS EC2 and IAM, Consul, Cubbyhole, Databases, Google Cloud, Key-Value, Nomad, PKI, RabbitMQ, SSH and TOTP)
    - Several system APIs including enterprise vault apis
@@ -80,6 +80,13 @@ The following platforms are supported due to that.
 
 * VaultSharp supports dynamic Consul credential generation.
 * Please look at the API usage in the 'Consul' section of 'Secrets Engines' below, to see all the Consul related methods in action.
+
+### VaultSharp and Automatic Built-in Client Side failover
+
+* VaultSharp DOES NOT support built-in client-side failover either by supporting multiple endpoint URI's or by supporting roundrobin DNS.
+* I repeat, it DOES NOT.
+* It works off a single URL that you provide. Any sort of fail-over etc. needs to be done by you.
+* You are free to instantiate a new instance of VaultClient with a different URI.
 
 ### Auth Methods
 
@@ -302,16 +309,20 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 #### Certificate (TLS) Auth Method
 
 ```cs
-var clientCertificate = new X509Certificate2(certificatePath, certificatePassword, 
-                            X509KeyStorageFlags.Exportable | X509KeyStorageFlags.PersistKeySet);
 
-IAuthMethodInfo authMethod = new CertAuthMethodInfo(clientCertificate);
+// Please note that the certificate needs to be in pkcs12 format with a private key.
+// Turn your cert + key into pkcs12 format with the following command:
+
+// openssl pkcs12 -export -out Cert.p12 -in your-cert.pem -inkey your-key.pem
+
+var certificate = new X509Certificate2(your-p12-bytes, your-pass);
+
+IAuthMethodInfo authMethod = new CertAuthMethodInfo(certificate);
 var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
 
 IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
-// any operations done using the vaultClient will use the 
-vault token/policies mapped to the client certificate.
+// any operations done using the vaultClient will use the vault token/policies mapped to the client certificate.
 ```
 
 #### Token Auth Method
@@ -541,7 +552,7 @@ string privateKeyData = privateKeySecret.Data.Base64EncodedPrivateKeyData;
 
  ```cs	
 var value = new Dictionary<string, object> { { "key1", "val1" }, { "key2", 2 } };
-await vaultClient.V1.Secrets.KeyValue.V1.WriteSecretAsync(secretPath, value);
+var writtenValue = await vaultClient.V1.Secrets.KeyValue.V1.WriteSecretAsync(secretPath, value);
 ```
 
 ###### Read Secret
@@ -584,7 +595,7 @@ await vaultClient.V1.Secrets.KeyValue.V1.DeleteSecretAsync(secretPath);
 
  ```cs	
 var value = new Dictionary<string, object> { { "key1", "val1" }, { "key2", 2 } };
-await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync(secretPath, value, checkAndSet);
+var writtenValue = await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync(secretPath, value, checkAndSet);
 ```
 
 ###### Read Secret
@@ -625,6 +636,15 @@ ListInfo paths = secret.Data;
 await vaultClient.V1.Secrets.KeyValue.V2.DestroySecretAsync(secretPath, new List<int> { 1, 2 });
 ```
 
+###### Delete Secret Metadata and all versions
+
+ * This endpoint permanently deletes the key metadata and all version data for the specified key. 
+ * All version history will be removed.
+
+ ```cs	
+await vaultClient.V1.Secrets.KeyValue.V2.DeleteMetadataAsync(secretPath);
+```
+
 #### Identity Secrets Engine
 
 Coming soon...
@@ -643,11 +663,27 @@ string secretId = nomadCredentials.Data.SecretId;
 
 #### PKI (Cerificates) Secrets Engine
 
+##### Generate credentials
+
 ```cs
 var certificateCredentialsRequestOptions = new CertificateCredentialsRequestOptions { // initialize };
 Secret<CertificateCredentials> certSecret = await vaultClient.V1.Secrets.PKI.GetCredentialsAsync(pkiRoleName, certificateCredentialsRequestOptions);
 
 string privateKeyContent = certSecret.Data.PrivateKeyContent;
+```
+
+##### Revoke Certificate
+
+```cs
+Secret<RevokeCertificateResponse> revoke = await vaultClient.V1.Secrets.PKI.RevokeCertificateAsync(serialNumber);
+long revocationTime = revoke.Data.RevocationTime;
+```
+
+##### Tidy up Certificate Storage
+
+```cs
+var request = new CertificateTidyRequest { TidyCertStore = false, TidyRevokedCerts = true };
+await vaultClient.V1.Secrets.PKI.TidyAsync(request);
 ```
 
 #### RabbitMQ Secrets Engine

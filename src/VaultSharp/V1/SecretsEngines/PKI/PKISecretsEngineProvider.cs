@@ -25,5 +25,22 @@ namespace VaultSharp.V1.SecretsEngines.PKI
 
             return result;
         }
+
+        public async Task<Secret<RevokeCertificateResponse>> RevokeCertificateAsync(string serialNumber, string pkiBackendMountPoint = "pki")
+        {
+            Checker.NotNull(serialNumber, "serialNumber");
+            Checker.NotNull(pkiBackendMountPoint, "pkiBackendMountPoint");
+
+            return await _polymath.MakeVaultApiRequest<Secret<RevokeCertificateResponse>>("v1/" + pkiBackendMountPoint.Trim('/') + "/revoke", HttpMethod.Post, new { serial_number = serialNumber }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task TidyAsync(CertificateTidyRequest certificateTidyRequest = null, string pkiBackendMountPoint = "pki")
+        {
+            Checker.NotNull(pkiBackendMountPoint, "pkiBackendMountPoint");
+
+            var newRequest = certificateTidyRequest ?? new CertificateTidyRequest();
+
+            await _polymath.MakeVaultApiRequest("v1/" + pkiBackendMountPoint.Trim('/') + "/tidy", HttpMethod.Post, newRequest).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
     }
 }

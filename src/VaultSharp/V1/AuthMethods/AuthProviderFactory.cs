@@ -85,7 +85,7 @@ namespace VaultSharp.V1.AuthMethods
 
             if (authInfo.AuthMethodType == AuthMethodType.Token)
             {
-                return new TokenAuthMethodLoginProvider(authInfo as TokenAuthMethodInfo);
+                return new TokenAuthMethodLoginProvider(authInfo as TokenAuthMethodInfo, polymath);
             }
 
             if (authInfo.AuthMethodType == AuthMethodType.UserPass)

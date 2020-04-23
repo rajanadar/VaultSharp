@@ -1,6 +1,11 @@
-## 1.4.0000 (Unknown)
+## 1.4.0000 (expected by May 17, 2020)
 
-Plan: Release 0.11.1003 with key bug fixes in GH. Then work on this vnext.
+**FEATURES:**
+
+  * Add support for ```AliPay``` Secrets Engine.
+  * Add support to pass Vault token as ```X-Vault-Token``` header or as the standard ```Authorization: Bearer <vault-token>``` header.
+    By default, the ```Authorization: Bearer <vault-token>``` scheme is used.
+    You can override it using the ```VaultClientSettings.UseVaultTokenHeaderInsteadOfAuthorizationHeader``` flag.
 
 **BREAKING CHANGES:**
 
@@ -17,29 +22,28 @@ Plan: Release 0.11.1003 with key bug fixes in GH. Then work on this vnext.
   * Added the ```otp``` and ```otp_length``` fields to ```RootTokenGenerationStatus``` class.
   * ```TokenCapability``` class now returns additional fields as well other than the ```capabilities``` field.
 
+## 0.11.1003 (April 22, 2020)
+
 **FEATURES:**
 
-  * Add support for ```AliPay``` Secrets Engine.
-  * Add support to pass Vault token as ```X-Vault-Token``` header or as the standard ```Authorization: Bearer <vault-token>``` header.
-    By default, the ```Authorization: Bearer <vault-token>``` scheme is used.
-    You can override it using the ```VaultClientSettings.UseVaultTokenHeaderInsteadOfAuthorizationHeader``` flag.
-  * [GH-94] Add support for namespaces per VaultSharp client. 
+  * [GH-75] Add possibility to revoke certificate by serial number.
+  * [GH-76] Add expiration to response of GetCertificateCredentials
+  * [GH-79] Ability to tidy up the certificate storage
+  * [GH-84] Ability to delete KV2 secret metadata and all versions
 
 **BUG FIXES:**
 
+  * [GH-94] Add namespace support.
   * [GH-82] Fix the GetSecretBackendsAsync() deserialization error
+  * [GH-116] [GH-107] Fix deadlock issues
+  * [GH-85] Add checks for private key and better documentation
+  * [GH-80] Fix deserialization error on ReturnedLoginAuthInfo
+  * [GH-63] WriteSecretAsync now returns an output
+  * [GH-86] Fix the wrong default mount name for KV1 and KV2 secret engines
 
-**TODO:**
+**DOC IMPROVEMENTS:**
 
-  * Google Cloud KMS,  Secrets Engine.
-  * auth/jwt: Disallow logins of role_type "oidc" via the /login path [JWT-38]
-  * auth/jwt: Roles now have a "role type" parameter with a default type of "oidc". To configure new JWT roles, a role type of "jwt" must be explicitly specified.
-  * The name "oidc" has been added as an alias for the jwt backend. Either name may be specified in the auth enable command.
-  * Kubernetes Projected Service Account Tokens: Projected Service Account Tokens are now supported in Kubernetes auth
-  * Azure Existing Service Principal Support: Credentials can now be generated against an existing service principal
-  * Check JSON of all AUTH and Secrets Engines.
-  * Fix the KV2 reading metadata.
-  * Fix the root level response fields.
+  * [GH-85] Add documentation to clearly mention that VaultSharp doesn't support automatic client side failovers.
 
 ## 0.11.1002 (April 21, 2019)
 
