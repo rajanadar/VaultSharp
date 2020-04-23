@@ -4,8 +4,7 @@
 
   * [GH-75] Add possibility to revoke certificate by serial number. #1 https://github.com/rajanadar/VaultSharp/pull/75
   * [GH-76] Add expiration to response of GetCertificateCredentials
-  
-  * (pending) [GH-79] Remove expired certificates
+  * [GH-79] Ability to tidy up the certificate storage
 
 **BUG FIXES:**
 
@@ -16,7 +15,6 @@
   * [GH-80] Fix deserialization error on ReturnedLoginAuthInfo
   * [GH-63] WriteSecretAsync now returns an output
   * [GH-86] Fix the wrong default mount name for KV1 and KV2 secret engines
-  * (pending) [GH-104] Fixed the Cubbyhole Mountpoint bug
 
 **DOC IMPROVEMENTS:**
 

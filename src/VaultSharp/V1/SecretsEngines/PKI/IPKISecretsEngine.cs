@@ -49,5 +49,19 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The secret with the Certificate revokation info.
         /// </returns>
         Task<Secret<RevokeCertificateResponse>> RevokeCertificateAsync(string serialNumber, string pkiBackendMountPoint = SecretsEngineDefaultPaths.PKI);
+
+        /// <summary>
+        /// This endpoint allows tidying up the storage backend and/or CRL by removing certificates that have expired 
+        /// and are past a certain buffer period beyond their expiration time.
+        /// </summary>
+        /// <param name="certificateTidyRequest">The request object</param>
+        /// <param name="pkiBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineDefaultPaths.PKI" />
+        /// Provide a value only if you have customized the PKI mount point.
+        /// </param>
+        /// <returns>
+        /// The task
+        /// </returns>
+        Task TidyAsync(CertificateTidyRequest certificateTidyRequest = null, string pkiBackendMountPoint = SecretsEngineDefaultPaths.PKI);
     }
 }

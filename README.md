@@ -50,7 +50,7 @@ string consulToken = consulCredentials.Data.Token;
 
 ### Gist of the features
 
- * VaultSharp 0.10.x supports 
+ * VaultSharp supports 
    - All the Auth Methods for Logging  into Vault. (AppRole, AWS, Azure, GitHub, Google Cloud, JWT/OIDC, Kubernetes, LDAP, Okta, RADIUS, TLS, Tokens & UserPass)
    - All the secret engines to get dynamic credentials. (AD, AWS EC2 and IAM, Consul, Cubbyhole, Databases, Google Cloud, Key-Value, Nomad, PKI, RabbitMQ, SSH and TOTP)
    - Several system APIs including enterprise vault apis
@@ -653,6 +653,13 @@ string privateKeyContent = certSecret.Data.PrivateKeyContent;
 ```cs
 Secret<RevokeCertificateResponse> revoke = await vaultClient.V1.Secrets.PKI.RevokeCertificateAsync(serialNumber);
 long revocationTime = revoke.Data.RevocationTime;
+```
+
+##### Tidy up Certificate Storage
+
+```cs
+var request = new CertificateTidyRequest { TidyCertStore = false, TidyRevokedCerts = true };
+await vaultClient.V1.Secrets.PKI.TidyAsync(request);
 ```
 
 #### RabbitMQ Secrets Engine
