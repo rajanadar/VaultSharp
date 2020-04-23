@@ -58,30 +58,6 @@ namespace VaultSharp.Samples
 
         private static void RunAllSamples()
         {
-            // before runnig these tests, just start your local vault server with a file backend.
-            // ensure the path in .hcl file reflects the right folder structure.
-            
-            // startvault.cmd OR these 2 lines.
-            // rd E:\raja\work\vault\file_backend /S /Q
-            // vault server -config E:\raja\work\vault\f.hcl
-            
-            // f.hcl looks like
-            /*
-                backend "file" {
-                  path = "e:\\raja\\work\\vault\\file_backend"
-                  }
- 
-                listener "tcp" {
-                  address = "127.0.0.1:8200"
-                  tls_disable = 1
-                }
-
-                raw_storage_endpoint = true
-            */
-
-            // don't init or unseal it. these tests will do all of that.
-            // i dev on a Windows 10 x64 bit OS.
-
             RunSystemBackendSamples();
             RunAuthMethodSamples();
             RunSecretsEngineSamples();
@@ -328,6 +304,14 @@ namespace VaultSharp.Samples
             _authenticatedVaultClient.V1.Secrets.KeyValue.V2.DestroySecretAsync(genericsPath, new List<int> { kv2genericmetadata.Data.CurrentVersion }, mountPoint: kv2SecretsEngine.Path).Wait();
 
             _authenticatedVaultClient.V1.System.UnmountSecretBackendAsync(kv2SecretsEngine.Path).Wait();        
+        }
+
+        public class FooData
+        {
+            [JsonProperty("foo")]
+            public string Foo { get; set; }
+            [JsonProperty("foo2")]
+            public int Foo2 { get; set; }
         }
 
         private static void RunSystemBackendSamples()
