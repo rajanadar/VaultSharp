@@ -25,7 +25,7 @@ namespace VaultSharp.Core
 
         public VaultClientSettings VaultClientSettings { get; }
 
-        public Polymath(VaultClientSettings vaultClientSettings)
+        public Polymath(VaultClientSettings vaultClientSettings, ICredentials credentials = null)
         {
             VaultClientSettings = vaultClientSettings;
 
@@ -38,7 +38,7 @@ namespace VaultSharp.Core
                 var certAuthMethodInfo = vaultClientSettings.AuthMethodInfo as CertAuthMethodInfo;
                 handler.ClientCertificates.Add(certAuthMethodInfo.ClientCertificate);
             }
-#else   
+#else
             var handler = new HttpClientHandler();
 
             // not the best place, but a very convenient place to add cert of certauthmethod.
@@ -49,21 +49,43 @@ namespace VaultSharp.Core
             }
 #endif
 
+            handler.Credentials = credentials;
+
             vaultClientSettings.PostProcessHttpClientHandlerAction?.Invoke(handler);
 
             _httpClient = new HttpClient(handler);
-            _httpClient.BaseAddress = new Uri(vaultClientSettings.VaultServerUriWithPort);
+            ConfigureHttpClient();
+            _lazyVaultToken = GetLazyVaultToken();
+        }
 
-            if (vaultClientSettings.VaultServiceTimeout != null)
+        public Polymath(VaultClientSettings vaultClientSettings, HttpClient httpClient)
+        {
+            VaultClientSettings = vaultClientSettings;
+            _httpClient = httpClient;
+
+            ConfigureHttpClient();
+            _lazyVaultToken = GetLazyVaultToken();
+        }
+
+        private void ConfigureHttpClient()
+        {
+            _httpClient.BaseAddress = new Uri(VaultClientSettings.VaultServerUriWithPort);
+
+            if (VaultClientSettings.VaultServiceTimeout != null)
             {
-                _httpClient.Timeout = vaultClientSettings.VaultServiceTimeout.Value;
+                _httpClient.Timeout = VaultClientSettings.VaultServiceTimeout.Value;
+            }
+        }
+
+        private Lazy<Task<string>> GetLazyVaultToken()
+        {
+            if (VaultClientSettings.AuthMethodInfo == null)
+            {
+                return null;
             }
 
-            if (vaultClientSettings.AuthMethodInfo != null)
-            {
-                var authProvider = AuthProviderFactory.CreateAuthenticationProvider(vaultClientSettings.AuthMethodInfo, this);
-                _lazyVaultToken = new Lazy<Task<string>>(authProvider.GetVaultTokenAsync);
-            }
+            var authProvider = AuthProviderFactory.CreateAuthenticationProvider(VaultClientSettings.AuthMethodInfo, this);
+            return new Lazy<Task<string>>(authProvider.GetVaultTokenAsync);
         }
 
         public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false)
