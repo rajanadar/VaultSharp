@@ -727,6 +727,16 @@ Secret<SSHCredentials> sshCreds = await vaultClient.V1.Secrets.SSH.GetCredential
 string sshKey = sshCreds.Data.Key;
 ```
 
+##### SSH key signing
+
+ * This endpoint signs an SSH public key based on the supplied parameters, subject to the restrictions contained in the role named in the endpoint.
+
+ ```cs	
+SignKeyRequest request = new SignKeyRequest { PublicKey = "ipsem" };
+Secret<SignedKeyResponse> signedKey = await vaultClient.V1.Secrets.SSH.SignKeyAsync(roleName, request);
+string signedKey = signedKey.Data.SignedKey;
+```
+
 #### TOTP Secrets Engine
 
 ##### Generate Code

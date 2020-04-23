@@ -6,6 +6,7 @@
   * Add support to pass Vault token as ```X-Vault-Token``` header or as the standard ```Authorization: Bearer <vault-token>``` header.
     By default, the ```Authorization: Bearer <vault-token>``` scheme is used.
     You can override it using the ```VaultClientSettings.UseVaultTokenHeaderInsteadOfAuthorizationHeader``` flag.
+  * [GH-71] SSK Key Signing
 
 **BREAKING CHANGES:**
 
