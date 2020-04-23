@@ -8,7 +8,7 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
     public class TOTPCode
     {
         /// <summary>
-        /// Gets or sets the TOTO code.
+        /// Gets or sets the TOTP code.
         /// </summary>
         /// <value>
         /// The TOTP code.
