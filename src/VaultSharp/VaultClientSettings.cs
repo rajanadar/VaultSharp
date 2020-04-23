@@ -31,6 +31,11 @@ namespace VaultSharp
         public IAuthMethodInfo AuthMethodInfo { get; }
 
         /// <summary>
+        /// The Vault namespace, if any.
+        /// </summary>
+        public string Namespace { get; set; }
+
+        /// <summary>
         /// Flag to indicate async context.
         /// </summary>
         public bool ContinueAsyncTasksOnCapturedContext { get; set; }

@@ -1,4 +1,5 @@
-﻿using VaultSharp.V1.Commons;
+﻿using Newtonsoft.Json;
+using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.AuthMethods
 {
@@ -7,6 +8,7 @@ namespace VaultSharp.V1.AuthMethods
     /// </summary>
     public abstract class AbstractAuthMethodInfo : IAuthMethodInfo
     {
+        [JsonIgnore]
         public AuthInfo ReturnedLoginAuthInfo { get; internal set; }
 
         public abstract AuthMethodType AuthMethodType { get; }

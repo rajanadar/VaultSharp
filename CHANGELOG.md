@@ -1,3 +1,26 @@
+## 0.11.1003 (April 22, 2020)
+
+**FEATURES:**
+
+  * [GH-75] Add possibility to revoke certificate by serial number. #1 https://github.com/rajanadar/VaultSharp/pull/75
+  * [GH-76] Add expiration to response of GetCertificateCredentials
+  * [GH-79] Ability to tidy up the certificate storage
+  * [GH-84] Ability to delete KV2 secret metadata and all versions
+
+**BUG FIXES:**
+
+  * [GH-94] Add namespace support.
+  * [GH-82] Fix the GetSecretBackendsAsync() deserialization error
+  * [GH-116] [GH-107] Fix deadlock issues
+  * [GH-85] Add checks for private key and better documentation
+  * [GH-80] Fix deserialization error on ReturnedLoginAuthInfo
+  * [GH-63] WriteSecretAsync now returns an output
+  * [GH-86] Fix the wrong default mount name for KV1 and KV2 secret engines
+
+**DOC IMPROVEMENTS:**
+
+  * [GH-85] Add documentation to clearly mention that VaultSharp doesn't support automatic client side failovers.
+
 ## 0.11.1002 (April 21, 2019)
 
 **FEATURES:**

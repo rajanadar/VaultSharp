@@ -109,7 +109,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>
-        /// The task.
+        /// The task with the secret.
         /// </returns>
         /// <remarks>
         /// Unlike other secrets engines, the KV secrets engine does not enforce TTLs for expiration. 
@@ -119,7 +119,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// Even with a ttl set, the secrets engine never removes data on its own.The ttl key is merely advisory.
         /// When reading a value with a ttl, both the ttl key and the refresh interval will reflect the value:
         /// </remarks>
-        Task WriteSecretAsync(string path, IDictionary<string, object> data, int? checkAndSet = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2);
+        Task<Secret<Dictionary<string, object>>> WriteSecretAsync(string path, IDictionary<string, object> data, int? checkAndSet = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2);
         
         /// <summary>
         /// Stores a secret at the specified location. If the value does not yet exist, the calling token must have an ACL policy granting the create capability. 
@@ -149,7 +149,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// Even with a ttl set, the secrets engine never removes data on its own.The ttl key is merely advisory.
         /// When reading a value with a ttl, both the ttl key and the refresh interval will reflect the value:
         /// </remarks>
-        Task WriteSecretAsync<T>(string path, T data, int? checkAndSet = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2);
+        Task<Secret<T>> WriteSecretAsync<T>(string path, T data, int? checkAndSet = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2);
 
         /// <summary>
         /// Deletes the value at the specified path in Vault.
@@ -168,5 +168,21 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// The task.
         /// </returns>
         Task DestroySecretAsync(string path, IList<int> versions, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2);
+
+        /// <summary>
+        /// This endpoint permanently deletes the key metadata and all version data for the specified key. 
+        /// All version history will be removed.
+        /// </summary>
+        /// <param name="path"><para>[required]</para>
+        /// Specifies the path of the secret to delete.
+        /// </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV2" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task DeleteMetadataAsync(string path, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2);
     }
 }

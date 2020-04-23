@@ -6,6 +6,7 @@ using VaultSharp.V1.AuthMethods.AWS;
 using VaultSharp.V1.AuthMethods.Azure;
 using VaultSharp.V1.AuthMethods.Cert;
 using VaultSharp.V1.AuthMethods.GitHub;
+using VaultSharp.V1.AuthMethods.Kerberos;
 using VaultSharp.V1.AuthMethods.Kubernetes;
 using VaultSharp.V1.AuthMethods.LDAP;
 using VaultSharp.V1.AuthMethods.Okta;
@@ -41,6 +42,8 @@ namespace VaultSharp.V1.AuthMethods
         public IKubernetesAuthMethod Kubernetes => throw new NotImplementedException();
 
         public ILDAPAuthMethod LDAP => throw new NotImplementedException();
+
+        public IKerberosAuthMethod Kerberos => throw new NotImplementedException();
 
         public IOktaAuthMethod Okta => throw new NotImplementedException();
 

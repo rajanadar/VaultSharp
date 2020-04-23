@@ -24,5 +24,14 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// </value>
         [JsonProperty("private_key_type")]
         public CertificateKeyType PrivateKeyType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the expiration.
+        /// </summary>
+        /// <value>
+        /// The expiration.
+        /// </value>
+        [JsonProperty("expiration")]
+        public int Expiration { get; set; }
     }
 }

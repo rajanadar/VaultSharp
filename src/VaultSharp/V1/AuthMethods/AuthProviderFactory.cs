@@ -9,6 +9,7 @@ using VaultSharp.V1.AuthMethods.Custom;
 using VaultSharp.V1.AuthMethods.GitHub;
 using VaultSharp.V1.AuthMethods.GoogleCloud;
 using VaultSharp.V1.AuthMethods.JWT;
+using VaultSharp.V1.AuthMethods.Kerberos;
 using VaultSharp.V1.AuthMethods.Kubernetes;
 using VaultSharp.V1.AuthMethods.LDAP;
 using VaultSharp.V1.AuthMethods.Okta;
@@ -67,6 +68,11 @@ namespace VaultSharp.V1.AuthMethods
                 return new LDAPAuthMethodLoginProvider(authInfo as LDAPAuthMethodInfo, polymath);
             }
 
+            if (authInfo.AuthMethodType == AuthMethodType.Kerberos)
+            {
+                return new KerberosAuthMethodLoginProvider(authInfo as KerberosAuthMethodInfo, polymath);
+            }
+
             if (authInfo.AuthMethodType == AuthMethodType.Okta)
             {
                 return new OktaAuthMethodLoginProvider(authInfo as OktaAuthMethodInfo, polymath);
@@ -85,7 +91,7 @@ namespace VaultSharp.V1.AuthMethods
 
             if (authInfo.AuthMethodType == AuthMethodType.Token)
             {
-                return new TokenAuthMethodLoginProvider(authInfo as TokenAuthMethodInfo);
+                return new TokenAuthMethodLoginProvider(authInfo as TokenAuthMethodInfo, polymath);
             }
 
             if (authInfo.AuthMethodType == AuthMethodType.UserPass)
