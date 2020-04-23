@@ -219,6 +219,30 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 // vault token/policies mapped to the azure jwt
 ```
 
+#### CloudFoundry Auth Method
+
+```cs
+// setup the CloudFoundry based auth to get the right token.
+
+IAuthMethodInfo authMethod = new CloudFoundryAuthMethodInfo(roleName, instanceCertContent, instanceKeyContent);
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the
+// vault token/policies mapped to the CloudFoundry jwt
+```
+
+##### CloudFoundry Signature Creation
+
+ - VaultSharp also provides a helper class to generate on-demand CloudFoundry signature.
+ - Use the ```CloudFoundrySignatureProvider``` class as follows
+
+```cs
+var signing_time = CloudFoundrySignatureProvider.GetFormattedSigningTime(DateTime.UtcNow);
+var signature = CloudFoundrySignatureProvider.GetSignature(signingTime, cfInstanceCertContent, roleName, cfInstanceKeyContent);
+```
+
 #### GitHub Auth Method
 
 ```cs

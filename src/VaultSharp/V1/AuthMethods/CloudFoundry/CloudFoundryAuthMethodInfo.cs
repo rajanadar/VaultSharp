@@ -1,12 +1,9 @@
-﻿using Newtonsoft.Json;
-using VaultSharp.Core;
-using VaultSharp.V1.AuthMethods.CloudFoundry.Signature;
+﻿using VaultSharp.Core;
 
 namespace VaultSharp.V1.AuthMethods.CloudFoundry
 {
     public class CloudFoundryAuthMethodInfo : AbstractAuthMethodInfo
     {
-        [JsonIgnore]
         public override AuthMethodType AuthMethodType => AuthMethodType.CloudFoundry;
 
         /// <summary>
@@ -16,7 +13,6 @@ namespace VaultSharp.V1.AuthMethods.CloudFoundry
         /// <value>
         /// The mount point.
         /// </value>
-        [JsonIgnore]
         public string MountPoint { get; }
 
         /// <summary>
@@ -26,19 +22,19 @@ namespace VaultSharp.V1.AuthMethods.CloudFoundry
         /// <value>
         /// The role name.
         /// </value>
-        [JsonProperty("role")]
         public string RoleName { get; }
 
         /// <summary>
         /// [required]
-        /// Gets the Signature for getting a token for a service account.
+        /// The full body of the file available at the path denoted by CF_INSTANCE_CERT.
         /// </summary>
-        /// <value>
-        /// The Signature.
-        /// </value>
-        [JsonProperty("signature")]
-        public CloudFoundrySignature Signature { get; }
+        public string CFInstanceCertContent { get; }
 
+        /// <summary>
+        /// [required]
+        /// The full body of the file available at the path denoted by CF_INSTANCE_KEY.
+        /// </summary>
+        public string CFInstanceKeyContent { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFoundryAuthMethodInfo"/> class.
@@ -46,12 +42,14 @@ namespace VaultSharp.V1.AuthMethods.CloudFoundry
         /// <param name="roleName">[required]
         /// The name of the role against which the login is being attempted.
         /// </param>
-        /// <param name="signature">
-        /// [required]
-        /// Gets the Signature for getting a token for a service account.
+        /// <param name="instanceCertContent">[required]
+        /// The full body of the file available at the path denoted by CF_INSTANCE_CERT.
         /// </param>
-        public CloudFoundryAuthMethodInfo(string roleName, CloudFoundrySignature signature)
-            : this(AuthMethodType.CloudFoundry.Type, roleName, signature)
+        /// <param name="instanceKeyContent">[required]
+        /// The full body of the file available at the path denoted by CF_INSTANCE_KEY.
+        /// </param>
+        public CloudFoundryAuthMethodInfo(string roleName, string instanceCertContent, string instanceKeyContent)
+            : this(AuthMethodType.CloudFoundry.Type, roleName, instanceCertContent, instanceKeyContent)
         {
         }
 
@@ -62,20 +60,23 @@ namespace VaultSharp.V1.AuthMethods.CloudFoundry
         /// <param name="roleName">[required]
         /// The name of the role against which the login is being attempted.
         /// </param>
-        /// <param name="signature">
-        /// [required]
-        /// Gets the Signature for getting a token for a service account.
+        /// <param name="instanceCertContent">[required]
+        /// The full body of the file available at the path denoted by CF_INSTANCE_CERT.
         /// </param>
-
-        public CloudFoundryAuthMethodInfo(string mountPoint, string roleName, CloudFoundrySignature signature)
+        /// <param name="instanceKeyContent">[required]
+        /// The full body of the file available at the path denoted by CF_INSTANCE_KEY.
+        /// </param>
+        public CloudFoundryAuthMethodInfo(string mountPoint, string roleName, string instanceCertContent, string instanceKeyContent)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");
-            Checker.NotNull(signature, "signature");
+            Checker.NotNull(instanceCertContent, "instanceCertContent");
+            Checker.NotNull(instanceKeyContent, "instanceKeyContent");
 
             MountPoint = mountPoint;
             RoleName = roleName;
-            Signature = signature;
+            CFInstanceCertContent = instanceCertContent;
+            CFInstanceKeyContent = instanceKeyContent;
         }
     }
 }

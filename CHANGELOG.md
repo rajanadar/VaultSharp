@@ -7,6 +7,7 @@
     By default, the ```Authorization: Bearer <vault-token>``` scheme is used.
     You can override it using the ```VaultClientSettings.UseVaultTokenHeaderInsteadOfAuthorizationHeader``` flag.
   * [GH-71] SSK Key Signing
+  * [GH-122] CloudFoundry Auth Method: Support for CloudFoundry login tokens including ability to create signatures.
 
 **BREAKING CHANGES:**
 
