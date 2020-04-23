@@ -24,7 +24,7 @@ namespace VaultSharp.Core
 
         public VaultClientSettings VaultClientSettings { get; }
 
-        public Polymath(VaultClientSettings vaultClientSettings)
+        public Polymath(VaultClientSettings vaultClientSettings, ICredentials credentials = null)
         {
             VaultClientSettings = vaultClientSettings;
 
@@ -37,7 +37,7 @@ namespace VaultSharp.Core
                 var certAuthMethodInfo = vaultClientSettings.AuthMethodInfo as CertAuthMethodInfo;
                 handler.ClientCertificates.Add(certAuthMethodInfo.ClientCertificate);
             }
-#else   
+#else
             var handler = new HttpClientHandler();
 
             // not the best place, but a very convenient place to add cert of certauthmethod.
@@ -47,6 +47,8 @@ namespace VaultSharp.Core
                 handler.ClientCertificates.Add(certAuthMethodInfo.ClientCertificate);
             }
 #endif
+
+            handler.Credentials = credentials;
 
             vaultClientSettings.PostProcessHttpClientHandlerAction?.Invoke(handler);
 
