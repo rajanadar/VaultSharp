@@ -24,6 +24,11 @@
 
 ## 0.11.1003 (April 22, 2020)
 
+**BREAKING CHANGES:**
+
+  * [GH-86] Fix the wrong default mount name for KV1 and KV2 secret engines. 
+    To minimize risks, please ensure you are using explicit mount points.
+
 **FEATURES:**
 
   * [GH-75] Add possibility to revoke certificate by serial number.
@@ -39,7 +44,6 @@
   * [GH-85] Add checks for private key and better documentation
   * [GH-80] Fix deserialization error on ReturnedLoginAuthInfo
   * [GH-63] WriteSecretAsync now returns an output
-  * [GH-86] Fix the wrong default mount name for KV1 and KV2 secret engines
 
 **DOC IMPROVEMENTS:**
 
