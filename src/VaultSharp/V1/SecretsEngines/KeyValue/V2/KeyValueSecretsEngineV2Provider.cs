@@ -49,11 +49,6 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
 
         public async Task<Secret<Dictionary<string, object>>> WriteSecretAsync(string path, IDictionary<string, object> data, int? checkAndSet = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2)
         {
-            await WriteSecretAsync<IDictionary<string, object>>(path, data, checkAndSet, mountPoint);
-        }
-        
-        public async Task WriteSecretAsync<T>(string path, T data, int? checkAndSet = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2)
-        {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(path, "path");
 
@@ -68,6 +63,24 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
             }
 
             return await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>("v1/" + mountPoint.Trim('/') + "/data/" + path.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+        
+        public async Task<Secret<T>> WriteSecretAsync<T>(string path, T data, int? checkAndSet = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2)
+        {
+            Checker.NotNull(mountPoint, "mountPoint");
+            Checker.NotNull(path, "path");
+
+            var requestData = new Dictionary<string, object>
+            {
+                { "data", data }
+            };
+
+            if (checkAndSet != null)
+            {
+                requestData.Add("options", new { cas = checkAndSet.Value });
+            }
+
+            return await _polymath.MakeVaultApiRequest<Secret<T>>("v1/" + mountPoint.Trim('/') + "/data/" + path.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task DestroySecretAsync(string path, IList<int> versions, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2)

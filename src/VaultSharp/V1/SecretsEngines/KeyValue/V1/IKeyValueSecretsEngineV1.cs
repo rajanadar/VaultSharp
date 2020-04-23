@@ -110,7 +110,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// Even with a ttl set, the secrets engine never removes data on its own.The ttl key is merely advisory.
         /// When reading a value with a ttl, both the ttl key and the refresh interval will reflect the value:
         /// </remarks>
-        Task WriteSecretAsync<T>(string path, T values, string mountPoint = SecretsEngineDefaultPaths.KeyValueV1);
+        Task<Secret<T>> WriteSecretAsync<T>(string path, T values, string mountPoint = SecretsEngineDefaultPaths.KeyValueV1);
         
         /// <summary>
         /// Deletes the value at the specified path in Vault.
