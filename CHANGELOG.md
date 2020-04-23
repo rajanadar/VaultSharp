@@ -1,3 +1,55 @@
+## 1.4.0000 (expected by May 17, 2020)
+
+**FEATURES:**
+
+  * Add support for ```AliPay``` Secrets Engine.
+  * Add support to pass Vault token as ```X-Vault-Token``` header or as the standard ```Authorization: Bearer <vault-token>``` header.
+    By default, the ```Authorization: Bearer <vault-token>``` scheme is used.
+    You can override it using the ```VaultClientSettings.UseVaultTokenHeaderInsteadOfAuthorizationHeader``` flag.
+  * [GH-71] SSK Key Signing
+
+**BREAKING CHANGES:**
+
+  * ```GetSealStatusAsync``` doesn't throw an exception anymore for a sealed vault.
+
+**IMPROVEMENTS:**
+
+  * Added the ```path``` field to ```FileAuditBackend``` class.
+  * Added the ```performance_standby``` field to ```HealthStatus``` class.
+  * Added the ```initialized```, ```migration``` and ```recovery_seal``` fields to ```SealStatus``` class.
+  * Added the ```options``` field to all the ```Backend``` classes.
+  * Added the ```token_type``` field to all the ```BackendConfig``` classes.
+  * Added the ```performance_standby``` and ```performance_standby_last_remote_wal``` fields to ```Leader``` class.
+  * Added the ```otp``` and ```otp_length``` fields to ```RootTokenGenerationStatus``` class.
+  * ```TokenCapability``` class now returns additional fields as well other than the ```capabilities``` field.
+
+## 0.11.1003 (April 22, 2020)
+
+**BREAKING CHANGES:**
+
+  * [GH-86] Fix the wrong default mount name for KV1 and KV2 secret engines. 
+    To minimize risks, please ensure you are using explicit mount points.
+
+**FEATURES:**
+
+  * [GH-75] Add possibility to revoke certificate by serial number.
+  * [GH-76] Add expiration to response of GetCertificateCredentials
+  * [GH-79] Ability to tidy up the certificate storage
+  * [GH-84] Ability to delete KV2 secret metadata and all versions
+
+**BUG FIXES:**
+
+  * [GH-94] Add namespace support.
+  * [GH-82] Fix the GetSecretBackendsAsync() deserialization error
+  * [GH-116] [GH-107] Fix deadlock issues
+  * [GH-85] Add checks for private key and better documentation
+  * [GH-80] Fix deserialization error on ReturnedLoginAuthInfo
+  * [GH-63] WriteSecretAsync now returns an output
+
+**DOC IMPROVEMENTS:**
+
+  * [GH-85] Add documentation to clearly mention that VaultSharp doesn't support automatic client side failovers.
+
 ## 0.11.1002 (April 21, 2019)
 
 **FEATURES:**

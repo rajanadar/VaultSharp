@@ -6,7 +6,11 @@ namespace VaultSharp.V1.Commons
     /// <summary>
     /// Represents a Vault Secret Data.
     /// </summary>
-    public class SecretData
+    public class SecretData : SecretData<IDictionary<string, object>>
+    {
+    }
+
+    public class SecretData<T>
     {
         /// <summary>
         /// Gets or sets the data.
@@ -15,7 +19,7 @@ namespace VaultSharp.V1.Commons
         /// The data.
         /// </value>
         [JsonProperty("data")]
-        public Dictionary<string, object> Data { get; set; }
+        public T Data { get; set; }
 
         /// <summary>
         /// Gets or sets the metadata.

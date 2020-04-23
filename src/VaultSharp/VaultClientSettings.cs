@@ -31,11 +31,6 @@ namespace VaultSharp
         public IAuthMethodInfo AuthMethodInfo { get; }
 
         /// <summary>
-        /// The Vault namespace, if any.
-        /// </summary>
-        public string Namespace { get; set; }
-
-        /// <summary>
         /// Flag to indicate async context.
         /// </summary>
         public bool ContinueAsyncTasksOnCapturedContext { get; set; }
@@ -60,5 +55,17 @@ namespace VaultSharp
         /// The per http response delegate invoked after every vault api http response.
         /// </summary>
         public Action<HttpResponseMessage> AfterApiResponseAction { get; set; }
+
+        /// <summary>
+        /// Flag to indicate how the vault token should be passed to the API.
+        /// Default is to use the Authorization: Bearer &lt;vault-token&gt; scheme.
+        /// </summary>
+        public bool UseVaultTokenHeaderInsteadOfAuthorizationHeader { get; set; }
+
+        /// <summary>
+        /// The namespace to use to achieve tenant level isolation.
+        /// Enterprise Vault only.
+        /// </summary>
+        public string Namespace { get; set; }
     }
 }

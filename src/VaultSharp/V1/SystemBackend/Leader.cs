@@ -44,5 +44,17 @@ namespace VaultSharp.V1.SystemBackend
         /// </value>
         [JsonProperty("leader_cluster_address")]
         public string ClusterAddress { get; set; }
+
+        /// <summary>
+        /// Gets or sets the performance standby.
+        /// </summary>
+        [JsonProperty("performance_standby")]
+        public bool PerformanceStandby { get; set; }
+
+        /// <summary>
+        /// Gets or sets the performance standby last remote wal.
+        /// </summary>
+        [JsonProperty("performance_standby_last_remote_wal")]
+        public int PerformanceStandbyLastRemoteWal { get; set; }
     }
 }

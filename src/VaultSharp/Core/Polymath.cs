@@ -15,16 +15,17 @@ namespace VaultSharp.Core
 {
     internal class Polymath
     {
+        private const string NamespaceHeaderKey = "X-Vault-Namespace";
+        private const string AuthorizationHeaderKey = "Authorization";
         private const string VaultTokenHeaderKey = "X-Vault-Token";
         private const string VaultWrapTimeToLiveHeaderKey = "X-Vault-Wrap-TTL";
-        private const string VaultNamespaceHeaderKey = "X-Vault-Namespace";
 
         private readonly HttpClient _httpClient;
         private readonly Lazy<Task<string>> _lazyVaultToken;
 
         public VaultClientSettings VaultClientSettings { get; }
 
-        public Polymath(VaultClientSettings vaultClientSettings)
+        public Polymath(VaultClientSettings vaultClientSettings, ICredentials credentials = null)
         {
             VaultClientSettings = vaultClientSettings;
 
@@ -37,7 +38,7 @@ namespace VaultSharp.Core
                 var certAuthMethodInfo = vaultClientSettings.AuthMethodInfo as CertAuthMethodInfo;
                 handler.ClientCertificates.Add(certAuthMethodInfo.ClientCertificate);
             }
-#else   
+#else
             var handler = new HttpClientHandler();
 
             // not the best place, but a very convenient place to add cert of certauthmethod.
@@ -48,26 +49,48 @@ namespace VaultSharp.Core
             }
 #endif
 
+            handler.Credentials = credentials;
+
             vaultClientSettings.PostProcessHttpClientHandlerAction?.Invoke(handler);
 
             _httpClient = new HttpClient(handler);
-            _httpClient.BaseAddress = new Uri(vaultClientSettings.VaultServerUriWithPort);
+            ConfigureHttpClient();
+            _lazyVaultToken = GetLazyVaultToken();
+        }
 
-            if (vaultClientSettings.VaultServiceTimeout != null)
+        public Polymath(VaultClientSettings vaultClientSettings, HttpClient httpClient)
+        {
+            VaultClientSettings = vaultClientSettings;
+            _httpClient = httpClient;
+
+            ConfigureHttpClient();
+            _lazyVaultToken = GetLazyVaultToken();
+        }
+
+        private void ConfigureHttpClient()
+        {
+            _httpClient.BaseAddress = new Uri(VaultClientSettings.VaultServerUriWithPort);
+
+            if (VaultClientSettings.VaultServiceTimeout != null)
             {
-                _httpClient.Timeout = vaultClientSettings.VaultServiceTimeout.Value;
+                _httpClient.Timeout = VaultClientSettings.VaultServiceTimeout.Value;
+            }
+        }
+
+        private Lazy<Task<string>> GetLazyVaultToken()
+        {
+            if (VaultClientSettings.AuthMethodInfo == null)
+            {
+                return null;
             }
 
-            if (vaultClientSettings.AuthMethodInfo != null)
-            {
-                var authProvider = AuthProviderFactory.CreateAuthenticationProvider(vaultClientSettings.AuthMethodInfo, this);
-                _lazyVaultToken = new Lazy<Task<string>>(authProvider.GetVaultTokenAsync);
-            }
+            var authProvider = AuthProviderFactory.CreateAuthenticationProvider(VaultClientSettings.AuthMethodInfo, this);
+            return new Lazy<Task<string>>(authProvider.GetVaultTokenAsync);
         }
 
         public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false)
         {
-            await MakeVaultApiRequest<JToken>(resourcePath, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated);
+            await MakeVaultApiRequest<JToken>(resourcePath, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null, string wrapTimeToLive = null, bool unauthenticated = false) where TResponse : class
@@ -76,7 +99,16 @@ namespace VaultSharp.Core
 
             if (!unauthenticated && _lazyVaultToken != null)
             {
-                headers.Add(VaultTokenHeaderKey, await _lazyVaultToken.Value);
+                var vaultToken = await _lazyVaultToken.Value.ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+
+                if (VaultClientSettings.UseVaultTokenHeaderInsteadOfAuthorizationHeader)
+                {
+                    headers.Add(VaultTokenHeaderKey, vaultToken);
+                }
+                else
+                {
+                    headers.Add(AuthorizationHeaderKey, "Bearer " + vaultToken);
+                }
             }
 
             if (wrapTimeToLive != null)
@@ -84,9 +116,9 @@ namespace VaultSharp.Core
                 headers.Add(VaultWrapTimeToLiveHeaderKey, wrapTimeToLive);
             }
 
-            if (VaultClientSettings.Namespace != null)
+            if (!string.IsNullOrWhiteSpace(VaultClientSettings.Namespace))
             {
-                headers.Add(VaultNamespaceHeaderKey, VaultClientSettings.Namespace);
+                headers.Add(NamespaceHeaderKey, VaultClientSettings.Namespace);
             }
 
             return await MakeRequestAsync<TResponse>(resourcePath, httpMethod, requestData, headers, rawResponse, postResponseAction).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);

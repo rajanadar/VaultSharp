@@ -5,14 +5,15 @@
         public const string System = "system";
 
         public const string ActiveDirectory = "ad";
+        public const string AliCloud = "alicloud";
         public const string AWS = "aws";
         public const string Azure = "azure";
         public const string Consul = "consul";
         public const string Cubbyhole = "cubbyhole";
         public const string Database = "database";
         public const string GoogleCloud = "gcp";
-        public const string KeyValueV1 = "secret";
-        public const string KeyValueV2 = "kv";
+        public const string KeyValueV1 = "kv";
+        public const string KeyValueV2 = "secret";
         public const string Identity = "identity";
         public const string Nomad = "nomad";
         public const string PKI = "pki";

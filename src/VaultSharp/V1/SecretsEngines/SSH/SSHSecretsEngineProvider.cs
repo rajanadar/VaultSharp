@@ -24,5 +24,14 @@ namespace VaultSharp.V1.SecretsEngines.SSH
 
             return await _polymath.MakeVaultApiRequest<Secret<SSHCredentials>>("v1/" + mountPoint.Trim('/') + "/creds/" + roleName.Trim('/'), HttpMethod.Post, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
+
+        public async Task<Secret<SignedKeyResponse>> SignKeyAsync(string roleName, SignKeyRequest signKeyRequest, string mountPoint = "ssh")
+        {
+            Checker.NotNull(mountPoint, "mountPoint");
+            Checker.NotNull(roleName, "roleName");
+            Checker.NotNull(signKeyRequest, "signKeyRequest");
+
+            return await _polymath.MakeVaultApiRequest<Secret<SignedKeyResponse>>("v1/" + mountPoint.Trim('/') + "/sign/" + roleName.Trim('/'), HttpMethod.Post, signKeyRequest).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
     }
 }

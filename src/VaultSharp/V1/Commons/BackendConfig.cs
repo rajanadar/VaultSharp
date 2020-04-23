@@ -36,6 +36,17 @@ namespace VaultSharp.Core
         [JsonProperty("max_lease_ttl")]
         public int MaximumLeaseTtl { get; set; }
 
+        // raja todo: this sounds non-generic.
+
+        /// <summary>
+        /// Gets or sets the token type.
+        /// </summary>
+        /// <value>
+        /// The token type.
+        /// </value>
+        [JsonProperty("token_type")]
+        public string TokenType { get; set; }
+
         /// <summary>
         /// Gets or sets the plugin name.
         /// </summary>

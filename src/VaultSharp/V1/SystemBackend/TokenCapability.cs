@@ -1,17 +1,33 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace VaultSharp.V1.SystemBackend
 {
     /// <summary>
     /// Represents the capabilities of a token.
     /// </summary>
-    public class TokenCapability
+    public class TokenCapability : Dictionary<string, object>
     {
         /// <summary>
-        /// Gets or sets a value.
+        /// Gets the capabilities.
         /// </summary>
-        [JsonProperty("capabilities")]
-        public IEnumerable<string> Capabilities { get; set; }
+        public IEnumerable<string> Capabilities
+        {
+            get
+            {
+                if (this.ContainsKey("capabilities"))
+                {
+                    var values = this["capabilities"] as JArray;
+
+                    if (values != null)
+                    {
+                        return values.ToObject<List<string>>();
+                    }                     
+                }
+
+                return Enumerable.Empty<string>();
+            }
+        }
     }
 }

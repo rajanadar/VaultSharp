@@ -18,6 +18,14 @@ namespace VaultSharp.V1.SecretsEngines
         public static SecretsEngineType System { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.System);
 
         /// <summary>
+        /// Gets the alicloud type.
+        /// </summary>
+        /// <value>
+        /// The aws.
+        /// </value>
+        public static SecretsEngineType AliCloud { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.AliCloud);
+
+        /// <summary>
         /// Gets the aws type.
         /// </summary>
         /// <value>
@@ -42,12 +50,20 @@ namespace VaultSharp.V1.SecretsEngines
         public static SecretsEngineType CubbyHole { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.Cubbyhole);
 
         /// <summary>
-        /// Gets the generic type.
+        /// Gets the generic type v1.
         /// </summary>
         /// <value>
         /// The generic.
         /// </value>
-        public static SecretsEngineType KeyValue { get; } = new SecretsEngineType("kv");
+        public static SecretsEngineType KeyValueV1 { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.KeyValueV1);
+
+        /// <summary>
+        /// Gets the generic type v2.
+        /// </summary>
+        /// <value>
+        /// The generic.
+        /// </value>
+        public static SecretsEngineType KeyValueV2 { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.KeyValueV2);
 
         /// <summary>
         /// Gets the Identity type.
@@ -206,7 +222,7 @@ namespace VaultSharp.V1.SecretsEngines
         /// </returns>
         public override string ToString()
         {
-            return this == KeyValue ? "kv" : Type;
+            return Type;
         }
     }
 }

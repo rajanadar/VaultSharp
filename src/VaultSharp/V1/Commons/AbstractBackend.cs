@@ -28,6 +28,8 @@ namespace VaultSharp.V1.Commons
         public string Accessor { get; set; }
 
         // raja todo: see if these Config options are strong typable or predicatble.
+        // "config":{"default_lease_ttl":0,"force_no_cache":false,"max_lease_ttl":0,"token_type":"default-service"}
+        // BackendConfig + some specific things like token_type
 
         /// <summary>
         /// Gets or sets the config options.
@@ -46,8 +48,6 @@ namespace VaultSharp.V1.Commons
         /// </value>
         [JsonProperty("description")]
         public string Description { get; set; }
-
-        //
 
         /// <summary>
         /// <para>[optional]</para>
@@ -79,5 +79,14 @@ namespace VaultSharp.V1.Commons
         /// </value>
         [JsonProperty("plugin_name")]
         public string PluginName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the options.
+        /// </summary>
+        /// <value>
+        /// The options.
+        /// </value>
+        [JsonProperty("options")]
+        public Dictionary<string, object> Options { get; set; }
     }
 }

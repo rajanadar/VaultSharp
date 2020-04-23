@@ -83,6 +83,14 @@ namespace VaultSharp.V1.AuthMethods
         public static AuthMethodType LDAP { get; } = new AuthMethodType(AuthMethodDefaultPaths.LDAP);
 
         /// <summary>
+        /// Gets the Kerberos type.
+        /// </summary>
+        /// <value>
+        /// The Kerberos.
+        /// </value>
+        public static AuthMethodType Kerberos { get; } = new AuthMethodType(AuthMethodDefaultPaths.Kerberos);
+
+        /// <summary>
         /// Gets the Okta type.
         /// </summary>
         /// <value>

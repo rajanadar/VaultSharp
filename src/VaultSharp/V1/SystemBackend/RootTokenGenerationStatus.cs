@@ -81,5 +81,23 @@ namespace VaultSharp.V1.SystemBackend
         /// </value>
         [JsonProperty("pgp_fingerprint")]
         public string PGPFingerPrint { get; set; }
+
+        /// <summary>
+        /// Gets or sets the OTP.
+        /// </summary>
+        /// <value>
+        /// The OTP.
+        /// </value>
+        [JsonProperty("otp")]
+        public string OTP { get; set; }
+
+        /// <summary>
+        /// Gets or sets the OTP length.
+        /// </summary>
+        /// <value>
+        /// The OTP length.
+        /// </value>
+        [JsonProperty("otp_length")]
+        public int OTPLength { get; set; }
     }
 }

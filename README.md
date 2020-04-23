@@ -6,15 +6,19 @@ A cross-platform .NET Library for HashiCorp's Vault - A Secret Management System
 
 **VaultSharp Latest Documentation:** Inline Below and also at: http://rajanadar.github.io/VaultSharp/
 
+**VaultSharp on Stack Overflow:** [VaultSharp Stack Overflow](https://stackoverflow.com/questions/tagged/vault-sharp)
+
 **VaultSharp Gitter Lobby:** [Gitter Lobby](https://gitter.im/rajanadar-VaultSharp/Lobby)
 
 **Older VaultSharp 0.6.x Documentation:** [0.6.x Docs](https://github.com/rajanadar/VaultSharp/blob/master/README-0.6.x.md)
 
 **Report Issues/Feedback:** [Create a VaultSharp GitHub issue](https://github.com/rajanadar/VaultSharp/issues/new)
 
-[![NuGet](https://img.shields.io/nuget/dt/VaultSharp.svg?style=flat)](https://www.nuget.org/packages/VaultSharp)
-[![Join the chat at https://gitter.im/rajanadar-VaultSharp/Lobby](https://badges.gitter.im/rajanadar-VaultSharp/Lobby.svg)](https://gitter.im/rajanadar-VaultSharp/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![License](https://img.shields.io/:license-apache%202.0-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
+**Contributing Guidlines:** [VaultSharp Contribution Guidelines](https://github.com/rajanadar/VaultSharp/blob/master/CONTRIBUTING.MD)
+
+[![NuGet](https://img.shields.io/nuget/dt/VaultSharp.svg?style=flat)](https://www.nuget.org/packages/VaultSharp)	
+[![Join the chat at https://gitter.im/rajanadar-VaultSharp/Lobby](https://badges.gitter.im/rajanadar-VaultSharp/Lobby.svg)](https://gitter.im/rajanadar-VaultSharp/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)	
+[![License](https://img.shields.io/:license-apache%202.0-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)	
 [![Build status](https://ci.appveyor.com/api/projects/status/aldh4a6n2t7hthdv?svg=true)](https://ci.appveyor.com/project/rajanadar/vaultsharp)
 
 ### What is VaultSharp?
@@ -49,15 +53,15 @@ string consulToken = consulCredentials.Data.Token;
 
 ### Gist of the features
 
-- VaultSharp 0.10.x supports
-  - All the Auth Methods for Logging into Vault. (AppRole, AWS, Azure, GitHub, Google Cloud, JWT/OIDC, Kubernetes, LDAP, Okta, RADIUS, TLS, Tokens & UserPass)
-  - All the secret engines to get dynamic credentials. (AD, AWS EC2 and IAM, Consul, Cubbyhole, Databases, Google Cloud, Key-Value, Nomad, PKI, RabbitMQ, SSH and TOTP)
-  - Several system APIs including enterprise vault apis
-- You can also bring your own "Auth Method" by providing a custom delegate to fetch a token from anywhere.
-- VaultSharp has first class support for Consul engine.
-- KeyValue engine supports both v1 and v2 apis.
-- Abundant intellisense.
-- Provides hooks into http-clients to set custom proxy settings etc.
+ * VaultSharp supports 
+   - All the Auth Methods for Logging  into Vault. (AppRole, AWS, Azure, GitHub, Google Cloud, JWT/OIDC, Kubernetes, LDAP, Okta, RADIUS, TLS, Tokens & UserPass)
+   - All the secret engines to get dynamic credentials. (AD, AWS EC2 and IAM, Consul, Cubbyhole, Databases, Google Cloud, Key-Value, Nomad, PKI, RabbitMQ, SSH and TOTP)
+   - Several system APIs including enterprise vault apis
+ * You can also bring your own "Auth Method" by providing a custom delegate to fetch a token from anywhere.
+ * VaultSharp has first class support for Consul engine.
+ * KeyValue engine supports both v1 and v2 apis.
+ * Abundant intellisense.
+ * Provides hooks into http-clients to set custom proxy settings etc.
 
 ### VaultSharp - Supported .NET Platforms
 
@@ -79,6 +83,13 @@ Source: https://github.com/dotnet/standard/blob/master/docs/versions.md
 
 - VaultSharp supports dynamic Consul credential generation.
 - Please look at the API usage in the 'Consul' section of 'Secrets Engines' below, to see all the Consul related methods in action.
+
+### VaultSharp and Automatic Built-in Client Side failover
+
+* VaultSharp DOES NOT support built-in client-side failover either by supporting multiple endpoint URI's or by supporting roundrobin DNS.
+* I repeat, it DOES NOT.
+* It works off a single URL that you provide. Any sort of fail-over etc. needs to be done by you.
+* You are free to instantiate a new instance of VaultClient with a different URI.
 
 ### Auth Methods
 
@@ -274,6 +285,20 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 // vault token/policies mapped to the LDAP username and password.
 ```
 
+#### Kerberos Authentication Backend
+
+Requires https://github.com/wintoncode/vault-plugin-auth-kerberos .
+
+```cs
+IAuthMethodInfo authMethod = new KerberosAuthMethodInfo();
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the 
+// vault token/policies mapped to the current ActiveDirectory/Kerberos identity.
+```
+
 #### Okta Auth Method
 
 ```cs
@@ -301,10 +326,14 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 #### Certificate (TLS) Auth Method
 
 ```cs
-var clientCertificate = new X509Certificate2(certificatePath, certificatePassword,
-                            X509KeyStorageFlags.Exportable | X509KeyStorageFlags.PersistKeySet);
+// Please note that the certificate needs to be in pkcs12 format with a private key.
+// Turn your cert + key into pkcs12 format with the following command:
 
-IAuthMethodInfo authMethod = new CertAuthMethodInfo(clientCertificate);
+// openssl pkcs12 -export -out Cert.p12 -in your-cert.pem -inkey your-key.pem
+
+var certificate = new X509Certificate2(your-p12-bytes, your-pass);
+
+IAuthMethodInfo authMethod = new CertAuthMethodInfo(certificate);
 var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
 
 IVaultClient vaultClient = new VaultClient(vaultClientSettings);
@@ -413,6 +442,21 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 ```cs
 Secret<ActiveDirectoryCredentials> adCreds = await vaultClient.V1.Secrets.ActiveDirectory.GetCredentialsAsync(role);
 string currentPassword = adCreds.Data.CurrentPassword;
+```
+
+#### AliCloud Secrets Engine
+
+##### Generate RAM Credentials
+
+ * This endpoint generates dynamic RAM credentials based on the named role.
+
+ ```cs	
+Secret<AliCloudCredentials> aliCloudCreds = await vaultClient.V1.Secrets.AliCloud.GetCredentialsAsync(role);
+
+string accessKey = aliCloudCreds.Data.AccessKey;
+string secretKey = aliCloudCreds.Data.SecretKey;
+string securityToken = aliCloudCreds.Data.SecurityToken;
+string expiration = aliCloudCreds.Data.Expiration;
 ```
 
 #### AWS Secrets Engine
@@ -549,7 +593,7 @@ string privateKeyData = privateKeySecret.Data.Base64EncodedPrivateKeyData;
 
 ```cs
 var value = new Dictionary<string, object> { { "key1", "val1" }, { "key2", 2 } };
-await vaultClient.V1.Secrets.KeyValue.V1.WriteSecretAsync(secretPath, value);
+var writtenValue = await vaultClient.V1.Secrets.KeyValue.V1.WriteSecretAsync(secretPath, value);
 ```
 
 ###### Read Secret
@@ -592,7 +636,7 @@ await vaultClient.V1.Secrets.KeyValue.V1.DeleteSecretAsync(secretPath);
 
 ```cs
 var value = new Dictionary<string, object> { { "key1", "val1" }, { "key2", 2 } };
-await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync(secretPath, value, checkAndSet);
+var writtenValue = await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync(secretPath, value, checkAndSet);
 ```
 
 ###### Read Secret
@@ -633,6 +677,15 @@ ListInfo paths = secret.Data;
 await vaultClient.V1.Secrets.KeyValue.V2.DestroySecretAsync(secretPath, new List<int> { 1, 2 });
 ```
 
+###### Delete Secret Metadata and all versions
+
+ * This endpoint permanently deletes the key metadata and all version data for the specified key. 
+ * All version history will be removed.
+
+ ```cs	
+await vaultClient.V1.Secrets.KeyValue.V2.DeleteMetadataAsync(secretPath);
+```
+
 #### Identity Secrets Engine
 
 Coming soon...
@@ -651,11 +704,27 @@ string secretId = nomadCredentials.Data.SecretId;
 
 #### PKI (Cerificates) Secrets Engine
 
+##### Generate credentials
+
 ```cs
 var certificateCredentialsRequestOptions = new CertificateCredentialsRequestOptions { // initialize };
 Secret<CertificateCredentials> certSecret = await vaultClient.V1.Secrets.PKI.GetCredentialsAsync(pkiRoleName, certificateCredentialsRequestOptions);
 
 string privateKeyContent = certSecret.Data.PrivateKeyContent;
+```
+
+##### Revoke Certificate
+
+```cs
+Secret<RevokeCertificateResponse> revoke = await vaultClient.V1.Secrets.PKI.RevokeCertificateAsync(serialNumber);
+long revocationTime = revoke.Data.RevocationTime;
+```
+
+##### Tidy up Certificate Storage
+
+```cs
+var request = new CertificateTidyRequest { TidyCertStore = false, TidyRevokedCerts = true };
+await vaultClient.V1.Secrets.PKI.TidyAsync(request);
 ```
 
 #### RabbitMQ Secrets Engine
@@ -679,6 +748,16 @@ string password = secret.Data.Password;
 ```cs
 Secret<SSHCredentials> sshCreds = await vaultClient.V1.Secrets.SSH.GetCredentialsAsync(role, ipAddress, username);
 string sshKey = sshCreds.Data.Key;
+```
+
+##### SSH key signing
+
+ * This endpoint signs an SSH public key based on the supplied parameters, subject to the restrictions contained in the role named in the endpoint.
+
+ ```cs	
+SignKeyRequest request = new SignKeyRequest { PublicKey = "ipsem" };
+Secret<SignedKeyResponse> signedKey = await vaultClient.V1.Secrets.SSH.SignKeyAsync(roleName, request);
+string signedKey = signedKey.Data.SignedKey;
 ```
 
 #### TOTP Secrets Engine

@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Security.Cryptography.X509Certificates;
 using VaultSharp.Core;
 
@@ -51,6 +52,11 @@ namespace VaultSharp.V1.AuthMethods.Cert
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(clientCertificate, "clientCertificate");
+
+            if (!clientCertificate.HasPrivateKey)
+            {
+                throw new ArgumentException("Certificate does not contain a private key.");
+            }
 
             MountPoint = mountPoint;
             ClientCertificate = clientCertificate;
