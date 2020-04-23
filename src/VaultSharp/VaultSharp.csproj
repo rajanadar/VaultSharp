@@ -47,6 +47,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Portable.BouncyCastle" Version="1.8.5" />
   </ItemGroup>
 
   <ItemGroup>
@@ -71,4 +72,5 @@
     <Reference Include="System.Net.Http.WebRequest" />
   </ItemGroup>
 
+  
 </Project>

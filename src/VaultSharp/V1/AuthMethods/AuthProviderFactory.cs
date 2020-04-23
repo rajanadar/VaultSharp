@@ -5,6 +5,7 @@ using VaultSharp.V1.AuthMethods.AppRole;
 using VaultSharp.V1.AuthMethods.AWS;
 using VaultSharp.V1.AuthMethods.Azure;
 using VaultSharp.V1.AuthMethods.Cert;
+using VaultSharp.V1.AuthMethods.CloudFoundry;
 using VaultSharp.V1.AuthMethods.Custom;
 using VaultSharp.V1.AuthMethods.GitHub;
 using VaultSharp.V1.AuthMethods.GoogleCloud;
@@ -97,6 +98,11 @@ namespace VaultSharp.V1.AuthMethods
             if (authInfo.AuthMethodType == AuthMethodType.UserPass)
             {
                 return new UserPassAuthMethodLoginProvider(authInfo as UserPassAuthMethodInfo, polymath);
+            }
+
+            if (authInfo.AuthMethodType == AuthMethodType.CloudFoundry)
+            {
+                return new CloudFoundryAuthMethodLoginProvider(authInfo as CloudFoundryAuthMethodInfo, polymath);
             }
 
             var customAuthMethodInfo = authInfo as CustomAuthMethodInfo;
