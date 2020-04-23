@@ -5,6 +5,7 @@
   * [GH-75] Add possibility to revoke certificate by serial number. #1 https://github.com/rajanadar/VaultSharp/pull/75
   * [GH-76] Add expiration to response of GetCertificateCredentials
   * [GH-79] Ability to tidy up the certificate storage
+  * [GH-84] Ability to delete KV2 secret metadata and all versions
 
 **BUG FIXES:**
 

@@ -621,6 +621,15 @@ ListInfo paths = secret.Data;
 await vaultClient.V1.Secrets.KeyValue.V2.DestroySecretAsync(secretPath, new List<int> { 1, 2 });
 ```
 
+###### Delete Secret Metadata and all versions
+
+ * This endpoint permanently deletes the key metadata and all version data for the specified key. 
+ * All version history will be removed.
+
+ ```cs	
+await vaultClient.V1.Secrets.KeyValue.V2.DeleteMetadataAsync(secretPath);
+```
+
 #### Identity Secrets Engine
 
 Coming soon...

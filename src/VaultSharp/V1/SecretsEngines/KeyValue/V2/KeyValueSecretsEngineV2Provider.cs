@@ -67,5 +67,13 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
 
             await _polymath.MakeVaultApiRequest("v1/" + mountPoint.Trim('/') + "/destroy/" + path.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
+
+        public async Task DeleteMetadataAsync(string path, string mountPoint = "secret")
+        {
+            Checker.NotNull(mountPoint, "mountPoint");
+            Checker.NotNull(path, "path");
+
+            await _polymath.MakeVaultApiRequest("v1/" + mountPoint.Trim('/') + "/metadata/" + path.Trim('/'), HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
     }
 }
