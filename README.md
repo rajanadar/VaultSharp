@@ -7,11 +7,15 @@ A cross-platform .NET Library for HashiCorp's Vault - A Secret Management System
 
 **VaultSharp Latest Documentation:** Inline Below and also at: http://rajanadar.github.io/VaultSharp/
 
+**VaultSharp on Stack Overflow:** [VaultSharp Stack Overflow](https://stackoverflow.com/questions/tagged/vault-sharp)
+
 **VaultSharp Gitter Lobby:** [Gitter Lobby](https://gitter.im/rajanadar-VaultSharp/Lobby)
 
 **Older VaultSharp 0.6.x Documentation:** [0.6.x Docs](https://github.com/rajanadar/VaultSharp/blob/master/README-0.6.x.md)
 
 **Report Issues/Feedback:** [Create a VaultSharp GitHub issue](https://github.com/rajanadar/VaultSharp/issues/new)
+
+**Contributing Guidlines:** [VaultSharp Contribution Guidelines](https://github.com/rajanadar/VaultSharp/blob/master/CONTRIBUTING.MD)
 
 [![NuGet](https://img.shields.io/nuget/dt/VaultSharp.svg?style=flat)](https://www.nuget.org/packages/VaultSharp)	
 [![Join the chat at https://gitter.im/rajanadar-VaultSharp/Lobby](https://badges.gitter.im/rajanadar-VaultSharp/Lobby.svg)](https://gitter.im/rajanadar-VaultSharp/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)	
