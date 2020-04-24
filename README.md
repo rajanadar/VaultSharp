@@ -673,6 +673,35 @@ Secret<ListInfo> secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretPat
 ListInfo paths = secret.Data;
 ```
 
+###### Delete Secret
+
+ - This endpoint issues a soft delete of the secret's latest version at the specified location. 
+ - This marks the version as deleted and will stop it from being returned from reads, but the underlying data will not be removed.
+ - A delete can be undone using the undelete method.
+
+```cs
+await vaultClient.V1.Secrets.KeyValue.V2.DeleteSecretAsync(secretPath);
+```
+
+###### Delete Secret Versions
+
+ - This endpoint issues a soft delete of the specified versions of the secret.
+ - This marks the versions as deleted and will stop them from being returned from reads, but the underlying data will not be removed.
+ - A delete can be undone using the undelete method.
+
+```cs
+await vaultClient.V1.Secrets.KeyValue.V2.DeleteSecretVersionsAsync(secretPath, versions);
+```
+
+###### Undelete Secret Versions
+
+ - Undeletes the data for the provided version and path in the key-value store.
+ - This restores the data, allowing it to be returned on get requests.
+
+```cs
+await vaultClient.V1.Secrets.KeyValue.V2.UndeleteSecretVersionsAsync(secretPath, versions);
+```
+
 ###### Destroy Secret
 
 - This endpoint destroys the secret at the specified location for the given versions.
@@ -874,10 +903,11 @@ Additional documentation coming soon...
 
 - This library is written for Hashicorp's Vault Service
 - The Vault service is evolving constantly and the Hashicorp team is rapidly working on it.
-- Pretty soon, they should have an 1.0.0 version of the Vault Service from Hashicorp.
 - Because this client library is intended to facilititate the Vault Service operations, this library makes it easier for its consumers to relate to the Vault service it supports.
 - Hence a version of 0.11.x denotes that this library will support the Vault 0.11.x Service Apis.
-- Tomorrow when Vault Service gets upgraded to 1.0.0, this library will be modified accordingly and versioned as 1.0.0
+- Tomorrow when Vault Service gets upgraded to x.0.0, this library will be modified accordingly and versioned as x.0.0
+- VaultSharp starts at e.g. 2.3.0 matching the Vault Server exactly, and then can go 2.3.0001, 2.3.0002 etc. for bug fixes etc. within 2.3.0 of Vault.
+- Another thing to note is that, empirically, VaultSharp and Vault have been amazingly compatible even with great versioning differences. Kudos to the Vault team.
 
 ### Can I use it in my PowerShell Automation?
 

@@ -83,6 +83,36 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
             return await _polymath.MakeVaultApiRequest<Secret<T>>("v1/" + mountPoint.Trim('/') + "/data/" + path.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
+        public async Task DeleteSecretAsync(string path, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2)
+        {
+            Checker.NotNull(mountPoint, "mountPoint");
+            Checker.NotNull(path, "path");
+
+            await _polymath.MakeVaultApiRequest("v1/" + mountPoint.Trim('/') + "/data/" + path.Trim('/'), HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task DeleteSecretVersionsAsync(string path, IList<int> versions, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2)
+        {
+            Checker.NotNull(mountPoint, "mountPoint");
+            Checker.NotNull(path, "path");
+            Checker.NotNull(versions, "versions");
+
+            var requestData = new { versions = versions };
+
+            await _polymath.MakeVaultApiRequest("v1/" + mountPoint.Trim('/') + "/delete/" + path.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task UndeleteSecretVersionsAsync(string path, IList<int> versions, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2)
+        {
+            Checker.NotNull(mountPoint, "mountPoint");
+            Checker.NotNull(path, "path");
+            Checker.NotNull(versions, "versions");
+
+            var requestData = new { versions = versions };
+
+            await _polymath.MakeVaultApiRequest("v1/" + mountPoint.Trim('/') + "/undelete/" + path.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
         public async Task DestroySecretAsync(string path, IList<int> versions, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2)
         {
             Checker.NotNull(mountPoint, "mountPoint");

@@ -152,7 +152,62 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         Task<Secret<T>> WriteSecretAsync<T>(string path, T data, int? checkAndSet = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2);
 
         /// <summary>
-        /// Deletes the value at the specified path in Vault.
+        /// This endpoint issues a soft delete of the secret's latest version at the specified location. 
+        /// This marks the version as deleted and will stop it from being returned from reads, 
+        /// but the underlying data will not be removed. A delete can be undone using the Undelete method.
+        /// </summary>
+        /// <param name="path"><para>[required]</para>
+        /// Specifies the path of the secret to delete.</param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV2" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task DeleteSecretAsync(string path, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2);
+
+        /// <summary>
+        /// This endpoint issues a soft delete of the secret's latest version at the specified location. 
+        /// This marks the version as deleted and will stop it from being returned from reads, 
+        /// but the underlying data will not be removed. A delete can be undone using the Undelete method.
+        /// </summary>
+        /// <param name="path"><para>[required]</para>
+        /// Specifies the path of the secret to delete.</param>
+        /// <param name="versions">
+        /// <para>[required]</para>
+        /// The versions to delete.
+        /// </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV2" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task DeleteSecretVersionsAsync(string path, IList<int> versions, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2);
+
+        /// <summary>
+        /// Undeletes the data for the provided version and path in the key-value store.
+        /// This restores the data, allowing it to be returned on get requests.
+        /// </summary>
+        /// <param name="path"><para>[required]</para>
+        /// Specifies the path of the secret to undelete.</param>
+        /// <param name="versions">
+        /// <para>[required]</para>
+        /// The versions to undelete.
+        /// </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV2" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task UndeleteSecretVersionsAsync(string path, IList<int> versions, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2);
+
+        /// <summary>
+        /// Permanently removes the specified version data for the provided key and version numbers from the key-value store.
         /// </summary>
         /// <param name="path"><para>[required]</para>
         /// The path where the value is to be stored.</param>

@@ -9,6 +9,7 @@
   * [GH-71] SSK Key Signing
   * [GH-122] CloudFoundry Auth Method: Support for CloudFoundry login tokens including ability to create signatures.
   * Support lease info in Custom Auth Info.
+  * [GH-96] Ability to delete secret, delete secret versions and undelete a secret.
 
 **BREAKING CHANGES:**
 
