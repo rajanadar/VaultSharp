@@ -562,6 +562,36 @@ string username = dbCreds.Data.Username;
 string password = dbCreds.Data.Password;
 ```
 
+##### Create, Read and Delete Static Database Roles
+
+- These endpoints manage the creation, reading and deletion of static DB roles.
+
+```cs
+await vaultClient.V1.Secrets.Database.CreateStaticRoleAsync(roleName, roleRequest);
+
+await vaultClient.V1.Secrets.Database.ReadStaticRoleAsync(roleName);
+
+await vaultClient.V1.Secrets.Database.ReadAllStaticRolesAsync();
+
+await vaultClient.V1.Secrets.Database.DeleteStaticRoleAsync(roleName);
+```
+
+##### Generate Static DB credentials
+
+- This endpoint generates a new set of static credentials based on the named role.
+
+```cs
+Secret<StaticCredentials> dbCreds = await vaultClient.V1.Secrets.Database.GetStaticCredentialsAsync(role);
+```
+
+##### Rotate static DB credentials
+
+- This endpoint rotates the static credentials on demand.
+
+```cs
+await vaultClient.V1.Secrets.Database.RotateStaticCredentialsAsync(role);
+```
+
 #### Google Cloud Secrets Engine
 
 ##### Generate Secret (IAM Service Account Creds): OAuth2 Access Token

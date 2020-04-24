@@ -11,6 +11,7 @@
   * Support lease info in Custom Auth Info.
   * [GH-96] Ability to delete secret, delete secret versions and undelete a secret.
   * [GH-113] Extend the TOTP Secrets Engine with more APIs: Create Key, Read, Read All and Delete Key.
+  * [GH-109] Support for Static Database Roles and Static Credentials. CRUD Role, create and rotate static credentials.
 
 **BREAKING CHANGES:**
 
