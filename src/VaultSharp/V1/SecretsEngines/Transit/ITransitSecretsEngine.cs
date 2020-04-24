@@ -58,5 +58,19 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The secret with plain text.
         /// </returns>
         Task<Secret<DecryptionResponse>> DecryptAsync(string keyName, DecryptRequestOptions decryptRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit, string wrapTimeToLive = null);
+
+        /// <summary>
+        /// Returns a list of keys. Only the key names are returned.
+        /// </summary>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineDefaultPaths.Transit" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
+        /// <returns>The list of key names.</returns>
+        Task<Secret<ListInfo>> ReadAllEncryptionKeysAsync(string mountPoint = SecretsEngineDefaultPaths.Transit, string wrapTimeToLive = null);
     }
 }

@@ -15,6 +15,7 @@
   * Kerberos Auth Method: Support for Kerberos login tokens.
   * [GH-59] Ability to create tokens: Attached tokens, Orphaned tokens, Role based tokens.
   * [GH-69] Read CA certificate API
+  * [GH-117] Add ability to read all keys from Transit backend.
 
 **BREAKING CHANGES:**
 

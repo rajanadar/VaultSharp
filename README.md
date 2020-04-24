@@ -984,6 +984,11 @@ Secret<DecryptionResponse> decryptionResponse = await _authenticatedVaultClient.
 string firstEncodedPlainText = decryptionResponse.Data.BatchedResults.First().Base64EncodedPlainText;
 ```
 
+##### Read all Encryption Keys
+
+```cs
+var allKeys = await _authenticatedVaultClient.V1.Secrets.Transit.ReadAllEncryptionKeysAsync();
+
 ### System Backend
 
 - The system backend is a default backend in Vault that is mounted at the /sys endpoint.
