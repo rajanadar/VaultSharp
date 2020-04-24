@@ -1,4 +1,4 @@
-## 1.4.0000 (expected by May 17, 2020)
+## 1.4.0 (expected by May 17, 2020)
 
 **FEATURES:**
 
@@ -14,6 +14,7 @@
   * [GH-109] Support for Static Database Roles and Static Credentials. CRUD Role, create and rotate static credentials.
   * Kerberos Auth Method: Support for Kerberos login tokens.
   * [GH-59] Ability to create tokens: Attached tokens, Orphaned tokens, Role based tokens.
+  * [GH-69] Read CA certificate API
 
 **BREAKING CHANGES:**
 

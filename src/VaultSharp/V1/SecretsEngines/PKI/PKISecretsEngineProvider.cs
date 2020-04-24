@@ -42,5 +42,23 @@ namespace VaultSharp.V1.SecretsEngines.PKI
 
             await _polymath.MakeVaultApiRequest("v1/" + pkiBackendMountPoint.Trim('/') + "/tidy", HttpMethod.Post, newRequest).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
+
+        public async Task<RawCertificateData> ReadCACertificateAsync(CertificateFormat certificateFormat = CertificateFormat.der, string pkiBackendMountPoint = SecretsEngineDefaultPaths.PKI)
+        {
+            Checker.NotNull(pkiBackendMountPoint, "pkiBackendMountPoint");
+
+            var format = certificateFormat == CertificateFormat.pem ? "/" + CertificateFormat.pem : string.Empty;
+            var outputFormat = certificateFormat == CertificateFormat.pem
+                ? CertificateFormat.pem
+                : CertificateFormat.der;
+
+            var result = await _polymath.MakeVaultApiRequest<string>("v1/" + pkiBackendMountPoint.Trim('/') + "/ca" + format, HttpMethod.Get, rawResponse: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            
+            return new RawCertificateData
+            {
+                CertificateContent = result,
+                EncodedCertificateFormat = outputFormat
+            };
+        }
     }
 }

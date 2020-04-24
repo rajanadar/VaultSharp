@@ -804,6 +804,17 @@ var request = new CertificateTidyRequest { TidyCertStore = false, TidyRevokedCer
 await vaultClient.V1.Secrets.PKI.TidyAsync(request);
 ```
 
+##### Read CA Certificate
+
+ - This endpoint retrieves the CA certificate in raw DER-encoded form. 
+ - The CA certificate can be returned in PEM or DER format.
+ - This is an unauthenticated endpoint.
+
+```cs
+var caCert = await vaultClient.V1.Secrets.PKI.ReadCACertificateAsync(CertificateFormat.pem, mountpoint);
+Assert.NotNull(caCert.CertificateContent);
+```
+
 #### RabbitMQ Secrets Engine
 
 ##### Generate dynamic DB credentials

@@ -63,5 +63,23 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The task
         /// </returns>
         Task TidyAsync(CertificateTidyRequest certificateTidyRequest = null, string pkiBackendMountPoint = SecretsEngineDefaultPaths.PKI);
+
+        /// <summary>
+        /// Retrieves the CA certificate in raw DER-encoded form. 
+        /// This is a bare endpoint that does not return a standard Vault data structure. 
+        /// The CA certificate can be returned in DER or PEM format.
+        /// This is an unauthenticated endpoint.
+        /// </summary>
+        /// <param name="certificateFormat"><para>[optional]</para>
+        /// The certificate format needed.
+        /// Defaults to <see cref="CertificateFormat.der" /></param>
+        /// <param name="pkiBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineDefaultPaths.PKI" />
+        /// Provide a value only if you have customized the PKI mount point.
+        /// </param>
+        /// <returns>
+        /// The raw certificate data.
+        /// </returns>
+        Task<RawCertificateData> ReadCACertificateAsync(CertificateFormat certificateFormat = CertificateFormat.der, string pkiBackendMountPoint = SecretsEngineDefaultPaths.PKI);
     }
 }
