@@ -314,7 +314,8 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 Requires https://github.com/wintoncode/vault-plugin-auth-kerberos .
 
 ```cs
-IAuthMethodInfo authMethod = new KerberosAuthMethodInfo();
+IAuthMethodInfo authMethod = new KerberosAuthMethodInfo(); // uses network credential by default.
+// IAuthMethodInfo authMethod = new KerberosAuthMethodInfo(credentials); // use your own ICredentials
 var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
 
 IVaultClient vaultClient = new VaultClient(vaultClientSettings);

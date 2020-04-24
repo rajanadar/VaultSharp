@@ -46,6 +46,13 @@ namespace VaultSharp.V1.AuthMethods.Kerberos
         /// <summary>
         /// Initializes a new instance of the <see cref="KerberosAuthMethodInfo"/> class.
         /// </summary>
+        public KerberosAuthMethodInfo(ICredentials credentials) : this(AuthMethodType.Kerberos.Type, credentials)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KerberosAuthMethodInfo"/> class.
+        /// </summary>
         /// <param name="mountPoint">The mount point.</param>
         /// <param name="credentials">The credential to use.</param>
         public KerberosAuthMethodInfo(string mountPoint, ICredentials credentials)
