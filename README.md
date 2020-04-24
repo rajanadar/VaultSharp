@@ -813,6 +813,49 @@ Secret<TOTPCodeValidity> totpValidity = await vaultClient.V1.Secrets.TOTP.Valida
 bool valid = totpValidity.Data.Valid;
 ```
 
+##### Create TOTP Key
+
+This endpoint creates or updates a key definition.
+You can create both Vault based or non-vault based keys.
+
+```cs
+
+TOTPCreateKeyRequest request = new TOTPCreateKeyRequest
+{
+ Issuer = "Google",
+ AccountName = "scooby@gmail.com",
+ KeyGenerationOption = new TOTPVaultBasedKeyGeneration { // specific stuff }
+ // for non-vault based, use new TOTPNonVaultBasedKeyGeneration { // specific stuff }
+};
+
+Secret<TOTPCreateKeyResponse> response = await vaultClient.V1.Secrets.TOTP.CreateKeyAsync(keyName, request);
+var barcode = response.Data.Barcode;
+```
+
+##### Read Key
+
+This endpoint queries the key definition.
+
+```cs
+Secret<TOTPKey> key = await vaultClient.V1.Secrets.TOTP.ReadKeyAsync(keyName);
+```
+
+##### Read all Keys
+
+This endpoint returns a list of available keys. Only the key names are returned, not any values.
+
+```cs
+Secret<ListInfo> keys = await vaultClient.V1.Secrets.TOTP.ReadAllKeysAsync();
+```
+
+##### Delete Key
+
+This endpoint deletes the key definition.
+
+```cs
+await vaultClient.V1.Secrets.TOTP.DeleteKeyAsync(keyName);
+```
+
 #### Transit Secrets Engine
 
 ##### Encrypt Method

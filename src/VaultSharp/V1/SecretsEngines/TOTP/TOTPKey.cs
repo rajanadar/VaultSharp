@@ -23,6 +23,13 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
         public string Algorithm { get; set; }
 
         /// <summary>
+        /// Gets or sets the number of digits in the generated TOTP code.
+        /// This value can be set to 6 or 8.
+        /// </summary>
+        [JsonProperty("digits")]
+        public int Digits { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the issuing organization.
         /// </summary>
         [JsonProperty("issuer")]

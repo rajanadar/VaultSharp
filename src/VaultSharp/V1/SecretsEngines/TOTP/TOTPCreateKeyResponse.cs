@@ -5,7 +5,7 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
     /// <summary>
     /// Represents the result when creating a new key
     /// </summary>
-    public class TOTPProvider
+    public class TOTPCreateKeyResponse
     {
         /// <summary>
         /// Gets or sets the Barcode

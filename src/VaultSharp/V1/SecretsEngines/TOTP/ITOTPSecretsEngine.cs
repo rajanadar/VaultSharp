@@ -15,8 +15,8 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
         /// Specifies the name of the key to create credentials against.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Nomad backend. Defaults to <see cref="SecretsEngineDefaultPaths.TOTP" />
-        /// Provide a value only if you have customized the Nomad mount point.</param>
+        /// The mount point for the TOTP backend. Defaults to <see cref="SecretsEngineDefaultPaths.TOTP" />
+        /// Provide a value only if you have customized the TOTP mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
@@ -36,8 +36,8 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
         /// Specifies the the password you want to validate.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Nomad backend. Defaults to <see cref="SecretsEngineDefaultPaths.TOTP" />
-        /// Provide a value only if you have customized the Nomad mount point.</param>
+        /// The mount point for the TOTP backend. Defaults to <see cref="SecretsEngineDefaultPaths.TOTP" />
+        /// Provide a value only if you have customized the TOTP mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
@@ -48,36 +48,35 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
         Task<Secret<TOTPCodeValidity>> ValidateCodeAsync(string keyName, string code, string mountPoint = SecretsEngineDefaultPaths.TOTP, string wrapTimeToLive = null);
 
         /// <summary>
-        /// Creates a new key definition where Vault acts as TOTP provider
+        /// This endpoint creates or updates a key definition.
         /// </summary>
         /// <param name="keyName"><para>[required]</para>
-        /// Specifies the name of the key to create credentials against.
+        /// The name of the key.
         /// </param>
-        /// <param name="issuer"><para>[required]</para>
-        /// Specifies the name of the key’s issuing organization.
-        /// </param>
-        /// <param name="accountName"><para>[required]</para>
-        /// Specifies the name of the account associated with the key.
+        /// <param name="createKeyRequest"><para>[required]</para>
+        /// The create key options.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Nomad backend. Defaults to <see cref="SecretsEngineDefaultPaths.TOTP" />
-        /// Provide a value only if you have customized the Nomad mount point.</param>
-        /// <returns>
-        /// The secret with the <see cref="TOTPProvider" /> as the data.
-        /// </returns>
-        Task<Secret<TOTPProvider>> CreateTOTPProviderKeyAsync(string keyName, string issuer, string accountName, string mountPoint = SecretsEngineDefaultPaths.TOTP);
+        /// The mount point for the TOTP backend. Defaults to <see cref="SecretsEngineDefaultPaths.TOTP" />
+        /// Provide a value only if you have customized the TOTP mount point.</param>
+        /// <returns>The barcode and url of the key.</returns>
+        Task<Secret<TOTPCreateKeyResponse>> CreateKeyAsync(string keyName, TOTPCreateKeyRequest createKeyRequest, string mountPoint = SecretsEngineDefaultPaths.TOTP);
 
         /// <summary>
-        /// Deletes the key definition
+        /// Retrieves a TOTP key.
         /// </summary>
         /// <param name="keyName"><para>[required]</para>
-        /// Specifies the name of the key to create credentials against.
+        /// The name of the key to retrieve.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Nomad backend. Defaults to <see cref="SecretsEngineDefaultPaths.TOTP" />
-        /// Provide a value only if you have customized the Nomad mount point.</param>
-        /// <returns>A completed task when succesful</returns>
-        Task DeleteKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.TOTP);
+        /// The mount point for the TOTP backend. Defaults to <see cref="SecretsEngineDefaultPaths.TOTP" />
+        /// Provide a value only if you have customized the TOTP mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[optional]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
+        /// <returns>Key Info.</returns>
+        Task<Secret<TOTPKey>> ReadKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.TOTP, string wrapTimeToLive = null);
 
         /// <summary>
         /// Returns a list of available keys. Only the key names are returned, not any values.
@@ -89,25 +88,18 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
-        /// <returns>List of availble keys</returns>
-        Task<Secret<ListInfo>> ListAllKeysAsync(string mountPoint = SecretsEngineDefaultPaths.TOTP, string wrapTimeToLive = null);
+        /// <returns>List of available keys</returns>
+        Task<Secret<ListInfo>> ReadAllKeysAsync(string mountPoint = SecretsEngineDefaultPaths.TOTP, string wrapTimeToLive = null);
 
         /// <summary>
-        /// Queries the key definition
+        /// Deletes a TOTP key.
         /// </summary>
         /// <param name="keyName"><para>[required]</para>
-        /// Specifies the name of the key to create credentials against.
+        /// The name of the key to delete.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Nomad backend. Defaults to <see cref="SecretsEngineDefaultPaths.TOTP" />
-        /// Provide a value only if you have customized the Nomad mount point.</param>
-        /// <param name="wrapTimeToLive">
-        /// <para>[optional]</para>
-        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
-        /// </param>
-        /// <returns>A secret with the key definition</returns>
-        Task<Secret<TOTPKey>> ReadKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.TOTP, string wrapTimeToLive = null);
-
-
+        /// The mount point for the TOTP backend. Defaults to <see cref="SecretsEngineDefaultPaths.TOTP" />
+        /// Provide a value only if you have customized the TOTP mount point.</param>
+        Task DeleteKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.TOTP);
     }
 }
