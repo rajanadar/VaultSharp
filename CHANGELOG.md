@@ -8,6 +8,7 @@
     You can override it using the ```VaultClientSettings.UseVaultTokenHeaderInsteadOfAuthorizationHeader``` flag.
   * [GH-71] SSK Key Signing
   * [GH-122] CloudFoundry Auth Method: Support for CloudFoundry login tokens including ability to create signatures.
+  * Support lease info in Custom Auth Info.
 
 **BREAKING CHANGES:**
 

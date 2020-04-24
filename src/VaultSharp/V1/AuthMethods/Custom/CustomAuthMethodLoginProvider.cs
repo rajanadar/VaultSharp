@@ -17,14 +17,14 @@ namespace VaultSharp.V1.AuthMethods.Custom
 
         public async Task<string> GetVaultTokenAsync()
         {
-            var token = await _customAuthMethodInfo.AuthenticationTokenAsyncDelegate().ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            var customAuthMethodInfo = await _customAuthMethodInfo.CustomAuthMethodInfoAsyncDelegate().ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
-            if (!string.IsNullOrWhiteSpace(token))
+            if (!string.IsNullOrWhiteSpace(customAuthMethodInfo.ReturnedLoginAuthInfo?.ClientToken))
             {
-                return token;
+                return customAuthMethodInfo.ReturnedLoginAuthInfo?.ClientToken;
             }
 
-            throw new Exception("The call to the Custom Auth method did not yield a client token. Please verify your credentials.");
+            throw new Exception("The call to the Custom Auth method did not yield a client token. Please verify your logic.");
         }
     }
 }

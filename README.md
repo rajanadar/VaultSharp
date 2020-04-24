@@ -390,42 +390,22 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 vault token/policies mapped to the username/password.
 ```
 
-#### Cloud Foundry Auth Method
-
-```cs
-// setup the Cloud Foundry based auth to get the right token.
-
-// retrieves a signature for requesting a vault token.
-var signingTokenProvider = new CloudFoundrySignatureProvider();
-var signature = signingTokenProvider.GetSignatureToken(roleName);
-
-IAuthMethodInfo authMethod = new CloudFoundryAuthMethodInfo(roleName, signature);
-
-// nameSpace is optional
-var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod)
-{
-    Namespace = nameSpace
-};
-
-IVaultClient vaultClient = new VaultClient(vaultClientSettings);
-
-// any operations done using the vaultClient will use the
-// vault token/policies mapped to the Cloud Foundry signature
-```
-
 #### Custom Auth Method - Bring your own Vault Token
 
-- VaultSharp also supports a custom way to provide the Vault auth token to VaultSharp.
-- In this approach, you are free to provide any delegate that returns the Vault token.
-- The token can be retrieved from a database, another secret engine, from a file, etc.
+- In cases where the Vault Server has a supported Auth backend, not YET supported by VaultSharp, you can use the CustomAuthMethodInfo
+- In this approach, you write the delegate logic that gets the token from Vault along with lease renewal info etc.
 
 ```cs
-// Func<Task<String>> getTokenAsync = a custom async method to return the vault token.
-IAuthMethodInfo authMethod = new CustomAuthMethodInfo("my-own-token-auth-method", getTokenAsync);
+// Func<Task<CustomAuthMethodInfo>> getCustomAuthMethodInfoAsync = a custom async method to return the vault token.
+IAuthMethodInfo authMethod = new CustomAuthMethodInfo("vault-server-auth-method", getCustomAuthMethodInfoAsync);
 var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
 
 IVaultClient vaultClient = new VaultClient(vaultClientSettings);
-```
+
+// Once VaultSharp evaluates the delegate, VaultSharp can now provide you with the associated lease info for the Token as well.
+// authMethod.ReturnedLoginAuthInfo has all the info including the token and renewal info.
+
+``` 
 
 #### App Id Auth Method (DEPRECATED)
 
