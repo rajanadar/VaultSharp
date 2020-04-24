@@ -1,6 +1,6 @@
 # VaultSharp
 
-A cross-platform .NET Library for HashiCorp's Vault - A Secret Management System.
+The most comprehensive cross-platform .NET Library for HashiCorp's Vault - A Secret Management System.
 
 **VaultSharp NuGet:** [![NuGet](https://img.shields.io/nuget/dt/VaultSharp.svg?style=flat)](https://www.nuget.org/packages/VaultSharp)
 
