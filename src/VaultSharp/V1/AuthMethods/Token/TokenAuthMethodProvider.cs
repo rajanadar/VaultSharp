@@ -17,6 +17,25 @@ namespace VaultSharp.V1.AuthMethods.Token
             this._polymath = polymath;
         }
 
+        public async Task<Secret<object>> CreateTokenAsync(CreateTokenRequest createTokenRequest)
+        {
+            var request = createTokenRequest ?? new CreateTokenRequest();
+
+            var suffix = "create";
+
+            if (createTokenRequest.NoParent)
+            {
+                suffix = "create-orphan";
+            }
+
+            if (!string.IsNullOrWhiteSpace(createTokenRequest.RoleName))
+            {
+                suffix = "create/" + createTokenRequest.RoleName.Trim('/');
+            }
+
+            return await _polymath.MakeVaultApiRequest<Secret<object>>("v1/auth/token/" + suffix, HttpMethod.Post, request).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
         public async Task<Secret<CallingTokenInfo>> LookupSelfAsync()
         {
             return await _polymath.MakeVaultApiRequest<Secret<CallingTokenInfo>>("v1/auth/token/lookup-self", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);

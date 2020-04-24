@@ -61,5 +61,26 @@ namespace VaultSharp.V1.Commons
         /// </value>
         [JsonProperty("renewable")]
         public bool Renewable { get; set; }
+
+        // raja todo: Add more stuff to this.
+        /*
+         * https://www.vaultproject.io/api-docs/auth/token
+         *   "auth": {
+                        "client_token": "s.wOrq9dO9kzOcuvB06CMviJhZ",
+                        "accessor": "B6oixijqmeR4bsLOJH88Ska9",
+                        "policies": ["default", "stage", "web"],
+                        "token_policies": ["default", "stage", "web"],
+                        "metadata": {
+                          "user": "armon"
+                        },
+                        "lease_duration": 3600,
+                        "renewable": true,
+                        "entity_id": "",
+                        "token_type": "service",
+                        "orphan": false
+                      }
+         * 
+         */
+
     }
 }

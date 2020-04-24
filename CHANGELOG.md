@@ -13,6 +13,7 @@
   * [GH-113] Extend the TOTP Secrets Engine with more APIs: Create Key, Read, Read All and Delete Key.
   * [GH-109] Support for Static Database Roles and Static Credentials. CRUD Role, create and rotate static credentials.
   * Kerberos Auth Method: Support for Kerberos login tokens.
+  * [GH-59] Ability to create tokens: Attached tokens, Orphaned tokens, Role based tokens.
 
 **BREAKING CHANGES:**
 

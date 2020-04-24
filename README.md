@@ -369,6 +369,8 @@ vault token/policies mapped to the client certificate.
 
 #### Token Auth Method
 
+##### Token Auth Login Method
+
 ```cs
 IAuthMethodInfo authMethod = new TokenAuthMethodInfo(vaultToken);
 var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
@@ -377,6 +379,17 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the
 vault token/policies mapped to the vault token.
+```
+
+##### Token Creation
+
+ - You can use the ```CreateTokenAsync``` method to create various types of tokens.
+
+```cs
+CreateTokenRequest request = new CreateTokenRequest();
+
+// CreateTokenRequest has options to create orphaned tokens, role based tokens etc. with attached policies.
+Secret<object> tokenData = await _authenticatedVaultClient.V1.Auth.Token.CreateTokenAsync(request);
 ```
 
 #### Username and Password Auth Method
