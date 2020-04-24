@@ -6,7 +6,7 @@ A cross-platform .NET Library for HashiCorp's Vault - A Secret Management System
 
 **VaultSharp Latest Documentation:** Inline Below and also at: http://rajanadar.github.io/VaultSharp/
 
-**VaultSharp on Stack Overflow:** [VaultSharp Stack Overflow](https://stackoverflow.com/questions/tagged/vault-sharp)
+**VaultSharp Questions/Clarifications:** [VaultSharp Stack Overflow](https://stackoverflow.com/questions/tagged/vault-sharp)
 
 **VaultSharp Gitter Lobby:** [Gitter Lobby](https://gitter.im/rajanadar-VaultSharp/Lobby)
 
