@@ -681,7 +681,6 @@ await vaultClient.V1.Secrets.GoogleCloudKMS.SignAsync(keyName, requestOptions);
 await vaultClient.V1.Secrets.GoogleCloudKMS.VerifyAsync(keyName, requestOptions);
 ```
 
-
 #### Key Value Secrets Engine
 
 - VaultSharp supports both v1 and v2 of the Key Value Secrets Engine.
@@ -821,7 +820,24 @@ await vaultClient.V1.Secrets.KeyValue.V2.DeleteMetadataAsync(secretPath);
 
 #### Identity Secrets Engine
 
-Coming soon...
+##### Generate a Signed ID Token
+
+- Use this endpoint to generate a signed ID (OIDC) token.
+
+```cs
+Secret<IdentityToken> token = await vaultClient.V1.Secrets.Identity.GetTokenAsync(roleName);
+string clientId = token.Data.ClientId;
+string token = token.Data.Token;
+```
+
+##### Introspect a signed ID Token
+
+- This endpoint can verify the authenticity and active state of a signed ID token.
+
+```cs
+Secret<bool> activeResponse = await vaultClient.V1.Secrets.Identity.IntrospectTokenAsync(token, clientId);
+bool active = activeResponse.Data;
+```
 
 #### KMIP Secrets Engine
 

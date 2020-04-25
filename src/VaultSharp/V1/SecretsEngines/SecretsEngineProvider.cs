@@ -38,6 +38,7 @@ namespace VaultSharp.V1.SecretsEngines
             Database = new DatabaseSecretsEngineProvider(polymath);
             GoogleCloud = new GoogleCloudSecretsEngineProvider(polymath);
             GoogleCloudKMS = new GoogleCloudKMSSecretsEngineProvider(polymath);
+            Identity = new IdentitySecretsEngineProvider(polymath);
             KMIP = new KMIPSecretsEngineProvider(polymath);
             KeyValue = new KeyValueSecretsEngineProvider(polymath);
             Nomad = new NomadSecretsEngineProvider(polymath);
@@ -70,7 +71,7 @@ namespace VaultSharp.V1.SecretsEngines
 
         public IKeyValueSecretsEngine KeyValue { get; }
 
-        public IIdentitySecretsEngine Identity => throw new NotImplementedException();
+        public IIdentitySecretsEngine Identity { get; }
 
         public INomadSecretsEngine Nomad { get; }
 

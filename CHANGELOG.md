@@ -15,6 +15,7 @@
   * [GH-106] Ability to manage LDAP Groups and Users
   * [GH-130] Add support for OCI Auth backend login
   * [GH-125] Add support for ```Google Cloud KMS``` Secrets Engine.
+  * [GH-126] Add support for ```Identity``` Secrets Engine.
 
 **ENTERPRISE VAULT FEATURES:**
 
