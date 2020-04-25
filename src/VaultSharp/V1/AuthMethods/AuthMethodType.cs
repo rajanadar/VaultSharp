@@ -91,6 +91,14 @@ namespace VaultSharp.V1.AuthMethods
         public static AuthMethodType Kerberos { get; } = new AuthMethodType(AuthMethodDefaultPaths.Kerberos);
 
         /// <summary>
+        /// Gets the OCI type.
+        /// </summary>
+        /// <value>
+        /// The Okta.
+        /// </value>
+        public static AuthMethodType OCI { get; } = new AuthMethodType(AuthMethodDefaultPaths.OCI);
+
+        /// <summary>
         /// Gets the Okta type.
         /// </summary>
         /// <value>

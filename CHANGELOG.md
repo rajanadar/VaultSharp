@@ -2,21 +2,18 @@
 
 **FEATURES:**
 
-  * Add support for ```AliPay``` Secrets Engine.
-  * Add support to pass Vault token as ```X-Vault-Token``` header or as the standard ```Authorization: Bearer <vault-token>``` header.
-    By default, the ```Authorization: Bearer <vault-token>``` scheme is used.
-    You can override it using the ```VaultClientSettings.UseVaultTokenHeaderInsteadOfAuthorizationHeader``` flag.
+  * [GH-131] Add support for ```AliCloud``` Secrets Engine.
   * [GH-71] SSK Key Signing
   * [GH-122] CloudFoundry Auth Method: Support for CloudFoundry login tokens including ability to create signatures.
-  * Support lease info in Custom Auth Info.
   * [GH-96] Ability to delete secret, delete secret versions and undelete a secret.
   * [GH-113] Extend the TOTP Secrets Engine with more APIs: Create Key, Read, Read All and Delete Key.
   * [GH-109] Support for Static Database Roles and Static Credentials. CRUD Role, create and rotate static credentials.
-  * Kerberos Auth Method: Support for Kerberos login tokens.
+  * [GH-132] Kerberos Auth Method: Support for Kerberos login tokens.
   * [GH-59] Ability to create tokens: Attached tokens, Orphaned tokens, Role based tokens.
   * [GH-69] Read CA certificate API
   * [GH-117] Add ability to read all keys from Transit backend.
   * [GH-106] Ability to manage LDAP Groups and Users
+  * [GH-130] Add support for OCI Auth backend login
 
 **BREAKING CHANGES:**
 
@@ -24,6 +21,10 @@
 
 **IMPROVEMENTS:**
 
+  * Add support to pass Vault token as ```X-Vault-Token``` header or as the standard ```Authorization: Bearer <vault-token>``` header.
+    By default, the ```Authorization: Bearer <vault-token>``` scheme is used.
+    You can override it using the ```VaultClientSettings.UseVaultTokenHeaderInsteadOfAuthorizationHeader``` flag.
+  * Support lease info in Custom Auth Info.
   * Added the ```path``` field to ```FileAuditBackend``` class.
   * Added the ```performance_standby``` field to ```HealthStatus``` class.
   * Added the ```initialized```, ```migration``` and ```recovery_seal``` fields to ```SealStatus``` class.

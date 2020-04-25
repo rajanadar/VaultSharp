@@ -12,6 +12,7 @@
         public const string Kubernetes = "kubernetes";
         public const string LDAP = "ldap";
         public const string Kerberos = "kerberos";
+        public const string OCI = "oci";
         public const string Okta = "okta";
         public const string RADIUS = "radius";
         public const string Cert = "cert";

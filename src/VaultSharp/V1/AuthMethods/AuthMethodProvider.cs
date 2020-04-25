@@ -10,6 +10,7 @@ using VaultSharp.V1.AuthMethods.GitHub;
 using VaultSharp.V1.AuthMethods.Kerberos;
 using VaultSharp.V1.AuthMethods.Kubernetes;
 using VaultSharp.V1.AuthMethods.LDAP;
+using VaultSharp.V1.AuthMethods.OCI;
 using VaultSharp.V1.AuthMethods.Okta;
 using VaultSharp.V1.AuthMethods.RADIUS;
 using VaultSharp.V1.AuthMethods.Token;
@@ -48,6 +49,8 @@ namespace VaultSharp.V1.AuthMethods
         public ILDAPAuthMethod LDAP { get; }
 
         public IKerberosAuthMethod Kerberos => throw new NotImplementedException();
+
+        public IOCIAuthMethod OCI => throw new NotImplementedException();
 
         public IOktaAuthMethod Okta => throw new NotImplementedException();
 

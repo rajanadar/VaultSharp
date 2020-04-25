@@ -343,6 +343,30 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 // vault token/policies mapped to the current ActiveDirectory/Kerberos identity.
 ```
 
+#### OCI Auth Method
+
+```cs
+
+var requestHeaders = new Dictionary<string, object>
+{
+     {"date", new List<string> { "Fri, 22 Aug 2019 21:02:19 GMT" } },
+     {"(request-target)", new List<string> { "get /v1/auth/oci/login/devrole" } },
+     {"host", new List<string> { "127.0.0.1" } },
+     {"content-type", new List<string> { "application/json" } },
+     {"authorization", new List<string> { 
+          "Signature algorithm=\"rsa-sha256\",headers=\"date (request-target) host\",keyId=\"ocid1.tenancy.oc1..aaaaaaaaba3pv6wkcr4jqae5f15p2b2m2yt2j6rx32uzr4h25vqstifsfdsq/ocid1.user.oc1..aaaaaaaat5nvwcna5j6aqzjcaty5eqbb6qt2jvpkanghtgdaqedqw3rynjq/73:61:a2:21:67:e0:df:be:7e:4b:93:1e:15:98:a5:b7\",signature=\"GBas7grhyrhSKHP6AVIj/h5/Vp8bd/peM79H9Wv8kjoaCivujVXlpbKLjMPeDUhxkFIWtTtLBj3sUzaFj34XE6YZAHc9r2DmE4pMwOAy/kiITcZxa1oHPOeRheC0jP2dqbTll8fmTZVwKZOKHYPtrLJIJQHJjNvxFWeHQjMaR7M=\",version=\"1\""
+        } }
+};
+
+IAuthMethodInfo authMethod = new OCIAuthMethodInfo(roleName, requestHeaders);
+var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+
+// any operations done using the vaultClient will use the
+// vault token/policies mapped to the OCI entity.
+```
+
 #### Okta Auth Method
 
 ```cs
