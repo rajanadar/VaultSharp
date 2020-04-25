@@ -1,4 +1,4 @@
-## 1.4.0 (expected by May 17, 2020)
+## 1.4.0 (April 25, 2020)
 
 **FEATURES:**
 
