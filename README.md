@@ -865,7 +865,7 @@ string publicKey = nomadCredentials.Data.PublicKey;
 
 #### Nomad Secrets Engine
 
-##### Generate dynamic DB credentials
+##### Generate dynamic credentials
 
 - Generates a dynamic Nomad token based on the given role definition.
 
@@ -873,6 +873,18 @@ string publicKey = nomadCredentials.Data.PublicKey;
 Secret<NomadCredentials> nomadCredentials = await vaultClient.V1.Secrets.Nomad.GetCredentialsAsync(roleName);
 string accessorId = nomadCredentials.Data.AccessorId;
 string secretId = nomadCredentials.Data.SecretId;
+```
+
+#### OpenLDAP Secrets Engine
+
+##### Generate static credentials
+
+ - This endpoint offers the credential information for a given static-role.
+
+```cs
+Secret<StaticCredentials> credentials = await vaultClient.V1.Secrets.OpenLDAP.GetStaticCredentialsAsync(roleName);
+string username = credentials.Data.Username;
+string password = credentials.Data.Password;
 ```
 
 #### PKI (Cerificates) Secrets Engine

@@ -17,6 +17,7 @@
   * [GH-125] Add support for ```Google Cloud KMS``` Secrets Engine.
   * [GH-126] Add support for ```Identity``` Secrets Engine.
   * [GH-127] Add support for ```MongoDBAtlas``` Secrets Engine.
+  * [GH-128] Add support for ```OpenLDAP``` Secrets Engine.
 
 **ENTERPRISE VAULT FEATURES:**
 

@@ -19,6 +19,7 @@
         public const string KeyValueV2 = "secret";
         public const string Identity = "identity";
         public const string Nomad = "nomad";
+        public const string OpenLDAP = "openldap";
         public const string PKI = "pki";
         public const string RabbitMQ = "rabbitmq";
         public const string SSH = "ssh";

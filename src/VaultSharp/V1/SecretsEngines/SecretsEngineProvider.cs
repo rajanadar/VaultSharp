@@ -13,6 +13,7 @@ using VaultSharp.V1.SecretsEngines.KeyValue;
 using VaultSharp.V1.SecretsEngines.KMIP;
 using VaultSharp.V1.SecretsEngines.MongoDBAtlas;
 using VaultSharp.V1.SecretsEngines.Nomad;
+using VaultSharp.V1.SecretsEngines.OpenLDAP;
 using VaultSharp.V1.SecretsEngines.PKI;
 using VaultSharp.V1.SecretsEngines.RabbitMQ;
 using VaultSharp.V1.SecretsEngines.SSH;
@@ -39,6 +40,7 @@ namespace VaultSharp.V1.SecretsEngines
             KeyValue = new KeyValueSecretsEngineProvider(polymath);
             MongoDBAtlas = new MongoDBAtlasSecretsEngineProvider(polymath);
             Nomad = new NomadSecretsEngineProvider(polymath);
+            OpenLDAP = new OpenLDAPSecretsEngineProvider(polymath);
             PKI = new PKISecretsEngineProvider(polymath);
             RabbitMQ = new RabbitMQSecretsEngineProvider(polymath);
             SSH = new SSHSecretsEngineProvider(polymath);
@@ -73,6 +75,8 @@ namespace VaultSharp.V1.SecretsEngines
         public IMongoDBAtlasSecretsEngine MongoDBAtlas { get; }
 
         public INomadSecretsEngine Nomad { get; }
+
+        public IOpenLDAPSecretsEngine OpenLDAP { get; }
 
         public IPKISecretsEngine PKI { get; }
 

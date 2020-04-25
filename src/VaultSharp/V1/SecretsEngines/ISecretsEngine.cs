@@ -12,6 +12,7 @@ using VaultSharp.V1.SecretsEngines.KMIP;
 using VaultSharp.V1.SecretsEngines.KeyValue;
 using VaultSharp.V1.SecretsEngines.MongoDBAtlas;
 using VaultSharp.V1.SecretsEngines.Nomad;
+using VaultSharp.V1.SecretsEngines.OpenLDAP;
 using VaultSharp.V1.SecretsEngines.PKI;
 using VaultSharp.V1.SecretsEngines.RabbitMQ;
 using VaultSharp.V1.SecretsEngines.SSH;
@@ -94,6 +95,11 @@ namespace VaultSharp.V1.SecretsEngines
         /// The Nomad Secrets Engine.
         /// </summary>
         INomadSecretsEngine Nomad { get; }
+
+        /// <summary>
+        /// The OpenLDAP Secrets Engine.
+        /// </summary>
+        IOpenLDAPSecretsEngine OpenLDAP { get; }
 
         /// <summary>
         /// The PKI Secrets Engine.
