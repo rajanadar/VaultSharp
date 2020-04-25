@@ -17,6 +17,7 @@ using VaultSharp.V1.SecretsEngines.PKI;
 using VaultSharp.V1.SecretsEngines.RabbitMQ;
 using VaultSharp.V1.SecretsEngines.SSH;
 using VaultSharp.V1.SecretsEngines.TOTP;
+using VaultSharp.V1.SecretsEngines.Transform;
 using VaultSharp.V1.SecretsEngines.Transit;
 
 namespace VaultSharp.V1.SecretsEngines
@@ -120,6 +121,11 @@ namespace VaultSharp.V1.SecretsEngines
         /// The TOTP Secrets Engine.
         /// </summary>
         ITOTPSecretsEngine TOTP { get; }
+
+        /// <summary>
+        /// The Transform Secrets Engine.
+        /// </summary>
+        ITransformSecretsEngine Transform { get; }
 
         /// <summary>
         /// The Transit Secrets Engine.

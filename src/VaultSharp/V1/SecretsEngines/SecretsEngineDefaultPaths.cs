@@ -24,6 +24,7 @@
         public const string RabbitMQ = "rabbitmq";
         public const string SSH = "ssh";
         public const string TOTP = "totp";
+        public const string Transform = "transform";
         public const string Transit = "transit";
 
         public const string Cassandra = "cassandra";

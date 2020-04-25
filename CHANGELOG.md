@@ -22,6 +22,7 @@
 **ENTERPRISE VAULT FEATURES:**
 
   * [GH-122] Add support for ```KMIP``` Secrets Engine.
+  * [GH-129] Add support for ```Transform``` Secrets Engine.
 
 **BREAKING CHANGES:**
 

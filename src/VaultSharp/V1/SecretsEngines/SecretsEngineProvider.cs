@@ -18,6 +18,7 @@ using VaultSharp.V1.SecretsEngines.PKI;
 using VaultSharp.V1.SecretsEngines.RabbitMQ;
 using VaultSharp.V1.SecretsEngines.SSH;
 using VaultSharp.V1.SecretsEngines.TOTP;
+using VaultSharp.V1.SecretsEngines.Transform;
 using VaultSharp.V1.SecretsEngines.Transit;
 
 namespace VaultSharp.V1.SecretsEngines
@@ -45,6 +46,7 @@ namespace VaultSharp.V1.SecretsEngines
             RabbitMQ = new RabbitMQSecretsEngineProvider(polymath);
             SSH = new SSHSecretsEngineProvider(polymath);
             TOTP = new TOTPSecretsEngineProvider(polymath);
+            Transform = new TransformSecretsEngineProvider(polymath);
             Transit = new TransitSecretsEngineProvider(polymath);
         }
 
@@ -85,6 +87,8 @@ namespace VaultSharp.V1.SecretsEngines
         public ISSHSecretsEngine SSH { get; }
 
         public ITOTPSecretsEngine TOTP { get; }
+
+        public ITransformSecretsEngine Transform { get; }
 
         public ITransitSecretsEngine Transit { get; }
     }
