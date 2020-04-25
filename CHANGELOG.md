@@ -16,6 +16,10 @@
   * [GH-130] Add support for OCI Auth backend login
   * [GH-125] Add support for ```Google Cloud KMS``` Secrets Engine.
 
+**ENTERPRISE VAULT FEATURES:**
+
+  * [GH-122] Add support for ```KMIP``` Secrets Engine.
+
 **BREAKING CHANGES:**
 
   * ```GetSealStatusAsync``` doesn't throw an exception anymore for a sealed vault.

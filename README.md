@@ -823,6 +823,18 @@ await vaultClient.V1.Secrets.KeyValue.V2.DeleteMetadataAsync(secretPath);
 
 Coming soon...
 
+#### KMIP Secrets Engine
+
+##### Generate dynamic credentials
+
+- Create a new client certificate tied to the given role and scope.
+
+```cs
+Secret<KMIPCredentials> kmipCredentials = await vaultClient.V1.Secrets.KMIP.GetCredentialsAsync(scopeName, roleName);
+string certificateContent = kmipCredentials.Data.CertificateContent;
+string privateKeyContent = kmipCredentials.Data.PrivateKeyContent;
+```
+
 #### Nomad Secrets Engine
 
 ##### Generate dynamic DB credentials

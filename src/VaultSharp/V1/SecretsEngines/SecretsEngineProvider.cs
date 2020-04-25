@@ -11,6 +11,7 @@ using VaultSharp.V1.SecretsEngines.GoogleCloud;
 using VaultSharp.V1.SecretsEngines.GoogleCloudKMS;
 using VaultSharp.V1.SecretsEngines.Identity;
 using VaultSharp.V1.SecretsEngines.KeyValue;
+using VaultSharp.V1.SecretsEngines.KMIP;
 using VaultSharp.V1.SecretsEngines.Nomad;
 using VaultSharp.V1.SecretsEngines.PKI;
 using VaultSharp.V1.SecretsEngines.RabbitMQ;
@@ -37,6 +38,7 @@ namespace VaultSharp.V1.SecretsEngines
             Database = new DatabaseSecretsEngineProvider(polymath);
             GoogleCloud = new GoogleCloudSecretsEngineProvider(polymath);
             GoogleCloudKMS = new GoogleCloudKMSSecretsEngineProvider(polymath);
+            KMIP = new KMIPSecretsEngineProvider(polymath);
             KeyValue = new KeyValueSecretsEngineProvider(polymath);
             Nomad = new NomadSecretsEngineProvider(polymath);
             PKI = new PKISecretsEngineProvider(polymath);
@@ -63,6 +65,8 @@ namespace VaultSharp.V1.SecretsEngines
         public IGoogleCloudSecretsEngine GoogleCloud { get; }
 
         public IGoogleCloudKMSSecretsEngine GoogleCloudKMS { get; }
+
+        public IKMIPSecretsEngine KMIP { get; }
 
         public IKeyValueSecretsEngine KeyValue { get; }
 
