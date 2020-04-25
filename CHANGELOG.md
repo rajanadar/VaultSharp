@@ -16,6 +16,7 @@
   * [GH-130] Add support for OCI Auth backend login
   * [GH-125] Add support for ```Google Cloud KMS``` Secrets Engine.
   * [GH-126] Add support for ```Identity``` Secrets Engine.
+  * [GH-127] Add support for ```MongoDBAtlas``` Secrets Engine.
 
 **ENTERPRISE VAULT FEATURES:**
 

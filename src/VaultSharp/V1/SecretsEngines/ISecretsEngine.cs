@@ -10,6 +10,7 @@ using VaultSharp.V1.SecretsEngines.GoogleCloudKMS;
 using VaultSharp.V1.SecretsEngines.Identity;
 using VaultSharp.V1.SecretsEngines.KMIP;
 using VaultSharp.V1.SecretsEngines.KeyValue;
+using VaultSharp.V1.SecretsEngines.MongoDBAtlas;
 using VaultSharp.V1.SecretsEngines.Nomad;
 using VaultSharp.V1.SecretsEngines.PKI;
 using VaultSharp.V1.SecretsEngines.RabbitMQ;
@@ -70,6 +71,11 @@ namespace VaultSharp.V1.SecretsEngines
         IGoogleCloudKMSSecretsEngine GoogleCloudKMS { get; }
 
         /// <summary>
+        /// The Identity Secrets Engine.
+        /// </summary>
+        IIdentitySecretsEngine Identity { get; }
+
+        /// <summary>
         /// The KMIP Secrets Engine.
         /// </summary>
         IKMIPSecretsEngine KMIP { get; }
@@ -80,9 +86,9 @@ namespace VaultSharp.V1.SecretsEngines
         IKeyValueSecretsEngine KeyValue { get; }
 
         /// <summary>
-        /// The Identity Secrets Engine.
+        /// The MongoDBAtlas Secrets Engine.
         /// </summary>
-        IIdentitySecretsEngine Identity { get; }
+        IMongoDBAtlasSecretsEngine MongoDBAtlas { get; }
 
         /// <summary>
         /// The Nomad Secrets Engine.

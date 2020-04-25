@@ -851,6 +851,18 @@ string certificateContent = kmipCredentials.Data.CertificateContent;
 string privateKeyContent = kmipCredentials.Data.PrivateKeyContent;
 ```
 
+#### MongoDBAtlas Secrets Engine
+
+##### Generate dynamic credentials
+
+- Generates a dynamic MongoDBAtlas creds based on the given role definition.
+
+```cs
+Secret<MongoDBAtlasCredentials> creds = await vaultClient.V1.Secrets.MongoDBAtlas.GetCredentialsAsync(name);
+string privateKey = creds.Data.PrivateKey;
+string publicKey = nomadCredentials.Data.PublicKey;
+```
+
 #### Nomad Secrets Engine
 
 ##### Generate dynamic DB credentials

@@ -15,6 +15,7 @@
         public const string GoogleCloudKMS = "gcpkms";
         public const string KMIP = "kmip";
         public const string KeyValueV1 = "kv";
+        public const string MongoDBAtlas = "mongodbatlas";
         public const string KeyValueV2 = "secret";
         public const string Identity = "identity";
         public const string Nomad = "nomad";

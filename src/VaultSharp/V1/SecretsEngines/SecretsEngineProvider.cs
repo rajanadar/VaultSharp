@@ -1,5 +1,4 @@
-﻿using System;
-using VaultSharp.Core;
+﻿using VaultSharp.Core;
 using VaultSharp.V1.SecretsEngines.ActiveDirectory;
 using VaultSharp.V1.SecretsEngines.AliCloud;
 using VaultSharp.V1.SecretsEngines.AWS;
@@ -12,6 +11,7 @@ using VaultSharp.V1.SecretsEngines.GoogleCloudKMS;
 using VaultSharp.V1.SecretsEngines.Identity;
 using VaultSharp.V1.SecretsEngines.KeyValue;
 using VaultSharp.V1.SecretsEngines.KMIP;
+using VaultSharp.V1.SecretsEngines.MongoDBAtlas;
 using VaultSharp.V1.SecretsEngines.Nomad;
 using VaultSharp.V1.SecretsEngines.PKI;
 using VaultSharp.V1.SecretsEngines.RabbitMQ;
@@ -23,12 +23,8 @@ namespace VaultSharp.V1.SecretsEngines
 {
     internal class SecretsEngineProvider : ISecretsEngine
     {
-        private readonly Polymath _polymath;
-
         public SecretsEngineProvider(Polymath polymath)
         {
-            _polymath = polymath;
-
             ActiveDirectory = new ActiveDirectorySecretsEngineProvider(polymath);
             AliCloud = new AliCloudSecretsEngineProvider(polymath);
             AWS = new AWSSecretsEngineProvider(polymath);
@@ -41,6 +37,7 @@ namespace VaultSharp.V1.SecretsEngines
             Identity = new IdentitySecretsEngineProvider(polymath);
             KMIP = new KMIPSecretsEngineProvider(polymath);
             KeyValue = new KeyValueSecretsEngineProvider(polymath);
+            MongoDBAtlas = new MongoDBAtlasSecretsEngineProvider(polymath);
             Nomad = new NomadSecretsEngineProvider(polymath);
             PKI = new PKISecretsEngineProvider(polymath);
             RabbitMQ = new RabbitMQSecretsEngineProvider(polymath);
@@ -72,6 +69,8 @@ namespace VaultSharp.V1.SecretsEngines
         public IKeyValueSecretsEngine KeyValue { get; }
 
         public IIdentitySecretsEngine Identity { get; }
+
+        public IMongoDBAtlasSecretsEngine MongoDBAtlas { get; }
 
         public INomadSecretsEngine Nomad { get; }
 
