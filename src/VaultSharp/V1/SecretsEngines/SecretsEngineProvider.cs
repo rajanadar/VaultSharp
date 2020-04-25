@@ -8,6 +8,7 @@ using VaultSharp.V1.SecretsEngines.Consul;
 using VaultSharp.V1.SecretsEngines.Cubbyhole;
 using VaultSharp.V1.SecretsEngines.Database;
 using VaultSharp.V1.SecretsEngines.GoogleCloud;
+using VaultSharp.V1.SecretsEngines.GoogleCloudKMS;
 using VaultSharp.V1.SecretsEngines.Identity;
 using VaultSharp.V1.SecretsEngines.KeyValue;
 using VaultSharp.V1.SecretsEngines.Nomad;
@@ -35,6 +36,7 @@ namespace VaultSharp.V1.SecretsEngines
             Cubbyhole = new CubbyholeSecretsEngineProvider(polymath);
             Database = new DatabaseSecretsEngineProvider(polymath);
             GoogleCloud = new GoogleCloudSecretsEngineProvider(polymath);
+            GoogleCloudKMS = new GoogleCloudKMSSecretsEngineProvider(polymath);
             KeyValue = new KeyValueSecretsEngineProvider(polymath);
             Nomad = new NomadSecretsEngineProvider(polymath);
             PKI = new PKISecretsEngineProvider(polymath);
@@ -59,6 +61,8 @@ namespace VaultSharp.V1.SecretsEngines
         public IDatabaseSecretsEngine Database { get; }
 
         public IGoogleCloudSecretsEngine GoogleCloud { get; }
+
+        public IGoogleCloudKMSSecretsEngine GoogleCloudKMS { get; }
 
         public IKeyValueSecretsEngine KeyValue { get; }
 

@@ -669,6 +669,19 @@ Secret<GoogleCloudServiceAccountKey> privateKeySecret = await vaultClient.V1.Sec
 string privateKeyData = privateKeySecret.Data.Base64EncodedPrivateKeyData;
 ```
 
+#### Google Cloud KMS Secrets Engine
+
+##### Encrypt, Decrypt, ReEncrypt, Sign & Verify
+
+```cs
+await vaultClient.V1.Secrets.GoogleCloudKMS.EncryptAsync(keyName, requestOptions);
+await vaultClient.V1.Secrets.GoogleCloudKMS.DecryptAsync(keyName, requestOptions);
+await vaultClient.V1.Secrets.GoogleCloudKMS.ReEncryptAsync(keyName, requestOptions);
+await vaultClient.V1.Secrets.GoogleCloudKMS.SignAsync(keyName, requestOptions);
+await vaultClient.V1.Secrets.GoogleCloudKMS.VerifyAsync(keyName, requestOptions);
+```
+
+
 #### Key Value Secrets Engine
 
 - VaultSharp supports both v1 and v2 of the Key Value Secrets Engine.

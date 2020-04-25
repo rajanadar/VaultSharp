@@ -14,6 +14,7 @@
   * [GH-117] Add ability to read all keys from Transit backend.
   * [GH-106] Ability to manage LDAP Groups and Users
   * [GH-130] Add support for OCI Auth backend login
+  * [GH-125] Add support for ```Google Cloud KMS``` Secrets Engine.
 
 **BREAKING CHANGES:**
 

@@ -6,6 +6,7 @@ using VaultSharp.V1.SecretsEngines.Consul;
 using VaultSharp.V1.SecretsEngines.Cubbyhole;
 using VaultSharp.V1.SecretsEngines.Database;
 using VaultSharp.V1.SecretsEngines.GoogleCloud;
+using VaultSharp.V1.SecretsEngines.GoogleCloudKMS;
 using VaultSharp.V1.SecretsEngines.Identity;
 using VaultSharp.V1.SecretsEngines.KeyValue;
 using VaultSharp.V1.SecretsEngines.Nomad;
@@ -61,6 +62,11 @@ namespace VaultSharp.V1.SecretsEngines
         /// The GoogleCloud Secrets Engine.
         /// </summary>
         IGoogleCloudSecretsEngine GoogleCloud { get; }
+
+        /// <summary>
+        /// The GoogleCloud KMS Secrets Engine.
+        /// </summary>
+        IGoogleCloudKMSSecretsEngine GoogleCloudKMS { get; }
 
         /// <summary>
         /// The KeyValue Secrets Engine.
