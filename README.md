@@ -299,6 +299,8 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 #### LDAP Authentication Backend
 
+##### LDAP Authentication Login Method
+
 ```cs
 IAuthMethodInfo authMethod = new LDAPAuthMethodInfo(userName, password);
 var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
@@ -307,6 +309,23 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the
 // vault token/policies mapped to the LDAP username and password.
+```
+
+##### LDAP Auth Backend - Groups and User management
+
+ - You can use the methods to CRUD LDAP groups and users now.
+
+```cs
+await _authenticatedVaultClient.V1.Auth.LDAP.WriteGroupAsync(groupName, policies);
+await _authenticatedVaultClient.V1.Auth.LDAP.ReadGroupAsync(groupName);
+await _authenticatedVaultClient.V1.Auth.LDAP.ReadAllGroupsAsync();
+await _authenticatedVaultClient.V1.Auth.LDAP.DeleteGroupAsync(groupName);
+
+await _authenticatedVaultClient.V1.Auth.LDAP.WriteUserAsync(username, policies, groups);
+await _authenticatedVaultClient.V1.Auth.LDAP.ReadUserAsync(username);
+await _authenticatedVaultClient.V1.Auth.LDAP.ReadAllUsersAsync();
+await _authenticatedVaultClient.V1.Auth.LDAP.DeleteUserAsync(username);
+
 ```
 
 #### Kerberos Authentication Backend

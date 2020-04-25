@@ -25,6 +25,7 @@ namespace VaultSharp.V1.AuthMethods
         {
             _polymath = polymath;
 
+            LDAP = new LDAPAuthMethodProvider(_polymath);
             Token = new TokenAuthMethodProvider(_polymath);
         }
 
@@ -44,7 +45,7 @@ namespace VaultSharp.V1.AuthMethods
 
         public IKubernetesAuthMethod Kubernetes => throw new NotImplementedException();
 
-        public ILDAPAuthMethod LDAP => throw new NotImplementedException();
+        public ILDAPAuthMethod LDAP { get; }
 
         public IKerberosAuthMethod Kerberos => throw new NotImplementedException();
 

@@ -16,6 +16,7 @@
   * [GH-59] Ability to create tokens: Attached tokens, Orphaned tokens, Role based tokens.
   * [GH-69] Read CA certificate API
   * [GH-117] Add ability to read all keys from Transit backend.
+  * [GH-106] Ability to manage LDAP Groups and Users
 
 **BREAKING CHANGES:**
 
