@@ -6,7 +6,7 @@ The most comprehensive cross-platform .NET Library for HashiCorp's Vault - A Sec
 
 **VaultSharp Latest Documentation:** Inline Below and also at: http://rajanadar.github.io/VaultSharp/
 
-**VaultSharp Questions/Clarifications:** [Ask on Stack Overflow with the tag vault-sharp](https://stackoverflow.com/questions/tagged/vault-sharp)
+**VaultSharp Questions/Clarifications:** [Ask on Stack Overflow with the tag vaultsharp](https://stackoverflow.com/questions/tagged/vaultsharp)
 
 **VaultSharp Gitter Lobby:** [Gitter Lobby](https://gitter.im/rajanadar-VaultSharp/Lobby)
 
