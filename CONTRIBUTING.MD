@@ -86,7 +86,7 @@ FOR A PARTICULAR PURPOSE.
 
 [github]: https://github.com/RajaNadar/VaultSharp
 [documentation]: http://rajanadar.github.io/VaultSharp/
-[stackoverflow]: https://stackoverflow.com/questions/tagged/vault-sharp
+[stackoverflow]: https://stackoverflow.com/questions/tagged/vaultsharp
 [dropbox]: https://www.dropbox.com
 [gist]: https://gist.github.com
 [pullrequesthelp]: https://help.github.com/articles/using-pull-requests
