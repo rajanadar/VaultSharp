@@ -93,6 +93,12 @@ namespace VaultSharp.V1.SystemBackend
         public bool RecoverySeal { get; set; }
 
         /// <summary>
+        /// Gets or sets what type of storage the cluster is configured to use
+        /// </summary>
+        [JsonProperty("storage_type")]
+        public string StorageType { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the cluster.
         /// </summary>
         /// <value>
