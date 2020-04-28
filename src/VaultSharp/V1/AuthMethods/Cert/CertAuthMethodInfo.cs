@@ -36,10 +36,16 @@ namespace VaultSharp.V1.AuthMethods.Cert
         public X509Certificate2 ClientCertificate { get; }
 
         /// <summary>
+        /// Optionally, you may specify a single certificate role to authenticate against.
+        /// </summary>
+        public string RoleName { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CertAuthMethodInfo" /> class.
         /// </summary>
         /// <param name="clientCertificate">The client certificate.</param>
-        public CertAuthMethodInfo(X509Certificate2 clientCertificate) : this(AuthMethodType.Cert.Type, clientCertificate)
+        /// <param name="roleName">A single certificate role to authenticate against.</param>
+        public CertAuthMethodInfo(X509Certificate2 clientCertificate, string roleName = null) : this(AuthMethodType.Cert.Type, clientCertificate, roleName)
         {
         }
 
@@ -48,7 +54,8 @@ namespace VaultSharp.V1.AuthMethods.Cert
         /// </summary>
         /// <param name="mountPoint">The mount point.</param>
         /// <param name="clientCertificate">The client certificate.</param>
-        public CertAuthMethodInfo(string mountPoint, X509Certificate2 clientCertificate)
+        /// <param name="roleName">A single certificate role to authenticate against.</param>
+        public CertAuthMethodInfo(string mountPoint, X509Certificate2 clientCertificate, string roleName = null)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(clientCertificate, "clientCertificate");
@@ -60,6 +67,7 @@ namespace VaultSharp.V1.AuthMethods.Cert
 
             MountPoint = mountPoint;
             ClientCertificate = clientCertificate;
+            RoleName = roleName;
         }
     }
 }

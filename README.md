@@ -402,6 +402,10 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 var certificate = new X509Certificate2(your-p12-bytes, your-pass);
 
 IAuthMethodInfo authMethod = new CertAuthMethodInfo(certificate);
+
+// Optionally, you can also provide a Certificate Role Name during Auth.
+// IAuthMethodInfo authMethod = new CertAuthMethodInfo(certificate, certificateRoleName);
+
 var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
 
 IVaultClient vaultClient = new VaultClient(vaultClientSettings);

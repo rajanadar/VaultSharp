@@ -1,3 +1,9 @@
+## 1.4.0001 (April 27, 2020)
+
+**IMPROVEMENTS:**
+
+  * [GH-133] Add support for the optional ```CertificateRoleName``` while doing Cert based Auth.
+
 ## 1.4.0 (April 25, 2020)
 
 **FEATURES:**
