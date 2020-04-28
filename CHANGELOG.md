@@ -9,7 +9,7 @@
 **FEATURES:**
 
   * [GH-131] Add support for ```AliCloud``` Secrets Engine.
-  * [GH-71] SSK Key Signing
+  * [GH-71] SSH Key Signing
   * [GH-122] CloudFoundry Auth Method: Support for CloudFoundry login tokens including ability to create signatures.
   * [GH-96] Ability to delete secret, delete secret versions and undelete a secret.
   * [GH-113] Extend the TOTP Secrets Engine with more APIs: Create Key, Read, Read All and Delete Key.
