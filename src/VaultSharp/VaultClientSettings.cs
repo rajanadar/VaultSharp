@@ -67,5 +67,16 @@ namespace VaultSharp
         /// Enterprise Vault only.
         /// </summary>
         public string Namespace { get; set; }
+
+        /// <summary>
+        /// A factory delegate to use if you want to provide your own http client.
+        /// The Handler already has the certificates etc. enabled. 
+        /// Don't worry about setting any vault specific values on your http client.
+        /// Just create your http client and pass it in. 
+        /// VaultSharp will set all the necessary things.
+        /// Use the handler parameter to set proxy etc. 
+        /// It is essential that your HttpClient use the handler, since it has certificate auth etc.
+        /// </summary>
+        public Func<HttpClientHandler, HttpClient> MyHttpClientProviderFunc { get; set; }
     }
 }

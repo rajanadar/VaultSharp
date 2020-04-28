@@ -1154,7 +1154,8 @@ namespace VaultSharp.Samples
                         Console.WriteLine(_responseContent);
                     }
                 },
-                Namespace = "bhjk"
+                Namespace = "bhjk",
+                MyHttpClientProviderFunc = handler => new HttpClient(handler)
             };
 
             return settings;

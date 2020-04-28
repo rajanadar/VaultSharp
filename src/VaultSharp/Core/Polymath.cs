@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using VaultSharp.V1.AuthMethods;
 using VaultSharp.V1.AuthMethods.Cert;
+using VaultSharp.V1.AuthMethods.Kerberos;
 using VaultSharp.V1.Commons;
 
 namespace VaultSharp.Core
@@ -25,7 +26,7 @@ namespace VaultSharp.Core
 
         public VaultClientSettings VaultClientSettings { get; }
 
-        public Polymath(VaultClientSettings vaultClientSettings, ICredentials credentials = null)
+        public Polymath(VaultClientSettings vaultClientSettings)
         {
             VaultClientSettings = vaultClientSettings;
 
@@ -49,43 +50,29 @@ namespace VaultSharp.Core
             }
 #endif
 
-            handler.Credentials = credentials;
+            // if auth method is kerberos, then set the credentials in the handler.
+            if (vaultClientSettings.AuthMethodInfo?.AuthMethodType == AuthMethodType.Kerberos)
+            {
+                var kerberosAuthMethodInfo = vaultClientSettings.AuthMethodInfo as KerberosAuthMethodInfo;
+                handler.Credentials = kerberosAuthMethodInfo.Credentials;
+            }
 
             vaultClientSettings.PostProcessHttpClientHandlerAction?.Invoke(handler);
 
-            _httpClient = new HttpClient(handler);
-            ConfigureHttpClient();
-            _lazyVaultToken = GetLazyVaultToken();
-        }
+            _httpClient = VaultClientSettings.MyHttpClientProviderFunc == null ? new HttpClient(handler) : VaultClientSettings.MyHttpClientProviderFunc(handler);
 
-        public Polymath(VaultClientSettings vaultClientSettings, HttpClient httpClient)
-        {
-            VaultClientSettings = vaultClientSettings;
-            _httpClient = httpClient;
-
-            ConfigureHttpClient();
-            _lazyVaultToken = GetLazyVaultToken();
-        }
-
-        private void ConfigureHttpClient()
-        {
             _httpClient.BaseAddress = new Uri(VaultClientSettings.VaultServerUriWithPort);
 
             if (VaultClientSettings.VaultServiceTimeout != null)
             {
                 _httpClient.Timeout = VaultClientSettings.VaultServiceTimeout.Value;
             }
-        }
 
-        private Lazy<Task<string>> GetLazyVaultToken()
-        {
-            if (VaultClientSettings.AuthMethodInfo == null)
+            if (VaultClientSettings.AuthMethodInfo != null)
             {
-                return null;
+                var authProvider = AuthProviderFactory.CreateAuthenticationProvider(VaultClientSettings.AuthMethodInfo, this);
+                _lazyVaultToken = new Lazy<Task<string>>(authProvider.GetVaultTokenAsync);
             }
-
-            var authProvider = AuthProviderFactory.CreateAuthenticationProvider(VaultClientSettings.AuthMethodInfo, this);
-            return new Lazy<Task<string>>(authProvider.GetVaultTokenAsync);
         }
 
         public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false)

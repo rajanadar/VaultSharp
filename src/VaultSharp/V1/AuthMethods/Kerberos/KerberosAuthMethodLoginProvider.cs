@@ -21,11 +21,8 @@ namespace VaultSharp.V1.AuthMethods.Kerberos
 
         public async Task<string> GetVaultTokenAsync()
         {
-            // Create new polymath instance with the credentials set
-            var polymath = new Polymath(_polymath.VaultClientSettings, _kerberosAuthMethodInfo.Credentials);
-
             // make an unauthenticated call to Vault, since this is the call to get the token. It shouldn't need a token.
-            var response = await polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             _kerberosAuthMethodInfo.ReturnedLoginAuthInfo = response?.AuthInfo;
 
             if (response?.AuthInfo != null && !string.IsNullOrWhiteSpace(response.AuthInfo.ClientToken))
