@@ -1160,7 +1160,19 @@ VaultSharp already supports several of the System backend features.
 // vaultClient.V1.System.<method> The method you are looking for.
 ```
 
-Additional documentation coming soon...
+### Can I inject my own HttpClient into VaultSharp?
+
+ - Yes you can.
+ - The ```VaultClientSettings``` object takes a ```MyHttpClientProviderFunc``` delegate that can be as follows.
+ - Don't worry about setting any vault specific URL, timeout etc. on this http client. VaultSharp will do that.
+
+ ```cs
+var settings = new VaultClientSettings("http://localhost:8200", authMethodInfo)
+            {
+                Namespace = "mynamespace",
+                MyHttpClientProviderFunc = handler => new HttpClient(handler)
+            };
+```
 
 ### What is the deal with the Versioning of VaultSharp?
 

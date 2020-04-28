@@ -2,6 +2,12 @@
 
 **IMPROVEMENTS:**
 
+  * [GH-135] Ability to inject custom HttpClient to VaultSharp.
+
+## 1.4.0.1 (April 27, 2020)
+
+**IMPROVEMENTS:**
+
   * [GH-133] Add support for the optional ```CertificateRoleName``` while doing Cert based Auth.
 
 ## 1.4.0 (April 25, 2020)
