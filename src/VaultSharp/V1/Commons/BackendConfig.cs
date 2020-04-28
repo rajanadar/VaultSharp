@@ -48,6 +48,12 @@ namespace VaultSharp.Core
         public string TokenType { get; set; }
 
         /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets or sets the plugin name.
         /// </summary>
         /// <value>

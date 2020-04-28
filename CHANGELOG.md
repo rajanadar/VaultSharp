@@ -4,6 +4,7 @@
 
   * [GH-135] Ability to inject custom ```HttpClient``` to VaultSharp.
   * Add ```StorageType``` field to ```SealStatus```
+  * Add ```Description``` field to ```BackendConfig```
 
 ## 1.4.0.1 (April 27, 2020)
 
