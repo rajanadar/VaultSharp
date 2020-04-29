@@ -5,6 +5,7 @@
   * [GH-135] Ability to inject custom ```HttpClient``` to VaultSharp.
   * Add ```StorageType``` field to ```SealStatus```
   * Add ```Description``` field to ```BackendConfig```
+  * [GH-136] VaultSharp now supports SourceLink standard for .NET debugging into sources
 
 ## 1.4.0.1 (April 27, 2020)
 
