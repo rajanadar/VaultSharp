@@ -36,7 +36,7 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         {
             Checker.NotNull(awsMountPoint, "awsMountPoint");
 
-            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/" + awsMountPoint.Trim('/') + "/roles", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/" + awsMountPoint.Trim('/') + "/roles?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<AWSRoleModel>> ReadRoleAsync(string awsRoleName, string awsMountPoint = SecretsEngineDefaultPaths.AWS, string wrapTimeToLive = null)

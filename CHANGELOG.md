@@ -1,4 +1,10 @@
-## 1.4.0.2 (May 07, 2020)
+## 1.4.0.3 (May 07, 2020)
+
+**BUG FIXES:**
+
+  * [GH-135] Fixed a bug with AWS Read ROles.
+
+## 1.4.0.2 (May 07, 2020) - Has a bug on AWS Read Roles. Please use later versions.
 
 **IMPROVEMENTS:**
 
