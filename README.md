@@ -538,6 +538,24 @@ string secretKey = awsCreds.Data.SecretKey;
 string securityToken = awsCreds.Data.SecurityToken;
 ```
 
+##### Read All Roles
+
+- This endpoint reads all the AWS Roles
+
+```cs
+Secret<ListInfo> roles = await vaultClient.V1.Secrets.AWS.ReadAllRolesAsync();
+List<string> names = roles.Data;
+```
+
+##### Generate IAM Credentials
+
+- This endpoint reads details of one AWS Role.
+
+```cs
+Secret<AWSRoleModel> role = await vaultClient.V1.Secrets.AWS.ReadRoleAsync(roleName);
+List<string> credTypes = role.Data.CredentialTypes;
+```
+
 ##### Generate IAM Credentials with STS
 
 - This generates a dynamic IAM credential with an STS token based on the named role.

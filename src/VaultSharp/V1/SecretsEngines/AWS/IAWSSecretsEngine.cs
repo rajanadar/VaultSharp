@@ -44,5 +44,35 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// The secret with the <see cref="AWSCredentials" /> as the data.
         /// </returns>
         Task<Secret<AWSCredentials>> GenerateSTSCredentialsAsync(string awsRoleName, string timeToLive = "1h", string awsMountPoint = SecretsEngineDefaultPaths.AWS, string wrapTimeToLive = null);
+
+        /// <summary>
+        /// This endpoint lists all existing roles in the secrets engine.
+        /// </summary>
+        /// <param name="awsMountPoint"><para>[optional]</para>
+        /// The mount point for the AWS backend. Defaults to <see cref="SecretsEngineDefaultPaths.AWS" />
+        /// Provide a value only if you have customized the AWS mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
+        /// <returns>The list of role names.</returns>
+        Task<Secret<ListInfo>> ReadAllRolesAsync(string awsMountPoint = SecretsEngineDefaultPaths.AWS, string wrapTimeToLive = null);
+
+        /// <summary>
+        /// This endpoint queries an existing role by the given name.
+        /// If invalid role data was supplied to the role from an earlier version of Vault, 
+        /// then it will show up in the response as invalid_data.
+        /// </summary>
+        /// <param name="awsRoleName"><para>[required]</para>
+        /// Name of the AWS role.</param>
+        /// <param name="awsMountPoint"><para>[optional]</para>
+        /// The mount point for the AWS backend. Defaults to <see cref="SecretsEngineDefaultPaths.AWS" />
+        /// Provide a value only if you have customized the AWS mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
+        /// <returns>The list of role names.</returns>
+        Task<Secret<AWSRoleModel>> ReadRoleAsync(string awsRoleName, string awsMountPoint = SecretsEngineDefaultPaths.AWS, string wrapTimeToLive = null);
     }
 }

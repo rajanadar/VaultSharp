@@ -1,4 +1,4 @@
-## vNext (TBD)
+## 1.4.0.2 (May 07, 2020)
 
 **IMPROVEMENTS:**
 
@@ -6,6 +6,7 @@
   * Add ```StorageType``` field to ```SealStatus```
   * Add ```Description``` field to ```BackendConfig```
   * [GH-136] VaultSharp now supports SourceLink standard for .NET debugging into sources
+  * [GH-137] Read AWS Roles
 
 ## 1.4.0.1 (April 27, 2020)
 
