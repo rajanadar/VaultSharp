@@ -1,8 +1,14 @@
+## 1.4.0.4 (June 25, 2020)
+
+**IMPROVEMENTS:**
+
+  * [GH-141] Ability to create, read and delete database roles. (non-static ones)
+
 ## 1.4.0.3 (May 07, 2020)
 
 **BUG FIXES:**
 
-  * [GH-135] Fixed a bug with AWS Read ROles.
+  * [GH-135] Fixed a bug with AWS Read Roles.
 
 ## 1.4.0.2 (May 07, 2020) - Has a bug on AWS Read Roles. Please use later versions.
 

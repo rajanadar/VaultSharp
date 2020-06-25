@@ -641,6 +641,20 @@ string username = dbCreds.Data.Username;
 string password = dbCreds.Data.Password;
 ```
 
+##### Create, Read and Delete Database Roles (please see next section for static db roles)
+
+- These endpoints manage the creation, reading and deletion of DB roles.
+
+```cs
+await vaultClient.V1.Secrets.Database.CreateRoleAsync(roleName, roleRequest);
+
+await vaultClient.V1.Secrets.Database.ReadRoleAsync(roleName);
+
+await vaultClient.V1.Secrets.Database.ReadAllRolesAsync();
+
+await vaultClient.V1.Secrets.Database.DeleteRoleAsync(roleName);
+```
+
 ##### Create, Read and Delete Static Database Roles
 
 - These endpoints manage the creation, reading and deletion of static DB roles.

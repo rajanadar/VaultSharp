@@ -26,7 +26,7 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// See the plugin's API page for more information on support and formatting for this parameter.
         /// </summary>
         [JsonProperty("rotation_statements")]
-        public IList<string> RotationStatements { get; set; }
+        public List<string> RotationStatements { get; set; }
 
         /// <summary>
         /// Specifies the amount of time Vault should wait before rotating the password. 

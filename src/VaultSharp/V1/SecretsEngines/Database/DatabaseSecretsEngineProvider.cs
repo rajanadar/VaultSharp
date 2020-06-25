@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
@@ -13,6 +12,38 @@ namespace VaultSharp.V1.SecretsEngines.Database
         public DatabaseSecretsEngineProvider(Polymath polymath)
         {
             _polymath = polymath;
+        }
+
+        public async Task CreateRoleAsync(string roleName, Role role, string mountPoint = SecretsEngineDefaultPaths.Database)
+        {
+            Checker.NotNull(mountPoint, "mountPoint");
+            Checker.NotNull(roleName, "roleName");
+            Checker.NotNull(role, "role");
+
+            await _polymath.MakeVaultApiRequest("v1/" + mountPoint.Trim('/') + "/roles/" + roleName.Trim('/'), HttpMethod.Post, role).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<Role>> ReadRoleAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.Database, string wrapTimeToLive = null)
+        {
+            Checker.NotNull(mountPoint, "mountPoint");
+            Checker.NotNull(roleName, "roleName");
+
+            return await _polymath.MakeVaultApiRequest<Secret<Role>>("v1/" + mountPoint.Trim('/') + "/roles/" + roleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<ListInfo>> ReadAllRolesAsync(string mountPoint = SecretsEngineDefaultPaths.Database, string wrapTimeToLive = null)
+        {
+            Checker.NotNull(mountPoint, "mountPoint");
+
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/" + mountPoint.Trim('/') + "/roles?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task DeleteRoleAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.Database)
+        {
+            Checker.NotNull(mountPoint, "mountPoint");
+            Checker.NotNull(roleName, "roleName");
+
+            await _polymath.MakeVaultApiRequest("v1/" + mountPoint.Trim('/') + "/roles/" + roleName.Trim('/'), HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<UsernamePasswordCredentials>> GetCredentialsAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.Database, string wrapTimeToLive = null)
