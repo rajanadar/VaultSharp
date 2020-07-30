@@ -10,6 +10,7 @@ using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods;
 using VaultSharp.V1.AuthMethods.AppRole;
 using VaultSharp.V1.AuthMethods.Token;
+using VaultSharp.V1.Commons;
 using VaultSharp.V1.SecretsEngines;
 using VaultSharp.V1.SecretsEngines.Transit;
 using VaultSharp.V1.SystemBackend;
@@ -225,6 +226,19 @@ namespace VaultSharp.Samples
 
             var batchedDecryptionResponse = _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions).Result;
             var firstPlainText = batchedDecryptionResponse.Data.BatchedResults.First().Base64EncodedPlainText;
+
+            // Generate Data Key
+            var dataKeyOptions = new DataKeyRequestOptions
+            {
+                Base64EncodedContext = encodedContext,
+                Bits = 256, // default
+                Nonce = nonce
+            };
+
+            Secret<DataKeyResponse> dataKeyResponse = _authenticatedVaultClient.V1.Secrets.Transit.GenerateDataKeyAsync(keyName, "plaintext", dataKeyOptions).Result;
+
+            var encodedDataKeyPlainText = dataKeyResponse.Data.Base64EncodedPlainText;
+            var dataKeyCipherText = dataKeyResponse.Data.Base64EncodedPlainText;
         }
 
         private static void RunKeyValueSamples()
