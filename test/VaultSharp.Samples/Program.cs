@@ -21,7 +21,7 @@ namespace VaultSharp.Samples
 {
     class Program
     {
-        private const string ExpectedVaultVersion = "1.2.3";
+        private const string ExpectedVaultVersion = "1.4.0";
 
         private static IVaultClient _unauthenticatedVaultClient;
         private static IVaultClient _authenticatedVaultClient;
@@ -130,7 +130,7 @@ namespace VaultSharp.Samples
             RunCubbyholeSamples();
             RunKeyValueSamples();
 
-            // RunTransitSamples();
+            RunTransitSamples();
         }
 
         private static void RunCubbyholeSamples()
@@ -234,7 +234,7 @@ namespace VaultSharp.Samples
                 Nonce = nonce
             };
 
-            Secret<DataKeyResponse> dataKeyResponse = _authenticatedVaultClient.V1.Secrets.Transit.GenerateDataKeyAsync(keyName, "plaintext", dataKeyOptions).Result;
+            Secret<DataKeyResponse> dataKeyResponse = _authenticatedVaultClient.V1.Secrets.Transit.GenerateDataKeyAsync("plaintext", keyName, dataKeyOptions).Result;
 
             var encodedDataKeyPlainText = dataKeyResponse.Data.Base64EncodedPlainText;
             var dataKeyCipherText = dataKeyResponse.Data.Base64EncodedPlainText;
