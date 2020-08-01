@@ -1182,14 +1182,13 @@ string firstEncodedPlainText = decryptionResponse.Data.BatchedResults.First().Ba
 var dataKeyOptions = new DataKeyRequestOptions
 {
     Base64EncodedContext = encodedContext,
-    Bits = 256, // default
     Nonce = nonce
 };
 
-Secret<DataKeyResponse> dataKeyResponse = await _authenticatedVaultClient.V1.Secrets.Transit.GenerateDataKeyAsync(keyName, "plaintext", dataKeyOptions);
+Secret<DataKeyResponse> dataKeyResponse = await _authenticatedVaultClient.V1.Secrets.Transit.GenerateDataKeyAsync(keyType, keyName, dataKeyOptions);
 
 var encodedDataKeyPlainText = dataKeyResponse.Data.Base64EncodedPlainText;
-var dataKeyCipherText = dataKeyResponse.Data.Base64EncodedPlainText;
+var dataKeyCipherText = dataKeyResponse.Data.Base64EncodedCipherText;
 
 ```
 

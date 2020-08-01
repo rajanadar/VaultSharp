@@ -1,3 +1,13 @@
+## 1.4.0.5 (July 31, 2020)
+
+**BREAKING CHANGES:**
+
+  * The KV2 Backend type changed from `secret` to `kv-v2`
+
+**FEATURES:**
+
+  * [GH-146] Add support for ```GenerateDataKey``` in Transit Engine.
+
 ## 1.4.0.4 (June 25, 2020)
 
 **IMPROVEMENTS:**
