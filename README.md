@@ -1175,6 +1175,23 @@ var decryptOptions = new DecryptRequestOptions
 Secret<DecryptionResponse> decryptionResponse = await _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions);
 string firstEncodedPlainText = decryptionResponse.Data.BatchedResults.First().Base64EncodedPlainText;
 ```
+###### Generate Data Key
+
+```cs
+// Generate Data Key
+var dataKeyOptions = new DataKeyRequestOptions
+{
+    Base64EncodedContext = encodedContext,
+    Bits = 256, // default
+    Nonce = nonce
+};
+
+Secret<DataKeyResponse> dataKeyResponse = await _authenticatedVaultClient.V1.Secrets.Transit.GenerateDataKeyAsync(keyName, "plaintext", dataKeyOptions);
+
+var encodedDataKeyPlainText = dataKeyResponse.Data.Base64EncodedPlainText;
+var dataKeyCipherText = dataKeyResponse.Data.Base64EncodedPlainText;
+
+```
 
 ##### Read all Encryption Keys
 
