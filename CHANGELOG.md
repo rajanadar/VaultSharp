@@ -1,4 +1,4 @@
-## vnext (tbd)
+## 1.4.0.5 (July 31, 2020)
 
 **BREAKING CHANGES:**
 
