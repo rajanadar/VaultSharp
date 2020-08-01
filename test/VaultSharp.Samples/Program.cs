@@ -20,7 +20,7 @@ namespace VaultSharp.Samples
 {
     class Program
     {
-        private const string ExpectedVaultVersion = "1.4.0";
+        private const string ExpectedVaultVersion = "1.2.3";
 
         private static IVaultClient _unauthenticatedVaultClient;
         private static IVaultClient _authenticatedVaultClient;
@@ -236,7 +236,7 @@ namespace VaultSharp.Samples
         private static void RunKeyValueV2Samples()
         {
             // raja todo: check this out later
-            return;
+            // return;
 
             var path = Guid.NewGuid().ToString();
 
@@ -293,10 +293,18 @@ namespace VaultSharp.Samples
 
         private static void RunKeyValueV1Samples()
         {
+            return;
             // raja todo
 
             // 1.1.0 doesn't have kv1 by default.
-            /*
+
+            var path = Guid.NewGuid().ToString();
+
+            var values = new Dictionary<string, object>
+            {
+                {"foo", "kv2"},
+                {"foo2", 345 }
+            };
 
             _authenticatedVaultClient.V1.Secrets.KeyValue.V1.WriteSecretAsync(path, values).Wait();
 
@@ -307,7 +315,7 @@ namespace VaultSharp.Samples
             Assert.True(kv1Secret.Data.Count == 2);
 
             _authenticatedVaultClient.V1.Secrets.KeyValue.V1.DeleteSecretAsync(path).Wait();
-            */
+            
         }
 
         public class FooData

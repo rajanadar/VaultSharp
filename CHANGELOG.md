@@ -1,3 +1,9 @@
+## vnext (tbd)
+
+**BREAKING CHANGES:**
+
+  * The KV2 Backend type changed from `secret` to `kv-v2`
+
 ## 1.4.0.4 (June 25, 2020)
 
 **IMPROVEMENTS:**
