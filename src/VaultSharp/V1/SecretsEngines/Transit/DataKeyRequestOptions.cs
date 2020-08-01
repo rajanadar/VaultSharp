@@ -1,11 +1,9 @@
-using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
     /// <summary>
-    /// Represents the Encrypt Request Options.
+    /// Represents the Data Key Request Options.
     /// </summary>
     public class DataKeyRequestOptions
     {
@@ -31,6 +29,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <summary>
         /// [optional]
         /// Specifies the number of bits in the desired key. Can be 128, 256, or 512.
+        /// Defaults to 256.
         /// </summary>
         [JsonProperty("bits")]
         public int Bits { get; set; }

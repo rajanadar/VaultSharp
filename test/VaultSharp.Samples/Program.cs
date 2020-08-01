@@ -231,7 +231,6 @@ namespace VaultSharp.Samples
             var dataKeyOptions = new DataKeyRequestOptions
             {
                 Base64EncodedContext = encodedContext,
-                Bits = 256, // default
                 Nonce = nonce
             };
 
