@@ -33,10 +33,13 @@ namespace VaultSharp.V1.SecretsEngines.Transit
             return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/" + mountPoint.Trim('/') + "/keys?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<DataKeyResponse>> GenerateDataKeyAsync(string keyName, string type, DataKeyRequestOptions dataKeyRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit, string wrapTimeToLive = null)
+        public async Task<Secret<DataKeyResponse>> GenerateDataKeyAsync(string keyType, string keyName, DataKeyRequestOptions dataKeyRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit, string wrapTimeToLive = null)
         {
+            Checker.NotNull(keyType, "keyType");
             Checker.NotNull(keyName, "keyName");
-            return await _polymath.MakeVaultApiRequest<Secret<DataKeyResponse>>($"v1/{ mountPoint.Trim('/') }/datakey/{ type.Trim('/') }/{ keyName.Trim('/') }", HttpMethod.Post, dataKeyRequestOptions, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+
+            return await _polymath.MakeVaultApiRequest<Secret<DataKeyResponse>>(
+                "v1/" + mountPoint.Trim('/') + "/datakey/" + keyType.Trim('/')+ "/" + keyName.Trim('/'), HttpMethod.Post, dataKeyRequestOptions, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

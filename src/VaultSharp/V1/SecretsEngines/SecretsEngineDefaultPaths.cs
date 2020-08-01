@@ -16,7 +16,7 @@
         public const string KMIP = "kmip";
         public const string KeyValueV1 = "kv";
         public const string MongoDBAtlas = "mongodbatlas";
-        public const string KeyValueV2 = "secret";
+        public const string KeyValueV2 = "kv-v2";
         public const string Identity = "identity";
         public const string Nomad = "nomad";
         public const string OpenLDAP = "openldap";

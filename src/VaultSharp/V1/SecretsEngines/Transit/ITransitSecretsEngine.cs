@@ -74,15 +74,18 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         Task<Secret<ListInfo>> ReadAllEncryptionKeysAsync(string mountPoint = SecretsEngineDefaultPaths.Transit, string wrapTimeToLive = null);
 
         /// <summary>
-        /// This endpoint generates a new high-entropy key and the value encrypted with the named key. Optionally return the plaintext of the key as well.
+        /// This endpoint generates a new high-entropy key and the value encrypted with the named key. 
+        /// Optionally return the plaintext of the key as well.
+        /// Whether plaintext is returned depends on the path; as a result, you can use Vault ACL policies to control whether a user is allowed to retrieve the plaintext value of a key. 
+        /// This is useful if you want an untrusted user or operation to generate keys that are then made available to trusted users.
         /// </summary>
-        /// <param name="keyName"><para>[required]</para>
-        /// Specifies the name of the encryption key to use to encrypt the datakey.
-        /// <param name="type"><para>[required]</para>
+        /// <param name="keyType"><para>[required]</para>
         ///  Specifies the type of key to generate.
         ///  If plaintext, the plaintext key will be returned along with the ciphertext.
         ///  If wrapped, only the ciphertext value will be returned. 
         /// </param>
+        /// <param name="keyName"><para>[required]</para>
+        /// Specifies the name of the encryption key to use to encrypt the datakey.
         /// </param>
         /// <param name="dataKeyRequestOptions"></param>
         /// The Options
@@ -95,8 +98,8 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
         /// <returns>
-        /// The secret with cipher text.
+        /// The secret with data key response.
         /// </returns>
-        Task<Secret<DataKeyResponse>> GenerateDataKeyAsync(string keyName, string type, DataKeyRequestOptions dataKeyRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit, string wrapTimeToLive = null);
+        Task<Secret<DataKeyResponse>> GenerateDataKeyAsync(string keyType, string keyName, DataKeyRequestOptions dataKeyRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit, string wrapTimeToLive = null);
     }
 }

@@ -130,7 +130,7 @@ namespace VaultSharp.Samples
             RunCubbyholeSamples();
             RunKeyValueSamples();
 
-            // RunTransitSamples();
+            RunTransitSamples();
         }
 
         private static void RunCubbyholeSamples()
@@ -231,11 +231,10 @@ namespace VaultSharp.Samples
             var dataKeyOptions = new DataKeyRequestOptions
             {
                 Base64EncodedContext = encodedContext,
-                Bits = 256, // default
                 Nonce = nonce
             };
 
-            Secret<DataKeyResponse> dataKeyResponse = _authenticatedVaultClient.V1.Secrets.Transit.GenerateDataKeyAsync(keyName, "plaintext", dataKeyOptions).Result;
+            Secret<DataKeyResponse> dataKeyResponse = _authenticatedVaultClient.V1.Secrets.Transit.GenerateDataKeyAsync("plaintext", keyName, dataKeyOptions).Result;
 
             var encodedDataKeyPlainText = dataKeyResponse.Data.Base64EncodedPlainText;
             var dataKeyCipherText = dataKeyResponse.Data.Base64EncodedPlainText;
@@ -250,7 +249,7 @@ namespace VaultSharp.Samples
         private static void RunKeyValueV2Samples()
         {
             // raja todo: check this out later
-            return;
+            // return;
 
             var path = Guid.NewGuid().ToString();
 
@@ -307,10 +306,18 @@ namespace VaultSharp.Samples
 
         private static void RunKeyValueV1Samples()
         {
+            return;
             // raja todo
 
             // 1.1.0 doesn't have kv1 by default.
-            /*
+
+            var path = Guid.NewGuid().ToString();
+
+            var values = new Dictionary<string, object>
+            {
+                {"foo", "kv2"},
+                {"foo2", 345 }
+            };
 
             _authenticatedVaultClient.V1.Secrets.KeyValue.V1.WriteSecretAsync(path, values).Wait();
 
@@ -321,7 +328,7 @@ namespace VaultSharp.Samples
             Assert.True(kv1Secret.Data.Count == 2);
 
             _authenticatedVaultClient.V1.Secrets.KeyValue.V1.DeleteSecretAsync(path).Wait();
-            */
+            
         }
 
         public class FooData
