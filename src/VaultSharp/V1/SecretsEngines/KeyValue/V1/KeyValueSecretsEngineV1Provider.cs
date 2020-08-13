@@ -38,7 +38,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
 
         public async Task<Secret<Dictionary<string, object>>> WriteSecretAsync(string path, IDictionary<string, object> values, string mountPoint = SecretsEngineDefaultPaths.KeyValueV1)
         {
-            return await WriteSecretAsync(path, values, mountPoint);
+            return await WriteSecretAsync(path, new Dictionary<string, object>(values), mountPoint);
         }
         
         public async Task<Secret<T>> WriteSecretAsync<T>(string path, T values, string mountPoint = SecretsEngineDefaultPaths.KeyValueV1)
