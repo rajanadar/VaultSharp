@@ -1088,7 +1088,7 @@ response.Data.EncodedItems;
 ```cs
 var decodeOptions = new DecodeRequestOptions { Value = "ipsem" };
 Secret<DecodedResponse> response = await _authenticatedVaultClient.V1.Secrets.Transform.DecodeAsync(roleName, decodeOptions);
-response.Data.DecodedText;
+response.Data.DecodedValuet;
 ```
 
 ###### Decode Batched Item
