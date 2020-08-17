@@ -1078,7 +1078,7 @@ var encodeOptions = new EncodeRequestOptions
 };
 
 Secret<EncodedResponse> response = await _authenticatedVaultClient.V1.Secrets.Transform.EncodeAsync(roleName, encodeOptions);
-response.Data.BatchResults;
+response.Data.EncodedItems;
 ```
 
 ##### Decode Method
