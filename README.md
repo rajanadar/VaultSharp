@@ -1065,7 +1065,7 @@ await vaultClient.V1.Secrets.TOTP.DeleteKeyAsync(keyName);
 
 var encodeOptions = new EncodeRequestOptions { Value = "ipsem" };
 Secret<EncodedResponse> response = await _authenticatedVaultClient.V1.Secrets.Transform.EncodeAsync(roleName, encodeOptions);
-response.Data.EncodedText;
+response.Data.EncodedValue;
 
 ```
 
