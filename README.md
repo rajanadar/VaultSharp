@@ -1100,7 +1100,7 @@ var decodeOptions = new DecodeRequestOptions
 };
 
 Secret<DecodedResponse> response = await _authenticatedVaultClient.V1.Secrets.Transform.DecodeAsync(roleName, decodeOptions);
-response.Data.BatchResults;
+response.Data.DecodedItems;
 ```
 
 #### Transit Secrets Engine
