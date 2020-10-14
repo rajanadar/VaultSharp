@@ -21,6 +21,15 @@ namespace VaultSharp
         }
 
         /// <summary>
+        /// Clear current token.
+        /// Next request will get new token.
+        /// </summary>
+        public void ResetToken()
+        {
+            polymath.ResetToken();
+        }
+
+        /// <summary>
         /// Gets the V1 Client interface for Vault Api.
         /// </summary>
         public IVaultClientV1 V1 { get; }

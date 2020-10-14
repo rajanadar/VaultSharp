@@ -17,6 +17,12 @@ namespace VaultSharp
         /// Gets the V1 Client interface for Vault Api.
         /// </summary>
         IVaultClientV1 V1 { get; }
+
+        /// <summary>
+        /// Clear current token.
+        /// Next request will get new token.
+        /// </summary>
+        void ResetToken();
     }
 }
 
