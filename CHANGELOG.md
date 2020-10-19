@@ -1,3 +1,8 @@
+## 1.4.0.6 (July 31, 2020)
+**FEATURES:**
+
+  * [GH-147] Add support for Renewing token after max ttl as expired.
+
 ## 1.4.0.5 (July 31, 2020)
 
 **BREAKING CHANGES:**

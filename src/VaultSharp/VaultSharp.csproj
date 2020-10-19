@@ -5,14 +5,14 @@
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>VaultSharp.snk</AssemblyOriginatorKeyFile>
-    <Title>VaultSharp</Title>
-    <Version>1.4.0.5</Version>
+    <Title>VaultSharp - Omnibees</Title>
+    <Version>1.0.0.1</Version>
     <Authors>Raja Nadar</Authors>
     <Copyright>Copyright ©  2020 Raja Nadar. All rights reserved.</Copyright>
-    <PackageProjectUrl>https://github.com/rajanadar/VaultSharp</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/rajanadar/VaultSharp</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/RafaelMontegordoFelix/VaultSharp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/RafaelMontegordoFelix/VaultSharp</RepositoryUrl>
     <PackageTags>c# vault hashicorp .net netcore netstandard api secret consul kv ldap aws ec2 iam userpass</PackageTags>
-    <PackageReleaseNotes>https://github.com/rajanadar/VaultSharp/blob/master/CHANGELOG.md</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/RafaelMontegordoFelix/VaultSharp/blob/master/CHANGELOG.md</PackageReleaseNotes>
     <Description>The most comprehensive .NET Library for HashiCorp's Vault which is a modern secret management system.
 
  * VaultSharp supports all Auth methods, all Secrets Engines and most System Apis supported by Vault.
@@ -22,8 +22,8 @@
 This library is built with .NET Standard 2.0 &amp; .NET 4.5 and hence is cross-platform across .NET Core 1.0, 2.0, .NET 4.5 and above, Xamarin iOS, Android, Mac, UWP etc.</Description>
     <RepositoryType>Github</RepositoryType>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.4.0.5</AssemblyVersion>
-    <FileVersion>1.4.0.5</FileVersion>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageIcon>icon.png</PackageIcon>
     
