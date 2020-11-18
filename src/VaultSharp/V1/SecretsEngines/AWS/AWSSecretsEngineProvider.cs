@@ -29,7 +29,7 @@ namespace VaultSharp.V1.SecretsEngines.AWS
 
             object requestData = string.IsNullOrWhiteSpace(timeToLive) ? null : new { ttl = timeToLive };
 
-            return await _polymath.MakeVaultApiRequest<Secret<AWSCredentials>>("v1/" + awsMountPoint.Trim('/') + "/sts/" + awsRoleName.Trim('/'), HttpMethod.Post, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<AWSCredentials>>("v1/" + awsMountPoint.Trim('/') + "/sts/" + awsRoleName.Trim('/'), HttpMethod.Get, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<ListInfo>> ReadAllRolesAsync(string awsMountPoint = SecretsEngineDefaultPaths.AWS, string wrapTimeToLive = null)
