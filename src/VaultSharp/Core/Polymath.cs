@@ -132,7 +132,7 @@ namespace VaultSharp.Core
         {
             try
             {
-                var requestUri = new Uri(_httpClient.BaseAddress, resourcePath);
+                var requestUri = new Uri(_httpClient.BaseAddress, new Uri(resourcePath, UriKind.Relative));
 
                 var requestContent = requestData != null
                     ? new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8)
