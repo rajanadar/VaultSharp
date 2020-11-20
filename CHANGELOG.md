@@ -1,3 +1,10 @@
+## 1.4.0.6 (Nov 20, 2020)
+
+**BUG FIXES:**
+
+  * [GH-148] AWS.GenerateSTSCredentialsAsync() should use GET instead of POST.
+  * [GH-150] Fixed case then VAULT_ADDR has a trailing slash.
+
 ## 1.4.0.5 (July 31, 2020)
 
 **BREAKING CHANGES:**
