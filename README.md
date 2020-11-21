@@ -1081,8 +1081,8 @@ await vaultClient.V1.Secrets.TOTP.DeleteKeyAsync(keyName);
 ```cs
 
 var encodeOptions = new EncodeRequestOptions { Value = "ipsem" };
-Secret<EncodedResponse> response = await _authenticatedVaultClient.V1.Secrets.Transit.EncodeAsync(roleName, encodeOptions);
-response.Data.EncodedText;
+Secret<EncodedResponse> response = await _authenticatedVaultClient.V1.Secrets.Transform.EncodeAsync(roleName, encodeOptions);
+response.Data.EncodedValue;
 
 ```
 
@@ -1094,8 +1094,8 @@ var encodeOptions = new EncodeRequestOptions
   BatchItems = new List<EncodingItem> { new EncodingItem { Value = "ipsem1" }, new EncodingItem { Value = "ipsem2" } }
 };
 
-Secret<EncodedResponse> response = await _authenticatedVaultClient.V1.Secrets.Transit.EncodeAsync(roleName, encodeOptions);
-response.Data.BatchResults;
+Secret<EncodedResponse> response = await _authenticatedVaultClient.V1.Secrets.Transform.EncodeAsync(roleName, encodeOptions);
+response.Data.EncodedItems;
 ```
 
 ##### Decode Method
@@ -1104,8 +1104,8 @@ response.Data.BatchResults;
 
 ```cs
 var decodeOptions = new DecodeRequestOptions { Value = "ipsem" };
-Secret<DecodedResponse> response = await _authenticatedVaultClient.V1.Secrets.Transit.DecodeAsync(roleName, decodeOptions);
-response.Data.DecodedText;
+Secret<DecodedResponse> response = await _authenticatedVaultClient.V1.Secrets.Transform.DecodeAsync(roleName, decodeOptions);
+response.Data.DecodedValue;
 ```
 
 ###### Decode Batched Item
@@ -1116,8 +1116,8 @@ var decodeOptions = new DecodeRequestOptions
   BatchItems = new List<DecodingItem> { new DecodingItem { Value = "ipsem1" }, new DecodingItem { Value = "ipsem2" } }
 };
 
-Secret<DecodedResponse> response = await _authenticatedVaultClient.V1.Secrets.Transit.DecodeAsync(roleName, decodeOptions);
-response.Data.BatchResults;
+Secret<DecodedResponse> response = await _authenticatedVaultClient.V1.Secrets.Transform.DecodeAsync(roleName, decodeOptions);
+response.Data.DecodedItems;
 ```
 
 #### Transit Secrets Engine
