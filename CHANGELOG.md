@@ -1,3 +1,9 @@
+## 1.4.0.7 (TBD)
+
+**FEATURES:**
+
+  * [GH-161] Add ability to re-fetch vault token as dictated by the client
+
 ## 1.4.0.6 (Nov 20, 2020)
 
 **BUG FIXES:**

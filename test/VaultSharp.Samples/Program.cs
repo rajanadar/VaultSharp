@@ -45,6 +45,8 @@ namespace VaultSharp.Samples
                     var settings = GetVaultClientSettings();
                     _unauthenticatedVaultClient = new VaultClient(settings);
 
+                    _unauthenticatedVaultClient.V1.Auth.ResetVaultToken();
+
                     RunAllSamples();
 
                     Console.SetOut(existingOut);

@@ -481,6 +481,23 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 - It is significantly more complete and flexible and which can be used throughout Vault's API.
 - Please see the _System Backend_ section of the docs for the Enterprise MFA apis.
 
+#### Force re-fetch of Vault Login
+
+- Whenever you initialize VaultSharp with an appropriate AuthMethod, VaultSharp fetches the vault token on the first authenticated Vault operation requested by the host app.
+- Once VaultSharp has this token, it never re-fetches the token.
+- This means, when the token expires, Vault calls will start failing.
+- The older way to solve for this is for the host app to keep track of the token's TTL and re-initialize VaultClient. This ensures that VaultSharp will fetch the vault-token again.
+- However, a lot of our clients don't want to mess with the singleton nature of VaultClient.
+- So VaultSharp now supports the ability to set a flag that tells VaultSharp to refetch the vault token during the next Vault operation.
+- As a client, whenever you determine that the token needs to be re-fetched, call this method.
+- It'll make VaultSharp fetch the vault token again before the next operation.
+
+```
+// when it is time to re-fetch the login token, just set this flag.
+vaultClient.V1.Auth.ResetVaultToken();
+
+```
+
 ### Secrets Engines
 
 - VaultSharp supports all secrets engines supported by the Vault Service

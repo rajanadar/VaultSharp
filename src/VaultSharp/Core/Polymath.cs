@@ -22,7 +22,8 @@ namespace VaultSharp.Core
         private const string VaultWrapTimeToLiveHeaderKey = "X-Vault-Wrap-TTL";
 
         private readonly HttpClient _httpClient;
-        private readonly Lazy<Task<string>> _lazyVaultToken;
+        private Lazy<Task<string>> _lazyVaultToken;
+        private readonly IAuthMethodLoginProvider _authMethodLoginProvider;
 
         public VaultClientSettings VaultClientSettings { get; }
 
@@ -70,8 +71,17 @@ namespace VaultSharp.Core
 
             if (VaultClientSettings.AuthMethodInfo != null)
             {
-                var authProvider = AuthProviderFactory.CreateAuthenticationProvider(VaultClientSettings.AuthMethodInfo, this);
-                _lazyVaultToken = new Lazy<Task<string>>(authProvider.GetVaultTokenAsync);
+                _authMethodLoginProvider = AuthProviderFactory.CreateAuthenticationProvider(VaultClientSettings.AuthMethodInfo, this);
+
+                SetVaultTokenDelegate();
+            }
+        }
+
+        internal void SetVaultTokenDelegate()
+        {
+            if (_authMethodLoginProvider != null)
+            {
+                _lazyVaultToken = new Lazy<Task<string>>(_authMethodLoginProvider.GetVaultTokenAsync);
             }
         }
 

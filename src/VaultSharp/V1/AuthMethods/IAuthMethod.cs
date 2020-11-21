@@ -103,5 +103,10 @@ namespace VaultSharp.V1.AuthMethods
         /// 
         /// </summary>
         IUserPassAuthMethod UserPass { get; }
+
+        /// <summary>
+        /// This will make VaultSharp fetch the vault token again before the new operation
+        /// </summary>
+        void ResetVaultToken();
     }
 }

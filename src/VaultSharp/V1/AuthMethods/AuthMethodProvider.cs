@@ -61,5 +61,10 @@ namespace VaultSharp.V1.AuthMethods
         public ITokenAuthMethod Token { get; }
 
         public IUserPassAuthMethod UserPass => throw new NotImplementedException();
+
+        public void ResetVaultToken()
+        {
+            _polymath.SetVaultTokenDelegate();
+        }
     }
 }
