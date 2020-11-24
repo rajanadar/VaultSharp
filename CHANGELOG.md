@@ -8,6 +8,10 @@
 
   * [GH-161] Add ability to re-fetch vault token as dictated by the client
 
+**BUG FIXES:**
+
+  * [GH-149] Fixes a recursion problem with `WriteSecretAsync`
+
 ## 1.4.0.6 (Nov 20, 2020)
 
 **BUG FIXES:**
