@@ -1,9 +1,16 @@
-﻿using VaultSharp.Core;
+﻿using System;
+using VaultSharp.Core;
 
 namespace VaultSharp.V1.AuthMethods.CloudFoundry
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class CloudFoundryAuthMethodInfo : AbstractAuthMethodInfo
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public override AuthMethodType AuthMethodType => AuthMethodType.CloudFoundry;
 
         /// <summary>
@@ -32,9 +39,16 @@ namespace VaultSharp.V1.AuthMethods.CloudFoundry
 
         /// <summary>
         /// [required]
-        /// The full body of the file available at the path denoted by CF_INSTANCE_KEY.
+        /// The signature.
+        /// Please see https://gist.github.com/rajanadar/84769efeca64e0128d7a8a627b7bb4db
         /// </summary>
-        public string CFInstanceKeyContent { get; }
+        public string Signature { get; }
+
+        /// <summary>
+        /// [required]
+        /// The datetime used in the signature.
+        /// </summary>
+        public DateTime SignatureDateTime { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CloudFoundryAuthMethodInfo"/> class.
@@ -45,11 +59,14 @@ namespace VaultSharp.V1.AuthMethods.CloudFoundry
         /// <param name="instanceCertContent">[required]
         /// The full body of the file available at the path denoted by CF_INSTANCE_CERT.
         /// </param>
-        /// <param name="instanceKeyContent">[required]
-        /// The full body of the file available at the path denoted by CF_INSTANCE_KEY.
+        /// <param name="signatureDateTime">[required]
+        /// The datetime used in the signature.
         /// </param>
-        public CloudFoundryAuthMethodInfo(string roleName, string instanceCertContent, string instanceKeyContent)
-            : this(AuthMethodType.CloudFoundry.Type, roleName, instanceCertContent, instanceKeyContent)
+        /// <param name="signature">[required]
+        /// The signature.
+        /// </param>
+        public CloudFoundryAuthMethodInfo(string roleName, string instanceCertContent, DateTime signatureDateTime, string signature)
+            : this(AuthMethodType.CloudFoundry.Type, roleName, instanceCertContent, signatureDateTime, signature)
         {
         }
 
@@ -63,20 +80,24 @@ namespace VaultSharp.V1.AuthMethods.CloudFoundry
         /// <param name="instanceCertContent">[required]
         /// The full body of the file available at the path denoted by CF_INSTANCE_CERT.
         /// </param>
-        /// <param name="instanceKeyContent">[required]
-        /// The full body of the file available at the path denoted by CF_INSTANCE_KEY.
+        /// <param name="signatureDateTime">[required]
+        /// The datetime used in the signature.
         /// </param>
-        public CloudFoundryAuthMethodInfo(string mountPoint, string roleName, string instanceCertContent, string instanceKeyContent)
+        /// <param name="signature">[required]
+        /// The signature.
+        /// </param>
+        public CloudFoundryAuthMethodInfo(string mountPoint, string roleName, string instanceCertContent, DateTime signatureDateTime, string signature)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");
             Checker.NotNull(instanceCertContent, "instanceCertContent");
-            Checker.NotNull(instanceKeyContent, "instanceKeyContent");
+            Checker.NotNull(signature, "signature");
 
             MountPoint = mountPoint;
             RoleName = roleName;
             CFInstanceCertContent = instanceCertContent;
-            CFInstanceKeyContent = instanceKeyContent;
+            SignatureDateTime = signatureDateTime;
+            Signature = signature;
         }
     }
 }

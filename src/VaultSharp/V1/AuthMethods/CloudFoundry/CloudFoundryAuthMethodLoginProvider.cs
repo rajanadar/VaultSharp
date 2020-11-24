@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using VaultSharp.Core;
-using VaultSharp.V1.AuthMethods.CloudFoundry.Signature;
 using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.AuthMethods.CloudFoundry
@@ -18,20 +17,21 @@ namespace VaultSharp.V1.AuthMethods.CloudFoundry
         {
             _cloudFoundryAuthMethodInfo = cloudFoundryAuthMethodInfo;
             _polymath = polymath;
+        }
 
+        public static string GetFormattedSigningTime(DateTime signingTime)
+        {
+            return signingTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
         }
 
         public async Task<string> GetVaultTokenAsync()
         {
-            var signingTime = DateTime.UtcNow;
-            var signature = CloudFoundrySignatureProvider.GetSignature(signingTime, _cloudFoundryAuthMethodInfo.CFInstanceCertContent, _cloudFoundryAuthMethodInfo.RoleName, _cloudFoundryAuthMethodInfo.CFInstanceKeyContent);
-
             var requestData = new
             {
                 role = _cloudFoundryAuthMethodInfo.RoleName,
                 cf_instance_cert = _cloudFoundryAuthMethodInfo.CFInstanceCertContent,
-                signing_time = CloudFoundrySignatureProvider.GetFormattedSigningTime(signingTime),
-                signature
+                signing_time = GetFormattedSigningTime(_cloudFoundryAuthMethodInfo.SignatureDateTime),
+                signature = _cloudFoundryAuthMethodInfo.Signature
             };
             
             // make an unauthenticated call to Vault, since this is the call to get the token. 

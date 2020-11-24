@@ -1,5 +1,9 @@
 ## 1.4.0.7 (TBD)
 
+**BREAKING CHANGES:**
+
+  * [GH-162] The `CloudFoundryAuthMethodInfo` constructor now takes the actual signature and date time
+
 **FEATURES:**
 
   * [GH-161] Add ability to re-fetch vault token as dictated by the client

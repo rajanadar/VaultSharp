@@ -70,7 +70,6 @@ This library is built with .NET Standard 2.0 &amp; .NET 4.5 and hence is cross-p
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Portable.BouncyCastle" Version="1.8.5" />
   </ItemGroup>
 
   <ItemGroup>

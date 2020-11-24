@@ -235,7 +235,8 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 ##### CloudFoundry Signature Creation
 
- - VaultSharp also provides a helper class to generate on-demand CloudFoundry signature.
+ - I have created GH Gist with a helper class to generate on-demand CloudFoundry signature.
+ - https://gist.github.com/rajanadar/84769efeca64e0128d7a8a627b7bb4db
  - Use the ```CloudFoundrySignatureProvider``` class as follows
 
 ```cs
