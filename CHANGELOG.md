@@ -11,6 +11,7 @@
 **BUG FIXES:**
 
   * [GH-149] Fixes a recursion problem with `WriteSecretAsync`
+  * [GH-147] Fixes the return type error with kv2 secret writes.
 
 ## 1.4.0.6 (Nov 20, 2020)
 

@@ -149,7 +149,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// Even with a ttl set, the secrets engine never removes data on its own.The ttl key is merely advisory.
         /// When reading a value with a ttl, both the ttl key and the refresh interval will reflect the value:
         /// </remarks>
-        Task<Secret<T>> WriteSecretAsync<T>(string path, T data, int? checkAndSet = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2);
+        Task<Secret<Dictionary<string, object>>> WriteSecretAsync<T>(string path, T data, int? checkAndSet = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2);
 
         /// <summary>
         /// This endpoint issues a soft delete of the secret's latest version at the specified location. 

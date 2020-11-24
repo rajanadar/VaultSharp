@@ -268,18 +268,19 @@ namespace VaultSharp.Samples
 
             _authenticatedVaultClient.V1.System.MountSecretBackendAsync(kv2SecretsEngine).Wait();
 
-            var values = new Dictionary<string, object>
+            var values = new Dictionary<string, Dictionary<string, object>>();
+            values.Add("test", new Dictionary<string, object>
             {
-                {"foo", "kv2"},
-                {"foo2", 345 }
-            };
+                {"Blub", 1 },
+                {"Foo", "bar" }
+            });
 
             var written1 = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync(path, values, mountPoint: kv2SecretsEngine.Path).Result;
 
-            Assert.True(written1.Data.Count == 2);
+            Assert.True(written1.Data.Count == 4);
 
             var kv2Secret = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync(path, mountPoint: kv2SecretsEngine.Path).Result;
-            Assert.True(kv2Secret.Data.Data.Count == 2);
+            Assert.True(kv2Secret.Data.Data.Count == 1);
 
             var paths2 = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretPathsAsync("", mountPoint: kv2SecretsEngine.Path).Result;
             Assert.True(paths2.Data.Keys.Count() == 1);
@@ -292,9 +293,9 @@ namespace VaultSharp.Samples
             // kv2 with generics
             var genericsPath = "genericBlah";
             var data = new FooData { Foo = "bar", Foo2 = 42 };
-            _authenticatedVaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync(path, data, mountPoint: kv2SecretsEngine.Path).Wait();
+            _authenticatedVaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync(genericsPath, data, mountPoint: kv2SecretsEngine.Path).Wait();
 
-            var kv2SecretGeneric = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync<FooData>(path, mountPoint: kv2SecretsEngine.Path).Result;
+            var kv2SecretGeneric = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync<FooData>(genericsPath, mountPoint: kv2SecretsEngine.Path).Result;
             Assert.False(string.IsNullOrEmpty(kv2SecretGeneric.Data.Data.Foo));
             Assert.True(kv2SecretGeneric.Data.Data.Foo2 == 42);
 
