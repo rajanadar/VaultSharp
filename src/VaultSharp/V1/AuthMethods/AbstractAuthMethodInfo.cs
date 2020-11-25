@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using VaultSharp.V1.Commons;
+﻿using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.AuthMethods
 {

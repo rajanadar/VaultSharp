@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using Newtonsoft.Json;
 
 namespace VaultSharp.Core
 {
@@ -66,7 +65,8 @@ namespace VaultSharp.Core
 
             try
             {
-                var structured = JsonConvert.DeserializeObject<Dictionary<string, IEnumerable<string>>>(message);
+
+                var structured = Polymath.DeserializeJson<Dictionary<string, IEnumerable<string>>>(message);
 
                 if (structured.ContainsKey("errors"))
                 {

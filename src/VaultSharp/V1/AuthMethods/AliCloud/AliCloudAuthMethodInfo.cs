@@ -1,5 +1,4 @@
 ﻿
-using Newtonsoft.Json;
 using VaultSharp.Core;
 
 namespace VaultSharp.V1.AuthMethods.AliCloud
@@ -15,7 +14,11 @@ namespace VaultSharp.V1.AuthMethods.AliCloud
         /// <value>
         /// The type of the authentication backend.
         /// </value>
-        [JsonIgnore]
+#if NET5_0 
+        [System.Text.Json.Serialization.JsonIgnore]
+#else
+        [Newtonsoft.Json.JsonIgnore]
+#endif
         public override AuthMethodType AuthMethodType => AuthMethodType.AliCloud;
 
         /// <summary>
