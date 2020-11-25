@@ -1,4 +1,4 @@
-## 1.4.0.7 (TBD)
+## 1.4.0.7 (Nov 24, 2020)
 
 **BREAKING CHANGES:**
 
@@ -7,6 +7,7 @@
 **FEATURES:**
 
   * [GH-161] Add ability to re-fetch vault token as dictated by the client
+  * Add support for .Net Standard 2.1 (.Net Core 3.x) and .Net 5
 
 **BUG FIXES:**
 
