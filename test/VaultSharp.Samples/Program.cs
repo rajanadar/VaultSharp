@@ -21,7 +21,7 @@ namespace VaultSharp.Samples
 {
     class Program
     {
-        private const string ExpectedVaultVersion = "1.4.0";
+        private const string ExpectedVaultVersion = "1.6.0";
 
         private static IVaultClient _unauthenticatedVaultClient;
         private static IVaultClient _authenticatedVaultClient;
@@ -165,6 +165,8 @@ namespace VaultSharp.Samples
 
         private static void RunTransitSamples()
         {
+            return;
+
             // Transit
 
             // manually setup the following.

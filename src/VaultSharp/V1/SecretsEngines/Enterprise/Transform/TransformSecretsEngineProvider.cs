@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
 
-namespace VaultSharp.V1.SecretsEngines.Transform
+namespace VaultSharp.V1.SecretsEngines.Enterprise.Transform
 {
     internal class TransformSecretsEngineProvider : ITransformSecretsEngine
     {

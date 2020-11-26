@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace VaultSharp.V1.SecretsEngines.KMIP
+namespace VaultSharp.V1.SecretsEngines.Enterprise.KMIP
 {
     /// <summary>
     /// Represents the Certificate format.

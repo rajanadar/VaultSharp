@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace VaultSharp.V1.SecretsEngines.KMIP
+namespace VaultSharp.V1.SecretsEngines.Enterprise.KMIP
 {
     /// <summary>
     /// Represents the KMIP credentials.

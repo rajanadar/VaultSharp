@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace VaultSharp.V1.SecretsEngines.Transform
+namespace VaultSharp.V1.SecretsEngines.Enterprise.Transform
 {
     /// <summary>
     /// Represents the Encode Request Options.

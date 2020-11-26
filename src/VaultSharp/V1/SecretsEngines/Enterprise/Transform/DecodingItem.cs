@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace VaultSharp.V1.SecretsEngines.Transform
+namespace VaultSharp.V1.SecretsEngines.Enterprise.Transform
 {
     /// <summary>
     /// Represents a single Decoding item.

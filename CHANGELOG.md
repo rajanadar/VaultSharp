@@ -1,3 +1,13 @@
+## 1.6.0.0 (TBD)
+
+**ENTERPRISE VAULT FEATURES:**
+
+  * Add support for ```Key Management``` Secrets Engine.
+
+**BREAKING CHANGES:**
+
+  * Moved Enterprise Secrets Engines under the Enterprise namespace (KMIP, Transform etc.)
+
 ## 1.4.0.7 (Nov 24, 2020)
 
 **BREAKING CHANGES:**

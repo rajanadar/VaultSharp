@@ -10,7 +10,6 @@ using VaultSharp.V1.SecretsEngines.GoogleCloud;
 using VaultSharp.V1.SecretsEngines.GoogleCloudKMS;
 using VaultSharp.V1.SecretsEngines.Identity;
 using VaultSharp.V1.SecretsEngines.KeyValue;
-using VaultSharp.V1.SecretsEngines.KMIP;
 using VaultSharp.V1.SecretsEngines.MongoDBAtlas;
 using VaultSharp.V1.SecretsEngines.Nomad;
 using VaultSharp.V1.SecretsEngines.OpenLDAP;
@@ -18,8 +17,8 @@ using VaultSharp.V1.SecretsEngines.PKI;
 using VaultSharp.V1.SecretsEngines.RabbitMQ;
 using VaultSharp.V1.SecretsEngines.SSH;
 using VaultSharp.V1.SecretsEngines.TOTP;
-using VaultSharp.V1.SecretsEngines.Transform;
 using VaultSharp.V1.SecretsEngines.Transit;
+using VaultSharp.V1.SecretsEngines.Enterprise;
 
 namespace VaultSharp.V1.SecretsEngines
 {
@@ -27,6 +26,8 @@ namespace VaultSharp.V1.SecretsEngines
     {
         public SecretsEngineProvider(Polymath polymath)
         {
+            Enterprise = new EnterpriseProvider(polymath);
+
             ActiveDirectory = new ActiveDirectorySecretsEngineProvider(polymath);
             AliCloud = new AliCloudSecretsEngineProvider(polymath);
             AWS = new AWSSecretsEngineProvider(polymath);
@@ -37,7 +38,6 @@ namespace VaultSharp.V1.SecretsEngines
             GoogleCloud = new GoogleCloudSecretsEngineProvider(polymath);
             GoogleCloudKMS = new GoogleCloudKMSSecretsEngineProvider(polymath);
             Identity = new IdentitySecretsEngineProvider(polymath);
-            KMIP = new KMIPSecretsEngineProvider(polymath);
             KeyValue = new KeyValueSecretsEngineProvider(polymath);
             MongoDBAtlas = new MongoDBAtlasSecretsEngineProvider(polymath);
             Nomad = new NomadSecretsEngineProvider(polymath);
@@ -46,9 +46,10 @@ namespace VaultSharp.V1.SecretsEngines
             RabbitMQ = new RabbitMQSecretsEngineProvider(polymath);
             SSH = new SSHSecretsEngineProvider(polymath);
             TOTP = new TOTPSecretsEngineProvider(polymath);
-            Transform = new TransformSecretsEngineProvider(polymath);
             Transit = new TransitSecretsEngineProvider(polymath);
         }
+
+        public IEnterprise Enterprise { get; }
 
         public IActiveDirectorySecretsEngine ActiveDirectory { get; }
 
@@ -68,8 +69,6 @@ namespace VaultSharp.V1.SecretsEngines
 
         public IGoogleCloudKMSSecretsEngine GoogleCloudKMS { get; }
 
-        public IKMIPSecretsEngine KMIP { get; }
-
         public IKeyValueSecretsEngine KeyValue { get; }
 
         public IIdentitySecretsEngine Identity { get; }
@@ -87,8 +86,6 @@ namespace VaultSharp.V1.SecretsEngines
         public ISSHSecretsEngine SSH { get; }
 
         public ITOTPSecretsEngine TOTP { get; }
-
-        public ITransformSecretsEngine Transform { get; }
 
         public ITransitSecretsEngine Transit { get; }
     }

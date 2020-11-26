@@ -5,10 +5,10 @@ using VaultSharp.V1.SecretsEngines.Azure;
 using VaultSharp.V1.SecretsEngines.Consul;
 using VaultSharp.V1.SecretsEngines.Cubbyhole;
 using VaultSharp.V1.SecretsEngines.Database;
+using VaultSharp.V1.SecretsEngines.Enterprise;
 using VaultSharp.V1.SecretsEngines.GoogleCloud;
 using VaultSharp.V1.SecretsEngines.GoogleCloudKMS;
 using VaultSharp.V1.SecretsEngines.Identity;
-using VaultSharp.V1.SecretsEngines.KMIP;
 using VaultSharp.V1.SecretsEngines.KeyValue;
 using VaultSharp.V1.SecretsEngines.MongoDBAtlas;
 using VaultSharp.V1.SecretsEngines.Nomad;
@@ -17,7 +17,6 @@ using VaultSharp.V1.SecretsEngines.PKI;
 using VaultSharp.V1.SecretsEngines.RabbitMQ;
 using VaultSharp.V1.SecretsEngines.SSH;
 using VaultSharp.V1.SecretsEngines.TOTP;
-using VaultSharp.V1.SecretsEngines.Transform;
 using VaultSharp.V1.SecretsEngines.Transit;
 
 namespace VaultSharp.V1.SecretsEngines
@@ -27,6 +26,11 @@ namespace VaultSharp.V1.SecretsEngines
     /// </summary>
     public interface ISecretsEngine
     {
+        /// <summary>
+        /// The Enterprise Secrets Engines.
+        /// </summary>
+        IEnterprise Enterprise { get; }
+
         /// <summary>
         /// The ActiveDirectory Secrets Engine.
         /// </summary>
@@ -78,11 +82,6 @@ namespace VaultSharp.V1.SecretsEngines
         IIdentitySecretsEngine Identity { get; }
 
         /// <summary>
-        /// The KMIP Secrets Engine.
-        /// </summary>
-        IKMIPSecretsEngine KMIP { get; }
-
-        /// <summary>
         /// The KeyValue Secrets Engine.
         /// </summary>
         IKeyValueSecretsEngine KeyValue { get; }
@@ -121,11 +120,6 @@ namespace VaultSharp.V1.SecretsEngines
         /// The TOTP Secrets Engine.
         /// </summary>
         ITOTPSecretsEngine TOTP { get; }
-
-        /// <summary>
-        /// The Transform Secrets Engine.
-        /// </summary>
-        ITransformSecretsEngine Transform { get; }
 
         /// <summary>
         /// The Transit Secrets Engine.

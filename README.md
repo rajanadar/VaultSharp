@@ -893,14 +893,39 @@ Secret<bool> activeResponse = await vaultClient.V1.Secrets.Identity.IntrospectTo
 bool active = activeResponse.Data;
 ```
 
-#### KMIP Secrets Engine
+#### KeyManagement Secrets Engine (Enterprise)
+
+##### Read Key
+
+- Returns information about a named key. 
+- The keys object will hold information regarding each key version. 
+- Different information will be returned depending on the key type. 
+- For example, an asymmetric key will return its public key in a standard format for the type.
+
+```cs
+Secret<KeyManagementKey> keyManagementKey = await vaultClient.V1.Secrets.Enterprise.KeyManagement.ReadKeyAsync(keyName);
+var keys = keyManagementKey.Data.Keys;
+```
+
+##### Read Key in KMS
+
+- Returns information about a named key in KMS. 
+
+```cs
+Secret<KeyManagementKMSKey> keyManagementKMSKey = await vaultClient.V1.Secrets.Enterprise.KeyManagement.ReadKeyInKMSAsync(kmsName, keyName);
+var name = keyManagementKMSKey.Data.Name;
+var purpose = keyManagementKMSKey.Data.Purpose;
+var protection = keyManagementKMSKey.Data.Protection;
+```
+
+#### KMIP Secrets Engine (Enterprise)
 
 ##### Generate dynamic credentials
 
 - Create a new client certificate tied to the given role and scope.
 
 ```cs
-Secret<KMIPCredentials> kmipCredentials = await vaultClient.V1.Secrets.KMIP.GetCredentialsAsync(scopeName, roleName);
+Secret<KMIPCredentials> kmipCredentials = await vaultClient.V1.Secrets.Enterprise.KMIP.GetCredentialsAsync(scopeName, roleName);
 string certificateContent = kmipCredentials.Data.CertificateContent;
 string privateKeyContent = kmipCredentials.Data.PrivateKeyContent;
 ```
@@ -914,7 +939,7 @@ string privateKeyContent = kmipCredentials.Data.PrivateKeyContent;
 ```cs
 Secret<MongoDBAtlasCredentials> creds = await vaultClient.V1.Secrets.MongoDBAtlas.GetCredentialsAsync(name);
 string privateKey = creds.Data.PrivateKey;
-string publicKey = nomadCredentials.Data.PublicKey;
+string publicKey = creds.Data.PublicKey;
 ```
 
 #### Nomad Secrets Engine
@@ -1073,7 +1098,7 @@ This endpoint deletes the key definition.
 await vaultClient.V1.Secrets.TOTP.DeleteKeyAsync(keyName);
 ```
 
-#### Transform Secrets Engine
+#### Transform Secrets Engine (Enterprise)
 
 ##### Encode Method
 
@@ -1082,7 +1107,7 @@ await vaultClient.V1.Secrets.TOTP.DeleteKeyAsync(keyName);
 ```cs
 
 var encodeOptions = new EncodeRequestOptions { Value = "ipsem" };
-Secret<EncodedResponse> response = await _authenticatedVaultClient.V1.Secrets.Transform.EncodeAsync(roleName, encodeOptions);
+Secret<EncodedResponse> response = await _authenticatedVaultClient.V1.Secrets.Enterprise.Transform.EncodeAsync(roleName, encodeOptions);
 response.Data.EncodedValue;
 
 ```
@@ -1095,7 +1120,7 @@ var encodeOptions = new EncodeRequestOptions
   BatchItems = new List<EncodingItem> { new EncodingItem { Value = "ipsem1" }, new EncodingItem { Value = "ipsem2" } }
 };
 
-Secret<EncodedResponse> response = await _authenticatedVaultClient.V1.Secrets.Transform.EncodeAsync(roleName, encodeOptions);
+Secret<EncodedResponse> response = await _authenticatedVaultClient.V1.Secrets.Enterprise.Transform.EncodeAsync(roleName, encodeOptions);
 response.Data.EncodedItems;
 ```
 
@@ -1105,7 +1130,7 @@ response.Data.EncodedItems;
 
 ```cs
 var decodeOptions = new DecodeRequestOptions { Value = "ipsem" };
-Secret<DecodedResponse> response = await _authenticatedVaultClient.V1.Secrets.Transform.DecodeAsync(roleName, decodeOptions);
+Secret<DecodedResponse> response = await _authenticatedVaultClient.V1.Secrets.Enterprise.Transform.DecodeAsync(roleName, decodeOptions);
 response.Data.DecodedValue;
 ```
 
@@ -1117,7 +1142,7 @@ var decodeOptions = new DecodeRequestOptions
   BatchItems = new List<DecodingItem> { new DecodingItem { Value = "ipsem1" }, new DecodingItem { Value = "ipsem2" } }
 };
 
-Secret<DecodedResponse> response = await _authenticatedVaultClient.V1.Secrets.Transform.DecodeAsync(roleName, decodeOptions);
+Secret<DecodedResponse> response = await _authenticatedVaultClient.V1.Secrets.Enterprise.Transform.DecodeAsync(roleName, decodeOptions);
 response.Data.DecodedItems;
 ```
 

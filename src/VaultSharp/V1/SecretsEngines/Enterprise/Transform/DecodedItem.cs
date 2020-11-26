@@ -1,17 +1,17 @@
 ﻿using Newtonsoft.Json;
 
-namespace VaultSharp.V1.SecretsEngines.Transform
+namespace VaultSharp.V1.SecretsEngines.Enterprise.Transform
 {
     /// <summary>
-    /// Represents a single Encoded item.
+    /// Represents a single Decoded item.
     /// </summary>
-    public class EncodedItem
+    public class DecodedItem
     {
         /// <summary>
-        /// Specifies the encoded value.
+        /// Specifies the decoded value.
         /// </summary>
-        [JsonProperty("encoded_value")]
-        public string EncodedValue { get; set; }
+        [JsonProperty("decoded_value")]
+        public string DecodedValue { get; set; }
 
         /// <summary>
         /// Specifies the base64 encoded tweak that was provided during encoding.

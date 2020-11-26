@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 
-namespace VaultSharp.V1.SecretsEngines.Transform
+namespace VaultSharp.V1.SecretsEngines.Enterprise.Transform
 {
     /// <summary>
     /// The Transform Secrets Engine.

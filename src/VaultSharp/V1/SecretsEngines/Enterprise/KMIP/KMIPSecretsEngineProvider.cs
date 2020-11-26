@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
 
-namespace VaultSharp.V1.SecretsEngines.KMIP
+namespace VaultSharp.V1.SecretsEngines.Enterprise.KMIP
 {
     internal class KMIPSecretsEngineProvider : IKMIPSecretsEngine
     {

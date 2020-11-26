@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 
-namespace VaultSharp.V1.SecretsEngines.KMIP
+namespace VaultSharp.V1.SecretsEngines.Enterprise.KMIP
 {
     /// <summary>
     /// KMIP Secrets Engine.
