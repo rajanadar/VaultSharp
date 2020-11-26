@@ -1,4 +1,4 @@
-## 1.6.0.0 (TBD)
+## 1.6.0.0 (Nov 26, 2020)
 
 **ENTERPRISE VAULT FEATURES:**
 
