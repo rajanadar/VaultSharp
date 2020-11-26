@@ -412,7 +412,7 @@ var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200"
 IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the
-vault token/policies mapped to the client certificate.
+// vault token/policies mapped to the client certificate.
 ```
 
 #### Token Auth Method
@@ -426,7 +426,7 @@ var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200"
 IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the
-vault token/policies mapped to the vault token.
+// vault token/policies mapped to the vault token.
 ```
 
 ##### Token Creation
@@ -449,7 +449,7 @@ var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200"
 IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // any operations done using the vaultClient will use the
-vault token/policies mapped to the username/password.
+// vault token/policies mapped to the username/password.
 ```
 
 #### Custom Auth Method - Bring your own Vault Token
@@ -493,7 +493,7 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 - As a client, whenever you determine that the token needs to be re-fetched, call this method.
 - It'll make VaultSharp fetch the vault token again before the next operation.
 
-```
+```cs
 // when it is time to re-fetch the login token, just set this flag.
 vaultClient.V1.Auth.ResetVaultToken();
 
@@ -1239,6 +1239,7 @@ var dataKeyCipherText = dataKeyResponse.Data.Base64EncodedCipherText;
 
 ```cs
 var allKeys = await _authenticatedVaultClient.V1.Secrets.Transit.ReadAllEncryptionKeysAsync();
+````
 
 ### System Backend
 
@@ -1248,7 +1249,7 @@ var allKeys = await _authenticatedVaultClient.V1.Secrets.Transit.ReadAllEncrypti
 VaultSharp already supports several of the System backend features.
 
 ```cs
-// vaultClient.V1.System.<method> The method you are looking for.
+vaultClient.V1.System.<method> // The method you are looking for.
 ```
 
 ### Can I inject my own HttpClient into VaultSharp?
