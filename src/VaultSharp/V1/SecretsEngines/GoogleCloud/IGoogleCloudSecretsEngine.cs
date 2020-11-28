@@ -43,6 +43,10 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
         /// <param name="privateKeyType"><para>[optional]</para>
         ///  Private key type to generate. Defaults to JSON credentials file. 
         /// </param>
+        /// <param name="timeToLive"><para>[optional]</para>
+        /// Specifies the Time To Live value provided as a string duration with time suffix. 
+        /// If not set, uses the system default value.
+        /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the backend. Defaults to <see cref="SecretsEngineDefaultPaths.GoogleCloud" />
         /// Provide a value only if you have customized the Consul mount point.</param>
@@ -53,6 +57,6 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
         /// <returns>
         /// The secret with the <see cref="GoogleCloudOAuth2Token" /> as the data.
         /// </returns>
-        Task<Secret<GoogleCloudServiceAccountKey>> GetServiceAccountKeyAsync(string roleset, ServiceAccountKeyAlgorithm keyAlgorithm = ServiceAccountKeyAlgorithm.KEY_ALG_RSA_2048, ServiceAccountPrivateKeyType privateKeyType = ServiceAccountPrivateKeyType.TYPE_GOOGLE_CREDENTIALS_FILE,  string mountPoint = SecretsEngineDefaultPaths.GoogleCloud, string wrapTimeToLive = null);
+        Task<Secret<GoogleCloudServiceAccountKey>> GetServiceAccountKeyAsync(string roleset, ServiceAccountKeyAlgorithm keyAlgorithm = ServiceAccountKeyAlgorithm.KEY_ALG_RSA_2048, ServiceAccountPrivateKeyType privateKeyType = ServiceAccountPrivateKeyType.TYPE_GOOGLE_CREDENTIALS_FILE, string timeToLive = "",  string mountPoint = SecretsEngineDefaultPaths.GoogleCloud, string wrapTimeToLive = null);
     }
 }

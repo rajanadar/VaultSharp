@@ -1,4 +1,11 @@
-## 1.6.0.0 (Nov 26, 2020)
+## 1.6.0.1 (TBD)
+
+**IMPROVEMENTS:**
+
+  * [Google Cloud Secrets Engine]: Add support for `expires_at_seconds` and `token_ttl` for OAuth2 Token
+  * [Google Cloud Secrets Engine]: Add support for `ttl` for Service Account creation
+
+## 1.6.0 (Nov 26, 2020)
 
 **ENTERPRISE VAULT FEATURES:**
 
