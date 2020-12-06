@@ -90,37 +90,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// The secret metadata.
         /// </returns>
         Task<Secret<FullSecretMetadata>> ReadSecretMetadataAsync(string path, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2, string wrapTimeToLive = null);
-
-        /// <summary>
-        /// Stores a secret at the specified location. If the value does not yet exist, the calling token must have an ACL policy granting the create capability. 
-        /// If the value already exists, the calling token must have an ACL policy granting the update capability.
-        /// </summary>
-        /// <param name="path"><para>[required]</para>
-        /// The path where the value is to be stored.</param>
-        /// <param name="data"><para>[required]</para>
-        /// The value to be written.</param>
-        /// <param name="checkAndSet">
-        /// <para>[optional]</para>
-        /// If not set the write will be allowed. If set to 0 a write will only be allowed if the key doesn’t exist. 
-        /// If the index is non-zero the write will only be allowed if the key’s current version matches the version specified in the cas parameter.
-        /// </param>
-        /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV2" />
-        /// Provide a value only if you have customized the mount point.
-        /// </param>
-        /// <returns>
-        /// The task with the secret.
-        /// </returns>
-        /// <remarks>
-        /// Unlike other secrets engines, the KV secrets engine does not enforce TTLs for expiration. 
-        /// Instead, the lease_duration is a hint for how often consumers should check back for a new value. 
-        /// This is commonly displayed as refresh_interval instead of lease_duration to clarify this in output.
-        /// If provided a key of ttl, the KV secrets engine will utilize this value as the lease duration:
-        /// Even with a ttl set, the secrets engine never removes data on its own.The ttl key is merely advisory.
-        /// When reading a value with a ttl, both the ttl key and the refresh interval will reflect the value:
-        /// </remarks>
-        Task<Secret<Dictionary<string, object>>> WriteSecretAsync(string path, IDictionary<string, object> data, int? checkAndSet = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2);
-        
+       
         /// <summary>
         /// Stores a secret at the specified location. If the value does not yet exist, the calling token must have an ACL policy granting the create capability. 
         /// If the value already exists, the calling token must have an ACL policy granting the update capability.
@@ -149,7 +119,27 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// Even with a ttl set, the secrets engine never removes data on its own.The ttl key is merely advisory.
         /// When reading a value with a ttl, both the ttl key and the refresh interval will reflect the value:
         /// </remarks>
-        Task<Secret<Dictionary<string, object>>> WriteSecretAsync<T>(string path, T data, int? checkAndSet = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2);
+        Task<Secret<CurrentSecretMetadata>> WriteSecretAsync<T>(string path, T data, int? checkAndSet = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2);
+
+        /// <summary>
+        /// Writes the data to the given path in the K/V v2 secrets engine. 
+        /// The data can be of any type. 
+        /// Unlike the <see cref="WriteSecretAsync{T}(string, T, int?, string)"/> method, the patch command combines the change with existing data 
+        /// instead of replacing them. 
+        /// Therefore, this command makes it easy to make a partial updates to an existing data.
+        /// </summary>
+        /// <param name="path"><para>[required]</para>
+        /// The path where the value is to be stored.</param>
+        /// <param name="newData"><para>[required]</para>
+        /// The value to be replaced and appended.</param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV2" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task<Secret<CurrentSecretMetadata>> PatchSecretAsync(string path, IDictionary<string, object> newData, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2);
 
         /// <summary>
         /// This endpoint issues a soft delete of the secret's latest version at the specified location. 

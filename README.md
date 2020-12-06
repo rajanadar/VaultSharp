@@ -796,6 +796,18 @@ var value = new Dictionary<string, object> { { "key1", "val1" }, { "key2", 2 } }
 var writtenValue = await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync(secretPath, value, checkAndSet);
 ```
 
+###### Patch Secret
+
+- You can also patch a secret that already exists.
+- Patching means, replacing/adding new key-values to an existing map of secrets.
+
+```cs
+
+var valueToBeCombined = new Dictionary<string, object> { { "key2", "new-val2" }, { "key3", "val3" } };
+
+var metadata = await vaultClient.V1.Secrets.KeyValue.V2.PatchSecretAsync(secretPath, valueToBeCombined);
+```
+
 ###### Read Secret
 
 - Reads the secret at the specified location returning data and metadata.

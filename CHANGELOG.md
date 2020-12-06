@@ -1,9 +1,14 @@
 ## 1.6.0.1 (TBD)
 
+**BREAKING CHANGES:**
+
+  * [KV2 Secrets Engine]: Removed the redundant Dictionary based `WriteSecretAsync' method of KV2 engine. The generic method can be used for everything.
+
 **IMPROVEMENTS:**
 
   * [Google Cloud Secrets Engine]: Add support for `expires_at_seconds` and `token_ttl` for OAuth2 Token
   * [Google Cloud Secrets Engine]: Add support for `ttl` for Service Account creation
+  * [KV2 Secrets Engine]: Add support for partial writes (patch updates)
 
 ## 1.6.0 (Nov 26, 2020)
 

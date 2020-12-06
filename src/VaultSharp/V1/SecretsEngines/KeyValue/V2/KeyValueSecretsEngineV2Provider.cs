@@ -47,7 +47,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
             return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/" + mountPoint.Trim('/') + "/metadata" + suffixPath + "?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<Dictionary<string, object>>> WriteSecretAsync(string path, IDictionary<string, object> data, int? checkAndSet = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2)
+        public async Task<Secret<CurrentSecretMetadata>> WriteSecretAsync<T>(string path, T data, int? checkAndSet = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(path, "path");
@@ -62,25 +62,51 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
                 requestData.Add("options", new { cas = checkAndSet.Value });
             }
 
-            return await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>("v1/" + mountPoint.Trim('/') + "/data/" + path.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<CurrentSecretMetadata>>("v1/" + mountPoint.Trim('/') + "/data/" + path.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
-        
-        public async Task<Secret<Dictionary<string, object>>> WriteSecretAsync<T>(string path, T data, int? checkAndSet = null, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2)
+
+        public async Task<Secret<CurrentSecretMetadata>> PatchSecretAsync(string path, IDictionary<string, object> newData, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(path, "path");
 
-            var requestData = new Dictionary<string, object>
-            {
-                { "data", data }
-            };
+            // https://github.com/hashicorp/vault/blob/master/command/kv_patch.go#L126
 
-            if (checkAndSet != null)
+            var currentSecret = await ReadSecretAsync(path, mountPoint: mountPoint);
+
+            if (currentSecret == null || currentSecret.Data == null)
             {
-                requestData.Add("options", new { cas = checkAndSet.Value });
+                throw new VaultApiException("No value found at " + path);
             }
 
-            return await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>("v1/" + mountPoint.Trim('/') + "/data/" + path.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            var metadata = currentSecret.Data.Metadata;
+
+            if (metadata == null)
+            {
+                throw new VaultApiException("No metadata found at " + path + "; patch only works on existing data");
+            }
+
+            if (currentSecret.Data.Data == null)
+            {
+                throw new VaultApiException("No data found at " + path + "; patch only works on existing data");
+            }
+
+            foreach(var entry in newData)
+            {
+                // upsert
+                currentSecret.Data.Data[entry.Key] = entry.Value;
+            }
+
+            var requestData = new
+            {
+                data = currentSecret.Data.Data,
+                options = new Dictionary<string, object>
+                {
+                    {  "cas", metadata.Version }
+                }
+            };
+
+            return await _polymath.MakeVaultApiRequest<Secret<CurrentSecretMetadata>>("v1/" + mountPoint.Trim('/') + "/data/" + path.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task DeleteSecretAsync(string path, string mountPoint = SecretsEngineDefaultPaths.KeyValueV2)

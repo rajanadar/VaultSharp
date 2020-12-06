@@ -270,41 +270,45 @@ namespace VaultSharp.Samples
 
             _authenticatedVaultClient.V1.System.MountSecretBackendAsync(kv2SecretsEngine).Wait();
 
-            var values = new Dictionary<string, Dictionary<string, object>>();
-            values.Add("test", new Dictionary<string, object>
+            var values = new Dictionary<string, object>
             {
-                {"Blub", 1 },
-                {"Foo", "bar" }
-            });
+                { "k1", "v1" },
+                { "k2", "v2" }
+            };
 
-            var written1 = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync(path, values, mountPoint: kv2SecretsEngine.Path).Result;
+            var currentMetadata = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync(path, values, mountPoint: kv2SecretsEngine.Path).Result;
 
-            Assert.True(written1.Data.Count == 4);
+            Assert.True(currentMetadata.Data.Version == 1);
 
             var kv2Secret = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync(path, mountPoint: kv2SecretsEngine.Path).Result;
-            Assert.True(kv2Secret.Data.Data.Count == 1);
+            Assert.True(kv2Secret.Data.Data.Count == 2);
 
             var paths2 = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretPathsAsync("", mountPoint: kv2SecretsEngine.Path).Result;
             Assert.True(paths2.Data.Keys.Count() == 1);
 
             var kv2metadata = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretMetadataAsync(path, mountPoint: kv2SecretsEngine.Path).Result;
-            Assert.True(kv2metadata.Data.CurrentVersion > 0); 
+            Assert.True(kv2metadata.Data.CurrentVersion == 1);
+
+            // patch
+
+            Assert.ThrowsAsync<VaultApiException>(() => _authenticatedVaultClient.V1.Secrets.KeyValue.V2.PatchSecretAsync(Guid.NewGuid().ToString(), new Dictionary<string, object>(), mountPoint: kv2SecretsEngine.Path)).Wait();
+
+            var newData = new Dictionary<string, object>
+            {
+                { "k2", "newv2" },
+                { "k3", "v3" }
+            };
+
+            var newCurrentData = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.PatchSecretAsync(path,
+                newData, mountPoint: kv2SecretsEngine.Path).Result;
+
+            Assert.True(newCurrentData.Data.Version == 2);
+
+            var kv2SecretNew = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync(path, mountPoint: kv2SecretsEngine.Path).Result;
+            Assert.True(kv2SecretNew.Data.Data.Count == 3);
+            Assert.True((string)kv2SecretNew.Data.Data["k2"] == "newv2");
 
             _authenticatedVaultClient.V1.Secrets.KeyValue.V2.DestroySecretAsync(path, new List<int> { kv2metadata.Data.CurrentVersion }, mountPoint: kv2SecretsEngine.Path).Wait();
-
-            // kv2 with generics
-            var genericsPath = "genericBlah";
-            var data = new FooData { Foo = "bar", Foo2 = 42 };
-            _authenticatedVaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync(genericsPath, data, mountPoint: kv2SecretsEngine.Path).Wait();
-
-            var kv2SecretGeneric = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync<FooData>(genericsPath, mountPoint: kv2SecretsEngine.Path).Result;
-            Assert.False(string.IsNullOrEmpty(kv2SecretGeneric.Data.Data.Foo));
-            Assert.True(kv2SecretGeneric.Data.Data.Foo2 == 42);
-
-            var kv2genericmetadata = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretMetadataAsync(genericsPath, mountPoint: kv2SecretsEngine.Path).Result;
-            Assert.True(kv2genericmetadata.Data.CurrentVersion > 0);
-
-            _authenticatedVaultClient.V1.Secrets.KeyValue.V2.DestroySecretAsync(genericsPath, new List<int> { kv2genericmetadata.Data.CurrentVersion }, mountPoint: kv2SecretsEngine.Path).Wait();
 
             _authenticatedVaultClient.V1.System.UnmountSecretBackendAsync(kv2SecretsEngine.Path).Wait();
         }
