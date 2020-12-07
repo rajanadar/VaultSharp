@@ -1,4 +1,4 @@
-## 1.6.0.1 (TBD)
+## 1.6.0.1 (Dec 6, 2020)
 
 **BREAKING CHANGES:**
 
