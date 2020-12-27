@@ -101,5 +101,92 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The secret with data key response.
         /// </returns>
         Task<Secret<DataKeyResponse>> GenerateDataKeyAsync(string keyType, string keyName, DataKeyRequestOptions dataKeyRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit, string wrapTimeToLive = null);
+
+        /// <summary>
+        /// This endpoint creates a new named encryption key of the specified type. The values set here cannot be changed after key creation.
+        /// </summary>
+        /// <param name="keyName"><para>[required]</para>
+        /// Specifies the name of the encryption key to use. This is specified as part of the URL.
+        /// </param>
+        /// <param name="createKeyRequestOptions"></param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineDefaultPaths.Transit" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>Nothing is returned. No error means the operation was successful.</returns>
+        Task CreateKeyAsync(string keyName, CreateKeyRequestOptions createKeyRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit);
+
+        /// <summary>
+        /// This endpoint returns information about a named encryption key.
+        /// </summary>
+        /// <param name="keyName"><para>[required]</para>
+        /// Specifies the name of the encryption key to use. This is specified as part of the URL.
+        /// </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineDefaultPaths.Transit" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>The information about the encryption key.</returns>
+        Task<Secret<EncryptionKeyInfo>> ReadEncryptionKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.Transit);
+
+        /// <summary>
+        /// This endpoint allows tuning configuration values for a given key.
+        /// </summary>
+        /// <param name="keyName"><para>[required]</para>
+        /// Specifies the name of the encryption key to use. This is specified as part of the URL.
+        /// </param>
+        /// <param name="updateKeyRequestOptions"><para>[required]</para>
+        /// The options for the request.
+        /// </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineDefaultPaths.Transit" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>Nothing is returned. No error means the operation was successful.</returns>
+        Task UpdateKeyAsync(string keyName, UpdateKeyRequestOptions updateKeyRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit);
+
+        /// <summary>
+        /// This endpoint deletes a named encryption key. It will no longer be possible to decrypt any data encrypted with the named key. 
+        /// </summary>
+        /// <param name="keyName"><para>[required]</para>
+        /// Specifies the name of the encryption key to use. This is specified as part of the URL.
+        /// </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineDefaultPaths.Transit" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>Nothing is returned. No error means the operation was successful.</returns>
+        Task DeleteKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.Transit);
+
+        /// <summary>
+        /// This endpoint rotates the version of the named key. After rotation, new plaintext requests will be encrypted with the new version of the key.
+        /// </summary>
+        /// <param name="keyName"><para>[required]</para>
+        /// Specifies the name of the encryption key to use. This is specified as part of the URL.
+        /// </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineDefaultPaths.Transit" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>Nothing is returned. No error means the operation was successful.</returns>
+        Task RotateKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.Transit);
+
+        /// <summary>
+        /// This endpoint rewraps the provided ciphertext using the latest version of the named key.
+        /// Because this never returns plaintext, it is possible to delegate this functionality to
+        /// untrusted users or scripts.
+        /// </summary>
+        /// <param name="keyName"><para>[required]</para>
+        /// Specifies the name of the encryption key to use. This is specified as part of the URL.
+        /// </param>vz
+        /// <param name="rewrapRequestOptions"><para>[required]</para>
+        /// The options for the request.
+        /// </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineDefaultPaths.Transit" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>The new cyphertext.</returns>
+        Task<Secret<EncryptionResponse>> RewrapAsync(string keyName, RewrapRequestOptions rewrapRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit);
     }
 }

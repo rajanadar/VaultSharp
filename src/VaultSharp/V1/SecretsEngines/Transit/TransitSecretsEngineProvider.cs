@@ -41,5 +41,86 @@ namespace VaultSharp.V1.SecretsEngines.Transit
             return await _polymath.MakeVaultApiRequest<Secret<DataKeyResponse>>(
                 "v1/" + mountPoint.Trim('/') + "/datakey/" + keyType.Trim('/')+ "/" + keyName.Trim('/'), HttpMethod.Post, dataKeyRequestOptions, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
+
+        public async Task CreateKeyAsync(string keyName, CreateKeyRequestOptions createKeyRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit)
+        {
+            Checker.NotNull(keyName, "keyName");
+            Checker.NotNull(createKeyRequestOptions, "createKeyRequestOptions");
+            Checker.NotNull(mountPoint, "mountPoint");
+
+            await _polymath.MakeVaultApiRequest<object>(
+                "v1/" + mountPoint.Trim('/') + "/keys/" + keyName.Trim('/'),
+                HttpMethod.Post,
+                createKeyRequestOptions,
+                wrapTimeToLive: null)
+                    .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<EncryptionKeyInfo>> ReadEncryptionKeyAsync(string keyName, string mountPoint = "transit")
+        {
+            Checker.NotNull(keyName, "keyName");
+            Checker.NotNull(mountPoint, "mountPoint");
+
+            return await _polymath.MakeVaultApiRequest<Secret<EncryptionKeyInfo>>(
+                "v1/" + mountPoint.Trim('/') + "/keys/" + keyName.Trim('/'),
+                HttpMethod.Get,
+                requestData: null,
+                wrapTimeToLive: null)
+                    .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task UpdateKeyAsync(string keyName, UpdateKeyRequestOptions updateKeyRequestOptions, string mountPoint = "transit")
+        {
+            Checker.NotNull(keyName, "keyName");
+            Checker.NotNull(updateKeyRequestOptions, "updateKeyRequestOptions");
+            Checker.NotNull(mountPoint, "mountPoint");
+
+            await _polymath.MakeVaultApiRequest<object>(
+                "v1/" + mountPoint.Trim('/') + "/keys/" + keyName.Trim('/') + "/config",
+                HttpMethod.Post,
+                updateKeyRequestOptions,
+                wrapTimeToLive: null)
+                    .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task DeleteKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.Transit)
+        {
+            Checker.NotNull(keyName, "keyName");
+            Checker.NotNull(mountPoint, "mountPoint");
+
+            await _polymath.MakeVaultApiRequest<object>(
+                "v1/" + mountPoint.Trim('/') + "/keys/" + keyName.Trim('/'),
+                HttpMethod.Delete,
+                requestData: null,
+                wrapTimeToLive: null)
+                    .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task RotateKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.Transit)
+        {
+            Checker.NotNull(keyName, "keyName");
+            Checker.NotNull(mountPoint, "mountPoint");
+
+            await _polymath.MakeVaultApiRequest<object>(
+                "v1/" + mountPoint.Trim('/') + "/keys/" + keyName.Trim('/') + "/rotate",
+                HttpMethod.Post,
+                requestData: null,
+                wrapTimeToLive: null)
+                    .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<EncryptionResponse>> RewrapAsync(string keyName, RewrapRequestOptions rewrapRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit)
+        {
+            Checker.NotNull(keyName, "keyName");
+            Checker.NotNull(rewrapRequestOptions, "rewrapRequestOptions");
+            Checker.NotNull(mountPoint, "mountPoint");
+
+            return await _polymath.MakeVaultApiRequest<Secret<EncryptionResponse>>(
+                "v1/" + mountPoint.Trim('/') + "/rewrap/" + keyName.Trim('/'),
+                HttpMethod.Post,
+                rewrapRequestOptions,
+                wrapTimeToLive: null)
+                    .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
     }
 }
