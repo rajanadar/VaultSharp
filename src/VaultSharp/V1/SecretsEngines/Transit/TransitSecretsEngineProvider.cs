@@ -42,7 +42,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
                 "v1/" + mountPoint.Trim('/') + "/datakey/" + keyType.Trim('/')+ "/" + keyName.Trim('/'), HttpMethod.Post, dataKeyRequestOptions, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task CreateKeyAsync(string keyName, CreateKeyRequestOptions createKeyRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit)
+        public async Task CreateEncryptionKeyAsync(string keyName, CreateKeyRequestOptions createKeyRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit)
         {
             Checker.NotNull(keyName, "keyName");
             Checker.NotNull(createKeyRequestOptions, "createKeyRequestOptions");
@@ -51,25 +51,22 @@ namespace VaultSharp.V1.SecretsEngines.Transit
             await _polymath.MakeVaultApiRequest<object>(
                 "v1/" + mountPoint.Trim('/') + "/keys/" + keyName.Trim('/'),
                 HttpMethod.Post,
-                createKeyRequestOptions,
-                wrapTimeToLive: null)
+                createKeyRequestOptions)
                     .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<EncryptionKeyInfo>> ReadEncryptionKeyAsync(string keyName, string mountPoint = "transit")
+        public async Task<Secret<EncryptionKeyInfo>> ReadEncryptionKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.Transit)
         {
             Checker.NotNull(keyName, "keyName");
             Checker.NotNull(mountPoint, "mountPoint");
 
             return await _polymath.MakeVaultApiRequest<Secret<EncryptionKeyInfo>>(
                 "v1/" + mountPoint.Trim('/') + "/keys/" + keyName.Trim('/'),
-                HttpMethod.Get,
-                requestData: null,
-                wrapTimeToLive: null)
+                HttpMethod.Get)
                     .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task UpdateKeyAsync(string keyName, UpdateKeyRequestOptions updateKeyRequestOptions, string mountPoint = "transit")
+        public async Task UpdateEncryptionKeyConfigAsync(string keyName, UpdateKeyRequestOptions updateKeyRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit)
         {
             Checker.NotNull(keyName, "keyName");
             Checker.NotNull(updateKeyRequestOptions, "updateKeyRequestOptions");
@@ -78,34 +75,29 @@ namespace VaultSharp.V1.SecretsEngines.Transit
             await _polymath.MakeVaultApiRequest<object>(
                 "v1/" + mountPoint.Trim('/') + "/keys/" + keyName.Trim('/') + "/config",
                 HttpMethod.Post,
-                updateKeyRequestOptions,
-                wrapTimeToLive: null)
+                updateKeyRequestOptions)
                     .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task DeleteKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.Transit)
+        public async Task DeleteEncryptionKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.Transit)
         {
             Checker.NotNull(keyName, "keyName");
             Checker.NotNull(mountPoint, "mountPoint");
 
             await _polymath.MakeVaultApiRequest<object>(
                 "v1/" + mountPoint.Trim('/') + "/keys/" + keyName.Trim('/'),
-                HttpMethod.Delete,
-                requestData: null,
-                wrapTimeToLive: null)
+                HttpMethod.Delete)
                     .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task RotateKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.Transit)
+        public async Task RotateEncryptionKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.Transit)
         {
             Checker.NotNull(keyName, "keyName");
             Checker.NotNull(mountPoint, "mountPoint");
 
             await _polymath.MakeVaultApiRequest<object>(
                 "v1/" + mountPoint.Trim('/') + "/keys/" + keyName.Trim('/') + "/rotate",
-                HttpMethod.Post,
-                requestData: null,
-                wrapTimeToLive: null)
+                HttpMethod.Post)
                     .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
@@ -118,8 +110,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
             return await _polymath.MakeVaultApiRequest<Secret<EncryptionResponse>>(
                 "v1/" + mountPoint.Trim('/') + "/rewrap/" + keyName.Trim('/'),
                 HttpMethod.Post,
-                rewrapRequestOptions,
-                wrapTimeToLive: null)
+                rewrapRequestOptions)
                     .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }

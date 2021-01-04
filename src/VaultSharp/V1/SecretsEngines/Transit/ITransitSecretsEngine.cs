@@ -114,7 +114,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
-        Task CreateKeyAsync(string keyName, CreateKeyRequestOptions createKeyRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit);
+        Task CreateEncryptionKeyAsync(string keyName, CreateKeyRequestOptions createKeyRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit);
 
         /// <summary>
         /// This endpoint returns information about a named encryption key.
@@ -143,7 +143,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
-        Task UpdateKeyAsync(string keyName, UpdateKeyRequestOptions updateKeyRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit);
+        Task UpdateEncryptionKeyConfigAsync(string keyName, UpdateKeyRequestOptions updateKeyRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit);
 
         /// <summary>
         /// This endpoint deletes a named encryption key. It will no longer be possible to decrypt any data encrypted with the named key. 
@@ -156,7 +156,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
-        Task DeleteKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.Transit);
+        Task DeleteEncryptionKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.Transit);
 
         /// <summary>
         /// This endpoint rotates the version of the named key. After rotation, new plaintext requests will be encrypted with the new version of the key.
@@ -169,7 +169,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
-        Task RotateKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.Transit);
+        Task RotateEncryptionKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.Transit);
 
         /// <summary>
         /// This endpoint rewraps the provided ciphertext using the latest version of the named key.

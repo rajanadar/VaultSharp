@@ -12,7 +12,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The type of key (i.e. encryption algorithm) to generate.
         /// </summary>
         [JsonProperty("type")]
-        public string Type { get; set; } = "aes256-gcm96";
+        public TransitKeyType Type { get; set; }
 
         /// <summary>
         /// Specifies if the key is allowed to be deleted.
