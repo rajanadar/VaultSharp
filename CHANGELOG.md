@@ -1,3 +1,12 @@
+## 1.6.0.2 (Jan 3, 2021)
+
+**IMPROVEMENTS:**
+
+  * [Kerberos Auth]: Set pre-authenticate flag to optimize on dual calls.
+  * [Kerberos Auth]: Use `DefaultCredentials` instead of `DefaultNetworkCredentials` as the default credentials.
+  * [GH-172]: Add support to query the details of a token
+  * [GH-172]: Add Transit operations to CRUD encryption keys
+
 ## 1.6.0.1 (Dec 6, 2020)
 
 **BREAKING CHANGES:**

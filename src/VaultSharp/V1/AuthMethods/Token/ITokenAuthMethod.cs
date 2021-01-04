@@ -24,11 +24,11 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// <summary>
         /// Gets token information about the specified token.
         /// </summary>
-        /// <param name="vaultToken">The vault token to lookup</param>
+        /// <param name="clientToken">The vault token to lookup</param>
         /// <returns>
         /// The secret with <see cref="TokenInfo" />.
         /// </returns>
-        Task<Secret<TokenInfo>> LookupAsync(string vaultToken);
+        Task<Secret<ClientTokenInfo>> LookupAsync(string clientToken);
 
         /// <summary>
         /// Gets the calling client token information. i.e. the token used by the client as part of this call.

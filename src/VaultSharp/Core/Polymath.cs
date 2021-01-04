@@ -55,6 +55,7 @@ namespace VaultSharp.Core
             if (vaultClientSettings.AuthMethodInfo?.AuthMethodType == AuthMethodType.Kerberos)
             {
                 var kerberosAuthMethodInfo = vaultClientSettings.AuthMethodInfo as KerberosAuthMethodInfo;
+                handler.PreAuthenticate = kerberosAuthMethodInfo.PreAuthenticate;
                 handler.Credentials = kerberosAuthMethodInfo.Credentials;
             }
 
