@@ -36,6 +36,14 @@ namespace VaultSharp.V1.AuthMethods.Token
             return await _polymath.MakeVaultApiRequest<Secret<object>>("v1/auth/token/" + suffix, HttpMethod.Post, request).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<Secret<TokenInfo>> LookupAsync(string vaultToken)
+        {
+            Checker.NotNull(vaultToken, nameof(vaultToken));
+
+            var requestData = new { token = vaultToken };
+            return await _polymath.MakeVaultApiRequest<Secret<TokenInfo>>("v1/auth/token/lookup", HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
         public async Task<Secret<CallingTokenInfo>> LookupSelfAsync()
         {
             return await _polymath.MakeVaultApiRequest<Secret<CallingTokenInfo>>("v1/auth/token/lookup-self", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
