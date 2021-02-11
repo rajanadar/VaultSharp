@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods.AliCloud;
 using VaultSharp.V1.AuthMethods.AppRole;
@@ -65,6 +66,11 @@ namespace VaultSharp.V1.AuthMethods
         public void ResetVaultToken()
         {
             _polymath.SetVaultTokenDelegate();
+        }
+
+        public async Task PerformImmediateLogin()
+        {
+            await _polymath.PerformImmediateLogin();
         }
     }
 }

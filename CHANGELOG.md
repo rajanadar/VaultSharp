@@ -1,3 +1,13 @@
+## 1.6.0.3 (Feb 11, 2021)
+
+**BUG FIXES:**
+
+  * [GH-180] Fixes TOTP key list issue
+
+**IMPROVEMENTS:**
+
+  * [GH-177] Add ability to make VaultSharp fail fast on Login Authentication issues
+
 ## 1.6.0.2 (Jan 3, 2021)
 
 **IMPROVEMENTS:**

@@ -91,6 +91,23 @@ Source: https://github.com/dotnet/standard/blob/master/docs/versions.md
 * It works off a single URL that you provide. Any sort of fail-over etc. needs to be done by you.
 * You are free to instantiate a new instance of VaultClient with a different URI.
 
+### VaultSharp and Immediate Login Failure Detection
+
+* By DEFAULT, VaultSharp performs a lazy login to Vault.
+* What this means is that, once you initialize VaultSharp with AuthInfo, VaultSharp will not try to immediately login into Vault.
+* It'll attempt to login to Vault, only when the first real functional operation is requested. E.g. ReadSecretAsync etc.
+* This has the pro that the acquired token can live as long as possible.
+* The downside to this is that, any login issues will be a non-app startup discovery (assuming VaultClient is initialized at app startup) which may be not desirable at all. Folks may want to know that Vault Login failed as early as possible.
+* VaultSharp now supports this feature starting version 1.6.0.3
+* Imemdiately after initializing vault client, invoke the login method to force a login. 
+
+```cs
+IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+vaultClient.V1.Auth.PerformImmediateLogin();
+```
+
+* Please note that this will not work for Token Authentication since you already have a vault token.
+
 ### Auth Methods
 
 - VaultSharp supports all authentication methods supported by the Vault Service

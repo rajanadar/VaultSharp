@@ -86,6 +86,15 @@ namespace VaultSharp.Core
             }
         }
 
+        internal async Task PerformImmediateLogin()
+        {
+            if (_authMethodLoginProvider != null)
+            {
+                // make a dummy call, that will force a login.
+                await _lazyVaultToken.Value.ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            }
+        }
+
         public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false)
         {
             await MakeVaultApiRequest<JToken>(resourcePath, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);

@@ -1,4 +1,5 @@
-﻿using VaultSharp.V1.AuthMethods.AliCloud;
+﻿using System.Threading.Tasks;
+using VaultSharp.V1.AuthMethods.AliCloud;
 using VaultSharp.V1.AuthMethods.AppRole;
 using VaultSharp.V1.AuthMethods.AWS;
 using VaultSharp.V1.AuthMethods.Azure;
@@ -108,5 +109,12 @@ namespace VaultSharp.V1.AuthMethods
         /// This will make VaultSharp fetch the vault token again before the new operation
         /// </summary>
         void ResetVaultToken();
+
+        /// <summary>
+        /// Performs immediate login to uncover login issues faster.
+        /// Cannot be used for Token Authentication, since you already have a token.
+        /// </summary>
+        /// <returns>Nothing</returns>
+        Task PerformImmediateLogin();
     }
 }
