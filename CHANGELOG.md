@@ -1,3 +1,9 @@
+## 1.6.0.4 (Feb 22, 2021)
+
+**BREAKING CHANGES:**
+
+  * [GH-181] Transit Secret Engine respects a specific key version, that needs to be specified at the ```EncryptionItem``` or ```RewrapItem``` level.
+
 ## 1.6.0.3 (Feb 11, 2021)
 
 **BUG FIXES:**
