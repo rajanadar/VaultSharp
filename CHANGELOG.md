@@ -1,10 +1,8 @@
-## 1.6.2.1 (TBD)
+## 1.6.2.1 (March 01, 2021)
 
 **FEATURES:**
 
   * Added active since timestamp to the status output of active nodes.
-  * TODO: Couchbase Secrets, 1.6.0. 9664
-  * See more 1.6.0 things
 
 **BUG FIXES:**
 
