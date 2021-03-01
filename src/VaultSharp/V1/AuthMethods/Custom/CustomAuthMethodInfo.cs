@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using VaultSharp.Core;
+using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.AuthMethods.Custom
 {
@@ -23,28 +24,22 @@ namespace VaultSharp.V1.AuthMethods.Custom
         }
 
         /// <summary>
-        /// Gets the CustomAuthMethodInfo asynchronous delegate which includes the token and token info.
+        /// Gets the CustomAuthInfo asynchronous delegate which includes the token and token info.
         /// </summary>
-        public Func<Task<CustomAuthMethodInfo>> CustomAuthMethodInfoAsyncDelegate { get; }
-
-        /// <summary>
-        /// Use this version in the delegate to return a CustomAuthMethodInfo.
-        /// </summary>
-        public CustomAuthMethodInfo()
-        { }
+        public Func<Task<AuthInfo>> CustomAuthInfoAsyncDelegate { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomAuthMethodInfo"/> class.
         /// </summary>
         /// <param name="type">The type of the unknown authentication backend type not supported by this library yet. But supported by the Vault Server.</param>
-        /// <param name="customAuthMethodInfoAsyncDelegate">The authentication token asynchronous delegate.</param>
-        public CustomAuthMethodInfo(string type, Func<Task<CustomAuthMethodInfo>> customAuthMethodInfoAsyncDelegate)
+        /// <param name="customAuthInfoAsyncDelegate">The authentication token asynchronous delegate.</param>
+        public CustomAuthMethodInfo(string type, Func<Task<AuthInfo>> customAuthInfoAsyncDelegate)
         {
             Checker.NotNull(type, "type");
-            Checker.NotNull(customAuthMethodInfoAsyncDelegate, nameof(customAuthMethodInfoAsyncDelegate));
+            Checker.NotNull(customAuthInfoAsyncDelegate, nameof(customAuthInfoAsyncDelegate));
 
             _lazyAuthMethodType = new Lazy<AuthMethodType>(() => new AuthMethodType(type));
-            CustomAuthMethodInfoAsyncDelegate = customAuthMethodInfoAsyncDelegate;
+            CustomAuthInfoAsyncDelegate = customAuthInfoAsyncDelegate;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -24,6 +25,12 @@ namespace VaultSharp.V1.SystemBackend
         /// </value>
         [JsonProperty("is_self")]
         public bool IsSelf { get; set; }
+
+        /// <summary>
+        /// Gets or sets active time of the leader.
+        /// </summary>
+        [JsonProperty("active_time")]
+        public DateTimeOffset ActiveTime { get; set; }
 
         /// <summary>
         /// Gets or sets the address of the leader.
@@ -55,6 +62,24 @@ namespace VaultSharp.V1.SystemBackend
         /// Gets or sets the performance standby last remote wal.
         /// </summary>
         [JsonProperty("performance_standby_last_remote_wal")]
-        public int PerformanceStandbyLastRemoteWal { get; set; }
+        public long PerformanceStandbyLastRemoteWal { get; set; }
+
+        /// <summary>
+        /// Gets or sets the last remote.
+        /// </summary>
+        [JsonProperty("last_wal")]
+        public long LastWal { get; set; }
+
+        /// <summary>
+        /// Gets or sets the raft committed index.
+        /// </summary>
+        [JsonProperty("raft_committed_index", NullValueHandling = NullValueHandling.Ignore)]
+        public long RaftCommittedIndex { get; set; }
+
+        /// <summary>
+        /// Gets or sets the raft applied index.
+        /// </summary>
+        [JsonProperty("raft_applied_index", NullValueHandling = NullValueHandling.Ignore)]
+        public long RaftAppliedIndex { get; set; }
     }
 }

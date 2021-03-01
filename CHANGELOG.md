@@ -1,3 +1,15 @@
+## 1.6.2.1 (TBD)
+
+**FEATURES:**
+
+  * Added active since timestamp to the status output of active nodes.
+  * TODO: Couchbase Secrets, 1.6.0. 9664
+  * See more 1.6.0 things
+
+**BUG FIXES:**
+
+  * [GH-182] Allow setting the Auth Info when custom Auth is used.
+
 ## 1.6.2 (Feb 22, 2021)
 
 **BREAKING CHANGES:**
