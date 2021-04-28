@@ -24,6 +24,6 @@ namespace VaultSharp.V1.SecretsEngines.MongoDBAtlas
         /// <returns>
         /// The secret with the <see cref="MongoDBAtlasCredentials" /> as the data.
         /// </returns>
-        Task<Secret<MongoDBAtlasCredentials>> GetCredentialsAsync(string name, string mountPoint = SecretsEngineDefaultPaths.MongoDBAtlas, string wrapTimeToLive = null);
+        Task<Secret<MongoDBAtlasCredentials>> GetCredentialsAsync(string name, string mountPoint = null, string wrapTimeToLive = null);
     }
 }

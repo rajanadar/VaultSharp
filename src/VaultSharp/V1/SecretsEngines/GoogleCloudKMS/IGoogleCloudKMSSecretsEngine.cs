@@ -31,7 +31,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
         /// <returns>
         /// The secret with cipher text.
         /// </returns>
-        Task<Secret<EncryptionResponse>> EncryptAsync(string keyName, EncryptRequestOptions encryptRequestOptions, string mountPoint = SecretsEngineDefaultPaths.GoogleCloudKMS, string wrapTimeToLive = null);
+        Task<Secret<EncryptionResponse>> EncryptAsync(string keyName, EncryptRequestOptions encryptRequestOptions, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint uses the named encryption key to decrypt the ciphertext string. 
@@ -58,7 +58,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
         /// <returns>
         /// The secret with plain text.
         /// </returns>
-        Task<Secret<DecryptionResponse>> DecryptAsync(string keyName, DecryptRequestOptions decryptRequestOptions, string mountPoint = SecretsEngineDefaultPaths.GoogleCloudKMS, string wrapTimeToLive = null);
+        Task<Secret<DecryptionResponse>> DecryptAsync(string keyName, DecryptRequestOptions decryptRequestOptions, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint uses the named encryption key to re-encrypt the underlying cryptokey to the latest version for this ciphertext without disclosing the original plaintext value to the requestor. 
@@ -83,7 +83,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
         /// <returns>
         /// The secret with cipher text.
         /// </returns>
-        Task<Secret<ReEncryptionResponse>> ReEncryptAsync(string keyName, ReEncryptRequestOptions reEncryptRequestOptions, string mountPoint = SecretsEngineDefaultPaths.GoogleCloudKMS, string wrapTimeToLive = null);
+        Task<Secret<ReEncryptionResponse>> ReEncryptAsync(string keyName, ReEncryptRequestOptions reEncryptRequestOptions, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint uses the named encryption key to sign digest string data. 
@@ -108,7 +108,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
         /// <returns>
         /// The secret with signed text.
         /// </returns>
-        Task<Secret<SignatureResponse>> SignAsync(string keyName, SignatureOptions signatureOptions, string mountPoint = SecretsEngineDefaultPaths.GoogleCloudKMS, string wrapTimeToLive = null);
+        Task<Secret<SignatureResponse>> SignAsync(string keyName, SignatureOptions signatureOptions, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint uses the named encryption key to verify a signature and digest string data.
@@ -132,6 +132,6 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
         /// <returns>
         /// The secret with verified text.
         /// </returns>
-        Task<Secret<VerificationResponse>> VerifyAsync(string keyName, VerificationOptions verificationOptions, string mountPoint = SecretsEngineDefaultPaths.GoogleCloudKMS, string wrapTimeToLive = null);
+        Task<Secret<VerificationResponse>> VerifyAsync(string keyName, VerificationOptions verificationOptions, string mountPoint = null, string wrapTimeToLive = null);
     }
 }

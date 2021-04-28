@@ -40,8 +40,8 @@ namespace VaultSharp.V1.AuthMethods.GoogleCloud
         /// <summary>
         /// [required]
         /// Gets the signed JSON Web Token (JWT).
-        /// For iam type roles, this is a JWT signed with the signJwt method <see cref="https://cloud.google.com/iam/reference/rest/v1/projects.serviceAccounts/signJwt" /> or a self-signed JWT.
-        /// For gce type roles, this is an identity metadata token. <see cref="https://cloud.google.com/compute/docs/instances/verifying-instance-identity#request_signature"/>
+        /// For iam type roles, this is a JWT signed with the signJwt method <see href="https://cloud.google.com/iam/reference/rest/v1/projects.serviceAccounts/signJwt" /> or a self-signed JWT.
+        /// For gce type roles, this is an identity metadata token. <see href="https://cloud.google.com/compute/docs/instances/verifying-instance-identity#request_signature"/>
         /// </summary>
         /// <value>
         /// The jwt.
@@ -58,8 +58,8 @@ namespace VaultSharp.V1.AuthMethods.GoogleCloud
         /// <param name="jwt">
         /// [required]
         /// The signed JSON Web Token (JWT).
-        /// For iam type roles, this is a JWT signed with the signJwt method <see cref="https://cloud.google.com/iam/reference/rest/v1/projects.serviceAccounts/signJwt" /> or a self-signed JWT.
-        /// For gce type roles, this is an identity metadata token. <see cref="https://cloud.google.com/compute/docs/instances/verifying-instance-identity#request_signature"/>
+        /// For iam type roles, this is a JWT signed with the signJwt method <see href="https://cloud.google.com/iam/reference/rest/v1/projects.serviceAccounts/signJwt" /> or a self-signed JWT.
+        /// For gce type roles, this is an identity metadata token. <see href="https://cloud.google.com/compute/docs/instances/verifying-instance-identity#request_signature"/>
         /// </param>
         public GoogleCloudAuthMethodInfo(string roleName, string jwt)
             : this (AuthMethodType.GoogleCloud.Type, roleName, jwt)
@@ -76,8 +76,8 @@ namespace VaultSharp.V1.AuthMethods.GoogleCloud
         /// <param name="jwt">
         /// [required]
         /// The signed JSON Web Token (JWT).
-        /// For iam type roles, this is a JWT signed with the signJwt method <see cref="https://cloud.google.com/iam/reference/rest/v1/projects.serviceAccounts/signJwt" /> or a self-signed JWT.
-        /// For gce type roles, this is an identity metadata token. <see cref="https://cloud.google.com/compute/docs/instances/verifying-instance-identity#request_signature"/>
+        /// For iam type roles, this is a JWT signed with the signJwt method <see href="https://cloud.google.com/iam/reference/rest/v1/projects.serviceAccounts/signJwt" /> or a self-signed JWT.
+        /// For gce type roles, this is an identity metadata token. <see href="https://cloud.google.com/compute/docs/instances/verifying-instance-identity#request_signature"/>
         /// </param>
         public GoogleCloudAuthMethodInfo(string mountPoint, string roleName, string jwt)
         {

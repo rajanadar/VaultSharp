@@ -27,6 +27,6 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.KMIP
         /// <returns>
         /// The secret with the <see cref="KMIPCredentials" /> as the data.
         /// </returns>
-        Task<Secret<KMIPCredentials>> GetCredentialsAsync(string scopeName, string roleName, CertificateFormat format = CertificateFormat.pem, string mountPoint = SecretsEngineDefaultPaths.KMIP, string wrapTimeToLive = null);
+        Task<Secret<KMIPCredentials>> GetCredentialsAsync(string scopeName, string roleName, CertificateFormat format = CertificateFormat.pem, string mountPoint = null, string wrapTimeToLive = null);
     }
 }

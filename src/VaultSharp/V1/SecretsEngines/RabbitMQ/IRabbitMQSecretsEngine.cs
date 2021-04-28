@@ -23,6 +23,6 @@ namespace VaultSharp.V1.SecretsEngines.RabbitMQ
         /// <returns>
         /// The secret with the <see cref="UsernamePasswordCredentials" /> as the data.
         /// </returns>
-        Task<Secret<UsernamePasswordCredentials>> GetCredentialsAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.RabbitMQ, string wrapTimeToLive = null);
+        Task<Secret<UsernamePasswordCredentials>> GetCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
     }
 }

@@ -23,6 +23,6 @@ namespace VaultSharp.V1.SecretsEngines.Azure
         /// <returns>
         /// The secret with the <see cref="AzureCredentials" /> as the data.
         /// </returns>
-        Task<Secret<AzureCredentials>> GetCredentialsAsync(string azureRoleName, string azureBackendMountPoint = SecretsEngineDefaultPaths.Azure, string wrapTimeToLive = null);
+        Task<Secret<AzureCredentials>> GetCredentialsAsync(string azureRoleName, string azureBackendMountPoint = null, string wrapTimeToLive = null);
     }
 }

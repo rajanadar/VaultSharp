@@ -24,7 +24,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// <returns>
         /// The secret with the <see cref="IdentityToken" /> as the data.
         /// </returns>
-        Task<Secret<IdentityToken>> GetTokenAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.Identity, string wrapTimeToLive = null);
+        Task<Secret<IdentityToken>> GetTokenAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint can verify the authenticity and active state of a signed ID token.
@@ -45,6 +45,6 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// <returns>
         /// Indicates if the token is active.
         /// </returns>
-        Task<Secret<bool>> IntrospectTokenAsync(string token, string clientId = null, string mountPoint = SecretsEngineDefaultPaths.Identity, string wrapTimeToLive = null);
+        Task<Secret<bool>> IntrospectTokenAsync(string token, string clientId = null, string mountPoint = null, string wrapTimeToLive = null);
     }
 }

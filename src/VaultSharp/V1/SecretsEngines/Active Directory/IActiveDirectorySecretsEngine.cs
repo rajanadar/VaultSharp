@@ -23,6 +23,6 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
         /// <returns>
         /// The secret with the <see cref="ActiveDirectoryCredentials" /> as the data.
         /// </returns>
-        Task<Secret<ActiveDirectoryCredentials>> GetCredentialsAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.ActiveDirectory, string wrapTimeToLive = null);
+        Task<Secret<ActiveDirectoryCredentials>> GetCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
     }
 }

@@ -23,6 +23,6 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud
         /// <returns>
         /// The secret with the <see cref="AliCloudCredentials" /> as the data.
         /// </returns>
-        Task<Secret<AliCloudCredentials>> GetCredentialsAsync(string aliCloudRoleName, string aliCloudMountPoint = SecretsEngineDefaultPaths.AliCloud, string wrapTimeToLive = null);
+        Task<Secret<AliCloudCredentials>> GetCredentialsAsync(string aliCloudRoleName, string aliCloudMountPoint = null, string wrapTimeToLive = null);
     }
 }

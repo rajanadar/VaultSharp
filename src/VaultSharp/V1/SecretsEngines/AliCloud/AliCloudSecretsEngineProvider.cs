@@ -9,17 +9,25 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud
     {
         private readonly Polymath _polymath;
 
+        private string MountPoint
+        {
+            get 
+            {
+                _polymath.VaultClientSettings.SecretEngineMountPoints.TryGetValue(nameof(SecretsEngineDefaultPaths.AliCloud), out var mountPoint);
+                return mountPoint ?? SecretsEngineDefaultPaths.AliCloud;
+            }
+        }
+
         public AliCloudSecretsEngineProvider(Polymath polymath)
         {
             _polymath = polymath;
         }
 
-        public async Task<Secret<AliCloudCredentials>> GetCredentialsAsync(string aliCloudRoleName, string aliCloudMountPoint = SecretsEngineDefaultPaths.AliCloud, string wrapTimeToLive = null)
+        public async Task<Secret<AliCloudCredentials>> GetCredentialsAsync(string aliCloudRoleName, string aliCloudMountPoint = null, string wrapTimeToLive = null)
         {
-            Checker.NotNull(aliCloudMountPoint, "aliCloudMountPoint");
             Checker.NotNull(aliCloudRoleName, "aliCloudRoleName");
 
-            return await _polymath.MakeVaultApiRequest<Secret<AliCloudCredentials>>("v1/" + aliCloudMountPoint.Trim('/') + "/creds/" + aliCloudRoleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<AliCloudCredentials>>(aliCloudMountPoint ?? MountPoint, "/creds/" + aliCloudRoleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

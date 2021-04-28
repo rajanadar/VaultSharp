@@ -23,6 +23,6 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// <returns>
         /// The secret with the <see cref="StaticCredentials" /> as the data.
         /// </returns>
-        Task<Secret<StaticCredentials>> GetStaticCredentialsAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.OpenLDAP, string wrapTimeToLive = null);
+        Task<Secret<StaticCredentials>> GetStaticCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
     }
 }

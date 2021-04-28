@@ -23,7 +23,7 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// <returns>
         /// The secret with the <see cref="AWSCredentials" /> as the data.
         /// </returns>
-        Task<Secret<AWSCredentials>> GetCredentialsAsync(string awsRoleName, string awsMountPoint = SecretsEngineDefaultPaths.AWS, string wrapTimeToLive = null);
+        Task<Secret<AWSCredentials>> GetCredentialsAsync(string awsRoleName, string awsMountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// Generates a dynamic IAM AWS credential  with an STS token based on the named role.
@@ -43,7 +43,7 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// <returns>
         /// The secret with the <see cref="AWSCredentials" /> as the data.
         /// </returns>
-        Task<Secret<AWSCredentials>> GenerateSTSCredentialsAsync(string awsRoleName, string timeToLive = "1h", string awsMountPoint = SecretsEngineDefaultPaths.AWS, string wrapTimeToLive = null);
+        Task<Secret<AWSCredentials>> GenerateSTSCredentialsAsync(string awsRoleName, string timeToLive = "1h", string awsMountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint lists all existing roles in the secrets engine.
@@ -56,7 +56,7 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
         /// <returns>The list of role names.</returns>
-        Task<Secret<ListInfo>> ReadAllRolesAsync(string awsMountPoint = SecretsEngineDefaultPaths.AWS, string wrapTimeToLive = null);
+        Task<Secret<ListInfo>> ReadAllRolesAsync(string awsMountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint queries an existing role by the given name.
@@ -73,6 +73,6 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
         /// <returns>The list of role names.</returns>
-        Task<Secret<AWSRoleModel>> ReadRoleAsync(string awsRoleName, string awsMountPoint = SecretsEngineDefaultPaths.AWS, string wrapTimeToLive = null);
+        Task<Secret<AWSRoleModel>> ReadRoleAsync(string awsRoleName, string awsMountPoint = null, string wrapTimeToLive = null);
     }
 }

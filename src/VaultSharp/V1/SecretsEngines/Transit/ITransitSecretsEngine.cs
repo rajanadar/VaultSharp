@@ -34,7 +34,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <returns>
         /// The secret with cipher text.
         /// </returns>
-        Task<Secret<EncryptionResponse>> EncryptAsync(string keyName, EncryptRequestOptions encryptRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit, string wrapTimeToLive = null);
+        Task<Secret<EncryptionResponse>> EncryptAsync(string keyName, EncryptRequestOptions encryptRequestOptions, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// Decrypts the provided ciphertext using the named key.
@@ -57,7 +57,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <returns>
         /// The secret with plain text.
         /// </returns>
-        Task<Secret<DecryptionResponse>> DecryptAsync(string keyName, DecryptRequestOptions decryptRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit, string wrapTimeToLive = null);
+        Task<Secret<DecryptionResponse>> DecryptAsync(string keyName, DecryptRequestOptions decryptRequestOptions, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// Returns a list of keys. Only the key names are returned.
@@ -71,7 +71,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
         /// <returns>The list of key names.</returns>
-        Task<Secret<ListInfo>> ReadAllEncryptionKeysAsync(string mountPoint = SecretsEngineDefaultPaths.Transit, string wrapTimeToLive = null);
+        Task<Secret<ListInfo>> ReadAllEncryptionKeysAsync(string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint generates a new high-entropy key and the value encrypted with the named key. 
@@ -100,7 +100,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <returns>
         /// The secret with data key response.
         /// </returns>
-        Task<Secret<DataKeyResponse>> GenerateDataKeyAsync(string keyType, string keyName, DataKeyRequestOptions dataKeyRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit, string wrapTimeToLive = null);
+        Task<Secret<DataKeyResponse>> GenerateDataKeyAsync(string keyType, string keyName, DataKeyRequestOptions dataKeyRequestOptions, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint creates a new named encryption key of the specified type. The values set here cannot be changed after key creation.
@@ -114,7 +114,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
-        Task CreateEncryptionKeyAsync(string keyName, CreateKeyRequestOptions createKeyRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit);
+        Task CreateEncryptionKeyAsync(string keyName, CreateKeyRequestOptions createKeyRequestOptions, string mountPoint = null);
 
         /// <summary>
         /// This endpoint returns information about a named encryption key.
@@ -127,7 +127,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>The information about the encryption key.</returns>
-        Task<Secret<EncryptionKeyInfo>> ReadEncryptionKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.Transit);
+        Task<Secret<EncryptionKeyInfo>> ReadEncryptionKeyAsync(string keyName, string mountPoint = null);
 
         /// <summary>
         /// This endpoint allows tuning configuration values for a given key.
@@ -143,7 +143,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
-        Task UpdateEncryptionKeyConfigAsync(string keyName, UpdateKeyRequestOptions updateKeyRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit);
+        Task UpdateEncryptionKeyConfigAsync(string keyName, UpdateKeyRequestOptions updateKeyRequestOptions, string mountPoint = null);
 
         /// <summary>
         /// This endpoint deletes a named encryption key. It will no longer be possible to decrypt any data encrypted with the named key. 
@@ -156,7 +156,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
-        Task DeleteEncryptionKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.Transit);
+        Task DeleteEncryptionKeyAsync(string keyName, string mountPoint = null);
 
         /// <summary>
         /// This endpoint rotates the version of the named key. After rotation, new plaintext requests will be encrypted with the new version of the key.
@@ -169,7 +169,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
-        Task RotateEncryptionKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.Transit);
+        Task RotateEncryptionKeyAsync(string keyName, string mountPoint = null);
 
         /// <summary>
         /// This endpoint rewraps the provided ciphertext using the latest version of the named key.
@@ -187,6 +187,6 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>The new cyphertext.</returns>
-        Task<Secret<EncryptionResponse>> RewrapAsync(string keyName, RewrapRequestOptions rewrapRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transit);
+        Task<Secret<EncryptionResponse>> RewrapAsync(string keyName, RewrapRequestOptions rewrapRequestOptions, string mountPoint = null);
     }
 }

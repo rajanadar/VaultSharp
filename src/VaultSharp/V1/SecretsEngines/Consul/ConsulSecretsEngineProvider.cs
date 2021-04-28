@@ -9,17 +9,25 @@ namespace VaultSharp.V1.SecretsEngines.Consul
     {
         private readonly Polymath _polymath;
 
+        private string MountPoint
+        {
+            get 
+            {
+                _polymath.VaultClientSettings.SecretEngineMountPoints.TryGetValue(nameof(SecretsEngineDefaultPaths.Consul), out var mountPoint);
+                return mountPoint ?? SecretsEngineDefaultPaths.Consul;
+            }
+        }
+
         public ConsulSecretsEngineProvider(Polymath polymath)
         {
             _polymath = polymath;
         }
 
-        public async Task<Secret<ConsulCredentials>> GetCredentialsAsync(string consulRoleName, string consulBackendMountPoint = SecretsEngineDefaultPaths.Consul, string wrapTimeToLive = null)
+        public async Task<Secret<ConsulCredentials>> GetCredentialsAsync(string consulRoleName, string consulBackendMountPoint = null, string wrapTimeToLive = null)
         {
-            Checker.NotNull(consulBackendMountPoint, "consulBackendMountPoint");
             Checker.NotNull(consulRoleName, "consulRoleName");
 
-            return await _polymath.MakeVaultApiRequest<Secret<ConsulCredentials>>("v1/" + consulBackendMountPoint.Trim('/') + "/creds/" + consulRoleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<ConsulCredentials>>(consulBackendMountPoint ?? MountPoint, "/creds/" + consulRoleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

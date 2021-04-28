@@ -29,7 +29,7 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.Transform
         /// <returns>
         /// The secret with encoded text.
         /// </returns>
-        Task<Secret<EncodedResponse>> EncodeAsync(string roleName, EncodeRequestOptions encodeRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transform, string wrapTimeToLive = null);
+        Task<Secret<EncodedResponse>> EncodeAsync(string roleName, EncodeRequestOptions encodeRequestOptions, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint decodes the provided value using a named role.
@@ -52,6 +52,6 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.Transform
         /// <returns>
         /// The secret with decoded text.
         /// </returns>
-        Task<Secret<DecodedResponse>> DecodeAsync(string roleName, DecodeRequestOptions decodeRequestOptions, string mountPoint = SecretsEngineDefaultPaths.Transform, string wrapTimeToLive = null);
+        Task<Secret<DecodedResponse>> DecodeAsync(string roleName, DecodeRequestOptions decodeRequestOptions, string mountPoint = null, string wrapTimeToLive = null);
     }
 }

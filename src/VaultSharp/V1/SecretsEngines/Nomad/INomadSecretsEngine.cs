@@ -23,6 +23,6 @@ namespace VaultSharp.V1.SecretsEngines.Nomad
         /// <returns>
         /// The secret with the <see cref="NomadCredentials" /> as the data.
         /// </returns>
-        Task<Secret<NomadCredentials>> GetCredentialsAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.Nomad, string wrapTimeToLive = null);
+        Task<Secret<NomadCredentials>> GetCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
     }
 }

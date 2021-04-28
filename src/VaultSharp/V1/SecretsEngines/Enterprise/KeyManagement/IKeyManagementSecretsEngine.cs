@@ -25,7 +25,7 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.KeyManagement
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
         /// <returns>Key Info.</returns>
-        Task<Secret<KeyManagementKey>> ReadKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.KeyManagement, string wrapTimeToLive = null);
+        Task<Secret<KeyManagementKey>> ReadKeyAsync(string keyName, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// Reads information about a key that's been distributed to a KMS provider.
@@ -44,6 +44,6 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.KeyManagement
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
         /// <returns>Key Info.</returns>
-        Task<Secret<KeyManagementKMSKey>> ReadKeyInKMSAsync(string kmsName, string keyName, string mountPoint = SecretsEngineDefaultPaths.KeyManagement, string wrapTimeToLive = null);
+        Task<Secret<KeyManagementKMSKey>> ReadKeyInKMSAsync(string kmsName, string keyName, string mountPoint = null, string wrapTimeToLive = null);
     }
 }

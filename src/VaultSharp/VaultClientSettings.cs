@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using VaultSharp.V1.AuthMethods;
 
@@ -78,5 +79,11 @@ namespace VaultSharp
         /// It is essential that your HttpClient use the handler, since it has certificate auth etc.
         /// </summary>
         public Func<HttpClientHandler, HttpClient> MyHttpClientProviderFunc { get; set; }
+
+        /// <summary>
+        /// Use custom secret engine mount points globally rather than on every method call.
+        /// If a value isn't found in this dictionary then the default value from <see cref="V1.SecretsEngines.SecretsEngineDefaultPaths" /> is used.
+        /// </summary>
+        public Dictionary<string, string> SecretEngineMountPoints { get; set; }
     }
 }
