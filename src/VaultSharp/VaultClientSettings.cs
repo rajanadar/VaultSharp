@@ -84,6 +84,6 @@ namespace VaultSharp
         /// Use custom secret engine mount points globally rather than on every method call.
         /// See <see cref="V1.SecretsEngines.SecretsEngineMountPoints.Defaults" /> for defaults.
         /// </summary>
-        public SecretsEngineMountPoints SecretsEngineMountPoints = new SecretsEngineMountPoints();
+        public SecretsEngineMountPoints SecretsEngineMountPoints { get; set; } = new SecretsEngineMountPoints();
     }
 }
