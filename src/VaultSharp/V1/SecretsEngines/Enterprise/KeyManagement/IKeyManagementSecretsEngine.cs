@@ -18,7 +18,7 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.KeyManagement
         /// Specifies the name of the key to read.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyManagement" />
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.KeyManagement" />
         /// Provide a value only if you have customized the mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>
@@ -37,7 +37,7 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.KeyManagement
         /// Specifies the name of the key to read.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyManagement" />
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.KeyManagement" />
         /// Provide a value only if you have customized the mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>

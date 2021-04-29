@@ -17,7 +17,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
         /// Name of an roleset with secret type access_token to generate access_token under.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the backend. Defaults to <see cref="SecretsEngineDefaultPaths.GoogleCloud" />
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.GoogleCloud" />
         /// Provide a value only if you have customized the Consul mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>
@@ -48,7 +48,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
         /// If not set, uses the system default value.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the backend. Defaults to <see cref="SecretsEngineDefaultPaths.GoogleCloud" />
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.GoogleCloud" />
         /// Provide a value only if you have customized the Consul mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>

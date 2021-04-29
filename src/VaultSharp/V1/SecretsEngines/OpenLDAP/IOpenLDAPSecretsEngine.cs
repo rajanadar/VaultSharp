@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// <param name="roleName"><para>[required]</para>
         /// Specifies the name of the static role to get credentials for.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the OpenLDAP backend. Defaults to <see cref="SecretsEngineDefaultPaths.OpenLDAP" />
+        /// The mount point for the OpenLDAP backend. Defaults to <see cref="SecretsEngineMountPoints.OpenLDAP" />
         /// Provide a value only if you have customized the mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>

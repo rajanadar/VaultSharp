@@ -15,7 +15,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// The name of the role against which to generate a signed ID token.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the backend. Defaults to <see cref="SecretsEngineDefaultPaths.Identity" />
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.Identity" />
         /// Provide a value only if you have customized the Azure mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>
@@ -36,7 +36,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// Specifying the client ID optimizes validation time
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the backend. Defaults to <see cref="SecretsEngineDefaultPaths.Identity" />
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.Identity" />
         /// Provide a value only if you have customized the Azure mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>

@@ -18,7 +18,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// Specifies the version to return. If not set the latest version is returned.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the KeyValue backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV2" />
+        /// The mount point for the KeyValue backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
         /// Provide a value only if you have customized the mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[required]</para>
@@ -38,7 +38,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// Specifies the version to return. If not set the latest version is returned.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the KeyValue backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV2" />
+        /// The mount point for the KeyValue backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
         /// Provide a value only if you have customized the mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[required]</para>
@@ -57,7 +57,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// <param name="path"><para>[required]</para>
         /// The location path where the secret needs to be read from.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV2" />
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
         /// Provide a value only if you have customized the mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[required]</para>
@@ -74,7 +74,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// <param name="path"><para>[required]</para>
         /// The location path where the secret needs to be read from.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the KeyValue backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV2" />
+        /// The mount point for the KeyValue backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
         /// Provide a value only if you have customized the mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[required]</para>
@@ -99,7 +99,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// If the index is non-zero the write will only be allowed if the key’s current version matches the version specified in the cas parameter.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV2" />
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>
@@ -127,7 +127,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// <param name="newData"><para>[required]</para>
         /// The value to be replaced and appended.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV2" />
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>
@@ -143,7 +143,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// <param name="path"><para>[required]</para>
         /// Specifies the path of the secret to delete.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV2" />
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>
@@ -163,7 +163,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// The versions to delete.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV2" />
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>
@@ -182,7 +182,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// The versions to undelete.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV2" />
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>
@@ -200,7 +200,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// The versions to destroy. Their data will be permanently deleted.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV2" />
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>

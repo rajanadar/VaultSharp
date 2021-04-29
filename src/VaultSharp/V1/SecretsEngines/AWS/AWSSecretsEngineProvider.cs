@@ -9,15 +9,6 @@ namespace VaultSharp.V1.SecretsEngines.AWS
     {
         private readonly Polymath _polymath;
 
-        private string MountPoint
-        {
-            get 
-            {
-                _polymath.VaultClientSettings.SecretEngineMountPoints.TryGetValue(nameof(SecretsEngineDefaultPaths.AWS), out var mountPoint);
-                return mountPoint ?? SecretsEngineDefaultPaths.AWS;
-            }
-        }
-
         public AWSSecretsEngineProvider(Polymath polymath)
         {
             _polymath = polymath;
@@ -27,7 +18,7 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         {
             Checker.NotNull(awsRoleName, "awsRoleName");
 
-            return await _polymath.MakeVaultApiRequest<Secret<AWSCredentials>>(awsMountPoint ?? MountPoint, "/creds/" + awsRoleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<AWSCredentials>>(awsMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.AWS, "/creds/" + awsRoleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<AWSCredentials>> GenerateSTSCredentialsAsync(string awsRoleName, string timeToLive = "1h", string awsMountPoint = null, string wrapTimeToLive = null)
@@ -36,19 +27,19 @@ namespace VaultSharp.V1.SecretsEngines.AWS
 
             object requestData = string.IsNullOrWhiteSpace(timeToLive) ? null : new { ttl = timeToLive };
 
-            return await _polymath.MakeVaultApiRequest<Secret<AWSCredentials>>(awsMountPoint ?? MountPoint, "/sts/" + awsRoleName.Trim('/'), HttpMethod.Get, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<AWSCredentials>>(awsMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.AWS, "/sts/" + awsRoleName.Trim('/'), HttpMethod.Get, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<ListInfo>> ReadAllRolesAsync(string awsMountPoint = null, string wrapTimeToLive = null)
         {
-            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>(awsMountPoint ?? MountPoint, "/roles?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>(awsMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.AWS, "/roles?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<AWSRoleModel>> ReadRoleAsync(string awsRoleName, string awsMountPoint = null, string wrapTimeToLive = null)
         {
             Checker.NotNull(awsRoleName, "awsRoleName");
 
-            return await _polymath.MakeVaultApiRequest<Secret<AWSRoleModel>>(awsMountPoint ?? MountPoint, "/roles/" + awsRoleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<AWSRoleModel>>(awsMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.AWS, "/roles/" + awsRoleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

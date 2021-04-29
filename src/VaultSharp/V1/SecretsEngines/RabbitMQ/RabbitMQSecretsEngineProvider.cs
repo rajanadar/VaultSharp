@@ -9,15 +9,6 @@ namespace VaultSharp.V1.SecretsEngines.RabbitMQ
     {
         private readonly Polymath _polymath;
 
-        private string MountPoint
-        {
-            get 
-            {
-                _polymath.VaultClientSettings.SecretEngineMountPoints.TryGetValue(nameof(SecretsEngineDefaultPaths.RabbitMQ), out var mountPoint);
-                return mountPoint ?? SecretsEngineDefaultPaths.RabbitMQ;
-            }
-        }
-
         public RabbitMQSecretsEngineProvider(Polymath polymath)
         {
             _polymath = polymath;
@@ -27,7 +18,7 @@ namespace VaultSharp.V1.SecretsEngines.RabbitMQ
         {
             Checker.NotNull(roleName, "roleName");
 
-            return await _polymath.MakeVaultApiRequest<Secret<UsernamePasswordCredentials>>(mountPoint ?? MountPoint, "/creds/" + roleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<UsernamePasswordCredentials>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.RabbitMQ, "/creds/" + roleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

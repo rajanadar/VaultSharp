@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using VaultSharp.V1.AuthMethods;
+using VaultSharp.V1.SecretsEngines;
 
 namespace VaultSharp
 {
@@ -82,8 +82,8 @@ namespace VaultSharp
 
         /// <summary>
         /// Use custom secret engine mount points globally rather than on every method call.
-        /// If a value isn't found in this dictionary then the default value from <see cref="V1.SecretsEngines.SecretsEngineDefaultPaths" /> is used.
+        /// If a value isn't found in this dictionary then the default value from <see cref="V1.SecretsEngines.SecretsEngineMountPoints.Defaults" /> is used.
         /// </summary>
-        public Dictionary<string, string> SecretEngineMountPoints { get; set; }
+        public SecretsEngineMountPoints SecretsEngineMountPoints { get; set; }
     }
 }

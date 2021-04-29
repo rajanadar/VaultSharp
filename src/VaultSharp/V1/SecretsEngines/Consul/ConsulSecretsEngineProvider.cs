@@ -9,15 +9,6 @@ namespace VaultSharp.V1.SecretsEngines.Consul
     {
         private readonly Polymath _polymath;
 
-        private string MountPoint
-        {
-            get 
-            {
-                _polymath.VaultClientSettings.SecretEngineMountPoints.TryGetValue(nameof(SecretsEngineDefaultPaths.Consul), out var mountPoint);
-                return mountPoint ?? SecretsEngineDefaultPaths.Consul;
-            }
-        }
-
         public ConsulSecretsEngineProvider(Polymath polymath)
         {
             _polymath = polymath;
@@ -27,7 +18,7 @@ namespace VaultSharp.V1.SecretsEngines.Consul
         {
             Checker.NotNull(consulRoleName, "consulRoleName");
 
-            return await _polymath.MakeVaultApiRequest<Secret<ConsulCredentials>>(consulBackendMountPoint ?? MountPoint, "/creds/" + consulRoleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<ConsulCredentials>>(consulBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Consul, "/creds/" + consulRoleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

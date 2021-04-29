@@ -9,15 +9,6 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
     {
         private readonly Polymath _polymath;
 
-        private string MountPoint
-        {
-            get 
-            {
-                _polymath.VaultClientSettings.SecretEngineMountPoints.TryGetValue(nameof(SecretsEngineDefaultPaths.GoogleCloud), out var mountPoint);
-                return mountPoint ?? SecretsEngineDefaultPaths.GoogleCloud;
-            }
-        }
-
         public GoogleCloudSecretsEngineProvider(Polymath polymath)
         {
             _polymath = polymath;
@@ -27,7 +18,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
         {
             Checker.NotNull(roleset, "roleset");
 
-            return await _polymath.MakeVaultApiRequest<Secret<GoogleCloudOAuth2Token>>(mountPoint ?? MountPoint, "/token/" + roleset.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<GoogleCloudOAuth2Token>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.GoogleCloud, "/token/" + roleset.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<GoogleCloudServiceAccountKey>> GetServiceAccountKeyAsync(string roleset, ServiceAccountKeyAlgorithm keyAlgorithm = ServiceAccountKeyAlgorithm.KEY_ALG_RSA_2048, ServiceAccountPrivateKeyType privateKeyType = ServiceAccountPrivateKeyType.TYPE_GOOGLE_CREDENTIALS_FILE, string timeToLive = "", string mountPoint = null, string wrapTimeToLive = null)
@@ -41,7 +32,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
                 ttl = timeToLive
             };
 
-            return await _polymath.MakeVaultApiRequest<Secret<GoogleCloudServiceAccountKey>>(mountPoint ?? MountPoint, "/key/" + roleset.Trim('/'), HttpMethod.Post, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<GoogleCloudServiceAccountKey>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.GoogleCloud, "/key/" + roleset.Trim('/'), HttpMethod.Post, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

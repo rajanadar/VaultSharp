@@ -9,15 +9,6 @@ namespace VaultSharp.V1.SecretsEngines.MongoDBAtlas
     {
         private readonly Polymath _polymath;
 
-        private string MountPoint
-        {
-            get 
-            {
-                _polymath.VaultClientSettings.SecretEngineMountPoints.TryGetValue(nameof(SecretsEngineDefaultPaths.MongoDBAtlas), out var mountPoint);
-                return mountPoint ?? SecretsEngineDefaultPaths.MongoDBAtlas;
-            }
-        }
-
         public MongoDBAtlasSecretsEngineProvider(Polymath polymath)
         {
             _polymath = polymath;
@@ -27,7 +18,7 @@ namespace VaultSharp.V1.SecretsEngines.MongoDBAtlas
         {
             Checker.NotNull(name, "name");
 
-            return await _polymath.MakeVaultApiRequest<Secret<MongoDBAtlasCredentials>>(mountPoint ?? MountPoint, "/creds/" + name.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<MongoDBAtlasCredentials>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.MongoDBAtlas, "/creds/" + name.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
         /// The options.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the backend. Defaults to <see cref="SecretsEngineDefaultPaths.GoogleCloudKMS" />
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.GoogleCloudKMS" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <param name="wrapTimeToLive">
@@ -48,7 +48,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
         /// The options.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the backend. Defaults to <see cref="SecretsEngineDefaultPaths.GoogleCloudKMS" />
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.GoogleCloudKMS" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <param name="wrapTimeToLive">
@@ -73,7 +73,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
         /// The options.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the backend. Defaults to <see cref="SecretsEngineDefaultPaths.GoogleCloudKMS" />
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.GoogleCloudKMS" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <param name="wrapTimeToLive">
@@ -98,7 +98,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
         /// The options.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the backend. Defaults to <see cref="SecretsEngineDefaultPaths.GoogleCloudKMS" />
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.GoogleCloudKMS" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <param name="wrapTimeToLive">
@@ -122,7 +122,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
         /// The options.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the backend. Defaults to <see cref="SecretsEngineDefaultPaths.GoogleCloudKMS" />
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.GoogleCloudKMS" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <param name="wrapTimeToLive">

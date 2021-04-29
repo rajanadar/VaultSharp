@@ -18,7 +18,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// <param name="username"><para>[optional]</para>
         /// The username on the remote host.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the SSH backend. Defaults to <see cref="SecretsEngineDefaultPaths.SSH" />
+        /// The mount point for the SSH backend. Defaults to <see cref="SecretsEngineMountPoints.SSH" />
         /// Provide a value only if you have customized the SSH mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[required]</para>
@@ -38,7 +38,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// <param name="signKeyRequest"><para>[required]</para>
         /// The request parameters</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the SSH backend. Defaults to <see cref="SecretsEngineDefaultPaths.SSH" />
+        /// The mount point for the SSH backend. Defaults to <see cref="SecretsEngineMountPoints.SSH" />
         /// Provide a value only if you have customized the SSH mount point.</param>
         /// <returns>The signed key</returns>
         Task<Secret<SignedKeyResponse>> SignKeyAsync(string roleName, SignKeyRequest signKeyRequest, string mountPoint = null);

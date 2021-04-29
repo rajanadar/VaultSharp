@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// <param name="awsRoleName"><para>[required]</para>
         /// Name of the AWS role.</param>
         /// <param name="awsMountPoint"><para>[optional]</para>
-        /// The mount point for the AWS backend. Defaults to <see cref="SecretsEngineDefaultPaths.AWS" />
+        /// The mount point for the AWS backend. Defaults to <see cref="SecretsEngineMountPoints.AWS" />
         /// Provide a value only if you have customized the AWS mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[required]</para>
@@ -34,7 +34,7 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// <param name="timeToLive"><para>[optional]</para>
         /// Time to live. Defaults to 1 hour</param>
         /// <param name="awsMountPoint"><para>[optional]</para>
-        /// The mount point for the AWS backend. Defaults to <see cref="SecretsEngineDefaultPaths.AWS" />
+        /// The mount point for the AWS backend. Defaults to <see cref="SecretsEngineMountPoints.AWS" />
         /// Provide a value only if you have customized the AWS mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[required]</para>
@@ -49,7 +49,7 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// This endpoint lists all existing roles in the secrets engine.
         /// </summary>
         /// <param name="awsMountPoint"><para>[optional]</para>
-        /// The mount point for the AWS backend. Defaults to <see cref="SecretsEngineDefaultPaths.AWS" />
+        /// The mount point for the AWS backend. Defaults to <see cref="SecretsEngineMountPoints.AWS" />
         /// Provide a value only if you have customized the AWS mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[required]</para>
@@ -66,7 +66,7 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// <param name="awsRoleName"><para>[required]</para>
         /// Name of the AWS role.</param>
         /// <param name="awsMountPoint"><para>[optional]</para>
-        /// The mount point for the AWS backend. Defaults to <see cref="SecretsEngineDefaultPaths.AWS" />
+        /// The mount point for the AWS backend. Defaults to <see cref="SecretsEngineMountPoints.AWS" />
         /// Provide a value only if you have customized the AWS mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[required]</para>

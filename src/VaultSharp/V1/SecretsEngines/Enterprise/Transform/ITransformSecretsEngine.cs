@@ -19,7 +19,7 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.Transform
         /// The options.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Transform backend. Defaults to <see cref="SecretsEngineDefaultPaths.Transform" />
+        /// The mount point for the Transform backend. Defaults to <see cref="SecretsEngineMountPoints.Transform" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <param name="wrapTimeToLive">
@@ -42,7 +42,7 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.Transform
         /// The options.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Transform backend. Defaults to <see cref="SecretsEngineDefaultPaths.Transform" />
+        /// The mount point for the Transform backend. Defaults to <see cref="SecretsEngineMountPoints.Transform" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <param name="wrapTimeToLive">

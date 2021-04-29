@@ -9,15 +9,6 @@ namespace VaultSharp.V1.SecretsEngines.SSH
     {
         private readonly Polymath _polymath;
 
-        private string MountPoint
-        {
-            get 
-            {
-                _polymath.VaultClientSettings.SecretEngineMountPoints.TryGetValue(nameof(SecretsEngineDefaultPaths.SSH), out var mountPoint);
-                return mountPoint ?? SecretsEngineDefaultPaths.SSH;
-            }
-        }
-
         public SSHSecretsEngineProvider(Polymath polymath)
         {
             _polymath = polymath;
@@ -30,7 +21,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
 
             var requestData = new { ip = ipAddress, username = username };
 
-            return await _polymath.MakeVaultApiRequest<Secret<SSHCredentials>>(mountPoint ?? MountPoint, "/creds/" + roleName.Trim('/'), HttpMethod.Post, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<SSHCredentials>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.SSH, "/creds/" + roleName.Trim('/'), HttpMethod.Post, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<SignedKeyResponse>> SignKeyAsync(string roleName, SignKeyRequest signKeyRequest, string mountPoint = null)
@@ -38,7 +29,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
             Checker.NotNull(roleName, "roleName");
             Checker.NotNull(signKeyRequest, "signKeyRequest");
 
-            return await _polymath.MakeVaultApiRequest<Secret<SignedKeyResponse>>(mountPoint ?? MountPoint, "/sign/" + roleName.Trim('/'), HttpMethod.Post, signKeyRequest).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<SignedKeyResponse>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.SSH, "/sign/" + roleName.Trim('/'), HttpMethod.Post, signKeyRequest).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

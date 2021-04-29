@@ -15,7 +15,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <param name="path"><para>[required]</para>
         /// The location path where the secret needs to be read from.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the KeyValue backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV1" />
+        /// The mount point for the KeyValue backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV1" />
         /// Provide a value only if you have customized the mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[required]</para>
@@ -32,7 +32,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <param name="path"><para>[required]</para>
         /// The location path where the secret needs to be read from.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the KeyValue backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV1" />
+        /// The mount point for the KeyValue backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV1" />
         /// Provide a value only if you have customized the mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[required]</para>
@@ -51,7 +51,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <param name="path"><para>[required]</para>
         /// The location path where the secret needs to be read from.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV1" />
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV1" />
         /// Provide a value only if you have customized the mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[required]</para>
@@ -71,7 +71,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <param name="values"><para>[required]</para>
         /// The value to be written.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV1" />
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV1" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>
@@ -96,7 +96,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <param name="values"><para>[required]</para>
         /// The value to be written.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV1" />
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV1" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>
@@ -118,7 +118,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <param name="path"><para>[required]</para>
         /// The path where the value is to be stored.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV1" />
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV1" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>

@@ -15,7 +15,7 @@ namespace VaultSharp.V1.SecretsEngines.MongoDBAtlas
         /// Unique identifier name of the credential
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the MongoDBAtlas backend. Defaults to <see cref="SecretsEngineDefaultPaths.MongoDBAtlas" />
+        /// The mount point for the MongoDBAtlas backend. Defaults to <see cref="SecretsEngineMountPoints.MongoDBAtlas" />
         /// Provide a value only if you have customized the MongoDBAtlas mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>

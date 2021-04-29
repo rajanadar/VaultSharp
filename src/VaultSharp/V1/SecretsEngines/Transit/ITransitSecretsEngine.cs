@@ -24,7 +24,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The options.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineDefaultPaths.Transit" />
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <param name="wrapTimeToLive">
@@ -47,7 +47,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The options.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineDefaultPaths.Transit" />
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <param name="wrapTimeToLive">
@@ -63,7 +63,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Returns a list of keys. Only the key names are returned.
         /// </summary>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineDefaultPaths.Transit" />
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <param name="wrapTimeToLive">
@@ -90,7 +90,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <param name="dataKeyRequestOptions"></param>
         /// The Options
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineDefaultPaths.Transit" />
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <param name="wrapTimeToLive">
@@ -110,7 +110,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </param>
         /// <param name="createKeyRequestOptions"></param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineDefaultPaths.Transit" />
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
@@ -123,7 +123,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Specifies the name of the encryption key to use. This is specified as part of the URL.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineDefaultPaths.Transit" />
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>The information about the encryption key.</returns>
@@ -139,7 +139,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The options for the request.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineDefaultPaths.Transit" />
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
@@ -152,7 +152,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Specifies the name of the encryption key to use. This is specified as part of the URL.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineDefaultPaths.Transit" />
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
@@ -165,7 +165,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Specifies the name of the encryption key to use. This is specified as part of the URL.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineDefaultPaths.Transit" />
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
@@ -183,7 +183,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The options for the request.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineDefaultPaths.Transit" />
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>The new cyphertext.</returns>

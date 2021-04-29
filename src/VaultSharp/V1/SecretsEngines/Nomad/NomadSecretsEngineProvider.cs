@@ -9,15 +9,6 @@ namespace VaultSharp.V1.SecretsEngines.Nomad
     {
         private readonly Polymath _polymath;
 
-        private string MountPoint
-        {
-            get 
-            {
-                _polymath.VaultClientSettings.SecretEngineMountPoints.TryGetValue(nameof(SecretsEngineDefaultPaths.Nomad), out var mountPoint);
-                return mountPoint ?? SecretsEngineDefaultPaths.Nomad;
-            }
-        }
-
         public NomadSecretsEngineProvider(Polymath polymath)
         {
             _polymath = polymath;
@@ -27,7 +18,7 @@ namespace VaultSharp.V1.SecretsEngines.Nomad
         {
             Checker.NotNull(roleName, "roleName");
 
-            return await _polymath.MakeVaultApiRequest<Secret<NomadCredentials>>(mountPoint ?? MountPoint, "/creds/" + roleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<NomadCredentials>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Nomad, "/creds/" + roleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

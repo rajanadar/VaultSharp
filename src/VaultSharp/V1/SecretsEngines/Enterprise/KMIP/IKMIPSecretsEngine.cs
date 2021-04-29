@@ -18,7 +18,7 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.KMIP
         /// <param name="format"><para>[required]</para>
         /// Format to return the certificate, private key, and CA chain in.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the KMIP backend. Defaults to <see cref="SecretsEngineDefaultPaths.KMIP" />
+        /// The mount point for the KMIP backend. Defaults to <see cref="SecretsEngineMountPoints.KMIP" />
         /// Provide a value only if you have customized the KMIP mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>

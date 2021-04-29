@@ -9,15 +9,6 @@ namespace VaultSharp.V1.SecretsEngines.PKI
     {
         private readonly Polymath _polymath;
 
-        private string MountPoint
-        {
-            get 
-            {
-                _polymath.VaultClientSettings.SecretEngineMountPoints.TryGetValue(nameof(SecretsEngineDefaultPaths.PKI), out var mountPoint);
-                return mountPoint ?? SecretsEngineDefaultPaths.PKI;
-            }
-        }
-
         public PKISecretsEngineProvider(Polymath polymath)
         {
             _polymath = polymath;
@@ -28,7 +19,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
             Checker.NotNull(pkiRoleName, "pkiRoleName");
             Checker.NotNull(certificateCredentialRequestOptions, "certificateCredentialRequestOptions");
 
-            var result = await _polymath.MakeVaultApiRequest<Secret<CertificateCredentials>>(pkiBackendMountPoint ?? MountPoint, "/issue/" + pkiRoleName, HttpMethod.Post, certificateCredentialRequestOptions, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            var result = await _polymath.MakeVaultApiRequest<Secret<CertificateCredentials>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/issue/" + pkiRoleName, HttpMethod.Post, certificateCredentialRequestOptions, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             result.Data.CertificateFormat = certificateCredentialRequestOptions.CertificateFormat;
 
             return result;
@@ -38,14 +29,14 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         {
             Checker.NotNull(serialNumber, "serialNumber");
 
-            return await _polymath.MakeVaultApiRequest<Secret<RevokeCertificateResponse>>(pkiBackendMountPoint ?? MountPoint, "/revoke", HttpMethod.Post, new { serial_number = serialNumber }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<RevokeCertificateResponse>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/revoke", HttpMethod.Post, new { serial_number = serialNumber }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task TidyAsync(CertificateTidyRequest certificateTidyRequest = null, string pkiBackendMountPoint = null)
         {
             var newRequest = certificateTidyRequest ?? new CertificateTidyRequest();
 
-            await _polymath.MakeVaultApiRequest(pkiBackendMountPoint ?? MountPoint, "/tidy", HttpMethod.Post, newRequest).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/tidy", HttpMethod.Post, newRequest).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<RawCertificateData> ReadCACertificateAsync(CertificateFormat certificateFormat = CertificateFormat.der, string pkiBackendMountPoint = null)
@@ -55,7 +46,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
                 ? CertificateFormat.pem
                 : CertificateFormat.der;
 
-            var result = await _polymath.MakeVaultApiRequest<string>(pkiBackendMountPoint ?? MountPoint, "/ca" + format, HttpMethod.Get, rawResponse: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            var result = await _polymath.MakeVaultApiRequest<string>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/ca" + format, HttpMethod.Get, rawResponse: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             
             return new RawCertificateData
             {

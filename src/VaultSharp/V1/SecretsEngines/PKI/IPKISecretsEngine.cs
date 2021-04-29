@@ -21,7 +21,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The certificate credential request options.
         /// </param>
         /// <param name="pkiBackendMountPoint"><para>[optional]</para>
-        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineDefaultPaths.PKI" />
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
         /// Provide a value only if you have customized the PKI mount point.
         /// </param>
         /// <param name="wrapTimeToLive">
@@ -42,7 +42,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// Specifies the serial number of the certificate to revoke, in hyphen-separated or colon-separated octal.
         /// </param>
         /// <param name="pkiBackendMountPoint"><para>[optional]</para>
-        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineDefaultPaths.PKI" />
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
         /// Provide a value only if you have customized the PKI mount point.
         /// </param>
         /// <returns>
@@ -56,7 +56,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// </summary>
         /// <param name="certificateTidyRequest">The request object</param>
         /// <param name="pkiBackendMountPoint"><para>[optional]</para>
-        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineDefaultPaths.PKI" />
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
         /// Provide a value only if you have customized the PKI mount point.
         /// </param>
         /// <returns>
@@ -74,7 +74,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The certificate format needed.
         /// Defaults to <see cref="CertificateFormat.der" /></param>
         /// <param name="pkiBackendMountPoint"><para>[optional]</para>
-        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineDefaultPaths.PKI" />
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
         /// Provide a value only if you have customized the PKI mount point.
         /// </param>
         /// <returns>

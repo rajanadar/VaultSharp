@@ -9,15 +9,6 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
     {
         private readonly Polymath _polymath;
 
-        private string MountPoint
-        {
-            get 
-            {
-                _polymath.VaultClientSettings.SecretEngineMountPoints.TryGetValue(nameof(SecretsEngineDefaultPaths.OpenLDAP), out var mountPoint);
-                return mountPoint ?? SecretsEngineDefaultPaths.OpenLDAP;
-            }
-        }
-
         public OpenLDAPSecretsEngineProvider(Polymath polymath)
         {
             _polymath = polymath;
@@ -27,7 +18,7 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         {
             Checker.NotNull(roleName, "roleName");
 
-            return await _polymath.MakeVaultApiRequest<Secret<StaticCredentials>>(mountPoint ?? MountPoint, "/static-cred/" + roleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<StaticCredentials>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.OpenLDAP, "/static-cred/" + roleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }
