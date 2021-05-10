@@ -203,7 +203,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
-        /// <returns></returns>
+        /// <returns>Nothing is returned. No error means the operation was successful.</returns>
         Task TrimKeyAsync(string keyName, TrimKeyRequestOptions trimKeyRequestOptions, string mountPoint = null);
     }
 }
