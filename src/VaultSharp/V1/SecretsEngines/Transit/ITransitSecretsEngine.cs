@@ -188,5 +188,22 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </param>
         /// <returns>The new cyphertext.</returns>
         Task<Secret<EncryptionResponse>> RewrapAsync(string keyName, RewrapRequestOptions rewrapRequestOptions, string mountPoint = null);
+
+        /// <summary>
+        /// This endpoint trims older key versions setting a minimum version 
+        /// for the keyring. Once trimmed, previous versions of the key cannot be recovered.
+        /// </summary>
+        /// <param name="keyName"><para>[required]</para>
+        /// Specifies the name of the encryption key to use. This is specified as part of the URL.
+        /// </param>
+        /// <param name="trimKeyRequestOptions">
+        /// The options for the request.
+        /// </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns></returns>
+        Task TrimKeyAsync(string keyName, TrimKeyRequestOptions trimKeyRequestOptions, string mountPoint = null);
     }
 }

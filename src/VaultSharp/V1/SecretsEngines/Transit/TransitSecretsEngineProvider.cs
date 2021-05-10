@@ -106,5 +106,17 @@ namespace VaultSharp.V1.SecretsEngines.Transit
                 rewrapRequestOptions)
                     .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
+
+        public async Task TrimKeyAsync(string keyName, TrimKeyRequestOptions trimKeyRequestOptions, string mountPoint = null)
+        {
+            Checker.NotNull(keyName, "keyName");
+            Checker.NotNull(trimKeyRequestOptions, "trimKeyRequestOptions");
+
+            await _polymath.MakeVaultApiRequest<object>(
+                mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Transit, "/keys/" + keyName.Trim('/') + "/trim",
+                HttpMethod.Post,
+                trimKeyRequestOptions)
+                .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
     }
 }
