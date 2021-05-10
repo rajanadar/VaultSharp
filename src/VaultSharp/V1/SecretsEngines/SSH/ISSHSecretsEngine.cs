@@ -18,7 +18,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// <param name="username"><para>[optional]</para>
         /// The username on the remote host.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the SSH backend. Defaults to <see cref="SecretsEngineDefaultPaths.SSH" />
+        /// The mount point for the SSH backend. Defaults to <see cref="SecretsEngineMountPoints.SSH" />
         /// Provide a value only if you have customized the SSH mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[required]</para>
@@ -27,7 +27,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// <returns>
         /// The secret with the SSH credentials.
         /// </returns>
-        Task<Secret<SSHCredentials>> GetCredentialsAsync(string roleName, string ipAddress, string username = null, string mountPoint = SecretsEngineDefaultPaths.SSH, string wrapTimeToLive = null);
+        Task<Secret<SSHCredentials>> GetCredentialsAsync(string roleName, string ipAddress, string username = null, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint signs an SSH public key based on the supplied parameters, 
@@ -38,9 +38,9 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// <param name="signKeyRequest"><para>[required]</para>
         /// The request parameters</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the SSH backend. Defaults to <see cref="SecretsEngineDefaultPaths.SSH" />
+        /// The mount point for the SSH backend. Defaults to <see cref="SecretsEngineMountPoints.SSH" />
         /// Provide a value only if you have customized the SSH mount point.</param>
         /// <returns>The signed key</returns>
-        Task<Secret<SignedKeyResponse>> SignKeyAsync(string roleName, SignKeyRequest signKeyRequest, string mountPoint = SecretsEngineDefaultPaths.SSH);
+        Task<Secret<SignedKeyResponse>> SignKeyAsync(string roleName, SignKeyRequest signKeyRequest, string mountPoint = null);
     }
 }

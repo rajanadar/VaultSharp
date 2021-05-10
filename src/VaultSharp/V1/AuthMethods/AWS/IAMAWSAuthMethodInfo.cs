@@ -43,7 +43,7 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// <summary>
         /// Gets the Base64-encoded HTTP body used in the signed request. 
         /// Most likely QWN0aW9uPUdldENhbGxlcklkZW50aXR5JlZlcnNpb249MjAxMS0wNi0xNQ== which is the base64 encoding of 
-        /// Action=GetCallerIdentity&Version=2011-06-15
+        /// <![CDATA[ Action=GetCallerIdentity&Version=2011-06-15 ]]>
         /// This is required when using the iam auth method.
         /// </summary>
         /// <value>
@@ -79,7 +79,7 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// then the headers must include the X-Vault-AWS-IAM-Server-ID header, 
         /// its value must match the value configured, and the header must be included in the signed headers. 
         /// This is required when using the iam auth method.
-        /// Please see <see cref="https://github.com/rajanadar/VaultSharp/blob/master/README.md#aws-auth-method---iam"/> on how to construct this.
+        /// Please see <see href="https://github.com/rajanadar/VaultSharp/blob/master/README.md#aws-auth-method---iam"/> on how to construct this.
         /// </param>
         /// <param name="httpRequestMethod">
         /// <para>[required]</para>
@@ -97,7 +97,7 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// <param name="requestBody">
         /// <para>[required]</para>
         /// Base64-encoded body of the signed request. Most likely QWN0aW9uPUdldENhbGxlcklkZW50aXR5JlZlcnNpb249MjAxMS0wNi0xNQ== 
-        /// which is the base64 encoding of Action=GetCallerIdentity&Version=2011-06-15.
+        /// which is the base64 encoding of <![CDATA[ Action=GetCallerIdentity&Version=2011-06-15 ]]>.
         /// This is required when using the iam auth method.
         /// </param>
         /// <param name="nonce">
@@ -160,7 +160,7 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// <param name="requestBody">
         /// <para>[required]</para>
         /// Base64-encoded body of the signed request. Most likely QWN0aW9uPUdldENhbGxlcklkZW50aXR5JlZlcnNpb249MjAxMS0wNi0xNQ== 
-        /// which is the base64 encoding of Action=GetCallerIdentity&Version=2011-06-15.
+        /// which is the base64 encoding of <![CDATA[ Action=GetCallerIdentity&Version=2011-06-15 ]]>.
         /// This is required when using the iam auth method.
         /// </param>
         /// <param name="nonce">

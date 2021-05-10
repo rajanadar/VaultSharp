@@ -16,10 +16,10 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <param name="role"><para>[required]</para>
         /// Specifies the request options. </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineDefaultPaths.Database" />
+        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineMountPoints.Database" />
         /// Provide a value only if you have customized the mount point.</param>        
         /// <returns>The task</returns>
-        Task CreateRoleAsync(string roleName, Role role, string mountPoint = SecretsEngineDefaultPaths.Database);
+        Task CreateRoleAsync(string roleName, Role role, string mountPoint = null);
 
         /// <summary>
         /// This endpoint queries the role definition.
@@ -27,28 +27,28 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <param name="roleName"><para>[required]</para>
         /// Specifies the name of the role to read. </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineDefaultPaths.Database" />
+        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineMountPoints.Database" />
         /// Provide a value only if you have customized the mount point.</param>   
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
         /// <returns>The role info.</returns>
-        Task<Secret<Role>> ReadRoleAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.Database, string wrapTimeToLive = null);
+        Task<Secret<Role>> ReadRoleAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint returns a list of available roles. 
         /// Only the role names are returned, not any values.
         /// </summary>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineDefaultPaths.Database" />
+        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineMountPoints.Database" />
         /// Provide a value only if you have customized the mount point.</param>   
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
         /// <returns>The role names.</returns>
-        Task<Secret<ListInfo>> ReadAllRolesAsync(string mountPoint = SecretsEngineDefaultPaths.Database, string wrapTimeToLive = null);
+        Task<Secret<ListInfo>> ReadAllRolesAsync(string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint deletes the role definition.
@@ -56,10 +56,10 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <param name="roleName"><para>[required]</para>
         /// Specifies the name of the role to delete. </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineDefaultPaths.Database" />
+        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineMountPoints.Database" />
         /// Provide a value only if you have customized the mount point.</param>   
         /// <returns>The task.</returns>
-        Task DeleteRoleAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.Database);
+        Task DeleteRoleAsync(string roleName, string mountPoint = null);
 
         /// <summary>
         /// Generates a new set of dynamic credentials based on the named role.
@@ -67,7 +67,7 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <param name="roleName"><para>[required]</para>
         /// Name of the role to create credentials against.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineDefaultPaths.Database" />
+        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineMountPoints.Database" />
         /// Provide a value only if you have customized the mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>
@@ -76,7 +76,7 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <returns>
         /// The secret with the <see cref="UsernamePasswordCredentials" /> as the data.
         /// </returns>
-        Task<Secret<UsernamePasswordCredentials>> GetCredentialsAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.Database, string wrapTimeToLive = null);
+        Task<Secret<UsernamePasswordCredentials>> GetCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint creates or updates a static role definition. 
@@ -89,10 +89,10 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <param name="staticRole"><para>[required]</para>
         /// Specifies the request options. </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineDefaultPaths.Database" />
+        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineMountPoints.Database" />
         /// Provide a value only if you have customized the mount point.</param>        
         /// <returns>The task</returns>
-        Task CreateStaticRoleAsync(string roleName, StaticRole staticRole, string mountPoint = SecretsEngineDefaultPaths.Database);
+        Task CreateStaticRoleAsync(string roleName, StaticRole staticRole, string mountPoint = null);
 
         /// <summary>
         /// This endpoint queries the static role definition.
@@ -100,28 +100,28 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <param name="roleName"><para>[required]</para>
         /// Specifies the name of the role to read. </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineDefaultPaths.Database" />
+        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineMountPoints.Database" />
         /// Provide a value only if you have customized the mount point.</param>   
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
         /// <returns>The role info.</returns>
-        Task<Secret<StaticRole>> ReadStaticRoleAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.Database, string wrapTimeToLive = null);
+        Task<Secret<StaticRole>> ReadStaticRoleAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint returns a list of available static roles. 
         /// Only the role names are returned, not any values.
         /// </summary>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineDefaultPaths.Database" />
+        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineMountPoints.Database" />
         /// Provide a value only if you have customized the mount point.</param>   
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
         /// <returns>The role names.</returns>
-        Task<Secret<ListInfo>> ReadAllStaticRolesAsync(string mountPoint = SecretsEngineDefaultPaths.Database, string wrapTimeToLive = null);
+        Task<Secret<ListInfo>> ReadAllStaticRolesAsync(string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint deletes the static role definition and revokes the database user.
@@ -129,10 +129,10 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <param name="roleName"><para>[required]</para>
         /// Specifies the name of the role to delete. </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineDefaultPaths.Database" />
+        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineMountPoints.Database" />
         /// Provide a value only if you have customized the mount point.</param>   
         /// <returns>The task.</returns>
-        Task DeleteStaticRoleAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.Database);
+        Task DeleteStaticRoleAsync(string roleName, string mountPoint = null);
 
         /// <summary>
         /// Generates a new set of STATIC credentials based on the named role.
@@ -140,7 +140,7 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <param name="roleName"><para>[required]</para>
         /// Specifies the name of the static role to get credentials for.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineDefaultPaths.Database" />
+        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineMountPoints.Database" />
         /// Provide a value only if you have customized the mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>
@@ -149,7 +149,7 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <returns>
         /// The secret with the <see cref="StaticCredentials" /> as the data.
         /// </returns>
-        Task<Secret<StaticCredentials>> GetStaticCredentialsAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.Database, string wrapTimeToLive = null);
+        Task<Secret<StaticCredentials>> GetStaticCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint is used to rotate the Static Role credentials stored for a given role name. 
@@ -160,8 +160,8 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <param name="roleName"><para>[required]</para>
         /// Specifies the name of the static role to rotate credentials for.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineDefaultPaths.Database" />
+        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineMountPoints.Database" />
         /// Provide a value only if you have customized the mount point.</param>
-        Task RotateStaticCredentialsAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.Database);
+        Task RotateStaticCredentialsAsync(string roleName, string mountPoint = null);
     }
 }

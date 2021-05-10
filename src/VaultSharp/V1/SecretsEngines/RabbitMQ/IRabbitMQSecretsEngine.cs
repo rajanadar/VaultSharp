@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.RabbitMQ
         /// <param name="roleName"><para>[required]</para>
         /// Name of the role to create credentials against.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the backend. Defaults to <see cref="SecretsEngineDefaultPaths.RabbitMQ" />
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.RabbitMQ" />
         /// Provide a value only if you have customized the mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>
@@ -23,6 +23,6 @@ namespace VaultSharp.V1.SecretsEngines.RabbitMQ
         /// <returns>
         /// The secret with the <see cref="UsernamePasswordCredentials" /> as the data.
         /// </returns>
-        Task<Secret<UsernamePasswordCredentials>> GetCredentialsAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.RabbitMQ, string wrapTimeToLive = null);
+        Task<Secret<UsernamePasswordCredentials>> GetCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
     }
 }

@@ -15,7 +15,7 @@ namespace VaultSharp.V1.SecretsEngines.MongoDBAtlas
         /// Unique identifier name of the credential
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the MongoDBAtlas backend. Defaults to <see cref="SecretsEngineDefaultPaths.MongoDBAtlas" />
+        /// The mount point for the MongoDBAtlas backend. Defaults to <see cref="SecretsEngineMountPoints.MongoDBAtlas" />
         /// Provide a value only if you have customized the MongoDBAtlas mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>
@@ -24,6 +24,6 @@ namespace VaultSharp.V1.SecretsEngines.MongoDBAtlas
         /// <returns>
         /// The secret with the <see cref="MongoDBAtlasCredentials" /> as the data.
         /// </returns>
-        Task<Secret<MongoDBAtlasCredentials>> GetCredentialsAsync(string name, string mountPoint = SecretsEngineDefaultPaths.MongoDBAtlas, string wrapTimeToLive = null);
+        Task<Secret<MongoDBAtlasCredentials>> GetCredentialsAsync(string name, string mountPoint = null, string wrapTimeToLive = null);
     }
 }

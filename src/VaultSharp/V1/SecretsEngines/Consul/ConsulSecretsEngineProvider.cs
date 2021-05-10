@@ -14,12 +14,11 @@ namespace VaultSharp.V1.SecretsEngines.Consul
             _polymath = polymath;
         }
 
-        public async Task<Secret<ConsulCredentials>> GetCredentialsAsync(string consulRoleName, string consulBackendMountPoint = SecretsEngineDefaultPaths.Consul, string wrapTimeToLive = null)
+        public async Task<Secret<ConsulCredentials>> GetCredentialsAsync(string consulRoleName, string consulBackendMountPoint = null, string wrapTimeToLive = null)
         {
-            Checker.NotNull(consulBackendMountPoint, "consulBackendMountPoint");
             Checker.NotNull(consulRoleName, "consulRoleName");
 
-            return await _polymath.MakeVaultApiRequest<Secret<ConsulCredentials>>("v1/" + consulBackendMountPoint.Trim('/') + "/creds/" + consulRoleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<ConsulCredentials>>(consulBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Consul, "/creds/" + consulRoleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

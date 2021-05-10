@@ -21,7 +21,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The certificate credential request options.
         /// </param>
         /// <param name="pkiBackendMountPoint"><para>[optional]</para>
-        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineDefaultPaths.PKI" />
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
         /// Provide a value only if you have customized the PKI mount point.
         /// </param>
         /// <param name="wrapTimeToLive">
@@ -31,7 +31,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <returns>
         /// The secret with the new Certificate credentials.
         /// </returns>
-        Task<Secret<CertificateCredentials>> GetCredentialsAsync(string pkiRoleName, CertificateCredentialsRequestOptions certificateCredentialRequestOptions, string pkiBackendMountPoint = SecretsEngineDefaultPaths.PKI, string wrapTimeToLive = null);
+        Task<Secret<CertificateCredentials>> GetCredentialsAsync(string pkiRoleName, CertificateCredentialsRequestOptions certificateCredentialRequestOptions, string pkiBackendMountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint revokes a certificate using its serial number. 
@@ -42,13 +42,13 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// Specifies the serial number of the certificate to revoke, in hyphen-separated or colon-separated octal.
         /// </param>
         /// <param name="pkiBackendMountPoint"><para>[optional]</para>
-        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineDefaultPaths.PKI" />
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
         /// Provide a value only if you have customized the PKI mount point.
         /// </param>
         /// <returns>
         /// The secret with the Certificate revokation info.
         /// </returns>
-        Task<Secret<RevokeCertificateResponse>> RevokeCertificateAsync(string serialNumber, string pkiBackendMountPoint = SecretsEngineDefaultPaths.PKI);
+        Task<Secret<RevokeCertificateResponse>> RevokeCertificateAsync(string serialNumber, string pkiBackendMountPoint = null);
 
         /// <summary>
         /// This endpoint allows tidying up the storage backend and/or CRL by removing certificates that have expired 
@@ -56,13 +56,13 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// </summary>
         /// <param name="certificateTidyRequest">The request object</param>
         /// <param name="pkiBackendMountPoint"><para>[optional]</para>
-        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineDefaultPaths.PKI" />
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
         /// Provide a value only if you have customized the PKI mount point.
         /// </param>
         /// <returns>
         /// The task
         /// </returns>
-        Task TidyAsync(CertificateTidyRequest certificateTidyRequest = null, string pkiBackendMountPoint = SecretsEngineDefaultPaths.PKI);
+        Task TidyAsync(CertificateTidyRequest certificateTidyRequest = null, string pkiBackendMountPoint = null);
 
         /// <summary>
         /// Retrieves the CA certificate in raw DER-encoded form. 
@@ -74,12 +74,12 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The certificate format needed.
         /// Defaults to <see cref="CertificateFormat.der" /></param>
         /// <param name="pkiBackendMountPoint"><para>[optional]</para>
-        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineDefaultPaths.PKI" />
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
         /// Provide a value only if you have customized the PKI mount point.
         /// </param>
         /// <returns>
         /// The raw certificate data.
         /// </returns>
-        Task<RawCertificateData> ReadCACertificateAsync(CertificateFormat certificateFormat = CertificateFormat.der, string pkiBackendMountPoint = SecretsEngineDefaultPaths.PKI);
+        Task<RawCertificateData> ReadCACertificateAsync(CertificateFormat certificateFormat = CertificateFormat.der, string pkiBackendMountPoint = null);
     }
 }

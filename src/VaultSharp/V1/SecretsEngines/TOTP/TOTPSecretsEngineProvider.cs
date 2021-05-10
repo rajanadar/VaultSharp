@@ -14,22 +14,20 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
             _polymath = polymath;
         }
 
-        public async Task<Secret<TOTPCode>> GetCodeAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.TOTP, string wrapTimeToLive = null)
+        public async Task<Secret<TOTPCode>> GetCodeAsync(string keyName, string mountPoint = null, string wrapTimeToLive = null)
         {
-            Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(keyName, "keyName");
 
-            return await _polymath.MakeVaultApiRequest<Secret<TOTPCode>>("v1/" + mountPoint.Trim('/') + "/code/" + keyName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<TOTPCode>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.TOTP, "/code/" + keyName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<TOTPCodeValidity>> ValidateCodeAsync(string keyName, string code, string mountPoint = SecretsEngineDefaultPaths.TOTP, string wrapTimeToLive = null)
+        public async Task<Secret<TOTPCodeValidity>> ValidateCodeAsync(string keyName, string code, string mountPoint = null, string wrapTimeToLive = null)
         {
-            Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(keyName, "keyName");
             Checker.NotNull(code, "code");
 
             var requestData = new { code = code };
-            return await _polymath.MakeVaultApiRequest<Secret<TOTPCodeValidity>>("v1/" + mountPoint.Trim('/') + "/code/" + keyName.Trim('/'), HttpMethod.Post, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<TOTPCodeValidity>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.TOTP, "/code/" + keyName.Trim('/'), HttpMethod.Post, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<TOTPCreateKeyResponse>> CreateKeyAsync(string keyName, TOTPCreateKeyRequest createKeyRequest, string mountPoint)
@@ -75,30 +73,27 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
                 };
             }
 
-            return await _polymath.MakeVaultApiRequest<Secret<TOTPCreateKeyResponse>>("v1/" + mountPoint.Trim('/') + "/keys/" + keyName.Trim('/'), HttpMethod.Post, request).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<TOTPCreateKeyResponse>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.TOTP, "/keys/" + keyName.Trim('/'), HttpMethod.Post, request).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<TOTPKey>> ReadKeyAsync(string keyName, string mountPoint = SecretsEngineDefaultPaths.TOTP, string wrapTimeToLive = null)
+        public async Task<Secret<TOTPKey>> ReadKeyAsync(string keyName, string mountPoint = null, string wrapTimeToLive = null)
         {
-            Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(keyName, "keyName");
 
-            return await _polymath.MakeVaultApiRequest<Secret<TOTPKey>>("v1/" + mountPoint.Trim('/') + "/keys/" + keyName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<TOTPKey>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.TOTP, "/keys/" + keyName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<ListInfo>> ReadAllKeysAsync(string mountPoint = SecretsEngineDefaultPaths.TOTP, string wrapTimeToLive = null)
+        public async Task<Secret<ListInfo>> ReadAllKeysAsync(string mountPoint = null, string wrapTimeToLive = null)
         {
-            Checker.NotNull(mountPoint, "mountPoint");
 
-            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/" + mountPoint.Trim('/') + "/keys?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.TOTP, "/keys?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task DeleteKeyAsync(string keyName, string mountPoint = "totp")
+        public async Task DeleteKeyAsync(string keyName, string mountPoint = null)
         {
-            Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(keyName, "keyName");
 
-            await _polymath.MakeVaultApiRequest("v1/" + mountPoint.Trim('/') + "/keys/" + keyName.Trim('/'), HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.TOTP, "/keys/" + keyName.Trim('/'), HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

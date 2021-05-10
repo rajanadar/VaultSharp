@@ -15,7 +15,7 @@ namespace VaultSharp.V1.SecretsEngines
         /// <value>
         /// The system.
         /// </value>
-        public static SecretsEngineType System { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.System);
+        public static SecretsEngineType System { get; } = new SecretsEngineType(SecretsEngineMountPoints.Defaults.System);
 
         /// <summary>
         /// Gets the alicloud type.
@@ -23,7 +23,7 @@ namespace VaultSharp.V1.SecretsEngines
         /// <value>
         /// The aws.
         /// </value>
-        public static SecretsEngineType AliCloud { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.AliCloud);
+        public static SecretsEngineType AliCloud { get; } = new SecretsEngineType(SecretsEngineMountPoints.Defaults.AliCloud);
 
         /// <summary>
         /// Gets the aws type.
@@ -31,7 +31,7 @@ namespace VaultSharp.V1.SecretsEngines
         /// <value>
         /// The aws.
         /// </value>
-        public static SecretsEngineType AWS { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.AWS);
+        public static SecretsEngineType AWS { get; } = new SecretsEngineType(SecretsEngineMountPoints.Defaults.AWS);
 
         /// <summary>
         /// Gets the consul type.
@@ -39,7 +39,7 @@ namespace VaultSharp.V1.SecretsEngines
         /// <value>
         /// The consul.
         /// </value>
-        public static SecretsEngineType Consul { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.Consul);
+        public static SecretsEngineType Consul { get; } = new SecretsEngineType(SecretsEngineMountPoints.Defaults.Consul);
 
         /// <summary>
         /// Gets the cubby hole type.
@@ -47,7 +47,7 @@ namespace VaultSharp.V1.SecretsEngines
         /// <value>
         /// The cubby hole.
         /// </value>
-        public static SecretsEngineType CubbyHole { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.Cubbyhole);
+        public static SecretsEngineType CubbyHole { get; } = new SecretsEngineType(SecretsEngineMountPoints.Defaults.Cubbyhole);
 
         /// <summary>
         /// Gets the generic type v1.
@@ -55,7 +55,7 @@ namespace VaultSharp.V1.SecretsEngines
         /// <value>
         /// The generic.
         /// </value>
-        public static SecretsEngineType KeyValueV1 { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.KeyValueV1);
+        public static SecretsEngineType KeyValueV1 { get; } = new SecretsEngineType(SecretsEngineMountPoints.Defaults.KeyValueV1);
 
         /// <summary>
         /// Gets the generic type v2.
@@ -63,7 +63,7 @@ namespace VaultSharp.V1.SecretsEngines
         /// <value>
         /// The generic.
         /// </value>
-        public static SecretsEngineType KeyValueV2 { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.KeyValueV2);
+        public static SecretsEngineType KeyValueV2 { get; } = new SecretsEngineType(SecretsEngineMountPoints.Defaults.KeyValueV2);
 
         /// <summary>
         /// Gets the Identity type.
@@ -71,7 +71,7 @@ namespace VaultSharp.V1.SecretsEngines
         /// <value>
         /// The Identity.
         /// </value>
-        public static SecretsEngineType Identity { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.Identity);
+        public static SecretsEngineType Identity { get; } = new SecretsEngineType(SecretsEngineMountPoints.Defaults.Identity);
 
         /// <summary>
         /// Gets the Nomad type.
@@ -79,7 +79,7 @@ namespace VaultSharp.V1.SecretsEngines
         /// <value>
         /// The Nomad.
         /// </value>
-        public static SecretsEngineType Nomad { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.Nomad);
+        public static SecretsEngineType Nomad { get; } = new SecretsEngineType(SecretsEngineMountPoints.Defaults.Nomad);
 
         /// <summary>
         /// Gets the pki type.
@@ -87,7 +87,7 @@ namespace VaultSharp.V1.SecretsEngines
         /// <value>
         /// The pki.
         /// </value>
-        public static SecretsEngineType PKI { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.PKI);
+        public static SecretsEngineType PKI { get; } = new SecretsEngineType(SecretsEngineMountPoints.Defaults.PKI);
 
         /// <summary>
         /// Gets the rabbit mq type.
@@ -95,7 +95,7 @@ namespace VaultSharp.V1.SecretsEngines
         /// <value>
         /// The rabbit mq.
         /// </value>
-        public static SecretsEngineType RabbitMQ { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.RabbitMQ);
+        public static SecretsEngineType RabbitMQ { get; } = new SecretsEngineType(SecretsEngineMountPoints.Defaults.RabbitMQ);
 
         /// <summary>
         /// Gets the SSH type.
@@ -103,7 +103,7 @@ namespace VaultSharp.V1.SecretsEngines
         /// <value>
         /// The SSH.
         /// </value>
-        public static SecretsEngineType SSH { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.SSH);
+        public static SecretsEngineType SSH { get; } = new SecretsEngineType(SecretsEngineMountPoints.Defaults.SSH);
 
         /// <summary>
         /// Gets the TOTP type.
@@ -111,7 +111,7 @@ namespace VaultSharp.V1.SecretsEngines
         /// <value>
         /// The TOTP.
         /// </value>
-        public static SecretsEngineType TOTP { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.TOTP);
+        public static SecretsEngineType TOTP { get; } = new SecretsEngineType(SecretsEngineMountPoints.Defaults.TOTP);
 
         /// <summary>
         /// Gets the transit type.
@@ -119,7 +119,7 @@ namespace VaultSharp.V1.SecretsEngines
         /// <value>
         /// The transit.
         /// </value>
-        public static SecretsEngineType Transit { get; } = new SecretsEngineType(SecretsEngineDefaultPaths.Transit);
+        public static SecretsEngineType Transit { get; } = new SecretsEngineType(SecretsEngineMountPoints.Defaults.Transit);
 
         /// <summary>
         /// Gets the type.

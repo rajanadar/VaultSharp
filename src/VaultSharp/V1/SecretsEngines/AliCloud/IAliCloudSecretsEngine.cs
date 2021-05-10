@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud
         /// <param name="aliCloudRoleName"><para>[required]</para>
         /// Name of the AliCloud role.</param>
         /// <param name="aliCloudMountPoint"><para>[optional]</para>
-        /// The mount point for the AliCloud backend. Defaults to <see cref="SecretsEngineDefaultPaths.AliCloud" />
+        /// The mount point for the AliCloud backend. Defaults to <see cref="SecretsEngineMountPoints.AliCloud" />
         /// Provide a value only if you have customized the AliCloud mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[required]</para>
@@ -23,6 +23,6 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud
         /// <returns>
         /// The secret with the <see cref="AliCloudCredentials" /> as the data.
         /// </returns>
-        Task<Secret<AliCloudCredentials>> GetCredentialsAsync(string aliCloudRoleName, string aliCloudMountPoint = SecretsEngineDefaultPaths.AliCloud, string wrapTimeToLive = null);
+        Task<Secret<AliCloudCredentials>> GetCredentialsAsync(string aliCloudRoleName, string aliCloudMountPoint = null, string wrapTimeToLive = null);
     }
 }
