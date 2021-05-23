@@ -14,12 +14,11 @@ namespace VaultSharp.V1.SecretsEngines.Nomad
             _polymath = polymath;
         }
 
-        public async Task<Secret<NomadCredentials>> GetCredentialsAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.Nomad, string wrapTimeToLive = null)
+        public async Task<Secret<NomadCredentials>> GetCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null)
         {
-            Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");
 
-            return await _polymath.MakeVaultApiRequest<Secret<NomadCredentials>>("v1/" + mountPoint.Trim('/') + "/creds/" + roleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<NomadCredentials>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Nomad, "/creds/" + roleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

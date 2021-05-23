@@ -45,6 +45,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// </summary>
         /// <param name="increment"><para>[optional]</para>
         /// An optional requested lease increment can be provided. This increment may be ignored.
+        /// </param>
         /// <returns>
         /// The auth info.
         /// </returns>

@@ -66,7 +66,7 @@ namespace VaultSharp.V1.SystemBackend
         /// Note that the audit log records requests and responses; since the Vault API is JSON-based,
         /// any binary data returned from an API call (such as a DER-format certificate) is base64-encoded by
         /// the Vault server in the response, and as a result such information should also be base64-encoded
-        /// to supply into the <see cref="inputToHash" /> parameter.
+        /// to supply into the <see paramref="inputToHash" /> parameter.
         /// </summary>
         /// <param name="path"><para>[required]</para>
         /// The mount point for the audit backend. (with or without trailing slashes. it doesn't matter)</param>
@@ -118,7 +118,7 @@ namespace VaultSharp.V1.SystemBackend
         Task<Secret<BackendConfig>> GetAuthBackendConfigAsync(string path);
 
         /// <summary>
-        /// Tunes the mount configuration parameters for the given <see cref="path" />.
+        /// Tunes the mount configuration parameters for the given <see paramref="path" />.
         /// </summary>
         /// <param name="path"><para>[required]</para>
         /// The authentication path for the authentication backend. (with or without trailing slashes. it doesn't matter)</param>
@@ -220,7 +220,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <summary>
         /// Initializes a new root generation attempt. 
         /// Only a single root generation attempt can take place at a time. 
-        /// One (and only one) of <see cref="base64EncodedOneTimePassword"/> or <see cref="pgpKey"/> are required.
+        /// One (and only one) of <see paramref="base64EncodedOneTimePassword"/> or <see paramref="pgpKey"/> are required.
         /// </summary>
         /// <param name="base64EncodedOneTimePassword"><para>[optional]</para>
         /// A base64-encoded 16-byte value. The raw bytes of the token will be XOR'd with this 
@@ -450,7 +450,7 @@ namespace VaultSharp.V1.SystemBackend
         Task<Secret<BackendConfig>> GetSecretBackendConfigAsync(string mountPoint);
 
         /// <summary>
-        /// Tunes the mount configuration parameters for the given <see cref="path" />.
+        /// Tunes the mount configuration parameters for the given <see paramref="path" />.
         /// </summary>
         /// <param name="path"><para>[required]</para>
         /// The mount point for the secret backend. (with or without trailing slashes. it doesn't matter)</param>
@@ -606,12 +606,12 @@ namespace VaultSharp.V1.SystemBackend
         /// The number of shares to split the master key into.</param>
         /// <param name="secretThreshold"><para>[required]</para>
         /// The number of shares required to reconstruct the master key.
-        /// This must be less than or equal to <see cref="secretShares" />.</param>
+        /// This must be less than or equal to <see paramref="secretShares" />.</param>
         /// <param name="pgpKeys"><para>[optional]</para>
         /// An array of PGP public keys used to encrypt the output unseal keys.
         /// Ordering is preserved.
         /// The keys must be base64-encoded from their original binary representation.
-        /// The size of this array must be the same as <see cref="secretShares" />.</param>
+        /// The size of this array must be the same as <see paramref="secretShares" />.</param>
         /// <param name="backup"><para>[optional]</para>
         /// If using PGP-encrypted keys, whether Vault should also back them up to a well-known 
         /// location in physical storage. These can then be retrieved and removed 
@@ -709,8 +709,8 @@ namespace VaultSharp.V1.SystemBackend
         /// If the threshold number of master key shares is reached, Vault will attempt to unseal the Vault.
         /// Otherwise, this API must be called multiple times until that threshold is met.
         /// <para>
-        /// Either the <see cref="masterShareKey" /> or <see cref="resetCompletely" /> parameter must be provided; 
-        /// if both are provided, <see cref="resetCompletely" /> takes precedence.
+        /// Either the <see paramref="masterShareKey" /> or <see paramref="resetCompletely" /> parameter must be provided; 
+        /// if both are provided, <see paramref="resetCompletely" /> takes precedence.
         /// </para>
         /// This is an unauthenticated call and does not use the credentials.
         /// </summary>
@@ -718,7 +718,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="resetCompletely">When <value>true</value>, the previously-provided unseal keys are discarded from memory 
         /// and the unseal process is completely reset.
         /// Default value is <value>false</value>.
-        /// If you make a call with the value as <value>true</value>, it doesn't matter if this call has a valid unused <see cref="masterShareKey" />. 
+        /// If you make a call with the value as <value>true</value>, it doesn't matter if this call has a valid unused <see paramref="masterShareKey" />. 
         /// It'll be ignored.</param>
         /// <returns>
         /// The seal status of the Vault.

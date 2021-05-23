@@ -55,7 +55,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <para>[optional]</para>
         /// Gets or sets the custom OID/UTF8-string SANs. 
         /// These must match values specified on the role in allowed_other_sans (globbing allowed). 
-        /// The format is the same as OpenSSL: <oid>;<type>:<value> where the only current valid type is UTF8. 
+        /// The format is the same as OpenSSL: [oid];[type]:[value] where the only current valid type is UTF8. 
         /// This can be a comma-delimited list or a JSON string slice.
         /// </summary>
         /// <value>

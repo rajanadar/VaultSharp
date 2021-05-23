@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.Nomad
         /// <param name="roleName"><para>[required]</para>
         /// Specifies the name of an existing role against which to create this Nomad token.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Nomad backend. Defaults to <see cref="SecretsEngineDefaultPaths.Nomad" />
+        /// The mount point for the Nomad backend. Defaults to <see cref="SecretsEngineMountPoints.Nomad" />
         /// Provide a value only if you have customized the Nomad mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>
@@ -23,6 +23,6 @@ namespace VaultSharp.V1.SecretsEngines.Nomad
         /// <returns>
         /// The secret with the <see cref="NomadCredentials" /> as the data.
         /// </returns>
-        Task<Secret<NomadCredentials>> GetCredentialsAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.Nomad, string wrapTimeToLive = null);
+        Task<Secret<NomadCredentials>> GetCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
     }
 }

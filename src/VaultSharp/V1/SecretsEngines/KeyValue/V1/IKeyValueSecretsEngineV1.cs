@@ -15,7 +15,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <param name="path"><para>[required]</para>
         /// The location path where the secret needs to be read from.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the KeyValue backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV1" />
+        /// The mount point for the KeyValue backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV1" />
         /// Provide a value only if you have customized the mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[required]</para>
@@ -24,7 +24,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <returns>
         /// The secret with the data.
         /// </returns>
-        Task<Secret<Dictionary<string, object>>> ReadSecretAsync(string path, string mountPoint = SecretsEngineDefaultPaths.KeyValueV1, string wrapTimeToLive = null);
+        Task<Secret<Dictionary<string, object>>> ReadSecretAsync(string path, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// Retrieves the secret at the specified location.
@@ -32,7 +32,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <param name="path"><para>[required]</para>
         /// The location path where the secret needs to be read from.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the KeyValue backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV1" />
+        /// The mount point for the KeyValue backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV1" />
         /// Provide a value only if you have customized the mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[required]</para>
@@ -41,7 +41,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <returns>
         /// The secret with the data.
         /// </returns>
-        Task<Secret<T>> ReadSecretAsync<T>(string path, string mountPoint = SecretsEngineDefaultPaths.KeyValueV1, string wrapTimeToLive = null);
+        Task<Secret<T>> ReadSecretAsync<T>(string path, string mountPoint = null, string wrapTimeToLive = null);
         
         /// <summary>
         /// Retrieves the secret location path entries at the specified location.
@@ -51,7 +51,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <param name="path"><para>[required]</para>
         /// The location path where the secret needs to be read from.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV1" />
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV1" />
         /// Provide a value only if you have customized the mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[required]</para>
@@ -60,7 +60,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <returns>
         /// The secret list with the data.
         /// </returns>
-        Task<Secret<ListInfo>> ReadSecretPathsAsync(string path, string mountPoint = SecretsEngineDefaultPaths.KeyValueV1, string wrapTimeToLive = null);
+        Task<Secret<ListInfo>> ReadSecretPathsAsync(string path, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// Stores a secret at the specified location. If the value does not yet exist, the calling token must have an ACL policy granting the create capability. 
@@ -71,7 +71,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <param name="values"><para>[required]</para>
         /// The value to be written.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV1" />
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV1" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>
@@ -85,7 +85,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// Even with a ttl set, the secrets engine never removes data on its own.The ttl key is merely advisory.
         /// When reading a value with a ttl, both the ttl key and the refresh interval will reflect the value:
         /// </remarks>
-        Task<Secret<Dictionary<string, object>>> WriteSecretAsync(string path, IDictionary<string, object> values, string mountPoint = SecretsEngineDefaultPaths.KeyValueV1);
+        Task<Secret<Dictionary<string, object>>> WriteSecretAsync(string path, IDictionary<string, object> values, string mountPoint = null);
 
         /// <summary>
         /// Stores a secret at the specified location. If the value does not yet exist, the calling token must have an ACL policy granting the create capability. 
@@ -96,7 +96,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <param name="values"><para>[required]</para>
         /// The value to be written.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV1" />
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV1" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>
@@ -110,7 +110,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// Even with a ttl set, the secrets engine never removes data on its own.The ttl key is merely advisory.
         /// When reading a value with a ttl, both the ttl key and the refresh interval will reflect the value:
         /// </remarks>
-        Task<Secret<T>> WriteSecretAsync<T>(string path, T values, string mountPoint = SecretsEngineDefaultPaths.KeyValueV1);
+        Task<Secret<T>> WriteSecretAsync<T>(string path, T values, string mountPoint = null);
         
         /// <summary>
         /// Deletes the value at the specified path in Vault.
@@ -118,12 +118,12 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <param name="path"><para>[required]</para>
         /// The path where the value is to be stored.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineDefaultPaths.KeyValueV1" />
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV1" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task DeleteSecretAsync(string path, string mountPoint = SecretsEngineDefaultPaths.KeyValueV1);
+        Task DeleteSecretAsync(string path, string mountPoint = null);
     }
 }

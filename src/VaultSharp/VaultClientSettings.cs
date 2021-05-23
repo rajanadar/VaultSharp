@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using VaultSharp.V1.AuthMethods;
+using VaultSharp.V1.SecretsEngines;
 
 namespace VaultSharp
 {
@@ -78,5 +79,11 @@ namespace VaultSharp
         /// It is essential that your HttpClient use the handler, since it has certificate auth etc.
         /// </summary>
         public Func<HttpClientHandler, HttpClient> MyHttpClientProviderFunc { get; set; }
+
+        /// <summary>
+        /// Use custom secret engine mount points globally rather than on every method call.
+        /// See <see cref="V1.SecretsEngines.SecretsEngineMountPoints.Defaults" /> for defaults.
+        /// </summary>
+        public SecretsEngineMountPoints SecretsEngineMountPoints { get; set; } = new SecretsEngineMountPoints();
     }
 }

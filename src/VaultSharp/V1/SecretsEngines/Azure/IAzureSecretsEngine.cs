@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.Azure
         /// <param name="azureRoleName"><para>[required]</para>
         /// Name of the Azure role.</param>
         /// <param name="azureBackendMountPoint"><para>[optional]</para>
-        /// The mount point for the Azure backend. Defaults to <see cref="SecretsEngineDefaultPaths.Azure" />
+        /// The mount point for the Azure backend. Defaults to <see cref="SecretsEngineMountPoints.Azure" />
         /// Provide a value only if you have customized the Azure mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>
@@ -23,6 +23,6 @@ namespace VaultSharp.V1.SecretsEngines.Azure
         /// <returns>
         /// The secret with the <see cref="AzureCredentials" /> as the data.
         /// </returns>
-        Task<Secret<AzureCredentials>> GetCredentialsAsync(string azureRoleName, string azureBackendMountPoint = SecretsEngineDefaultPaths.Azure, string wrapTimeToLive = null);
+        Task<Secret<AzureCredentials>> GetCredentialsAsync(string azureRoleName, string azureBackendMountPoint = null, string wrapTimeToLive = null);
     }
 }

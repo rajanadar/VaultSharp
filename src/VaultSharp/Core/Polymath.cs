@@ -21,6 +21,8 @@ namespace VaultSharp.Core
         private const string VaultTokenHeaderKey = "X-Vault-Token";
         private const string VaultWrapTimeToLiveHeaderKey = "X-Vault-Wrap-TTL";
 
+        private const string VaultSharpV1Path = "v1/";
+
         private readonly HttpClient _httpClient;
         private Lazy<Task<string>> _lazyVaultToken;
         private readonly IAuthMethodLoginProvider _authMethodLoginProvider;
@@ -95,9 +97,23 @@ namespace VaultSharp.Core
             }
         }
 
+        public async Task MakeVaultApiRequest(string mountPoint, string path, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false)
+        {
+            Checker.NotNull(mountPoint, "mountPoint");
+            
+            await MakeVaultApiRequest(VaultSharpV1Path + mountPoint.Trim('/') + path, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
         public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false)
         {
             await MakeVaultApiRequest<JToken>(resourcePath, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<TResponse> MakeVaultApiRequest<TResponse>(string mountPoint, string path, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null, string wrapTimeToLive = null, bool unauthenticated = false) where TResponse : class 
+        {
+            Checker.NotNull(mountPoint, "mountPoint");
+
+            return await MakeVaultApiRequest<TResponse>(VaultSharpV1Path + mountPoint.Trim('/') + path, httpMethod, requestData, rawResponse, postResponseAction, wrapTimeToLive, unauthenticated);
         }
 
         public async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null, string wrapTimeToLive = null, bool unauthenticated = false) where TResponse : class

@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
         /// <param name="roleName"><para>[required]</para>
         /// Name of the role.</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the AD backend. Defaults to <see cref="SecretsEngineDefaultPaths.ActiveDirectory" />
+        /// The mount point for the AD backend. Defaults to <see cref="SecretsEngineMountPoints.ActiveDirectory" />
         /// Provide a value only if you have customized the mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>
@@ -23,6 +23,6 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
         /// <returns>
         /// The secret with the <see cref="ActiveDirectoryCredentials" /> as the data.
         /// </returns>
-        Task<Secret<ActiveDirectoryCredentials>> GetCredentialsAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.ActiveDirectory, string wrapTimeToLive = null);
+        Task<Secret<ActiveDirectoryCredentials>> GetCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
     }
 }

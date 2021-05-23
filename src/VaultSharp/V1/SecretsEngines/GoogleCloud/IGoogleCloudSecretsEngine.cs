@@ -17,7 +17,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
         /// Name of an roleset with secret type access_token to generate access_token under.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the backend. Defaults to <see cref="SecretsEngineDefaultPaths.GoogleCloud" />
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.GoogleCloud" />
         /// Provide a value only if you have customized the Consul mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>
@@ -26,7 +26,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
         /// <returns>
         /// The secret with the <see cref="GoogleCloudOAuth2Token" /> as the data.
         /// </returns>
-        Task<Secret<GoogleCloudOAuth2Token>> GetOAuth2TokenAsync(string roleset, string mountPoint = SecretsEngineDefaultPaths.GoogleCloud, string wrapTimeToLive = null);
+        Task<Secret<GoogleCloudOAuth2Token>> GetOAuth2TokenAsync(string roleset, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// Generates a service account key.
@@ -48,7 +48,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
         /// If not set, uses the system default value.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the backend. Defaults to <see cref="SecretsEngineDefaultPaths.GoogleCloud" />
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.GoogleCloud" />
         /// Provide a value only if you have customized the Consul mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>
@@ -57,6 +57,6 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
         /// <returns>
         /// The secret with the <see cref="GoogleCloudOAuth2Token" /> as the data.
         /// </returns>
-        Task<Secret<GoogleCloudServiceAccountKey>> GetServiceAccountKeyAsync(string roleset, ServiceAccountKeyAlgorithm keyAlgorithm = ServiceAccountKeyAlgorithm.KEY_ALG_RSA_2048, ServiceAccountPrivateKeyType privateKeyType = ServiceAccountPrivateKeyType.TYPE_GOOGLE_CREDENTIALS_FILE, string timeToLive = "",  string mountPoint = SecretsEngineDefaultPaths.GoogleCloud, string wrapTimeToLive = null);
+        Task<Secret<GoogleCloudServiceAccountKey>> GetServiceAccountKeyAsync(string roleset, ServiceAccountKeyAlgorithm keyAlgorithm = ServiceAccountKeyAlgorithm.KEY_ALG_RSA_2048, ServiceAccountPrivateKeyType privateKeyType = ServiceAccountPrivateKeyType.TYPE_GOOGLE_CREDENTIALS_FILE, string timeToLive = "",  string mountPoint = null, string wrapTimeToLive = null);
     }
 }

@@ -15,7 +15,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// The name of the role against which to generate a signed ID token.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the backend. Defaults to <see cref="SecretsEngineDefaultPaths.Identity" />
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.Identity" />
         /// Provide a value only if you have customized the Azure mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>
@@ -24,7 +24,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// <returns>
         /// The secret with the <see cref="IdentityToken" /> as the data.
         /// </returns>
-        Task<Secret<IdentityToken>> GetTokenAsync(string roleName, string mountPoint = SecretsEngineDefaultPaths.Identity, string wrapTimeToLive = null);
+        Task<Secret<IdentityToken>> GetTokenAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint can verify the authenticity and active state of a signed ID token.
@@ -36,7 +36,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// Specifying the client ID optimizes validation time
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the backend. Defaults to <see cref="SecretsEngineDefaultPaths.Identity" />
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.Identity" />
         /// Provide a value only if you have customized the Azure mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[optional]</para>
@@ -45,6 +45,6 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// <returns>
         /// Indicates if the token is active.
         /// </returns>
-        Task<Secret<bool>> IntrospectTokenAsync(string token, string clientId = null, string mountPoint = SecretsEngineDefaultPaths.Identity, string wrapTimeToLive = null);
+        Task<Secret<bool>> IntrospectTokenAsync(string token, string clientId = null, string mountPoint = null, string wrapTimeToLive = null);
     }
 }
