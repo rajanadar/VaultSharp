@@ -34,8 +34,6 @@ namespace VaultSharp.Samples
             var nonce = "1234";
             var roleName = "role-bastion";
 
-
-
             const string path = "ProgramOutput.txt";
 
             using (var fs = new FileStream(path, FileMode.Create))
@@ -203,6 +201,7 @@ namespace VaultSharp.Samples
             var encryptionResponse = _authenticatedVaultClient.V1.Secrets.Transit.EncryptAsync(keyName, encryptOptions, path).Result;
             var cipherText = encryptionResponse.Data.CipherText;
 
+            /*
             encryptOptions = new EncryptRequestOptions
             {
                 BatchedEncryptionItems = new List<EncryptionItem>
@@ -239,6 +238,8 @@ namespace VaultSharp.Samples
             var batchedDecryptionResponse = _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions, path).Result;
             var firstPlainText = batchedDecryptionResponse.Data.BatchedResults.First().Base64EncodedPlainText;
 
+            */
+
             // Generate Data Key
             var dataKeyOptions = new DataKeyRequestOptions
             {
@@ -250,6 +251,9 @@ namespace VaultSharp.Samples
 
             var encodedDataKeyPlainText = dataKeyResponse.Data.Base64EncodedPlainText;
             var dataKeyCipherText = dataKeyResponse.Data.Base64EncodedPlainText;
+
+            // var trimOptions = new TrimKeyRequestOptions { MinimumAvailableVersion = 1 };
+            // _authenticatedVaultClient.V1.Secrets.Transit.TrimKeyAsync(keyName, trimOptions).Wait();
 
             _authenticatedVaultClient.V1.System.UnmountSecretBackendAsync(path).Wait();
         }
