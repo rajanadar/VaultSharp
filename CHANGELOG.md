@@ -1,3 +1,10 @@
+## 1.6.2.2 (May 23, 2021)
+
+**FEATURES:**
+
+  * [GH-187] Ability to customise the default Secret Engine MountPoints.
+  * [GH-188] Added Trim Key functionality to the Transit Secret Engine.
+
 ## 1.6.2.1 (March 01, 2021)
 
 **FEATURES:**

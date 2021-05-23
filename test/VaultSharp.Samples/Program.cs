@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods;
 using VaultSharp.V1.AuthMethods.AppRole;
+using VaultSharp.V1.AuthMethods.AWS;
 using VaultSharp.V1.AuthMethods.Token;
 using VaultSharp.V1.Commons;
 using VaultSharp.V1.SecretsEngines;
@@ -30,6 +31,11 @@ namespace VaultSharp.Samples
 
         public static void Main(string[] args)
         {
+            var nonce = "1234";
+            var roleName = "role-bastion";
+
+
+
             const string path = "ProgramOutput.txt";
 
             using (var fs = new FileStream(path, FileMode.Create))
@@ -165,16 +171,18 @@ namespace VaultSharp.Samples
 
         private static void RunTransitSamples()
         {
-            return;
+            var path = Guid.NewGuid().ToString();
 
-            // Transit
+            var transitSecretsEngine = new SecretsEngine
+            {
+                Type = SecretsEngineType.Transit,
+                Path = path
+            };
 
-            // manually setup the following.
+            _authenticatedVaultClient.V1.System.MountSecretBackendAsync(transitSecretsEngine).Wait();
 
-            var keyName = "test_key";
-
-            // .\vault.exe secrets enable transit
-            // .\vault.exe write -f transit/keys/test_key
+            var keyName = Guid.NewGuid().ToString();
+            _authenticatedVaultClient.V1.Secrets.Transit.CreateEncryptionKeyAsync(keyName, new CreateKeyRequestOptions(), path).Wait();
 
             var context = "context1";
             var plainText = "raja";
@@ -192,20 +200,20 @@ namespace VaultSharp.Samples
                 Nonce = nonce
             };
 
-            var encryptionResponse = _authenticatedVaultClient.V1.Secrets.Transit.EncryptAsync(keyName, encryptOptions).Result;
+            var encryptionResponse = _authenticatedVaultClient.V1.Secrets.Transit.EncryptAsync(keyName, encryptOptions, path).Result;
             var cipherText = encryptionResponse.Data.CipherText;
 
             encryptOptions = new EncryptRequestOptions
             {
                 BatchedEncryptionItems = new List<EncryptionItem>
                 {
-                    new EncryptionItem { Base64EncodedContext = encodedContext, Base64EncodedPlainText = encodedPlainText },
-                    new EncryptionItem { Base64EncodedContext = encodedContext, Base64EncodedPlainText = encodedPlainText },
-                    new EncryptionItem { Base64EncodedContext = encodedContext, Base64EncodedPlainText = encodedPlainText },
+                    new EncryptionItem { KeyVersion = 1, Nonce = nonce, Base64EncodedContext = encodedContext, Base64EncodedPlainText = encodedPlainText },
+                    new EncryptionItem { KeyVersion = 1, Nonce = nonce, Base64EncodedContext = encodedContext, Base64EncodedPlainText = encodedPlainText },
+                    new EncryptionItem { KeyVersion = 1, Nonce = nonce, Base64EncodedContext = encodedContext, Base64EncodedPlainText = encodedPlainText },
                 }
             };
 
-            var batchedEncryptionResponse = _authenticatedVaultClient.V1.Secrets.Transit.EncryptAsync(keyName, encryptOptions).Result;
+            var batchedEncryptionResponse = _authenticatedVaultClient.V1.Secrets.Transit.EncryptAsync(keyName, encryptOptions, path).Result;
             var firstCipherText = batchedEncryptionResponse.Data.BatchedResults.First().CipherText;
 
             var decryptOptions = new DecryptRequestOptions
@@ -215,20 +223,20 @@ namespace VaultSharp.Samples
                 Nonce = nonce
             };
 
-            var decryptionResponse = _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions).Result;
+            var decryptionResponse = _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions, path).Result;
             var gotPlainText = decryptionResponse.Data.Base64EncodedPlainText;
 
             decryptOptions = new DecryptRequestOptions
             {
                 BatchedDecryptionItems = new List<DecryptionItem>
                 {
-                    new DecryptionItem { Base64EncodedContext = encodedContext, CipherText = batchedEncryptionResponse.Data.BatchedResults.ElementAt(0).CipherText },
-                    new DecryptionItem { Base64EncodedContext = encodedContext, CipherText = batchedEncryptionResponse.Data.BatchedResults.ElementAt(1).CipherText },
-                    new DecryptionItem { Base64EncodedContext = encodedContext, CipherText = batchedEncryptionResponse.Data.BatchedResults.ElementAt(2).CipherText },
+                    new DecryptionItem { Nonce = nonce, Base64EncodedContext = encodedContext, CipherText = batchedEncryptionResponse.Data.BatchedResults.ElementAt(0).CipherText },
+                    new DecryptionItem { Nonce = nonce, Base64EncodedContext = encodedContext, CipherText = batchedEncryptionResponse.Data.BatchedResults.ElementAt(1).CipherText },
+                    new DecryptionItem { Nonce = nonce, Base64EncodedContext = encodedContext, CipherText = batchedEncryptionResponse.Data.BatchedResults.ElementAt(2).CipherText },
                 }
             };
 
-            var batchedDecryptionResponse = _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions).Result;
+            var batchedDecryptionResponse = _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions, path).Result;
             var firstPlainText = batchedDecryptionResponse.Data.BatchedResults.First().Base64EncodedPlainText;
 
             // Generate Data Key
@@ -238,10 +246,12 @@ namespace VaultSharp.Samples
                 Nonce = nonce
             };
 
-            Secret<DataKeyResponse> dataKeyResponse = _authenticatedVaultClient.V1.Secrets.Transit.GenerateDataKeyAsync("plaintext", keyName, dataKeyOptions).Result;
+            Secret<DataKeyResponse> dataKeyResponse = _authenticatedVaultClient.V1.Secrets.Transit.GenerateDataKeyAsync("plaintext", keyName, dataKeyOptions, path).Result;
 
             var encodedDataKeyPlainText = dataKeyResponse.Data.Base64EncodedPlainText;
             var dataKeyCipherText = dataKeyResponse.Data.Base64EncodedPlainText;
+
+            _authenticatedVaultClient.V1.System.UnmountSecretBackendAsync(path).Wait();
         }
 
         private static void RunKeyValueSamples()

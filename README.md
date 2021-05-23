@@ -213,7 +213,7 @@ var base64EncodedIamRequestHeaders = Convert.ToBase64String(Encoding.UTF8.GetByt
 
 // Step 4: Setup the IAM AWS Auth Info.
 
-IAuthMethodInfo authMethod = new IAMAWSAuthMethodInfo(nonce, roleName, base64EncodedIamRequestHeaders);
+IAuthMethodInfo authMethod = new IAMAWSAuthMethodInfo(nonce: nonce, roleName: roleName, requestHeaders: base64EncodedIamRequestHeaders);
 var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
 
 IVaultClient vaultClient = new VaultClient(vaultClientSettings);
@@ -1269,6 +1269,16 @@ var dataKeyCipherText = dataKeyResponse.Data.Base64EncodedCipherText;
 ```cs
 var allKeys = await _authenticatedVaultClient.V1.Secrets.Transit.ReadAllEncryptionKeysAsync();
 ````
+
+##### Trim Key
+
+```cs
+
+var trimOptions = new TrimKeyRequestOptions { MinimumAvailableVersion = 2 };
+
+await _authenticatedVaultClient.V1.Secrets.Transit.TrimKeyAsync(keyName, trimOptions);
+
+```
 
 ### System Backend
 
