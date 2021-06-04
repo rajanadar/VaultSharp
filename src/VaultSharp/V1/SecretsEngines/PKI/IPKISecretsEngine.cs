@@ -34,6 +34,30 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         Task<Secret<CertificateCredentials>> GetCredentialsAsync(string pkiRoleName, CertificateCredentialsRequestOptions certificateCredentialRequestOptions, string pkiBackendMountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
+        /// This endpoint signs a new certificate based upon the provided CSR and the supplied parameters,
+        /// subject to the restrictions contained in the role named in the endpoint.
+        /// The issuing CA certificate is returned as well, so that only the root CA need be in a client's trust store.
+        /// </summary>
+        /// <param name="pkiRoleName"><para>[required]</para>
+        /// Name of the PKI role.
+        /// </param>
+        /// <param name="signCertificateRequestOptions"><para>[required]</para>
+        /// The sign certificate request options.
+        /// </param>
+        /// <param name="pkiBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
+        /// Provide a value only if you have customized the PKI mount point.
+        /// </param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
+        /// <returns>
+        /// The secret with the signed Certificate.
+        /// </returns>
+        Task<Secret<SignedCertificateData>> SignCertificateAsync(string pkiRoleName, SignCertificatesRequestOptions signCertificateRequestOptions, string pkiBackendMountPoint = null, string wrapTimeToLive = null);
+
+        /// <summary>
         /// This endpoint revokes a certificate using its serial number. 
         /// This is an alternative option to the standard method of revoking using Vault lease IDs.
         /// A successful revocation will rotate the CRL.

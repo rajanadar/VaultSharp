@@ -24,6 +24,17 @@ namespace VaultSharp.V1.SecretsEngines.PKI
 
             return result;
         }
+        
+        public async Task<Secret<SignedCertificateData>> SignCertificateAsync(string pkiRoleName, SignCertificatesRequestOptions signCertificatesRequestOptions, string pkiBackendMountPoint = null, string wrapTimeToLive = null)
+        {
+            Checker.NotNull(pkiRoleName, "pkiRoleName");
+            Checker.NotNull(signCertificatesRequestOptions, "signCertificatesRequestOptions");
+
+            var result = await _polymath.MakeVaultApiRequest<Secret<SignedCertificateData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/sign/" + pkiRoleName, HttpMethod.Post, signCertificatesRequestOptions, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            result.Data.CertificateFormat = signCertificatesRequestOptions.CertificateFormat;
+
+            return result;
+        }
 
         public async Task<Secret<RevokeCertificateResponse>> RevokeCertificateAsync(string serialNumber, string pkiBackendMountPoint = null)
         {
@@ -54,5 +65,6 @@ namespace VaultSharp.V1.SecretsEngines.PKI
                 EncodedCertificateFormat = outputFormat
             };
         }
+
     }
 }
