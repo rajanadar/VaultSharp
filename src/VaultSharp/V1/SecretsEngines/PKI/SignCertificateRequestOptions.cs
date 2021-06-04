@@ -13,13 +13,13 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         ///  Specifies the PEM-encoded CSR
         /// </summary>
         /// <value>
-        /// The name of the common.
+        ///  Encoded CSR.
         /// </value>
         [JsonProperty("csr")]
         public string Csr { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CertificateCredentialsRequestOptions"/> class.
+        /// Initializes a new instance of the <see cref="SignCertificatesRequestOptions"/> class.
         /// </summary>
         public SignCertificatesRequestOptions() : base() { }
 
