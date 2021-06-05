@@ -1006,6 +1006,15 @@ Secret<CertificateCredentials> certSecret = await vaultClient.V1.Secrets.PKI.Get
 string privateKeyContent = certSecret.Data.PrivateKeyContent;
 ```
 
+##### Sign Certificate
+
+```cs
+var signCertificateRequestOptions = new SignCertificateRequestOptions { // initialize };
+Secret<SignedCertificateData> certSecret = await vaultClient.V1.Secrets.PKI.SignCertificateAsync(pkiRoleName, signCertificateRequestOptions);
+
+string certificateContent = certSecret.Data.CertificateContent;
+```
+
 ##### Revoke Certificate
 
 ```cs

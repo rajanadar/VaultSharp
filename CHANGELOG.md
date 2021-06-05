@@ -1,3 +1,9 @@
+## 1.6.2.3 (June 4, 2021)
+
+**FEATURES:**
+
+  * Implemented sign certificate endpoint of PKI secret engine. 
+
 ## 1.6.2.2 (May 23, 2021)
 
 **FEATURES:**
