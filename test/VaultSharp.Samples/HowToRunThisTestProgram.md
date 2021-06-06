@@ -1,17 +1,15 @@
 ﻿
+### How to run the VaultSharp End to End Flow
+
 1. VaultSharp.Samples is a simple console App.
 2. I debated between unit tests and a integration-like console app, and went with the console app
 3. It truly tests out the e2e flow.
-4. Before you run the app, do the following:
 
+Before you can run Program.cs, you need to start your Vault Server locally in a non-dev mode. This is what I do.
 
-1. Create a folder
-2. Have Vault.exe in it. The vault version can be figured by the 
-   ```
-   private const string ExpectedVaultVersion
-   ```
-   varible in Program.cs
-3. Start it with a file backend. Here is the sample hcl (f.hcl) and command I use.
+1. Create a folder anywhere on your file system.
+2. Copy a version of Vault.exe in this folder. Note down the Version. 
+3. Create a hcl file in this folder. My hcl file is as follows and named f.hcl:
 
 ```
 backend "file" {
@@ -26,14 +24,26 @@ listener "tcp" {
 raw_storage_endpoint = true
 ```
 
+4. Now, open a command prompt, go to this folder and start the Vault server, as follows:
+
 ```
 rd c:\raja\vault\file_backend /S /Q
 vault server -config c:\raja\vault\f.hcl
 ```
 
-4. This will start up the Vault server. That's it with the setup.
-5. Now run this Console App and check the ProgramOutput.txt file in your bin/debug folder. (not in the prject folder)
+At this point, we have a Vault Server running locally. That's the only step you need to do.
 
-Hopefully you get a nice text file.
+1. Now go to the VaultSharp C# solution
+2. Open Program.cs, and set the vault version variable to the version of your vault.exe 
+ - Note that the existing value would reflect the latest release of VaultSharp
+ - You can change that, if you are testing VaultSharp for your version of Vault. Most of the times, it'll work without any issues.
+
+   ```
+   private const string ExpectedVaultVersion
+   ```
+   
+3. Now run this Console App and check the ProgramOutput.txt file in your bin/debug folder.
+4. This file emits 2 blocks of JSON for every vault interaction. Block 1 is the JSON returned by the vault server. And Block 2 is the JSON of the POCO that we deserialized the Vault server json into. It helps me quickly find out if the Vault folks added new JSON fields or not. (Their docs doesn't have all fields sometimes)
+
 
 FYI: I dev on a Windows 10 x64 bit OS.
