@@ -16,6 +16,7 @@ namespace VaultSharp.Core
 {
     internal class Polymath
     {
+        private const string VaultRequestHeaderKey = "X-Vault-Request";
         private const string NamespaceHeaderKey = "X-Vault-Namespace";
         private const string AuthorizationHeaderKey = "Authorization";
         private const string VaultTokenHeaderKey = "X-Vault-Token";
@@ -214,6 +215,8 @@ namespace VaultSharp.Core
                     default:
                         throw new NotSupportedException("The Http Method is not supported: " + httpMethod);
                 }
+
+                httpRequestMessage.Headers.Add(VaultRequestHeaderKey, "true");
 
                 if (headers != null)
                 {

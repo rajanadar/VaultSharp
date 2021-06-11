@@ -42,7 +42,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The list of key-version pairs in the key ring.
         /// </summary>
         [JsonProperty("keys")]
-        public Dictionary<string, long> Keys { get; set; }
+        public Dictionary<string, object> Keys { get; set; }
 
         /// <summary>
         /// Specifies the minimum version of ciphertext allowed to be decrypted. Adjusting this as part

@@ -1,3 +1,13 @@
+## 1.6.2.4 (tbd)
+
+**IMPROVEMENTS:**
+
+  * VaultSharp now sets the ```X-Vault-Request: true``` header for all API calls.
+
+**BUG FIXES:**
+
+  * [GH-194] Fix deserialization error on ```ReadEncryptionKeyAsync``` for non ```aes256-gcm96``` based key rings.
+
 ## 1.6.2.3 (June 5, 2021)
 
 **FEATURES:**
