@@ -45,6 +45,18 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         public Dictionary<string, object> Keys { get; set; }
 
         /// <summary>
+        /// The latest version of the key ring.
+        /// </summary>
+        [JsonProperty("latest_version")]
+        public int LatestVersion { get; set; }
+
+        /// <summary>
+        /// The minimum available version of the key ring.
+        /// </summary>
+        [JsonProperty("min_available_version")]
+        public int MinimumAvailableVersion { get; set; }
+
+        /// <summary>
         /// Specifies the minimum version of ciphertext allowed to be decrypted. Adjusting this as part
         /// of a key rotation policy can prevent old copies of ciphertext from being decrypted, should
         /// they fall into the wrong hands. For signatures, this value controls the minimum version of

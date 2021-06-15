@@ -1,3 +1,9 @@
+## 1.6.2.5 (June 14, 2021)
+
+**IMPROVEMENTS:**
+
+  * [GH-194] Transit's ```ReadEncryptionKeyAsync``` returns the ```min_available_version``` and ```latest_version``` of the key ring.
+
 ## 1.6.2.4 (June 12, 2021)
 
 **IMPROVEMENTS:**
