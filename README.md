@@ -44,7 +44,12 @@ var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200"
 IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 
 // Use client to read a key-value secret.
-Secret<SecretData> kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("secret-name");
+
+// Very important to provide mountpath and secret name as two separate parameters. Don't provide a single combined string.
+// Please use named parameters for 100% clarity of code. (the method also takes version and wrapTimeToLive as params)
+
+Secret<SecretData> kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2
+                               .ReadSecretAsync(path: "secretPath", mountPoint: "mountPointIfNotDefault");
 
 // Generate a dynamic Consul credential
 Secret<ConsulCredentials> consulCreds = await vaultClient.V1.Secrets.Consul.GetCredentialsAsync(consulRole, consulMount);
