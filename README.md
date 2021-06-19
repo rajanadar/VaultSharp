@@ -836,7 +836,13 @@ var metadata = await vaultClient.V1.Secrets.KeyValue.V2.PatchSecretAsync(secretP
 
 ```cs
 // Use client to read a v2 key-value secret.
-Secret<Dictionary<string, object>> kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("v2-secret-name");
+
+// Very important to provide mountpath and secret name as two separate parameters. Don't provide a single combined string.
+// Please use named parameters for 100% clarity of code. (the method also takes version and wrapTimeToLive as params)
+
+Secret<Dictionary<string, object>> kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2
+                               .ReadSecretAsync(path: "v2-secret-name", mountPoint: "mountPointIfNotDefault");
+
 Dictionary<string, object> dataDictionary = kv2Secret.Data;
 ```
 
