@@ -19,7 +19,7 @@
  * VaultSharp  has first class support for Consul and Enterpise Vault APIs etc.
  * Enterprise APIs like Control Groups, Transform Secrets Engine &amp; KMIP Secrets Engine etc.
 
-    This library is built with .NET Standard 1.3, .NET Standard 2.0, .NET Standard 2.1, .NET Framework 4.5 4.6, 4.6.*, 4.7, 4.7.*, 4.8  &amp; .NET 5 and hence is cross-platform across .NET Core 1.x, 2.x, 3.x, .NET Frameworks 4.x, Xamarin iOS, Android, Mac, UWP etc.</Description>
+This library is built with .NET Standard 1.3, .NET Standard 2.0, .NET Standard 2.1, .NET Framework 4.5 4.6, 4.6.*, 4.7, 4.7.*, 4.8  &amp; .NET 5 and hence is cross-platform across .NET Core 1.x, 2.x, 3.x, .NET Frameworks 4.x, Xamarin iOS, Android, Mac, UWP etc.</Description>
     <RepositoryType>Github</RepositoryType>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AssemblyVersion>1.6.5.0</AssemblyVersion>
