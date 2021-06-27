@@ -37,22 +37,28 @@ namespace VaultSharp.Core
 #if NET45
             var handler = new WebRequestHandler();
 
-            // not the best place, but a very convenient place to add cert of certauthmethod.
-            if (vaultClientSettings.AuthMethodInfo?.AuthMethodType == AuthMethodType.Cert)
+            // if auth method is kerberos, then set the credentials in the handler.
+            if (vaultClientSettings.AuthMethodInfo?.AuthMethodType == AuthMethodType.Kerberos)
             {
-                var certAuthMethodInfo = vaultClientSettings.AuthMethodInfo as CertAuthMethodInfo;
-                handler.ClientCertificates.Add(certAuthMethodInfo.ClientCertificate);
+                var kerberosAuthMethodInfo = vaultClientSettings.AuthMethodInfo as KerberosAuthMethodInfo;
+                handler.PreAuthenticate = kerberosAuthMethodInfo.PreAuthenticate;
+                handler.Credentials = kerberosAuthMethodInfo.Credentials;
             }
+
+#elif NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NET48
+
+            var handler = new WinHttpHandler();
+
+            // if auth method is kerberos, then set the credentials in the handler.
+            if (vaultClientSettings.AuthMethodInfo?.AuthMethodType == AuthMethodType.Kerberos)
+            {
+                var kerberosAuthMethodInfo = vaultClientSettings.AuthMethodInfo as KerberosAuthMethodInfo;
+                handler.PreAuthenticate = kerberosAuthMethodInfo.PreAuthenticate;
+                handler.ServerCredentials = kerberosAuthMethodInfo.Credentials;
+            }
+
 #else
             var handler = new HttpClientHandler();
-
-            // not the best place, but a very convenient place to add cert of certauthmethod.
-            if (vaultClientSettings.AuthMethodInfo?.AuthMethodType == AuthMethodType.Cert)
-            {
-                var certAuthMethodInfo = vaultClientSettings.AuthMethodInfo as CertAuthMethodInfo;
-                handler.ClientCertificates.Add(certAuthMethodInfo.ClientCertificate);
-            }
-#endif
 
             // if auth method is kerberos, then set the credentials in the handler.
             if (vaultClientSettings.AuthMethodInfo?.AuthMethodType == AuthMethodType.Kerberos)
@@ -60,6 +66,15 @@ namespace VaultSharp.Core
                 var kerberosAuthMethodInfo = vaultClientSettings.AuthMethodInfo as KerberosAuthMethodInfo;
                 handler.PreAuthenticate = kerberosAuthMethodInfo.PreAuthenticate;
                 handler.Credentials = kerberosAuthMethodInfo.Credentials;
+            }
+
+#endif
+
+            // not the best place, but a very convenient place to add cert of certauthmethod.
+            if (vaultClientSettings.AuthMethodInfo?.AuthMethodType == AuthMethodType.Cert)
+            {
+                var certAuthMethodInfo = vaultClientSettings.AuthMethodInfo as CertAuthMethodInfo;
+                handler.ClientCertificates.Add(certAuthMethodInfo.ClientCertificate);
             }
 
             vaultClientSettings.PostProcessHttpClientHandlerAction?.Invoke(handler);

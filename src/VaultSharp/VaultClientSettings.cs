@@ -42,10 +42,10 @@ namespace VaultSharp
         public TimeSpan? VaultServiceTimeout { get; set; }
 
         /// <summary>
-        /// The one time http client's http client handler delegate.
+        /// The one time http client's http message handler delegate.
         /// Use this to set proxy settings etc.
         /// </summary>
-        public Action<HttpClientHandler> PostProcessHttpClientHandlerAction { get; set; }
+        public Action<HttpMessageHandler> PostProcessHttpClientHandlerAction { get; set; }
 
         /// <summary>
         /// The per http request delegate invoked before every vault api http request.
@@ -78,7 +78,7 @@ namespace VaultSharp
         /// Use the handler parameter to set proxy etc. 
         /// It is essential that your HttpClient use the handler, since it has certificate auth etc.
         /// </summary>
-        public Func<HttpClientHandler, HttpClient> MyHttpClientProviderFunc { get; set; }
+        public Func<HttpMessageHandler, HttpClient> MyHttpClientProviderFunc { get; set; }
 
         /// <summary>
         /// Use custom secret engine mount points globally rather than on every method call.

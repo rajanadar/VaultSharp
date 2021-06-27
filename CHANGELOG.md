@@ -1,3 +1,15 @@
+## 1.6.5 (June 26, 2021)
+
+**BREAKING CHANGES:**
+
+  * As part of .NET Framework 4.6.x and 4.7.x and 4.8 support, the delegates to set ```HttpClientHandler``` has changed to ```HttpMessagehandler```.
+
+**IMPROVEMENTS:**
+
+  * Add support for .NET 4.6 and 4.6.*, .NET 4.7 and .NET 4.8 and .NET 5.0
+  * [GH-197] Use ```WinHttpHandler``` instead of ```WebRequestHandler``` to support .NET 4.6 versions and higher.
+  * Upgrade to latest JSON dependency
+
 ## 1.6.2.5 (June 14, 2021)
 
 **IMPROVEMENTS:**
