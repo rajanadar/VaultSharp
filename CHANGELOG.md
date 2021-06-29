@@ -6,7 +6,7 @@
 
 **IMPROVEMENTS:**
 
-  * Add support for .NET 4.6 and 4.6.*, .NET 4.7 and .NET 4.8 and .NET 5.0
+  * Add support for .NET 4.6 and 4.6.x, .NET 4.7, .NET 4.7.x, .NET 4.8 and .NET 5.0
   * [GH-197] Use ```WinHttpHandler``` instead of ```WebRequestHandler``` to support .NET 4.6 versions and higher.
   * Upgrade to latest JSON dependency
 
