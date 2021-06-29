@@ -4,6 +4,10 @@
 
   * As part of .NET Framework 4.6.x and 4.7.x and 4.8 support, the delegates to set ```HttpClientHandler``` has changed to ```HttpMessagehandler```.
 
+**BUG FIXES:**
+
+  * [GH-197] Fix a bug with Certificate Auth not working for .NET 4.6 Apps, by replacing ```WebRequestHandler``` with ```WinHttpHandler```
+
 **IMPROVEMENTS:**
 
   * Add support for .NET 4.6 and 4.6.x, .NET 4.7, .NET 4.7.x, .NET 4.8 and .NET 5.0
