@@ -463,6 +463,24 @@ CreateTokenRequest request = new CreateTokenRequest();
 Secret<object> tokenData = await _authenticatedVaultClient.V1.Auth.Token.CreateTokenAsync(request);
 ```
 
+##### Token Lookup (any Token)
+
+ - You can use the ```LookupAsync``` method to lookup information about any Vault Token.
+
+```cs
+string token = "token-for-which-you-need-info";
+
+Secret<ClientTokenInfo> tokenData = await _authenticatedVaultClient.V1.Auth.Token.LookupAsync(token);
+```
+
+##### Token Lookup (Calling Token)
+
+ - You can use the ```LookupSelfAsync``` method to lookup information about your current Vault Token.
+
+```cs
+Secret<CallingTokenInfo> tokenData = await _authenticatedVaultClient.V1.Auth.Token.LookupSelfAsync();
+```
+
 #### Username and Password Auth Method
 
 ```cs
