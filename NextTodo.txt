@@ -1,0 +1,76 @@
+
+TODO:
+
+VaultChangelog has been looked at 100%
+
+0. All SecretData JSON Models are returned in ascending field order by Vault
+
+1.6.5.x
+
+
+        // 1. Add https://www.vaultproject.io/api/secret/transit#generate-random-bytes
+        // 2. https://www.vaultproject.io/api/secret/transit#hash-data
+        // 3. https://www.vaultproject.io/api/secret/transit#generate-hmac
+        // 4. https://www.vaultproject.io/api/secret/transit#sign-data
+        // 5. https://www.vaultproject.io/api/secret/transit#verify-signed-data
+        // 6. https://www.vaultproject.io/api/secret/transit#backup-key
+        // 7. https://www.vaultproject.io/api/secret/transit#restore-key
+        // 8. https://www.vaultproject.io/api/secret/transit#trim-key
+        // 9. https://www.vaultproject.io/api/secret/transit#configure-cache
+        // 10. https://www.vaultproject.io/api/secret/transit#read-transit-cache-configuration
+
+
+1.7.0
+
+aws auth
+
+aws/auth: AWS Auth concepts and endpoints that use the "whitelist" and "blacklist" terms have been updated to more inclusive language (e.g. /auth/aws/identity-whitelist has been updated to/auth/aws/identity-accesslist). The old and new endpoints are aliases, sharing the same underlying data. The legacy endpoint names are considered deprecated and will be removed in a future release (not before Vault 1.9). The complete list of endpoint changes is available in the AWS Auth API docs.
+
+auth/jwt: Adds max_age role parameter and auth_time claim validation. [GH-10919]
+See how to accomodate X-Vault-Index
+
+secrets/aws: add IAM tagging support for iam_user roles [GH-10953]
+secrets/database/cassandra: Add ability to customize dynamic usernames [GH-10906]
+secrets/database/couchbase: Add ability to customize dynamic usernames [GH-10995]
+secrets/database/mongodb: Add ability to customize dynamic usernames [GH-10858]
+secrets/database/mssql: Add ability to customize dynamic usernames [GH-10767]
+secrets/database/mysql: Add ability to customize dynamic usernames [GH-10834]
+secrets/database/postgresql: Add ability to customize dynamic usernames [GH-10766]
+secrets/db/snowflake: Added support for Snowflake to the Database Secret Engine [GH-10603]
+
+secrets/openldap: Added dynamic roles to OpenLDAP similar to the combined database engine [GH-10996]
+secrets/terraform: New secret engine for managing Terraform Cloud API tokens [GH-10931]
+
+
+auth/approle: Secrets ID generation endpoint now returns secret_id_ttl as part of its response. [GH-10826]
+auth/okta: Adds support for Okta Verify TOTP MFA. [GH-10942]
+
+
+core: Added active since timestamp to the status output of active nodes. [GH-10489]
+
+secrets/gcp: Truncate ServiceAccount display names longer than 100 characters. [GH-10558]
+
+DEPRECATIONS:
+
+aws/auth: AWS Auth endpoints that use the "whitelist" and "blacklist" terms have been deprecated. Refer to the CHANGES section for additional details.
+
+1.7.1
+
+auth/jwt: Adds ability to directly provide service account JSON in G Suite provider config. [GH-11388]
+
+1.7.2
+
+http: Add optional HTTP response headers for hostname and raft node ID [GH-11289]
+
+secrets/aws: add ability to provide a role session name when generating STS credentials [GH-11345]
+
+secrets/database/mongodb: Add ability to customize SocketTimeout, ConnectTimeout, and ServerSelectionTimeout [GH-11600]
+
+
+1.7.3
+
+db/cassandra: Added tls_server_name to specify server name for TLS validation [GH-11820]
+
+1.8.0-rc1
+
+< do it once released >

@@ -1,3 +1,9 @@
+## 1.6.5.1 (July 18, 2021)
+
+**IMPROVEMENTS:**
+
+  * Add support for ```export-key``` api of ```Transit``` Secret Engine
+
 ## 1.6.5 (June 26, 2021)
 
 **BREAKING CHANGES:**

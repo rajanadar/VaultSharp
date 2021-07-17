@@ -1319,6 +1319,16 @@ await _authenticatedVaultClient.V1.Secrets.Transit.TrimKeyAsync(keyName, trimOpt
 
 ```
 
+##### Export Key
+
+```cs
+
+string version = "latest";
+
+Secret<ExportedKeyInfo> exportedKeyInfo = await _authenticatedVaultClient.V1.Secrets.Transit.ExportKeyAsync(TransitKeyCategory.encryption_key, keyName, version);
+
+```
+
 ### System Backend
 
 - The system backend is a default backend in Vault that is mounted at the /sys endpoint.

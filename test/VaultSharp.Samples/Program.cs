@@ -180,7 +180,7 @@ namespace VaultSharp.Samples
             _authenticatedVaultClient.V1.System.MountSecretBackendAsync(transitSecretsEngine).Wait();
 
             var keyName = Guid.NewGuid().ToString();
-            _authenticatedVaultClient.V1.Secrets.Transit.CreateEncryptionKeyAsync(keyName, new CreateKeyRequestOptions(), path).Wait();
+            _authenticatedVaultClient.V1.Secrets.Transit.CreateEncryptionKeyAsync(keyName, new CreateKeyRequestOptions() { Exportable = true }, path).Wait();
 
             var context = "context1";
             var plainText = "raja";
@@ -254,6 +254,14 @@ namespace VaultSharp.Samples
 
             // var trimOptions = new TrimKeyRequestOptions { MinimumAvailableVersion = 1 };
             // _authenticatedVaultClient.V1.Secrets.Transit.TrimKeyAsync(keyName, trimOptions).Wait();
+
+            var exportedKey = _authenticatedVaultClient.V1.Secrets.Transit
+                .ExportKeyAsync(TransitKeyCategory.encryption_key, keyName, version: null, path).Result;
+            DisplayJson(exportedKey);
+
+            exportedKey = _authenticatedVaultClient.V1.Secrets.Transit
+                .ExportKeyAsync(TransitKeyCategory.encryption_key, keyName, version: "latest", path).Result;
+            DisplayJson(exportedKey);
 
             _authenticatedVaultClient.V1.System.UnmountSecretBackendAsync(path).Wait();
         }

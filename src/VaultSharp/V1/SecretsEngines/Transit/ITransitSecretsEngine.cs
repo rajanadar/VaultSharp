@@ -205,5 +205,32 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
         Task TrimKeyAsync(string keyName, TrimKeyRequestOptions trimKeyRequestOptions, string mountPoint = null);
+
+        /// <summary>
+        /// This endpoint returns the named key. 
+        /// The `keys` object shows the value of the key for each version. 
+        /// If version is specified, the specific version will be returned. 
+        /// If latest is provided as the version, the current key will be provided. 
+        /// Depending on the type of key, different information may be returned. 
+        /// The key must be exportable to support this operation and the version must still be valid.
+        /// </summary>
+        /// <param name="keyType"><para>[required]</para>
+        /// Specifies the type of the key to export.
+        /// </param>
+        /// <param name="keyName"><para>[required]</para>
+        /// Specifies the name of the key to read information about. 
+        /// </param>
+        /// <param name="version"><para>[optional]</para>
+        /// Specifies the version of the key to read. 
+        /// If omitted, all versions of the key will be returned. 
+        /// This is specified as part of the URL. 
+        /// If the version is set to latest, the current key will be returned.
+        /// </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>Nothing is returned. No error means the operation was successful.</returns>
+        Task<Secret<ExportedKeyInfo>> ExportKeyAsync(TransitKeyCategory keyType, string keyName, string version = null, string mountPoint = null);
     }
 }

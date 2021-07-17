@@ -118,5 +118,19 @@ namespace VaultSharp.V1.SecretsEngines.Transit
                 trimKeyRequestOptions)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
+
+        public async Task<Secret<ExportedKeyInfo>> ExportKeyAsync(TransitKeyCategory keyType, 
+            string keyName, string version = null, string mountPoint = null)
+        {
+            Checker.NotNull(keyName, "keyName");
+
+            return await _polymath.MakeVaultApiRequest<Secret<ExportedKeyInfo>>(
+                mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Transit,
+                "/export/" + keyType.ToString().Replace("_", "-") + "/" + keyName + 
+                (string.IsNullOrEmpty(version) ? "" : "/" + version),
+                HttpMethod.Get)
+                .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+
+        }
     }
 }
