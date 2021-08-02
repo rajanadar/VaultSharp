@@ -42,6 +42,12 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// </summary>
         [JsonProperty("no_parent")]
         public bool NoParent { get; set; }
+        
+        /// <summary>
+        /// When set to true, the token will be created via create-orphan endpoint.
+        /// </summary>
+        [JsonIgnore]
+        public bool CreateOrphan { get; set; }
 
         /// <summary>
         /// If true the default policy will not be contained in this token's policy set.

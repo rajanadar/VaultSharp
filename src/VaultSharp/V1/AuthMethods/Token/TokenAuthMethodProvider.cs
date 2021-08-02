@@ -23,14 +23,14 @@ namespace VaultSharp.V1.AuthMethods.Token
 
             var suffix = "create";
 
-            if (createTokenRequest.NoParent)
+            if (request.CreateOrphan)
             {
                 suffix = "create-orphan";
             }
 
-            if (!string.IsNullOrWhiteSpace(createTokenRequest.RoleName))
+            if (!string.IsNullOrWhiteSpace(request.RoleName))
             {
-                suffix = "create/" + createTokenRequest.RoleName.Trim('/');
+                suffix = "create/" + request.RoleName.Trim('/');
             }
 
             return await _polymath.MakeVaultApiRequest<Secret<object>>("v1/auth/token/" + suffix, HttpMethod.Post, request).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
