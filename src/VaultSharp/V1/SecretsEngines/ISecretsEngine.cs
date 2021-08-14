@@ -16,6 +16,7 @@ using VaultSharp.V1.SecretsEngines.OpenLDAP;
 using VaultSharp.V1.SecretsEngines.PKI;
 using VaultSharp.V1.SecretsEngines.RabbitMQ;
 using VaultSharp.V1.SecretsEngines.SSH;
+using VaultSharp.V1.SecretsEngines.Terraform;
 using VaultSharp.V1.SecretsEngines.TOTP;
 using VaultSharp.V1.SecretsEngines.Transit;
 
@@ -115,6 +116,11 @@ namespace VaultSharp.V1.SecretsEngines
         /// The SSH Secrets Engine.
         /// </summary>
         ISSHSecretsEngine SSH { get; }
+
+        /// <summary>
+        /// The Terraform Secrets Engine.
+        /// </summary>
+        ITerraformSecretsEngine Terraform { get; }
 
         /// <summary>
         /// The TOTP Secrets Engine.

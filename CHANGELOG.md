@@ -1,3 +1,13 @@
+## 1.7.0 (August 14, 2021)
+
+**FEATURES:**
+
+  * Add support for the ```Terraform Cloud``` Secret Backend
+
+**IMPROVEMENTS:**
+
+  * Add support for ```orphaned tokens``` in ```create-token``` api, avoiding suod access
+
 ## 1.6.5.1 (July 17, 2021)
 
 **IMPROVEMENTS:**

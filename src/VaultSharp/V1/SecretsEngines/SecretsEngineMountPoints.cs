@@ -26,6 +26,7 @@ namespace VaultSharp.V1.SecretsEngines
             public const string PKI = "pki";
             public const string RabbitMQ = "rabbitmq";
             public const string SSH = "ssh";
+            public const string Terraform = "terraform";
             public const string TOTP = "totp";
             public const string Transform = "transform";
             public const string Transit = "transit";
@@ -61,6 +62,8 @@ namespace VaultSharp.V1.SecretsEngines
         public string PKI { get; set; } = Defaults.PKI;
         public string RabbitMQ { get; set; } = Defaults.RabbitMQ;
         public string SSH { get; set; } = Defaults.SSH;
+
+        public string Terraform { get; set; } = Defaults.Terraform;
         public string TOTP { get; set; } = Defaults.TOTP;
         public string Transform { get; set; } = Defaults.Transform;
         public string Transit { get; set; } = Defaults.Transit;

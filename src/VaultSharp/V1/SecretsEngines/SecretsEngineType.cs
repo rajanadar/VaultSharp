@@ -106,6 +106,14 @@ namespace VaultSharp.V1.SecretsEngines
         public static SecretsEngineType SSH { get; } = new SecretsEngineType(SecretsEngineMountPoints.Defaults.SSH);
 
         /// <summary>
+        /// Gets the Terraform type.
+        /// </summary>
+        /// <value>
+        /// The Terraform.
+        /// </value>
+        public static SecretsEngineType Terraform { get; } = new SecretsEngineType(SecretsEngineMountPoints.Defaults.Terraform);
+
+        /// <summary>
         /// Gets the TOTP type.
         /// </summary>
         /// <value>

@@ -1103,6 +1103,19 @@ Secret<SignedKeyResponse> signedKey = await vaultClient.V1.Secrets.SSH.SignKeyAs
 string signedKey = signedKey.Data.SignedKey;
 ```
 
+#### Terraform Cloud Secrets Engine
+
+##### Generate credentials
+
+- This endpoint returns a Terraform Cloud token based on the given role definition. 
+- For Organization and Team roles, the same API token is returned until the token is rotated with rotate-role. 
+- For User roles, a new token is generated with each request.
+
+```cs
+Secret<TerraformCredentials> secret = await vaultClient.V1.Secrets.Terraform.GetCredentialsAsync(role);
+string token = secret.Data.Token;
+string tokenId = secret.Data.TokenId;
+
 #### TOTP Secrets Engine
 
 ##### Generate Code

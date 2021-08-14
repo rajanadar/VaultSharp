@@ -30,7 +30,7 @@ namespace VaultSharp.V1.AuthMethods.Token
 
             if (!string.IsNullOrWhiteSpace(request.RoleName))
             {
-                suffix = "create/" + request.RoleName.Trim('/');
+                suffix = suffix + "/" + request.RoleName.Trim('/');
             }
 
             return await _polymath.MakeVaultApiRequest<Secret<object>>("v1/auth/token/" + suffix, HttpMethod.Post, request).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);

@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods;
 using VaultSharp.V1.AuthMethods.AppRole;
-using VaultSharp.V1.AuthMethods.AWS;
 using VaultSharp.V1.AuthMethods.Token;
 using VaultSharp.V1.Commons;
 using VaultSharp.V1.SecretsEngines;
@@ -22,7 +21,7 @@ namespace VaultSharp.Samples
 {
     class Program
     {
-        private const string ExpectedVaultVersion = "1.6.0";
+        private const string ExpectedVaultVersion = "1.7.0";
 
         private static IVaultClient _unauthenticatedVaultClient;
         private static IVaultClient _authenticatedVaultClient;
