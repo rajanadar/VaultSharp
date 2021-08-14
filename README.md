@@ -1115,6 +1115,7 @@ string signedKey = signedKey.Data.SignedKey;
 Secret<TerraformCredentials> secret = await vaultClient.V1.Secrets.Terraform.GetCredentialsAsync(role);
 string token = secret.Data.Token;
 string tokenId = secret.Data.TokenId;
+```
 
 #### TOTP Secrets Engine
 
