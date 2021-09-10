@@ -122,9 +122,9 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// Provide a value only if you have customized the PKI mount point.
         /// </param>
         /// <returns>
-        /// The certificate data
+        /// The secret with the certificate data
         /// </returns>
-        Task<CertificateData> ReadCertificateAsync(string serialNumber, string pkiBackendMountPoint = null);
+        Task<Secret<CertificateData>> ReadCertificateAsync(string serialNumber, string pkiBackendMountPoint = null);
 
         /// <summary>
         /// Retrieves a list of all certificate keys (serial numbers).
@@ -134,8 +134,8 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// Provide a value only if you have customized the PKI mount point.
         /// </param>
         /// <returns>
-        /// A list of certificate keys (serial numbers)
+        /// The secret with the list of certificate keys (serial numbers)
         /// </returns>
-        Task<List<string>> ListCertificatesAsync(string pkiBackendMountPoint = null);
+        Task<Secret<CertificateKeys>> ListCertificatesAsync(string pkiBackendMountPoint = null);
     }
 }

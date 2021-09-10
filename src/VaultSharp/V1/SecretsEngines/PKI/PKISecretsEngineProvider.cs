@@ -67,28 +67,31 @@ namespace VaultSharp.V1.SecretsEngines.PKI
             };
         }
 
-        public async Task<CertificateData> ReadCertificateAsync(string serialNumber, string pkiBackendMountPoint = null)
+        public async Task<Secret<CertificateData>> ReadCertificateAsync(string serialNumber, string pkiBackendMountPoint = null)
         {
             Checker.NotNull(serialNumber, "serialNumber");
 
             var certificateDataSecret = await _polymath.MakeVaultApiRequest<Secret<CertificateData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/cert/" + serialNumber , HttpMethod.Get, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
-            var certificateData = certificateDataSecret.Data;
-
-            if (string.IsNullOrEmpty(certificateData.SerialNumber))
+            
+            // Populate properties not set by vault API
+            if (string.IsNullOrEmpty(certificateDataSecret.Data.SerialNumber))
             {
-                certificateData.SerialNumber = serialNumber;
+                certificateDataSecret.Data.SerialNumber = serialNumber;
             }
 
-            certificateData.CertificateFormat = CertificateFormat.pem;
+            if (certificateDataSecret.Data.CertificateFormat == CertificateFormat.None)
+            {
+                certificateDataSecret.Data.CertificateFormat = CertificateFormat.pem;
+            }
 
-            return certificateData;
+            return certificateDataSecret;
         }
 
-        public async Task<List<string>> ListCertificatesAsync(string pkiBackendMountPoint = null)
+        public async Task<Secret<CertificateKeys>> ListCertificatesAsync(string pkiBackendMountPoint = null)
         {
             var result = await _polymath.MakeVaultApiRequest<Secret<CertificateKeys>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/certs?list=true", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
-            return result.Data.Keys;
+            return result;
         }
     }
 }
