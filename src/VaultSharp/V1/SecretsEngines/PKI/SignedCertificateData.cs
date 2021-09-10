@@ -5,7 +5,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
     /// <summary>
     /// Represents the signed Certificate.
     /// </summary>
-    public class SignedCertificateData : AbstractCertificateData
+    public class SignedCertificateData : AbstractIssuedCertificateData
     {
     }
 }

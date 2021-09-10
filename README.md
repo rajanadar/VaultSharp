@@ -1025,7 +1025,7 @@ string username = credentials.Data.Username;
 string password = credentials.Data.Password;
 ```
 
-#### PKI (Cerificates) Secrets Engine
+#### PKI (Certificates) Secrets Engine
 
 ##### Generate credentials
 
@@ -1057,6 +1057,26 @@ long revocationTime = revoke.Data.RevocationTime;
 ```cs
 var request = new CertificateTidyRequest { TidyCertStore = false, TidyRevokedCerts = true };
 await vaultClient.V1.Secrets.PKI.TidyAsync(request);
+```
+
+##### List certificates
+
+ - This endpoint retrieves a list of certificate keys (serial numbers)
+
+```cs
+var keys = await vaultClient.V1.Secrets.PKI.ListCertificatesAsync(mountpoint);
+Assert.IsTrue(keys.Any(k => k == "17:67:16:b0:b9:45:58:c0:3a:29:e3:cb:d6:98:33:7a:a6:3b:66:c1"));
+```
+
+##### Read certificate
+
+ - This endpoint retrieves a certificate by key (serial number)
+ - The certificate format is always PEM.
+ - This is an unauthenticated endpoint.
+
+```cs
+var cert = await vaultClient.V1.Secrets.PKI.ReadCertificateAsync("17:67:16:b0:b9:45:58:c0:3a:29:e3:cb:d6:98:33:7a:a6:3b:66:c1", mountpoint);
+Assert.NotNull(cert.CertificateContent);
 ```
 
 ##### Read CA Certificate

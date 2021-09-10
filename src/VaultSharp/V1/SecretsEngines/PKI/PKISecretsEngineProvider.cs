@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
@@ -66,5 +67,28 @@ namespace VaultSharp.V1.SecretsEngines.PKI
             };
         }
 
+        public async Task<CertificateData> ReadCertificateAsync(string serialNumber, string pkiBackendMountPoint = null)
+        {
+            Checker.NotNull(serialNumber, "serialNumber");
+
+            var certificateDataSecret = await _polymath.MakeVaultApiRequest<Secret<CertificateData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/cert/" + serialNumber , HttpMethod.Get, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            var certificateData = certificateDataSecret.Data;
+
+            if (string.IsNullOrEmpty(certificateData.SerialNumber))
+            {
+                certificateData.SerialNumber = serialNumber.ToLower().Replace("-", ":"); // To be consistent with serial number format returned in other endpoints by Vault (even though it accepts dashes as input as well)
+            }
+
+            certificateData.CertificateFormat = CertificateFormat.pem;
+
+            return certificateData;
+        }
+
+        public async Task<List<string>> ListCertificatesAsync(string pkiBackendMountPoint = null)
+        {
+            var result = await _polymath.MakeVaultApiRequest<Secret<CertificateKeys>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/certs", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+
+            return result.Data.Keys;
+        }
     }
 }

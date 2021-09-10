@@ -5,7 +5,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
     /// <summary>
     /// Represents the generated Certificate credentials.
     /// </summary>
-    public class CertificateCredentials : AbstractCertificateData
+    public class CertificateCredentials : AbstractIssuedCertificateData
     {
         /// <summary>
         /// Gets or sets the private key.

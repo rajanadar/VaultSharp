@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.SecretsEngines.PKI
@@ -105,5 +106,36 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The raw certificate data.
         /// </returns>
         Task<RawCertificateData> ReadCACertificateAsync(CertificateFormat certificateFormat = CertificateFormat.der, string pkiBackendMountPoint = null);
+
+        /// <summary>
+        /// Retrieves a certificate by key (serial number). The certificate format is always <see cref="CertificateFormat.pem"/>.
+        /// This is an unauthenticated endpoint.
+        /// </summary>
+        /// <param name="serialNumber">
+        /// The serial number of the certificate to be retrieved (Example: '17:67:16:b0:b9:45:58:c0:3a:29:e3:cb:d6:98:33:7a:a6:3b:66:c1').
+        /// To retrieve the CA certificate, use the value 'ca'.
+        /// To retrieve the CA Chain, use the value 'ca_chain'.
+        /// To retrieve the current CRL, use the value 'crl'.
+        /// </param>
+        /// <param name="pkiBackendMountPoint">
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
+        /// Provide a value only if you have customized the PKI mount point.
+        /// </param>
+        /// <returns>
+        /// The certificate data
+        /// </returns>
+        Task<CertificateData> ReadCertificateAsync(string serialNumber, string pkiBackendMountPoint = null);
+
+        /// <summary>
+        /// Retrieves a list of all certificate keys (serial numbers).
+        /// </summary>
+        /// <param name="pkiBackendMountPoint">
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
+        /// Provide a value only if you have customized the PKI mount point.
+        /// </param>
+        /// <returns>
+        /// A list of certificate keys (serial numbers)
+        /// </returns>
+        Task<List<string>> ListCertificatesAsync(string pkiBackendMountPoint = null);
     }
 }
