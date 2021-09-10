@@ -76,7 +76,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
 
             if (string.IsNullOrEmpty(certificateData.SerialNumber))
             {
-                certificateData.SerialNumber = serialNumber.ToLower().Replace("-", ":"); // To be consistent with serial number format returned in other endpoints by Vault (even though it accepts dashes as input as well)
+                certificateData.SerialNumber = serialNumber;
             }
 
             certificateData.CertificateFormat = CertificateFormat.pem;
@@ -86,7 +86,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
 
         public async Task<List<string>> ListCertificatesAsync(string pkiBackendMountPoint = null)
         {
-            var result = await _polymath.MakeVaultApiRequest<Secret<CertificateKeys>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/certs", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            var result = await _polymath.MakeVaultApiRequest<Secret<CertificateKeys>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/certs?list=true", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
             return result.Data.Keys;
         }
