@@ -1,3 +1,14 @@
+## 1.7.1 (September 10, 2021)
+
+**BREAKING CHANGES:**
+
+  * The properties ```IssuingCACertificateContent``` and ```CAChainContent``` of the base class ```AbstractCertificateData``` has been moved to a subclass ```AbstractIssuedCertificateData```.
+
+**FEATURES:**
+
+  * Implemented PKI secret engine endpoint to read a certificate by key (serial number).
+  * Implemented PKI secret engine endpoint to retrieve a list of certificate keys (serial numbers).
+
 ## 1.7.0 (August 14, 2021)
 
 **FEATURES:**
