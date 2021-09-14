@@ -1,3 +1,9 @@
+## 1.7.1.1 (September 14th, 2021)
+
+**IMPROVEMENTS:**
+
+  * Changed type of property ```Expiration``` in ```CertificateCredentials``` from ```int``` to ```long```.
+
 ## 1.7.1 (September 10, 2021)
 
 **BREAKING CHANGES:**

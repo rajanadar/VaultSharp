@@ -32,6 +32,6 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The expiration.
         /// </value>
         [JsonProperty("expiration")]
-        public int Expiration { get; set; }
+        public long Expiration { get; set; }
     }
 }
