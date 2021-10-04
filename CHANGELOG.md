@@ -1,10 +1,4 @@
-## 1.7.1.1 (September 14th, 2021)
-
-**IMPROVEMENTS:**
-
-  * Changed type of property ```Expiration``` in ```CertificateCredentials``` from ```int``` to ```long```.
-
-## 1.7.1 (September 10, 2021)
+## 1.7.0.1 (October 03, 2021)
 
 **BREAKING CHANGES:**
 
@@ -14,6 +8,10 @@
 
   * Implemented PKI secret engine endpoint to read a certificate by key (serial number).
   * Implemented PKI secret engine endpoint to retrieve a list of certificate keys (serial numbers).
+
+**IMPROVEMENTS:**
+
+  * Changed type of property ```Expiration``` in ```CertificateCredentials``` from ```int``` to ```long```.
 
 ## 1.7.0 (August 14, 2021)
 
