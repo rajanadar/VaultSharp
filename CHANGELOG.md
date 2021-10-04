@@ -1,3 +1,9 @@
+## 1.7.0.2 (October 04, 2021)
+
+**IMPROVEMENTS:**
+
+  * [GH-220] Improved the token initialization code by retrying when errors happen first time.
+
 ## 1.7.0.1 (October 03, 2021)
 
 **BREAKING CHANGES:**
