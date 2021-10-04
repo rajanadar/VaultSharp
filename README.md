@@ -430,6 +430,10 @@ IAuthMethodInfo authMethod = new CertAuthMethodInfo(certificate);
 // Optionally, you can also provide a Certificate Role Name during Auth.
 // IAuthMethodInfo authMethod = new CertAuthMethodInfo(certificate, certificateRoleName);
 
+// And if you want to use the full chain of client-certificates, then use this overload
+// X509Certificate2Collection x509Certificate2Collection = <load the full chain of certs>;
+// IAuthMethodInfo authMethod = new CertAuthMethodInfo(x509Certificate2Collection);
+
 var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
 
 IVaultClient vaultClient = new VaultClient(vaultClientSettings);

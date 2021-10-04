@@ -2,6 +2,7 @@
 
 **IMPROVEMENTS:**
 
+  * [GH-215] Certificate Auth now takes a chain of certificates.
   * [GH-220] Improved the token initialization code by retrying when errors happen first time.
 
 ## 1.7.0.1 (October 03, 2021)

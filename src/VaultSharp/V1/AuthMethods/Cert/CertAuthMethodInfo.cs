@@ -36,6 +36,16 @@ namespace VaultSharp.V1.AuthMethods.Cert
         public X509Certificate2 ClientCertificate { get; }
 
         /// <summary>
+        /// Gets the collection of client certificates including the chain.
+        /// Use this property if you want to attach the full chain of certs.
+        /// Use either this property or the <see cref="ClientCertificate"/> property, not both.
+        /// </summary>
+        /// <value>
+        /// The client certificates.
+        /// </value>
+        public X509Certificate2Collection ClientCertificateCollection { get; }
+
+        /// <summary>
         /// Optionally, you may specify a single certificate role to authenticate against.
         /// </summary>
         public string RoleName { get; }
@@ -67,6 +77,31 @@ namespace VaultSharp.V1.AuthMethods.Cert
 
             MountPoint = mountPoint;
             ClientCertificate = clientCertificate;
+            RoleName = roleName;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CertAuthMethodInfo" /> class.
+        /// </summary>
+        /// <param name="clientCertificateCollection">The client certificate including the chain.</param>
+        /// <param name="roleName">A single certificate role to authenticate against.</param>
+        public CertAuthMethodInfo(X509Certificate2Collection clientCertificateCollection, string roleName = null) : this(AuthMethodType.Cert.Type, clientCertificateCollection, roleName)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CertAuthMethodInfo"/> class.
+        /// </summary>
+        /// <param name="mountPoint">The mount point.</param>
+        /// <param name="clientCertificateCollection">The client certificate including the chain.</param>
+        /// <param name="roleName">A single certificate role to authenticate against.</param>
+        public CertAuthMethodInfo(string mountPoint, X509Certificate2Collection clientCertificateCollection, string roleName = null)
+        {
+            Checker.NotNull(mountPoint, "mountPoint");
+            Checker.NotNull(clientCertificateCollection, "clientCertificateCollection");
+
+            MountPoint = mountPoint;
+            ClientCertificateCollection = clientCertificateCollection;
             RoleName = roleName;
         }
     }

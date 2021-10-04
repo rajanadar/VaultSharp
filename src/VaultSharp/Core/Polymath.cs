@@ -75,7 +75,18 @@ namespace VaultSharp.Core
             if (vaultClientSettings.AuthMethodInfo?.AuthMethodType == AuthMethodType.Cert)
             {
                 var certAuthMethodInfo = vaultClientSettings.AuthMethodInfo as CertAuthMethodInfo;
-                handler.ClientCertificates.Add(certAuthMethodInfo.ClientCertificate);
+
+                if (certAuthMethodInfo.ClientCertificate != null)
+                {
+                    handler.ClientCertificates.Add(certAuthMethodInfo.ClientCertificate);
+                }
+                else
+                {
+                    if (certAuthMethodInfo.ClientCertificateCollection != null)
+                    {
+                        handler.ClientCertificates.AddRange(certAuthMethodInfo.ClientCertificateCollection);
+                    }
+                }
             }
 
             vaultClientSettings.PostProcessHttpClientHandlerAction?.Invoke(handler);
