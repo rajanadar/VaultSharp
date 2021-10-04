@@ -42,6 +42,6 @@ namespace VaultSharp.V1.SystemBackend
         /// Gets or sets the time to live for the lease.
         /// </summary>
         [JsonProperty("ttl", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public int TimeToLive { get; set; }
+        public long TimeToLive { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace VaultSharp.V1.Commons
         /// The time to live.
         /// </value>
         [JsonProperty("ttl")]
-        public int TimeToLive { get; set; }
+        public long TimeToLive { get; set; }
 
         /// <summary>
         /// Gets or sets the creation time.

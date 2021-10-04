@@ -14,7 +14,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// The creation time.
         /// </value>
         [JsonProperty("creation_time")]
-        public int CreationTime { get; set; }
+        public long CreationTime { get; set; }
 
         /// <summary>
         /// Gets or sets the creation time to live.
@@ -23,7 +23,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// The creation time to live.
         /// </value>
         [JsonProperty("creation_ttl")]
-        public int CreationTimeToLive { get; set; }
+        public long CreationTimeToLive { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="TokenAccessorInfo"/> is orphan.
@@ -41,7 +41,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// The time to live.
         /// </value>
         [JsonProperty("ttl")]
-        public int TimeToLive { get; set; }
+        public long TimeToLive { get; set; }
 
         /// <summary>
         /// Gets or sets the type

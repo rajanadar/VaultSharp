@@ -23,7 +23,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The revocation time.
         /// </value>
         [JsonProperty("revocation_time")]
-        public int RevocationTime { get; set; }
+        public long RevocationTime { get; set; }
 
         /// <summary>
         /// Gets or sets the encoded certificate format.

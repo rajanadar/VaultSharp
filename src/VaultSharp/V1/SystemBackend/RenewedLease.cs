@@ -24,6 +24,6 @@ namespace VaultSharp.V1.SystemBackend
         /// Gets or sets the time to live for the lease.
         /// </summary>
         [JsonProperty("lease_duration")]
-        public int LeaseDuration { get; set; }
+        public long LeaseDuration { get; set; }
     }
 }

@@ -23,7 +23,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// The explicit maximum time to live.
         /// </value>
         [JsonProperty("explicit_max_ttl")]
-        public int ExplicitMaximumTimeToLive { get; set; }
+        public long ExplicitMaximumTimeToLive { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="CallingTokenInfo"/> is renewable.

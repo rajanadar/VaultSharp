@@ -32,6 +32,6 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
         /// The ttl.
         /// </value>
         [JsonProperty("token_ttl")]
-        public int TokenTimeToLive { get; set; }
+        public long TokenTimeToLive { get; set; }
     }
 }

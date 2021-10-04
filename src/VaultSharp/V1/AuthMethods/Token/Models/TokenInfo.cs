@@ -82,7 +82,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         ///   The epoch of the last renewal time
         /// </value>
         [JsonProperty("last_renewal_time", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public int LastRenewalTime { get; set; }
+        public long LastRenewalTime { get; set; }
 
         /// <summary>
         /// Gets or sets the entity id.

@@ -23,12 +23,12 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// Specifies the rotation period for this cred.
         /// </summary>
         [JsonProperty("rotation_period")]
-        public int RotationPeriod { get; set; }
+        public long RotationPeriod { get; set; }
 
         /// <summary>
         /// Specifies the remaining time for the creds.
         /// </summary>
         [JsonProperty("ttl")]
-        public int TimeToLive { get; set; }
+        public long TimeToLive { get; set; }
     }
 }

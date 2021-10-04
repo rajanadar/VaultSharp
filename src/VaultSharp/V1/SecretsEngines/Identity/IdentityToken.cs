@@ -23,6 +23,6 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// Gets or sets the time to live.
         /// </summary>
         [JsonProperty("ttl")]
-        public int TimeToLive { get; set; }
+        public long TimeToLive { get; set; }
     }
 }

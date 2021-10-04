@@ -1,4 +1,8 @@
-## 1.7.0.2 (October 04, 2021)
+## 1.7.0.2 (TBD)
+
+**POTENTIAL BREAKING CHANGES:**
+
+  * [GH-217] Data type of Epoch based time properties change from int to long, across the board. This should not cause any breaking behavior in most cases, since it is an upgrade.
 
 **IMPROVEMENTS:**
 

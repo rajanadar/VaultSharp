@@ -34,6 +34,6 @@ namespace VaultSharp.V1.SystemBackend
         /// The creation time to live.
         /// </value>
         [JsonProperty("creation_ttl")]
-        public int CreationTimeToLive { get; set; }
+        public long CreationTimeToLive { get; set; }
     }
 }

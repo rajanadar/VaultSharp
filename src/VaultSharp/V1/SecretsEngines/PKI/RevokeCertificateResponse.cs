@@ -14,6 +14,6 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The revocation time.
         /// </value>
         [JsonProperty("revocation_time")]
-        public int RevocationTime { get; set; }
+        public long RevocationTime { get; set; }
     }
 }

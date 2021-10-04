@@ -15,7 +15,7 @@ namespace VaultSharp.Core
         /// The default lease TTL.
         /// </value>
         [JsonProperty("default_lease_ttl")]
-        public int DefaultLeaseTtl { get; set; }
+        public long DefaultLeaseTtl { get; set; }
 
         /// <summary>
         /// Gets or sets the cache flag.
@@ -34,7 +34,7 @@ namespace VaultSharp.Core
         /// The maximum lease TTL.
         /// </value>
         [JsonProperty("max_lease_ttl")]
-        public int MaximumLeaseTtl { get; set; }
+        public long MaximumLeaseTtl { get; set; }
 
         // raja todo: this sounds non-generic.
 
