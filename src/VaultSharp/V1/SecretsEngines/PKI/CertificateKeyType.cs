@@ -25,8 +25,8 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         ec = 2,
 
         /// <summary>
-        /// The RSA Key type.
+        /// The Ed25519 Key type.
         /// </summary>
-        ed25519 = 1,
+        ed25519 = 3,
     }
 }
