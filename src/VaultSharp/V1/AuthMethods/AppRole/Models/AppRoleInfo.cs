@@ -15,7 +15,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole.Models
         /// Duration in seconds.
         /// </summary>
         [JsonProperty("token_ttl")]
-        public int TokenTTL { get; internal set; }
+        public int TokenTTL { get; set; }
 
         /// <summary>
         /// The maximum lifetime for generated tokens. 
@@ -23,14 +23,14 @@ namespace VaultSharp.V1.AuthMethods.AppRole.Models
         /// Duration in seconds.
         /// </summary>
         [JsonProperty("token_max_ttl")]
-        public int TokenMaxTTL { get; internal set; }
+        public int TokenMaxTTL { get; set; }
 
         /// <summary>
         /// Duration in either an integer number of seconds (3600) or an 
         /// integer time unit (60m) after which any SecretID expires.
         /// </summary>
         [JsonProperty("secret_id_ttl")]
-        public string SecretIdTTL { get; internal set; }
+        public string SecretIdTTL { get; set; }
 
         /// <summary>
         /// Number of times any particular SecretID can be used to fetch 
@@ -38,7 +38,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole.Models
         /// A value of zero will allow unlimited uses.
         /// </summary>
         [JsonProperty("secret_id_num_uses")]
-        public int SecretIdNumUses { get; internal set; }
+        public int SecretIdNumUses { get; set; }
 
         /// <summary>
         /// List of policies to encode onto generated tokens. Depending on the
@@ -46,26 +46,26 @@ namespace VaultSharp.V1.AuthMethods.AppRole.Models
         /// values.
         /// </summary>
         [JsonProperty("token_policies")]
-        public List<string> TokenPolicies { get; internal set; }
+        public List<string> TokenPolicies { get; set; }
 
         /// <summary>
         /// The period, if any, to set on the token.
         /// </summary>
         [JsonProperty("period")]
-        public int Period { get; internal set; }
+        public int Period { get; set; }
 
         /// <summary>
         /// Require secret_id to be presented when logging in using this 
         /// AppRole.
         /// </summary>
         [JsonProperty("bind_secret_id")]
-        public bool BindSecretId { get; internal set; }
+        public bool BindSecretId { get; set; }
 
         /// <summary>
         /// Comma-separated string or list of CIDR blocks; if set, specifies 
         /// blocks of IP addresses which can perform the login operation.
         /// </summary>
         [JsonProperty("bound_cidr_list")]
-        public List<string> BoundCIDRList { get; internal set; }
+        public List<string> BoundCIDRList { get; set; }
     }
 }
