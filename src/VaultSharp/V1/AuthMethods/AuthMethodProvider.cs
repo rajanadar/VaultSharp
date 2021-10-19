@@ -27,13 +27,14 @@ namespace VaultSharp.V1.AuthMethods
         {
             _polymath = polymath;
 
+            AppRole = new AppRoleAuthMethodProvider(_polymath);
             LDAP = new LDAPAuthMethodProvider(_polymath);
             Token = new TokenAuthMethodProvider(_polymath);
         }
 
         public IAliCloudAuthMethod AliCloud => throw new NotImplementedException();
 
-        public IAppRoleAuthMethod AppRole => throw new NotImplementedException();
+        public IAppRoleAuthMethod AppRole { get; }
 
         public IAWSAuthMethod AWS => throw new NotImplementedException();
 
