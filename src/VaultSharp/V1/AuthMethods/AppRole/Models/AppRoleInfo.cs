@@ -15,7 +15,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole.Models
         /// Duration in seconds.
         /// </summary>
         [JsonProperty("token_ttl")]
-        public int TokenTTL { get; set; }
+        public int TokenTimeToLive { get; set; }
 
         /// <summary>
         /// The maximum lifetime for generated tokens. 
@@ -23,14 +23,14 @@ namespace VaultSharp.V1.AuthMethods.AppRole.Models
         /// Duration in seconds.
         /// </summary>
         [JsonProperty("token_max_ttl")]
-        public int TokenMaxTTL { get; set; }
+        public int TokenMaxTimeToLive { get; set; }
 
         /// <summary>
         /// Duration in either an integer number of seconds (3600) or an 
         /// integer time unit (60m) after which any SecretID expires.
         /// </summary>
         [JsonProperty("secret_id_ttl")]
-        public string SecretIdTTL { get; set; }
+        public string SecretIdTimeToLive { get; set; }
 
         /// <summary>
         /// Number of times any particular SecretID can be used to fetch 
