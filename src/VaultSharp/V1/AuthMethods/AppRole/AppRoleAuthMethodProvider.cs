@@ -16,7 +16,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             this._polymath = polymath;
         }
 
-        public async Task<Secret<AppRoleInfo>> ReadRoleAsync(string roleName, string mountPoint = "approle") 
+        public async Task<Secret<AppRoleInfo>> ReadRoleAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole) 
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");
