@@ -3,6 +3,8 @@
 **IMPROVEMENTS:**
 
   * Implemented support for Ed25519 Key type (Vault 1.9+ only)
+  * Add support for AppRole Auth API endpoints
+  * Implemented AppRole auth endpoint to read role information by role name
 
 ## 1.7.0.2 (October 04, 2021)
 
