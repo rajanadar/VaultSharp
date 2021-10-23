@@ -1,3 +1,9 @@
+## 1.7.0.3 (October 08, 2021)
+
+**IMPROVEMENTS:**
+
+  * Implemented support for Ed25519 Key type (Vault 1.9+ only)
+
 ## 1.7.0.2 (October 04, 2021)
 
 **IMPROVEMENTS:**

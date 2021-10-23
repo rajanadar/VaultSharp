@@ -22,6 +22,11 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <summary>
         /// The Elliptic Curve key type.
         /// </summary>
-        ec = 2
+        ec = 2,
+
+        /// <summary>
+        /// The Ed25519 Key type.
+        /// </summary>
+        ed25519 = 3,
     }
 }
