@@ -1,17 +1,17 @@
-## 1.7.0.3 (October 08, 2021)
+## 1.7.0.3 (TBD)
 
 **IMPROVEMENTS:**
 
   * Implemented support for Ed25519 Key type (Vault 1.9+ only)
-  * Add support for AppRole Auth API endpoints
-  * Implemented AppRole auth endpoint to read role information by role name
 
-## 1.7.0.2 (October 04, 2021)
+## 1.7.0.2 (November 19, 2021)
 
 **IMPROVEMENTS:**
 
   * [GH-215] Certificate Auth now takes a chain of certificates.
   * [GH-220] Improved the token initialization code by retrying when errors happen first time.
+  * Add support for AppRole Auth API endpoints
+  * Implemented AppRole auth endpoint to read role information by role name
 
 ## 1.7.0.1 (October 03, 2021)
 
