@@ -1,8 +1,14 @@
-## 1.7.0.3 (TBD)
+## 1.7.0.4 (TBD)
 
 **IMPROVEMENTS:**
 
   * Implemented support for Ed25519 Key type (Vault 1.9+ only)
+
+## 1.7.0.3 (November 21, 2021)
+
+**IMPROVEMENTS:**
+
+  * .NET 6 Support
 
 ## 1.7.0.2 (November 19, 2021)
 
