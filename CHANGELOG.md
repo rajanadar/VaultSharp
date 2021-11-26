@@ -1,8 +1,18 @@
-## 1.7.0.4 (TBD)
+## 1.7.0.5 (TBD)
 
 **IMPROVEMENTS:**
 
   * Implemented support for Ed25519 Key type (Vault 1.9+ only)
+
+## 1.7.0.4 (November 26, 2021)
+
+**BUG FIXES:**
+
+  * [GH-235] Fix a deadlock when a particular internal path is chosen
+
+**DOC IMPROVEMENTS:**
+
+  * [GH-236] Add section on Token-Renewal and DI Lifetime
 
 ## 1.7.0.3 (November 21, 2021)
 
