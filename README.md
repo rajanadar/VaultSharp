@@ -91,6 +91,19 @@ Source: https://github.com/dotnet/standard/blob/master/docs/versions.md
 - VaultSharp supports dynamic Consul credential generation.
 - Please look at the API usage in the 'Consul' section of 'Secrets Engines' below, to see all the Consul related methods in action.
 
+### VaultSharp and Automatic Token Refresh
+
+* VaultSharp DOES NOT support automatic token refresh.
+* It is the responsibility of the host application to refresh the login token as per its expiry.
+* The host app is free to use the ```vaultClient.V1.Auth.ResetVaultToken();``` method to refresh the token from time to time.
+* The host app is also free to re-initialize the entire ```VaultClient``` instance. This is helpful when you use AWS Signatures etc. where even if you try to just reset the vault token, it may fail because the signature time is pretty old. In those cases, feel free to re-initialize the whole vaultclient instance
+
+### VaultSharp and VaultClient Dependency Injection Lifetime
+
+* If the vault login token expiry is way more than the deployment cadence of your application, then the recommended lifetime scope for VaultSharp's IVaultClient is ```Singleton```. This is because, it will login only once to Vault to get the auth token and use it for the rest of all the vault calls you make.
+* The only use-case when the ```Singleton``` lifetime will fail you is if your login token expiry is less than your application's deployment cadence. In that case, you have to either write your automatic token renewal logic OR use a ```RequestScoped``` lifetime for DI. Renewal logic is more performant than request scoping. This is because, you wouldn't want vaultsharp to request a login token for every web request of yours.
+
+
 ### VaultSharp and Automatic Built-in Client Side failover
 
 * VaultSharp DOES NOT support built-in client-side failover either by supporting multiple endpoint URI's or by supporting roundrobin DNS.
