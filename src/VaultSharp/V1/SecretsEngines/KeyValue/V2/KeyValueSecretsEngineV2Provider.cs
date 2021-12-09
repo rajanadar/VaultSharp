@@ -65,7 +65,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
 
             // https://github.com/hashicorp/vault/blob/master/command/kv_patch.go#L126
 
-            var currentSecret = await ReadSecretAsync(path, mountPoint: mountPoint);
+            var currentSecret = await ReadSecretAsync(path, mountPoint: mountPoint).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
             if (currentSecret == null || currentSecret.Data == null)
             {
