@@ -35,6 +35,7 @@ This library is built with .NET Standard 1.3, .NET Standard 2.0, .NET Standard 2
 
     <Deterministic>True</Deterministic>
     <ContinousIntegrationBuild>True</ContinousIntegrationBuild>
+    <WarningsAsErrors>CA2007</WarningsAsErrors> <!-- CA2007:Do not directly await a Task - -->
   </PropertyGroup>
 
   <!-- https://github.com/dotnet/sourcelink/issues/572 -->
