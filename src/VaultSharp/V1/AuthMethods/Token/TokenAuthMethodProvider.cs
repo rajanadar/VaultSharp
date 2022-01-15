@@ -36,6 +36,27 @@ namespace VaultSharp.V1.AuthMethods.Token
             return await _polymath.MakeVaultApiRequest<Secret<object>>("v1/auth/token/" + suffix, HttpMethod.Post, request).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
+        public async Task CreateTokenRoleAsync(string roleName, CreateTokenRoleRequest createTokenRoleRequest)
+        {
+            Checker.NotNull(roleName, "roleName");
+            var request = createTokenRoleRequest ?? new CreateTokenRoleRequest();
+            await _polymath.MakeVaultApiRequest("v1/auth/token/roles/" + roleName.Trim('/'), HttpMethod.Post, request)
+                .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task DeleteTokenRoleAsync(string roleName)
+        {
+            Checker.NotNull(roleName, "roleName");
+            await _polymath.MakeVaultApiRequest("v1/auth/token/roles/" + roleName.Trim('/'), HttpMethod.Delete)
+                .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<ListTokenRoles>> ListTokenRolesAsync()
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<ListTokenRoles>>("v1/auth/token/roles", new HttpMethod("LIST"))
+                .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
         public async Task<Secret<ClientTokenInfo>> LookupAsync(string clientToken)
         {
             Checker.NotNull(clientToken, nameof(clientToken));
@@ -47,6 +68,13 @@ namespace VaultSharp.V1.AuthMethods.Token
         public async Task<Secret<CallingTokenInfo>> LookupSelfAsync()
         {
             return await _polymath.MakeVaultApiRequest<Secret<CallingTokenInfo>>("v1/auth/token/lookup-self", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<TokenRoleInfo>> ReadTokenRoleAsync(string roleName)
+        {
+            Checker.NotNull(roleName, "roleName");
+            return await _polymath.MakeVaultApiRequest<Secret<TokenRoleInfo>>("v1/auth/token/roles/" + roleName.Trim('/'), HttpMethod.Get)
+                .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<AuthInfo> RenewSelfAsync(string increment = null)
