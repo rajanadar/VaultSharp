@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace VaultSharp.V1.AuthMethods.Token.Models
@@ -39,7 +35,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         public string PathSuffix { get; set; }
 
         [JsonProperty("period")]
-        public long Period { get; set; }
+        public string Period { get; set; }
 
         /// <summary>
         /// Set to false to disable the ability of the token to be renewed past
@@ -55,7 +51,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// a renewal.
         /// </summary>
         [JsonProperty("token_explicit_max_ttl")]
-        public long TokenExplicitMaxTimeToLive { get; set; }
+        public string TokenExplicitMaxTimeToLive { get; set; }
 
         /// <summary>
         /// If set, the default policy will not be set on generated tokens; 
@@ -68,7 +64,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// Period if anything is set on the token.
         /// </summary>
         [JsonProperty("token_period")]
-        public long TokenPeriod { get; set; }
+        public string TokenPeriod { get; set; }
 
         /// <summary>
         /// The type of token to be generated. Can be one of service, batch or
@@ -84,7 +80,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// Explicit Max TTL of the role.
         /// </summary>
         [JsonProperty("explicit_max_ttl")]
-        public long ExplicitMaxTimeToLive { get; set; }
+        public string ExplicitMaxTimeToLive { get; set; }
 
         /// <summary>
         /// String or JSON list of allowed entity aliases. If set, specifies 
@@ -93,7 +89,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// Note that allowed_entity_aliases is not case sensitive.
         /// </summary>
         [JsonProperty("allowed_entity_aliases")]
-        public List<string> AllowedEntityAliases { get; set; }
+        public IList<string> AllowedEntityAliases { get; set; }
 
         /// <summary>
         ///  If set, tokens can be created with any subset of the policies in 
@@ -106,7 +102,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         ///  automatically.
         /// </summary>
         [JsonProperty("allowed_policies")]
-        public List<string> AllowedPolcies { get; set; }
+        public IList<string> AllowedPolcies { get; set; }
 
         /// <summary>
         /// If set, successful token creation via this role will require that 
@@ -116,7 +112,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// created tokens.
         /// </summary>
         [JsonProperty("disallowed_policies")]
-        public List<string> DisallowedPolcies { get; set; }
+        public IList<string> DisallowedPolcies { get; set; }
 
         /// <summary>
         /// If set, tokens can be created with any subset of glob matched 
@@ -134,12 +130,12 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// /auth/token/create/:role_name.
         /// </summary>
         [JsonProperty("allowed_policies_glob")]
-        public List<string> AllowedPolciesGlob { get; set; }
+        public IList<string> AllowedPolciesGlob { get; set; }
 
         /// <summary>
         ///  If set, successful token creation via this role will require that no requested policies glob match any of policies in this list. The parameter is a comma-delimited string of policy name globs. Adding any glob that matches "default" to this list will prevent "default" from being added automatically to created tokens. If combined with disallowed_policies policies need to only match one of the two lists to be blocked.
         /// </summary>
         [JsonProperty("disallowed_policies_glob")]
-        public List<string> DisallowedPolciesGlob { get; set; }
+        public IList<string> DisallowedPolciesGlob { get; set; }
     }
 }
