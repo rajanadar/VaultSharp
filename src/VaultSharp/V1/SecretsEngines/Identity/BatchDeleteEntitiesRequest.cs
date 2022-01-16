@@ -9,6 +9,6 @@ namespace VaultSharp.V1.SecretsEngines.Identity
     public class BatchDeleteEntitiesRequest
     {
         [JsonProperty("entity_ids")]
-        public List<string> EntityIds { get; set; }
+        public IList<string> EntityIds { get; set; }
     }
 }

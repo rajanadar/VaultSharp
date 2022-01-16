@@ -24,6 +24,6 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// List of aliases assigned to the entity.
         /// </summary>
         [JsonProperty("aliases")]
-        public List<string> Aliases { get; set; }
+        public IList<string> Aliases { get; set; }
     }
 }

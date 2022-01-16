@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// Entity IDs which needs to get merged.
         /// </summary>
         [JsonProperty("from_entity_ids")]
-        public List<string> FromEntityIds { get; set; }
+        public IList<string> FromEntityIds { get; set; }
 
         /// <summary>
         /// [required]

@@ -232,6 +232,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// The TTL for the token and can be either an integer number of 
         /// seconds or a string duration of seconds.
         /// </param>
+        /// <param name="entityId">Id of the entity to be updated</param>
         /// <returns>
         /// The secret with the <see cref="UpdateEntityResponse"/> as the data
         /// </returns>
@@ -254,6 +255,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// The TTL for the token and can be either an integer number of 
         /// seconds or a string duration of seconds.
         /// </param>
+        /// <param name="name">Name of the entity to be updated.</param>
         /// <returns>
         /// The secret with the <see cref="UpdateEntityResponse"/> as the data
         /// </returns>
