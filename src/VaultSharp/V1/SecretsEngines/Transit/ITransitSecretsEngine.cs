@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections;
+using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
@@ -10,10 +11,10 @@ namespace VaultSharp.V1.SecretsEngines.Transit
     {
         /// <summary>
         /// Encrypts the provided plaintext using the named key.
-        /// This path supports the create and update policy capabilities as follows: 
-        /// if the user has the create capability for this endpoint in their policies, 
-        /// and the key does not exist, it will be upserted with default values 
-        /// (whether the key requires derivation depends on whether the context parameter is empty or not). 
+        /// This path supports the create and update policy capabilities as follows:
+        /// if the user has the create capability for this endpoint in their policies,
+        /// and the key does not exist, it will be upserted with default values
+        /// (whether the key requires derivation depends on whether the context parameter is empty or not).
         /// If the user only has update capability and the key does not exist, an error will be returned.
         /// </summary>
         /// <param name="keyName">
@@ -74,15 +75,15 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         Task<Secret<ListInfo>> ReadAllEncryptionKeysAsync(string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
-        /// This endpoint generates a new high-entropy key and the value encrypted with the named key. 
+        /// This endpoint generates a new high-entropy key and the value encrypted with the named key.
         /// Optionally return the plaintext of the key as well.
-        /// Whether plaintext is returned depends on the path; as a result, you can use Vault ACL policies to control whether a user is allowed to retrieve the plaintext value of a key. 
+        /// Whether plaintext is returned depends on the path; as a result, you can use Vault ACL policies to control whether a user is allowed to retrieve the plaintext value of a key.
         /// This is useful if you want an untrusted user or operation to generate keys that are then made available to trusted users.
         /// </summary>
         /// <param name="keyType"><para>[required]</para>
         ///  Specifies the type of key to generate.
         ///  If plaintext, the plaintext key will be returned along with the ciphertext.
-        ///  If wrapped, only the ciphertext value will be returned. 
+        ///  If wrapped, only the ciphertext value will be returned.
         /// </param>
         /// <param name="keyName"><para>[required]</para>
         /// Specifies the name of the encryption key to use to encrypt the datakey.
@@ -146,7 +147,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         Task UpdateEncryptionKeyConfigAsync(string keyName, UpdateKeyRequestOptions updateKeyRequestOptions, string mountPoint = null);
 
         /// <summary>
-        /// This endpoint deletes a named encryption key. It will no longer be possible to decrypt any data encrypted with the named key. 
+        /// This endpoint deletes a named encryption key. It will no longer be possible to decrypt any data encrypted with the named key.
         /// </summary>
         /// <param name="keyName"><para>[required]</para>
         /// Specifies the name of the encryption key to use. This is specified as part of the URL.
@@ -190,7 +191,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         Task<Secret<EncryptionResponse>> RewrapAsync(string keyName, RewrapRequestOptions rewrapRequestOptions, string mountPoint = null);
 
         /// <summary>
-        /// This endpoint trims older key versions setting a minimum version 
+        /// This endpoint trims older key versions setting a minimum version
         /// for the keyring. Once trimmed, previous versions of the key cannot be recovered.
         /// </summary>
         /// <param name="keyName"><para>[required]</para>
@@ -207,23 +208,23 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         Task TrimKeyAsync(string keyName, TrimKeyRequestOptions trimKeyRequestOptions, string mountPoint = null);
 
         /// <summary>
-        /// This endpoint returns the named key. 
-        /// The `keys` object shows the value of the key for each version. 
-        /// If version is specified, the specific version will be returned. 
-        /// If latest is provided as the version, the current key will be provided. 
-        /// Depending on the type of key, different information may be returned. 
+        /// This endpoint returns the named key.
+        /// The `keys` object shows the value of the key for each version.
+        /// If version is specified, the specific version will be returned.
+        /// If latest is provided as the version, the current key will be provided.
+        /// Depending on the type of key, different information may be returned.
         /// The key must be exportable to support this operation and the version must still be valid.
         /// </summary>
         /// <param name="keyType"><para>[required]</para>
         /// Specifies the type of the key to export.
         /// </param>
         /// <param name="keyName"><para>[required]</para>
-        /// Specifies the name of the key to read information about. 
+        /// Specifies the name of the key to read information about.
         /// </param>
         /// <param name="version"><para>[optional]</para>
-        /// Specifies the version of the key to read. 
-        /// If omitted, all versions of the key will be returned. 
-        /// This is specified as part of the URL. 
+        /// Specifies the version of the key to read.
+        /// If omitted, all versions of the key will be returned.
+        /// This is specified as part of the URL.
         /// If the version is set to latest, the current key will be returned.
         /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
@@ -232,5 +233,23 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
         Task<Secret<ExportedKeyInfo>> ExportKeyAsync(TransitKeyCategory keyType, string keyName, string version = null, string mountPoint = null);
+
+        Task<Secret<BackupKeyResponse>> BackupKeyAsync(string keyName, string mountPoint = null);
+
+        Task RestoreKeyAsync(string keyName, RestoreKeyRequestOptions backupData, string mountPoint = null);
+
+        Task<Secret<RandomBytesResponse>> GenerateRandomBytesAsync(uint numberBytes, RandomBytesRequestOptions randomOptions, string mountPoint = null);
+
+        Task<Secret<HashResponse>> HashDataAsync(HashAlgorithm algorithm, HashRequestOptions hashOptions, string mountPoint = null);
+
+        Task<Secret<HmacResponse>> GenerateHmacAsync(HashAlgorithm algorithm, string keyName, HmacRequestOptions hmacOptions, string mountPoint = null);
+
+        Task<Secret<SigningResponse>> SignDataAsync(HashAlgorithm algorithm, string keyName, SignRequestOptions signOptions, string mountPoint = null);
+
+        Task<Secret<VerifyResponse>> VerifySignedDataAsync(HashAlgorithm algorithm, string keyName, VerifyRequestOptions verifyOptions, string mountPoint = null);
+
+        Task<Secret<CacheResponse>> ReadCacheConfigAsync(string mountPoint = null);
+
+        Task SetCacheConfigAsync(CacheConfigRequestOptions cacheOptions, string mountPoint = null);
     }
 }
