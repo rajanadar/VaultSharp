@@ -3,7 +3,7 @@
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
     /// <summary>
-    /// Data to be sent on restoring an encryption key from backup.
+    /// Represents the data to be sent on restoring an encryption key from backup.
     /// </summary>
     public class RestoreKeyRequestOptions
     {

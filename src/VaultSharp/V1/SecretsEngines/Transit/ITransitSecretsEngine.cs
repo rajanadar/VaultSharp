@@ -234,22 +234,144 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
         Task<Secret<ExportedKeyInfo>> ExportKeyAsync(TransitKeyCategory keyType, string keyName, string version = null, string mountPoint = null);
 
+        /// <summary>
+        /// This endpoint returns a plaintext backup of a named key.
+        /// The backup contains all the configuration data and keys of all the versions
+        /// along with the HMAC key.
+        /// The response from this endpoint can be used with the <see cref="RestoreKeyAsync">restore</see> endpoint to restore the key.
+        /// </summary>
+        /// <param name="keyName"><para>[required]</para>
+        /// Specifies the name of the key to backup.</param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>The backed up key data for secure storage or a subsequent restore operation.</returns>
         Task<Secret<BackupKeyResponse>> BackupKeyAsync(string keyName, string mountPoint = null);
 
+        /// <summary>
+        /// This endpoint restores the backup as a named key.
+        /// This will restore the key configurations and all the versions of the named key
+        /// along with HMAC keys.
+        /// The input to this endpoint should be the output of <see cref="BackupKeyAsync">backup</see> endpoint.
+        /// </summary>
+        /// <remarks>
+        /// For safety, by default the backend will refuse to restore to an existing key.
+        /// If you want to reuse a key name, it is recommended you delete the key before restoring.
+        /// It is a good idea to attempt restoring to a different key name first to verify that the operation successfully completes.
+        /// </remarks>
+        /// <param name="keyName"><para>[required]</para>
+        /// Specifies the name of the key to backup.</param>
+        /// <param name="backupData"><para>[required]</para>
+        /// Backed up key data to be restored.</param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>Nothing is returned. No error means the operation was successful.</returns>
         Task RestoreKeyAsync(string keyName, RestoreKeyRequestOptions backupData, string mountPoint = null);
 
+        /// <summary>
+        /// This endpoint returns high-quality random bytes of the specified length.
+        /// </summary>
+        /// <param name="numberBytes"><para>[required]</para>
+        /// The number of bytes to return.</param>
+        /// <param name="randomOptions"><para>[required]</para>
+        /// The options for the request.</param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>A set of random bytes in the requested output format.</returns>
         Task<Secret<RandomBytesResponse>> GenerateRandomBytesAsync(uint numberBytes, RandomBytesRequestOptions randomOptions, string mountPoint = null);
 
+        /// <summary>
+        /// This endpoint returns the cryptographic hash of given data using the specified algorithm.
+        /// </summary>
+        /// <param name="algorithm"><para>[required]</para>
+        /// The hash algorithm to use for the request.</param>
+        /// <param name="hashOptions"><para>[required]</para>
+        /// The options for the request.</param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>The cryptographic hash(es) of the input data.</returns>
         Task<Secret<HashResponse>> HashDataAsync(HashAlgorithm algorithm, HashRequestOptions hashOptions, string mountPoint = null);
 
+        /// <summary>
+        /// This endpoint returns the digest of given data using the specified hash algorithm and the named key.
+        /// The key can be of any type supported by transit; the raw key will be marshaled into bytes to be used for the HMAC function.
+        /// If the key is of a type that supports rotation, the latest (current) version will be used.
+        /// </summary>
+        /// <param name="algorithm"><para>[required]</para>
+        /// The hash algorithm to use for the request.</param>
+        /// <param name="keyName"><para>[required]</para>
+        /// Specifies the name of the key to backup.</param>
+        /// <param name="hmacOptions"><para>[required]</para>
+        /// The options for the request.</param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>The HMAC digest of the requested data.</returns>
         Task<Secret<HmacResponse>> GenerateHmacAsync(HashAlgorithm algorithm, string keyName, HmacRequestOptions hmacOptions, string mountPoint = null);
 
+        /// <summary>
+        /// This endpoint returns the cryptographic signature of the given data using the named key and the specified hash algorithm.
+        /// The key must be of a type that supports signing.
+        /// </summary>
+        /// <param name="algorithm"><para>[required]</para>
+        /// The hash algorithm to use for the request.</param>
+        /// <param name="keyName"><para>[required]</para>
+        /// Specifies the name of the key to backup.</param>
+        /// <param name="signOptions"><para>[required]</para>
+        /// The options for the request.</param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>The cryptographic signature of the requested data.</returns>
         Task<Secret<SigningResponse>> SignDataAsync(HashAlgorithm algorithm, string keyName, SignRequestOptions signOptions, string mountPoint = null);
 
+        /// <summary>
+        /// This endpoint returns whether the provided signature is valid for the given data.
+        /// </summary>
+        /// <param name="algorithm"><para>[required]</para>
+        /// The hash algorithm to use for the request.</param>
+        /// <param name="keyName"><para>[required]</para>
+        /// Specifies the name of the key to backup.</param>
+        /// <param name="verifyOptions"><para>[required]</para>
+        /// The options for the request.</param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>If the given signature is valid for the given data.</returns>
         Task<Secret<VerifyResponse>> VerifySignedDataAsync(HashAlgorithm algorithm, string keyName, VerifyRequestOptions verifyOptions, string mountPoint = null);
 
+        /// <summary>
+        /// This endpoint retrieves configurations for the transit engine's cache.
+        /// </summary>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>The current size of the transit engine's cache.</returns>
         Task<Secret<CacheResponse>> ReadCacheConfigAsync(string mountPoint = null);
 
+        /// <summary>
+        /// This endpoint is used to configure the transit engine's cache.
+        /// Note that configuration changes will not be applied until the transit plugin
+        /// is reloaded which can be achieved using the
+        /// <see cref="SystemBackend.Plugin.PluginProvider.ReloadBackendsAsync">/sys/plugins/reload/backend</see> endpoint.
+        /// </summary>
+        /// <param name="cacheOptions">The options for the request.</param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>Nothing is returned. No error means the operation was successful.</returns>
         Task SetCacheConfigAsync(CacheConfigRequestOptions cacheOptions, string mountPoint = null);
     }
 }
