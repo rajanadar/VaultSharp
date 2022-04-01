@@ -1,3 +1,13 @@
+## TBD
+
+**IMPROVEMENTS:**
+  * Implemented remaining Transit endpoints: 
+      * ```Backup``` and ```Restore``` functions.
+      * ```Hash``` and ```Generate Random``` functions.
+      * ```HMAC```, ```Sign``` and ```Verify``` functions.
+      * ```Cache Config``` read and update functions.
+
+
 ## 1.7.0.5 (TBD)
 
 **IMPROVEMENTS:**

@@ -1381,6 +1381,154 @@ Secret<ExportedKeyInfo> exportedKeyInfo = await _authenticatedVaultClient.V1.Sec
 
 ```
 
+##### Backup Key
+
+- In order for this call to work, the key must have been created with allow_plaintext_backup set to true.
+
+```cs
+
+var backup = await _authenticatedVaultClient.V1.Secrets.Transit.BackupKeyAsync(keyName);
+string backupData = backup.Data.BackupData;
+
+```
+
+##### Restore Key
+
+```cs
+
+var restoreData = new RestoreKeyRequestOptions 
+{
+    BackupData = previouslyBackedUpData, 
+    Force = true 
+};
+await _authenticatedVaultClient.V1.Secrets.Transit.RestoreKeyAsync(keyName, restoreData);
+```
+
+##### Generate Random Bytes
+
+```cs
+var byteCountRequested = 64;
+var randomOpts = new RandomBytesRequestOptions 
+{
+    Format = OutputEncodingFormat.base64
+};
+var base64Response = await _authenticatedVaultClient.V1.Secrets.Transit.GenerateRandomBytesAsync(byteCountRequested, randomOpts);
+var base64EncodedRandomData = base64Response.Data.EncodedRandomBytes;
+```
+
+##### Hash Data String
+
+```cs
+var hashOpts = new HashRequestOptions
+{
+    Format = OutputEncodingFormat.base64, 
+    Base64EncodedInput = encodedStringToHash
+};
+var hashResponse = await _authenticatedVaultClient.V1.Secrets.Transit.HashDataAsync(HashAlgorithm.sha2_256, hashOpts);
+var hashString = hashResponse.Data.HashSum;
+
+```
+
+##### Generate HMAC Single Item
+
+```cs
+var hmacOptions = new HmacRequestOptions 
+{
+    Base64EncodedInput = encodedPlainText
+};
+var hmacResponse = await _authenticatedVaultClient.V1.Secrets.Transit.GenerateHmacAsync(HashAlgorithm.sha2_256, keyName, hmacOptions);
+```
+
+##### Generate HMAC Batch Item
+
+```cs
+var hmacList = new HmacRequestOptions
+{
+    BatchInput = new List<HmacSingleInput>
+    {
+        new HmacSingleInput {Base64EncodedInput = encodedText},
+        new HmacSingleInput {Base64EncodedInput = encodedText2},
+        new HmacSingleInput {Base64EncodedInput = encodedText3}
+    }
+};
+var hmacResponse = await _authenticatedVaultClient.V1.Secrets.Transit.GenerateHmacAsync(HashAlgorithm.sha2_256, keyName, hmacList);
+```
+
+##### Sign Single Item
+
+```cs
+var signOptions = new SignRequestOptions
+{
+    Base64EncodedInput = encodedText,
+    SignatureAlgorithm = SignatureAlgorithm.Pkcs1v15,
+    MarshalingAlgorithm = MarshalingAlgorithm.Asn1
+};
+var signResponse = await _authenticatedVaultClient.V1.Secrets.Transit.SignDataAsync(HashAlgorithm.sha2_256, keyName, signOptions);
+
+```
+
+##### Sign Batched Item
+
+```cs
+ var signList = new SignRequestOptions
+{
+    BatchInput = new List<SignSingleInput>
+    {
+        new SignSingleInput {Base64EncodedInput = encodedText},
+        new SignSingleInput {Base64EncodedInput = encodedText2},
+        new SignSingleInput {Base64EncodedInput = encodedText3}
+    },
+    SignatureAlgorithm = SignatureAlgorithm.Pkcs1v15,
+    MarshalingAlgorithm = MarshalingAlgorithm.Asn1
+};
+var signResponse = await _authenticatedVaultClient.V1.Secrets.Transit.SignDataAsync(HashAlgorithm.sha2_256, keyName, signList);
+```
+
+##### Verify HMAC Single Item
+
+```cs
+var verifyOptions = new VerifyRequestOptions
+{
+    Base64EncodedInput = base64Input,
+    Hmac = hmacToVerify,
+    MarshalingAlgorithm = MarshalingAlgorithm.Asn1
+};
+var verifyResponse = await _authenticatedVaultClient.V1.Secrets.Transit.VerifySignedDataAsync(HashAlgorithm.sha2_256, keyName, verifyOptions);
+var isValid = verifyResponse.Data.Valid;
+```
+
+##### Verify Signature Single Item 
+
+```cs
+var verifyOptions = new VerifyRequestOptions
+{
+    Base64EncodedInput = base64Input,
+    Signature = signResponse.Data.Signature,
+    SignatureAlgorithm = SignatureAlgorithm.Pkcs1v15,
+    MarshalingAlgorithm = MarshalingAlgorithm.Asn1
+};
+var verifyResponse = await _authenticatedVaultClient.V1.Secrets.Transit.VerifySignedDataAsync(HashAlgorithm.sha2_256, keyname, verifyOptions);
+var isValid = verifyResponse.Data.Valid;
+```        
+
+##### Read Transit Cache Configuration
+
+```cs
+var cacheResult = await _authenticatedVaultClient.V1.Secrets.Transit.ReadCacheConfigAsync();
+var cacheSize = cacheResult.Data.Size;
+```
+
+##### Configure Cache
+- Configuration changes will not be applied until the transit plugin is reloaded which can be achieved using the ```/sys/plugins/reload/backend``` endpoint.
+
+```cs
+var cacheOptions = new CacheConfigRequestOptions 
+{
+    Size = cacheResult.Data.Size + 1 
+};
+await transit.SetCacheConfigAsync(cacheOptions);
+```
+
 ### System Backend
 
 - The system backend is a default backend in Vault that is mounted at the /sys endpoint.
