@@ -238,9 +238,6 @@ namespace VaultSharp.Core
 
                         httpRequestMessage = new HttpRequestMessage(HttpMethod.Head, requestUri);
                         break;
-                    case "LIST":
-                        httpRequestMessage = new HttpRequestMessage(new HttpMethod("LIST"), requestUri);
-                        break;
 
                     default:
                         throw new NotSupportedException("The Http Method is not supported: " + httpMethod);
