@@ -53,7 +53,7 @@ namespace VaultSharp.V1.AuthMethods.Token
 
         public async Task<Secret<ListTokenRoles>> ListTokenRolesAsync()
         {
-            return await _polymath.MakeVaultApiRequest<Secret<ListTokenRoles>>("v1/auth/token/roles", new HttpMethod("LIST"))
+            return await _polymath.MakeVaultApiRequest<Secret<ListTokenRoles>>("v1/auth/token/roles"+"?list=true", HttpMethod.Get)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
