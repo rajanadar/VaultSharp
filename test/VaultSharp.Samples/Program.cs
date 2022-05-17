@@ -21,7 +21,7 @@ namespace VaultSharp.Samples
 {
     class Program
     {
-        private const string ExpectedVaultVersion = "1.7.0";
+        private const string ExpectedVaultVersion = "1.10.0";
 
         private static IVaultClient _unauthenticatedVaultClient;
         private static IVaultClient _authenticatedVaultClient;
@@ -262,7 +262,133 @@ namespace VaultSharp.Samples
                 .ExportKeyAsync(TransitKeyCategory.encryption_key, keyName, version: "latest", path).Result;
             DisplayJson(exportedKey);
 
+
+            var backupKey = new CreateKeyRequestOptions() {Exportable = true, AllowPlaintextBackup = true, Type = TransitKeyType.aes256_gcm96};
+            keyName = "backupKey";
+            _authenticatedVaultClient.V1.Secrets.Transit.CreateEncryptionKeyAsync(keyName, backupKey, path).Wait();
+
+            var signKey = new CreateKeyRequestOptions() { Exportable = true, AllowPlaintextBackup = true, Type = TransitKeyType.ecdsa_p256 };
+            var signKeyName = "signKey";
+            _authenticatedVaultClient.V1.Secrets.Transit.CreateEncryptionKeyAsync(signKeyName, signKey, path).Wait();
+
+            RunTransitBackupRestore(keyName, path);
+            RunRandomGen(path);
+            RunHmacAndVerify(keyName, path);
+            RunSignatureAndVerify(signKeyName, path);
+            RunHash(signKeyName, path);
+            RunCache(path);
+
+
             _authenticatedVaultClient.V1.System.UnmountSecretBackendAsync(path).Wait();
+        }
+
+        private static void RunCache(string path)
+        {
+            var transit = _authenticatedVaultClient.V1.Secrets.Transit;
+            var cacheResult = transit.ReadCacheConfigAsync(path).Result;
+
+            //Assert
+            Assert.NotNull(cacheResult);
+            Assert.True(0 == cacheResult.Data.Size || 10 <= cacheResult.Data.Size);
+            Console.WriteLine("SZ = " + cacheResult.Data.Size);
+
+            //Act 2
+            var newSize = cacheResult.Data.Size == 0 ? 25 : cacheResult.Data.Size + 1;
+            var cacheOptions = new CacheConfigRequestOptions { Size = newSize };
+            transit.SetCacheConfigAsync(cacheOptions, path).Wait();
+            cacheOptions.Size -= 1;
+            transit.SetCacheConfigAsync(cacheOptions, path).Wait();
+        }
+
+        private static void RunHash(string keyName, string path)
+        {
+            var transit = _authenticatedVaultClient.V1.Secrets.Transit;
+
+            var hashOpts = new HashRequestOptions
+            {
+                Format = OutputEncodingFormat.base64,
+                Base64EncodedInput = Convert.ToBase64String(Encoding.UTF8.GetBytes("Let's hash this"))
+            };
+            var hashResponse = transit.HashDataAsync(HashAlgorithm.sha2_256, hashOpts, path).Result;
+            Console.WriteLine("HASHVAL = " + hashResponse.Data.HashSum);
+        }
+
+        private static void RunSignatureAndVerify(string keyName, string path)
+        {
+            var transit = _authenticatedVaultClient.V1.Secrets.Transit;
+            var base64Input =
+                Convert.ToBase64String(Encoding.UTF8.GetBytes("This is the value we will use as plaintext here."));
+            var signOptions = new SignRequestOptions { Base64EncodedInput = base64Input, MarshalingAlgorithm = MarshalingAlgorithm.Asn1 };
+            var signResponse = transit.SignDataAsync(HashAlgorithm.sha2_256, keyName, signOptions, path).Result;
+
+            var verifyOptions = new VerifyRequestOptions
+            {
+                Base64EncodedInput = base64Input,
+                Signature = signResponse.Data.Signature,
+                MarshalingAlgorithm = MarshalingAlgorithm.Asn1
+            };
+            var verifyResponse = transit.VerifySignedDataAsync(HashAlgorithm.sha2_256, keyName, verifyOptions, path).Result;
+
+            //Assert
+            Assert.True(verifyResponse.Data.Valid);
+        }
+
+        private static void RunHmacAndVerify(string keyName, string path)
+        {
+            var transit = _authenticatedVaultClient.V1.Secrets.Transit;
+            var base64Input =
+                Convert.ToBase64String(Encoding.UTF8.GetBytes("This is the value we will use as plaintext here."));
+
+            //Act 1 - Verify HMAC
+            var hmacOptions = new HmacRequestOptions { Base64EncodedInput = base64Input };
+            var hmacResponse = transit.GenerateHmacAsync(HashAlgorithm.sha2_256, keyName, hmacOptions, path).Result;
+
+            var verifyOptions = new VerifyRequestOptions
+            {
+                Base64EncodedInput = base64Input,
+                Hmac = hmacResponse.Data.Hmac,
+                MarshalingAlgorithm = MarshalingAlgorithm.Asn1
+            };
+            var verifyResponse = transit.VerifySignedDataAsync(HashAlgorithm.sha2_256, keyName, verifyOptions, path).Result;
+            Assert.True(verifyResponse.Data.Valid);
+        }
+
+        private static void RunRandomGen(string path)
+        {
+            var transit = _authenticatedVaultClient.V1.Secrets.Transit;
+            var randomOpts = new RandomBytesRequestOptions { Format = OutputEncodingFormat.base64 };
+            var base64Response = transit.GenerateRandomBytesAsync(64, randomOpts, path).Result;
+            randomOpts.Format = OutputEncodingFormat.hex;
+            var hexResponse = transit.GenerateRandomBytesAsync(64, randomOpts, path).Result;
+
+            Assert.Equal(88, base64Response.Data.EncodedRandomBytes.Length);
+            Assert.Equal(128, hexResponse.Data.EncodedRandomBytes.Length);
+
+            //Log
+            Console.WriteLine("B64RAND = " + base64Response.Data.EncodedRandomBytes);
+            Console.WriteLine("HEXRAND = " + hexResponse.Data.EncodedRandomBytes);
+        }
+
+        private static void RunTransitBackupRestore(string keyName, string path)
+        {
+            var transit = _authenticatedVaultClient.V1.Secrets.Transit;
+
+            var backup = transit.BackupKeyAsync(keyName, path).Result;
+
+            var backupData = new RestoreKeyRequestOptions {BackupData = backup.Data.BackupData};
+            var restore = transit.RestoreKeyAsync(keyName + "restored", backupData, path);
+
+            var encodedText = Convert.ToBase64String(Encoding.UTF8.GetBytes("testplaintext"));
+            var encryptOptions = new EncryptRequestOptions
+            {
+                Base64EncodedPlainText = encodedText,
+            };
+            var encrypted = transit.EncryptAsync(keyName, encryptOptions, path).Result;
+
+            var decryptOptions = new DecryptRequestOptions {CipherText = encrypted.Data.CipherText};
+            var decrypted = transit.DecryptAsync(keyName + "restored", decryptOptions, path).Result;
+
+            Assert.Equal(encodedText, decrypted.Data.Base64EncodedPlainText);
         }
 
         private static void RunKeyValueSamples()
@@ -358,7 +484,7 @@ namespace VaultSharp.Samples
             Assert.True(kv1Secret.Data.Count == 2);
 
             _authenticatedVaultClient.V1.Secrets.KeyValue.V1.DeleteSecretAsync(path).Wait();
-            
+
         }
 
         public class FooData
@@ -790,7 +916,7 @@ namespace VaultSharp.Samples
 
             // gives path not supported errors?. raja todo
             /*
-            var duoAuthBackend = authBackends.Data.Values.First(); 
+            var duoAuthBackend = authBackends.Data.Values.First();
 
             var duoConfig = new DuoConfig
             {
@@ -854,10 +980,10 @@ namespace VaultSharp.Samples
             // remount - raja todo
 
             /*
-             
+
             // mount a new secret backend
             _authenticatedVaultClient.V1.System.MountSecretBackendAsync(newSecretBackend).Wait();
-             
+
             // var newPath = "aws2";
             // _authenticatedVaultClient.V1.System.RemountSecretBackendAsync(newSecretBackend.Path, new Path);
 
