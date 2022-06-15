@@ -222,6 +222,6 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// <returns>
         /// The task.
         /// </returns>
-        Task DeleteMetadataAsync(string path, string mountPoint = null);
+        Task DeleteMetadataAsync(string path, string mountPoint = "secret");
     }
 }

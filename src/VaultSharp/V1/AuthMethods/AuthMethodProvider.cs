@@ -17,61 +17,63 @@ using VaultSharp.V1.AuthMethods.RADIUS;
 using VaultSharp.V1.AuthMethods.Token;
 using VaultSharp.V1.AuthMethods.UserPass;
 
-namespace VaultSharp.V1.AuthMethods
+namespace VaultSharp.V1.AuthMethods;
+
+internal class AuthMethodProvider : IAuthMethod
 {
-    internal class AuthMethodProvider : IAuthMethod
+    private readonly Polymath _polymath;
+
+    public AuthMethodProvider(Polymath polymath)
     {
-        private readonly Polymath _polymath;
+        _polymath = polymath;
+        GitHub = new GitHubAuthMethodProvider(_polymath);
+        AppRole = new AppRoleAuthMethodProvider(_polymath);
+        LDAP = new LDAPAuthMethodProvider(_polymath);
+        Token = new TokenAuthMethodProvider(_polymath);
+        UserPass = new UserPassAuthMethodProvider(_polymath);
+        Kubernetes = new KubernetesAuthMethodProvider(_polymath);
+    }
 
-        public AuthMethodProvider(Polymath polymath)
-        {
-            _polymath = polymath;
+    public IAliCloudAuthMethod AliCloud => throw new NotImplementedException();
 
-            AppRole = new AppRoleAuthMethodProvider(_polymath);
-            LDAP = new LDAPAuthMethodProvider(_polymath);
-            Token = new TokenAuthMethodProvider(_polymath);
-        }
+    public IAppRoleAuthMethod AppRole { get; }
 
-        public IAliCloudAuthMethod AliCloud => throw new NotImplementedException();
+    public IAWSAuthMethod AWS => throw new NotImplementedException();
 
-        public IAppRoleAuthMethod AppRole { get; }
+    public IAzureAuthMethod Azure => throw new NotImplementedException();
 
-        public IAWSAuthMethod AWS => throw new NotImplementedException();
+    public ICloudFoundryAuthMethod CloudFoundry => throw new NotImplementedException();
 
-        public IAzureAuthMethod Azure => throw new NotImplementedException();
+    public IGitHubAuthMethod GitHub { get; }
 
-        public ICloudFoundryAuthMethod CloudFoundry => throw new NotImplementedException();
+    public IGitHubAuthMethod GoogleCloud => throw new NotImplementedException();
 
-        public IGitHubAuthMethod GitHub => throw new NotImplementedException();
+    public IKubernetesAuthMethod Kubernetes { get; }
 
-        public IGitHubAuthMethod GoogleCloud => throw new NotImplementedException();
+    public ILDAPAuthMethod LDAP { get; }
 
-        public IKubernetesAuthMethod Kubernetes => throw new NotImplementedException();
+    public IKerberosAuthMethod Kerberos => throw new NotImplementedException();
 
-        public ILDAPAuthMethod LDAP { get; }
+    public IOCIAuthMethod OCI => throw new NotImplementedException();
 
-        public IKerberosAuthMethod Kerberos => throw new NotImplementedException();
+    public IOktaAuthMethod Okta => throw new NotImplementedException();
 
-        public IOCIAuthMethod OCI => throw new NotImplementedException();
+    public IRADIUSAuthMethod RADIUS => throw new NotImplementedException();
 
-        public IOktaAuthMethod Okta => throw new NotImplementedException();
+    public ICertAuthMethod Cert => throw new NotImplementedException();
 
-        public IRADIUSAuthMethod RADIUS => throw new NotImplementedException();
+    public ITokenAuthMethod Token { get; }
 
-        public ICertAuthMethod Cert => throw new NotImplementedException();
+    public IUserPassAuthMethod UserPass { get; }
 
-        public ITokenAuthMethod Token { get; }
+    public void ResetVaultToken()
+    {
+        _polymath.SetVaultTokenDelegate();
+    }
 
-        public IUserPassAuthMethod UserPass => throw new NotImplementedException();
-
-        public void ResetVaultToken()
-        {
-            _polymath.SetVaultTokenDelegate();
-        }
-
-        public async Task PerformImmediateLogin()
-        {
-            await _polymath.PerformImmediateLogin().ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
-        }
+    public async Task PerformImmediateLogin()
+    {
+        await _polymath.PerformImmediateLogin()
+            .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
     }
 }

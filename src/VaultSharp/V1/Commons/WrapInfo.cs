@@ -4,53 +4,59 @@ using Newtonsoft.Json;
 namespace VaultSharp.V1.Commons
 {
     /// <summary>
-    /// Represents the wrapped information in Vault.
+    ///     Represents the wrapped information in Vault.
     /// </summary>
     public class WrapInfo
     {
         /// <summary>
-        /// Gets or sets the token.
+        ///     Gets or sets the token.
         /// </summary>
         /// <value>
-        /// The token.
+        ///     The token.
         /// </value>
         [JsonProperty("token")]
         public string Token { get; set; }
 
         /// <summary>
-        /// Gets or sets the time to live.
+        ///     Gets or sets the time to live.
         /// </summary>
         /// <value>
-        /// The time to live.
+        ///     The time to live.
         /// </value>
         [JsonProperty("ttl")]
         public int TimeToLive { get; set; }
 
         /// <summary>
-        /// Gets or sets the creation time.
+        ///     Gets or sets the creation time.
         /// </summary>
         /// <value>
-        /// The creation time.
+        ///     The creation time.
         /// </value>
         [JsonProperty("creation_time")]
         public DateTimeOffset CreationTime { get; set; }
 
         /// <summary>
-        /// Gets or sets the wrapped accessor.
+        ///     Gets or sets the wrapped accessor.
         /// </summary>
         /// <value>
-        /// The wrapped accessor.
+        ///     The wrapped accessor.
         /// </value>
         [JsonProperty("accessor")]
         public string Accessor { get; set; }
 
         /// <summary>
-        /// Gets or sets the creation path.
+        ///     Gets or sets the creation path.
         /// </summary>
         /// <value>
-        /// The creation path.
+        ///     The creation path.
         /// </value>
         [JsonProperty("creation_path")]
         public string CreationPath { get; set; }
+
+        /// <summary>
+        ///     Wrapped Token Accessor
+        /// </summary>
+        [JsonProperty("wrapped_accessor")]
+        public string wrapped_accessor { get; set; }
     }
 }
