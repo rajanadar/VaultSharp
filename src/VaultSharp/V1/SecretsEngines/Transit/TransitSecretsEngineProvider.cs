@@ -249,7 +249,6 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         {
             switch (algorithm)
             {
-                case HashAlgorithm.sha1: return "";
                 case HashAlgorithm.sha2_224: return "sha2-224";
                 case HashAlgorithm.sha2_384: return "sha2-384";
                 case HashAlgorithm.sha2_256: return "sha2-256";
