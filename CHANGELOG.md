@@ -2,9 +2,7 @@
 
 **IMPROVEMENTS:**
   
-
-
-## 1.7.0.5 (TBA)
+## 1.7.0.5 (July 18, 2022)
 
 **IMPROVEMENTS:**
 
