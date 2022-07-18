@@ -1,7 +1,7 @@
 
 TODO:
 
-VaultChangelog has been looked at 100%
+VaultChangelog has been looked at 100% till 1.9.0
 
 0. All SecretData JSON Models are returned in ascending field order by Vault
 
@@ -70,7 +70,105 @@ secrets/database/mongodb: Add ability to customize SocketTimeout, ConnectTimeout
 1.7.3
 
 db/cassandra: Added tls_server_name to specify server name for TLS validation [GH-11820]
+See if this needs any work on our lib: secret: fix the bug where transit encrypt batch doesn't work with key_version [GH-11628]
 
-1.8.0-rc1
+1.7.4
+26 August 2021
 
-< do it once released >
+Nothing
+
+1.7.5
+29 September 2021
+
+Adds a new boolean flag. secrets/pki: Allow signing of self-issued certs with a different signature algorithm. [GH-12514].
+
+1.7.6
+November 4, 2021
+
+Nothing
+
+
+1.8.0
+July 28th, 2021
+
+db/cassandra: Added tls_server_name to specify server name for TLS validation [GH-11820]
+secrets/rabbitmq: Add ability to customize dynamic usernames [GH-11899]
+secrets/ad: Add rotate-role endpoint to allow rotations of service accounts. [GH-11942]
+secrets/aws: add IAM tagging support for iam_user roles [GH-10953]
+secrets/aws: add ability to provide a role session name when generating STS credentials [GH-11345]
+secrets/database/elasticsearch: Add ability to customize dynamic usernames [GH-11957]
+secrets/database/influxdb: Add ability to customize dynamic usernames [GH-11796]
+secrets/database/mongodb: Add ability to customize SocketTimeout, ConnectTimeout, and ServerSelectionTimeout [GH-11600]
+secrets/database/mongodb: Increased throughput by allowing for multiple request threads to simultaneously update users in MongoDB [GH-11600]
+secrets/database/mongodbatlas: Adds the ability to customize username generation for dynamic users in MongoDB Atlas. [GH-11956]
+secrets/database/redshift: Add ability to customize dynamic usernames [GH-12016]
+secrets/database/snowflake: Add ability to customize dynamic usernames [GH-11997]
+
+secrets/gcp: Deprecated the /gcp/token/:roleset and /gcp/key/:roleset paths for generating secrets for rolesets. Use /gcp/roleset/:roleset/token and /gcp/roleset/:roleset/key instead. [GH-12023]
+
+
+
+
+1.8.1
+August 5th, 2021
+
+nothing
+
+1.8.2
+26 August 2021
+
+nothing
+
+1.8.3
+29 September 2021
+
+secrets/pki: Allow signing of self-issued certs with a different signature algorithm. [GH-12514]
+secrets/transit: Enforce minimum cache size for transit backend and init cache size on transit backend without restart. [GH-12418]
+
+1.8.4
+6 October 2021
+
+1.8.5
+November 4, 2021
+
+1.9.0
+November 17, 2021
+
+auth/kubernetes: disable_iss_validation defaults to true. #127 [GH-12975]
+secrets/ssh: Roles with empty allowed_extensions will now forbid end-users specifying extensions when requesting ssh key signing. Update roles setting allowed_extensions to * to permit any extension to be specified by an end-user. [GH-12847]
+Customizable HTTP Headers: Add support to define custom HTTP headers for root path (/) and also on API endpoints (/v1/*) [GH-12485]
+KV Custom Metadata: Add ability in kv-v2 to specify version-agnostic custom key metadata via the metadata endpoint. The data will be present in responses made to the data endpoint independent of the calling token's read access to the metadata endpoint. [GH-12907]
+KV patch (Tech Preview): Add partial update support for the /<mount>/data/:path kv-v2 endpoint through HTTP PATCH. A new patch ACL capability has been added and is required to make such requests. [GH-12687]
+Key Management Secrets Engine (Enterprise): Adds support for distributing and managing keys in GCP Cloud KMS.
+Namespaces (Enterprise): Adds support for locking Vault API for particular namespaces.
+api: Add configuration option for ensuring isolated read-after-write semantics for all Client requests. [GH-12814]
+api: adds native Login method to Go client module with different auth method interfaces to support easier authentication [GH-12796]
+api: Move mergeStates and other required utils from agent to api module [GH-12731]
+api: Support VAULT_HTTP_PROXY environment variable to allow overriding the Vault client's HTTP proxy [GH-12582]
+auth/approle: The role/:name/secret-id-accessor/lookup endpoint now returns a 404 status code when the secret_id_accessor cannot be found [GH-12788]
+auth/approle: expose secret_id_accessor as WrappedAccessor when creating wrapped secret-id. [GH-12425]
+auth/aws: add profile support for AWS credentials when using the AWS auth method [GH-12621]
+auth/kubernetes: validate JWT against the provided role on alias look ahead operations [GH-12688]
+auth/kubernetes: Add ability to configure entity alias names based on the serviceaccount's namespace and name. #110 #112 [GH-12633]
+auth/ldap: include support for an optional user filter field when searching for users [GH-11000]
+auth/oidc: Adds the skip_browser CLI option to allow users to skip opening the default browser during the authentication flow. [GH-12876]
+auth/okta: Send x-forwarded-for in Okta Push Factor request [GH-12320]
+auth/token: Add allowed_policies_glob and disallowed_policies_glob fields to token roles to allow glob matching of policies [GH-7277]pki: adds signature_bits field to customize signature algorithm on CAs and certs signed by Vault [GH-11245]
+secrets/aws: Add conditional template that allows custom usernames for both STS and IAM cases [GH-12185]
+secrets/azure: Adds support for rotate-root. #70 [GH-13034]
+secrets/azure: Adds support for using Microsoft Graph API since Azure Active Directory API is being removed in 2022. #67 [GH-12629]
+secrets/database: Update MSSQL dependency github.com/denisenkom/go-mssqldb to v0.11.0 and include support for contained databases in MSSQL plugin [GH-12839]
+secrets/pki: Allow signing of self-issued certs with a different signature algorithm. [GH-12514]
+secrets/pki: Use entropy augmentation when available when generating root and intermediate CA key material. [GH-12559]
+secrets/pki: select appropriate signature algorithm for ECDSA signature on certificates. [GH-11216]
+secrets/pki: Support ed25519 as a key for the pki backend [GH-11780]
+secrets/rabbitmq: Update dependency github.com/michaelklishin/rabbit-hole to v2 and resolve UserInfo.tags regression from RabbitMQ v3.9 [GH-12877]
+secrets/ssh: Let allowed_users template mix templated and non-templated parts. [GH-10886]
+secrets/ssh: Use entropy augmentation when available for generation of the signing key. [GH-12560]
+transform (enterprise): Add advanced features for encoding and decoding for Transform FPE
+transform (enterprise): Add a reference field to batch items, and propogate it to the response
+
+auth/kubernetes: deprecate disable_iss_validation and issuer configuration fields #127 [GH-12975]
+
+
+
