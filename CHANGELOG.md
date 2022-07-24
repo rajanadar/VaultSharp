@@ -1,8 +1,17 @@
-## 1.7.0.5 (TBD)
+## TBD
+
+**IMPROVEMENTS:**
+  
+## 1.7.0.5 (July 18, 2022)
 
 **IMPROVEMENTS:**
 
-  * Implemented support for Ed25519 Key type (Vault 1.9+ only)
+  * [GH-223] Implemented support for Ed25519 Key type (Vault 1.9+ only)
+  * [GH-251] Implemented remaining Transit endpoints
+  * [GH-253] Update delete metadata async  
+  * [GH-239] Ensure awaits are configured 
+  * [GH-241] Enforce await configuration (CA2007)
+  * [GH-246] Added create, read, list & delete token role APIs
 
 ## 1.7.0.4 (November 26, 2021)
 

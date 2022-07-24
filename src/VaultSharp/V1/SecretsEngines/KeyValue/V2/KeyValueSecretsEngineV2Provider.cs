@@ -38,8 +38,9 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
 
         public async Task<Secret<ListInfo>> ReadSecretPathsAsync(string path, string mountPoint = null, string wrapTimeToLive = null)
         {
-            var suffixPath = string.IsNullOrWhiteSpace(path) ? string.Empty : "/" + path.Trim('/');
-            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV2, "/metadata" + suffixPath + "?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            Checker.NotNull(path, "path");
+
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV2, "/metadata/" + path.Trim('/') + "?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<CurrentSecretMetadata>> WriteSecretAsync<T>(string path, T data, int? checkAndSet = null, string mountPoint = null)
@@ -65,7 +66,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
 
             // https://github.com/hashicorp/vault/blob/master/command/kv_patch.go#L126
 
-            var currentSecret = await ReadSecretAsync(path, mountPoint: mountPoint);
+            var currentSecret = await ReadSecretAsync(path, mountPoint: mountPoint).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
             if (currentSecret == null || currentSecret.Data == null)
             {
@@ -139,12 +140,11 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
             await _polymath.MakeVaultApiRequest(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV2, "/destroy/" + path.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task DeleteMetadataAsync(string path, string mountPoint = "secret")
+        public async Task DeleteMetadataAsync(string path, string mountPoint = null)
         {
-            Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(path, "path");
 
-            await _polymath.MakeVaultApiRequest("v1/" + mountPoint.Trim('/') + "/metadata/" + path.Trim('/'), HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV2, "/metadata/" + path.Trim('/'), HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

@@ -71,7 +71,7 @@ namespace VaultSharp.V1.AuthMethods
 
         public async Task PerformImmediateLogin()
         {
-            await _polymath.PerformImmediateLogin();
+            await _polymath.PerformImmediateLogin().ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

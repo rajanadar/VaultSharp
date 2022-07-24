@@ -17,7 +17,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
 
         public async Task<Secret<Dictionary<string, object>>> ReadSecretAsync(string path, string mountPoint = null, string wrapTimeToLive = null)
         {
-            return await ReadSecretAsync<Dictionary<string, object>>(path, mountPoint, wrapTimeToLive);
+            return await ReadSecretAsync<Dictionary<string, object>>(path, mountPoint, wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
         
         public async Task<Secret<T>> ReadSecretAsync<T>(string path, string mountPoint = null, string wrapTimeToLive = null)
@@ -35,7 +35,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
 
         public async Task<Secret<Dictionary<string, object>>> WriteSecretAsync(string path, IDictionary<string, object> values, string mountPoint = null)
         {
-            return await WriteSecretAsync(path, new Dictionary<string, object>(values), mountPoint);
+            return await WriteSecretAsync(path, new Dictionary<string, object>(values), mountPoint).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
         
         public async Task<Secret<T>> WriteSecretAsync<T>(string path, T values, string mountPoint = null)
