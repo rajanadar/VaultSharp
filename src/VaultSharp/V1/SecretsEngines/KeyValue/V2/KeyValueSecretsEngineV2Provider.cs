@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
 
@@ -41,6 +43,15 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
             Checker.NotNull(path, "path");
 
             return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV2, "/metadata/" + path.Trim('/') + "?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<SubKeysInfo>> ReadSubKeysAsync(string path, int version = 0, int depth = 0, string mountPoint = null, string wrapTimeToLive = null)
+        {
+            Checker.NotNull(path, "path");
+
+            string queryParameters = "?version=" + version + "&depth=" + depth;
+
+            return await _polymath.MakeVaultApiRequest<Secret<SubKeysInfo>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV2, "/subkeys/" + path.Trim('/') + queryParameters, HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<CurrentSecretMetadata>> WriteSecretAsync<T>(string path, T data, int? checkAndSet = null, string mountPoint = null)
