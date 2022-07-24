@@ -14,9 +14,6 @@ namespace VaultSharp.V1.Commons
         [JsonProperty("metadata")]
         public CurrentSecretMetadata Metadata { get; set; }
 
-
-
-
         [OnDeserialized]
         private void SetValuesOnDeserialized(StreamingContext context)
         {
