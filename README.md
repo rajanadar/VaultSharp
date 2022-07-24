@@ -903,6 +903,14 @@ Secret<ListInfo> secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSecretPat
 ListInfo paths = secret.Data;
 ```
 
+###### Read Secret SubKeys
+- This endpoint provides the subkeys within a secret entry that exists at the requested path.
+- The secret entry at this path will be retrieved and stripped of all data by replacing underlying values of leaf keys (i.e. non-map keys or map keys with no underlying subkeys) with null.
+```cs
+Secret<SubKeysInfo> secret = await vaultClient.V1.Secrets.KeyValue.V2.ReadSubKeysAsync(path)
+SubKeysInfo subKeys = secret.Data;
+```
+
 ###### Delete Secret
 
  - This endpoint issues a soft delete of the secret's latest version at the specified location. 
