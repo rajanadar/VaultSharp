@@ -104,6 +104,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
 
         public async Task<Secret<CreateEntityResponse>> CreateEntityByNameAsync(CreateEntityByNameRequest createEntityByNameRequest, string name, string mountPoint = null, string wrapTimeToLive = null)
         {
+            Checker.NotNull(name, "name");
             Checker.NotNull(createEntityByNameRequest, "createEntityByNameRequest");
 
             return await _polymath.MakeVaultApiRequest<Secret<CreateEntityResponse>>(
