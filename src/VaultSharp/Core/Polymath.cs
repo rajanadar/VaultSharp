@@ -22,6 +22,7 @@ namespace VaultSharp.Core
         private const string AuthorizationHeaderKey = "Authorization";
         private const string VaultTokenHeaderKey = "X-Vault-Token";
         private const string VaultWrapTimeToLiveHeaderKey = "X-Vault-Wrap-TTL";
+        private const string ContentType = "Content-Type";
 
         private const string VaultSharpV1Path = "v1/";
 
@@ -237,6 +238,16 @@ namespace VaultSharp.Core
                     case "HEAD":
 
                         httpRequestMessage = new HttpRequestMessage(HttpMethod.Head, requestUri);
+                        break;
+
+                    case "PATCH":
+
+                        httpRequestMessage = new HttpRequestMessage(new HttpMethod("PATCH"), requestUri)
+                        {
+                            Content = requestContent
+                        };
+                        headers.Add(ContentType, "application/merge-patch+json");
+
                         break;
 
                     default:
