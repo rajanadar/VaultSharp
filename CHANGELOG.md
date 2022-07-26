@@ -1,5 +1,9 @@
 ## 1.7.1 (TBD, 2022)
 
+**FEATURES:**
+
+  * [GH-268] Implemented Read secret subkeys api capability
+
 **IMPROVEMENTS:**
 
   * [GH-243] Fix the framework issue with TargetMoniker
