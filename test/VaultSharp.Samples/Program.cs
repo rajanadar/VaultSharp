@@ -430,6 +430,9 @@ namespace VaultSharp.Samples
             var kv2Secret = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync(path, mountPoint: kv2SecretsEngine.Path).Result;
             Assert.True(kv2Secret.Data.Data.Count == 2);
 
+            var subkeys = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretSubkeysAsync(path, mountPoint: kv2SecretsEngine.Path).Result;
+            Assert.True(subkeys.Data.Subkeys.Count > 0);
+
             var paths2 = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretPathsAsync("", mountPoint: kv2SecretsEngine.Path).Result;
             Assert.True(paths2.Data.Keys.Count() == 1);
 

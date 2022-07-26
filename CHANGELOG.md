@@ -1,8 +1,10 @@
-## 1.7.1 (TBD, 2022)
+## 1.10.0 (TBD, 2022)
 
 **FEATURES:**
 
-  * [GH-268] Implemented Read secret subkeys api capability
+  * [GH-268] Implemented the reading of secret subkeys api capability for KV2 Secret
+
+## 1.7.1 (TBD, 2022)
 
 **IMPROVEMENTS:**
 

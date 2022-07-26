@@ -99,7 +99,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
         /// <returns>Subkeys Info for specified version and depth.</returns>
-        Task<Secret<SubKeysInfo>> ReadSubKeysAsync(string path, int version = 0, int depth = 0, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<SecretSubkeysInfo>> ReadSecretSubkeysAsync(string path, int version = 0, int depth = 0, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// Retrieves the secret metadata at the specified location.
