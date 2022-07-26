@@ -1,6 +1,8 @@
-## TBD
+## 1.7.1 (TBD, 2022)
 
 **IMPROVEMENTS:**
+
+  * [GH-243] Fix the framework issue with TargetMoniker
   
 ## 1.7.0.5 (July 18, 2022)
 
