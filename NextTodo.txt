@@ -172,3 +172,38 @@ auth/kubernetes: deprecate disable_iss_validation and issuer configuration field
 
 
 
+C# Snippet to auto add hyperlinks to changelog file.
+
+            var clpath = @"C:\raja\code\gh\rajanadar\VaultSharp\CHANGELOG.md";
+
+            var changelogContents = File.ReadAllText(clpath);
+            var ghNumberInSquareBracketsRegex = new System.Text.RegularExpressions.Regex(@"\[[^\]]*\]");
+            
+            var links = new System.Text.StringBuilder();
+            links.AppendLine();
+            links.AppendLine();
+
+            var dict = new SortedDictionary<int, string>(Comparer<int>.Create((x, y) => y.CompareTo(x)));
+
+            var linkFormat = "https://github.com/rajanadar/VaultSharp/issues/";
+
+            foreach (System.Text.RegularExpressions.Match match 
+                in ghNumberInSquareBracketsRegex.Matches(changelogContents))
+            {
+                var ghNumber = match.Value;
+
+                if (ghNumber.Contains("-"))
+                {
+                    var issueNumber = ghNumber.Split("-")[1].Trim(']');
+                    var issueNumberValue = int.Parse(issueNumber);
+
+                    if (!dict.ContainsKey(issueNumberValue))
+                    {
+                        dict.Add(issueNumberValue, ghNumber + ": " + linkFormat + issueNumber + Environment.NewLine);
+                    }
+                }
+            }
+
+            dict.ToList().ForEach(e => links.Append(e.Value));
+
+            File.AppendAllText(clpath, links.ToString());
