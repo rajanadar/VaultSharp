@@ -4,7 +4,7 @@
 
   * [GH-268] Implemented the reading of secret subkeys api capability for KV2 Secret
 
-## 1.7.1 (TBD, 2022)
+## 1.7.1 (July 27, 2022)
 
 **IMPROVEMENTS:**
 
