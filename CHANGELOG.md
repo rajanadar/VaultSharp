@@ -4,6 +4,10 @@
 
   * [GH-268] Implemented the reading of secret subkeys api capability for KV2 Secret
 
+## 1.9.0 (TBD, 2022)
+**BREAKING CHANGE:**
+  * [GH-269] Patch Secret Method updated to match API spec. `PatchSecretDataRequest` object with `application/merge-patch+json` will be sent as a HTTP `PATCH` Request.
+
 ## 1.7.1 (July 27, 2022)
 
 **IMPROVEMENTS:**
