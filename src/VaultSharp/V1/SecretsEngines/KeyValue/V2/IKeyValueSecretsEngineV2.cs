@@ -69,6 +69,39 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         Task<Secret<ListInfo>> ReadSecretPathsAsync(string path, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
+        /// This endpoint provides the subkeys within a secret entry that 
+        /// exists at the requested path.The secret entry at this path will be
+        /// retrieved and stripped of all data by replacing underlying values 
+        /// of leaf keys (i.e. non-map keys or map keys with no underlying 
+        /// subkeys) with null.
+        /// </summary>
+        /// <param name="path">
+        /// <para>[required]</para>
+        /// Specifies the path of the secret to read. This is specified as part
+        /// of the URL.
+        /// </param>
+        /// <param name="version">
+        /// Specifies the version to return. If not set the latest version is
+        /// returned.
+        /// </param>
+        /// <param name="depth">
+        /// Specifies the deepest nesting level to provide in the output. The 
+        /// default value 0 will not impose any limit. If non-zero, keys that 
+        /// reside at the specified depth value will be artificially treated as
+        /// leaves and will thus be null even if further underlying subkeys 
+        /// exist.
+        /// </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
+        /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
+        /// <returns>Subkeys Info for specified version and depth.</returns>
+        Task<Secret<SecretSubkeysInfo>> ReadSecretSubkeysAsync(string path, int version = 0, int depth = 0, string mountPoint = null, string wrapTimeToLive = null);
+
+        /// <summary>
         /// Retrieves the secret metadata at the specified location.
         /// </summary>
         /// <param name="path"><para>[required]</para>
