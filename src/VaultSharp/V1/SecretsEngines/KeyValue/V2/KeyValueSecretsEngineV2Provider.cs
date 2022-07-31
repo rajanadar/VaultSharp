@@ -69,11 +69,11 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
             return await _polymath.MakeVaultApiRequest<Secret<CurrentSecretMetadata>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV2, "/data/" + path.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<CurrentSecretMetadata>> PatchSecretAsync(string path, PatchSecretDataRequest patchSecretData,  string mountPoint = null)
+        public async Task<Secret<CurrentSecretMetadata>> PatchSecretAsync(string path, PatchSecretDataRequest patchSecretDataRequest,  string mountPoint = null)
         {
             Checker.NotNull(path, "path");
 
-            return await _polymath.MakeVaultApiRequest<Secret<CurrentSecretMetadata>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV2, "/data/" + path.Trim('/'), new HttpMethod("PATCH"), patchSecretData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<CurrentSecretMetadata>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV2, "/data/" + path.Trim('/'), new HttpMethod("PATCH"), patchSecretDataRequest).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task DeleteSecretAsync(string path, string mountPoint = null)

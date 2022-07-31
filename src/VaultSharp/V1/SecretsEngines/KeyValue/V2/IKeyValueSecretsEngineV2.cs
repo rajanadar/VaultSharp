@@ -157,7 +157,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// </summary>
         /// <param name="path"><para>[required]</para>
         /// The path where the value is to be stored.</param>
-        /// <param name="newData"><para>[required]</para>
+        /// <param name="patchSecretDataRequest"><para>[required]</para>
         /// The value to be replaced and appended.</param>
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
@@ -166,7 +166,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// <returns>
         /// The task.
         /// </returns>
-        Task<Secret<CurrentSecretMetadata>> PatchSecretAsync(string path, PatchSecretDataRequest newData, string mountPoint = null);
+        Task<Secret<CurrentSecretMetadata>> PatchSecretAsync(string path, PatchSecretDataRequest patchSecretDataRequest, string mountPoint = null);
 
         /// <summary>
         /// This endpoint issues a soft delete of the secret's latest version at the specified location. 
