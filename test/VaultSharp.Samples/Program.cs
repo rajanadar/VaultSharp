@@ -12,6 +12,7 @@ using VaultSharp.V1.AuthMethods.AppRole;
 using VaultSharp.V1.AuthMethods.Token;
 using VaultSharp.V1.Commons;
 using VaultSharp.V1.SecretsEngines;
+using VaultSharp.V1.SecretsEngines.KeyValue.V2;
 using VaultSharp.V1.SecretsEngines.Transit;
 using VaultSharp.V1.SystemBackend;
 using VaultSharp.V1.SystemBackend.Plugin;
@@ -441,7 +442,7 @@ namespace VaultSharp.Samples
 
             // patch
 
-            Assert.ThrowsAsync<VaultApiException>(() => _authenticatedVaultClient.V1.Secrets.KeyValue.V2.PatchSecretAsync(Guid.NewGuid().ToString(), new Dictionary<string, object>(), mountPoint: kv2SecretsEngine.Path)).Wait();
+            Assert.ThrowsAsync<VaultApiException>(() => _authenticatedVaultClient.V1.Secrets.KeyValue.V2.PatchSecretAsync(Guid.NewGuid().ToString(), new PatchSecretDataRequest(), mountPoint: kv2SecretsEngine.Path)).Wait();
 
             var newData = new Dictionary<string, object>
             {
@@ -449,8 +450,13 @@ namespace VaultSharp.Samples
                 { "k3", "v3" }
             };
 
+            PatchSecretDataRequest patchSecretDataRequest = new PatchSecretDataRequest()
+            {
+                Data = newData,
+            };
+
             var newCurrentData = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.PatchSecretAsync(path,
-                newData, mountPoint: kv2SecretsEngine.Path).Result;
+                patchSecretDataRequest, mountPoint: kv2SecretsEngine.Path).Result;
 
             Assert.True(newCurrentData.Data.Version == 2);
 
