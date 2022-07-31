@@ -166,7 +166,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// <returns>
         /// The task.
         /// </returns>
-        Task<Secret<CurrentSecretMetadata>> PatchSecretAsync(string path, IDictionary<string, object> newData, string mountPoint = null);
+        Task<Secret<CurrentSecretMetadata>> PatchSecretAsync(string path, PatchSecretDataRequest newData, string mountPoint = null);
 
         /// <summary>
         /// This endpoint issues a soft delete of the secret's latest version at the specified location. 
