@@ -3,7 +3,7 @@
 **FEATURES:**
 
   * [GH-268] Implemented the reading of secret subkeys api capability for KV2 Secret
-
+  * [GH-280] Implemented the Get Role Id and Pull Secret Id method for AppRole Auth Endpoint
 ## 1.7.1 (July 27, 2022)
 
 **IMPROVEMENTS:**
