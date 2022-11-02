@@ -8,6 +8,6 @@ namespace VaultSharp.V1.AuthMethods.AppRole.Models
     public class RoleIdInfo
     {
         [JsonProperty("role_id")]
-        public int RoleId { get; set; }
+        public string RoleId { get; set; }
     }
 }
