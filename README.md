@@ -4,7 +4,7 @@ The most comprehensive cross-platform .NET Library for HashiCorp's Vault - A Sec
 
 **VaultSharp NuGet:** [![NuGet](https://img.shields.io/nuget/dt/VaultSharp.svg?style=flat)](https://www.nuget.org/packages/VaultSharp)
 
-**VaultSharp Latest Documentation:** Inline Below and also at: http://rajanadar.github.io/VaultSharp/
+**VaultSharp Latest Documentation:** Inline Below and also at: https://rajanadar.github.io/VaultSharp/
 
 **VaultSharp Questions/Clarifications:** [Ask on Stack Overflow with the tag vaultsharp](https://stackoverflow.com/questions/tagged/vaultsharp)
 
