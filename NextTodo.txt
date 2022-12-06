@@ -1,5 +1,23 @@
-
 TODO:
+
+This file jots down what needs to be done on VaultSharp based on Vault Changelog.
+https://github.com/hashicorp/vault/blob/main/CHANGELOG.md
+
+Current VaultSharp Version: 1.7.1
+Does it have all features till Vault API 1.7.0? NO. A lot of previous vault features don't exist. 
+Simply because consumers haven't needed it.
+
+Absolute scan of every item in Vault Changelog file by versions and accomodating in VaultSharp.
+
+0.1.0 (April 28, 2015) -- All good
+
+0.1.1 (May 2, 2015) -- All good
+
+0.1.2 (May 11, 2015) -- All good
+
+
+-----------------------
+
 
 VaultChangelog has been looked at 100% till 1.9.0
 

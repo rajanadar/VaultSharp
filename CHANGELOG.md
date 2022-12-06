@@ -1,14 +1,25 @@
-## 1.10.0 (TBD, 2022)
+## 1.7.2 (TBD, 2022)
 
 **FEATURES:**
 
-  * [GH-268] Implemented the reading of secret subkeys api capability for KV2 Secret
+  * [GH-268] Vault 1.10.x Feature: Implemented the reading of secret subkeys api capability for KV2 Secret
+  * [GH-238] Add Entity Endpoints for Identity Secret Engine
   * [GH-280] Implemented the Get Role Id and Pull Secret Id method for AppRole Auth Endpoint
+  * [GH-286] Create, Read and Delete Role and Configure Lease endpoints for RabbitMQ Secrets Engine
+
+**DOC IMPROVEMENTS:**
+
+  * [GH-275] Updated Github Pages link to use https
+
 ## 1.7.1 (July 27, 2022)
 
 **IMPROVEMENTS:**
 
   * [GH-243] Fix the framework issue with TargetMoniker
+
+**DOC IMPROVEMENTS:**
+
+  * Real GH links on the Changelog file
   
 ## 1.7.0.5 (July 18, 2022)
 
@@ -559,6 +570,10 @@ there are no changes from 0.4.0.
   * Initial release
   * Parity with Hashicorp's Vault 0.4.1 Api features
 
+[GH-286]: https://github.com/rajanadar/VaultSharp/issues/286
+[GH-280]: https://github.com/rajanadar/VaultSharp/issues/280
+[GH-238]: https://github.com/rajanadar/VaultSharp/issues/238
+[GH-275]: https://github.com/rajanadar/VaultSharp/issues/275
 [GH-268]: https://github.com/rajanadar/VaultSharp/issues/268
 [GH-253]: https://github.com/rajanadar/VaultSharp/issues/253
 [GH-251]: https://github.com/rajanadar/VaultSharp/issues/251
