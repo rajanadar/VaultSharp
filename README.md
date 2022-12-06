@@ -1123,9 +1123,26 @@ Assert.NotNull(caCert.CertificateContent);
 - This endpoint generates a new set of dynamic credentials based on the named role.
 
 ```cs
-Secret<UsernamePasswordCredentials> secret = await vaultClient.V1.Secrets.RabbitMQ.GetCredentialsAsync(role);
+Secret<UsernamePasswordCredentials> secret = await vaultClient.V1.Secrets.RabbitMQ.GetCredentialsAsync(roleName);
 string username = secret.Data.Username;
 string password = secret.Data.Password;
+```
+
+##### Create, Read and Delete RabbitMQ Roles
+
+- These endpoints manage the creation, reading and deletion of RabbitMQ roles.
+
+```cs
+var virtualHostName = "/";
+var virtualHostPermission = new { write = ".*", read = ".*" };
+var virtualHosts = new Dictionary<string, object>() { { virtualHostName, virtualHostPermission } };
+var virtualHostsJson = JsonSerializer.Serialize(virtualHosts);
+var role = new RabbitMQRole() { VHosts = virtualHostsJson }        
+await vaultClient.V1.Secrets.RabbitMQ.CreateRoleAsync(roleName, role, mountPoint);
+
+await vaultClient.V1.Secrets.RabbitMQ.ReadRoleAsync(roleName, mountPoint);
+
+await vaultClient.V1.Secrets.RabbitMQ.DeleteRoleAsync(roleName, mountPoint);
 ```
 
 #### SSH Secrets Engine
