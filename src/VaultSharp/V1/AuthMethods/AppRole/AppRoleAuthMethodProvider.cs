@@ -16,11 +16,25 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             this._polymath = polymath;
         }
 
-        public async Task<Secret<AppRoleInfo>> ReadRoleAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole) 
+        public async Task<Secret<AppRoleInfo>> ReadRoleAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");
-            return await _polymath.MakeVaultApiRequest<Secret<AppRoleInfo>>("v1/auth/"+ mountPoint.Trim('/')+"/role/"+roleName.Trim('/'), HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<AppRoleInfo>>("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/'), HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<RoleIdInfo>> GetRoleIdAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole)
+        {
+            Checker.NotNull(mountPoint, "mountPoint");
+            Checker.NotNull(roleName, "roleName");
+            return await _polymath.MakeVaultApiRequest<Secret<RoleIdInfo>>("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/role-id", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<SecretIdInfo>> PullSecretIdAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, SecretIdRequestOptions secretIdRequestOptions = null)
+        {
+            Checker.NotNull(mountPoint, "mountPoint");
+            Checker.NotNull(roleName, "roleName");
+            return await _polymath.MakeVaultApiRequest<Secret<SecretIdInfo>>("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/secret-id", HttpMethod.Post, secretIdRequestOptions).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }
