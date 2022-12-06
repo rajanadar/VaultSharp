@@ -864,6 +864,8 @@ var writtenValue = await vaultClient.V1.Secrets.KeyValue.V2.WriteSecretAsync(sec
 
 var valueToBeCombined = new Dictionary<string, object> { { "key2", "new-val2" }, { "key3", "val3" } };
 
+var patchSecretDataRequest = new PatchSecretDataRequest() { Data = valueToBeCombined };
+
 var metadata = await vaultClient.V1.Secrets.KeyValue.V2.PatchSecretAsync(secretPath, valueToBeCombined);
 ```
 

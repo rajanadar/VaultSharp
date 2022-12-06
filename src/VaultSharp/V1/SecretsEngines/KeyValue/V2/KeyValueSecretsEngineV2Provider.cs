@@ -69,47 +69,11 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
             return await _polymath.MakeVaultApiRequest<Secret<CurrentSecretMetadata>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV2, "/data/" + path.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<CurrentSecretMetadata>> PatchSecretAsync(string path, IDictionary<string, object> newData, string mountPoint = null)
+        public async Task<Secret<CurrentSecretMetadata>> PatchSecretAsync(string path, PatchSecretDataRequest patchSecretDataRequest,  string mountPoint = null)
         {
             Checker.NotNull(path, "path");
 
-            // https://github.com/hashicorp/vault/blob/master/command/kv_patch.go#L126
-
-            var currentSecret = await ReadSecretAsync(path, mountPoint: mountPoint).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
-
-            if (currentSecret == null || currentSecret.Data == null)
-            {
-                throw new VaultApiException("No value found at " + path);
-            }
-
-            var metadata = currentSecret.Data.Metadata;
-
-            if (metadata == null)
-            {
-                throw new VaultApiException("No metadata found at " + path + "; patch only works on existing data");
-            }
-
-            if (currentSecret.Data.Data == null)
-            {
-                throw new VaultApiException("No data found at " + path + "; patch only works on existing data");
-            }
-
-            foreach(var entry in newData)
-            {
-                // upsert
-                currentSecret.Data.Data[entry.Key] = entry.Value;
-            }
-
-            var requestData = new
-            {
-                data = currentSecret.Data.Data,
-                options = new Dictionary<string, object>
-                {
-                    {  "cas", metadata.Version }
-                }
-            };
-
-            return await _polymath.MakeVaultApiRequest<Secret<CurrentSecretMetadata>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV2, "/data/" + path.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<CurrentSecretMetadata>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV2, "/data/" + path.Trim('/'), new HttpMethod("PATCH"), patchSecretDataRequest).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task DeleteSecretAsync(string path, string mountPoint = null)
