@@ -1,4 +1,8 @@
-## 1.7.2 (TBD, 2022)
+## 1.7.2 (December 06, 2022)
+
+**BREAKING CHANGE:**
+
+  * [GH-269] Patch Secret Method updated to match API spec. `PatchSecretDataRequest` object with `application/merge-patch+json` will be sent as a HTTP `PATCH` Request.
 
 **FEATURES:**
 
@@ -10,10 +14,6 @@
 **DOC IMPROVEMENTS:**
 
   * [GH-275] Updated Github Pages link to use https
-
-## 1.9.0 (TBD, 2022)
-**BREAKING CHANGE:**
-  * [GH-269] Patch Secret Method updated to match API spec. `PatchSecretDataRequest` object with `application/merge-patch+json` will be sent as a HTTP `PATCH` Request.
 
 ## 1.7.1 (July 27, 2022)
 
@@ -574,6 +574,7 @@ there are no changes from 0.4.0.
   * Initial release
   * Parity with Hashicorp's Vault 0.4.1 Api features
 
+[GH-269]: https://github.com/rajanadar/VaultSharp/issues/269
 [GH-286]: https://github.com/rajanadar/VaultSharp/issues/286
 [GH-280]: https://github.com/rajanadar/VaultSharp/issues/280
 [GH-238]: https://github.com/rajanadar/VaultSharp/issues/238
