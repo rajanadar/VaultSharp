@@ -1,3 +1,13 @@
+## 1.7.2.2 (TBD)
+
+**BREAKING CHANGES:**
+
+  * [GH-288] Fix a ttl bug and use proper http verbs for aws credential generation.
+
+**IMPROVEMENTS:**
+
+  * [GH-288] AWS Credentials supports role arn, role session name now.
+
 ## 1.7.2.1 (December 07, 2022)
 
 **BUG FIXES:**
@@ -580,6 +590,7 @@ there are no changes from 0.4.0.
   * Initial release
   * Parity with Hashicorp's Vault 0.4.1 Api features
 
+[GH-288]: https://github.com/rajanadar/VaultSharp/issues/288
 [GH-289]: https://github.com/rajanadar/VaultSharp/issues/289
 [GH-269]: https://github.com/rajanadar/VaultSharp/issues/269
 [GH-286]: https://github.com/rajanadar/VaultSharp/issues/286
