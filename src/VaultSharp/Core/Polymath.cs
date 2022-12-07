@@ -22,7 +22,6 @@ namespace VaultSharp.Core
         private const string AuthorizationHeaderKey = "Authorization";
         private const string VaultTokenHeaderKey = "X-Vault-Token";
         private const string VaultWrapTimeToLiveHeaderKey = "X-Vault-Wrap-TTL";
-        private const string ContentType = "Content-Type";
 
         private const string VaultSharpV1Path = "v1/";
 
@@ -242,11 +241,16 @@ namespace VaultSharp.Core
 
                     case "PATCH":
 
+                        // We cannot directly add content type for httpRequestMessage
+                        // It is added via the RequestContent
+                        // https://stackoverflow.com/a/70593566/1174414
+
                         httpRequestMessage = new HttpRequestMessage(new HttpMethod("PATCH"), requestUri)
                         {
-                            Content = requestContent
+                            Content = requestData != null 
+                            ? new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/merge-patch+json")
+                            : null
                         };
-                        headers.Add(ContentType, "application/merge-patch+json");
 
                         break;
 

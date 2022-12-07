@@ -1,3 +1,9 @@
+## 1.7.2.1 (December 07, 2022)
+
+**BUG FIXES:**
+
+  * [GH-289] Fix InvalidOperationException related to Patch Content type for PatchSecretAsync method
+
 ## 1.7.2 (December 06, 2022)
 
 **BREAKING CHANGE:**
@@ -574,6 +580,7 @@ there are no changes from 0.4.0.
   * Initial release
   * Parity with Hashicorp's Vault 0.4.1 Api features
 
+[GH-289]: https://github.com/rajanadar/VaultSharp/issues/289
 [GH-269]: https://github.com/rajanadar/VaultSharp/issues/269
 [GH-286]: https://github.com/rajanadar/VaultSharp/issues/286
 [GH-280]: https://github.com/rajanadar/VaultSharp/issues/280
