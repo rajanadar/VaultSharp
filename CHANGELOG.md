@@ -1,4 +1,4 @@
-## 1.7.2.2 (TBD)
+## 1.7.2.2 (December 08, 2022)
 
 **BREAKING CHANGES:**
 
