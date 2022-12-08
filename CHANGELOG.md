@@ -1,3 +1,9 @@
+## 1.12.0-beta1 (TBD)
+
+**FEATURES:**
+
+  * [GH-231] Ability to auto renew login token. In case of AWS Login, also regenerate signature.
+
 ## 1.7.2.2 (December 08, 2022)
 
 **BREAKING CHANGES:**
@@ -590,6 +596,7 @@ there are no changes from 0.4.0.
   * Initial release
   * Parity with Hashicorp's Vault 0.4.1 Api features
 
+[GH-231]: https://github.com/rajanadar/VaultSharp/issues/231
 [GH-288]: https://github.com/rajanadar/VaultSharp/issues/288
 [GH-289]: https://github.com/rajanadar/VaultSharp/issues/289
 [GH-269]: https://github.com/rajanadar/VaultSharp/issues/269
