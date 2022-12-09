@@ -8,6 +8,7 @@ using VaultSharp.V1.AuthMethods.Azure;
 using VaultSharp.V1.AuthMethods.Cert;
 using VaultSharp.V1.AuthMethods.CloudFoundry;
 using VaultSharp.V1.AuthMethods.GitHub;
+using VaultSharp.V1.AuthMethods.JWT;
 using VaultSharp.V1.AuthMethods.Kerberos;
 using VaultSharp.V1.AuthMethods.Kubernetes;
 using VaultSharp.V1.AuthMethods.LDAP;
@@ -28,6 +29,7 @@ namespace VaultSharp.V1.AuthMethods
             _polymath = polymath;
 
             AppRole = new AppRoleAuthMethodProvider(_polymath);
+            JWT = new JWTAuthMethodProvider(_polymath);
             LDAP = new LDAPAuthMethodProvider(_polymath);
             Okta = new OktaAuthMethodProvider(_polymath);
             Token = new TokenAuthMethodProvider(_polymath);
@@ -46,6 +48,8 @@ namespace VaultSharp.V1.AuthMethods
         public IGitHubAuthMethod GitHub => throw new NotImplementedException();
 
         public IGitHubAuthMethod GoogleCloud => throw new NotImplementedException();
+
+        public IJWTAuthMethod JWT { get; }
 
         public IKubernetesAuthMethod Kubernetes => throw new NotImplementedException();
 

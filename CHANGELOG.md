@@ -1,8 +1,9 @@
-## 1.12.2 (TBD)
+## 1.12.2 (December 09, 2022)
 
 **FEATURES:**
 
   * secret/kubernetes: Add kubernetes secrets engine.
+  * auth/jwt(oidc): Added OIDC methods to get auth url and generate vault token by exchanging auth code.
 
 ## 1.8.12 (December 09, 2022)
 
