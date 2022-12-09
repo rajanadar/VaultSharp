@@ -18,31 +18,11 @@ Absolute scan of every item in Vault Changelog file by versions and accomodating
 
 -----------------------
 
-
 VaultChangelog has been looked at 100% till 1.9.0
 
 0. All SecretData JSON Models are returned in ascending field order by Vault
 
-1.6.5.x
-
-
-        // 1. Add https://www.vaultproject.io/api/secret/transit#generate-random-bytes >> done
-        // 2. https://www.vaultproject.io/api/secret/transit#hash-data 
-        // 3. https://www.vaultproject.io/api/secret/transit#generate-hmac
-        // 4. https://www.vaultproject.io/api/secret/transit#sign-data
-        // 5. https://www.vaultproject.io/api/secret/transit#verify-signed-data
-        // 6. https://www.vaultproject.io/api/secret/transit#backup-key
-        // 7. https://www.vaultproject.io/api/secret/transit#restore-key
-        // 8. https://www.vaultproject.io/api/secret/transit#trim-key
-        // 9. https://www.vaultproject.io/api/secret/transit#configure-cache
-        // 10. https://www.vaultproject.io/api/secret/transit#read-transit-cache-configuration
-
-
 1.7.0
-
-aws auth
-
-aws/auth: AWS Auth concepts and endpoints that use the "whitelist" and "blacklist" terms have been updated to more inclusive language (e.g. /auth/aws/identity-whitelist has been updated to/auth/aws/identity-accesslist). The old and new endpoints are aliases, sharing the same underlying data. The legacy endpoint names are considered deprecated and will be removed in a future release (not before Vault 1.9). The complete list of endpoint changes is available in the AWS Auth API docs.
 
 auth/jwt: Adds max_age role parameter and auth_time claim validation. [GH-10919]
 See how to accomodate X-Vault-Index
@@ -70,7 +50,7 @@ secrets/gcp: Truncate ServiceAccount display names longer than 100 characters. [
 
 DEPRECATIONS:
 
-aws/auth: AWS Auth endpoints that use the "whitelist" and "blacklist" terms have been deprecated. Refer to the CHANGES section for additional details.
+aws/auth: AWS Auth endpoints that use the "accesslist" and "denylist" terms have been deprecated. Refer to the CHANGES section for additional details.
 
 1.7.1
 

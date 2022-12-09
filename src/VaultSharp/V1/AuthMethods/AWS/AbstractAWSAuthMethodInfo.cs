@@ -53,7 +53,7 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// <summary>
         /// Gets the nonce to be used for subsequent login requests. 
         /// If this parameter is not specified at all and if reauthentication is allowed, 
-        /// then the method will generate a random nonce, attaches it to the instance's identity-whitelist 
+        /// then the method will generate a random nonce, attaches it to the instance's identity-accesslist 
         /// entry and returns the nonce back as part of auth metadata. 
         /// This value should be used with further login requests, to establish client authenticity. 
         /// Clients can choose to set a custom nonce if preferred, in which case, it is recommended 
@@ -78,7 +78,7 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// <para>[required/optional]</para>
         /// The nonce to be used for subsequent login requests. 
         /// If this parameter is not specified at all and if reauthentication is allowed, 
-        /// then the method will generate a random nonce, attaches it to the instance's identity-whitelist 
+        /// then the method will generate a random nonce, attaches it to the instance's identity-accesslist 
         /// entry and returns the nonce back as part of auth metadata. 
         /// This value should be used with further login requests, to establish client authenticity. 
         /// Clients can choose to set a custom nonce if preferred, in which case, it is recommended 
@@ -114,7 +114,7 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// <para>[required/optional]</para>
         /// The nonce to be used for subsequent login requests. 
         /// If this parameter is not specified at all and if reauthentication is allowed, 
-        /// then the method will generate a random nonce, attaches it to the instance's identity-whitelist 
+        /// then the method will generate a random nonce, attaches it to the instance's identity-accesslist 
         /// entry and returns the nonce back as part of auth metadata. 
         /// This value should be used with further login requests, to establish client authenticity. 
         /// Clients can choose to set a custom nonce if preferred, in which case, it is recommended 

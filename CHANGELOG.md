@@ -4,6 +4,10 @@
 
   * secret/transit: Add entropy-source field to GenerateRandomBytes api.
 
+**IMPROVEMENTS:**
+
+  * Remove all references of whitelist/blacklist in code, docs etc.
+
 ## 1.7.2.2 (December 08, 2022)
 
 **BREAKING CHANGES:**
