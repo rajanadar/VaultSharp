@@ -10,6 +10,7 @@ using VaultSharp.V1.SecretsEngines.GoogleCloud;
 using VaultSharp.V1.SecretsEngines.GoogleCloudKMS;
 using VaultSharp.V1.SecretsEngines.Identity;
 using VaultSharp.V1.SecretsEngines.KeyValue;
+using VaultSharp.V1.SecretsEngines.Kubernetes;
 using VaultSharp.V1.SecretsEngines.MongoDBAtlas;
 using VaultSharp.V1.SecretsEngines.Nomad;
 using VaultSharp.V1.SecretsEngines.OpenLDAP;
@@ -86,6 +87,11 @@ namespace VaultSharp.V1.SecretsEngines
         /// The KeyValue Secrets Engine.
         /// </summary>
         IKeyValueSecretsEngine KeyValue { get; }
+
+        /// <summary>
+        /// The Kubernetes Secrets Engine.
+        /// </summary>
+        IKubernetesSecretsEngine Kubernetes { get; }
 
         /// <summary>
         /// The MongoDBAtlas Secrets Engine.

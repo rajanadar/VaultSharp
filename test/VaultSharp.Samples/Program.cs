@@ -22,7 +22,11 @@ namespace VaultSharp.Samples
 {
     class Program
     {
-        private const string ExpectedVaultVersion = "1.8.12";
+        // Vault Changelog till 1.9.0 is scanned.
+        // Start from 1.9.0 for minor changes.
+        // Start after 1.12.2 for major changes.
+
+        private const string ExpectedVaultVersion = "1.12.2";
 
         private static IVaultClient _unauthenticatedVaultClient;
         private static IVaultClient _authenticatedVaultClient;
@@ -430,6 +434,9 @@ namespace VaultSharp.Samples
             };
 
             _authenticatedVaultClient.V1.System.MountSecretBackendAsync(kv2SecretsEngine).Wait();
+
+            // wait for a second for vault to upgrade all keys
+            System.Threading.Thread.Sleep(1000);
 
             var values = new Dictionary<string, object>
             {

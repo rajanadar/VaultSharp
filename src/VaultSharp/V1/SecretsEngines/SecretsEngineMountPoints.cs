@@ -20,6 +20,7 @@ namespace VaultSharp.V1.SecretsEngines
             public const string KeyValueV1 = "kv";
             public const string MongoDBAtlas = "mongodbatlas";
             public const string KeyValueV2 = "kv-v2";
+            public const string Kubernetes = "kubernetes";
             public const string Identity = "identity";
             public const string Nomad = "nomad";
             public const string OpenLDAP = "openldap";
@@ -55,6 +56,9 @@ namespace VaultSharp.V1.SecretsEngines
         public string KMIP { get; set; } = Defaults.KMIP;
         public string KeyValueV1 { get; set; } = Defaults.KeyValueV1;
         public string KeyValueV2 { get; set; } = Defaults.KeyValueV2;
+
+        public string Kubernetes { get; set; } = Defaults.Kubernetes;
+
         public string MongoDBAtlas { get; set; } = Defaults.MongoDBAtlas;
         public string Identity { get; set; } = Defaults.Identity;
         public string Nomad { get; set; } = Defaults.Nomad;

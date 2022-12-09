@@ -1,3 +1,9 @@
+## 1.12.2 (TBD)
+
+**FEATURES:**
+
+  * secret/kubernetes: Add kubernetes secrets engine.
+
 ## 1.8.12 (December 09, 2022)
 
 **BREAKING CHANGES:**

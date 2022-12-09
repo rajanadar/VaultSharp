@@ -10,8 +10,6 @@ The most comprehensive cross-platform .NET Library for HashiCorp's Vault - A Sec
 
 **VaultSharp Gitter Lobby:** [Gitter Lobby](https://gitter.im/rajanadar-VaultSharp/Lobby)
 
-**Older VaultSharp 0.6.x Documentation:** [0.6.x Docs](https://github.com/rajanadar/VaultSharp/blob/master/README-0.6.x.md)
-
 **Report Issues/Feedback:** [Create a VaultSharp GitHub issue](https://github.com/rajanadar/VaultSharp/issues/new)
 
 **Contributing Guidlines:** [VaultSharp Contribution Guidelines](https://github.com/rajanadar/VaultSharp/blob/master/CONTRIBUTING.MD)
@@ -1027,6 +1025,15 @@ var protection = keyManagementKMSKey.Data.Protection;
 Secret<KMIPCredentials> kmipCredentials = await vaultClient.V1.Secrets.Enterprise.KMIP.GetCredentialsAsync(scopeName, roleName);
 string certificateContent = kmipCredentials.Data.CertificateContent;
 string privateKeyContent = kmipCredentials.Data.PrivateKeyContent;
+```
+
+#### Kubernetes Secrets Engine
+
+##### Generate dynamic credentials
+
+```cs
+Secret<KubernetesCredentials> kubernetesCredentials = await vaultClient.V1.Secrets.Kubernetes.GetCredentialsAsync(ksRoleName, ksNamespace);
+string serviceAccountToken = kubernetesCredentials.Data.ServiceAccountToken;
 ```
 
 #### MongoDBAtlas Secrets Engine

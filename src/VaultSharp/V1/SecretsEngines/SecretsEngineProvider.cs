@@ -20,6 +20,7 @@ using VaultSharp.V1.SecretsEngines.TOTP;
 using VaultSharp.V1.SecretsEngines.Transit;
 using VaultSharp.V1.SecretsEngines.Enterprise;
 using VaultSharp.V1.SecretsEngines.Terraform;
+using VaultSharp.V1.SecretsEngines.Kubernetes;
 
 namespace VaultSharp.V1.SecretsEngines
 {
@@ -40,6 +41,7 @@ namespace VaultSharp.V1.SecretsEngines
             GoogleCloudKMS = new GoogleCloudKMSSecretsEngineProvider(polymath);
             Identity = new IdentitySecretsEngineProvider(polymath);
             KeyValue = new KeyValueSecretsEngineProvider(polymath);
+            Kubernetes = new KubernetesSecretsEngineProvider(polymath);
             MongoDBAtlas = new MongoDBAtlasSecretsEngineProvider(polymath);
             Nomad = new NomadSecretsEngineProvider(polymath);
             OpenLDAP = new OpenLDAPSecretsEngineProvider(polymath);
@@ -72,6 +74,8 @@ namespace VaultSharp.V1.SecretsEngines
         public IGoogleCloudKMSSecretsEngine GoogleCloudKMS { get; }
 
         public IKeyValueSecretsEngine KeyValue { get; }
+
+        public IKubernetesSecretsEngine Kubernetes { get; }
 
         public IIdentitySecretsEngine Identity { get; }
 
