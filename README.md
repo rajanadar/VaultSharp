@@ -417,6 +417,18 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 // vault token/policies mapped to the Okta username and password.
 ```
 
+##### Okta Verify
+
+```cs
+
+string nonce = "<nonce>";
+var challengeResponse = await vaultClient.V1.Auth.Okta.VerifyPushChallengeAsync(nonce);
+var answer = challengeResponse.Data.CorrectAnswer;
+
+// verify this answer
+
+```
+
 #### RADIUS Auth Method
 
 ```cs

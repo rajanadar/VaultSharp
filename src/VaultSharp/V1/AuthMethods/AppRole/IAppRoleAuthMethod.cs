@@ -16,6 +16,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint">Mount point of the AppRole Auth method</param>
         /// <returns>Metadata of Named AppRole</returns>
         Task<Secret<AppRoleInfo>> ReadRoleAsync(string roleName, string mountPoint = "approle");
+
         /// <summary>
         /// Reads the RoleID of an existing AppRole.
         /// </summary>
@@ -23,6 +24,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint">Mount point of the AppRole Auth method</param>
         /// <returns>RoleId of Named AppRole</returns>
         Task<Secret<RoleIdInfo>> GetRoleIdAsync(string roleName, string mountPoint = "approle");
+
         /// <summary>
         /// Generates and issues a new SecretID on an existing AppRole. 
         /// Similar to tokens, the response will also contain a 

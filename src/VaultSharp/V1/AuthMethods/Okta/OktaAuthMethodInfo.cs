@@ -41,11 +41,39 @@ namespace VaultSharp.V1.AuthMethods.Okta
         public string Password { get; }
 
         /// <summary>
+        /// Gets the TOTP.
+        /// </summary>
+        /// <value>
+        /// The TOTP.
+        /// </value>
+        public string TOTP { get; }
+
+        /// <summary>
+        /// Gets the Provider.
+        /// </summary>
+        /// <value>
+        /// The Provider.
+        /// </value>
+        public OktaTOTPProvider? TOTPProvider { get; }
+
+        /// <summary>
+        /// Gets the Nonce.
+        /// </summary>
+        /// <value>
+        /// The Nonce.
+        /// </value>
+        public string Nonce { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="OktaAuthMethodInfo"/> class.
         /// </summary>
         /// <param name="username">The username.</param>
         /// <param name="password">The password.</param>
-        public OktaAuthMethodInfo(string username, string password) : this(AuthMethodType.Okta.Type, username, password)
+        /// <param name="totp">The totp</param>
+        /// <param name="provider">The provider</param>
+        /// <param name="nonce">The nonce</param>
+        public OktaAuthMethodInfo(string username, string password, string totp = null, OktaTOTPProvider? provider = null, string nonce = null) 
+            : this(AuthMethodType.Okta.Type, username, password, totp, provider, nonce)
         {
         }
 
@@ -55,7 +83,10 @@ namespace VaultSharp.V1.AuthMethods.Okta
         /// <param name="mountPoint">The mount point.</param>
         /// <param name="username">The username.</param>
         /// <param name="password">The password.</param>
-        public OktaAuthMethodInfo(string mountPoint, string username, string password)
+        /// <param name="totp">The totp</param>
+        /// <param name="provider">The provider</param>
+        /// <param name="nonce">The nonce</param>
+        public OktaAuthMethodInfo(string mountPoint, string username, string password, string totp = null, OktaTOTPProvider? provider = null, string nonce = null)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(username, "username");
@@ -64,6 +95,9 @@ namespace VaultSharp.V1.AuthMethods.Okta
             MountPoint = mountPoint;
             Username = username;
             Password = password;
+            TOTP = totp;
+            TOTPProvider = provider;
+            Nonce = nonce;
         }
     }
 }

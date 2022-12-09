@@ -26,6 +26,21 @@ namespace VaultSharp.V1.AuthMethods.Okta
                 {"password", _oktaAuthMethodInfo.Password }
             };
 
+            if (!string.IsNullOrWhiteSpace(_oktaAuthMethodInfo.TOTP))
+            {
+                requestData.Add("totp", _oktaAuthMethodInfo.TOTP);
+            }
+
+            if (_oktaAuthMethodInfo.TOTPProvider != null)
+            {
+                requestData.Add("provider", _oktaAuthMethodInfo.TOTPProvider.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(_oktaAuthMethodInfo.Nonce))
+            {
+                requestData.Add("nonce", _oktaAuthMethodInfo.Nonce);
+            }
+
             // make an unauthenticated call to Vault, since this is the call to get the token. It shouldn't need a token.
             var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, requestData, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             _oktaAuthMethodInfo.ReturnedLoginAuthInfo = response?.AuthInfo;

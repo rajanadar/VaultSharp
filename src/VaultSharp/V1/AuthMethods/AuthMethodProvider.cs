@@ -29,6 +29,7 @@ namespace VaultSharp.V1.AuthMethods
 
             AppRole = new AppRoleAuthMethodProvider(_polymath);
             LDAP = new LDAPAuthMethodProvider(_polymath);
+            Okta = new OktaAuthMethodProvider(_polymath);
             Token = new TokenAuthMethodProvider(_polymath);
         }
 
@@ -54,7 +55,7 @@ namespace VaultSharp.V1.AuthMethods
 
         public IOCIAuthMethod OCI => throw new NotImplementedException();
 
-        public IOktaAuthMethod Okta => throw new NotImplementedException();
+        public IOktaAuthMethod Okta { get; }
 
         public IRADIUSAuthMethod RADIUS => throw new NotImplementedException();
 

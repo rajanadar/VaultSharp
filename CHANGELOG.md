@@ -3,10 +3,12 @@
 **FEATURES:**
 
   * secret/transit: Add entropy-source field to GenerateRandomBytes api.
+  * auth/okta: Adds support for Okta Verify TOTP MFA.
 
 **IMPROVEMENTS:**
 
   * Remove all references of whitelist/blacklist in code, docs etc.
+  * auth/okta: Okta login now supports the totp, provider and nonce fields.
 
 ## 1.7.2.2 (December 08, 2022)
 

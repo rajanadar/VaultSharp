@@ -24,23 +24,6 @@ VaultChangelog has been looked at 100% till 1.9.0
 
 1.7.0
 
-auth/jwt: Adds max_age role parameter and auth_time claim validation. [GH-10919]
-See how to accomodate X-Vault-Index
-
-secrets/aws: add IAM tagging support for iam_user roles [GH-10953]
-secrets/database/cassandra: Add ability to customize dynamic usernames [GH-10906]
-secrets/database/couchbase: Add ability to customize dynamic usernames [GH-10995]
-secrets/database/mongodb: Add ability to customize dynamic usernames [GH-10858]
-secrets/database/mssql: Add ability to customize dynamic usernames [GH-10767]
-secrets/database/mysql: Add ability to customize dynamic usernames [GH-10834]
-secrets/database/postgresql: Add ability to customize dynamic usernames [GH-10766]
-secrets/db/snowflake: Added support for Snowflake to the Database Secret Engine [GH-10603]
-
-secrets/openldap: Added dynamic roles to OpenLDAP similar to the combined database engine [GH-10996]
-secrets/terraform: New secret engine for managing Terraform Cloud API tokens [GH-10931]
-
-
-auth/approle: Secrets ID generation endpoint now returns secret_id_ttl as part of its response. [GH-10826]
 auth/okta: Adds support for Okta Verify TOTP MFA. [GH-10942]
 
 
