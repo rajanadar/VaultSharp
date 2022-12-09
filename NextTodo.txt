@@ -26,8 +26,8 @@ VaultChangelog has been looked at 100% till 1.9.0
 1.6.5.x
 
 
-        // 1. Add https://www.vaultproject.io/api/secret/transit#generate-random-bytes
-        // 2. https://www.vaultproject.io/api/secret/transit#hash-data
+        // 1. Add https://www.vaultproject.io/api/secret/transit#generate-random-bytes >> done
+        // 2. https://www.vaultproject.io/api/secret/transit#hash-data 
         // 3. https://www.vaultproject.io/api/secret/transit#generate-hmac
         // 4. https://www.vaultproject.io/api/secret/transit#sign-data
         // 5. https://www.vaultproject.io/api/secret/transit#verify-signed-data

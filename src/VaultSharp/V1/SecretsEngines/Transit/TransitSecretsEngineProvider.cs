@@ -159,6 +159,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         public async Task<Secret<RandomBytesResponse>> GenerateRandomBytesAsync(uint numberBytes, RandomBytesRequestOptions randomOptions, string mountPoint = null)
         {
             Checker.NotNull(randomOptions, "randomOptions");
+
             return await _polymath.MakeVaultApiRequest<Secret<RandomBytesResponse>>(
                     mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Transit,
                     "/random/" + numberBytes,

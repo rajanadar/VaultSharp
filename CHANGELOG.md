@@ -1,3 +1,9 @@
+## 1.8.0 (TBD)
+
+**FEATURES:**
+
+  * secret/transit: Add entropy-source field to GenerateRandomBytes api.
+
 ## 1.7.2.2 (December 08, 2022)
 
 **BREAKING CHANGES:**
