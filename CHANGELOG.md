@@ -1,4 +1,8 @@
-## 1.8.0 (TBD)
+## 1.8.12 (December 09, 2022)
+
+**BREAKING CHANGES:**
+
+  * secrets/gcp: Deprecated the /gcp/token/:roleset and /gcp/key/:roleset paths for generating secrets for rolesets. Use /gcp/roleset/:roleset/token and /gcp/roleset/:roleset/key instead.
 
 **FEATURES:**
 
