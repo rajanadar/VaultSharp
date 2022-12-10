@@ -40,6 +40,9 @@ namespace VaultSharp.V1.Commons
         [JsonProperty("config")]
         public Dictionary<string, object> Config { get; set; }
 
+        [JsonProperty("deprecation_status")]
+        public string DeprecationStatus { get; set; }
+
         /// <summary>
         /// Gets or sets a human-friendly description of the backend.
         /// </summary>
@@ -48,6 +51,9 @@ namespace VaultSharp.V1.Commons
         /// </value>
         [JsonProperty("description")]
         public string Description { get; set; }
+
+        [JsonProperty("external_entropy_access")]
+        public bool ExternalEntropyAccess { get; set; }
 
         /// <summary>
         /// <para>[optional]</para>
@@ -63,13 +69,13 @@ namespace VaultSharp.V1.Commons
         public bool Local { get; set; }
 
         /// <summary>
-        /// Gets or sets a seal wrap flag for the backend.
+        /// Gets or sets the options.
         /// </summary>
         /// <value>
-        /// The flag.
+        /// The options.
         /// </value>
-        [JsonProperty("seal_wrap")]
-        public bool SealWrap { get; set; }
+        [JsonProperty("options")]
+        public Dictionary<string, object> Options { get; set; }
 
         /// <summary>
         /// Gets or sets the plugin name.
@@ -80,13 +86,22 @@ namespace VaultSharp.V1.Commons
         [JsonProperty("plugin_name")]
         public string PluginName { get; set; }
 
+        [JsonProperty("plugin_version")]
+        public string PluginVersion { get; set; }
+
+        [JsonProperty("running_plugin_version")]
+        public string RunningPluginVersion { get; set; }
+
+        [JsonProperty("running_sha256")]
+        public string RunningSHA256 { get; set; }
+
         /// <summary>
-        /// Gets or sets the options.
+        /// Gets or sets a seal wrap flag for the backend.
         /// </summary>
         /// <value>
-        /// The options.
+        /// The flag.
         /// </value>
-        [JsonProperty("options")]
-        public Dictionary<string, object> Options { get; set; }
+        [JsonProperty("seal_wrap")]
+        public bool SealWrap { get; set; }
     }
 }
