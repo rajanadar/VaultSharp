@@ -670,7 +670,18 @@ namespace VaultSharp.Samples
             DisplayJson(sealStatus);
             Assert.False(sealStatus.Sealed);
 
-            // logger endpoints
+            // logger endpoints.
+            // Check when 1.13.0 Vault is released
+
+            /*
+
+            var loggers = _authenticatedVaultClient.V1.System.GetVerbosityLevelOfAllLoggersAsync().Result;
+            Assert.True(loggers.Data.Count > 0);
+
+            var logger = _authenticatedVaultClient.V1.System.GetVerbosityLevelOfLoggerAsync("audit").Result;
+            Assert.True(logger.Data.Count > 0);
+
+            */
 
             _authenticatedVaultClient.V1.System.ModifyVerbosityLevelForAllLoggersAsync(LogVerbosityLevel.error).Wait();
 

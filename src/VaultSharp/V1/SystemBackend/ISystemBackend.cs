@@ -410,6 +410,21 @@ namespace VaultSharp.V1.SystemBackend
         Task RevokePrefixLeaseAsync(string prefix);
 
         /// <summary>
+        /// Get the verbosity level of all loggers.
+        /// </summary>
+        /// <returns>The verbosity levels</returns>
+        Task<Secret<Dictionary<string, object>>> GetVerbosityLevelOfAllLoggersAsync();
+
+        /// <summary>
+        /// Get the verbosity level of a logger.
+        /// </summary>
+        /// <param name="loggerName">
+        /// Specifies the logger name.
+        /// </param>
+        /// <returns>The verbosity level</returns>
+        Task<Secret<Dictionary<string, object>>> GetVerbosityLevelOfLoggerAsync(string loggerName);
+
+        /// <summary>
         /// Modify the verbosity level of all loggers.
         /// </summary>
         /// <param name="logVerbosityLevel">

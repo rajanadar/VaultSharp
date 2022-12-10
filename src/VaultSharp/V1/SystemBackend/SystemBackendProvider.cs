@@ -375,6 +375,16 @@ namespace VaultSharp.V1.SystemBackend
             await _polymath.MakeVaultApiRequest("v1/sys/leases/revoke-prefix/" + prefix.TrimStart('/'), HttpMethod.Put).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<Secret<Dictionary<string, object>>> GetVerbosityLevelOfAllLoggersAsync()
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>("v1/sys/loggers", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<Dictionary<string, object>>> GetVerbosityLevelOfLoggerAsync(string loggerName)
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>("v1/sys/loggers/" + loggerName, HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
         public async Task ModifyVerbosityLevelForAllLoggersAsync(LogVerbosityLevel logVerbosityLevel)
         {
             var requestData = new

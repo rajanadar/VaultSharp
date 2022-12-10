@@ -7,8 +7,11 @@
     {
         trace,
         debug,
+        notice,
         info,
         warn,
-        error
+        warning,
+        error,
+        err
     }
 }
