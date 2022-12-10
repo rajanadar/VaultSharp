@@ -670,6 +670,15 @@ namespace VaultSharp.Samples
             DisplayJson(sealStatus);
             Assert.False(sealStatus.Sealed);
 
+            // logger endpoints
+
+            _authenticatedVaultClient.V1.System.ModifyVerbosityLevelForAllLoggersAsync(LogVerbosityLevel.error).Wait();
+
+            _authenticatedVaultClient.V1.System.ModifyVerbosityLevelForLoggerAsync("audit", LogVerbosityLevel.warn);
+
+            _authenticatedVaultClient.V1.System.RevertVerbosityLevelForAllLoggersAsync().Wait();
+            _authenticatedVaultClient.V1.System.RevertVerbosityLevelForLoggerAsync("audit").Wait();
+
             // audit backends
             var audits = _authenticatedVaultClient.V1.System.GetAuditBackendsAsync().Result;
             DisplayJson(audits);

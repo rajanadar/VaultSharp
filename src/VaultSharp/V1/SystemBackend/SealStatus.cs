@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -74,6 +76,9 @@ namespace VaultSharp.V1.SystemBackend
         [JsonProperty("version")]
         public string Version { get; set; }
 
+        [JsonProperty("build_date")]
+        public DateTimeOffset BuildDate { get; set; }
+
         /// <summary>
         /// Gets or sets the migration.
         /// </summary>
@@ -98,13 +103,28 @@ namespace VaultSharp.V1.SystemBackend
         [JsonProperty("storage_type")]
         public string StorageType { get; set; }
 
+        [JsonProperty("hcp_link_status", NullValueHandling = NullValueHandling.Ignore)]
+        public string HCPLinkStatus { get; set; }
+
+        [JsonProperty("hcp_link_resource_ID", NullValueHandling = NullValueHandling.Ignore)]
+        public string HCPLinkResourceID { get; set; }
+
+        [JsonProperty("warnings", NullValueHandling = NullValueHandling.Ignore)]
+        public List<string> Warnings { get; set; }
+
+        [JsonProperty("ha_enabled", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? HighAvailabilityEnabled { get; set; }
+
+        [JsonProperty("active_time", NullValueHandling = NullValueHandling.Ignore)]
+        public DateTimeOffset? ActiveTime { get; set; }
+
         /// <summary>
         /// Gets or sets the name of the cluster.
         /// </summary>
         /// <value>
         /// The name of the cluster.
         /// </value>
-        [JsonProperty("cluster_name")]
+        [JsonProperty("cluster_name", NullValueHandling = NullValueHandling.Ignore)]
         public string ClusterName { get; set; }
 
         /// <summary>
@@ -113,7 +133,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The cluster identifier.
         /// </value>
-        [JsonProperty("cluster_id")]
+        [JsonProperty("cluster_id", NullValueHandling = NullValueHandling.Ignore)]
         public string ClusterId { get; set; }
     }
 }

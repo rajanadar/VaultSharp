@@ -3,6 +3,7 @@
 **IMPROVEMENTS:**
 
   * [GH-292](https://github.com/rajanadar/VaultSharp/issues/292) Add warning and other fields to seal status apis.
+  * [GH-291](https://github.com/rajanadar/VaultSharp/issues/291) Add logger endpoints to System backend.
 
 ## 1.12.2 (December 09, 2022)
 

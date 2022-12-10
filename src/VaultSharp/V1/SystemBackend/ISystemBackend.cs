@@ -410,6 +410,38 @@ namespace VaultSharp.V1.SystemBackend
         Task RevokePrefixLeaseAsync(string prefix);
 
         /// <summary>
+        /// Modify the verbosity level of all loggers.
+        /// </summary>
+        /// <param name="logVerbosityLevel">
+        /// Specifies the log verbosity level to be set for all loggers.
+        /// </param>
+        Task ModifyVerbosityLevelForAllLoggersAsync(LogVerbosityLevel logVerbosityLevel);
+
+        /// <summary>
+        /// Modify the verbosity level of a logger.
+        /// </summary>
+        /// <param name="loggerName">
+        /// Specifies the logger to be modified.
+        /// </param>
+        /// <param name="logVerbosityLevel">
+        /// Specifies the log verbosity level to be set for all loggers.
+        /// </param>
+        Task ModifyVerbosityLevelForLoggerAsync(string loggerName, LogVerbosityLevel logVerbosityLevel);
+
+        /// <summary>
+        /// Reverts the verbosity level of all loggers.
+        /// </summary>
+        Task RevertVerbosityLevelForAllLoggersAsync();
+
+        /// <summary>
+        /// Revert the verbosity level of a logger
+        /// </summary>
+        /// <param name="loggerName">
+        /// Specifies the logger to be modified.
+        /// </param>
+        Task RevertVerbosityLevelForLoggerAsync(string loggerName);
+
+        /// <summary>
         /// Gets all the mounted secret backends.
         /// </summary>
         /// <returns>

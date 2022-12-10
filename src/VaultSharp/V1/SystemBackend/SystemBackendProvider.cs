@@ -375,6 +375,36 @@ namespace VaultSharp.V1.SystemBackend
             await _polymath.MakeVaultApiRequest("v1/sys/leases/revoke-prefix/" + prefix.TrimStart('/'), HttpMethod.Put).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
+        public async Task ModifyVerbosityLevelForAllLoggersAsync(LogVerbosityLevel logVerbosityLevel)
+        {
+            var requestData = new
+            {
+                level = logVerbosityLevel.ToString()
+            };
+
+            await _polymath.MakeVaultApiRequest("v1/sys/loggers", HttpMethod.Post, requestData: requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task ModifyVerbosityLevelForLoggerAsync(string loggerName, LogVerbosityLevel logVerbosityLevel)
+        {
+            var requestData = new
+            {
+                level = logVerbosityLevel.ToString()
+            };
+
+            await _polymath.MakeVaultApiRequest("v1/sys/loggers/" + loggerName, HttpMethod.Post, requestData: requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task RevertVerbosityLevelForAllLoggersAsync()
+        {
+            await _polymath.MakeVaultApiRequest("v1/sys/loggers", HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task RevertVerbosityLevelForLoggerAsync(string loggerName)
+        {
+            await _polymath.MakeVaultApiRequest("v1/sys/loggers/" + loggerName, HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
         public async Task<Secret<Dictionary<string, SecretsEngine>>> GetSecretBackendsAsync()
         {
             var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, SecretsEngine>>>("v1/sys/mounts", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
