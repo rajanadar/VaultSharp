@@ -17,8 +17,5 @@ namespace VaultSharp.V1.AuthMethods
         /// </value>
         [JsonProperty("type")]
         public AuthMethodType Type { get; set; }
-
-        [JsonProperty("uuid")]
-        public string Id { get; set; }
     }
 }

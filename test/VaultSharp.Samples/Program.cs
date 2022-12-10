@@ -772,7 +772,7 @@ namespace VaultSharp.Samples
             Assert.Equal(2764800, backendConfig.Data.DefaultLeaseTtl);
             Assert.Equal(2764800, backendConfig.Data.MaximumLeaseTtl);
 
-            var newBackendConfig = new BackendConfig
+            var newBackendConfig = new NewBackendConfig
             {
                 DefaultLeaseTtl = 3600,
                 MaximumLeaseTtl = 4200,
@@ -993,8 +993,6 @@ namespace VaultSharp.Samples
             _authenticatedVaultClient.V1.System.MFA.Duo.DeleteConfigAsync(duoConfig.Name).Wait();
             */
 
-            return;
-
             // mounted secret backends.
 
             var secretBackends = _authenticatedVaultClient.V1.System.GetSecretBackendsAsync().Result;
@@ -1004,6 +1002,8 @@ namespace VaultSharp.Samples
             var mountConfig = _authenticatedVaultClient.V1.System.GetSecretBackendConfigAsync(secretBackends.Data.First().Key).Result;
             DisplayJson(mountConfig);
             Assert.True(mountConfig.Data.MaximumLeaseTtl > 0);
+
+            // return;
 
             // mount a new secret backend
             var newSecretBackend = new SecretsEngine
@@ -1017,7 +1017,7 @@ namespace VaultSharp.Samples
 
             var ttl = 36000;
 
-            _authenticatedVaultClient.V1.System.ConfigureSecretBackendAsync(newSecretBackend.Path, new BackendConfig { DefaultLeaseTtl = ttl, MaximumLeaseTtl = ttl, ForceNoCache = true }).Wait();
+            _authenticatedVaultClient.V1.System.ConfigureSecretBackendAsync(newSecretBackend.Path, new NewBackendConfig { DefaultLeaseTtl = ttl, MaximumLeaseTtl = ttl, ForceNoCache = true }).Wait();
 
             var newMountConfig = _authenticatedVaultClient.V1.System.GetSecretBackendConfigAsync(newSecretBackend.Path).Result;
             DisplayJson(newMountConfig);
@@ -1035,6 +1035,9 @@ namespace VaultSharp.Samples
             var oldSecretBackends = _authenticatedVaultClient.V1.System.GetSecretBackendsAsync().Result;
             DisplayJson(oldSecretBackends);
             Assert.Equal(secretBackends.Data.Count(), oldSecretBackends.Data.Count());
+
+            // raja todo:
+            return;
 
             // remount - raja todo
 

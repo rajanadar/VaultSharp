@@ -1,5 +1,9 @@
 ## 1.13.0 (TBD)
 
+**BREAKING CHANGES:**
+
+  * Backend APIs to tune mount config now take the ```NewBackendConfig``` object instead of ```BackendConfig``` object.
+
 **IMPROVEMENTS:**
 
   * [GH-292](https://github.com/rajanadar/VaultSharp/issues/292) Add warning and other fields to seal status apis.

@@ -103,5 +103,8 @@ namespace VaultSharp.V1.Commons
         /// </value>
         [JsonProperty("seal_wrap")]
         public bool SealWrap { get; set; }
+
+        [JsonProperty("uuid")]
+        public string Id { get; set; }
     }
 }
