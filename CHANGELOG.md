@@ -1,3 +1,9 @@
+## 1.13.0 (TBD)
+
+**IMPROVEMENTS:**
+
+  * [GH-292](https://github.com/rajanadar/VaultSharp/issues/292) Add warning and other fields to seal status apis.
+
 ## 1.12.2 (December 09, 2022)
 
 **FEATURES:**
