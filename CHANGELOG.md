@@ -14,7 +14,8 @@
   * [GH-292](https://github.com/rajanadar/VaultSharp/issues/292) Add warning and other fields to seal status apis.
   * [GH-291](https://github.com/rajanadar/VaultSharp/issues/291) Add logger endpoints to System backend.
   * Added several fields like plugin_version etc. to the Backend fetching System APIs.
-  * Added several new fields to the PKI Cert Tidy Request payload.
+  * secret/pki: Added several new fields to the PKI Cert Tidy Request payload.
+  * secret/pki: Add revocation time rfc and issuer id fields to cert reads.
 
 ## 1.12.2 (December 09, 2022)
 

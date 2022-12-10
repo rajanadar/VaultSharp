@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace VaultSharp.V1.SecretsEngines.PKI
 {
@@ -15,5 +16,11 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// </value>
         [JsonProperty("revocation_time")]
         public int RevocationTime { get; set; }
+
+        [JsonProperty("revocation_time_rfc3339")]
+        public DateTimeOffset? RevocationTimeRFC3339 { get; set; }
+
+        [JsonProperty("issuer_id")]
+        public string RevocationIssuerId { get; set; }
     }
 }
