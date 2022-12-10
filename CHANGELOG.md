@@ -4,6 +4,10 @@
 
   * Backend APIs to tune mount config now take the ```NewBackendConfig``` object instead of ```BackendConfig``` object.
 
+**FEATURES:**
+
+  * secret/pki: Add new api to list revoked certificates
+
 **IMPROVEMENTS:**
 
   * [GH-292](https://github.com/rajanadar/VaultSharp/issues/292) Add warning and other fields to seal status apis.

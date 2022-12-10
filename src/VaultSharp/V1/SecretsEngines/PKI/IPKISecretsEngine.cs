@@ -137,5 +137,17 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The secret with the list of certificate keys (serial numbers)
         /// </returns>
         Task<Secret<CertificateKeys>> ListCertificatesAsync(string pkiBackendMountPoint = null);
+
+        /// <summary>
+        /// Retrieves a list of all revoked certificate keys (serial numbers).
+        /// </summary>
+        /// <param name="pkiBackendMountPoint">
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
+        /// Provide a value only if you have customized the PKI mount point.
+        /// </param>
+        /// <returns>
+        /// The secret with the list of revoked certificate keys (serial numbers)
+        /// </returns>
+        Task<Secret<CertificateKeys>> ListRevokedCertificatesAsync(string pkiBackendMountPoint = null);
     }
 }

@@ -1115,6 +1115,15 @@ var keys = await vaultClient.V1.Secrets.PKI.ListCertificatesAsync(mountpoint);
 Assert.IsTrue(keys.Any(k => k == "17:67:16:b0:b9:45:58:c0:3a:29:e3:cb:d6:98:33:7a:a6:3b:66:c1"));
 ```
 
+##### List revoked certificates
+
+ - This endpoint retrieves a list of revoked certificate keys (serial numbers)
+
+```cs
+var keys = await vaultClient.V1.Secrets.PKI.ListRevokedCertificatesAsync(mountpoint);
+Assert.IsTrue(keys.Any(k => k == "17:67:16:b0:b9:45:58:c0:3a:29:e3:cb:d6:98:33:7a:a6:3b:66:c1"));
+```
+
 ##### Read certificate
 
  - This endpoint retrieves a certificate by key (serial number)
