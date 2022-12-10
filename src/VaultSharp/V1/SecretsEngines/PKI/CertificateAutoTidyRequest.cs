@@ -3,10 +3,17 @@
 namespace VaultSharp.V1.SecretsEngines.PKI
 {
     /// <summary>
-    /// Represents the Certificate Tidy Request.
+    /// Represents the Certificate Auto Tidy Request.
     /// </summary>
-    public class CertificateTidyRequest
+    public class CertificateAutoTidyRequest 
     {
+
+        [JsonProperty("enabled")]
+        public bool Enabled { get; set; } = true; // If a caller is calling our API, make this true.
+
+        [JsonProperty("interval_duration")]
+        public string IntervalDuration { get; set; } = "12h";
+
         /// <summary>
         /// Specifies whether to tidy up the certificate store. Defaults to false.
         /// </summary>
@@ -39,8 +46,5 @@ namespace VaultSharp.V1.SecretsEngines.PKI
 
         [JsonProperty("issuer_safety_buffer")]
         public string IssuerSafetyBuffer { get; set; } = "8760h"; // 365*24 hrs
-
-        [JsonProperty("pause_duration")]
-        public string PauseDuration { get; set; } = "0s";
     }
 }
