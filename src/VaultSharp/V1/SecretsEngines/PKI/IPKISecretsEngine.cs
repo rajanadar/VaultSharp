@@ -104,6 +104,17 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         Task AutoTidyAsync(CertificateAutoTidyRequest certificateAutoTidyRequest = null, string pkiBackendMountPoint = null);
 
         /// <summary>
+        /// This is a read only endpoint that returns information about the current tidy operation, 
+        /// or the most recent if none are currently running.
+        /// </summary>
+        /// <param name="pkiBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
+        /// Provide a value only if you have customized the PKI mount point.
+        /// </param>
+        /// <returns>The tidy status</returns>
+        Task<Secret<CertificateTidyStatus>> GetTidyStatusAsync(string pkiBackendMountPoint = null);
+
+        /// <summary>
         /// Retrieves the CA certificate in raw DER-encoded form. 
         /// This is a bare endpoint that does not return a standard Vault data structure. 
         /// The CA certificate can be returned in DER or PEM format.

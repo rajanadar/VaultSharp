@@ -14,7 +14,7 @@ Before you can run Program.cs, you need to start your Vault Server locally in a 
 ```
 backend "file" {
   path = "c:\\raja\\vault\\file_backend"
-  }
+}
 
 listener "tcp" {
   address = "127.0.0.1:8200"

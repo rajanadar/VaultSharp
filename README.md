@@ -1106,6 +1106,20 @@ var request = new CertificateTidyRequest { TidyCertStore = false, TidyRevokedCer
 await vaultClient.V1.Secrets.PKI.TidyAsync(request);
 ```
 
+##### Configure Automatic Tidying up of Certificate Storage
+
+```cs
+var request = new CertificateAutoTidyRequest { TidyCertStore = false, TidyRevokedCerts = true };
+await vaultClient.V1.Secrets.PKI.AutoTidyAsync(request);
+```
+
+##### Get Status of Certificate Tidying Process
+
+```cs
+var tidyStatus = await vaultClient.V1.Secrets.PKI.GetTidyStatusAsync();
+CertificateTidyState state = tidyStatus.Data.TidyState;
+```
+
 ##### List certificates
 
  - This endpoint retrieves a list of certificate keys (serial numbers)

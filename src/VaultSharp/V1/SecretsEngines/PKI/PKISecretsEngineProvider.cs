@@ -58,6 +58,11 @@ namespace VaultSharp.V1.SecretsEngines.PKI
             await _polymath.MakeVaultApiRequest(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/config/auto-tidy", HttpMethod.Post, newRequest).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<Secret<CertificateTidyStatus>> GetTidyStatusAsync(string pkiBackendMountPoint = null)
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<CertificateTidyStatus>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/tidy-status", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
         public async Task<RawCertificateData> ReadCACertificateAsync(CertificateFormat certificateFormat = CertificateFormat.der, string pkiBackendMountPoint = null)
         {
             var format = certificateFormat == CertificateFormat.pem ? "/" + CertificateFormat.pem : string.Empty;

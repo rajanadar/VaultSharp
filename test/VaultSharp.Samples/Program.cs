@@ -22,10 +22,6 @@ namespace VaultSharp.Samples
 {
     class Program
     {
-        // Vault Changelog till 1.9.0 is scanned.
-        // Start from 1.9.0 for minor changes.
-        // Start after 1.12.2 for major changes.
-
         private const string ExpectedVaultVersion = "1.12.2";
 
         private static IVaultClient _unauthenticatedVaultClient;
@@ -35,9 +31,6 @@ namespace VaultSharp.Samples
 
         public static void Main(string[] args)
         {
-            var nonce = "1234";
-            var roleName = "role-bastion";
-
             const string path = "ProgramOutput.txt";
 
             using (var fs = new FileStream(path, FileMode.Create))
@@ -45,6 +38,11 @@ namespace VaultSharp.Samples
                 using (var sw = new StreamWriter(fs))
                 {
                     Console.WriteLine();
+
+                    Console.WriteLine("Please read HowToRunThisTestProgram.md for setup instructions.");
+                    Console.WriteLine();
+                    Console.WriteLine();
+
                     Console.Write("Writing results to file. Hang tight...");
 
                     var existingOut = Console.Out;
@@ -670,7 +668,7 @@ namespace VaultSharp.Samples
             DisplayJson(sealStatus);
             Assert.False(sealStatus.Sealed);
 
-            // logger endpoints.
+            // logger endpoints. raja todo
             // Check when 1.13.0 Vault is released
 
             /*
