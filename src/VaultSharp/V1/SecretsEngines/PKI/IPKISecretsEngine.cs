@@ -115,6 +115,19 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         Task<Secret<CertificateTidyStatus>> GetTidyStatusAsync(string pkiBackendMountPoint = null);
 
         /// <summary>
+        /// This endpoint allows cancelling a running tidy operation. 
+        /// It takes no parameter and cancels the tidy at the next available checkpoint, 
+        /// which may process additional certificates between when the operation was 
+        /// marked as cancelled and when the operation stopped.
+        /// </summary>
+        /// <param name="pkiBackendMountPoint"><para>[optional]</para>
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
+        /// Provide a value only if you have customized the PKI mount point.
+        /// </param>
+        /// <returns>The tidy status</returns>
+        Task<Secret<CertificateTidyStatus>> CancelTidyAsync(string pkiBackendMountPoint = null);
+
+        /// <summary>
         /// Retrieves the CA certificate in raw DER-encoded form. 
         /// This is a bare endpoint that does not return a standard Vault data structure. 
         /// The CA certificate can be returned in DER or PEM format.

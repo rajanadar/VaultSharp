@@ -9,6 +9,7 @@
   * secret/pki: Add new api to list revoked certificates
   * secret/pki: Add new api to auto tidy certificates
   * secret/pki: Add new api to get tidy status
+  * secret/pki: Add new api to cancel the tidy operation
 
 **IMPROVEMENTS:**
 

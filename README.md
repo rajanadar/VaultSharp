@@ -1120,6 +1120,13 @@ var tidyStatus = await vaultClient.V1.Secrets.PKI.GetTidyStatusAsync();
 CertificateTidyState state = tidyStatus.Data.TidyState;
 ```
 
+##### Cancel Certificate Tidying Process
+
+```cs
+var tidyStatus = await vaultClient.V1.Secrets.PKI.CancelTidyAsync();
+CertificateTidyState state = tidyStatus.Data.TidyState;
+```
+
 ##### List certificates
 
  - This endpoint retrieves a list of certificate keys (serial numbers)
