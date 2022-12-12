@@ -895,6 +895,42 @@ Secret<Dictionary<string, object>> kv2Secret = await vaultClient.V1.Secrets.KeyV
 Dictionary<string, object> dataDictionary = kv2Secret.Data;
 ```
 
+###### Write Metadata
+
+- Creates or updates the metadata of a secret at the specified location in the K/V v2 secrets engine.
+
+```
+var writeCustomMetadataRequest = new CustomMetadataRequest
+            {
+                CustomMetadata = new Dictionary<string, string>
+                {
+                    { "owner", "system"},
+                    { "expired_in", "20331010"}
+                }
+            };
+
+ await _authenticatedVaultClient.V1.Secrets.KeyValue.V2.WriteSecretMetadataAsync(path, writeCustomMetadataRequest, mountPoint: kv2SecretsEngine.Path);
+       
+```
+
+###### Patch Metadata
+
+-  Patch the metadata of a secret at specified location in the K/V v2 secrets engine.
+
+```
+ var patchCustomMetadataRequest = new CustomMetadataRequest
+            {
+                CustomMetadata = new Dictionary<string, string>
+                {
+                    { "locale", "EN"},
+                    { "expired_in", "20341010"}
+                }
+            };
+
+ await _authenticatedVaultClient.V1.Secrets.KeyValue.V2.PatchSecretMetadataAsync(path, patchCustomMetadataRequest, mountPoint: kv2SecretsEngine.Path)
+            
+```
+
 ###### Read Metadata
 
 - Reads the secret metadata at the specified location returning.

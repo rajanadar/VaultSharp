@@ -492,6 +492,41 @@ namespace VaultSharp.Samples
 
             */
 
+            var writeCustomMetadataRequest = new CustomMetadataRequest
+            {
+                CustomMetadata = new Dictionary<string, string>
+                {
+                    { "owner", "system"},
+                    { "expired_in", "20331010"}
+                }
+            };
+
+            _authenticatedVaultClient.V1.Secrets.KeyValue.V2.WriteSecretMetadataAsync(path, writeCustomMetadataRequest, mountPoint: kv2SecretsEngine.Path).Wait();
+            
+            var kv2metadata2 = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretMetadataAsync(path, mountPoint: kv2SecretsEngine.Path).Result;
+            
+            Assert.True(kv2metadata2.Data.CustomMetadata.Count == 2);
+            Assert.True(kv2metadata2.Data.CustomMetadata["expired_in"] == "20331010");
+            Assert.True(kv2metadata2.Data.CustomMetadata["owner"] == "system");
+
+            var patchCustomMetadataRequest = new CustomMetadataRequest
+            {
+                CustomMetadata = new Dictionary<string, string>
+                {
+                    { "locale", "EN"},
+                    { "expired_in", "20341010"}
+                }
+            };
+
+            _authenticatedVaultClient.V1.Secrets.KeyValue.V2.PatchSecretMetadataAsync(path, patchCustomMetadataRequest, mountPoint: kv2SecretsEngine.Path).Wait();
+            
+            var kv2metadata3 = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretMetadataAsync(path, mountPoint: kv2SecretsEngine.Path).Result;
+            
+            Assert.True(kv2metadata3.Data.CustomMetadata.Count == 3);
+            Assert.True(kv2metadata3.Data.CustomMetadata["expired_in"] == "20341010");
+            Assert.True(kv2metadata3.Data.CustomMetadata["owner"] == "system");
+            Assert.True(kv2metadata3.Data.CustomMetadata["locale"] == "EN");
+
             _authenticatedVaultClient.V1.Secrets.KeyValue.V2.DestroySecretAsync(path, new List<int> { kv2metadata.Data.CurrentVersion }, mountPoint: kv2SecretsEngine.Path).Wait();
 
             _authenticatedVaultClient.V1.System.UnmountSecretBackendAsync(kv2SecretsEngine.Path).Wait();

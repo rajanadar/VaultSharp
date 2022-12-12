@@ -10,6 +10,8 @@
   * secret/pki: Add new api to auto tidy certificates
   * secret/pki: Add new api to get tidy status
   * secret/pki: Add new api to cancel the tidy operation
+  * [GH-293](https://github.com/rajanadar/VaultSharp/issues/293) secret/kv2: Add new api for create metadata
+  * [GH-293](https://github.com/rajanadar/VaultSharp/issues/293) secret/kv2: Add new api for update metadata
 
 **IMPROVEMENTS:**
 
@@ -18,6 +20,7 @@
   * Added several fields like plugin_version etc. to the Backend fetching System APIs.
   * secret/pki: Added several new fields to the PKI Cert Tidy Request payload.
   * secret/pki: Add revocation time rfc and issuer id fields to cert reads.
+  * [GH-293](https://github.com/rajanadar/VaultSharp/issues/293) secret/kv2: Add new fields ```cas_required``` and ```custom_metadata``` in ```FullSecretMetadata``` class.
 
 ## 1.12.2 (December 09, 2022)
 

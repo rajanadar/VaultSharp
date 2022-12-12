@@ -61,5 +61,23 @@ namespace VaultSharp.V1.Commons
         /// </value>
         [JsonProperty("versions")]
         public Dictionary<string, SecretMetadata> Versions { get; set; }
+
+        /// <summary>
+        /// Gets or sets the cas required flag.
+        /// </summary>
+        /// <value>
+        /// If true all keys will require the cas parameter to be set on all write requests.
+        /// </value>
+        [JsonProperty("cas_required")]
+        public bool CASRequired { get; set; }
+
+        /// <summary>
+        /// Gets or sets the custom metadata.
+        /// </summary>
+        /// <value>
+        /// A map of arbitrary string to string valued user-provided metadata meant to describe the secret.
+        /// </value>
+        [JsonProperty("custom_metadata")]
+        public Dictionary<string, string> CustomMetadata { get; set; }
     }
 }

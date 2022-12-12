@@ -102,6 +102,54 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         Task<Secret<SecretSubkeysInfo>> ReadSecretSubkeysAsync(string path, int version = 0, int depth = 0, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
+        /// Creates or updates the metadata of a secret at the specified location in 
+        /// the K/V v2 secrets engine.
+        /// It does not create a new version.
+        /// </summary>
+        /// <param name="path">
+        /// <para>[required]</para>
+        /// The path where the value is to be stored.
+        /// </param>
+        /// <param name="customMetadataRequest">
+        /// <para>[required]</para>
+        /// The value to be written.
+        /// </param>
+        /// <param name="mountPoint">
+        /// <para>[optional]</para>
+        /// The mount point for the Generic backend. 
+        /// Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task WriteSecretMetadataAsync(string path, CustomMetadataRequest customMetadataRequest, string mountPoint = null);
+
+        /// <summary>
+        /// Patch the metadata of a secret at specified location in the K/V v2 secrets engine.
+        /// The patch command combines the change with existing custom metadata instead of replacing them.
+        /// Therefore, this command makes it easy to make a partial updates to an existing metadata.
+        /// </summary>
+        /// <param name="path">
+        /// <para>[required]</para>
+        /// The path where the value is to be stored.
+        /// </param>
+        /// <param name="customMetadataRequest">
+        /// <para>[required]</para>
+        /// The value to be replaced and appended.
+        /// </param>
+        /// <param name="mountPoint">
+        /// <para>[optional]</para>
+        /// The mount point for the Generic backend. 
+        /// Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task PatchSecretMetadataAsync(string path, CustomMetadataRequest customMetadataRequest, string mountPoint = null);
+
+        /// <summary>
         /// Retrieves the secret metadata at the specified location.
         /// </summary>
         /// <param name="path"><para>[required]</para>
