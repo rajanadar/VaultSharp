@@ -33,7 +33,8 @@ namespace VaultSharp.V1.SystemBackend
         IPlugin Plugins { get; }
 
         /// <summary>
-        /// Gets all the mounted audit backends (it does not list all available audit backends).
+        /// Gets all the enabled audit backends (it does not list all available audit backends).
+        /// This endpoint requires sudo capability in addition to any path-specific capabilities.
         /// </summary>
         /// <returns>
         /// The mounted audit backends.

@@ -15,7 +15,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The file path.
         /// </value>
-        [JsonProperty("path")]
+        [JsonProperty("file_path")]
         public string FilePath { get; set; }
     }
 }

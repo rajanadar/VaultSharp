@@ -12,16 +12,23 @@ Before you can run Program.cs, you need to start your Vault Server locally in a 
 3. Create a hcl file in this folder. My hcl file is as follows and named f.hcl:
 
 ```
+ui = true
+disable_mlock = true
+
 backend "file" {
   path = "c:\\raja\\vault\\file_backend"
 }
 
 listener "tcp" {
-  address = "127.0.0.1:8200"
-  tls_disable = 1
+  address     = "0.0.0.0:8200"
+  tls_disable = "true"
 }
 
 raw_storage_endpoint = true
+
+api_addr = "http://127.0.0.1:8200"
+cluster_addr = "https://127.0.0.1:8201"
+
 ```
 
 4. Now, open a command prompt, go to this folder and start the Vault server, as follows:

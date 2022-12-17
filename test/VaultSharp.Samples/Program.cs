@@ -716,14 +716,8 @@ namespace VaultSharp.Samples
 
             */
 
-            _authenticatedVaultClient.V1.System.ModifyVerbosityLevelForAllLoggersAsync(LogVerbosityLevel.error).Wait();
-
-            _authenticatedVaultClient.V1.System.ModifyVerbosityLevelForLoggerAsync("audit", LogVerbosityLevel.warn);
-
-            _authenticatedVaultClient.V1.System.RevertVerbosityLevelForAllLoggersAsync().Wait();
-            _authenticatedVaultClient.V1.System.RevertVerbosityLevelForLoggerAsync("audit").Wait();
-
             // audit backends
+
             var audits = _authenticatedVaultClient.V1.System.GetAuditBackendsAsync().Result;
             DisplayJson(audits);
             Assert.False(audits.Data.Any());
@@ -762,6 +756,13 @@ namespace VaultSharp.Samples
             var newAudits = _authenticatedVaultClient.V1.System.GetAuditBackendsAsync().Result;
             DisplayJson(newAudits);
             Assert.Equal(audits.Data.Count() + 2, newAudits.Data.Count());
+
+            _authenticatedVaultClient.V1.System.ModifyVerbosityLevelForAllLoggersAsync(LogVerbosityLevel.error).Wait();
+
+            _authenticatedVaultClient.V1.System.ModifyVerbosityLevelForLoggerAsync("audit", LogVerbosityLevel.warn);
+
+            _authenticatedVaultClient.V1.System.RevertVerbosityLevelForAllLoggersAsync().Wait();
+            _authenticatedVaultClient.V1.System.RevertVerbosityLevelForLoggerAsync("audit").Wait();
 
             // hash with audit
             var hash = _authenticatedVaultClient.V1.System.AuditHashAsync(newFileAudit.MountPoint, "testinput").Result;
