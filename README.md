@@ -613,16 +613,92 @@ string expiration = aliCloudCreds.Data.Expiration;
 
 #### AWS Secrets Engine
 
-##### Generate IAM Credentials
+##### Configure Root IAM Credential
 
-- This endpoint generates dynamic IAM credentials based on the named role.
+- This endpoint configures the root IAM credentials to communicate with AWS.
 
 ```cs
-Secret<AWSCredentials> awsCreds = await vaultClient.V1.Secrets.AWS.GetCredentialsAsync(role);
+var configureRootIAMCredentialsModel = new ConfigureRootIAMCredentialsModel
+{
+   AccessKey = "<>",
+   SecretKey = "<>",
+   Region = "<>"
+};
 
-string accessKey = awsCreds.Data.AccessKey;
-string secretKey = awsCreds.Data.SecretKey;
-string securityToken = awsCreds.Data.SecurityToken;
+await vaultClient.V1.Secrets.AWS.ConfigureRootIAMCredentialsAsync(configureRootIAMCredentialsModel);
+
+```
+
+##### Read Root IAM Credential
+
+- This endpoint allows you to read non-secure values that have been configured in the config/root endpoint.
+- In particular, the secret_key parameter is never returned.
+
+```cs
+
+Secret<RootIAMCredentialsConfigModel> config = await vaultClient.V1.Secrets.AWS.GetRootIAMCredentialsConfigAsync();
+
+```
+
+##### Rotate Root IAM Credential
+
+- When you have configured Vault with static credentials, you can use this endpoint to have Vault rotate the access key it used. 
+
+```cs
+
+Secret<RotateRootIAMCredentialsResponseModel> response = await vaultClient.V1.Secrets.AWS.RotateRootIAMCredentialsAsync();
+
+string newAccessKey = response.Data.NewAccessKey;
+
+```
+
+##### Configure Lease
+
+- This endpoint configures lease settings for the AWS secrets engine.
+
+```cs
+var leaseConfigModel = new AWSLeaseConfigModel
+{
+   Lease = "36h",
+   MaximumLease = "72h"
+};
+
+await vaultClient.V1.Secrets.AWS.ConfigureLeaseAsync(leaseConfigModel);
+
+```
+
+##### Read Lease
+
+- This endpoint returns the current lease settings for the AWS secrets engine.
+
+```cs
+
+Secret<AWSLeaseConfigModel> lease = await vaultClient.V1.Secrets.AWS.GetLeaseConfigAsync();
+
+```
+
+##### Write Role
+
+- This endpoint creates or updates the role with the given name.
+
+```cs
+var role = new CreateAWSRoleModel
+{
+   CredentialType = AWSCredentialsType.federation_token,
+   PolicyDocument = "{\"Version\": \"...\"}"
+};
+
+await vaultClient.V1.Secrets.AWS.WriteRoleAsync("my-role-name", role);
+
+```
+
+##### Read Role
+
+- This endpoint reads details of one AWS Role.
+
+```cs
+Secret<AWSRoleModel> role = await vaultClient.V1.Secrets.AWS.ReadRoleAsync(roleName);
+List<AWSCredentialsType> credTypes = role.Data.CredentialTypes;
 ```
 
 ##### Read All Roles
@@ -636,11 +712,14 @@ List<string> names = roles.Data;
 
 ##### Generate IAM Credentials
 
-- This endpoint reads details of one AWS Role.
+- This endpoint generates dynamic IAM credentials based on the named role.
 
 ```cs
-Secret<AWSRoleModel> role = await vaultClient.V1.Secrets.AWS.ReadRoleAsync(roleName);
-List<string> credTypes = role.Data.CredentialTypes;
+Secret<AWSCredentials> awsCreds = await vaultClient.V1.Secrets.AWS.GetCredentialsAsync(role);
+
+string accessKey = awsCreds.Data.AccessKey;
+string secretKey = awsCreds.Data.SecretKey;
+string securityToken = awsCreds.Data.SecurityToken;
 ```
 
 ##### Generate IAM Credentials with STS

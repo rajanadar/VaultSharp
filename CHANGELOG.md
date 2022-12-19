@@ -12,6 +12,7 @@
   * secret/pki: Add new api to cancel the tidy operation
   * [GH-293](https://github.com/rajanadar/VaultSharp/issues/293) secret/kv2: Add new api for create metadata
   * [GH-293](https://github.com/rajanadar/VaultSharp/issues/293) secret/kv2: Add new api for update metadata
+  * [GH-294](https://github.com/rajanadar/VaultSharp/issues/294) secret/aws: All management apis
 
 **IMPROVEMENTS:**
 
