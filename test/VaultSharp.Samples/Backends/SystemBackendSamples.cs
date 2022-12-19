@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -206,17 +205,17 @@ namespace VaultSharp.Samples
             DisplayJson(newAudits);
             Assert.Equal(audits.Data.Count() + 2, newAudits.Data.Count());
 
+            // hash with audit
+            var hash = _authenticatedVaultClient.V1.System.AuditHashAsync(newFileAudit.MountPoint, "testinput").Result;
+            DisplayJson(hash);
+            Assert.NotNull(hash.Data.Hash);
+
             _authenticatedVaultClient.V1.System.ModifyVerbosityLevelForAllLoggersAsync(LogVerbosityLevel.error).Wait();
 
             _authenticatedVaultClient.V1.System.ModifyVerbosityLevelForLoggerAsync("audit", LogVerbosityLevel.warn);
 
             _authenticatedVaultClient.V1.System.RevertVerbosityLevelForAllLoggersAsync().Wait();
             _authenticatedVaultClient.V1.System.RevertVerbosityLevelForLoggerAsync("audit").Wait();
-
-            // hash with audit
-            var hash = _authenticatedVaultClient.V1.System.AuditHashAsync(newFileAudit.MountPoint, "testinput").Result;
-            DisplayJson(hash);
-            Assert.NotNull(hash.Data.Hash);
 
             // disabled audit
             _authenticatedVaultClient.V1.System.UnmountAuditBackendAsync(newFileAudit.MountPoint).Wait();

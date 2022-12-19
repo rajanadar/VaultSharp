@@ -55,18 +55,21 @@ namespace VaultSharp.V1.SystemBackend
                 abstractAuditBackend.MountPoint = abstractAuditBackend.Type.Value;
             }
 
-            await _polymath.MakeVaultApiRequest("v1/sys/audit/" + abstractAuditBackend.MountPoint.Trim('/'), HttpMethod.Put, abstractAuditBackend).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/sys/audit/" + abstractAuditBackend.MountPoint.Trim('/'), HttpMethod.Post, abstractAuditBackend).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task UnmountAuditBackendAsync(string mountPoint)
+        public async Task UnmountAuditBackendAsync(string path)
         {
-            await _polymath.MakeVaultApiRequest("v1/sys/audit/" + mountPoint.Trim('/'), HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            Checker.NotNull(path, "path");
+
+            await _polymath.MakeVaultApiRequest("v1/sys/audit/" + path.Trim('/'), HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<AuditHash>> AuditHashAsync(string mountPoint, string inputToHash)
+        public async Task<Secret<AuditHash>> AuditHashAsync(string path, string inputToHash)
         {
             var requestData = new { input = inputToHash };
-            return await _polymath.MakeVaultApiRequest<Secret<AuditHash>>("v1/sys/audit-hash/" + mountPoint.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+
+            return await _polymath.MakeVaultApiRequest<Secret<AuditHash>>("v1/sys/audit-hash/" + path.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<Dictionary<string, AuthMethod>>> GetAuthBackendsAsync()

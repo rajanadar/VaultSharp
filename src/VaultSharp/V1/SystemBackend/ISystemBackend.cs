@@ -42,7 +42,8 @@ namespace VaultSharp.V1.SystemBackend
         Task<Secret<Dictionary<string, AbstractAuditBackend>>> GetAuditBackendsAsync();
 
         /// <summary>
-        /// Mounts a new audit backend at the specified mount point.
+        /// This endpoint enables a new audit device at the supplied path. 
+        /// The path can be a single word name or a more complex, nested path.
         /// </summary>
         /// <param name="abstractAuditBackend">The audit backend.</param>
         /// <returns>
