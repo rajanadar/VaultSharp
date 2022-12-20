@@ -6,7 +6,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole.Models
     /// <summary>
     /// https://developer.hashicorp.com/vault/api-docs/auth/approle#generate-new-secret-id
     /// </summary>
-    public class SecretIdRequestOptions
+    public class PullSecretIdRequestOptions
     {
         /// <summary>
         /// Metadata to be tied to the SecretID. 

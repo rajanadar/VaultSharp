@@ -3,7 +3,7 @@
 **BREAKING CHANGES:**
 
   * Backend APIs to tune mount config now take the ```NewBackendConfig``` object instead of ```BackendConfig``` object.
-  * auth/approle: ```PullSecretIdAsync``` method is renamed to ```GenerateNewSecretIdAsync```
+  * auth/approle: ```PullSecretIdAsync``` method is renamed to ```PullNewSecretIdAsync```
 
 **FEATURES:**
 

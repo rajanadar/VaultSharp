@@ -92,6 +92,69 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param>        
         /// <returns>The secret id info</returns>
-        Task<Secret<SecretIdInfo>> GenerateNewSecretIdAsync(string roleName, SecretIdRequestOptions secretIdRequestOptions = null, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<SecretIdInfo>> PullNewSecretIdAsync(string roleName, PullSecretIdRequestOptions secretIdRequestOptions = null, string mountPoint = AuthMethodDefaultPaths.AppRole);
+
+        /// <summary>
+        /// Lists the accessors of all the SecretIDs issued against the AppRole. 
+        /// This includes the accessors for "custom" SecretIDs as well.
+        /// </summary>
+        /// <param name="roleName"><para>[required]</para>
+        /// Specifies the name of the role. </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>The secret accessors.</returns>
+        Task<Secret<ListInfo>> ReadAllSecretIdAccessorsAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+
+        /// <summary>
+        /// Reads out the properties of a SecretID.
+        /// </summary>
+        /// <param name="roleName">Name of the Role.</param>
+        /// <param name="secretId">The secret id.</param>
+        /// <param name="mountPoint">Mount point of the AppRole Auth method</param>
+        /// <returns>Secret Id properties</returns>
+        Task<Secret<SecretIdInfo>> ReadSecretIdInfoAsync(string roleName, string secretId, string mountPoint = AuthMethodDefaultPaths.AppRole);
+
+        /// <summary>
+        /// Destroy an AppRole secret ID.
+        /// </summary>
+        /// <param name="roleName">Name of the Role.</param>
+        /// <param name="secretId">The secret id.</param>
+        /// <param name="mountPoint">Mount point of the AppRole Auth method</param>
+        /// <returns>The task</returns>
+        Task DestroySecretIdAsync(string roleName, string secretId, string mountPoint = AuthMethodDefaultPaths.AppRole);
+
+        /// <summary>
+        /// Reads out the properties of a SecretID by accessor.
+        /// </summary>
+        /// <param name="roleName">Name of the Role.</param>
+        /// <param name="secretIdAccessor">The secret id accessor.</param>
+        /// <param name="mountPoint">Mount point of the AppRole Auth method</param>
+        /// <returns>Secret Id properties</returns>
+        Task<Secret<SecretIdInfo>> ReadSecretIdInfoByAccessorAsync(string roleName, string secretIdAccessor, string mountPoint = AuthMethodDefaultPaths.AppRole);
+
+        /// <summary>
+        /// Destroy an AppRole secret id by Accessor.
+        /// </summary>
+        /// <param name="roleName">Name of the Role.</param>
+        /// <param name="secretIdAccessor">The secret id accessor.</param>
+        /// <param name="mountPoint">Mount point of the AppRole Auth method</param>
+        /// <returns>The task</returns>
+        Task DestroySecretIdByAccessorAsync(string roleName, string secretIdAccessor, string mountPoint = AuthMethodDefaultPaths.AppRole);
+
+        /// <summary>
+        /// Assigns a "custom" SecretID against an existing AppRole. 
+        /// This is used in the "Push" model of operation.
+        /// </summary>
+        /// <param name="roleName"><para>[required]</para>
+        /// Specifies the name of the role. </param>
+        /// <param name="secretIdRequestOptions"><para>[required]</para>
+        /// Specifies the request options. </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
+        /// Provide a value only if you have customized the mount point.</param>        
+        /// <returns>The secret id info</returns>
+        Task<Secret<SecretIdInfo>> PushNewSecretIdAsync(string roleName, PushSecretIdRequestOptions secretIdRequestOptions = null, string mountPoint = AuthMethodDefaultPaths.AppRole);
     }
 }
