@@ -190,8 +190,6 @@ namespace VaultSharp.Core
             };
         }
 
-        /// //////
-
         protected async Task<TResponse> MakeRequestAsync<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, IDictionary<string, string> headers = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null) where TResponse : class
         {
             try
@@ -206,37 +204,22 @@ namespace VaultSharp.Core
 
                 switch (httpMethod.ToString().ToUpperInvariant())
                 {
+                    case "LIST":
                     case "GET":
-
-                        httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri);
-                        break;
-
                     case "DELETE":
+                    case "HEAD":
 
-                        httpRequestMessage = new HttpRequestMessage(HttpMethod.Delete, requestUri);
+                        httpRequestMessage = new HttpRequestMessage(httpMethod, requestUri);
                         break;
 
                     case "POST":
-
-                        httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri)
-                        {
-                            Content = requestContent
-                        };
-
-                        break;
-
                     case "PUT":
 
-                        httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, requestUri)
+                        httpRequestMessage = new HttpRequestMessage(httpMethod, requestUri)
                         {
                             Content = requestContent
                         };
 
-                        break;
-
-                    case "HEAD":
-
-                        httpRequestMessage = new HttpRequestMessage(HttpMethod.Head, requestUri);
                         break;
 
                     case "PATCH":
@@ -245,7 +228,7 @@ namespace VaultSharp.Core
                         // It is added via the RequestContent
                         // https://stackoverflow.com/a/70593566/1174414
 
-                        httpRequestMessage = new HttpRequestMessage(new HttpMethod("PATCH"), requestUri)
+                        httpRequestMessage = new HttpRequestMessage(httpMethod, requestUri)
                         {
                             Content = requestData != null 
                             ? new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/merge-patch+json")

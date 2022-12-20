@@ -4,6 +4,7 @@
 
   * Backend APIs to tune mount config now take the ```NewBackendConfig``` object instead of ```BackendConfig``` object.
   * auth/approle: ```PullSecretIdAsync``` method is renamed to ```PullNewSecretIdAsync```
+  * auth/approle: ```ReadRoleAsync``` method uses a new type ```AppRoleRoleModel``` instead of ```AppRoleInfo```.
 
 **FEATURES:**
 

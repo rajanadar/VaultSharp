@@ -19,23 +19,23 @@ namespace VaultSharp.V1.AuthMethods.AppRole
 
         public async Task<Secret<ListInfo>> ReadAllRolesAsync(string mountPoint = AuthMethodDefaultPaths.AppRole)
         {
-            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/auth/" + mountPoint.Trim('/') + "/roles?list=true", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/auth/" + mountPoint.Trim('/') + "/roles", new HttpMethod("LIST")).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task WriteRoleAsync(string roleName, CreateAppRoleRoleModel createAppRoleRoleModel, string mountPoint = AuthMethodDefaultPaths.AppRole)
+        public async Task WriteRoleAsync(string roleName, AppRoleRoleModel appRoleRoleModel, string mountPoint = AuthMethodDefaultPaths.AppRole)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");
 
-            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/'), HttpMethod.Post, requestData: createAppRoleRoleModel).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/'), HttpMethod.Post, requestData: appRoleRoleModel).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<AppRoleInfo>> ReadRoleAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole)
+        public async Task<Secret<AppRoleRoleModel>> ReadRoleAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");
             
-            return await _polymath.MakeVaultApiRequest<Secret<AppRoleInfo>>("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/'), HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<AppRoleRoleModel>>("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/'), HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task DeleteRoleAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole)
@@ -185,7 +185,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             return _polymath.GetMappedSecret(secret, (int)secret.Data["secret_id_ttl"]);
         }
 
-        public async Task WriteRoleSecretIdTimeToLiveAsync(string roleName, string secretIdTimeToLive, string mountPoint = AuthMethodDefaultPaths.AppRole)
+        public async Task WriteRoleSecretIdTimeToLiveAsync(string roleName, int secretIdTimeToLive, string mountPoint = AuthMethodDefaultPaths.AppRole)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");
@@ -211,7 +211,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             return _polymath.GetMappedSecret(secret, (int)secret.Data["token_ttl"]);
         }
 
-        public async Task WriteRoleTokenTimeToLiveAsync(string roleName, string tokenTimeToLive, string mountPoint = AuthMethodDefaultPaths.AppRole)
+        public async Task WriteRoleTokenTimeToLiveAsync(string roleName, int tokenTimeToLive, string mountPoint = AuthMethodDefaultPaths.AppRole)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");
@@ -237,7 +237,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             return _polymath.GetMappedSecret(secret, (int)secret.Data["token_max_ttl"]);
         }
 
-        public async Task WriteRoleTokenMaximumTimeToLiveAsync(string roleName, string tokenMaximumTimeToLive, string mountPoint = AuthMethodDefaultPaths.AppRole)
+        public async Task WriteRoleTokenMaximumTimeToLiveAsync(string roleName, int tokenMaximumTimeToLive, string mountPoint = AuthMethodDefaultPaths.AppRole)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");
@@ -331,17 +331,17 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/token-bound-cidrs", HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<string>> ReadRolePeriodAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole)
+        public async Task<Secret<int>> ReadRolePeriodAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");
 
             var secret = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/period", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
-            return _polymath.GetMappedSecret(secret, (string)secret.Data["period"]);
+            return _polymath.GetMappedSecret(secret, (int)secret.Data["period"]);
         }
 
-        public async Task WriteRolePeriodAsync(string roleName, string period, string mountPoint = AuthMethodDefaultPaths.AppRole)
+        public async Task WriteRolePeriodAsync(string roleName, int period, string mountPoint = AuthMethodDefaultPaths.AppRole)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");

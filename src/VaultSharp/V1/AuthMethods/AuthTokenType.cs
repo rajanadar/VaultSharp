@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace VaultSharp.V1.AuthMethods
@@ -6,19 +7,19 @@ namespace VaultSharp.V1.AuthMethods
     [JsonConverter(typeof(StringEnumConverter))]
     public enum AuthTokenType
     {
-        [JsonProperty("service")]
+        [EnumMember(Value = "service")]
         Service,
 
-        [JsonProperty("batch")]
+        [EnumMember(Value = "batch")]
         Batch,
 
-        [JsonProperty("default")]
+        [EnumMember(Value = "default")]
         Default,
 
-        [JsonProperty("default-service")]
+        [EnumMember(Value = "default-service")]
         DefaultService,
 
-        [JsonProperty("default-batch")]
+        [EnumMember(Value = "default-batch")]
         DefaultBatch,
     }
 }

@@ -29,13 +29,13 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// </summary>
         /// <param name="roleName"><para>[required]</para>
         /// Specifies the name of the role to create. </param>
-        /// <param name="createAppRoleRoleModel"><para>[required]</para>
+        /// <param name="appRoleRoleModel"><para>[required]</para>
         /// Specifies the request options. </param>
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param>        
         /// <returns>The task</returns>
-        Task WriteRoleAsync(string roleName, CreateAppRoleRoleModel createAppRoleRoleModel, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task WriteRoleAsync(string roleName, AppRoleRoleModel appRoleRoleModel, string mountPoint = AuthMethodDefaultPaths.AppRole);
 
         /// <summary>
         /// Reads the properties of an existing AppRole.
@@ -43,7 +43,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="roleName">Name of the Role.</param>
         /// <param name="mountPoint">Mount point of the AppRole Auth method</param>
         /// <returns>Metadata of Named AppRole</returns>
-        Task<Secret<AppRoleInfo>> ReadRoleAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<AppRoleRoleModel>> ReadRoleAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
 
         /// <summary>
         /// Deletes an existing AppRole from the method.
@@ -242,7 +242,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task WriteRoleSecretIdTimeToLiveAsync(string roleName, string secretIdTimeToLive, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task WriteRoleSecretIdTimeToLiveAsync(string roleName, int secretIdTimeToLive, string mountPoint = AuthMethodDefaultPaths.AppRole);
 
         /// <summary>
         /// Deletes the secret-id-ttl attribute of the Role entity
@@ -274,7 +274,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task WriteRoleTokenTimeToLiveAsync(string roleName, string tokenTimeToLive, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task WriteRoleTokenTimeToLiveAsync(string roleName, int tokenTimeToLive, string mountPoint = AuthMethodDefaultPaths.AppRole);
 
         /// <summary>
         /// Deletes the token-ttl attribute of the Role entity
@@ -306,7 +306,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task WriteRoleTokenMaximumTimeToLiveAsync(string roleName, string tokenMaximumTimeToLive, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task WriteRoleTokenMaximumTimeToLiveAsync(string roleName, int tokenMaximumTimeToLive, string mountPoint = AuthMethodDefaultPaths.AppRole);
 
         /// <summary>
         /// Deletes the token-max-ttl attribute of the Role entity
@@ -423,7 +423,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param>        
         /// <returns>The period value.</returns>
-        Task<Secret<string>> ReadRolePeriodAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<int>> ReadRolePeriodAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
 
         /// <summary>
         /// Updates the period attribute of the Role entity
@@ -434,7 +434,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task WriteRolePeriodAsync(string roleName, string period, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task WriteRolePeriodAsync(string roleName, int period, string mountPoint = AuthMethodDefaultPaths.AppRole);
 
         /// <summary>
         /// Deletes the period attribute of the Role entity

@@ -8,6 +8,9 @@ namespace VaultSharp.Samples
     {
         private static void RunAuthMethodSamples()
         {
+            RunAliCloudAuthMethodSamples();
+            RunAppRoleAuthMethodSamples();
+
             // Token Apis.
             var callingTokenInfo = _authenticatedVaultClient.V1.Auth.Token.LookupSelfAsync().Result;
             DisplayJson(callingTokenInfo);
