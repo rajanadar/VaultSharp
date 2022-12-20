@@ -29,6 +29,8 @@ namespace VaultSharp.Core
         private Lazy<Task<string>> _lazyVaultToken;
         private readonly IAuthMethodLoginProvider _authMethodLoginProvider;
 
+        public HttpMethod ListHttpMethod { get; } = new HttpMethod("LIST");
+
         public VaultClientSettings VaultClientSettings { get; }
 
         public Polymath(VaultClientSettings vaultClientSettings)

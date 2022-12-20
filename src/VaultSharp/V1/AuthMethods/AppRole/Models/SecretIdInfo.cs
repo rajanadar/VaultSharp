@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace VaultSharp.V1.AuthMethods.AppRole.Models
 {
@@ -7,16 +9,16 @@ namespace VaultSharp.V1.AuthMethods.AppRole.Models
     /// </summary>
     public class SecretIdInfo
     {
+        [JsonProperty("secret_id")]
+        public string SecretId { get; set; }
+
         [JsonProperty("secret_id_accessor")]
         public string SecretIdAccessor { get; set; }
         
-        [JsonProperty("secret_id")]
-        public string SecretId { get; set; }
-        
+        [JsonProperty("secret_id_num_uses")]
+        public int SecretIdNumberOfUses { get; set; }
+
         [JsonProperty("secret_id_ttl")]
         public int SecretIdTimeToLive { get; set; }
-        
-        [JsonProperty("secret_id_num_uses")]
-        public int SecretIdNumUses { get; set; }
     }
 }

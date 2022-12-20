@@ -62,7 +62,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// </summary>
         /// <param name="roleName">Name of the Role.</param>
         /// <param name="mountPoint">Mount point of the AppRole Auth method</param>
-        /// <returns>RoleId of Named AppRole</returns>
+        /// <returns>The task</returns>
         Task<Secret<RoleIdInfo>> GetRoleIdAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param>        
         /// <returns>The task</returns>
-        Task<Secret<RoleIdInfo>> WriteRoleIdAsync(string roleName, RoleIdInfo roleIdInfo, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task WriteRoleIdAsync(string roleName, RoleIdInfo roleIdInfo, string mountPoint = AuthMethodDefaultPaths.AppRole);
 
         /// <summary>
         /// Generates and issues a new SecretID on an existing AppRole. 
@@ -115,7 +115,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="secretId">The secret id.</param>
         /// <param name="mountPoint">Mount point of the AppRole Auth method</param>
         /// <returns>Secret Id properties</returns>
-        Task<Secret<SecretIdInfo>> ReadSecretIdInfoAsync(string roleName, string secretId, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<FullSecretIdInfo>> ReadSecretIdInfoAsync(string roleName, string secretId, string mountPoint = AuthMethodDefaultPaths.AppRole);
 
         /// <summary>
         /// Destroy an AppRole secret ID.
@@ -133,7 +133,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="secretIdAccessor">The secret id accessor.</param>
         /// <param name="mountPoint">Mount point of the AppRole Auth method</param>
         /// <returns>Secret Id properties</returns>
-        Task<Secret<SecretIdInfo>> ReadSecretIdInfoByAccessorAsync(string roleName, string secretIdAccessor, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<FullSecretIdInfo>> ReadSecretIdInfoByAccessorAsync(string roleName, string secretIdAccessor, string mountPoint = AuthMethodDefaultPaths.AppRole);
 
         /// <summary>
         /// Destroy an AppRole secret id by Accessor.
