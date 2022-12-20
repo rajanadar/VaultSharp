@@ -1,12 +1,24 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
-namespace VaultSharp.V1.AuthMethods.AliCloud.Models
+namespace VaultSharp.V1.AuthMethods.AppRole.Models
 {
-    public class CreateAliCloudRoleModel
+    public class CreateAppRoleRoleModel
     {
-        [JsonProperty("arn")]
-        public string ARN { get; set; }
+        [JsonProperty("bind_secret_id")]
+        public bool BindSecretId { get; set; } = true;
+
+        [JsonProperty("secret_id_bound_cidrs")]
+        public List<string> SecretIdBoundCIDRs { get; set; }
+
+        [JsonProperty("secret_id_num_uses")]
+        public bool SecretIdNumberOfUses { get; set; }
+
+        [JsonProperty("secret_id_ttl")]
+        public string SecretIdTimeToLive { get; set; }
+
+        [JsonProperty("local_secret_ids")]
+        public bool LocalSecretIds { get; set; }
 
         [JsonProperty("token_ttl")]
         public string TokenTimeToLive { get; set; }

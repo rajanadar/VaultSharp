@@ -19,7 +19,7 @@ namespace VaultSharp.V1.AuthMethods.AliCloud
         /// <param name="createAliCloudRoleModel"><para>[required]</para>
         /// Specifies the request options. </param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Database backend. Defaults to <see cref="AuthMethodDefaultPaths.AliCloud" />
+        /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AliCloud" />
         /// Provide a value only if you have customized the mount point.</param>        
         /// <returns>The task</returns>
         Task WriteRoleAsync(string roleName, CreateAliCloudRoleModel createAliCloudRoleModel, string mountPoint = AuthMethodDefaultPaths.AliCloud);
@@ -30,7 +30,7 @@ namespace VaultSharp.V1.AuthMethods.AliCloud
         /// <param name="roleName"><para>[required]</para>
         /// Specifies the name of the role</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Database backend. Defaults to <see cref="AuthMethodDefaultPaths.AliCloud" />
+        /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AliCloud" />
         /// Provide a value only if you have customized the mount point.
         /// </param>        
         /// <returns>The role details</returns>
@@ -41,7 +41,7 @@ namespace VaultSharp.V1.AuthMethods.AliCloud
         /// Only the role names are returned, not any values.
         /// </summary>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Database backend. Defaults to <see cref="AuthMethodDefaultPaths.AliCloud" />
+        /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AliCloud" />
         /// Provide a value only if you have customized the mount point.
         /// </param>  
         /// <returns>The role names.</returns>
@@ -53,7 +53,7 @@ namespace VaultSharp.V1.AuthMethods.AliCloud
         /// <param name="roleName"><para>[required]</para>
         /// Specifies the name of the role</param>
         /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Database backend. Defaults to <see cref="AuthMethodDefaultPaths.AliCloud" />
+        /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AliCloud" />
         /// Provide a value only if you have customized the mount point.
         /// </param>        
         /// <returns>The task</returns>

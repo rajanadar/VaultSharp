@@ -3,6 +3,7 @@
 **BREAKING CHANGES:**
 
   * Backend APIs to tune mount config now take the ```NewBackendConfig``` object instead of ```BackendConfig``` object.
+  * auth/approle: ```PullSecretIdAsync``` method is renamed to ```GenerateNewSecretIdAsync```
 
 **FEATURES:**
 
@@ -13,7 +14,8 @@
   * [GH-293](https://github.com/rajanadar/VaultSharp/issues/293) secret/kv2: Add new api for create metadata
   * [GH-293](https://github.com/rajanadar/VaultSharp/issues/293) secret/kv2: Add new api for update metadata
   * [GH-294](https://github.com/rajanadar/VaultSharp/issues/294) secret/aws: All management apis
-  * auth/alicloud: All the AliCloud apis.
+  * auth/alicloud: All the AliCloud Auth apis.
+  * auth/approle: All the AppRole Auth apis.
 
 **IMPROVEMENTS:**
 
