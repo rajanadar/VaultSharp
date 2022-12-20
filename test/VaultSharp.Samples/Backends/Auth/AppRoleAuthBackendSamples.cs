@@ -1,6 +1,8 @@
 ﻿
 using System;
 using System.Linq;
+using System.Net;
+using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods;
 using VaultSharp.V1.AuthMethods.AppRole.Models;
 using Xunit;
@@ -26,10 +28,10 @@ namespace VaultSharp.Samples
 
             var mountPoint = newApproleAuthBackend.Path;
 
-            // raja todo. Read All Roles doesn't work for some reason. Maybe a 1.13 thing.
+            var notFoundException = Assert.ThrowsAsync<VaultApiException>(
+                () => _authenticatedVaultClient.V1.Auth.AppRole.ReadAllRolesAsync(mountPoint)).Result;
 
-            // var noRoles = _authenticatedVaultClient.V1.Auth.AppRole.ReadAllRolesAsync(mountPoint).Result;
-            // Assert.False(noRoles.Data.Keys.Any());
+            Assert.Equal((int)HttpStatusCode.NotFound, notFoundException.StatusCode);
 
             var newAppRoleRole = new AppRoleRoleModel
             {
@@ -62,16 +64,17 @@ namespace VaultSharp.Samples
             Assert.Equal(newAppRoleRole.TokenMaximumTimeToLive, writtenRole.Data.TokenMaximumTimeToLive);
             Assert.Equal(newAppRoleRole.TokenNumberOfUses, writtenRole.Data.TokenNumberOfUses);
 
-            // raja todo. Read All Roles doesn't work for some reason. Maybe a 1.13 thing.
-            // var roles = _authenticatedVaultClient.V1.Auth.AppRole.ReadAllRolesAsync(mountPoint).Result;
-            // Assert.True(roles.Data.Keys.Count() == 1);
-            // Assert.Equal(roleName, roles.Data.Keys.First());
+            var roles = _authenticatedVaultClient.V1.Auth.AppRole.ReadAllRolesAsync(mountPoint).Result;
+            DisplayJson(roles);
+            Assert.True(roles.Data.Keys.Count() == 1);
+            Assert.Equal(roleName, roles.Data.Keys.First());
 
             _authenticatedVaultClient.V1.Auth.AppRole.DeleteRoleAsync(roleName, mountPoint).Wait();
 
-            // raja todo. Read All Roles doesn't work for some reason. Maybe a 1.13 thing.
-            // noRoles = _authenticatedVaultClient.V1.Auth.AppRole.ReadAllRolesAsync(mountPoint).Result;
-            // Assert.False(noRoles.Data.Keys.Any());
+            notFoundException = Assert.ThrowsAsync<VaultApiException>(
+                () => _authenticatedVaultClient.V1.Auth.AppRole.ReadAllRolesAsync(mountPoint)).Result;
+
+            Assert.Equal((int)HttpStatusCode.NotFound, notFoundException.StatusCode);
 
             // all done. get rid of the backend.
             _authenticatedVaultClient.V1.System.UnmountAuthBackendAsync(newApproleAuthBackend.Path).Wait();

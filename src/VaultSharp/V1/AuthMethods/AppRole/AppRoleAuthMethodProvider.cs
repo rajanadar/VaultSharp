@@ -19,7 +19,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
 
         public async Task<Secret<ListInfo>> ReadAllRolesAsync(string mountPoint = AuthMethodDefaultPaths.AppRole)
         {
-            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/auth/" + mountPoint.Trim('/') + "/roles", new HttpMethod("LIST")).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/auth/" + mountPoint.Trim('/') + "/role", new HttpMethod("LIST")).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task WriteRoleAsync(string roleName, AppRoleRoleModel appRoleRoleModel, string mountPoint = AuthMethodDefaultPaths.AppRole)
