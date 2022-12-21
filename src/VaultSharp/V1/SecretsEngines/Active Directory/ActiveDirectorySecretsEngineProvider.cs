@@ -10,9 +10,12 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
     {
         private readonly Polymath _polymath;
 
+        public IActiveDirectoryLibrary Library { get; }
+
         public ActiveDirectorySecretsEngineProvider(Polymath polymath)
         {
             _polymath = polymath;
+            Library = new ActiveDirectoryLibrary(_polymath);
         }
 
         public async Task ConfigureConnectionAsync(CreateConnectionConfigModel createConnectionConfigModel, string mountPoint = null)

@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 using VaultSharp.V1.SecretsEngines.ActiveDirectory.Models;
-using VaultSharp.V1.SecretsEngines.AWS;
 
 namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
 {
@@ -10,6 +9,8 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
     /// </summary>
     public interface IActiveDirectorySecretsEngine
     {
+        IActiveDirectoryLibrary Library { get;}
+
         /// <summary>
         /// The config endpoint configures the LDAP connection and binding parameters, 
         /// as well as the password rotation configuration.
