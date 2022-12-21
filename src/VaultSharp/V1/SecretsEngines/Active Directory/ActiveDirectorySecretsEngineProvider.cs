@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
@@ -15,7 +16,7 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
         public ActiveDirectorySecretsEngineProvider(Polymath polymath)
         {
             _polymath = polymath;
-            Library = new ActiveDirectoryLibrary(_polymath);
+            Library = new ActiveDirectoryLibraryProvider(_polymath);
         }
 
         public async Task ConfigureConnectionAsync(CreateConnectionConfigModel createConnectionConfigModel, string mountPoint = null)
@@ -64,6 +65,23 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
             Checker.NotNull(roleName, "roleName");
 
             return await _polymath.MakeVaultApiRequest<Secret<ActiveDirectoryCredentials>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.ActiveDirectory, "/creds/" + roleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<Dictionary<string, object>>> RotateRootCredentialsAsync(string mountPoint = null)
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.ActiveDirectory, "/rotate-root", HttpMethod.Post).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<Dictionary<string, object>>> ReadRotateRootCredentialsStatusAsync(string mountPoint = null)
+        {
+            return await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.ActiveDirectory, "/rotate-root", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<Secret<Dictionary<string, object>>> RotateRoleCredentialsAsync(string roleName, string mountPoint = null)
+        {
+            Checker.NotNull(roleName, "roleName");
+
+            return await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.ActiveDirectory, "/rotate-role/" + roleName.Trim('/'), HttpMethod.Post).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

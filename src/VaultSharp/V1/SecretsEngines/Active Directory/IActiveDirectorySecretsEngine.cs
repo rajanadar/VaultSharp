@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 using VaultSharp.V1.SecretsEngines.ActiveDirectory.Models;
 
@@ -79,7 +80,7 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
         /// </summary>
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.ActiveDirectory" />
-        /// Provide a value only if you have customized the AWS mount point.</param>
+        /// Provide a value only if you have customized the mount point.</param>
         /// <param name="wrapTimeToLive">
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
@@ -114,5 +115,48 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
         /// The secret with the <see cref="ActiveDirectoryCredentials" /> as the data.
         /// </returns>
         Task<Secret<ActiveDirectoryCredentials>> GetCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
+
+        /// <summary>
+        /// Rotate the Bind Password to a new one known only to Vault.
+        /// </summary>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the AD backend. Defaults to <see cref="SecretsEngineMountPoints.ActiveDirectory" />
+        /// Provide a value only if you have customized the mount point.</param>
+        /// <returns>
+        /// Generally, rotate-root returns a 204. 
+        /// However, if rotate-root is already in progress, it may return a 200 with a 
+        /// warning that root credential rotation is already in progress.
+        /// </returns>
+        Task<Secret<Dictionary<string, object>>> RotateRootCredentialsAsync(string mountPoint = null);
+
+        /// <summary>
+        /// Read the status of Rotate action.
+        /// </summary>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the AD backend. Defaults to <see cref="SecretsEngineMountPoints.ActiveDirectory" />
+        /// Provide a value only if you have customized the mount point.</param>
+        /// <returns>
+        /// Generally, returns a 204. 
+        /// However, if rotate-root is already in progress, it may return a 200 with a 
+        /// warning that root credential rotation is already in progress.
+        /// </returns>
+        Task<Secret<Dictionary<string, object>>> ReadRotateRootCredentialsStatusAsync(string mountPoint = null);
+
+        /// <summary>
+        /// Manually rotate the password of a managed Active Directory service account.
+        /// </summary>
+        /// <param name="roleName">
+        /// [required]
+        /// The role of the service account.
+        /// </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the AD backend. Defaults to <see cref="SecretsEngineMountPoints.ActiveDirectory" />
+        /// Provide a value only if you have customized the mount point.</param>
+        /// <returns>
+        /// Generally, rotate returns a 204. 
+        /// However, if rotate is already in progress, it may return a 200 with a 
+        /// warning that rotation is already in progress.
+        /// </returns>
+        Task<Secret<Dictionary<string, object>>> RotateRoleCredentialsAsync(string roleName, string mountPoint = null);
     }
 }
