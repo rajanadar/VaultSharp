@@ -30,6 +30,7 @@ namespace VaultSharp.V1.AuthMethods
 
             AliCloud = new AliCloudAuthMethodProvider(_polymath);
             AppRole = new AppRoleAuthMethodProvider(_polymath);
+            AWS = new AWSAuthMethodProvider(_polymath);
             JWT = new JWTAuthMethodProvider(_polymath);
             LDAP = new LDAPAuthMethodProvider(_polymath);
             Okta = new OktaAuthMethodProvider(_polymath);
@@ -40,7 +41,7 @@ namespace VaultSharp.V1.AuthMethods
 
         public IAppRoleAuthMethod AppRole { get; }
 
-        public IAWSAuthMethod AWS => throw new NotImplementedException();
+        public IAWSAuthMethod AWS { get; }
 
         public IAzureAuthMethod Azure => throw new NotImplementedException();
 

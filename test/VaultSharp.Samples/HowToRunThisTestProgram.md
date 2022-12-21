@@ -1,9 +1,11 @@
 ﻿
-### How to run the VaultSharp End to End Flow
+### How to run the VaultSharp End to End Test Flow
 
 1. VaultSharp.Samples is a simple console App.
 2. I debated between unit tests and a integration-like console app, and went with the console app
 3. It truly tests out the e2e flow.
+
+#### Step 1 of 2: Configure and start Vault in non-dev mode
 
 Before you can run Program.cs, you need to start your Vault Server locally in a non-dev mode. This is what I do.
 
@@ -38,7 +40,10 @@ rd c:\raja\vault\file_backend /S /Q
 vault server -config c:\raja\vault\f.hcl
 ```
 
+#### Step 2 of 2: Run the C# Solution
+
 At this point, we have a Vault Server running locally. That's the only step you need to do.
+Don't worry about unsealing it or initializing it etc. The test-program will do all of that.
 
 1. Now go to the VaultSharp C# solution
 2. Open Program.cs, and set the vault version variable to the version of your vault.exe 
@@ -50,7 +55,7 @@ At this point, we have a Vault Server running locally. That's the only step you 
    ```
    
 3. Now run this Console App and check the ProgramOutput.txt file in your bin/debug folder.
-4. This file emits 2 blocks of JSON for every vault interaction. Block 1 is the JSON returned by the vault server. And Block 2 is the JSON of the POCO that we deserialized the Vault server json into. It helps me quickly find out if the Vault folks added new JSON fields or not. (Their docs doesn't have all fields sometimes)
+4. This file emits 2 blocks of JSON for every vault interaction. Block 1 is the JSON returned by the vault server. And Block 2 is the JSON of the POCO that we deserialized the Vault server json into. It helps me quickly find out if the Vault folks added new JSON fields or not. (Their docs don't necessarily have all the fields)
 
 
-FYI: I dev on a Windows 10 x64 bit OS.
+FYI: I dev on a Windows Machine
