@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace VaultSharp.V1.SecretsEngines.AliCloud
 {
@@ -17,6 +18,15 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud
         public string AccessKey { get; set; }
 
         /// <summary>
+        /// Gets or sets the expiration.
+        /// </summary>
+        /// <value>
+        /// The expiration.
+        /// </value>
+        [JsonProperty("expiration")]
+        public DateTimeOffset? Expiration { get; set; }
+
+        /// <summary>
         /// Gets or sets the secret key.
         /// </summary>
         /// <value>
@@ -33,14 +43,5 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud
         /// </value>
         [JsonProperty("security_token")]
         public string SecurityToken { get; set; }
-
-        /// <summary>
-        /// Gets or sets the expiration.
-        /// </summary>
-        /// <value>
-        /// The expiration.
-        /// </value>
-        [JsonProperty("expiration")]
-        public string Expiration { get; set; }
     }
 }
