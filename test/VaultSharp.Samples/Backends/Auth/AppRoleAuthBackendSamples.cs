@@ -184,6 +184,138 @@ namespace VaultSharp.Samples
             DisplayJson(readNewSecretIdNumberOfUses);
             Assert.True(readNewSecretIdNumberOfUses.Data == 0);
 
+            // secret id ttl crud
+
+            var existingSecretIdTimeToLive = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleSecretIdTimeToLiveAsync(roleName, mountPoint).Result;
+            DisplayJson(existingSecretIdTimeToLive);
+            Assert.True(existingSecretIdTimeToLive.Data > 0);
+
+            var newSecretIdTimeToLive = DateTime.Now.Year + DateTime.Now.Millisecond;
+            _authenticatedVaultClient.V1.Auth.AppRole.WriteRoleSecretIdTimeToLiveAsync(roleName, newSecretIdTimeToLive, mountPoint).Wait();
+
+            var readNewSecretIdTimeToLive = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleSecretIdTimeToLiveAsync(roleName, mountPoint).Result;
+            DisplayJson(readNewSecretIdTimeToLive);
+            Assert.Equal(newSecretIdTimeToLive, readNewSecretIdTimeToLive.Data);
+
+            _authenticatedVaultClient.V1.Auth.AppRole.DeleteRoleSecretIdTimeToLiveAsync(roleName, mountPoint).Wait();
+            readNewSecretIdTimeToLive = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleSecretIdTimeToLiveAsync(roleName, mountPoint).Result;
+            DisplayJson(readNewSecretIdTimeToLive);
+            Assert.True(readNewSecretIdTimeToLive.Data == 0);
+
+            // token ttl crud
+
+            var existingTokenTimeToLive = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleTokenTimeToLiveAsync(roleName, mountPoint).Result;
+            DisplayJson(existingTokenTimeToLive);
+            Assert.True(existingTokenTimeToLive.Data > 0);
+
+            var newTokenTimeToLive = DateTime.Now.Year + DateTime.Now.Millisecond;
+            _authenticatedVaultClient.V1.Auth.AppRole.WriteRoleTokenTimeToLiveAsync(roleName, newTokenTimeToLive, mountPoint).Wait();
+
+            var readNewTokenTimeToLive = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleTokenTimeToLiveAsync(roleName, mountPoint).Result;
+            DisplayJson(readNewTokenTimeToLive);
+            Assert.Equal(newTokenTimeToLive, readNewTokenTimeToLive.Data);
+
+            _authenticatedVaultClient.V1.Auth.AppRole.DeleteRoleTokenTimeToLiveAsync(roleName, mountPoint).Wait();
+            readNewTokenTimeToLive = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleTokenTimeToLiveAsync(roleName, mountPoint).Result;
+            DisplayJson(readNewTokenTimeToLive);
+            Assert.True(readNewTokenTimeToLive.Data == 0);
+
+            // token max ttl
+
+            var existingTokenMaximumTimeToLive = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleTokenMaximumTimeToLiveAsync(roleName, mountPoint).Result;
+            DisplayJson(existingTokenMaximumTimeToLive);
+            Assert.True(existingTokenMaximumTimeToLive.Data > 0);
+
+            var newTokenMaximumTimeToLive = DateTime.Now.Year + DateTime.Now.Millisecond;
+            _authenticatedVaultClient.V1.Auth.AppRole.WriteRoleTokenMaximumTimeToLiveAsync(roleName, newTokenMaximumTimeToLive, mountPoint).Wait();
+
+            var readNewTokenMaximumTimeToLive = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleTokenMaximumTimeToLiveAsync(roleName, mountPoint).Result;
+            DisplayJson(readNewTokenMaximumTimeToLive);
+            Assert.Equal(newTokenMaximumTimeToLive, readNewTokenMaximumTimeToLive.Data);
+
+            _authenticatedVaultClient.V1.Auth.AppRole.DeleteRoleTokenMaximumTimeToLiveAsync(roleName, mountPoint).Wait();
+            readNewTokenMaximumTimeToLive = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleTokenMaximumTimeToLiveAsync(roleName, mountPoint).Result;
+            DisplayJson(readNewTokenMaximumTimeToLive);
+            Assert.True(readNewTokenMaximumTimeToLive.Data == 0);
+
+            // bind secret id
+
+            var existingBindSecretId = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleBindSecretIdAsync(roleName, mountPoint).Result;
+            DisplayJson(existingBindSecretId);
+            Assert.True(existingBindSecretId.Data);
+
+            var newBindSecretId = false;
+            _authenticatedVaultClient.V1.Auth.AppRole.WriteRoleBindSecretIdAsync(roleName, newBindSecretId, mountPoint).Wait();
+
+            var readNewBindSecretId = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleBindSecretIdAsync(roleName, mountPoint).Result;
+            DisplayJson(readNewBindSecretId);
+            Assert.Equal(newBindSecretId, readNewBindSecretId.Data);
+
+            _authenticatedVaultClient.V1.Auth.AppRole.DeleteRoleBindSecretIdAsync(roleName, mountPoint).Wait();
+            readNewBindSecretId = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleBindSecretIdAsync(roleName, mountPoint).Result;
+            DisplayJson(readNewBindSecretId);
+
+            // raja todo
+            Assert.True(readNewBindSecretId.Data); // ?? why true. Does it revert to original default on role?
+
+            // secret id bound cidrs
+
+            var existingSecretIdBoundCIDRs = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleSecretIdBoundCIDRsAsync(roleName, mountPoint).Result;
+            DisplayJson(existingSecretIdBoundCIDRs);
+            Assert.True(existingSecretIdBoundCIDRs.Data.Count > 0);
+
+            existingSecretIdBoundCIDRs.Data.Add("192.168.142.23/17");
+            var newSecretIdBoundCIDRs = existingSecretIdBoundCIDRs.Data;
+            _authenticatedVaultClient.V1.Auth.AppRole.WriteRoleSecretIdBoundCIDRsAsync(roleName, newSecretIdBoundCIDRs, mountPoint).Wait();
+
+            var readNewSecretIdBoundCIDRs = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleSecretIdBoundCIDRsAsync(roleName, mountPoint).Result;
+            DisplayJson(readNewSecretIdBoundCIDRs);
+            Assert.Equal(existingSecretIdBoundCIDRs.Data.Count, readNewSecretIdBoundCIDRs.Data.Count);
+
+            _authenticatedVaultClient.V1.Auth.AppRole.DeleteRoleSecretIdBoundCIDRsAsync(roleName, mountPoint).Wait();
+            readNewSecretIdBoundCIDRs = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleSecretIdBoundCIDRsAsync(roleName, mountPoint).Result;
+            DisplayJson(readNewSecretIdBoundCIDRs);
+            Assert.Null(readNewSecretIdBoundCIDRs.Data);
+
+            // token bound CIDRs
+
+            var existingTokenBoundCIDRs = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleTokenBoundCIDRsAsync(roleName, mountPoint).Result;
+            DisplayJson(existingTokenBoundCIDRs);
+            Assert.True(existingTokenBoundCIDRs.Data.Count > 0);
+
+            existingTokenBoundCIDRs.Data.Add("192.168.167.23/18");
+            var newTokenBoundCIDRs = existingTokenBoundCIDRs.Data;
+            _authenticatedVaultClient.V1.Auth.AppRole.WriteRoleTokenBoundCIDRsAsync(roleName, newTokenBoundCIDRs, mountPoint).Wait();
+
+            var readNewTokenBoundCIDRs = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleTokenBoundCIDRsAsync(roleName, mountPoint).Result;
+            DisplayJson(readNewTokenBoundCIDRs);
+            Assert.Equal(existingTokenBoundCIDRs.Data.Count, readNewTokenBoundCIDRs.Data.Count);
+
+            _authenticatedVaultClient.V1.Auth.AppRole.DeleteRoleTokenBoundCIDRsAsync(roleName, mountPoint).Wait();
+            readNewTokenBoundCIDRs = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleTokenBoundCIDRsAsync(roleName, mountPoint).Result;
+            DisplayJson(readNewTokenBoundCIDRs);
+            Assert.Null(readNewTokenBoundCIDRs.Data);
+
+            // period cidr
+
+            var existingPeriod = _authenticatedVaultClient.V1.Auth.AppRole.ReadRolePeriodAsync(roleName, mountPoint).Result;
+            DisplayJson(existingPeriod);
+            Assert.True(existingPeriod.Data > 0);
+
+            var newPeriod = DateTime.Now.Year + DateTime.Now.Millisecond;
+            _authenticatedVaultClient.V1.Auth.AppRole.WriteRolePeriodAsync(roleName, newPeriod, mountPoint).Wait();
+
+            var readNewPeriod = _authenticatedVaultClient.V1.Auth.AppRole.ReadRolePeriodAsync(roleName, mountPoint).Result;
+            DisplayJson(readNewPeriod);
+            Assert.Equal(newPeriod, readNewPeriod.Data);
+
+            _authenticatedVaultClient.V1.Auth.AppRole.DeleteRolePeriodAsync(roleName, mountPoint).Wait();
+            readNewPeriod = _authenticatedVaultClient.V1.Auth.AppRole.ReadRolePeriodAsync(roleName, mountPoint).Result;
+            DisplayJson(readNewPeriod);
+            Assert.True(readNewPeriod.Data == 0);
+
+            // all done.
+
             _authenticatedVaultClient.V1.Auth.AppRole.DeleteRoleAsync(roleName, mountPoint).Wait();
 
             notFoundException = Assert.ThrowsAsync<VaultApiException>(
