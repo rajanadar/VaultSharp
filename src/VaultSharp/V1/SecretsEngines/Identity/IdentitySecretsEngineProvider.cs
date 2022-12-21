@@ -96,8 +96,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         {
             return await _polymath.MakeVaultApiRequest<Secret<ListEntitiesResponse>>(
                 mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
-                "/entity/id?list=true",
-                HttpMethod.Get,
+                "/entity/id", _polymath.ListHttpMethod,
                 wrapTimeToLive: wrapTimeToLive)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
@@ -157,8 +156,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         {
             return await _polymath.MakeVaultApiRequest<Secret<ListEntitiesResponse>>(
                 mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
-                "/entity/name?list=true",
-                HttpMethod.Get,
+                "/entity/name", _polymath.ListHttpMethod,
                 wrapTimeToLive: wrapTimeToLive)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }

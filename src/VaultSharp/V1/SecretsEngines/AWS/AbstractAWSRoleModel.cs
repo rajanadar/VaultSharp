@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace VaultSharp.V1.SecretsEngines.AWS
@@ -38,9 +39,11 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         
         
         [JsonProperty("policy")]
+        [Obsolete]
         public string LegacyParameterPolicy { get; set; }
 
         [JsonProperty("arn")]
+        [Obsolete]
         public string LegacyParameterARN { get; set; }
     }
 }

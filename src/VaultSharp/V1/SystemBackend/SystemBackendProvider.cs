@@ -344,7 +344,7 @@ namespace VaultSharp.V1.SystemBackend
 
         public async Task<Secret<ListInfo>> GetAllLeasesAsync(string prefix)
         {
-            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/sys/leases/lookup/" + prefix.TrimStart('/') + "?list=true", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/sys/leases/lookup/" + prefix.TrimStart('/'), _polymath.ListHttpMethod).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<RenewedLease>> RenewLeaseAsync(string leaseId, int incrementSeconds)
@@ -486,7 +486,7 @@ namespace VaultSharp.V1.SystemBackend
 
         public async Task<Secret<ListInfo>> GetACLPoliciesAsync()
         {
-            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/sys/policies/acl?list=true", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/sys/policies/acl", _polymath.ListHttpMethod).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<ACLPolicy>> GetACLPolicyAsync(string policyName)
@@ -512,8 +512,7 @@ namespace VaultSharp.V1.SystemBackend
         public async Task<Secret<ListInfo>> GetRawSecretKeysAsync(string storagePathPrefix)
         {
             return await _polymath
-                .MakeVaultApiRequest<Secret<ListInfo>>("v1/sys/raw/" + storagePathPrefix.TrimStart('/') + "?list=true",
-                    HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+                .MakeVaultApiRequest<Secret<ListInfo>>("v1/sys/raw/" + storagePathPrefix.TrimStart('/'), _polymath.ListHttpMethod).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<Dictionary<string, object>>> ReadRawSecretAsync(string storagePath)

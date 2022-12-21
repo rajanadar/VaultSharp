@@ -59,7 +59,7 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
 
         public async Task<Secret<ListInfo>> GetRGPPoliciesAsync()
         {
-            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/sys/policies/rgp?list=true", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/sys/policies/rgp", _polymath.ListHttpMethod).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<RGPPolicy>> GetRGPPolicyAsync(string policyName)
@@ -84,7 +84,7 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
 
         public async Task<Secret<ListInfo>> GetEGPPoliciesAsync()
         {
-            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/sys/policies/egp?list=true", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/sys/policies/egp", _polymath.ListHttpMethod).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<EGPPolicy>> GetEGPPolicyAsync(string policyName)

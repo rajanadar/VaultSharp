@@ -24,7 +24,7 @@ namespace VaultSharp.V1.SecretsEngines.Cubbyhole
         public async Task<Secret<ListInfo>> ReadSecretPathsAsync(string folderPath, string wrapTimeToLive = null)
         {
             Checker.NotNull(folderPath, "folderPath");
-            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>(_polymath.VaultClientSettings.SecretsEngineMountPoints.Cubbyhole, "/" + folderPath.TrimStart('/') + "?list=true", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>(_polymath.VaultClientSettings.SecretsEngineMountPoints.Cubbyhole, "/" + folderPath.TrimStart('/'), _polymath.ListHttpMethod, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task WriteSecretAsync(string secretPath, IDictionary<string, object> values)
