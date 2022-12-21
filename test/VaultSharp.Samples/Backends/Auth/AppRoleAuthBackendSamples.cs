@@ -137,10 +137,52 @@ namespace VaultSharp.Samples
             _authenticatedVaultClient.V1.Auth.AppRole.DestroySecretIdAsync(roleName, secretId, mountPoint).Wait();
 
             var destroyedSecret1 = _authenticatedVaultClient.V1.Auth.AppRole.ReadSecretIdInfoAsync(roleName, secretId, mountPoint).Result;
+            Assert.Null(destroyedSecret1);
 
             _authenticatedVaultClient.V1.Auth.AppRole.DestroySecretIdByAccessorAsync(roleName, pushSecretIdAccessor, mountPoint).Wait();
 
             var destroyedSecret2 = _authenticatedVaultClient.V1.Auth.AppRole.ReadSecretIdInfoAsync(roleName, pushSecretId, mountPoint).Result;
+            Assert.Null(destroyedSecret2);
+
+            // policies crud
+
+            var existingPolicies = _authenticatedVaultClient.V1.Auth.AppRole.ReadRolePoliciesAsync(roleName, mountPoint).Result;
+            DisplayJson(existingPolicies);
+            Assert.True(existingPolicies.Data.Policies.Count > 0);
+            Assert.True(existingPolicies.Data.TokenPolicies.Count > 0);
+
+            existingPolicies.Data.Policies.Add("qaaa");
+            existingPolicies.Data.TokenPolicies.Add("raaa");
+            var newPolicies = existingPolicies.Data;
+            _authenticatedVaultClient.V1.Auth.AppRole.WriteRolePoliciesAsync(roleName, newPolicies, mountPoint).Wait();
+
+            var readNewPolicies = _authenticatedVaultClient.V1.Auth.AppRole.ReadRolePoliciesAsync(roleName, mountPoint).Result;
+            DisplayJson(readNewPolicies);
+            Assert.True(readNewPolicies.Data.Policies.Count == 3);
+            Assert.True(readNewPolicies.Data.TokenPolicies.Count == 3);
+
+            _authenticatedVaultClient.V1.Auth.AppRole.DeleteRolePoliciesAsync(roleName, mountPoint).Wait();
+            readNewPolicies = _authenticatedVaultClient.V1.Auth.AppRole.ReadRolePoliciesAsync(roleName, mountPoint).Result;
+            DisplayJson(readNewPolicies);
+            Assert.Null(readNewPolicies.Data.Policies);
+            Assert.False(readNewPolicies.Data.TokenPolicies.Any());
+
+            // secret id num uses crud
+            var existingSecretIdNumberOfUses = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleSecretIdNumberOfUsesAsync(roleName, mountPoint).Result;
+            DisplayJson(existingSecretIdNumberOfUses);
+            Assert.True(existingSecretIdNumberOfUses.Data > 0);
+
+            var newSecretIdNumberOfUses = DateTime.Now.Year + DateTime.Now.Millisecond;
+            _authenticatedVaultClient.V1.Auth.AppRole.WriteRoleSecretIdNumberOfUsesAsync(roleName, newSecretIdNumberOfUses, mountPoint).Wait();
+
+            var readNewSecretIdNumberOfUses = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleSecretIdNumberOfUsesAsync(roleName, mountPoint).Result;
+            DisplayJson(readNewSecretIdNumberOfUses);
+            Assert.Equal(newSecretIdNumberOfUses, readNewSecretIdNumberOfUses.Data);
+
+            _authenticatedVaultClient.V1.Auth.AppRole.DeleteRoleSecretIdNumberOfUsesAsync(roleName, mountPoint).Wait();
+            readNewSecretIdNumberOfUses = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleSecretIdNumberOfUsesAsync(roleName, mountPoint).Result;
+            DisplayJson(readNewSecretIdNumberOfUses);
+            Assert.True(readNewSecretIdNumberOfUses.Data == 0);
 
             _authenticatedVaultClient.V1.Auth.AppRole.DeleteRoleAsync(roleName, mountPoint).Wait();
 

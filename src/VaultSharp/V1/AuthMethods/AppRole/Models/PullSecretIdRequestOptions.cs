@@ -42,7 +42,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole.Models
         /// than role's secret_id_num_uses.
         /// </summary>
         [JsonProperty("num_uses")]
-        public int NumberOfUses { get; set; }
+        public long NumberOfUses { get; set; }
 
         /// <summary>
         /// Duration in seconds (3600) or an integer time unit (60m) after 
@@ -51,6 +51,6 @@ namespace VaultSharp.V1.AuthMethods.AppRole.Models
         /// supplied. May not be longer than role's secret_id_ttl.
         /// </summary>
         [JsonProperty("ttl")]
-        public int TimeToLive { get; set; }        
+        public long TimeToLive { get; set; }        
     }
 }
