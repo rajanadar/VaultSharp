@@ -29,11 +29,6 @@ namespace VaultSharp.V1.AuthMethods
                 return new AliCloudAuthMethodLoginProvider(authInfo as AliCloudAuthMethodInfo, polymath);
             }
 
-            if (authInfo.AuthMethodType == AuthMethodType.AppRole)
-            {
-                return new AppRoleAuthMethodLoginProvider(authInfo as AppRoleAuthMethodInfo, polymath);
-            }
-
             if (authInfo.AuthMethodType == AuthMethodType.AWS)
             {
                 return new AWSAuthMethodLoginProvider(authInfo as AbstractAWSAuthMethodInfo, polymath);

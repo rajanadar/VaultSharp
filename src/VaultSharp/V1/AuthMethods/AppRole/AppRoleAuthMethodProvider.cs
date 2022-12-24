@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -371,9 +373,37 @@ namespace VaultSharp.V1.AuthMethods.AppRole
 
         public async Task<Secret<Dictionary<string, object>>> LoginAsync(AppRoleAuthMethodInfo appRoleAuthMethodInfo)
         {
-            var appRoleLoginProvider = new AppRoleAuthMethodLoginProvider(appRoleAuthMethodInfo, _polymath);
+            var loginResourcePath = string.Format(CultureInfo.InvariantCulture, "v1/auth/{0}/login", appRoleAuthMethodInfo.MountPoint.Trim('/'));
 
-            return await appRoleLoginProvider.LoginAsync().ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            var requestData = new Dictionary<string, object>
+            {
+                {"role_id", appRoleAuthMethodInfo.RoleId}
+            };
+
+            if (!string.IsNullOrWhiteSpace(appRoleAuthMethodInfo.SecretId))
+            {
+                requestData.Add("secret_id", appRoleAuthMethodInfo.SecretId);
+            }
+
+            // make an unauthenticated call to Vault, since this is the call to get the token.
+            // It shouldn't need a token.
+            var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(loginResourcePath, HttpMethod.Post, requestData, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+
+            return response;
+        }
+
+        internal async Task<string> GetVaultTokenAsync(AppRoleAuthMethodInfo appRoleAuthMethodInfo)
+        {
+            var response = await LoginAsync(appRoleAuthMethodInfo).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+
+            appRoleAuthMethodInfo.ReturnedLoginAuthInfo = response?.AuthInfo;
+
+            if (response?.AuthInfo != null && !string.IsNullOrWhiteSpace(response.AuthInfo.ClientToken))
+            {
+                return response.AuthInfo.ClientToken;
+            }
+
+            throw new Exception("The call to the Vault authentication method backend did not yield a client token. Please verify your credentials.");
         }
     }
 }

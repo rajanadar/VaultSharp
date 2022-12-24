@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using VaultSharp.V1.AuthMethods;
+using VaultSharp.V1.AuthMethods.AppRole;
 using VaultSharp.V1.AuthMethods.Cert;
 using VaultSharp.V1.AuthMethods.Kerberos;
 using VaultSharp.V1.Commons;
@@ -27,6 +28,8 @@ namespace VaultSharp.Core
 
         private readonly HttpClient _httpClient;
         private Lazy<Task<string>> _lazyVaultToken;
+        private Lazy<Task<string>> _newLazyVaultToken;
+
         private readonly IAuthMethodLoginProvider _authMethodLoginProvider;
 
         public HttpMethod ListHttpMethod { get; } = new HttpMethod("LIST");
@@ -104,26 +107,50 @@ namespace VaultSharp.Core
 
             if (VaultClientSettings.AuthMethodInfo != null)
             {
-                _authMethodLoginProvider = AuthProviderFactory.CreateAuthenticationProvider(VaultClientSettings.AuthMethodInfo, this);
-
-                SetVaultTokenDelegate();
+                if (vaultClientSettings.AuthMethodInfo.AuthMethodType == AuthMethodType.AppRole)
+                {
+                    SetVaultTokenDelegate();
+                }
+                else
+                {
+                    _authMethodLoginProvider = AuthProviderFactory.CreateAuthenticationProvider(VaultClientSettings.AuthMethodInfo, this);
+                    SetVaultTokenDelegate();
+                }
             }
         }
 
         internal void SetVaultTokenDelegate()
         {
-            if (_authMethodLoginProvider != null)
+            if (VaultClientSettings.AuthMethodInfo != null &&
+                VaultClientSettings.AuthMethodInfo.AuthMethodType == AuthMethodType.AppRole)
             {
-                _lazyVaultToken = new Lazy<Task<string>>(_authMethodLoginProvider.GetVaultTokenAsync, LazyThreadSafetyMode.PublicationOnly);
+                var appRoleAuthInfo = VaultClientSettings.AuthMethodInfo as AppRoleAuthMethodInfo;
+                var appRoleAuthMethod = new AppRoleAuthMethodProvider(this);
+
+                _newLazyVaultToken = new Lazy<Task<string>>(() => appRoleAuthMethod.GetVaultTokenAsync(appRoleAuthInfo), LazyThreadSafetyMode.PublicationOnly);
+            }
+            else
+            {
+                if (_authMethodLoginProvider != null)
+                {
+                    _lazyVaultToken = new Lazy<Task<string>>(_authMethodLoginProvider.GetVaultTokenAsync, LazyThreadSafetyMode.PublicationOnly);
+                }
             }
         }
 
         internal async Task PerformImmediateLogin()
         {
-            if (_authMethodLoginProvider != null)
+            if (VaultClientSettings.AuthMethodInfo.AuthMethodType == AuthMethodType.AppRole)
             {
-                // make a dummy call, that will force a login.
-                await _lazyVaultToken.Value.ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+                await _newLazyVaultToken.Value.ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            }
+            else
+            {
+                if (_authMethodLoginProvider != null)
+                {
+                    // make a dummy call, that will force a login.
+                    await _lazyVaultToken.Value.ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+                }
             }
         }
 
@@ -150,9 +177,18 @@ namespace VaultSharp.Core
         {
             var headers = new Dictionary<string, string>();
 
-            if (!unauthenticated && _lazyVaultToken != null)
+            if (!unauthenticated && (_lazyVaultToken != null || _newLazyVaultToken != null))
             {
-                var vaultToken = await _lazyVaultToken.Value.ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+                string vaultToken;
+
+                if (_newLazyVaultToken != null)
+                {
+                    vaultToken = await _newLazyVaultToken.Value.ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+                }
+                else
+                {
+                    vaultToken = await _lazyVaultToken.Value.ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+                }
 
                 if (VaultClientSettings.UseVaultTokenHeaderInsteadOfAuthorizationHeader)
                 {
