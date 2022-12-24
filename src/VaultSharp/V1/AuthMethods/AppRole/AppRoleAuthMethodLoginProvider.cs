@@ -19,7 +19,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             _polymath = polymath;
         }
 
-        public async Task<string> GetVaultTokenAsync()
+        public async Task<Secret<Dictionary<string, object>>> LoginAsync()
         {
             var requestData = new Dictionary<string, object>
             {
@@ -32,7 +32,13 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             }
 
             // make an unauthenticated call to Vault, since this is the call to get the token. It shouldn't need a token.
-            var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, requestData, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, requestData, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<string> GetVaultTokenAsync()
+        {
+            var response = await LoginAsync().ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+
             _appRoleAuthMethodInfo.ReturnedLoginAuthInfo = response?.AuthInfo;
 
             if (response?.AuthInfo != null && !string.IsNullOrWhiteSpace(response.AuthInfo.ClientToken))

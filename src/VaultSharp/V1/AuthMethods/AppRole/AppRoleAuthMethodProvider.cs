@@ -368,5 +368,12 @@ namespace VaultSharp.V1.AuthMethods.AppRole
 
             return await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>("v1/auth/" + mountPoint.Trim('/') + "/tidy/secret-id", HttpMethod.Post).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
+
+        public async Task<Secret<Dictionary<string, object>>> LoginAsync(AppRoleAuthMethodInfo appRoleAuthMethodInfo)
+        {
+            var appRoleLoginProvider = new AppRoleAuthMethodLoginProvider(appRoleAuthMethodInfo, _polymath);
+
+            return await appRoleLoginProvider.LoginAsync().ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
     }
 }

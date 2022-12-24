@@ -456,5 +456,13 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// Provide a value only if you have customized the mount point.</param> 
         /// <returns>The secret with warning message.</returns>
         Task<Secret<Dictionary<string, object>>> TidyTokensAsync(string mountPoint = AuthMethodDefaultPaths.AppRole);
+
+        /// <summary>
+        /// Useful to generate the login token as an explicit api.
+        /// Unauthenticated API.
+        /// </summary>
+        /// <param name="appRoleAuthMethodInfo">The request object</param>
+        /// <returns>The secret with the login token</returns>
+        Task<Secret<Dictionary<string, object>>> LoginAsync(AppRoleAuthMethodInfo appRoleAuthMethodInfo);
     }
 }

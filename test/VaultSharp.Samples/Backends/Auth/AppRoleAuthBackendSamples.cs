@@ -2,7 +2,6 @@
 using System;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods;
 using VaultSharp.V1.AuthMethods.AppRole;
@@ -129,10 +128,18 @@ namespace VaultSharp.Samples
 
             var appRoleLoginAuth = new AppRoleAuthMethodInfo(mountPoint, loginRoleId, loginSecretId);
 
+            // Explicit login
+
+            var explicitLogin = _authenticatedVaultClient.V1.Auth.AppRole.LoginAsync(appRoleLoginAuth).Result;
+            DisplayJson(explicitLogin);
+            Assert.NotNull(explicitLogin.AuthInfo.ClientToken);
+
             var newSettings = new VaultClientSettings(_authenticatedVaultClient.Settings.VaultServerUriWithPort, appRoleLoginAuth)
             {
                 Namespace = _authenticatedVaultClient.Settings.Namespace
             };
+
+            // Implicit login
 
             var loginClient = new VaultClient(newSettings);
             loginClient.V1.Auth.PerformImmediateLogin().Wait();
