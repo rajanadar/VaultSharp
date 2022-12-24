@@ -2,8 +2,10 @@
 using System;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods;
+using VaultSharp.V1.AuthMethods.AppRole;
 using VaultSharp.V1.AuthMethods.AppRole.Models;
 using Xunit;
 
@@ -109,6 +111,36 @@ namespace VaultSharp.Samples
             DisplayJson(readSecretIdInfoByAccessor);
             Assert.Equal(secretIdInfo.Data.SecretIdAccessor, readSecretIdInfoByAccessor.Data.SecretIdAccessor);
 
+            // Test the login method
+            var loginRole = new AppRoleRoleModel
+            {
+                BindSecretId = true, 
+                TokenPolicies = new System.Collections.Generic.List<string> { "default"},
+                Policies = new System.Collections.Generic.List<string> { "default" }
+            };
+
+            var loginRoleName = "login-role";
+
+            _authenticatedVaultClient.V1.Auth.AppRole.WriteRoleAsync(loginRoleName, loginRole, mountPoint).Wait();
+
+            var loginRoleId = _authenticatedVaultClient.V1.Auth.AppRole.GetRoleIdAsync(loginRoleName, mountPoint).Result.Data.RoleId;
+
+            var loginSecretId = _authenticatedVaultClient.V1.Auth.AppRole.PullNewSecretIdAsync(loginRoleName, mountPoint: mountPoint).Result.Data.SecretId;
+
+            var appRoleLoginAuth = new AppRoleAuthMethodInfo(mountPoint, loginRoleId, loginSecretId);
+
+            var newSettings = new VaultClientSettings(_authenticatedVaultClient.Settings.VaultServerUriWithPort, appRoleLoginAuth)
+            {
+                Namespace = _authenticatedVaultClient.Settings.Namespace
+            };
+
+            var loginClient = new VaultClient(newSettings);
+            loginClient.V1.Auth.PerformImmediateLogin().Wait();
+
+            Assert.NotNull(appRoleLoginAuth.ReturnedLoginAuthInfo.ClientToken);
+
+            _authenticatedVaultClient.V1.Auth.AppRole.DeleteRoleAsync(loginRoleName, mountPoint).Wait();
+
             var pushOptions = new PushSecretIdRequestOptions
             {
                 Metadata = "{ \"tag1\": \"production\" }",
@@ -158,6 +190,7 @@ namespace VaultSharp.Samples
 
             var readNewPolicies = _authenticatedVaultClient.V1.Auth.AppRole.ReadRolePoliciesAsync(roleName, mountPoint).Result;
             DisplayJson(readNewPolicies);
+
             Assert.True(readNewPolicies.Data.Policies.Count == 3);
             Assert.True(readNewPolicies.Data.TokenPolicies.Count == 3);
 
