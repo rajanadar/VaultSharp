@@ -18,6 +18,7 @@
   * [GH-294](https://github.com/rajanadar/VaultSharp/issues/294) secret/aws: All management apis
   * auth/alicloud: All the AliCloud Auth apis.
   * auth/approle: All the AppRole Auth apis.
+  * secret/alicloud: All the AliCloud Secret apis.
 
 **IMPROVEMENTS:**
 
