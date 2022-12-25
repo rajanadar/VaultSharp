@@ -148,6 +148,17 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         Task<Secret<ListInfo>> ReadAllRolesAsync(string awsMountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
+        /// Deletes a role
+        /// </summary>
+        /// <param name="roleName"><para>[required]</para>
+        /// Name of the role.</param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.AWS" />
+        /// Provide a value only if you have customized the mount point.</param>
+        /// <returns>The task</returns>
+        Task DeleteRoleAsync(string roleName, string mountPoint = null);
+
+        /// <summary>
         /// Generates a dynamic IAM AWS credential based on the named role.
         /// </summary>
         /// <param name="awsRoleName"><para>[required]</para>

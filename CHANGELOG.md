@@ -19,6 +19,7 @@
   * auth/alicloud: All the AliCloud Auth apis.
   * auth/approle: All the AppRole Auth apis.
   * secret/alicloud: All the AliCloud Secret apis.
+  * secret/aws: Add new api to delete role
 
 **IMPROVEMENTS:**
 

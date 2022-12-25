@@ -61,6 +61,13 @@ namespace VaultSharp.V1.SecretsEngines.AWS
             return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>(awsMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.AWS, "/roles", _polymath.ListHttpMethod, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
+        public async Task DeleteRoleAsync(string roleName, string mountPoint = null)
+        {
+            Checker.NotNull(roleName, "roleName");
+
+            await _polymath.MakeVaultApiRequest(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.AWS, "/roles/" + roleName.Trim('/'), HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
         public async Task<Secret<AWSCredentials>> GetCredentialsAsync(string awsRoleName, string roleARN = null, string roleSessionName = null, string awsMountPoint = null, string wrapTimeToLive = null)
         {
             Checker.NotNull(awsRoleName, "awsRoleName");
