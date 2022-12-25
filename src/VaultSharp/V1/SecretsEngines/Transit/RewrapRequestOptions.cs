@@ -11,7 +11,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <summary>
         /// Specifies a list of items to be decrypted in a single batch.
         /// </summary>
-        [JsonProperty(PropertyName = "batch_input")]
+        [JsonProperty(PropertyName = "batch_input", NullValueHandling = NullValueHandling.Ignore)]
         public List<RewrapItem> BatchedRewrapItems { get; set; }
     }
 }

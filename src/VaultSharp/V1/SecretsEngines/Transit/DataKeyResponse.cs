@@ -8,15 +8,6 @@ namespace VaultSharp.V1.SecretsEngines.Transit
     public class DataKeyResponse
     {
         /// <summary>
-        /// Gets or sets the plain text.
-        /// </summary>
-        /// <value>
-        /// The plain text.
-        /// </value>
-        [JsonProperty("plaintext")]
-        public string Base64EncodedPlainText { get; set; }
-
-        /// <summary>
         /// Gets or sets the cipher text.
         /// </summary>
         /// <value>
@@ -24,5 +15,17 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </value>
         [JsonProperty("ciphertext")]
         public string CipherText { get; set; }
+
+        [JsonProperty("key_version")]
+        public int KeyVersion { get; set; }
+
+        /// <summary>
+        /// Gets or sets the plain text.
+        /// </summary>
+        /// <value>
+        /// The plain text.
+        /// </value>
+        [JsonProperty("plaintext")]
+        public string Base64EncodedPlainText { get; set; }
     }
 }

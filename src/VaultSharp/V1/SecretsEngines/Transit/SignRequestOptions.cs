@@ -16,7 +16,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Gets or sets the list of input data to calculate signatures for.
         /// </summary>
         /// <value>The list of input data.</value>
-        [JsonProperty("batch_input")]
+        [JsonProperty("batch_input", NullValueHandling = NullValueHandling.Ignore)]
         public List<SignSingleInput> BatchInput { get; set; }
     }
 

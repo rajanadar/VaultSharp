@@ -12,7 +12,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Gets or sets a list of results if multiple signatures were requested at once.
         /// </summary>
         /// <value>The list of results.</value>
-        [JsonProperty("batch_results")]
+        [JsonProperty("batch_results", NullValueHandling = NullValueHandling.Ignore)]
         public List<SigningBatchResponse> BatchResults { get; set; }
     }
 
@@ -29,14 +29,14 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Gets or sets the derived public key used for the signature, if requested.
         /// </summary>
         /// <value>The derived public key.</value>
-        [JsonProperty("publickey")]
+        [JsonProperty("publickey", NullValueHandling = NullValueHandling.Ignore)]
         public string PublicKey { get; set; }
 
         /// <summary>
         /// Gets or sets the error message returned if unable to sign the input data string.
         /// </summary>
         /// <value>The error.</value>
-        [JsonProperty("error")]
+        [JsonProperty("error", NullValueHandling = NullValueHandling.Ignore)]
         public string Error { get; set; }
     }
 }

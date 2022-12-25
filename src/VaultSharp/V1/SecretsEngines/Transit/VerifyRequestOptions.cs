@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Gets or sets the list of input data to verify signatures or HMACs for.
         /// </summary>
         /// <value>The list of input data.</value>
-        [JsonProperty("batch_input")]
+        [JsonProperty("batch_input", NullValueHandling = NullValueHandling.Ignore)]
         public List<VerifySingleInput> BatchInput { get; set; }
     }
 

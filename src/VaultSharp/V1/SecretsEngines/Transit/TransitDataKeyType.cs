@@ -9,9 +9,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
     public enum TransitDataKeyType
     {        
         [EnumMember(Value = "plaintext")]
-        PlainText,
+        plaintext,
 
         [EnumMember(Value = "wrapped")]
-        Wrapped
+        wrapped
     }
 }

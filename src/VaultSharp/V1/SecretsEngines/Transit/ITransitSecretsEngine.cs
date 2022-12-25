@@ -386,16 +386,16 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// If you want to reuse a key name, it is recommended you delete the key before restoring.
         /// It is a good idea to attempt restoring to a different key name first to verify that the operation successfully completes.
         /// </remarks>
-        /// <param name="keyName"><para>[required]</para>
-        /// Specifies the name of the key to backup.</param>
         /// <param name="backupData"><para>[required]</para>
         /// Backed up key data to be restored.</param>
+        /// <param name="keyName"><para>[required]</para>
+        /// Specifies the name of the key to backup.</param>
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
-        Task RestoreKeyAsync(string keyName, RestoreKeyRequestOptions backupData, string mountPoint = null);
+        Task RestoreKeyAsync(RestoreKeyRequestOptions backupData, string keyName = null, string mountPoint = null);
 
         /// <summary>
         /// This endpoint trims older key versions setting a minimum version

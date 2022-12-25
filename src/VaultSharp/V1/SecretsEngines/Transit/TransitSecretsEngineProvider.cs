@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
@@ -109,7 +110,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
 
             return await _polymath.MakeVaultApiRequest<Secret<ExportedKeyInfo>>(
                 mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Transit,
-                "/export/" + keyType.ToString().Replace("_", "-") + "/" + keyName +
+                "/export/" + Enum.GetName(typeof(TransitKeyCategory), keyType).Replace("_", "-") + "/" + keyName +
                 (string.IsNullOrEmpty(version) ? "" : "/" + version),
                 HttpMethod.Get, wrapTimeToLive: wrapTimeToLive)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
@@ -146,7 +147,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
             Checker.NotNull(keyName, "keyName");
 
             return await _polymath.MakeVaultApiRequest<Secret<DataKeyResponse>>(
-                mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Transit, "/datakey/" + dataKeyRequestOptions.DataKeyType.ToString() + "/" + keyName.Trim('/'), HttpMethod.Post, dataKeyRequestOptions, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+                mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Transit, "/datakey/" +  Enum.GetName(typeof(TransitDataKeyType), dataKeyRequestOptions.DataKeyType) + "/" + keyName.Trim('/'), HttpMethod.Post, dataKeyRequestOptions, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<RandomBytesResponse>> GenerateRandomBytesAsync(RandomBytesRequestOptions randomOptions, string mountPoint = null, string wrapTimeToLive = null)
@@ -155,7 +156,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
 
             return await _polymath.MakeVaultApiRequest<Secret<RandomBytesResponse>>(
                     mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Transit,
-                    "/random/" + randomOptions.Source.ToString(),
+                    "/random/" + Enum.GetName(typeof(RandomBytesSource), randomOptions.Source),
                     HttpMethod.Post,
                     randomOptions, wrapTimeToLive: wrapTimeToLive)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
@@ -167,7 +168,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
 
             return await _polymath.MakeVaultApiRequest<Secret<HashResponse>>(
                     mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Transit,
-                    "/hash/" + hashOptions.Algorithm.ToString(),
+                    "/hash",
                     HttpMethod.Post,
                     hashOptions, wrapTimeToLive: wrapTimeToLive)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
@@ -219,13 +220,13 @@ namespace VaultSharp.V1.SecretsEngines.Transit
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task RestoreKeyAsync(string keyName, RestoreKeyRequestOptions restoreOptions, string mountPoint = null)
+        public async Task RestoreKeyAsync(RestoreKeyRequestOptions restoreOptions, string keyName = null, string mountPoint = null)
         {
             Checker.NotNull(restoreOptions, "restoreOptions");
 
             await _polymath.MakeVaultApiRequest(
                     mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Transit,
-                    "/restore" + (keyName ?? ("/" + keyName)),
+                    "/restore" + (string.IsNullOrWhiteSpace(keyName) ? "" : "/" + keyName),
                     HttpMethod.Post,
                     restoreOptions)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);

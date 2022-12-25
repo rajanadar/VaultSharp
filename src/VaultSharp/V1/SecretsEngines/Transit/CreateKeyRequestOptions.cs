@@ -39,7 +39,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Specifies the type of key to create.
         /// </summary>
         [JsonProperty("type")]
-        public TransitKeyType Type { get; set; }
+        public TransitKeyType Type { get; set; } = TransitKeyType.aes256_gcm96;
 
         /// <summary>
         /// The key size in bytes for algorithms that allow variable key sizes. 
@@ -55,10 +55,5 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </summary>
         [JsonProperty("auto_rotate_period")]
         public long AutoRotatePeriod { get; set; }
-
-        public CreateKeyRequestOptions()
-        {
-            this.Type = TransitKeyType.aes256_gcm96;
-        }
     }
 }

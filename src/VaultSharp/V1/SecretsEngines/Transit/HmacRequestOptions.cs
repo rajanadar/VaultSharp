@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// If set, then the <see cref="HmacSingleInput.Base64EncodedInput">input</see> parameter will be ignored.
         /// </summary>
         /// <value>The list of items for processing.</value>
-        [JsonProperty("batch_input")]
+        [JsonProperty("batch_input", NullValueHandling = NullValueHandling.Ignore)]
         public List<HmacSingleInput> BatchInput { get; set; }
     }
 

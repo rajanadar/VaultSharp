@@ -42,6 +42,8 @@ namespace VaultSharp.Samples
             };
 
             var encryptionResponse = _authenticatedVaultClient.V1.Secrets.Transit.EncryptAsync(keyName, encryptOptions, path).Result;
+            DisplayJson(encryptionResponse);
+
             var cipherText = encryptionResponse.Data.CipherText;
 
             /*
@@ -86,12 +88,13 @@ namespace VaultSharp.Samples
             // Generate Data Key
             var dataKeyOptions = new DataKeyRequestOptions
             {
-                DataKeyType = TransitDataKeyType.PlainText,
+                DataKeyType = TransitDataKeyType.plaintext,
                 Base64EncodedContext = encodedContext,
                 Nonce = nonce
             };
 
             Secret<DataKeyResponse> dataKeyResponse = _authenticatedVaultClient.V1.Secrets.Transit.GenerateDataKeyAsync(keyName, dataKeyOptions, path).Result;
+            DisplayJson(dataKeyResponse);
 
             var encodedDataKeyPlainText = dataKeyResponse.Data.Base64EncodedPlainText;
             var dataKeyCipherText = dataKeyResponse.Data.Base64EncodedPlainText;
@@ -107,7 +110,6 @@ namespace VaultSharp.Samples
                 .ExportKeyAsync(TransitKeyCategory.encryption_key, keyName, version: "latest", path).Result;
             DisplayJson(exportedKey);
 
-
             var backupKey = new CreateKeyRequestOptions() { Exportable = true, AllowPlaintextBackup = true, Type = TransitKeyType.aes256_gcm96 };
             keyName = "backupKey";
             _authenticatedVaultClient.V1.Secrets.Transit.CreateEncryptionKeyAsync(keyName, backupKey, path).Wait();
@@ -122,7 +124,7 @@ namespace VaultSharp.Samples
             DisplayJson(backup);
 
             var backupData = new RestoreKeyRequestOptions { BackupData = backup.Data.BackupData };
-            transit.RestoreKeyAsync(keyName + "restored", backupData, path).Wait();
+            transit.RestoreKeyAsync(backupData, keyName + "restored", path).Wait();
 
             var encodedText = Convert.ToBase64String(Encoding.UTF8.GetBytes("testplaintext"));
             var encryptOptions2 = new EncryptRequestOptions

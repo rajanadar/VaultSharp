@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <value>
         /// The batch results.
         /// </value>
-        [JsonProperty("batch_results")]
+        [JsonProperty("batch_results", NullValueHandling = NullValueHandling.Ignore)]
         public List<PlainTextData> BatchedResults
         {
             get; set;

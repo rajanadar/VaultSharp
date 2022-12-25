@@ -8,7 +8,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
     /// </summary>
     public class HashRequestOptions
     {
-        [JsonIgnore]
+        [JsonProperty("algorithm")]
         public TransitHashAlgorithm Algorithm { get; set; } = TransitHashAlgorithm.SHA2_256;
 
         /// <summary>
