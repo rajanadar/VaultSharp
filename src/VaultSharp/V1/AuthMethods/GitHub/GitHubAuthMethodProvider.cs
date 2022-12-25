@@ -1,12 +1,12 @@
 ﻿using VaultSharp.Core;
 
-namespace VaultSharp.V1.AuthMethods.AWS
+namespace VaultSharp.V1.AuthMethods.GitHub
 {
-    internal class AWSAuthMethodProvider : IAWSAuthMethod
+    internal class GitHubAuthMethodProvider : IGitHubAuthMethod
     {
         private readonly Polymath _polymath;
 
-        public AWSAuthMethodProvider(Polymath polymath)
+        public GitHubAuthMethodProvider(Polymath polymath)
         {
             Checker.NotNull(polymath, "polymath");
             this._polymath = polymath;

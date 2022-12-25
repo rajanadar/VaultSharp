@@ -6,6 +6,7 @@ using VaultSharp.V1.AuthMethods.Azure;
 using VaultSharp.V1.AuthMethods.Cert;
 using VaultSharp.V1.AuthMethods.CloudFoundry;
 using VaultSharp.V1.AuthMethods.GitHub;
+using VaultSharp.V1.AuthMethods.GoogleCloud;
 using VaultSharp.V1.AuthMethods.JWT;
 using VaultSharp.V1.AuthMethods.Kerberos;
 using VaultSharp.V1.AuthMethods.Kubernetes;
@@ -56,7 +57,7 @@ namespace VaultSharp.V1.AuthMethods
         /// <summary>
         /// 
         /// </summary>
-        IGitHubAuthMethod GoogleCloud { get; }
+        IGoogleCloudAuthMethod GoogleCloud { get; }
 
         IJWTAuthMethod JWT { get; }
 

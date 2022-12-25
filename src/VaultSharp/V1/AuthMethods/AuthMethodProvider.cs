@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods.AliCloud;
@@ -8,6 +8,7 @@ using VaultSharp.V1.AuthMethods.Azure;
 using VaultSharp.V1.AuthMethods.Cert;
 using VaultSharp.V1.AuthMethods.CloudFoundry;
 using VaultSharp.V1.AuthMethods.GitHub;
+using VaultSharp.V1.AuthMethods.GoogleCloud;
 using VaultSharp.V1.AuthMethods.JWT;
 using VaultSharp.V1.AuthMethods.Kerberos;
 using VaultSharp.V1.AuthMethods.Kubernetes;
@@ -31,10 +32,20 @@ namespace VaultSharp.V1.AuthMethods
             AliCloud = new AliCloudAuthMethodProvider(_polymath);
             AppRole = new AppRoleAuthMethodProvider(_polymath);
             AWS = new AWSAuthMethodProvider(_polymath);
+            Azure = new AzureAuthMethodProvider(_polymath);
+            CloudFoundry = new CloudFoundryAuthMethodProvider(_polymath);
+            GitHub = new GitHubAuthMethodProvider(_polymath);
+            GoogleCloud = new GoogleCloudAuthMethodProvider(_polymath);
             JWT = new JWTAuthMethodProvider(_polymath);
+            Kerberos = new KerberosAuthMethodProvider(_polymath);
+            Kubernetes = new KubernetesAuthMethodProvider(_polymath);
             LDAP = new LDAPAuthMethodProvider(_polymath);
+            OCI = new OCIAuthMethodProvider(_polymath);
             Okta = new OktaAuthMethodProvider(_polymath);
+            RADIUS = new RADIUSAuthMethodProvider(_polymath);
+            Cert = new CertAuthMethodProvider(_polymath);
             Token = new TokenAuthMethodProvider(_polymath);
+            UserPass = new UserPassAuthMethodProvider(_polymath);
         }
 
         public IAliCloudAuthMethod AliCloud { get; }
@@ -43,33 +54,33 @@ namespace VaultSharp.V1.AuthMethods
 
         public IAWSAuthMethod AWS { get; }
 
-        public IAzureAuthMethod Azure => throw new NotImplementedException();
+        public IAzureAuthMethod Azure { get; }
 
-        public ICloudFoundryAuthMethod CloudFoundry => throw new NotImplementedException();
+        public ICloudFoundryAuthMethod CloudFoundry { get; }
 
-        public IGitHubAuthMethod GitHub => throw new NotImplementedException();
+        public IGitHubAuthMethod GitHub { get; }
 
-        public IGitHubAuthMethod GoogleCloud => throw new NotImplementedException();
+        public IGoogleCloudAuthMethod GoogleCloud { get; }
 
         public IJWTAuthMethod JWT { get; }
 
-        public IKubernetesAuthMethod Kubernetes => throw new NotImplementedException();
+        public IKubernetesAuthMethod Kubernetes { get; }
 
         public ILDAPAuthMethod LDAP { get; }
 
-        public IKerberosAuthMethod Kerberos => throw new NotImplementedException();
+        public IKerberosAuthMethod Kerberos { get; }
 
-        public IOCIAuthMethod OCI => throw new NotImplementedException();
+        public IOCIAuthMethod OCI { get; }
 
         public IOktaAuthMethod Okta { get; }
 
-        public IRADIUSAuthMethod RADIUS => throw new NotImplementedException();
+        public IRADIUSAuthMethod RADIUS { get; }
 
-        public ICertAuthMethod Cert => throw new NotImplementedException();
+        public ICertAuthMethod Cert { get; }
 
         public ITokenAuthMethod Token { get; }
 
-        public IUserPassAuthMethod UserPass => throw new NotImplementedException();
+        public IUserPassAuthMethod UserPass { get; }
 
         public void ResetVaultToken()
         {

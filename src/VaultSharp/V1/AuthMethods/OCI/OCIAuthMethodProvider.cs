@@ -1,12 +1,12 @@
 ﻿using VaultSharp.Core;
 
-namespace VaultSharp.V1.AuthMethods.AWS
+namespace VaultSharp.V1.AuthMethods.OCI
 {
-    internal class AWSAuthMethodProvider : IAWSAuthMethod
+    internal class OCIAuthMethodProvider : IOCIAuthMethod
     {
         private readonly Polymath _polymath;
 
-        public AWSAuthMethodProvider(Polymath polymath)
+        public OCIAuthMethodProvider(Polymath polymath)
         {
             Checker.NotNull(polymath, "polymath");
             this._polymath = polymath;

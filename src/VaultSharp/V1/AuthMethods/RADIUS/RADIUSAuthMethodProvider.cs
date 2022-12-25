@@ -1,12 +1,12 @@
 ﻿using VaultSharp.Core;
 
-namespace VaultSharp.V1.AuthMethods.AWS
+namespace VaultSharp.V1.AuthMethods.RADIUS
 {
-    internal class AWSAuthMethodProvider : IAWSAuthMethod
+    internal class RADIUSAuthMethodProvider : IRADIUSAuthMethod
     {
         private readonly Polymath _polymath;
 
-        public AWSAuthMethodProvider(Polymath polymath)
+        public RADIUSAuthMethodProvider(Polymath polymath)
         {
             Checker.NotNull(polymath, "polymath");
             this._polymath = polymath;

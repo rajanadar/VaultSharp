@@ -1,12 +1,12 @@
 ﻿using VaultSharp.Core;
 
-namespace VaultSharp.V1.AuthMethods.AWS
+namespace VaultSharp.V1.AuthMethods.Cert
 {
-    internal class AWSAuthMethodProvider : IAWSAuthMethod
+    internal class CertAuthMethodProvider : ICertAuthMethod
     {
         private readonly Polymath _polymath;
 
-        public AWSAuthMethodProvider(Polymath polymath)
+        public CertAuthMethodProvider(Polymath polymath)
         {
             Checker.NotNull(polymath, "polymath");
             this._polymath = polymath;

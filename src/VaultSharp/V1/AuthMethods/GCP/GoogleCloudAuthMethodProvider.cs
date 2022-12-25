@@ -1,12 +1,12 @@
 ﻿using VaultSharp.Core;
 
-namespace VaultSharp.V1.AuthMethods.AWS
+namespace VaultSharp.V1.AuthMethods.GoogleCloud
 {
-    internal class AWSAuthMethodProvider : IAWSAuthMethod
+    internal class GoogleCloudAuthMethodProvider : IGoogleCloudAuthMethod
     {
         private readonly Polymath _polymath;
 
-        public AWSAuthMethodProvider(Polymath polymath)
+        public GoogleCloudAuthMethodProvider(Polymath polymath)
         {
             Checker.NotNull(polymath, "polymath");
             this._polymath = polymath;
