@@ -44,5 +44,13 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </summary>
         [JsonProperty(PropertyName = "min_encryption_version")]
         public int MinimumEncryptionVersion { get; set; }
+
+        /// <summary>
+        /// The period at which this key should be rotated automatically. 
+        /// Setting this to "0" (the default) will disable automatic key rotation. 
+        /// This value cannot be shorter than one hour.
+        /// </summary>
+        [JsonProperty("auto_rotate_period")]
+        public long AutoRotatePeriod { get; set; }
     }
 }

@@ -86,11 +86,12 @@ namespace VaultSharp.Samples
             // Generate Data Key
             var dataKeyOptions = new DataKeyRequestOptions
             {
+                DataKeyType = TransitDataKeyType.PlainText,
                 Base64EncodedContext = encodedContext,
                 Nonce = nonce
             };
 
-            Secret<DataKeyResponse> dataKeyResponse = _authenticatedVaultClient.V1.Secrets.Transit.GenerateDataKeyAsync("plaintext", keyName, dataKeyOptions, path).Result;
+            Secret<DataKeyResponse> dataKeyResponse = _authenticatedVaultClient.V1.Secrets.Transit.GenerateDataKeyAsync(keyName, dataKeyOptions, path).Result;
 
             var encodedDataKeyPlainText = dataKeyResponse.Data.Base64EncodedPlainText;
             var dataKeyCipherText = dataKeyResponse.Data.Base64EncodedPlainText;
@@ -138,19 +139,19 @@ namespace VaultSharp.Samples
             Assert.Equal(encodedText, decrypted.Data.Base64EncodedPlainText);
 
             // Random Gen
-            var randomOpts = new RandomBytesRequestOptions { Format = OutputEncodingFormat.base64 };
+            var randomOpts = new RandomBytesRequestOptions { BytesToGenerate = 64,  Format = OutputEncodingFormat.base64 };
 
-            var base64Response = transit.GenerateRandomBytesAsync(64, randomOpts, path).Result;
+            var base64Response = transit.GenerateRandomBytesAsync(randomOpts, path).Result;
             DisplayJson(base64Response);
             Assert.Equal(88, base64Response.Data.EncodedRandomBytes.Length);
 
             randomOpts.Format = OutputEncodingFormat.hex;
-            var hexResponse = transit.GenerateRandomBytesAsync(64, randomOpts, path).Result;
+            var hexResponse = transit.GenerateRandomBytesAsync(randomOpts, path).Result;
             DisplayJson(hexResponse);
             Assert.Equal(128, hexResponse.Data.EncodedRandomBytes.Length);
 
             randomOpts.Source = RandomBytesSource.all;
-            var allEntropySource = transit.GenerateRandomBytesAsync(64, randomOpts, path).Result;
+            var allEntropySource = transit.GenerateRandomBytesAsync(randomOpts, path).Result;
             DisplayJson(allEntropySource);
             Assert.Equal(128, allEntropySource.Data.EncodedRandomBytes.Length);
 
@@ -159,17 +160,18 @@ namespace VaultSharp.Samples
                Convert.ToBase64String(Encoding.UTF8.GetBytes("This is the value we will use as plaintext here."));
 
             //Act 1 - Verify HMAC
-            var hmacOptions = new HmacRequestOptions { Base64EncodedInput = base64Input };
-            var hmacResponse = transit.GenerateHmacAsync(HashAlgorithm.sha2_256, keyName, hmacOptions, path).Result;
+            var hmacOptions = new HmacRequestOptions { Algorithm = TransitHashAlgorithm.SHA2_256, Base64EncodedInput = base64Input };
+            var hmacResponse = transit.GenerateHmacAsync(keyName, hmacOptions, path).Result;
             DisplayJson(hmacResponse);
 
             var verifyOptions = new VerifyRequestOptions
             {
+                HashAlgorithm = TransitHashAlgorithm.SHA2_256,
                 Base64EncodedInput = base64Input,
                 Hmac = hmacResponse.Data.Hmac,
-                MarshalingAlgorithm = MarshalingAlgorithm.Asn1
+                MarshalingAlgorithm = MarshalingAlgorithm.asn1
             };
-            var verifyResponse = transit.VerifySignedDataAsync(HashAlgorithm.sha2_256, keyName, verifyOptions, path).Result;
+            var verifyResponse = transit.VerifySignedDataAsync(keyName, verifyOptions, path).Result;
             DisplayJson(verifyResponse);
 
             Assert.True(verifyResponse.Data.Valid);
@@ -177,17 +179,18 @@ namespace VaultSharp.Samples
             // Run Signature
             var base64InputForSign =
                 Convert.ToBase64String(Encoding.UTF8.GetBytes("This is the value we will use as plaintext here."));
-            var signOptions = new SignRequestOptions { Base64EncodedInput = base64InputForSign, MarshalingAlgorithm = MarshalingAlgorithm.Asn1 };
-            var signResponse = transit.SignDataAsync(HashAlgorithm.sha2_256, signKeyName, signOptions, path).Result;
+            var signOptions = new SignRequestOptions { HashAlgorithm = TransitHashAlgorithm.SHA2_256, Base64EncodedInput = base64InputForSign, MarshalingAlgorithm = MarshalingAlgorithm.asn1 };
+            var signResponse = transit.SignDataAsync(signKeyName, signOptions, path).Result;
             DisplayJson(signResponse);
 
             var verifyOptionsForSign = new VerifyRequestOptions
             {
+                HashAlgorithm = TransitHashAlgorithm.SHA2_256,
                 Base64EncodedInput = base64Input,
                 Signature = signResponse.Data.Signature,
-                MarshalingAlgorithm = MarshalingAlgorithm.Asn1
+                MarshalingAlgorithm = MarshalingAlgorithm.asn1
             };
-            var verifyResponseForSign = transit.VerifySignedDataAsync(HashAlgorithm.sha2_256, signKeyName, verifyOptionsForSign, path).Result;
+            var verifyResponseForSign = transit.VerifySignedDataAsync(signKeyName, verifyOptionsForSign, path).Result;
             DisplayJson(verifyResponseForSign);
 
             //Assert
@@ -196,10 +199,11 @@ namespace VaultSharp.Samples
             // Run Hash
             var hashOpts = new HashRequestOptions
             {
+                Algorithm = TransitHashAlgorithm.SHA2_256,
                 Format = OutputEncodingFormat.base64,
                 Base64EncodedInput = Convert.ToBase64String(Encoding.UTF8.GetBytes("Let's hash this"))
             };
-            var hashResponse = transit.HashDataAsync(HashAlgorithm.sha2_256, hashOpts, path).Result;
+            var hashResponse = transit.HashDataAsync(hashOpts, path).Result;
             DisplayJson(hashResponse);
 
             // Run Cache

@@ -12,6 +12,6 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </summary>
         /// <value>The size of the cache, in terms of the number of entries.</value>
         [JsonProperty("size")]
-        public uint Size { get; set; }
+        public int Size { get; set; }
     }
 }

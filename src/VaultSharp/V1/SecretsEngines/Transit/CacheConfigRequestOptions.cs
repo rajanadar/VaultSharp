@@ -13,7 +13,6 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <remarks>Must be 0 (default) or a value greater than or equal to 10 (minimum cache size).</remarks>
         /// <value>The size, in terms of number of entries.</value>
         [JsonProperty("size")]
-        public uint Size { get; set; }
-
+        public int Size { get; set; }
     }
 }

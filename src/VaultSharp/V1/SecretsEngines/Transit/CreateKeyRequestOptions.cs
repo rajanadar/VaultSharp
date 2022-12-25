@@ -41,6 +41,21 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         [JsonProperty("type")]
         public TransitKeyType Type { get; set; }
 
+        /// <summary>
+        /// The key size in bytes for algorithms that allow variable key sizes. 
+        /// Currently only applicable to HMAC, where it must be between 16 and 512 bytes.
+        /// </summary>
+        [JsonProperty("key_size")]
+        public int? KeySize { get; set; }
+
+        /// <summary>
+        /// The period at which this key should be rotated automatically. 
+        /// Setting this to "0" (the default) will disable automatic key rotation. 
+        /// This value cannot be shorter than one hour.
+        /// </summary>
+        [JsonProperty("auto_rotate_period")]
+        public long AutoRotatePeriod { get; set; }
+
         public CreateKeyRequestOptions()
         {
             this.Type = TransitKeyType.aes256_gcm96;

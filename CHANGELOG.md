@@ -2,6 +2,7 @@
 
 **BREAKING CHANGES:**
 
+  * secret/transit: Made several APIs consistent with other secret backends. No functional changes.
   * Backend APIs to tune mount config now take the ```NewBackendConfig``` object instead of ```BackendConfig``` object.
   * auth/approle: ```PullSecretIdAsync``` method is renamed to ```PullNewSecretIdAsync```
   * auth/approle: ```ReadRoleAsync``` method uses a new type ```AppRoleRoleModel``` instead of ```AppRoleInfo```.
@@ -20,6 +21,7 @@
   * auth/approle: All the AppRole Auth apis.
   * secret/alicloud: All the AliCloud Secret apis.
   * secret/aws: Add new api to delete role
+  * secret/transit: All apis are now supported.
 
 **IMPROVEMENTS:**
 

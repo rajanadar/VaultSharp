@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿
+using Newtonsoft.Json;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -8,6 +8,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
     /// </summary>
     public class HashRequestOptions
     {
+        [JsonIgnore]
+        public TransitHashAlgorithm Algorithm { get; set; } = TransitHashAlgorithm.SHA2_256;
+
         /// <summary>
         /// Gets or sets the base64 encoded input data to be hashed.
         /// </summary>
@@ -15,13 +18,11 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         [JsonProperty("input")]
         public string Base64EncodedInput { get; set; }
 
-
         /// <summary>
         /// Gets or sets the output encoding for the response.
         /// </summary>
         /// <value>The output encoding for the response.</value>
         [JsonProperty("format")]
-        [JsonConverter(typeof(StringEnumConverter))]
         public OutputEncodingFormat Format { get; set; }
     }
 }

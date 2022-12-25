@@ -101,5 +101,11 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </summary>
         [JsonProperty("supports_signing")]
         public bool SupportsSigning { get; set; }
+
+        /// <summary>
+        /// If set, indicates that the key is imported.
+        /// </summary>
+        [JsonProperty("imported")]
+        public bool Imported { get; set; }
     }
 }

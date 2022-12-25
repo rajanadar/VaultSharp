@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using Newtonsoft.Json;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
@@ -16,5 +17,11 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </summary>
         [JsonProperty("batch_input")]
         public List<EncryptionItem> BatchedEncryptionItems { get; set; }
+
+        public EncryptRequestOptions()
+        {
+            this.KeyType = TransitKeyType.aes256_gcm96;
+            this.PartialFailureResponseCode = (int)HttpStatusCode.BadRequest;
+        }
     }
 }

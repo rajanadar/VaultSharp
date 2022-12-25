@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -9,11 +8,16 @@ namespace VaultSharp.V1.SecretsEngines.Transit
     public class RandomBytesRequestOptions
     {
         /// <summary>
+        /// Specifies the number of bytes to return.
+        /// </summary>
+        [JsonProperty("bytes")]
+        public int BytesToGenerate { get; set; }
+
+        /// <summary>
         /// Gets or sets the format to return the bytes in.
         /// </summary>
         /// <value>The format to return the bytes in.</value>
         [JsonProperty("format")]
-        [JsonConverter(typeof(StringEnumConverter))]
         public OutputEncodingFormat Format { get; set; } = OutputEncodingFormat.base64;
 
         /// <summary>
@@ -23,8 +27,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// all mixes bytes from all available sources.
         /// </summary>
         /// <value>The entropy source for random bytes.</value>
-        [JsonProperty("source")]
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonIgnore]      
         public RandomBytesSource Source { get; set; } = RandomBytesSource.platform;
     }
 }

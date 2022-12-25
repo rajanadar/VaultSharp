@@ -71,5 +71,11 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </summary>
         [EnumMember(Value = "rsa-4096")]
         rsa_4096 = 10,
+
+        /// <summary>
+        /// HMAC (HMAC generation, verification)
+        /// </summary>
+        [EnumMember(Value = "hmac")]
+        hmac = 11,
     }
 }

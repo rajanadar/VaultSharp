@@ -7,6 +7,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
     /// </summary>
     public class DataKeyRequestOptions
     {
+        [JsonIgnore]
+        public TransitDataKeyType DataKeyType { get; set; }
+
         /// <summary>
         /// [required]
         ///  Specifies the base64 encoded context for key derivation. 

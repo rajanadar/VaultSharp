@@ -1,8 +1,12 @@
-﻿namespace VaultSharp.V1.SecretsEngines.Transit
+﻿using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
+
+namespace VaultSharp.V1.SecretsEngines.Transit
 {
     /// <summary>
     /// The the source of the requested bytes
     /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum RandomBytesSource
     {
         /// <summary>
