@@ -22,6 +22,7 @@
   * secret/alicloud: All the AliCloud Secret apis.
   * secret/aws: Add new api to delete role
   * secret/transit: All apis are now supported.
+  * secret/consul: All the apis
 
 **IMPROVEMENTS:**
 
