@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
@@ -15,10 +16,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
             _polymath = polymath;
         }
 
-        public async Task CreateEncryptionKeyAsync(string keyName, CreateKeyRequestOptions createKeyRequestOptions, string mountPoint = null)
+        public async Task CreateEncryptionKeyAsync(string keyName, CreateKeyRequestOptions createKeyRequestOptions = null, string mountPoint = null)
         {
             Checker.NotNull(keyName, "keyName");
-            Checker.NotNull(createKeyRequestOptions, "createKeyRequestOptions");
 
             await _polymath.MakeVaultApiRequest(
                 mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Transit, "/keys/" + keyName.Trim('/'),
@@ -168,7 +168,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
 
             return await _polymath.MakeVaultApiRequest<Secret<HashResponse>>(
                     mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Transit,
-                    "/hash",
+                    "/hash/" + Enum.GetName(typeof(TransitHashAlgorithm), hashOptions.Algorithm).ToLowerInvariant().Replace("_", "-"),
                     HttpMethod.Post,
                     hashOptions, wrapTimeToLive: wrapTimeToLive)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
@@ -180,7 +180,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
 
             return await _polymath.MakeVaultApiRequest<Secret<HmacResponse>>(
                     mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Transit,
-                    "/hmac/" + keyName,
+                    "/hmac/" + keyName + "/" + Enum.GetName(typeof(TransitHashAlgorithm), hmacOptions.Algorithm).ToLowerInvariant().Replace("_", "-"),
                     HttpMethod.Post, hmacOptions, wrapTimeToLive: wrapTimeToLive)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
@@ -191,11 +191,10 @@ namespace VaultSharp.V1.SecretsEngines.Transit
 
             return await _polymath.MakeVaultApiRequest<Secret<SigningResponse>>(
                     mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Transit,
-                    "/sign/" + keyName.Trim('/'),
+                    "/sign/" + keyName.Trim('/') + "/" + Enum.GetName(typeof(TransitHashAlgorithm), signOptions.HashAlgorithm).ToLowerInvariant().Replace("_", "-"),
                     HttpMethod.Post,
                     signOptions, wrapTimeToLive: wrapTimeToLive)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
-
         }
 
         public async Task<Secret<VerifyResponse>> VerifySignedDataAsync(string keyName, VerifyRequestOptions verifyOptions, string mountPoint = null, string wrapTimeToLive = null)
@@ -204,7 +203,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
 
             return await _polymath.MakeVaultApiRequest<Secret<VerifyResponse>>(
                     mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Transit,
-                    "/verify/" + keyName.Trim('/'),
+                    "/verify/" + keyName.Trim('/') + "/" + Enum.GetName(typeof(TransitHashAlgorithm), verifyOptions.HashAlgorithm).ToLowerInvariant().Replace("_", "-"),
                     HttpMethod.Post, verifyOptions, wrapTimeToLive: wrapTimeToLive)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }

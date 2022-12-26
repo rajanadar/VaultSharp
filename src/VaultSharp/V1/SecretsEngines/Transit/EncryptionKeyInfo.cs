@@ -9,10 +9,18 @@ namespace VaultSharp.V1.SecretsEngines.Transit
     public class EncryptionKeyInfo
     {
         /// <summary>
-        /// The type of key (i.e. encryption algorithm) to generate.
+        /// If set, enables taking backup of named key in the plaintext format. Once set, this cannot be disabled.
         /// </summary>
-        [JsonProperty("type")]
-        public TransitKeyType Type { get; set; }
+        [JsonProperty("allow_plaintext_backup")]
+        public bool AllowPlaintextBackup { get; set; }
+
+        /// <summary>
+        /// The period at which this key should be rotated automatically. 
+        /// Setting this to "0" (the default) will disable automatic key rotation. 
+        /// This value cannot be shorter than one hour.
+        /// </summary>
+        [JsonProperty("auto_rotate_period")]
+        public long AutoRotatePeriod { get; set; }
 
         /// <summary>
         /// Specifies if the key is allowed to be deleted.
@@ -33,10 +41,10 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         public bool Exportable { get; set; }
 
         /// <summary>
-        /// If set, enables taking backup of named key in the plaintext format. Once set, this cannot be disabled.
+        /// If set, indicates that the key is imported.
         /// </summary>
-        [JsonProperty("allow_plaintext_backup")]
-        public bool AllowPlaintextBackup { get; set; }
+        [JsonProperty("imported_key")]
+        public bool ImportedKey { get; set; }
 
         /// <summary>
         /// The list of key-version pairs in the key ring.
@@ -103,9 +111,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         public bool SupportsSigning { get; set; }
 
         /// <summary>
-        /// If set, indicates that the key is imported.
+        /// The type of key (i.e. encryption algorithm) to generate.
         /// </summary>
-        [JsonProperty("imported")]
-        public bool Imported { get; set; }
+        [JsonProperty("type")]
+        public TransitKeyType Type { get; set; }
     }
 }

@@ -19,11 +19,15 @@ namespace VaultSharp.V1.SecretsEngines.Transit
     public class SigningBatchResponse
     {
         /// <summary>
-        /// Gets or sets the signature for the input data string.
+        /// Gets or sets the error message returned if unable to sign the input data string.
         /// </summary>
-        /// <value>The signature.</value>
-        [JsonProperty("signature")]
-        public string Signature { get; set; }
+        /// <value>The error.</value>
+        [JsonProperty("error", NullValueHandling = NullValueHandling.Ignore)]
+        public string Error { get; set; }
+
+
+        [JsonProperty("key_version", NullValueHandling = NullValueHandling.Ignore)]
+        public int? KeyVersion { get; set; }
 
         /// <summary>
         /// Gets or sets the derived public key used for the signature, if requested.
@@ -33,10 +37,10 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         public string PublicKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the error message returned if unable to sign the input data string.
+        /// Gets or sets the signature for the input data string.
         /// </summary>
-        /// <value>The error.</value>
-        [JsonProperty("error", NullValueHandling = NullValueHandling.Ignore)]
-        public string Error { get; set; }
+        /// <value>The signature.</value>
+        [JsonProperty("signature", NullValueHandling = NullValueHandling.Ignore)]
+        public string Signature { get; set; }
     }
 }

@@ -22,7 +22,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
     /// </summary>
     public class VerifySingleInput
     {
-        [JsonProperty("hash_algorithm")]
+        [JsonIgnore]
         public TransitHashAlgorithm HashAlgorithm { get; set; } = TransitHashAlgorithm.SHA2_256;
 
         /// <summary>

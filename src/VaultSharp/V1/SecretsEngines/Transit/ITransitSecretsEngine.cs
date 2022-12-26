@@ -22,7 +22,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Provide a value only if you have customized the mount point.
         /// </param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
-        Task CreateEncryptionKeyAsync(string keyName, CreateKeyRequestOptions createKeyRequestOptions, string mountPoint = null);
+        Task CreateEncryptionKeyAsync(string keyName, CreateKeyRequestOptions createKeyRequestOptions = null, string mountPoint = null);
 
         /// <summary>
         /// This endpoint imports existing key material into a new transit-managed encryption key. 
@@ -334,6 +334,10 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[optional]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
         /// <returns>The cryptographic signature of the requested data.</returns>
         Task<Secret<SigningResponse>> SignDataAsync(string keyName, SignRequestOptions signOptions, string mountPoint = null, string wrapTimeToLive = null);

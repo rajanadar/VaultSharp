@@ -22,7 +22,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
     /// </summary>
     public class HmacSingleInput
     {
-        [JsonProperty("algorithm")]
+        [JsonIgnore]
         public TransitHashAlgorithm Algorithm { get; set; } = TransitHashAlgorithm.SHA2_256;
 
         /// <summary>
