@@ -39,6 +39,7 @@ namespace VaultSharp.Samples
 
                     _unauthenticatedVaultClient.V1.Auth.ResetVaultToken();
 
+                    Console.WriteLine("\n RunAllIntegrationTests \n");
                     RunAllIntegrationTests();
 
                     Console.SetOut(existingOut);
@@ -53,8 +54,13 @@ namespace VaultSharp.Samples
 
         private static void RunAllIntegrationTests()
         {
+            Console.WriteLine("\n RunSystemBackendSamples \n");
             RunSystemBackendSamples();
+
+            Console.WriteLine("\n RunAuthMethodSamples \n");
             RunAuthMethodSamples();
+
+            Console.WriteLine("\n RunSecretsEngineSamples \n");
             RunSecretsEngineSamples();
         }
 
