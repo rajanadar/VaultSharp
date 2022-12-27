@@ -10,6 +10,28 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
     public interface IKeyValueSecretsEngineV2
     {
         /// <summary>
+        /// This path configures backend level settings that are applied to every key in the key-value store.
+        /// </summary>
+        /// <param name="configModel">The config</param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the KeyValue backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
+        /// Provide a value only if you have customized the mount point.</param>
+        Task ConfigureAsync(KeyValue2ConfigModel configModel, string mountPoint = null);
+
+        /// <summary>
+        /// Reads the common config for all keys.
+        /// </summary>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the KeyValue backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
+        /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
+        /// <returns>The config</returns>
+        Task<Secret<KeyValue2ConfigModel>> ReadConfigAsync(string mountPoint = null, string wrapTimeToLive = null);
+
+        /// <summary>
         /// Retrieves the secret at the specified location.
         /// </summary>
         /// <param name="path"><para>[required]</para>
@@ -49,123 +71,6 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// </returns>
         Task<Secret<SecretData<T>>> ReadSecretAsync<T>(string path, int? version = null, string mountPoint = null, string wrapTimeToLive = null);
 
-        /// <summary>
-        /// Retrieves the secret location path entries at the specified location.
-        /// Folders are suffixed with /. The input must be a folder; list on a file will not return a value. 
-        /// The values themselves are not accessible via this API.
-        /// </summary>
-        /// <param name="path"><para>[required]</para>
-        /// The location path where the secret needs to be read from.</param>
-        /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
-        /// Provide a value only if you have customized the mount point.</param>
-        /// <param name="wrapTimeToLive">
-        /// <para>[required]</para>
-        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
-        /// </param>
-        /// <returns>
-        /// The secret list with the data.
-        /// </returns>
-        Task<Secret<ListInfo>> ReadSecretPathsAsync(string path, string mountPoint = null, string wrapTimeToLive = null);
-
-        /// <summary>
-        /// This endpoint provides the subkeys within a secret entry that 
-        /// exists at the requested path.The secret entry at this path will be
-        /// retrieved and stripped of all data by replacing underlying values 
-        /// of leaf keys (i.e. non-map keys or map keys with no underlying 
-        /// subkeys) with null.
-        /// </summary>
-        /// <param name="path">
-        /// <para>[required]</para>
-        /// Specifies the path of the secret to read. This is specified as part
-        /// of the URL.
-        /// </param>
-        /// <param name="version">
-        /// Specifies the version to return. If not set the latest version is
-        /// returned.
-        /// </param>
-        /// <param name="depth">
-        /// Specifies the deepest nesting level to provide in the output. The 
-        /// default value 0 will not impose any limit. If non-zero, keys that 
-        /// reside at the specified depth value will be artificially treated as
-        /// leaves and will thus be null even if further underlying subkeys 
-        /// exist.
-        /// </param>
-        /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
-        /// Provide a value only if you have customized the mount point.</param>
-        /// <param name="wrapTimeToLive">
-        /// <para>[required]</para>
-        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
-        /// </param>
-        /// <returns>Subkeys Info for specified version and depth.</returns>
-        Task<Secret<SecretSubkeysInfo>> ReadSecretSubkeysAsync(string path, int version = 0, int depth = 0, string mountPoint = null, string wrapTimeToLive = null);
-
-        /// <summary>
-        /// Creates or updates the metadata of a secret at the specified location in 
-        /// the K/V v2 secrets engine.
-        /// It does not create a new version.
-        /// </summary>
-        /// <param name="path">
-        /// <para>[required]</para>
-        /// The path where the value is to be stored.
-        /// </param>
-        /// <param name="customMetadataRequest">
-        /// <para>[required]</para>
-        /// The value to be written.
-        /// </param>
-        /// <param name="mountPoint">
-        /// <para>[optional]</para>
-        /// The mount point for the Generic backend. 
-        /// Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
-        /// Provide a value only if you have customized the mount point.
-        /// </param>
-        /// <returns>
-        /// The task.
-        /// </returns>
-        Task WriteSecretMetadataAsync(string path, CustomMetadataRequest customMetadataRequest, string mountPoint = null);
-
-        /// <summary>
-        /// Patch the metadata of a secret at specified location in the K/V v2 secrets engine.
-        /// The patch command combines the change with existing custom metadata instead of replacing them.
-        /// Therefore, this command makes it easy to make a partial updates to an existing metadata.
-        /// </summary>
-        /// <param name="path">
-        /// <para>[required]</para>
-        /// The path where the value is to be stored.
-        /// </param>
-        /// <param name="customMetadataRequest">
-        /// <para>[required]</para>
-        /// The value to be replaced and appended.
-        /// </param>
-        /// <param name="mountPoint">
-        /// <para>[optional]</para>
-        /// The mount point for the Generic backend. 
-        /// Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
-        /// Provide a value only if you have customized the mount point.
-        /// </param>
-        /// <returns>
-        /// The task.
-        /// </returns>
-        Task PatchSecretMetadataAsync(string path, CustomMetadataRequest customMetadataRequest, string mountPoint = null);
-
-        /// <summary>
-        /// Retrieves the secret metadata at the specified location.
-        /// </summary>
-        /// <param name="path"><para>[required]</para>
-        /// The location path where the secret needs to be read from.</param>
-        /// <param name="mountPoint"><para>[optional]</para>
-        /// The mount point for the KeyValue backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
-        /// Provide a value only if you have customized the mount point.</param>
-        /// <param name="wrapTimeToLive">
-        /// <para>[required]</para>
-        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
-        /// </param>
-        /// <returns>
-        /// The secret metadata.
-        /// </returns>
-        Task<Secret<FullSecretMetadata>> ReadSecretMetadataAsync(string path, string mountPoint = null, string wrapTimeToLive = null);
-       
         /// <summary>
         /// Stores a secret at the specified location. If the value does not yet exist, the calling token must have an ACL policy granting the create capability. 
         /// If the value already exists, the calling token must have an ACL policy granting the update capability.
@@ -215,6 +120,39 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// The task.
         /// </returns>
         Task<Secret<CurrentSecretMetadata>> PatchSecretAsync(string path, PatchSecretDataRequest patchSecretDataRequest, string mountPoint = null);
+
+        /// <summary>
+        /// This endpoint provides the subkeys within a secret entry that 
+        /// exists at the requested path.The secret entry at this path will be
+        /// retrieved and stripped of all data by replacing underlying values 
+        /// of leaf keys (i.e. non-map keys or map keys with no underlying 
+        /// subkeys) with null.
+        /// </summary>
+        /// <param name="path">
+        /// <para>[required]</para>
+        /// Specifies the path of the secret to read. This is specified as part
+        /// of the URL.
+        /// </param>
+        /// <param name="version">
+        /// Specifies the version to return. If not set the latest version is
+        /// returned.
+        /// </param>
+        /// <param name="depth">
+        /// Specifies the deepest nesting level to provide in the output. The 
+        /// default value 0 will not impose any limit. If non-zero, keys that 
+        /// reside at the specified depth value will be artificially treated as
+        /// leaves and will thus be null even if further underlying subkeys 
+        /// exist.
+        /// </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
+        /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
+        /// <returns>Subkeys Info for specified version and depth.</returns>
+        Task<Secret<SecretSubkeysInfo>> ReadSecretSubkeysAsync(string path, int version = 0, int depth = 0, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint issues a soft delete of the secret's latest version at the specified location. 
@@ -287,7 +225,91 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// <returns>
         /// The task.
         /// </returns>
-        Task DestroySecretAsync(string path, IList<int> versions, string mountPoint = null);
+        Task DestroySecretVersionsAsync(string path, IList<int> versions, string mountPoint = null);
+
+        /// <summary>
+        /// Retrieves the secret location path entries at the specified location.
+        /// Folders are suffixed with /. The input must be a folder; list on a file will not return a value. 
+        /// The values themselves are not accessible via this API.
+        /// </summary>
+        /// <param name="path"><para>[required]</para>
+        /// The location path where the secret needs to be read from.</param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
+        /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
+        /// <returns>
+        /// The secret list with the data.
+        /// </returns>
+        Task<Secret<ListInfo>> ReadSecretPathsAsync(string path, string mountPoint = null, string wrapTimeToLive = null);
+
+        /// <summary>
+        /// Retrieves the secret metadata at the specified location.
+        /// </summary>
+        /// <param name="path"><para>[required]</para>
+        /// The location path where the secret needs to be read from.</param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the KeyValue backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
+        /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[required]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
+        /// <returns>
+        /// The secret metadata.
+        /// </returns>
+        Task<Secret<FullSecretMetadata>> ReadSecretMetadataAsync(string path, string mountPoint = null, string wrapTimeToLive = null);
+
+        /// <summary>
+        /// Creates or updates the metadata of a secret at the specified location in 
+        /// the K/V v2 secrets engine.
+        /// It does not create a new version.
+        /// </summary>
+        /// <param name="path">
+        /// <para>[required]</para>
+        /// The path where the value is to be stored.
+        /// </param>
+        /// <param name="customMetadataRequest">
+        /// <para>[required]</para>
+        /// The value to be written.
+        /// </param>
+        /// <param name="mountPoint">
+        /// <para>[optional]</para>
+        /// The mount point for the Generic backend. 
+        /// Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task WriteSecretMetadataAsync(string path, CustomMetadataRequest customMetadataRequest, string mountPoint = null);
+
+        /// <summary>
+        /// Patch the metadata of a secret at specified location in the K/V v2 secrets engine.
+        /// The patch command combines the change with existing custom metadata instead of replacing them.
+        /// Therefore, this command makes it easy to make a partial updates to an existing metadata.
+        /// </summary>
+        /// <param name="path">
+        /// <para>[required]</para>
+        /// The path where the value is to be stored.
+        /// </param>
+        /// <param name="customMetadataRequest">
+        /// <para>[required]</para>
+        /// The value to be replaced and appended.
+        /// </param>
+        /// <param name="mountPoint">
+        /// <para>[optional]</para>
+        /// The mount point for the Generic backend. 
+        /// Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
+        /// Provide a value only if you have customized the mount point.
+        /// </param>
+        /// <returns>
+        /// The task.
+        /// </returns>
+        Task PatchSecretMetadataAsync(string path, CustomMetadataRequest customMetadataRequest, string mountPoint = null);
 
         /// <summary>
         /// This endpoint permanently deletes the key metadata and all version data for the specified key. 

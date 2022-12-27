@@ -2,11 +2,12 @@
 
 **BREAKING CHANGES:**
 
-  * secret/transit: Made several APIs consistent with other secret backends. No functional changes.
+  * secret/transit: Minor field changes across the apis to make it consistent with other backends. No functional changes.
   * Backend APIs to tune mount config now take the ```NewBackendConfig``` object instead of ```BackendConfig``` object.
   * auth/approle: ```PullSecretIdAsync``` method is renamed to ```PullNewSecretIdAsync```
   * auth/approle: ```ReadRoleAsync``` method uses a new type ```AppRoleRoleModel``` instead of ```AppRoleInfo```.
   * secret/alicloud: The ```GetCredentialsAsync``` method for assumed role changed the data type of ```Expiration``` field in ```AliCloudCredentials``` class from type ```string``` to ```DateTimeOffset```
+  * secret/kv2: Minor field changes to ```FullSecretMetadata``` object. No functional changes.
 
 **FEATURES:**
 
@@ -23,6 +24,7 @@
   * secret/aws: Add new api to delete role
   * secret/transit: All apis are now supported.
   * secret/consul: All the apis
+  * secret/kv2: New apis to configure store wide settings
 
 **IMPROVEMENTS:**
 

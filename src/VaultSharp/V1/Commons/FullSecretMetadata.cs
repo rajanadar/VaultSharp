@@ -9,6 +9,15 @@ namespace VaultSharp.V1.Commons
     public class FullSecretMetadata
     {
         /// <summary>
+        /// Gets or sets the cas required flag.
+        /// </summary>
+        /// <value>
+        /// If true all keys will require the cas parameter to be set on all write requests.
+        /// </value>
+        [JsonProperty("cas_required")]
+        public bool CASRequired { get; set; }
+
+        /// <summary>
         /// Gets or sets the created time.
         /// </summary>
         /// <value>
@@ -27,12 +36,24 @@ namespace VaultSharp.V1.Commons
         public int CurrentVersion { get; set; }
 
         /// <summary>
+        /// Gets or sets the custom metadata.
+        /// </summary>
+        /// <value>
+        /// A map of arbitrary string to string valued user-provided metadata meant to describe the secret.
+        /// </value>
+        [JsonProperty("custom_metadata")]
+        public Dictionary<string, string> CustomMetadata { get; set; }
+
+        [JsonProperty("delete_version_after")]
+        public string DeleteVersionAfter { get; set; }
+
+        /// <summary>
         /// Gets or sets the max version.
         /// </summary>
         /// <value>
         /// The max version.
         /// </value>
-        [JsonProperty("max_version")]
+        [JsonProperty("max_versions")]
         public int MaxVersion { get; set; }
 
         /// <summary>
@@ -61,23 +82,5 @@ namespace VaultSharp.V1.Commons
         /// </value>
         [JsonProperty("versions")]
         public Dictionary<string, SecretMetadata> Versions { get; set; }
-
-        /// <summary>
-        /// Gets or sets the cas required flag.
-        /// </summary>
-        /// <value>
-        /// If true all keys will require the cas parameter to be set on all write requests.
-        /// </value>
-        [JsonProperty("cas_required")]
-        public bool CASRequired { get; set; }
-
-        /// <summary>
-        /// Gets or sets the custom metadata.
-        /// </summary>
-        /// <value>
-        /// A map of arbitrary string to string valued user-provided metadata meant to describe the secret.
-        /// </value>
-        [JsonProperty("custom_metadata")]
-        public Dictionary<string, string> CustomMetadata { get; set; }
     }
 }
