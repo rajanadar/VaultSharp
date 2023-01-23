@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace VaultSharp.V1.SecretsEngines.TOTP
 {
@@ -40,6 +37,6 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
         /// create a counter for the TOTP code calculation.
         /// </summary>
         [JsonProperty("period")]
-        public string Period { get; set; }
+        public long Period { get; set; }
     }
 }

@@ -19,6 +19,9 @@ namespace VaultSharp.Samples
             Console.WriteLine("\n RunKeyValueSecretsBackendSamples \n");
             RunKeyValueSecretsBackendSamples();
 
+            Console.WriteLine("\n RunTOTPSecretsBackendSamples \n");
+            RunTOTPSecretsBackendSamples();
+
             Console.WriteLine("\n RunTransitSecretsBackendSamples \n");
             RunTransitSecretsBackendSamples();
         }
