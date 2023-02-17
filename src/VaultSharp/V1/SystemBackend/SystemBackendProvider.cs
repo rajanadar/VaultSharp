@@ -418,6 +418,12 @@ namespace VaultSharp.V1.SystemBackend
             await _polymath.MakeVaultApiRequest("v1/sys/loggers/" + loggerName, HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
+        public async Task<Secret<SecretsEngine>> GetSecretBackendAsync(string mountPoint)
+        {
+            var resourcePath = string.Format(CultureInfo.InvariantCulture, "v1/sys/mounts/{0}", mountPoint.Trim('/'));
+            return await _polymath.MakeVaultApiRequest<Secret<SecretsEngine>>(resourcePath, HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);            
+        }
+
         public async Task<Secret<Dictionary<string, SecretsEngine>>> GetSecretBackendsAsync()
         {
             var response = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, SecretsEngine>>>("v1/sys/mounts", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);

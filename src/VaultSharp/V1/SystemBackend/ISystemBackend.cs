@@ -459,6 +459,15 @@ namespace VaultSharp.V1.SystemBackend
         Task RevertVerbosityLevelForLoggerAsync(string loggerName);
 
         /// <summary>
+        /// Gets a specific mounted secret backend.
+        /// </summary>
+        /// <param name="mountPoint">The secret backend.</param>
+        /// <returns>
+        /// The mounted secret backend.
+        /// </returns>
+        Task<Secret<SecretsEngine>> GetSecretBackendAsync(string mountPoint);
+
+        /// <summary>
         /// Gets all the mounted secret backends.
         /// </summary>
         /// <returns>
