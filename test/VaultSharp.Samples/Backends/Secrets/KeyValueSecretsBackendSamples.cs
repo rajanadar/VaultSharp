@@ -35,6 +35,10 @@ namespace VaultSharp.Samples
 
             _authenticatedVaultClient.V1.System.MountSecretBackendAsync(kv1SecretsEngine).Wait();
 
+            var secretBackends = _authenticatedVaultClient.V1.System.GetSecretBackendsAsync().Result;
+            DisplayJson(secretBackends);
+            Assert.True(secretBackends.Data.Any());
+
             var kv1Path = Guid.NewGuid().ToString();
 
             var kv1DataValues = new Dictionary<string, object>

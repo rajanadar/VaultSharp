@@ -510,6 +510,13 @@ namespace VaultSharp.Samples
             DisplayJson(newSecretBackends);
             Assert.Equal(secretBackends.Data.Count() + 1, newSecretBackends.Data.Count());
 
+            // get single secret backend
+            var readNewSecretBackend = _authenticatedVaultClient.V1.System.GetSecretBackendAsync(newSecretBackend.Path).Result;
+            DisplayJson(readNewSecretBackend);
+
+            // TODO: File a vault bug because "description" is not returned by the Vault API
+            Assert.Equal(newSecretBackend.Type, readNewSecretBackend.Data.Type);
+
             // unmount
             _authenticatedVaultClient.V1.System.UnmountSecretBackendAsync(newSecretBackend.Path).Wait();
 
