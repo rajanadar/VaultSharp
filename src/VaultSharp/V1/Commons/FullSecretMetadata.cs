@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.Commons
 {
@@ -14,7 +14,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// If true all keys will require the cas parameter to be set on all write requests.
         /// </value>
-        [JsonProperty("cas_required")]
+        [JsonPropertyName("cas_required")]
         public bool CASRequired { get; set; }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The time.
         /// </value>
-        [JsonProperty("created_time")]
+        [JsonPropertyName("created_time")]
         public string CreatedTime { get; set; }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The current version.
         /// </value>
-        [JsonProperty("current_version")]
+        [JsonPropertyName("current_version")]
         public int CurrentVersion { get; set; }
 
         /// <summary>
@@ -41,10 +41,10 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// A map of arbitrary string to string valued user-provided metadata meant to describe the secret.
         /// </value>
-        [JsonProperty("custom_metadata")]
+        [JsonPropertyName("custom_metadata")]
         public Dictionary<string, string> CustomMetadata { get; set; }
 
-        [JsonProperty("delete_version_after")]
+        [JsonPropertyName("delete_version_after")]
         public string DeleteVersionAfter { get; set; }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The max version.
         /// </value>
-        [JsonProperty("max_versions")]
+        [JsonPropertyName("max_versions")]
         public int MaxVersion { get; set; }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The oldest version.
         /// </value>
-        [JsonProperty("oldest_version")]
+        [JsonPropertyName("oldest_version")]
         public int OldestVersion { get; set; }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The time.
         /// </value>
-        [JsonProperty("updated_time")]
+        [JsonPropertyName("updated_time")]
         public string UpdatedTime { get; set; }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The versions.
         /// </value>
-        [JsonProperty("versions")]
+        [JsonPropertyName("versions")]
         public Dictionary<string, SecretMetadata> Versions { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using VaultSharp.V1.SystemBackend.Enterprise;
 
 namespace VaultSharp.V1.AuthMethods.Token.Models
@@ -17,7 +17,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// <value>
         /// The identifier.
         /// </value>
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// <value>
         /// The policies.
         /// </value>
-        [JsonProperty("policies")]
+        [JsonPropertyName("policies")]
         public List<string> Policies { get; set; }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// <value>
         /// The metadata.
         /// </value>
-        [JsonProperty("meta")]
+        [JsonPropertyName("meta")]
         public Dictionary<string, string> Metadata { get; set; }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// <value>
         /// The created by path.
         /// </value>
-        [JsonProperty("path")]
+        [JsonPropertyName("path")]
         public string CreatedByPath { get; set; }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// <value>
         /// The display name.
         /// </value>
-        [JsonProperty("display_name")]
+        [JsonPropertyName("display_name")]
         public string DisplayName { get; set; }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// <value>
         /// The maximum usage count.
         /// </value>
-        [JsonProperty("num_uses")]
+        [JsonPropertyName("num_uses")]
         public int MaximumUsageCount { get; set; }
 
         /// <summary>
@@ -81,13 +81,13 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// <value>
         ///   The epoch of the last renewal time
         /// </value>
-        [JsonProperty("last_renewal_time", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonPropertyName("last_renewal_time", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public int LastRenewalTime { get; set; }
 
         /// <summary>
         /// Gets or sets the entity id.
         /// </summary>
-        [JsonProperty("entity_id")]
+        [JsonPropertyName("entity_id")]
         public string EntityId { get; set; }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// <value>
         /// The time.
         /// </value>
-        [JsonProperty("expire_time")]
+        [JsonPropertyName("expire_time")]
         public string ExpireTime { get; set; }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// <value>
         /// The identity policies.
         /// </value>
-        [JsonProperty("identity_policies")]
+        [JsonPropertyName("identity_policies")]
         public List<string> IdentityPolicies { get; set; }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// <value>
         /// The time.
         /// </value>
-        [JsonProperty("issue_time")]
+        [JsonPropertyName("issue_time")]
         public string IssueTime { get; set; }
     }
 }

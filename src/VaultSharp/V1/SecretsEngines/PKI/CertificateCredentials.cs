@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.PKI
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <value>
         /// The private key.
         /// </value>
-        [JsonProperty("private_key")]
+        [JsonPropertyName("private_key")]
         public string PrivateKeyContent { get; set; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <value>
         /// The type of the private key.
         /// </value>
-        [JsonProperty("private_key_type")]
+        [JsonPropertyName("private_key_type")]
         public CertificateKeyType PrivateKeyType { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <value>
         /// The expiration.
         /// </value>
-        [JsonProperty("expiration")]
+        [JsonPropertyName("expiration")]
         public long Expiration { get; set; }
     }
 }

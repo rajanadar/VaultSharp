@@ -1,41 +1,41 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.AuthMethods.AliCloud.Models
 {
     public class CreateAliCloudRoleModel
     {
-        [JsonProperty("arn")]
+        [JsonPropertyName("arn")]
         public string ARN { get; set; }
 
-        [JsonProperty("token_ttl")]
+        [JsonPropertyName("token_ttl")]
         public string TokenTimeToLive { get; set; }
 
-        [JsonProperty("token_max_ttl")]
+        [JsonPropertyName("token_max_ttl")]
         public string TokenMaximumTimeToLive { get; set; }
 
-        [JsonProperty("token_policies")]
+        [JsonPropertyName("token_policies")]
         public List<string> TokenPolicies { get; set; }
 
-        [JsonProperty("policies")]
+        [JsonPropertyName("policies")]
         public List<string> Policies { get; set; }
 
-        [JsonProperty("token_bound_cidrs")]
+        [JsonPropertyName("token_bound_cidrs")]
         public List<string> TokenBoundCIDRs { get; set; }
 
-        [JsonProperty("token_explicit_max_ttl")]
+        [JsonPropertyName("token_explicit_max_ttl")]
         public string TokenExplicitMaximumTimeToLive { get; set; }
 
-        [JsonProperty("token_no_default_policy")]
+        [JsonPropertyName("token_no_default_policy")]
         public bool TokenNoDefaultPolicy { get; set; }
 
-        [JsonProperty("token_num_uses")]
+        [JsonPropertyName("token_num_uses")]
         public int TokenNumberOfUses { get; set; }
 
-        [JsonProperty("token_period")]
+        [JsonPropertyName("token_period")]
         public string TokenPeriod { get; set; }
 
-        [JsonProperty("token_type")]
+        [JsonPropertyName("token_type")]
         public AuthTokenType TokenType { get; set; }
     }
 }

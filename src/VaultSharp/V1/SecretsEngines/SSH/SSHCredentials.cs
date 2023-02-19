@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.SSH
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// <value>
         /// The ip address.
         /// </value>
-        [JsonProperty("ip")]
+        [JsonPropertyName("ip")]
         public string IpAddress { get; set; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// <value>
         /// The key.
         /// </value>
-        [JsonProperty("key")]
+        [JsonPropertyName("key")]
         public string Key { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// <value>
         /// The type of the key.
         /// </value>
-        [JsonProperty("key_type")]
+        [JsonPropertyName("key_type")]
         public SSHKeyType KeyType { get; set; }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// <value>
         /// The port.
         /// </value>
-        [JsonProperty("port")]
+        [JsonPropertyName("port")]
         public int Port { get; set; }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// <value>
         /// The key.
         /// </value>
-        [JsonProperty("username")]
+        [JsonPropertyName("username")]
         public string Username { get; set; }
     }
 }

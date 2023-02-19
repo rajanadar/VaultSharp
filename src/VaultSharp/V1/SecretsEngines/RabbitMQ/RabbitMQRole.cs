@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.RabbitMQ
 {
@@ -10,7 +10,7 @@ namespace VaultSharp.V1.SecretsEngines.RabbitMQ
         /// <value>
         /// The tags
         /// </value>
-        [JsonProperty("tags")] 
+        [JsonPropertyName("tags")] 
         public string Tags { get; set; }
 
         /// <summary>
@@ -21,7 +21,7 @@ namespace VaultSharp.V1.SecretsEngines.RabbitMQ
         /// <value>
         /// The virtual hosts role.
         /// </value>
-        [JsonProperty("vhosts")]
+        [JsonPropertyName("vhosts")]
         public string VHosts { get; set; }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace VaultSharp.V1.SecretsEngines.RabbitMQ
         /// <value>
         /// The virtual hosts topics.
         /// </value>
-        [JsonProperty("vhost_topics")]
+        [JsonPropertyName("vhost_topics")]
         public string VHostTopics { get; set; }
     }
 }

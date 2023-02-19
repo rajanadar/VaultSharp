@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.TOTP
 {
@@ -15,7 +15,7 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
         /// You can embed it in a web page by including the base64 string
         /// in an 'img'-tag with the prefix data:image/png;base64
         /// </remarks>
-        [JsonProperty("barcode")]
+        [JsonPropertyName("barcode")]
         public string Barcode { get; set; }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
         /// The Url can be used by the client application in order to create
         /// TOTP codes.
         /// </remarks>
-        [JsonProperty("url")]
+        [JsonPropertyName("url")]
         public string Url { get; set; }
     }
 }

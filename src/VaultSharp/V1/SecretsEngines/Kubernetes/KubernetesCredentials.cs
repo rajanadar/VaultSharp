@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Kubernetes
 {
@@ -7,13 +7,13 @@ namespace VaultSharp.V1.SecretsEngines.Kubernetes
     /// </summary>
     public class KubernetesCredentials
     {
-        [JsonProperty("service_account_name")]
+        [JsonPropertyName("service_account_name")]
         public string ServiceAccountName { get; set; }
 
-        [JsonProperty("service_account_namespace")]
+        [JsonPropertyName("service_account_namespace")]
         public string ServiceAccountNamespace { get; set; }
 
-        [JsonProperty("service_account_token")]
+        [JsonPropertyName("service_account_token")]
         public string ServiceAccountToken { get; set; }
     }
 }

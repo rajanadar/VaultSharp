@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Enterprise.Transform
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.Transform
         /// If a single transformation exists for role, this parameter may be skipped and will be inferred. 
         /// If multiple transformations exist, one must be specified.
         /// </summary>
-        [JsonProperty("batch_input")]
+        [JsonPropertyName("batch_input")]
         public List<DecodingItem> BatchItems { get; set; }
     }
 }

@@ -1,14 +1,14 @@
 ﻿
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.ActiveDirectory.Models
 {
     public class CreateActiveDirectoryRoleModel
     {
-        [JsonProperty("service_account_name")]
+        [JsonPropertyName("service_account_name")]
         public string ServiceAccountName { get; set; }
 
-        [JsonProperty("ttl")]
+        [JsonPropertyName("ttl")]
         public long TimeToLive { get; set; }
     }
 }

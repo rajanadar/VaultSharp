@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.AWS
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// <value>
         /// The access key.
         /// </value>
-        [JsonProperty("access_key")]
+        [JsonPropertyName("access_key")]
         public string AccessKey { get; set; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// <value>
         /// The secret key.
         /// </value>
-        [JsonProperty("secret_key")]
+        [JsonPropertyName("secret_key")]
         public string SecretKey { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// <value>
         /// The secret token.
         /// </value>
-        [JsonProperty("security_token")]
+        [JsonPropertyName("security_token")]
         public string SecurityToken { get; set; }
     }
 }

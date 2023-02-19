@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.AWS
 {
     public class AWSLeaseConfigModel
     {
-        [JsonProperty("lease")]
+        [JsonPropertyName("lease")]
         public string Lease { get; set; }
 
-        [JsonProperty("lease_max")]
+        [JsonPropertyName("lease_max")]
         public string MaximumLease { get; set; }
     }
 }

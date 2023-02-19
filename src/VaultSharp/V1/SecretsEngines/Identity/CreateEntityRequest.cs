@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Identity
 {
@@ -12,14 +12,14 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// [optional]
         /// ID of the entity. If set, updates the corresponding existing entity
         /// </summary>
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
         /// <summary>
         /// Name of the entity. 
         /// The recommended format for the name is 'entity-UUID'
         /// </summary>
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
     }
 }

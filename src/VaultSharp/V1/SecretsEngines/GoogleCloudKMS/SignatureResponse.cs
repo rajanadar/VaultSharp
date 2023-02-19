@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
 {
@@ -10,7 +10,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
         /// <summary>
         /// The signature
         /// </summary>
-        [JsonProperty("signature")]
+        [JsonPropertyName("signature")]
         public string Signature { get; set; }
     }
 }

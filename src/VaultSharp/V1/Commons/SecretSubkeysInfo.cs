@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.Commons
 {
     public class SecretSubkeysInfo
     { 
-        [JsonProperty("metadata")]
+        [JsonPropertyName("metadata")]
         public CurrentSecretMetadata Metadata { get; set; }
 
-        [JsonProperty("subkeys")]
+        [JsonPropertyName("subkeys")]
         public Dictionary<string, object> Subkeys { get; set; }
     }
 }

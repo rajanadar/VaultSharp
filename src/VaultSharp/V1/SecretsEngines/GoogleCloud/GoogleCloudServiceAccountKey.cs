@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.GoogleCloud
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
         /// <value>
         /// The private_key_data.
         /// </value>
-        [JsonProperty("private_key_data")]
+        [JsonPropertyName("private_key_data")]
         public string Base64EncodedPrivateKeyData { get; set; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
         /// <value>
         /// The key_algorithm.
         /// </value>
-        [JsonProperty("key_algorithm")]
+        [JsonPropertyName("key_algorithm")]
         public ServiceAccountKeyAlgorithm KeyAlgorithm { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
         /// <value>
         /// The key_type.
         /// </value>
-        [JsonProperty("key_type")]
+        [JsonPropertyName("key_type")]
         public ServiceAccountPrivateKeyType PrivateKeyType { get; set; }
     }
 }

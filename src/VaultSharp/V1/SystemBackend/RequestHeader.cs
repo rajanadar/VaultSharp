@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The name.
         /// </value>
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The flag.
         /// </value>
-        [JsonProperty("hmac")]
+        [JsonPropertyName("hmac")]
         public bool HMAC { get; set; }
     }
 }

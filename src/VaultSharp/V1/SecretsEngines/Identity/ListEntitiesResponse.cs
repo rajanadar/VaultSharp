@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Identity
 {
@@ -8,7 +8,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
     /// </summary>
     public class ListEntitiesResponse
     {
-        [JsonProperty("keys")]
+        [JsonPropertyName("keys")]
         public List<string> Keys { get; set; }
     }
 }

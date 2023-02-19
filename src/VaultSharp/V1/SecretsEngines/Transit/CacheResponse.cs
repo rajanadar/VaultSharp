@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -11,7 +11,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Gets or sets the size of the cache, in terms of the number of entries.
         /// </summary>
         /// <value>The size of the cache, in terms of the number of entries.</value>
-        [JsonProperty("size")]
+        [JsonPropertyName("size")]
         public int Size { get; set; }
     }
 }

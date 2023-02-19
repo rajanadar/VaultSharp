@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -17,7 +17,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The PGP keys.
         /// </value>
-        [JsonProperty("pgp_keys")]
+        [JsonPropertyName("pgp_keys")]
         public string[] PgpKeys { get; set; }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The root token pgp key.
         /// </value>
-        [JsonProperty("root_token_pgp_key")]
+        [JsonPropertyName("root_token_pgp_key")]
         public string RootTokenPgpKey { get; set; }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The secret shares.
         /// </value>
-        [JsonProperty("secret_shares")]
+        [JsonPropertyName("secret_shares")]
         public int SecretShares { get; set; }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The secret threshold.
         /// </value>
-        [JsonProperty("secret_threshold")]
+        [JsonPropertyName("secret_threshold")]
         public int SecretThreshold { get; set; }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The stored shares.
         /// </value>
-        [JsonProperty("stored_shares")]
+        [JsonPropertyName("stored_shares")]
         public int StoredShares { get; set; }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The recovery shares.
         /// </value>
-        [JsonProperty("recovery_shares")]
+        [JsonPropertyName("recovery_shares")]
         public int RecoveryShares { get; set; }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The recovery threshold.
         /// </value>
-        [JsonProperty("recovery_threshold")]
+        [JsonPropertyName("recovery_threshold")]
         public int RecoveryThreshold { get; set; }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The recovery PGP keys.
         /// </value>
-        [JsonProperty("recovery_pgp_keys")]
+        [JsonPropertyName("recovery_pgp_keys")]
         public string[] RecoveryPgpKeys { get; set; }
     }
 }

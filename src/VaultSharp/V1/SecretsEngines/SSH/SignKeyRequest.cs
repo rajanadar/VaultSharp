@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.SSH
 {
@@ -12,7 +12,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// <para>[required]</para>
         /// Specifies the SSH public key that should be signed.
         /// </summary>
-        [JsonProperty("public_key")]
+        [JsonPropertyName("public_key")]
         public string PublicKey { get; set; }
 
         /// <summary>
@@ -22,14 +22,14 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// If not provided, the role's ttl value will be used. 
         /// Note that the role values default to system values if not explicitly set.
         /// </summary>
-        [JsonProperty("ttl")]
+        [JsonPropertyName("ttl")]
         public string TimeToLive { get; set; }
 
         /// <summary>
         /// <para>[optional]</para>
         /// Specifies valid principals, either usernames or hostnames, that the certificate should be signed for.
         /// </summary>
-        [JsonProperty("valid_principals")]
+        [JsonPropertyName("valid_principals")]
         public string ValidPrincipals { get; set; }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// Specifies the type of certificate to be created; either "user" or "host".
         /// Defaults to "user"
         /// </summary>
-        [JsonProperty("cert_type")]
+        [JsonPropertyName("cert_type")]
         public string CertificateType { get; set; }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// Specifies the key id that the created certificate should have. 
         /// If not specified, the display name of the token will be used.
         /// </summary>
-        [JsonProperty("key_id")]
+        [JsonPropertyName("key_id")]
         public string KeyId { get; set; }
 
         /// <summary>
@@ -53,14 +53,14 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// Specifies a map of the critical options that the certificate should be signed for.
         /// Defaults to none.
         /// </summary>
-        [JsonProperty("critical_options")]
+        [JsonPropertyName("critical_options")]
         public Dictionary<string, string> CriticalOptions { get; set; }
 
         /// <summary>
         /// <para>[optional]</para>
         /// Specifies a map of the extensions that the certificate should be signed for. Defaults to none.
         /// </summary>
-        [JsonProperty("extension")]
+        [JsonPropertyName("extension")]
         public Dictionary<string, string> Extension { get; set; }
 
         public SignKeyRequest()

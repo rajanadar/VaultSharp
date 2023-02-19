@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
 {
@@ -12,14 +12,14 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// The number of versions to keep per key. If not set, the backend’s configured max version is used.
         /// Once a key has more than the configured allowed versions, the oldest version will be permanently deleted.
         /// </summary>
-        [JsonProperty("max_versions")]
+        [JsonPropertyName("max_versions")]
         public int? MaxVersion { get; set; }
 
         /// <summary>
         /// If true, the key will require the cas parameter to be set on all write requests.
         /// If false, the backend’s configuration will be used.
         /// </summary>
-        [JsonProperty("cas_required")]
+        [JsonPropertyName("cas_required")]
         public bool? CASRequired { get; set; }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// </summary>
         /// <example>"0s"</example>
         /// <example>"3h25m19s"</example>
-        [JsonProperty("delete_version_after")]
+        [JsonPropertyName("delete_version_after")]
         public string DeleteVersionAfter { get; set; }
 
         /// <summary>
@@ -43,13 +43,13 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// key, thus the provided cas value must be greater than 0.
         /// </para>
         /// </summary>
-        [JsonProperty("options")]
+        [JsonPropertyName("options")]
         public Dictionary<string, object> Options { get; set; }
 
         /// <summary>
         /// A map of arbitrary string to string valued user-provided metadata meant to describe the secret.
         /// </summary>
-        [JsonProperty("custom_metadata")]
+        [JsonPropertyName("custom_metadata")]
         public Dictionary<string, string> CustomMetadata { get; set; }
     }
 }

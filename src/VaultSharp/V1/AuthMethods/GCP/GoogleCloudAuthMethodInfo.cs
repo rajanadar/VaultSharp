@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 using VaultSharp.Core;
 
 namespace VaultSharp.V1.AuthMethods.GoogleCloud
@@ -34,7 +34,7 @@ namespace VaultSharp.V1.AuthMethods.GoogleCloud
         /// <value>
         /// The role name.
         /// </value>
-        [JsonProperty("role")]
+        [JsonPropertyName("role")]
         public string RoleName { get; }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace VaultSharp.V1.AuthMethods.GoogleCloud
         /// <value>
         /// The jwt.
         /// </value>
-        [JsonProperty("jwt")]
+        [JsonPropertyName("jwt")]
         public string JWT { get; }
 
         /// <summary>

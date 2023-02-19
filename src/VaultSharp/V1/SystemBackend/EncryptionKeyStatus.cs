@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The install time.
         /// </value>
-        [JsonProperty("install_time")]
+        [JsonPropertyName("install_time")]
         public DateTimeOffset InstallTime { get; set; }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The sequential key number.
         /// </value>
-        [JsonProperty("term")]
+        [JsonPropertyName("term")]
         public int SequentialKeyNumber { get; set; }
     }
 }

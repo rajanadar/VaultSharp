@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -12,13 +12,13 @@ namespace VaultSharp.V1.SystemBackend
         /// <summary>
         /// Gets or sets a value indicating the type.
         /// </summary>
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating thif initialized.
         /// </summary>
-        [JsonProperty("initialized")]
+        [JsonPropertyName("initialized")]
         public bool Initialized { get; set; }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         ///   <c>true</c> if sealed; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("sealed")]
+        [JsonPropertyName("sealed")]
         public bool Sealed { get; set; }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The secret threshold.
         /// </value>
-        [JsonProperty("t")]
+        [JsonPropertyName("t")]
         public int SecretThreshold { get; set; }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The secret shares.
         /// </value>
-        [JsonProperty("n")]
+        [JsonPropertyName("n")]
         public int SecretShares { get; set; }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The progress count.
         /// </value>
-        [JsonProperty("progress")]
+        [JsonPropertyName("progress")]
         public int Progress { get; set; }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The nonce.
         /// </value>
-        [JsonProperty("nonce")]
+        [JsonPropertyName("nonce")]
         public string Nonce { get; set; }
 
         /// <summary>
@@ -73,10 +73,10 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The version.
         /// </value>
-        [JsonProperty("version")]
+        [JsonPropertyName("version")]
         public string Version { get; set; }
 
-        [JsonProperty("build_date")]
+        [JsonPropertyName("build_date")]
         public DateTimeOffset BuildDate { get; set; }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The migration.
         /// </value>
-        [JsonProperty("migration")]
+        [JsonPropertyName("migration")]
         public bool Migration { get; set; }
 
         /// <summary>
@@ -94,28 +94,28 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The recovery seal.
         /// </value>
-        [JsonProperty("recovery_seal")]
+        [JsonPropertyName("recovery_seal")]
         public bool RecoverySeal { get; set; }
 
         /// <summary>
         /// Gets or sets what type of storage the cluster is configured to use
         /// </summary>
-        [JsonProperty("storage_type")]
+        [JsonPropertyName("storage_type")]
         public string StorageType { get; set; }
 
-        [JsonProperty("hcp_link_status", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("hcp_link_status", NullValueHandling = NullValueHandling.Ignore)]
         public string HCPLinkStatus { get; set; }
 
-        [JsonProperty("hcp_link_resource_ID", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("hcp_link_resource_ID", NullValueHandling = NullValueHandling.Ignore)]
         public string HCPLinkResourceID { get; set; }
 
-        [JsonProperty("warnings", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("warnings", NullValueHandling = NullValueHandling.Ignore)]
         public List<string> Warnings { get; set; }
 
-        [JsonProperty("ha_enabled", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("ha_enabled", NullValueHandling = NullValueHandling.Ignore)]
         public bool? HighAvailabilityEnabled { get; set; }
 
-        [JsonProperty("active_time", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("active_time", NullValueHandling = NullValueHandling.Ignore)]
         public DateTimeOffset? ActiveTime { get; set; }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The name of the cluster.
         /// </value>
-        [JsonProperty("cluster_name", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("cluster_name", NullValueHandling = NullValueHandling.Ignore)]
         public string ClusterName { get; set; }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The cluster identifier.
         /// </value>
-        [JsonProperty("cluster_id", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("cluster_id", NullValueHandling = NullValueHandling.Ignore)]
         public string ClusterId { get; set; }
     }
 }

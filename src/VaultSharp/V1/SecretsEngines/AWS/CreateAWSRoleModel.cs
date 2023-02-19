@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.AWS
 {
@@ -7,7 +7,7 @@ namespace VaultSharp.V1.SecretsEngines.AWS
     /// </summary>
     public class CreateAWSRoleModel : AbstractAWSRoleModel
     {
-        [JsonProperty("credential_type")]
+        [JsonPropertyName("credential_type")]
         public AWSCredentialsType CredentialType { get; set; }
     }
 }

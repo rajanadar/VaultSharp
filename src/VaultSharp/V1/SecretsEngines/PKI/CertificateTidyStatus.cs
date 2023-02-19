@@ -1,38 +1,38 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.PKI
 {
     public class CertificateTidyStatus
     {
-        [JsonProperty("safety_buffer")]
+        [JsonPropertyName("safety_buffer")]
         public string SafetyBuffer { get; set; }
 
-        [JsonProperty("tidy_cert_store")]
+        [JsonPropertyName("tidy_cert_store")]
         public bool TidyCertStore { get; set; }
 
-        [JsonProperty("tidy_revoked_certs")]
+        [JsonPropertyName("tidy_revoked_certs")]
         public bool TidyRevokedCerts { get; set; }
 
-        [JsonProperty("state")]
+        [JsonPropertyName("state")]
         public CertificateTidyState TidyState { get; set; }
 
-        [JsonProperty("error")]
+        [JsonPropertyName("error")]
         public string Error { get; set; }
 
-        [JsonProperty("time_started")]
+        [JsonPropertyName("time_started")]
         public DateTimeOffset? TimeStarted { get; set; }
 
-        [JsonProperty("time_finished")]
+        [JsonPropertyName("time_finished")]
         public DateTimeOffset? TimeFinished { get; set; }
 
-        [JsonProperty("message")]
+        [JsonPropertyName("message")]
         public string Message { get; set; }
 
-        [JsonProperty("cert_store_deleted_count")]
+        [JsonPropertyName("cert_store_deleted_count")]
         public int CertStoreDeletedCount { get; set; }
 
-        [JsonProperty("revoked_cert_deleted_count")]
+        [JsonPropertyName("revoked_cert_deleted_count")]
         public string RevokedCertDeletedCount { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Enterprise.Transform
 {
@@ -10,7 +10,7 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.Transform
         /// <summary>
         /// Specifies the value to be decoded.
         /// </summary>
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public string Value { get; set; }
 
         /// <summary>
@@ -18,14 +18,14 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.Transform
         /// If a single transformation exists for role, this parameter may be skipped and will be inferred. 
         /// If multiple transformations exist, one must be specified.
         /// </summary>
-        [JsonProperty("transformation")]
+        [JsonPropertyName("transformation")]
         public string Transformation { get; set; }
 
         /// <summary>
         /// Specifies the base64 decoded tweak to use. 
         /// Only applicable for FPE transformations with supplied as the tweak source.
         /// </summary>
-        [JsonProperty("tweak")]
+        [JsonPropertyName("tweak")]
         public string Tweak { get; set; }
     }
 }

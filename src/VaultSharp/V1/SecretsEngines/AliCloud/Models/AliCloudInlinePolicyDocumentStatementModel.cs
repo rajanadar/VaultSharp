@@ -1,17 +1,17 @@
 ﻿
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.AliCloud.Models
 {
     public class AliCloudInlinePolicyDocumentStatementModel
     {
-        [JsonProperty("Action")]
+        [JsonPropertyName("Action")]
         public string Action { get; set; }
 
-        [JsonProperty("Effect")]
+        [JsonPropertyName("Effect")]
         public string Effect { get; set; }
 
-        [JsonProperty("Resource")]
+        [JsonPropertyName("Resource")]
         public string Resource { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The nonce.
         /// </value>
-        [JsonProperty("nonce")]
+        [JsonPropertyName("nonce")]
         public string Nonce { get; set; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         ///   <c>true</c> if complete; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("complete")]
+        [JsonPropertyName("complete")]
         public bool Complete { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The master keys.
         /// </value>
-        [JsonProperty("keys")]
+        [JsonPropertyName("keys")]
         public string[] MasterKeys { get; set; }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The master keys.
         /// </value>
-        [JsonProperty("keys_base64")]
+        [JsonPropertyName("keys_base64")]
         public string[] Base64MasterKeys { get; set; }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The PGP finger prints.
         /// </value>
-        [JsonProperty("pgp_fingerprints")]
+        [JsonPropertyName("pgp_fingerprints")]
         public string[] PGPFingerPrints { get; set; }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         ///   <c>true</c> if backup; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("backup")]
+        [JsonPropertyName("backup")]
         public bool Backup { get; set; }
     }
 }

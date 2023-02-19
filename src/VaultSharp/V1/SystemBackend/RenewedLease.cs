@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -11,19 +11,19 @@ namespace VaultSharp.V1.SystemBackend
         /// <summary>
         /// Gets or sets the lease identifier.
         /// </summary>
-        [JsonProperty("lease_id")]
+        [JsonPropertyName("lease_id")]
         public string LeaseId { get; set; }
 
         /// <summary>
         /// Gets or sets the flag indicating if this lease is renewable.
         /// </summary>
-        [JsonProperty("renewable")]
+        [JsonPropertyName("renewable")]
         public bool Renewable { get; set; }
 
         /// <summary>
         /// Gets or sets the time to live for the lease.
         /// </summary>
-        [JsonProperty("lease_duration")]
+        [JsonPropertyName("lease_duration")]
         public int LeaseDuration { get; set; }
     }
 }

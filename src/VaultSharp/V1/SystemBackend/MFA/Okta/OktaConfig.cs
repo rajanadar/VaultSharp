@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend.MFA.Okta
 {
@@ -11,13 +11,13 @@ namespace VaultSharp.V1.SystemBackend.MFA.Okta
         /// Gets or sets the mount to tie this method to for use in automatic mappings. 
         /// The mapping will use the Name field of Aliases associated with this mount as the username in the mapping.
         /// </summary>
-        [JsonProperty("mount_accessor")]
+        [JsonPropertyName("mount_accessor")]
         public string MountAccessor { get; set; }
 
         /// <summary>
         /// Gets or sets the identifier.
         /// </summary>
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
         /// <summary>
@@ -31,32 +31,32 @@ namespace VaultSharp.V1.SystemBackend.MFA.Okta
         ///     alias.metadata.[key]: The value of the Alias's metadata parameter
         ///     entity.metadata.[key]: The value of the Entity's metadata paramater
         /// </summary>
-        [JsonProperty("username_format")]
+        [JsonPropertyName("username_format")]
         public string UsernameFormat { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the organization to be used in the Okta API.
         /// </summary>
-        [JsonProperty("org_name")]
+        [JsonPropertyName("org_name")]
         public string OrgName { get; set; }
 
         /// <summary>
         /// Gets or sets the Okta Api Key.
         /// </summary>
-        [JsonProperty("api_token")]
+        [JsonPropertyName("api_token")]
         public string ApiToken { get; set; }
 
         /// <summary>
         /// Gets or sets a flag when set, will be used as the base domain for API requests. 
         /// Examples are okta.com, oktapreview.com, and okta-emea.com.
         /// </summary>
-        [JsonProperty("base_url")]
+        [JsonPropertyName("base_url")]
         public string BaseUrl { get; set; }
 
         /// <summary>
         /// Gets or sets a flag indicating if this is production.
         /// </summary>
-        [JsonProperty("production")]
+        [JsonPropertyName("production")]
         public bool Production { get; set; }
     }
 }

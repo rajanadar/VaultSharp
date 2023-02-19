@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         ///   <c>true</c> if initialized; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("initialized")]
+        [JsonPropertyName("initialized")]
         public bool Initialized { get; set; }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         ///   <c>true</c> if sealed; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("sealed")]
+        [JsonPropertyName("sealed")]
         public bool Sealed { get; set; }
 
         /// <summary>
@@ -32,25 +32,25 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         ///   <c>true</c> if standby; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("standby")]
+        [JsonPropertyName("standby")]
         public bool Standby { get; set; }
 
         /// <summary>
         /// Gets or sets the performance standby.
         /// </summary>
-        [JsonProperty("performance_standby")]
+        [JsonPropertyName("performance_standby")]
         public bool PerformanceStandby { get; set; }
 
         /// <summary>
         /// Gets or sets the replication performance mode.
         /// </summary>
-        [JsonProperty("replication_performance_mode")]
+        [JsonPropertyName("replication_performance_mode")]
         public string ReplicationPerformanceMode { get; set; }
 
         /// <summary>
         /// Gets or sets the replication dr mode.
         /// </summary>
-        [JsonProperty("replication_dr_mode")]
+        [JsonPropertyName("replication_dr_mode")]
         public string ReplicationDisasterRecoverymode { get; set; }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The server time UTC unix timestamp.
         /// </value>
-        [JsonProperty("server_time_utc")]
+        [JsonPropertyName("server_time_utc")]
         public long ServerTimeUtcUnixTimestamp { get; set; }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The version.
         /// </value>
-        [JsonProperty("version")]
+        [JsonPropertyName("version")]
         public string Version { get; set; }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The name of the cluster.
         /// </value>
-        [JsonProperty("cluster_name", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("cluster_name", NullValueHandling = NullValueHandling.Ignore)]
         public string ClusterName { get; set; }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The cluster identifier.
         /// </value>
-        [JsonProperty("cluster_id", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("cluster_id", NullValueHandling = NullValueHandling.Ignore)]
         public string ClusterId { get; set; }
 
         /// <summary>

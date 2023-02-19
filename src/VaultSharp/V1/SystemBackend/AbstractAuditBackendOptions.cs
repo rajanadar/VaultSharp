@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -15,7 +15,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The format.
         /// </value>
-        [JsonProperty("format")]
+        [JsonPropertyName("format")]
         public string Format { get; set; }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         ///   <c>true</c> if [hmac accessor]; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("hmac_accessor")]
+        [JsonPropertyName("hmac_accessor")]
         public string HmacAccessor { get; set; }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// <c>true</c> if [log sensitive data in raw format]; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("log_raw")]
+        [JsonPropertyName("log_raw")]
         public string LogSensitiveDataInRawFormat { get; set; }
 
         /// <summary>

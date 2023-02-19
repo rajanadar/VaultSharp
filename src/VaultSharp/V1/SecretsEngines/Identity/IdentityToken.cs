@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Identity
 {
@@ -10,19 +10,19 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// <summary>
         /// Gets or sets the Client Id.
         /// </summary>
-        [JsonProperty("client_id")]
+        [JsonPropertyName("client_id")]
         public string ClientId { get; set; }
 
         /// <summary>
         /// Gets or sets the token.
         /// </summary>
-        [JsonProperty("token")]
+        [JsonPropertyName("token")]
         public string Token { get; set; }
 
         /// <summary>
         /// Gets or sets the time to live.
         /// </summary>
-        [JsonProperty("ttl")]
+        [JsonPropertyName("ttl")]
         public int TimeToLive { get; set; }
     }
 }

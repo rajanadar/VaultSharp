@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.AuthMethods.AppRole.Models
 {
@@ -7,7 +7,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole.Models
     /// </summary>
     public class RoleIdInfo
     {
-        [JsonProperty("role_id")]
+        [JsonPropertyName("role_id")]
         public string RoleId { get; set; }
     }
 }

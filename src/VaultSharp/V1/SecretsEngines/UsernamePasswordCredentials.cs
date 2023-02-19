@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines
         /// <value>
         /// The username.
         /// </value>
-        [JsonProperty("username")]
+        [JsonPropertyName("username")]
         public string Username { get; set; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace VaultSharp.V1.SecretsEngines
         /// <value>
         /// The password.
         /// </value>
-        [JsonProperty("password")]
+        [JsonPropertyName("password")]
         public string Password { get; set; }
     }
 }

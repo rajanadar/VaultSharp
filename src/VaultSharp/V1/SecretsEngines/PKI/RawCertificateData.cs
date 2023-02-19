@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.PKI
 {
@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <value>
         /// The content of the certificate.
         /// </value>
-        [JsonProperty("certificate")]
+        [JsonPropertyName("certificate")]
         public string CertificateContent { get; set; }
 
         /// <summary>
@@ -23,13 +23,13 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <value>
         /// The revocation time.
         /// </value>
-        [JsonProperty("revocation_time")]
+        [JsonPropertyName("revocation_time")]
         public int RevocationTime { get; set; }
 
-        [JsonProperty("revocation_time_rfc3339")]
+        [JsonPropertyName("revocation_time_rfc3339")]
         public DateTimeOffset? RevocationTimeRFC3339 { get; set; }
 
-        [JsonProperty("issuer_id")]
+        [JsonPropertyName("issuer_id")]
         public string RevocationIssuerId { get; set; }
 
         /// <summary>

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -11,7 +11,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <summary>
         /// If set, enables taking backup of named key in the plaintext format. Once set, this cannot be disabled.
         /// </summary>
-        [JsonProperty("allow_plaintext_backup")]
+        [JsonPropertyName("allow_plaintext_backup")]
         public bool AllowPlaintextBackup { get; set; }
 
         /// <summary>
@@ -19,49 +19,49 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Setting this to "0" (the default) will disable automatic key rotation. 
         /// This value cannot be shorter than one hour.
         /// </summary>
-        [JsonProperty("auto_rotate_period")]
+        [JsonPropertyName("auto_rotate_period")]
         public long AutoRotatePeriod { get; set; }
 
         /// <summary>
         /// Specifies if the key is allowed to be deleted.
         /// </summary>
-        [JsonProperty("deletion_allowed")]
+        [JsonPropertyName("deletion_allowed")]
         public bool DeletionAllowed { get; set; }
 
         /// <summary>
         /// If set, key derivation is enabled, all encrypt/decrypt requests to this named key must provide a context which is used for key derivation.
         /// </summary>
-        [JsonProperty("derived")]
+        [JsonPropertyName("derived")]
         public bool Derived { get; set; }
 
         /// <summary>
         /// True if the keys are to be exportable. This allows for all the valid keys in the key ring to be exported. Once set, this cannot be disabled.
         /// </summary>
-        [JsonProperty("exportable")]
+        [JsonPropertyName("exportable")]
         public bool Exportable { get; set; }
 
         /// <summary>
         /// If set, indicates that the key is imported.
         /// </summary>
-        [JsonProperty("imported_key")]
+        [JsonPropertyName("imported_key")]
         public bool ImportedKey { get; set; }
 
         /// <summary>
         /// The list of key-version pairs in the key ring.
         /// </summary>
-        [JsonProperty("keys")]
+        [JsonPropertyName("keys")]
         public Dictionary<string, object> Keys { get; set; }
 
         /// <summary>
         /// The latest version of the key ring.
         /// </summary>
-        [JsonProperty("latest_version")]
+        [JsonPropertyName("latest_version")]
         public int LatestVersion { get; set; }
 
         /// <summary>
         /// The minimum available version of the key ring.
         /// </summary>
-        [JsonProperty("min_available_version")]
+        [JsonPropertyName("min_available_version")]
         public int MinimumAvailableVersion { get; set; }
 
         /// <summary>
@@ -71,49 +71,49 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// signature that can be verified against. For HMACs, this controls the minimum version of a
         /// key allowed to be used as the key for verification.
         /// </summary>
-        [JsonProperty("min_decryption_version")]
+        [JsonPropertyName("min_decryption_version")]
         public int MinimumDecryptionVersion { get; set; }
 
         /// <summary>
         /// Specifies the minimum version of the key that can be used to encrypt plaintext, sign payloads, or generate HMACs.
         /// </summary>
-        [JsonProperty("min_encryption_version")]
+        [JsonPropertyName("min_encryption_version")]
         public int MinimumEncryptionVersion { get; set; }
 
         /// <summary>
         /// The name of the encryption key.
         /// </summary>
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
         /// <summary>
         /// If set, the key can be used in encryption requests.
         /// </summary>
-        [JsonProperty("supports_encryption")]
+        [JsonPropertyName("supports_encryption")]
         public bool SupportsEncryption { get; set; }
 
         /// <summary>
         /// If set, the key can be used in decryption requests.
         /// </summary>
-        [JsonProperty("supports_decryption")]
+        [JsonPropertyName("supports_decryption")]
         public bool SupportsDecryption { get; set; }
 
         /// <summary>
         /// If set, the key supports key derivation during encrytion requests.
         /// </summary>
-        [JsonProperty("supports_derivation")]
+        [JsonPropertyName("supports_derivation")]
         public bool SupportsDerivation { get; set; }
 
         /// <summary>
         /// If set, the key can be used in signing requests.
         /// </summary>
-        [JsonProperty("supports_signing")]
+        [JsonPropertyName("supports_signing")]
         public bool SupportsSigning { get; set; }
 
         /// <summary>
         /// The type of key (i.e. encryption algorithm) to generate.
         /// </summary>
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public TransitKeyType Type { get; set; }
     }
 }

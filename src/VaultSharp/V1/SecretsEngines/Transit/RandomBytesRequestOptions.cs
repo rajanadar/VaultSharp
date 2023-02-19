@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -10,14 +10,14 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <summary>
         /// Specifies the number of bytes to return.
         /// </summary>
-        [JsonProperty("bytes")]
+        [JsonPropertyName("bytes")]
         public int BytesToGenerate { get; set; }
 
         /// <summary>
         /// Gets or sets the format to return the bytes in.
         /// </summary>
         /// <value>The format to return the bytes in.</value>
-        [JsonProperty("format")]
+        [JsonPropertyName("format")]
         public OutputEncodingFormat Format { get; set; } = OutputEncodingFormat.base64;
 
         /// <summary>

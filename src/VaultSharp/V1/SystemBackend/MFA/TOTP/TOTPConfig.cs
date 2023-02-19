@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend.MFA.TOTP
 {
@@ -10,51 +10,51 @@ namespace VaultSharp.V1.SystemBackend.MFA.TOTP
         /// <summary>
         /// Gets or sets the identifier.
         /// </summary>
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the key's issuing organization.
         /// </summary>
-        [JsonProperty("issuer")]
+        [JsonPropertyName("issuer")]
         public string Issuer { get; set; }
 
         /// <summary>
         /// Gets or sets the length of time used to generate a counter for the TOTP token calculation.
         /// </summary>
-        [JsonProperty("period")]
+        [JsonPropertyName("period")]
         public string Period { get; set; }
 
         /// <summary>
         /// Gets or sets the size in bytes of the generated key.
         /// </summary>
-        [JsonProperty("key_size")]
+        [JsonPropertyName("key_size")]
         public int KeySize  { get; set; }
 
         /// <summary>
         /// Gets or sets the pixel size of the generated square QR code.
         /// </summary>
-        [JsonProperty("qr_size")]
+        [JsonPropertyName("qr_size")]
         public int QRSize  { get; set; }
 
         /// <summary>
         /// Gets or sets the hashing algorithm used to generate the TOTP code. 
         /// Options include "SHA1", "SHA256" and "SHA512".
         /// </summary>
-        [JsonProperty("algorithm")]
+        [JsonPropertyName("algorithm")]
         public string Algorithm { get; set; }
 
         /// <summary>
         /// Gets or sets the number of digits in the generated TOTP token. This value can either be 6 or 8.
         /// </summary>
-        [JsonProperty("digits")]
+        [JsonPropertyName("digits")]
         public int Digits { get; set; }
 
         /// <summary>
         /// Gets or sets the number of delay periods that are allowed when validating a TOTP token. 
         /// This value can either be 0 or 1.
         /// </summary>
-        [JsonProperty("skew")]
+        [JsonPropertyName("skew")]
         public int Skew { get; set; }
 
         /// <summary>

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Enterprise.Transform
 {
@@ -10,13 +10,13 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.Transform
         /// <summary>
         /// Specifies the encoded value.
         /// </summary>
-        [JsonProperty("encoded_value")]
+        [JsonPropertyName("encoded_value")]
         public string EncodedValue { get; set; }
 
         /// <summary>
         /// Specifies the base64 encoded tweak that was provided during encoding.
         /// </summary>
-        [JsonProperty("tweak")]
+        [JsonPropertyName("tweak")]
         public string Tweak { get; set; }
     }
 }

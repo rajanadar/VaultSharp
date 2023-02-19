@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.PKI
 {
@@ -15,7 +15,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <value>
         /// The name of the common.
         /// </value>
-        [JsonProperty("common_name")]
+        [JsonPropertyName("common_name")]
         public string CommonName { get; set; }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <value>
         /// The subject alternative names.
         /// </value>
-        [JsonProperty("alt_names")]
+        [JsonPropertyName("alt_names")]
         public string SubjectAlternativeNames { get; set; }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <value>
         /// The ip subject alternative names.
         /// </value>
-        [JsonProperty("ip_sans")]
+        [JsonPropertyName("ip_sans")]
         public string IPSubjectAlternativeNames { get; set; }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <value>
         /// The uri subject alternative names.
         /// </value>
-        [JsonProperty("uri_sans")]
+        [JsonPropertyName("uri_sans")]
         public string URISubjectAlternativeNames { get; set; }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <value>
         /// The other subject alternative names.
         /// </value>
-        [JsonProperty("other_sans")]
+        [JsonPropertyName("other_sans")]
         public string OtherSubjectAlternativeNames { get; set; }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <value>
         /// The time to live.
         /// </value>
-        [JsonProperty("ttl")]
+        [JsonPropertyName("ttl")]
         public string TimeToLive { get; set; }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <value>
         /// The certificate format.
         /// </value>
-        [JsonProperty("format")]
+        [JsonPropertyName("format")]
         public CertificateFormat CertificateFormat { get; set; }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <value>
         /// The certificate format.
         /// </value>
-        [JsonProperty("private_key_format")]
+        [JsonPropertyName("private_key_format")]
         public PrivateKeyFormat PrivateKeyFormat { get; set; }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <value>
         /// <c>true</c> if [exclude common name from subject alternative names]; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("exclude_cn_from_sans")]
+        [JsonPropertyName("exclude_cn_from_sans")]
         public bool ExcludeCommonNameFromSubjectAlternativeNames { get; set; }
 
         /// <summary>

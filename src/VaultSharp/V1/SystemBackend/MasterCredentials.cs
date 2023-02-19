@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The master keys.
         /// </value>
-        [JsonProperty("keys")]
+        [JsonPropertyName("keys")]
         public string[] MasterKeys { get; set; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The master keys.
         /// </value>
-        [JsonProperty("keys_base64")]
+        [JsonPropertyName("keys_base64")]
         public string[] Base64MasterKeys { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The root token.
         /// </value>
-        [JsonProperty("root_token")]
+        [JsonPropertyName("root_token")]
         public string RootToken { get; set; }
     }
 }

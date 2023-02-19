@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.RabbitMQ
 {
@@ -11,13 +11,13 @@ namespace VaultSharp.V1.SecretsEngines.RabbitMQ
         /// <value>
         /// The time to live.
         /// </value>
-        [JsonProperty("ttl")]
+        [JsonPropertyName("ttl")]
         public int TimeToLive { get; set; }
 
         /// <summary>
         /// Specifies the maximum ttl provided in seconds.
         /// </summary>
-        [JsonProperty("max_ttl")]
+        [JsonPropertyName("max_ttl")]
         public int MaximumTimeToLive { get; set; }
     }
 }

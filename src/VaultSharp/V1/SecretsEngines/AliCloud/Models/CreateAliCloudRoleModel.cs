@@ -1,6 +1,6 @@
 ﻿
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.AliCloud.Models
 {
@@ -9,7 +9,7 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud.Models
         [JsonIgnore]
         public List<AliCloudRemotePolicyModel> RemotePolicies { get; set; }
 
-        [JsonProperty("remote_policies")]
+        [JsonPropertyName("remote_policies")]
         public string RemotePoliciesJson
         {
             get
@@ -21,7 +21,7 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud.Models
         [JsonIgnore]
         public List<AliCloudInlinePolicyModel> InlinePolicies { get; set; }
 
-        [JsonProperty("inline_policies")]
+        [JsonPropertyName("inline_policies")]
         public string InlinePoliciesJson
         {
             get
@@ -30,13 +30,13 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud.Models
             }
         }
 
-        [JsonProperty("role_arn")]
+        [JsonPropertyName("role_arn")]
         public string RoleARN { get; set; }
 
-        [JsonProperty("ttl")]
+        [JsonPropertyName("ttl")]
         public string TimeToLive { get; set; }
 
-        [JsonProperty("max_ttl")]
+        [JsonPropertyName("max_ttl")]
         public string MaximumTimeToLive { get; set; }
     }
 }

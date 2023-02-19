@@ -1,5 +1,5 @@
 using System.Net;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -12,7 +12,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// [required]
         /// Specifies base64 encoded plaintext to be encrypted.
         /// </summary>
-        [JsonProperty("plaintext")]
+        [JsonPropertyName("plaintext")]
         public string Base64EncodedPlainText { get; set; }
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         ///  Specifies the base64 encoded context for key derivation. 
         ///  This is required if key derivation is enabled for this key.
         /// </summary>
-        [JsonProperty("context")]
+        [JsonPropertyName("context")]
         public string Base64EncodedContext { get; set; }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         ///  If not set, uses the latest version. 
         ///  Must be greater than or equal to the key's min_encryption_version, if set.
         /// </summary>
-        [JsonProperty("key_version")]
+        [JsonPropertyName("key_version")]
         public int? KeyVersion { get; set; }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The value must be exactly 96 bits (12 bytes) long and the user must ensure that for any given context 
         /// (and thus, any given encryption key) this nonce value is never reused.
         /// </summary>
-        [JsonProperty("nonce")]
+        [JsonPropertyName("nonce")]
         public string Nonce { get; set; }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// This parameter is required when encryption key is expected to be created. 
         /// When performing an upsert operation, the type of key to create.
         /// </summary>
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public TransitKeyType KeyType { get; set; }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <value>
         ///   <c>true</c> if [convergent encryption]; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("convergent_encryption")]
+        [JsonPropertyName("convergent_encryption")]
         public bool ConvergentEncryption { get; set; }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Be warned that some failures (such as failure to decrypt) could be 
         /// indicative of a security breach and should not be ignored.
         /// </summary>
-        [JsonProperty("partial_failure_response_code")]
+        [JsonPropertyName("partial_failure_response_code")]
         public int PartialFailureResponseCode { get; set; }
 
         /// <summary>

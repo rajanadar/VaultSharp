@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 using VaultSharp.Core;
 
 namespace VaultSharp.V1.AuthMethods.AWS
@@ -24,7 +24,7 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// <value>
         /// The Base64 encoded EC2 instance identity document signature.
         /// </value>
-        [JsonProperty("identity")]
+        [JsonPropertyName("identity")]
         public string Identity { get; }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// <value>
         /// The Identity signature.
         /// </value>
-        [JsonProperty("signature")]
+        [JsonPropertyName("signature")]
         public string Signature { get; }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// <value>
         /// The PKCS7 signature.
         /// </value>
-        [JsonProperty("pkcs7")]
+        [JsonPropertyName("pkcs7")]
         public string PKCS7 { get; }
 
         /// <summary>

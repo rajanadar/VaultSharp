@@ -1,14 +1,14 @@
 ﻿
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.AliCloud.Models
 {
     public class AliCloudInlinePolicyModel
     {
-        [JsonProperty("hash")]
+        [JsonPropertyName("hash")]
         public string Hash { get; set; }
 
-        [JsonProperty("policy_document")]
+        [JsonPropertyName("policy_document")]
         public AliCloudInlinePolicyDocumentModel PolicyDocument { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
 {
@@ -10,7 +10,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
         /// <summary>
         ///  Integer version of the crypto key version to use for signing. 
         /// </summary>
-        [JsonProperty("key_version")]
+        [JsonPropertyName("key_version")]
         public int KeyVersion { get; set; }
 
         /// <summary>
@@ -18,7 +18,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
         ///  This digest is the base64 encoded binary value, 
         ///  and must match the signing algorithm digest of the Cloud KMS key,
         /// </summary>
-        [JsonProperty("digest")]
+        [JsonPropertyName("digest")]
         public string Digest { get; set; }
     }
 }

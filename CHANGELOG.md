@@ -1,8 +1,11 @@
 ## 1.12.2.2 (TBD)
 
-**IMROVEMENTS:**
+**BREAKING CHANGES:**
 
   * [GH-300](https://github.com/rajanadar/VaultSharp/issues/300) Remove support for EOL .NET 4.5
+
+**IMROVEMENTS:**
+
   * [GH-301](https://github.com/rajanadar/VaultSharp/pull/301) Add support for reading a secret backend
 
 ## 1.12.2.1 (January 23, 2023)

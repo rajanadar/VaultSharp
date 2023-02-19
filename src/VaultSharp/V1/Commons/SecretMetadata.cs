@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.Commons
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The time.
         /// </value>
-        [JsonProperty("created_time")]
+        [JsonPropertyName("created_time")]
         public string CreatedTime { get; set; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The time.
         /// </value>
-        [JsonProperty("deletion_time")]
+        [JsonPropertyName("deletion_time")]
         public string DeletionTime { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The flag.
         /// </value>
-        [JsonProperty("destroyed")]
+        [JsonPropertyName("destroyed")]
         public bool Destroyed { get; set; }
     }
 }

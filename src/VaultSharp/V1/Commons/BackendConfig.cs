@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.Core
 {
@@ -14,7 +14,7 @@ namespace VaultSharp.Core
         /// <value>
         /// The default lease TTL.
         /// </value>
-        [JsonProperty("default_lease_ttl")]
+        [JsonPropertyName("default_lease_ttl")]
         public int DefaultLeaseTtl { get; set; }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace VaultSharp.Core
         /// <value>
         /// The cache flag.
         /// </value>
-        [JsonProperty("force_no_cache")]
+        [JsonPropertyName("force_no_cache")]
         public bool ForceNoCache { get; set; }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace VaultSharp.Core
         /// <value>
         /// The maximum lease TTL.
         /// </value>
-        [JsonProperty("max_lease_ttl")]
+        [JsonPropertyName("max_lease_ttl")]
         public int MaximumLeaseTtl { get; set; }
     }
 }

@@ -1,12 +1,12 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿using System.Text.Json.Serialization;
+
 
 namespace VaultSharp.Core
 {
     /// <summary>
     /// Represents the BackendListingVisibility
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum BackendListingVisibility
     {
         hidden,

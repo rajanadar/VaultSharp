@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 using VaultSharp.Core;
 
 namespace VaultSharp.V1.AuthMethods.AWS
@@ -47,7 +47,7 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// <value>
         /// The role name.
         /// </value>
-        [JsonProperty("role")]
+        [JsonPropertyName("role")]
         public string RoleName { get; }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// <value>
         /// The nonce.
         /// </value>
-        [JsonProperty("nonce")]
+        [JsonPropertyName("nonce")]
         public string Nonce { get; }
 
         /// <summary>

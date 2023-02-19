@@ -1,5 +1,5 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using System.Text.Json.Serialization;
+
 
 namespace VaultSharp.V1.SecretsEngines.GoogleCloud
 {
@@ -7,7 +7,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
     /// Represents the ServiceAccountKeyAlgorithm.
     /// https://cloud.google.com/iam/reference/rest/v1/projects.serviceAccounts.keys#ServiceAccountKeyAlgorithm
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum ServiceAccountKeyAlgorithm
     {
         /// <summary>

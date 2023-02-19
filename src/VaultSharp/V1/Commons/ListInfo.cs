@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.Commons
 {
@@ -14,7 +14,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The keys.
         /// </value>
-        [JsonProperty("keys")]
+        [JsonPropertyName("keys")]
         public IEnumerable<string> Keys { get; set; }
     }
 }

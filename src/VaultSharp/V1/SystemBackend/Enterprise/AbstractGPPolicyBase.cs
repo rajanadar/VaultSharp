@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend.Enterprise
 {
@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
         /// <value>
         /// The rules.
         /// </value>
-        [JsonProperty("policy")]
+        [JsonPropertyName("policy")]
         public string Policy { get; set; }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
         /// <value>
         /// The level.
         /// </value>
-        [JsonProperty("enforcement_level")]
+        [JsonPropertyName("enforcement_level")]
         public EnforcementLevel EnforcementLevel { get; set; }
     }
 }

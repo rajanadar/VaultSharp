@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// If set, then the <see cref="HmacSingleInput.Base64EncodedInput">input</see> parameter will be ignored.
         /// </summary>
         /// <value>The list of items for processing.</value>
-        [JsonProperty("batch_input", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("batch_input", NullValueHandling = NullValueHandling.Ignore)]
         public List<HmacSingleInput> BatchInput { get; set; }
     }
 
@@ -29,14 +29,14 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Gets or sets the version of the key to use for the operation. Should only be set if an explicit version is required.
         /// </summary>
         /// <value>The key version to use for the operation.</value>
-        [JsonProperty("key_version", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("key_version", NullValueHandling = NullValueHandling.Ignore)]
         public int? KeyVersion { get; set; }
 
         /// <summary>
         /// Gets or sets the base64 encoded input data to generate an HMAC for.
         /// </summary>
         /// <value>The base64 encoded input to generate an HMAC for.</value>
-        [JsonProperty("input")]
+        [JsonPropertyName("input")]
         public string Base64EncodedInput { get; set; }
     }
 }

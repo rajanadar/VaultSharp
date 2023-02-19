@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.Commons
 {
@@ -24,7 +25,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The accessor.
         /// </value>
-        [JsonProperty("accessor")]
+        [JsonPropertyName("accessor")]
         public string Accessor { get; set; }
 
         // raja todo: see if these Config options are strong typable or predicatble.
@@ -37,10 +38,10 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The config options.
         /// </value>
-        [JsonProperty("config")]
+        [JsonPropertyName("config")]
         public Dictionary<string, object> Config { get; set; }
 
-        [JsonProperty("deprecation_status")]
+        [JsonPropertyName("deprecation_status")]
         public string DeprecationStatus { get; set; }
 
         /// <summary>
@@ -49,10 +50,10 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The description.
         /// </value>
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
-        [JsonProperty("external_entropy_access")]
+        [JsonPropertyName("external_entropy_access")]
         public bool ExternalEntropyAccess { get; set; }
 
         /// <summary>
@@ -65,7 +66,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The flag.
         /// </value>
-        [JsonProperty("local")]
+        [JsonPropertyName("local")]
         public bool Local { get; set; }
 
         /// <summary>
@@ -74,7 +75,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The options.
         /// </value>
-        [JsonProperty("options")]
+        [JsonPropertyName("options")]
         public Dictionary<string, object> Options { get; set; }
 
         /// <summary>
@@ -83,16 +84,16 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The plugin name.
         /// </value>
-        [JsonProperty("plugin_name")]
+        [JsonPropertyName("plugin_name")]
         public string PluginName { get; set; }
 
-        [JsonProperty("plugin_version")]
+        [JsonPropertyName("plugin_version")]
         public string PluginVersion { get; set; }
 
-        [JsonProperty("running_plugin_version")]
+        [JsonPropertyName("running_plugin_version")]
         public string RunningPluginVersion { get; set; }
 
-        [JsonProperty("running_sha256")]
+        [JsonPropertyName("running_sha256")]
         public string RunningSHA256 { get; set; }
 
         /// <summary>
@@ -101,10 +102,10 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The flag.
         /// </value>
-        [JsonProperty("seal_wrap")]
+        [JsonPropertyName("seal_wrap")]
         public bool SealWrap { get; set; }
 
-        [JsonProperty("uuid")]
+        [JsonPropertyName("uuid")]
         public string Id { get; set; }
     }
 }

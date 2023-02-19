@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </summary>
         /// <value>The list of results.</value>
 
-        [JsonProperty("batch_results", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("batch_results", NullValueHandling = NullValueHandling.Ignore)]
         public List<VerifySingleResponse> BatchResults { get; set; }
     }
 
@@ -23,7 +23,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Gets or sets a value indicating the verification result.
         /// </summary>
         /// <value><c>true</c> if the valid; otherwise, <c>false</c>.</value>
-        [JsonProperty("valid")]
+        [JsonPropertyName("valid")]
         public bool Valid { get; set; }
     }
 }

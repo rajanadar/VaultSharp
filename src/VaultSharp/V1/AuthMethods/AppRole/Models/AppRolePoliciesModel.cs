@@ -1,14 +1,14 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 using System.Collections.Generic;
 
 namespace VaultSharp.V1.AuthMethods.AppRole.Models
 {
     public class AppRolePoliciesModel
     {
-        [JsonProperty("policies")]
+        [JsonPropertyName("policies")]
         public List<string> Policies { get; set; }
 
-        [JsonProperty("token_policies")]
+        [JsonPropertyName("token_policies")]
         public List<string> TokenPolicies { get; set; }
     }
 }

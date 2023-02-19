@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
-using Newtonsoft.Json;
+using System.Text.Json;
 using VaultSharp.V1.AuthMethods;
 
 namespace VaultSharp.Samples
@@ -138,7 +138,7 @@ namespace VaultSharp.Samples
 
             Console.WriteLine(line + line);
             Console.WriteLine(_responseContent);
-            Console.WriteLine(JsonConvert.SerializeObject(value));
+            Console.WriteLine(JsonSerializer.Serialize(value, new JsonSerializerOptions { WriteIndented = true }));
             Console.WriteLine(line + line);
             Console.WriteLine();
             Console.WriteLine();

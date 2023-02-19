@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend.MFA.Duo
 {
@@ -11,13 +11,13 @@ namespace VaultSharp.V1.SystemBackend.MFA.Duo
         /// Gets or sets the mount to tie this method to for use in automatic mappings. 
         /// The mapping will use the Name field of Aliases associated with this mount as the username in the mapping.
         /// </summary>
-        [JsonProperty("mount_accessor")]
+        [JsonPropertyName("mount_accessor")]
         public string MountAccessor { get; set; }
 
         /// <summary>
         /// Gets or sets the identifier.
         /// </summary>
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
         /// <summary>
@@ -31,31 +31,31 @@ namespace VaultSharp.V1.SystemBackend.MFA.Duo
         ///     alias.metadata.[key]: The value of the Alias's metadata parameter
         ///     entity.metadata.[key]: The value of the Entity's metadata paramater
         /// </summary>
-        [JsonProperty("username_format")]
+        [JsonPropertyName("username_format")]
         public string UsernameFormat { get; set; }
 
         /// <summary>
         /// Gets or sets the SecretsEngine key for Duo.
         /// </summary>
-        [JsonProperty("secret_key")]
+        [JsonPropertyName("secret_key")]
         public string SecretKey  { get; set; }
 
         /// <summary>
         /// Gets or sets the Integration key for Duo.
         /// </summary>
-        [JsonProperty("integration_key")]
+        [JsonPropertyName("integration_key")]
         public string IntegrationKey { get; set; }
 
         /// <summary>
         /// Gets or sets the API hostname for Duo.
         /// </summary>
-        [JsonProperty("api_hostname")]
+        [JsonPropertyName("api_hostname")]
         public string ApiHostname { get; set; }
 
         /// <summary>
         /// Gets or sets the Push information for Duo.
         /// </summary>
-        [JsonProperty("push_info")]
+        [JsonPropertyName("push_info")]
         public string PushInfo { get; set; }
     }
 }

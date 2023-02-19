@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The nonce.
         /// </value>
-        [JsonProperty("nonce")]
+        [JsonPropertyName("nonce")]
         public string Nonce { get; set; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         ///   <c>true</c> if started; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("started")]
+        [JsonPropertyName("started")]
         public bool Started { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The secret threshold.
         /// </value>
-        [JsonProperty("t")]
+        [JsonPropertyName("t")]
         public int SecretThreshold { get; set; }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The secret shares.
         /// </value>
-        [JsonProperty("n")]
+        [JsonPropertyName("n")]
         public int SecretShares { get; set; }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The progress.
         /// </value>
-        [JsonProperty("progress")]
+        [JsonPropertyName("progress")]
         public int UnsealKeysProvided { get; set; }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The required unseal keys.
         /// </value>
-        [JsonProperty("required")]
+        [JsonPropertyName("required")]
         public int RequiredUnsealKeys { get; set; }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The PGP finger prints.
         /// </value>
-        [JsonProperty("pgp_fingerprints")]
+        [JsonPropertyName("pgp_fingerprints")]
         public string[] PGPFingerPrints { get; set; }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         ///   <c>true</c> if backup; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("backup")]
+        [JsonPropertyName("backup")]
         public bool Backup { get; set; }
     }
 }

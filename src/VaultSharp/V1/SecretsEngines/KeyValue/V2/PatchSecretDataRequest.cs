@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
 {
@@ -18,14 +18,14 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// key, thus the provided cas value must be greater than 0.
         /// </para>
         /// </summary>
-        [JsonProperty("options")]
+        [JsonPropertyName("options")]
         public Dictionary<string, object> Options { get; set; }
 
         /// <summary>
         /// The contents of the data map will be applied as a partial update 
         /// to the existing entry via a JSON merge patch to the existing entry.
         /// </summary>
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public Dictionary<string, object> Data { get; set; }
     }
 }

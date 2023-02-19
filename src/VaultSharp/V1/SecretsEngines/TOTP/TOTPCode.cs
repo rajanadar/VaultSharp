@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.TOTP
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
         /// <value>
         /// The TOTP code.
         /// </value>
-        [JsonProperty("code")]
+        [JsonPropertyName("code")]
         public string Code { get; set; }
     }
 }

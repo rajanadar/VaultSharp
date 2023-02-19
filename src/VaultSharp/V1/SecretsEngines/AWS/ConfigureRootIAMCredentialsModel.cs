@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.AWS
 {
     public class ConfigureRootIAMCredentialsModel : RootIAMCredentialsConfigModel
     {
-        [JsonProperty("secret_key")]
+        [JsonPropertyName("secret_key")]
         public string SecretKey { get; set; }
 
         public ConfigureRootIAMCredentialsModel()

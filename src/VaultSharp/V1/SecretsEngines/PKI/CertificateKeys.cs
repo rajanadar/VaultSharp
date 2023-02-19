@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.PKI
 {
@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <value>
         /// List of certificate keys (serial numbers)
         /// </value>
-        [JsonProperty("keys")]
+        [JsonPropertyName("keys")]
         public List<string> Keys { get; set; }
     }
 }

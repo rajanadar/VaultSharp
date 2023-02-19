@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Nomad
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.Nomad
         /// <value>
         /// The accessor id.
         /// </value>
-        [JsonProperty("accessor_id")]
+        [JsonPropertyName("accessor_id")]
         public string AccessorId { get; set; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace VaultSharp.V1.SecretsEngines.Nomad
         /// <value>
         /// The secret id.
         /// </value>
-        [JsonProperty("secret_id")]
+        [JsonPropertyName("secret_id")]
         public string SecretId { get; set; }
     }
 }

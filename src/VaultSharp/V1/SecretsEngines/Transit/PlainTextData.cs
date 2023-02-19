@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <value>
         /// The plain text.
         /// </value>
-        [JsonProperty("plaintext", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("plaintext", NullValueHandling = NullValueHandling.Ignore)]
         public string Base64EncodedPlainText { get; set; }
     }
 }

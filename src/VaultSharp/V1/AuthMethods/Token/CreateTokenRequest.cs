@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.AuthMethods.Token
 {
@@ -13,13 +13,13 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// Can only be specified by a root token. 
         /// Otherwise, the token ID is a randomly generated value.
         /// </summary>
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
         /// <summary>
         /// The name of the token role.
         /// </summary>
-        [JsonProperty("role_name")]
+        [JsonPropertyName("role_name")]
         public string RoleName { get; set; }
 
         /// <summary>
@@ -27,20 +27,20 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// This must be a subset of the policies belonging to the token making the request, unless root. 
         /// If not specified, defaults to all the policies of the calling token.
         /// </summary>
-        [JsonProperty("policies")]
+        [JsonPropertyName("policies")]
         public IList<string> Policies { get; set; }
 
         /// <summary>
         /// A map of string to string valued metadata. 
         /// This is passed through to the audit devices.
         /// </summary>
-        [JsonProperty("meta")]
+        [JsonPropertyName("meta")]
         public IDictionary<string, string> Metadata { get; set; }
 
         /// <summary>
         /// When set to true, the token created will not have a parent.
         /// </summary>
-        [JsonProperty("no_parent")]
+        [JsonPropertyName("no_parent")]
         public bool NoParent { get; set; }
         
         /// <summary>
@@ -52,28 +52,28 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// <summary>
         /// If true the default policy will not be contained in this token's policy set.
         /// </summary>
-        [JsonProperty("no_default_policy")]
+        [JsonPropertyName("no_default_policy")]
         public bool NoDefaultPolicy { get; set; }
 
         /// <summary>
         /// Set to false to disable the ability of the token to be renewed past its initial TTL. 
         /// Setting the value to true will allow the token to be renewable up to the system/mount maximum TTL.
         /// </summary>
-        [JsonProperty("renewable")]
+        [JsonPropertyName("renewable")]
         public bool Renewable { get; set; }
 
         /// <summary>
         /// The TTL period of the token, provided as "1h", where hour is the largest suffix. 
         /// If not provided, the token is valid for the default lease TTL, or indefinitely if the root policy is used.
         /// </summary>
-        [JsonProperty("ttl")]
+        [JsonPropertyName("ttl")]
         public string TimeToLive { get; set; }
 
         /// <summary>
         /// The token type. Can be "batch" or "service". 
         /// Defaults to the type specified by the role configuration named by role_name.
         /// </summary>
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string TokenType { get; set; }
 
         /// <summary>
@@ -82,13 +82,13 @@ namespace VaultSharp.V1.AuthMethods.Token
         ///  updates to the system/mount max TTL value will have no effect at renewal time -- 
         ///  the token will never be able to be renewed or used past the value set at issue time.
         /// </summary>
-        [JsonProperty("explicit_max_ttl")]
+        [JsonPropertyName("explicit_max_ttl")]
         public string ExplicitMaxTimeToLive { get; set; }
 
         /// <summary>
         /// The display name of the token.
         /// </summary>
-        [JsonProperty("display_name")]
+        [JsonPropertyName("display_name")]
         public string DisplayName { get; set; }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// This can be used to create a one-time-token or limited use token. 
         /// The value of 0 has no limit to the number of uses.
         /// </summary>
-        [JsonProperty("num_uses")]
+        [JsonPropertyName("num_uses")]
         public int NumberOfUses { get; set; }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// but every renewal will use the given period. 
         /// Requires a root token or one with the sudo capability.
         /// </summary>
-        [JsonProperty("period")]
+        [JsonPropertyName("period")]
         public string Period { get; set; }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// must be listed in allowed_entity_aliases. 
         /// If this has been specified, the entity will not be inherited from the parent.
         /// </summary>
-        [JsonProperty("entity_alias")]
+        [JsonPropertyName("entity_alias")]
         public string EntityAlias { get; set; }
 
         public CreateTokenRequest()

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Specifies a list of items to be decrypted in a single batch. 
         /// When this parameter is set, if the parameters 'ciphertext', 'context' and 'nonce' are also set, they will be ignored.
         /// </summary>
-        [JsonProperty("batch_input", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("batch_input", NullValueHandling = NullValueHandling.Ignore)]
         public List<DecryptionItem> BatchedDecryptionItems { get; set; }
     }
 }

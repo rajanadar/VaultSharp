@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -10,7 +10,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <summary>
         /// Gets or sets a the hash.
         /// </summary>
-        [JsonProperty("hash")]
+        [JsonPropertyName("hash")]
         public string Hash { get; set; }
     }
 }
