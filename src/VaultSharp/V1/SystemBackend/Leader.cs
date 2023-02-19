@@ -73,13 +73,13 @@ namespace VaultSharp.V1.SystemBackend
         /// <summary>
         /// Gets or sets the raft committed index.
         /// </summary>
-        [JsonPropertyName("raft_committed_index", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("raft_committed_index")]
         public long RaftCommittedIndex { get; set; }
 
         /// <summary>
         /// Gets or sets the raft applied index.
         /// </summary>
-        [JsonPropertyName("raft_applied_index", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("raft_applied_index")]
         public long RaftAppliedIndex { get; set; }
     }
 }

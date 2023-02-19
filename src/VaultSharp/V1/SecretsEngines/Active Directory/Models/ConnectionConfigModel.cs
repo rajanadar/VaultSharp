@@ -11,7 +11,7 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory.Models
         [JsonPropertyName("certificate")]
         public string X509PEMEncodedCertificate { get; set; }
 
-        [JsonPropertyName("formatter", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("formatter")]
         [Obsolete]
         public string LegacyParameterFormatter { get; set; }
 
@@ -21,7 +21,7 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory.Models
         [JsonPropertyName("last_rotation_tolerance")]
         public long LastRotationTolerance { get; set; }
 
-        [JsonPropertyName("length", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("length")]
         [Obsolete]
         public string LegacyParameterLength { get; set; }
 

@@ -12,10 +12,7 @@ namespace VaultSharp.V1.SystemBackend
     {
         public override void Write(Utf8JsonWriter writer, AbstractAuditBackend value, JsonSerializerOptions serializer)
         {
-            if (value != null)
-            {
-                writer.WriteStringValue(JsonSerializer.Serialize(value));
-            }
+            // JsonSerializer.Serialize(writer, value);
         }
 
         public override AbstractAuditBackend Read(ref Utf8JsonReader reader, Type type, JsonSerializerOptions options)
@@ -34,19 +31,19 @@ namespace VaultSharp.V1.SystemBackend
                 }
 
                 var auditBackendType = new AuditBackendType(typeProperty.GetString());
-                var jsonObject = jsonDocument.RootElement.GetRawText();
+                var jsonString = jsonDocument.RootElement.GetRawText();
 
                 if (auditBackendType == AuditBackendType.File)
                 {
-                    return (FileAuditBackend)JsonSerializer.Deserialize(jsonObject, type, options);
+                    return JsonSerializer.Deserialize<FileAuditBackend>(jsonString);
                 }
 
                 if (auditBackendType == AuditBackendType.Syslog)
                 {
-                    return (SyslogAuditBackend)JsonSerializer.Deserialize(jsonObject, type, options);
+                    return JsonSerializer.Deserialize<SyslogAuditBackend>(jsonString);
                 }
 
-                return (CustomAuditBackend)JsonSerializer.Deserialize(jsonObject, type, options);
+                return JsonSerializer.Deserialize<CustomAuditBackend>(jsonString);
             }
         }
     }

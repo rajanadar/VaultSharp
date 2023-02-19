@@ -29,7 +29,7 @@ namespace VaultSharp.Core
         [JsonPropertyName("allowed_managed_keys")]
         public List<string> AllowedManagedKeys { get; set; }
 
-        [JsonPropertyName("plugin_version", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("plugin_version")]
         public string PluginVersion { get; set; }
     }
 }

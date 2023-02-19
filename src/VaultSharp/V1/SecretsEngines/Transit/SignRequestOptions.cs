@@ -16,7 +16,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Gets or sets the list of input data to calculate signatures for.
         /// </summary>
         /// <value>The list of input data.</value>
-        [JsonPropertyName("batch_input", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("batch_input")]
         public List<SignSingleInput> BatchInput { get; set; }
     }
 
@@ -32,21 +32,21 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Gets or sets the version of the key to use for the operation. Should only be set if an explicit version is required.
         /// </summary>
         /// <value>The key version to use for the operation.</value>
-        [JsonPropertyName("key_version", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("key_version")]
         public int? KeyVersion { get; set; }
 
         /// <summary>
         /// Gets or sets the base64 encoded input data to be signed.
         /// </summary>
         /// <value>The base64 encoded input.</value>
-        [JsonPropertyName("input", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("input")]
         public string Base64EncodedInput { get; set; }
 
         /// <summary>
         /// Gets or sets the base64 encoded key derivation context, for use with ECDSA keys only.
         /// </summary>
         /// <value>The base64 encoded key derivation context.</value>
-        [JsonPropertyName("context", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("context")]
         public string Base64EncodedKeyDerivationContext { get; set; }
 
         /// <summary>
@@ -60,14 +60,14 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// When using an RSA key, specifies which RSA signature algorithm to use for signing.
         /// </summary>
         /// <value>The signature algorithm to use for signing.</value>
-        [JsonPropertyName("signature_algorithm", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("signature_algorithm")]
         public SignatureAlgorithm? SignatureAlgorithm { get; set; } = Transit.SignatureAlgorithm.pss;
 
         /// <summary>
         /// When using an ECDSA key, specifies the way in which the signature should be marshaled.
         /// </summary>
         /// <value>The marshaling algorithm.</value>
-        [JsonPropertyName("marshaling_algorithm", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("marshaling_algorithm")]
         public MarshalingAlgorithm? MarshalingAlgorithm { get; set; } = Transit.MarshalingAlgorithm.asn1;
 
         [JsonPropertyName("salt_length")]

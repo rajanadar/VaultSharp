@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 using VaultSharp.Core;
@@ -287,8 +291,12 @@ namespace VaultSharp.V1.AuthMethods.AppRole
 
             List<string> nullValue = null;
 
-            JArray cidrs = secret.Data["secret_id_bound_cidrs"] as JArray;
-            return _polymath.GetMappedSecret(secret, cidrs != null ? cidrs.ToObject<List<string>>() : nullValue);
+            JsonArray cidrs = secret.Data["secret_id_bound_cidrs"] as JsonArray;
+            var r = new List<string>();
+
+            cidrs.ToList().ForEach(c => r.Add(c.ToString()));
+
+            return _polymath.GetMappedSecret(secret, cidrs != null ? r : nullValue);
         }
 
         public async Task WriteRoleSecretIdBoundCIDRsAsync(string roleName, List<string> secretIdBoundCIDRs, string mountPoint = AuthMethodDefaultPaths.AppRole)
@@ -314,10 +322,14 @@ namespace VaultSharp.V1.AuthMethods.AppRole
 
             var secret = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/token-bound-cidrs", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
-            List<string> nullValue = null;
+            List<string> cids = null;
 
-            JArray cidrs = secret.Data["token_bound_cidrs"] as JArray;
-            return _polymath.GetMappedSecret(secret, cidrs != null ? cidrs.ToObject<List<string>>() : nullValue);
+            if (secret.Data["token_bound_cidrs"] != null)
+            {
+                cids = JsonSerializer.Deserialize<List<string>>(secret.Data["token_bound_cidrs"] as JsonArray);
+            }
+
+            return _polymath.GetMappedSecret(secret, cids);
         }
 
         public async Task WriteRoleTokenBoundCIDRsAsync(string roleName, List<string> tokenBoundCIDRs, string mountPoint = AuthMethodDefaultPaths.AppRole)

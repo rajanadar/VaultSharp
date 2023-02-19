@@ -11,6 +11,8 @@ using VaultSharp.V1.AuthMethods;
 using VaultSharp.V1.AuthMethods.Cert;
 using VaultSharp.V1.AuthMethods.Kerberos;
 using VaultSharp.V1.Commons;
+using System.Text.Json.Nodes;
+using System.Text.Json;
 
 namespace VaultSharp.Core
 {
@@ -135,7 +137,7 @@ namespace VaultSharp.Core
 
         public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false)
         {
-            await MakeVaultApiRequest<JToken>(resourcePath, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await MakeVaultApiRequest<JsonObject>(resourcePath, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<TResponse> MakeVaultApiRequest<TResponse>(string mountPoint, string path, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null, string wrapTimeToLive = null, bool unauthenticated = false) where TResponse : class 
@@ -198,7 +200,7 @@ namespace VaultSharp.Core
                 var requestUri = new Uri(_httpClient.BaseAddress, new Uri(resourcePath, UriKind.Relative));
 
                 var requestContent = requestData != null
-                    ? new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8)
+                    ? new StringContent(JsonSerializer.Serialize(requestData), Encoding.UTF8)
                     : null;
 
                 HttpRequestMessage httpRequestMessage = null;
@@ -232,7 +234,7 @@ namespace VaultSharp.Core
                         httpRequestMessage = new HttpRequestMessage(httpMethod, requestUri)
                         {
                             Content = requestData != null 
-                            ? new StringContent(JsonConvert.SerializeObject(requestData), Encoding.UTF8, "application/merge-patch+json")
+                            ? new StringContent(JsonSerializer.Serialize(requestData), Encoding.UTF8, "application/merge-patch+json")
                             : null
                         };
 
@@ -270,7 +272,7 @@ namespace VaultSharp.Core
                 {
                     if (!string.IsNullOrWhiteSpace(responseText))
                     {
-                        var response = rawResponse ? (responseText as TResponse) : JsonConvert.DeserializeObject<TResponse>(responseText);
+                        var response = rawResponse ? (responseText as TResponse) : JsonSerializer.Deserialize<TResponse>(responseText);
                         return response;
                     }
 

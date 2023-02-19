@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.CodeDom;
+using System.Collections.Generic;
 using System.Linq;
-
+using System.Text.Json.Nodes;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -18,11 +19,13 @@ namespace VaultSharp.V1.SystemBackend
             {
                 if (this.ContainsKey("capabilities"))
                 {
-                    var values = this["capabilities"] as JArray;
+                    var values = this["capabilities"] as JsonArray;
+                    var results = new List<string>();
 
                     if (values != null)
                     {
-                        return values.ToObject<List<string>>();
+                        values.ToList().ForEach(jn => results.Add(jn.ToString()));
+                        return results;
                     }                     
                 }
 

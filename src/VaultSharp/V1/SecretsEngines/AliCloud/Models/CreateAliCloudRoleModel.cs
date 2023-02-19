@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.AliCloud.Models
@@ -14,7 +15,7 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud.Models
         {
             get
             {
-                return JsonConvert.SerializeObject(RemotePolicies);
+                return JsonSerializer.Serialize(RemotePolicies);
             }
         }
 
@@ -26,7 +27,7 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud.Models
         {
             get
             {
-                return JsonConvert.SerializeObject(InlinePolicies);
+                return JsonSerializer.Serialize(InlinePolicies);
             }
         }
 

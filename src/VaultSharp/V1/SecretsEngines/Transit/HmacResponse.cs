@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Gets or sets the list of results if multiple HMACs were requested.
         /// </summary>
         /// <value>The list of results.</value>
-        [JsonPropertyName("batch_results", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("batch_results")]
         public List<HmacBatchResponse> BatchResults { get; set; }
     }
 
@@ -30,7 +30,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Gets or sets the error response from Vault when unable to calculate an HMAC.
         /// </summary>
         /// <value>The error response.</value>
-        [JsonPropertyName("error", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("error")]
         public string ErrorResponse { get; set; }
     }
 }

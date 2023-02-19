@@ -13,10 +13,10 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <value>
         /// The cipher text.
         /// </value>
-        [JsonPropertyName("ciphertext", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("ciphertext")]
         public string CipherText { get; set; }
 
-        [JsonPropertyName("key_version", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("key_version")]
         public int? KeyVersion { get; set; }
     }
 }

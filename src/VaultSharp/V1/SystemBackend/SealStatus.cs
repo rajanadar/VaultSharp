@@ -103,19 +103,19 @@ namespace VaultSharp.V1.SystemBackend
         [JsonPropertyName("storage_type")]
         public string StorageType { get; set; }
 
-        [JsonPropertyName("hcp_link_status", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("hcp_link_status")]
         public string HCPLinkStatus { get; set; }
 
-        [JsonPropertyName("hcp_link_resource_ID", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("hcp_link_resource_ID")]
         public string HCPLinkResourceID { get; set; }
 
-        [JsonPropertyName("warnings", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("warnings")]
         public List<string> Warnings { get; set; }
 
-        [JsonPropertyName("ha_enabled", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("ha_enabled")]
         public bool? HighAvailabilityEnabled { get; set; }
 
-        [JsonPropertyName("active_time", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("active_time")]
         public DateTimeOffset? ActiveTime { get; set; }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The name of the cluster.
         /// </value>
-        [JsonPropertyName("cluster_name", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("cluster_name")]
         public string ClusterName { get; set; }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The cluster identifier.
         /// </value>
-        [JsonPropertyName("cluster_id", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("cluster_id")]
         public string ClusterId { get; set; }
     }
 }

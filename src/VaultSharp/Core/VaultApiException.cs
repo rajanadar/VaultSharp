@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace VaultSharp.Core
@@ -66,7 +67,7 @@ namespace VaultSharp.Core
 
             try
             {
-                var structured = JsonConvert.DeserializeObject<Dictionary<string, IEnumerable<string>>>(message);
+                var structured = JsonSerializer.Deserialize<Dictionary<string, IEnumerable<string>>>(message);
 
                 if (structured.ContainsKey("errors"))
                 {

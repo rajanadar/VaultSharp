@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Gets or sets the list of input data to verify signatures or HMACs for.
         /// </summary>
         /// <value>The list of input data.</value>
-        [JsonPropertyName("batch_input", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("batch_input")]
         public List<VerifySingleInput> BatchInput { get; set; }
     }
 
@@ -36,7 +36,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Gets or sets the signature to verify.
         /// </summary>
         /// <value>The signature.</value>
-        [JsonPropertyName("signature", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("signature")]
         public string Signature { get; set; }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Gets or sets the base64 encoded key derivation context, for use with ECDSA keys only.
         /// </summary>
         /// <value>The base64 encoded key derivation context.</value>
-        [JsonPropertyName("context", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("context")]
         public string Base64EncodedKeyDerivationContext { get; set; }
 
         /// <summary>
@@ -64,14 +64,14 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// When using an RSA key, specifies which RSA signature algorithm to use for signature verification.
         /// </summary>
         /// <value>The signature algorithm to use for signing.</value>
-        [JsonPropertyName("signature_algorithm", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("signature_algorithm")]
         public SignatureAlgorithm? SignatureAlgorithm { get; set; } = Transit.SignatureAlgorithm.pss;
 
         /// <summary>
         /// When using an ECDSA key, specifies the way in which the signature should be unmarshaled.
         /// </summary>
         /// <value>The marshaling algorithm.</value>
-        [JsonPropertyName("marshaling_algorithm", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("marshaling_algorithm")]
         public MarshalingAlgorithm? MarshalingAlgorithm { get; set; } = Transit.MarshalingAlgorithm.asn1;
 
         [JsonPropertyName("salt_length")]

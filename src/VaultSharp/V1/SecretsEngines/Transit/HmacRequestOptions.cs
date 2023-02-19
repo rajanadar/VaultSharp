@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// If set, then the <see cref="HmacSingleInput.Base64EncodedInput">input</see> parameter will be ignored.
         /// </summary>
         /// <value>The list of items for processing.</value>
-        [JsonPropertyName("batch_input", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("batch_input")]
         public List<HmacSingleInput> BatchInput { get; set; }
     }
 
@@ -29,7 +29,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Gets or sets the version of the key to use for the operation. Should only be set if an explicit version is required.
         /// </summary>
         /// <value>The key version to use for the operation.</value>
-        [JsonPropertyName("key_version", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("key_version")]
         public int? KeyVersion { get; set; }
 
         /// <summary>
