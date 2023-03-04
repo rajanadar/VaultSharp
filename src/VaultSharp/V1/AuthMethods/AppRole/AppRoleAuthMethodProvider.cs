@@ -290,13 +290,19 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             var secret = await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/secret-id-bound-cidrs", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
             List<string> nullValue = null;
+            var results = new List<string>();
 
-            JsonArray cidrs = secret.Data["secret_id_bound_cidrs"] as JsonArray;
-            var r = new List<string>();
+            if (secret.Data["secret_id_bound_cidrs"] != null)
+            {
+                var enumerator = ((JsonElement)secret.Data["secret_id_bound_cidrs"]).EnumerateArray();
 
-            cidrs.ToList().ForEach(c => r.Add(c.ToString()));
+                foreach (var item in enumerator)
+                {
+                    results.Add(item.GetString());
+                }
+            }
 
-            return _polymath.GetMappedSecret(secret, cidrs != null ? r : nullValue);
+            return _polymath.GetMappedSecret(secret, results.Any() ? results : nullValue);
         }
 
         public async Task WriteRoleSecretIdBoundCIDRsAsync(string roleName, List<string> secretIdBoundCIDRs, string mountPoint = AuthMethodDefaultPaths.AppRole)
@@ -326,7 +332,19 @@ namespace VaultSharp.V1.AuthMethods.AppRole
 
             if (secret.Data["token_bound_cidrs"] != null)
             {
-                cids = JsonSerializer.Deserialize<List<string>>(secret.Data["token_bound_cidrs"] as JsonArray);
+                var enumerator = ((JsonElement)secret.Data["token_bound_cidrs"]).EnumerateArray();
+
+                var results = new List<string>();
+
+                foreach (var item in enumerator)
+                {
+                    results.Add(item.GetString());
+                }
+
+                if (results.Any())
+                {
+                    cids = results;
+                }
             }
 
             return _polymath.GetMappedSecret(secret, cids);

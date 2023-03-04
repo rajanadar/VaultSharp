@@ -202,7 +202,7 @@ namespace VaultSharp.Samples
             var readPostPatchSecret = _authenticatedVaultClient.V1.Secrets.KeyValue.V2.ReadSecretAsync(patchSecretPath, mountPoint: mountPoint).Result;
             DisplayJson(readPostPatchSecret);
             Assert.True(readPostPatchSecret.Data.Data.Count == 3);
-            Assert.True((long)readPostPatchSecret.Data.Data["k2"] == 2);            
+            Assert.True(Convert.ToInt64(readPostPatchSecret.Data.Data["k2"].ToString()) == 2);            
 
             var writeCustomMetadataRequest = new CustomMetadataRequest
             {
