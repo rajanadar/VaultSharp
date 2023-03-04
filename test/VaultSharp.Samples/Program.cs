@@ -49,12 +49,12 @@ namespace VaultSharp.Samples
                         Console.WriteLine();
                         Console.Write("I think we are done here. Press any key to exit...");
                     }
-                    finally
+                    catch (Exception ex)
                     {
-                        sw.Flush();
                         sw.Close();
-                        fs.Flush();
                         fs.Close();
+
+                        throw ex;
                     }
                 }
             }
@@ -83,9 +83,12 @@ namespace VaultSharp.Samples
                     var requestContent = req.Content != null ? req.Content.ReadAsStringAsync().Result : "";
 
                     Console.WriteLine("===Start Request===");
+
                     Console.WriteLine(req.Method + "   " + req.RequestUri.ToString());
                     Console.WriteLine(requestContent);
+                    
                     Console.WriteLine("===End Request===");
+                    Console.WriteLine();
                 },
 
                 AfterApiResponseAction = r =>
