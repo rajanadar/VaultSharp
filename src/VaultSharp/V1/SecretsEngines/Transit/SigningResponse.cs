@@ -13,6 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </summary>
         /// <value>The list of results.</value>
         [JsonPropertyName("batch_results")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<SigningBatchResponse> BatchResults { get; set; }
     }
 
@@ -23,10 +24,12 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </summary>
         /// <value>The error.</value>
         [JsonPropertyName("error")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Error { get; set; }
 
 
         [JsonPropertyName("key_version")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? KeyVersion { get; set; }
 
         /// <summary>
@@ -34,6 +37,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </summary>
         /// <value>The derived public key.</value>
         [JsonPropertyName("publickey")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string PublicKey { get; set; }
 
         /// <summary>
@@ -41,6 +45,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </summary>
         /// <value>The signature.</value>
         [JsonPropertyName("signature")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Signature { get; set; }
     }
 }

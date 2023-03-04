@@ -14,6 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </summary>
         /// <value>The list of input data.</value>
         [JsonPropertyName("batch_input")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<VerifySingleInput> BatchInput { get; set; }
     }
 
@@ -37,6 +38,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </summary>
         /// <value>The signature.</value>
         [JsonPropertyName("signature")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Signature { get; set; }
 
         /// <summary>
@@ -51,6 +53,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </summary>
         /// <value>The base64 encoded key derivation context.</value>
         [JsonPropertyName("context")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Base64EncodedKeyDerivationContext { get; set; }
 
         /// <summary>
@@ -65,6 +68,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </summary>
         /// <value>The signature algorithm to use for signing.</value>
         [JsonPropertyName("signature_algorithm")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public SignatureAlgorithm? SignatureAlgorithm { get; set; } = Transit.SignatureAlgorithm.pss;
 
         /// <summary>
@@ -72,6 +76,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </summary>
         /// <value>The marshaling algorithm.</value>
         [JsonPropertyName("marshaling_algorithm")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public MarshalingAlgorithm? MarshalingAlgorithm { get; set; } = Transit.MarshalingAlgorithm.asn1;
 
         [JsonPropertyName("salt_length")]

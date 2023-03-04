@@ -20,6 +20,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
         /// Encrypted cipher text.
         /// </summary>
         [JsonPropertyName("ciphertext")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string CipherText { get; set; }
     }
 }

@@ -226,14 +226,9 @@ namespace VaultSharp.Samples
                 MarshalingAlgorithm = MarshalingAlgorithm.asn1
             };
 
-            // CRITICAL: It says "key type chacha20-poly1305 does not support verification vault"
-            // However the same code works on master branch.
-            // https://github.com/hashicorp/vault/blob/fbe09168e9abdc9b81f5d9d5690c5199561bbaf0/builtin/logical/transit/path_sign_verify.go#L613
-            // Mayeb managed key?
-
-            // var verifyHmacResponse = _authenticatedVaultClient.V1.Secrets.Transit.VerifySignedDataAsync(keyName, verifyHmacOptions, mountPoint).Result;
-            // DisplayJson(verifyHmacResponse);
-            // Assert.True(verifyHmacResponse.Data.Valid);
+            var verifyHmacResponse = _authenticatedVaultClient.V1.Secrets.Transit.VerifySignedDataAsync(keyName, verifyHmacOptions, mountPoint).Result;
+            DisplayJson(verifyHmacResponse);
+            Assert.True(verifyHmacResponse.Data.Valid);
 
             // Run Hash
             var hashOpts = new HashRequestOptions

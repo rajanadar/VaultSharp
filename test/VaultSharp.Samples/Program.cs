@@ -161,7 +161,7 @@ namespace VaultSharp.Samples
 
             Console.WriteLine(line + line);
             Console.WriteLine(_responseContent);
-            Console.WriteLine(JsonSerializer.Serialize(value, new JsonSerializerOptions { WriteIndented = true }));
+            Console.WriteLine(JsonSerializer.Serialize(value, new JsonSerializerOptions { WriteIndented = false }));
             Console.WriteLine(line + line);
             Console.WriteLine();
             Console.WriteLine();

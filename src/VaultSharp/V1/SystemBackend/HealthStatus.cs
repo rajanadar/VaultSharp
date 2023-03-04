@@ -78,6 +78,7 @@ namespace VaultSharp.V1.SystemBackend
         /// The name of the cluster.
         /// </value>
         [JsonPropertyName("cluster_name")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string ClusterName { get; set; }
 
         /// <summary>
@@ -87,6 +88,7 @@ namespace VaultSharp.V1.SystemBackend
         /// The cluster identifier.
         /// </value>
         [JsonPropertyName("cluster_id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string ClusterId { get; set; }
 
         /// <summary>

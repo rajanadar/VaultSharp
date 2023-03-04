@@ -14,6 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// When this parameter is set, if the parameters 'ciphertext', 'context' and 'nonce' are also set, they will be ignored.
         /// </summary>
         [JsonPropertyName("batch_input")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<DecryptionItem> BatchedDecryptionItems { get; set; }
     }
 }

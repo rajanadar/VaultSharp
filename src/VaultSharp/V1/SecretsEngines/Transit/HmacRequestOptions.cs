@@ -14,6 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </summary>
         /// <value>The list of items for processing.</value>
         [JsonPropertyName("batch_input")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<HmacSingleInput> BatchInput { get; set; }
     }
 
@@ -30,6 +31,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </summary>
         /// <value>The key version to use for the operation.</value>
         [JsonPropertyName("key_version")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? KeyVersion { get; set; }
 
         /// <summary>

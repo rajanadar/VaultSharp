@@ -26,6 +26,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The plain text.
         /// </value>
         [JsonPropertyName("plaintext")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Base64EncodedPlainText { get; set; }
     }
 }

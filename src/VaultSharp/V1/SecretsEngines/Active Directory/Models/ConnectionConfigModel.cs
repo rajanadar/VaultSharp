@@ -13,6 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory.Models
 
         [JsonPropertyName("formatter")]
         [Obsolete]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string LegacyParameterFormatter { get; set; }
 
         [JsonPropertyName("insecure_tls")]
@@ -23,6 +24,7 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory.Models
 
         [JsonPropertyName("length")]
         [Obsolete]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string LegacyParameterLength { get; set; }
 
         [JsonPropertyName("max_ttl")]
