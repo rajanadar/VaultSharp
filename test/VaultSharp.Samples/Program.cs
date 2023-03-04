@@ -34,22 +34,33 @@ namespace VaultSharp.Samples
                     var existingOut = Console.Out;
                     Console.SetOut(sw);
 
-                    var settings = GetVaultClientSettings();
-                    _unauthenticatedVaultClient = new VaultClient(settings);
+                    try
+                    {
+                        var settings = GetVaultClientSettings();
+                        _unauthenticatedVaultClient = new VaultClient(settings);
 
-                    _unauthenticatedVaultClient.V1.Auth.ResetVaultToken();
+                        _unauthenticatedVaultClient.V1.Auth.ResetVaultToken();
 
-                    Console.WriteLine("\n RunAllIntegrationTests \n");
-                    RunAllIntegrationTests();
+                        Console.WriteLine("\n RunAllIntegrationTests \n");
+                        RunAllIntegrationTests();
 
-                    Console.SetOut(existingOut);
+                        Console.SetOut(existingOut);
 
-                    Console.WriteLine();
-                    Console.Write("I think we are done here. Press any key to exit...");
+                        Console.WriteLine();
+                        Console.Write("I think we are done here. Press any key to exit...");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.SetOut(existingOut);
+                        sw.Close();
+                        fs.Close();
+
+                        throw ex;
+                    }
                 }
             }
 
-            Console.ReadLine();
+            Console.ReadLine(); ;
         }
 
         private static void RunAllIntegrationTests()
@@ -68,6 +79,16 @@ namespace VaultSharp.Samples
         {
             var settings = new VaultClientSettings("http://localhost:8200", authMethodInfo)
             {
+                BeforeApiRequestAction = (client, req) =>
+                {
+                    var requestContent = req.Content != null ? req.Content.ReadAsStringAsync().Result : "";
+
+                    Console.WriteLine("===Start Request===");
+                    Console.WriteLine(req.Method + "   " + req.RequestUri.ToString());
+                    Console.WriteLine(requestContent);
+                    Console.WriteLine("===End Request===");
+                },
+
                 AfterApiResponseAction = r =>
                 {
                     var value = ((int)r.StatusCode + "-" + r.StatusCode) + "\n";
