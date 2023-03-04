@@ -19,14 +19,16 @@ namespace VaultSharp.V1.SystemBackend
             {
                 if (this.ContainsKey("capabilities"))
                 {
-                    var values = this["capabilities"] as JsonArray;
+                    var enumerator = ((System.Text.Json.JsonElement)this["capabilities"]).EnumerateArray();
+
                     var results = new List<string>();
 
-                    if (values != null)
+                    foreach (var item in enumerator)
                     {
-                        values.ToList().ForEach(jn => results.Add(jn.ToString()));
-                        return results;
-                    }                     
+                        results.Add(item.GetString());
+                    }
+
+                    return results;
                 }
 
                 return Enumerable.Empty<string>();

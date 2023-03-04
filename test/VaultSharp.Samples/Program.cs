@@ -49,13 +49,12 @@ namespace VaultSharp.Samples
                         Console.WriteLine();
                         Console.Write("I think we are done here. Press any key to exit...");
                     }
-                    catch (Exception ex)
+                    finally
                     {
-                        Console.SetOut(existingOut);
+                        sw.Flush();
                         sw.Close();
+                        fs.Flush();
                         fs.Close();
-
-                        throw ex;
                     }
                 }
             }

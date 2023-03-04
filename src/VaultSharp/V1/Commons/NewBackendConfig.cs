@@ -30,7 +30,7 @@ namespace VaultSharp.Core
         public List<string> AllowedManagedKeys { get; set; }
 
         [JsonPropertyName("plugin_version")]
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] // Very very important
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] // CRITICAL: Very very important
         public string PluginVersion { get; set; }
     }
 }
