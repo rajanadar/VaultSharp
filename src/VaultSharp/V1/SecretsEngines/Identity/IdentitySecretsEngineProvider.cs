@@ -172,5 +172,17 @@ namespace VaultSharp.V1.SecretsEngines.Identity
                 mergeEntitiesRequest)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
+
+        public async Task CreateNamedKey(string name, CreateNamedKeyRequest createNamedKeyRequest, string mountPoint = null)
+        {
+            Checker.NotNull(name, "name");
+
+            await _polymath.MakeVaultApiRequest(
+                mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
+                "/oidc/key/" + name.Trim('/'), 
+                HttpMethod.Post, 
+                createNamedKeyRequest)
+                .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
     }
 }
