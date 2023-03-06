@@ -184,5 +184,16 @@ namespace VaultSharp.V1.SecretsEngines.Identity
                 createNamedKeyRequest)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
+
+        public async Task<ReadNamedKeyResponse> ReadNamedKey(string name, string mountPoint = null)
+        {
+            Checker.NotNull(name, "name");
+
+            return await _polymath.MakeVaultApiRequest<ReadNamedKeyResponse>(
+                mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
+                "/oidc/key" + name.Trim('/'),
+                HttpMethod.Get)
+                .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
     }
 }
