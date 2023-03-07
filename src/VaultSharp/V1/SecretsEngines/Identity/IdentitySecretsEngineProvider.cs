@@ -191,7 +191,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
 
             return await _polymath.MakeVaultApiRequest<ReadNamedKeyResponse>(
                 mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
-                "/oidc/key" + name.Trim('/'),
+                "/oidc/key/" + name.Trim('/'),
                 HttpMethod.Get)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
@@ -214,7 +214,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
 
             return await _polymath.MakeVaultApiRequest<ReadRoleReponse>(
                 mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
-                "/oidc/role" + roleName.Trim('/'),
+                "/oidc/role/" + roleName.Trim('/'),
                 HttpMethod.Get)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }

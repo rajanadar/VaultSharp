@@ -4,7 +4,8 @@
 
   * [GH-300](https://github.com/rajanadar/VaultSharp/issues/300) Remove support for EOL .NET 4.5
   * [GH-301](https://github.com/rajanadar/VaultSharp/pull/301) Add support for reading a secret backend
-
+  * identity/oidc/key: create, read and update apis.
+  * identity/oidc/role: create, read and update apis.
 ## 1.12.2.1 (January 23, 2023)
 
 **BREAKING CHANGES:**
