@@ -176,6 +176,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         public async Task CreateNamedKeyAsync(string name, CreateNamedKeyRequest createNamedKeyRequest, string mountPoint = null)
         {
             Checker.NotNull(name, "name");
+            Checker.NotNull(createNamedKeyRequest, "createNamedKeyRequest");
 
             await _polymath.MakeVaultApiRequest(
                 mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
@@ -199,6 +200,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         public async Task CreateRoleAsync(string roleName, CreateRoleRequest createRoleRequest, string mountPoint = null)
         {
             Checker.NotNull(roleName, "roleName");
+            Checker.NotNull(createRoleRequest, "createRoleRequest");
 
             await _polymath.MakeVaultApiRequest(
                 mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
