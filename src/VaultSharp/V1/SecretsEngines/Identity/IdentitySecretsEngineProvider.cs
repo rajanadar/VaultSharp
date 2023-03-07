@@ -195,5 +195,28 @@ namespace VaultSharp.V1.SecretsEngines.Identity
                 HttpMethod.Get)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
+
+        public async Task CreateRoleAsync(string roleName, CreateRoleRequest createRoleRequest, string mountPoint = null)
+        {
+            Checker.NotNull(roleName, "roleName");
+
+            await _polymath.MakeVaultApiRequest(
+                mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
+                "/oidc/role/" + roleName.Trim('/'),
+                HttpMethod.Post,
+                createRoleRequest)
+                .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<RoleInfo> ReadRoleAsync(string roleName, string mountPoint = null)
+        {
+            Checker.NotNull(roleName, "roleName");
+
+            return await _polymath.MakeVaultApiRequest<RoleInfo>(
+                mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
+                "/oidc/role" + roleName.Trim('/'),
+                HttpMethod.Get)
+                .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
     }
 }
