@@ -173,7 +173,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task CreateNamedKey(string name, CreateNamedKeyRequest createNamedKeyRequest, string mountPoint = null)
+        public async Task CreateNamedKeyAsync(string name, CreateNamedKeyRequest createNamedKeyRequest, string mountPoint = null)
         {
             Checker.NotNull(name, "name");
 
@@ -185,7 +185,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<ReadNamedKeyResponse> ReadNamedKey(string name, string mountPoint = null)
+        public async Task<ReadNamedKeyResponse> ReadNamedKeyAsync(string name, string mountPoint = null)
         {
             Checker.NotNull(name, "name");
 

@@ -9,6 +9,30 @@ namespace VaultSharp.V1.SecretsEngines.Identity
     public interface IIdentitySecretsEngine
     {
         /// <summary>
+        /// Create or update a role. ID tokens are generated against a role and
+        /// signed against a named key.
+        /// </summary>
+        /// <param name="roleName">Name of the role.</param>
+        /// <param name="createRoleRequest">Request object ot create or update a role.</param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.Identity" />
+        /// Provide a value only if you have customized the Azure mount point.
+        /// </param>
+        /// <returns>This endpoint doesn't return anything.</returns>
+        Task CreateRoleAsync(string roleName, CreateRoleRequest createRoleRequest, string mountPoint = null);
+
+        /// <summary>
+        /// This endpoint queries a role and returs its configuration.
+        /// </summary>
+        /// <param name="roleName">Name of the role.</param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.Identity" />
+        /// Provide a value only if you have customized the Azure mount point.
+        /// </param>
+        /// <returns>The role information</returns>
+        Task<RoleInfo> ReadRoleAsync(string roleName, string mountPoint = null);
+
+        /// <summary>
         /// This endpoint creates or updates a named key which is used by a role to sign tokens.
         /// </summary>
         /// <param name="name">Name of the named key.</param>
@@ -18,7 +42,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// </param>
         /// <param name="createNamedKeyRequest">Request object to create a named key.</param>
         /// <returns>This endpoint doesn't return anything.</returns>
-        Task CreateNamedKey(string name, CreateNamedKeyRequest createNamedKeyRequest, string mountPoint = null);
+        Task CreateNamedKeyAsync(string name, CreateNamedKeyRequest createNamedKeyRequest, string mountPoint = null);
 
         /// <summary>
         /// This endpoint reads a named key which is used by a role to sign tokens.
@@ -28,7 +52,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.Identity" />
         /// Provide a value only if you have customized the Azure mount point.
         /// </param>
-        Task<ReadNamedKeyResponse> ReadNamedKey(string name, string mountPoint = null);
+        Task<ReadNamedKeyResponse> ReadNamedKeyAsync(string name, string mountPoint = null);
 
         /// <summary>
         /// Use this endpoint to generate a signed ID (OIDC) token.
