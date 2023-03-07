@@ -30,7 +30,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// Provide a value only if you have customized the Azure mount point.
         /// </param>
         /// <returns>The role information</returns>
-        Task<RoleInfo> ReadRoleAsync(string roleName, string mountPoint = null);
+        Task<ReadRoleReponse> ReadRoleAsync(string roleName, string mountPoint = null);
 
         /// <summary>
         /// This endpoint creates or updates a named key which is used by a role to sign tokens.
