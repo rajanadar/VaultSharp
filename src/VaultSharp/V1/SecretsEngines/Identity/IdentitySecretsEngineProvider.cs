@@ -210,11 +210,11 @@ namespace VaultSharp.V1.SecretsEngines.Identity
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<ReadRoleReponse> ReadRoleAsync(string roleName, string mountPoint = null)
+        public async Task<ReadRoleResponse> ReadRoleAsync(string roleName, string mountPoint = null)
         {
             Checker.NotNull(roleName, "roleName");
 
-            return await _polymath.MakeVaultApiRequest<ReadRoleReponse>(
+            return await _polymath.MakeVaultApiRequest<ReadRoleResponse>(
                 mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
                 "/oidc/role/" + roleName.Trim('/'),
                 HttpMethod.Get)
