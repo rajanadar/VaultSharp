@@ -220,5 +220,27 @@ namespace VaultSharp.V1.SecretsEngines.Identity
                 HttpMethod.Get)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
+
+        public async Task DeleteRoleAsync(string roleName, string mountPoint = null)
+        {
+            Checker.NotNull(roleName, "roleName");
+
+            await _polymath.MakeVaultApiRequest(
+                mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
+                "/oidc/role/" + roleName.Trim('/'),
+                HttpMethod.Delete)
+                .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task DeleteNamedKeyAsync(string name, string mountPoint = null)
+        {
+            Checker.NotNull(name, "name");
+
+            await _polymath.MakeVaultApiRequest(
+                mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
+                "/oidc/key/" + name.Trim('/'),
+                HttpMethod.Delete)
+                .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
     }
 }

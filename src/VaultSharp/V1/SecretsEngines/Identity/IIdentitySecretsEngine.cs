@@ -33,6 +33,17 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         Task<ReadRoleReponse> ReadRoleAsync(string roleName, string mountPoint = null);
 
         /// <summary>
+        /// This endpoint deletes a role.
+        /// </summary>
+        /// <param name="roleName">Name of the role.</param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.Identity" />
+        /// Provide a value only if you have customized the Azure mount point.
+        /// </param>
+        /// <returns>This endpoint doesn't return anything</returns>
+        Task DeleteRoleAsync(string roleName, string mountPoint = null);
+
+        /// <summary>
         /// This endpoint creates or updates a named key which is used by a role to sign tokens.
         /// </summary>
         /// <param name="name">Name of the named key.</param>
@@ -53,6 +64,17 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// Provide a value only if you have customized the Azure mount point.
         /// </param>
         Task<ReadNamedKeyResponse> ReadNamedKeyAsync(string name, string mountPoint = null);
+
+        /// <summary>
+        /// This endpoint deletes a named key.
+        /// </summary>
+        /// <param name="name">Name of the key.</param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.Identity" />
+        /// Provide a value only if you have customized the Azure mount point.
+        /// </param>
+        /// <returns>This endpoint doesn't return anything</returns>
+        Task DeleteNamedKeyAsync(string name, string mountPoint = null);
 
         /// <summary>
         /// Use this endpoint to generate a signed ID (OIDC) token.
