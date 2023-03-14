@@ -6,6 +6,7 @@
   * [GH-301](https://github.com/rajanadar/VaultSharp/pull/301) Add support for reading a secret backend
   * identity/oidc/key: create, read, update and delete apis.
   * identity/oidc/role: create, read, update and delete apis.
+  * auth/approle: ````PullNewSecretIdAsync``` allows for reponse wrapping using ```wrapTimeToLive``` parameter
 ## 1.12.2.1 (January 23, 2023)
 
 **BREAKING CHANGES:**
