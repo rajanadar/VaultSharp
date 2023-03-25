@@ -1,16 +1,17 @@
-## 1.12.2.2 (TBD)
+## 1.13.0 (TBD)
 
 **BREAKING CHANGES:**
 
   * [GH-300](https://github.com/rajanadar/VaultSharp/issues/300) Remove support for EOL .NET 4.5
   * Remove support for EOL .NET 4.6, .NET 4.6.1
-  * Remove support for .NET Standard 1.3  
+  * Remove support for .NET Standard 1.3
+  * [GH-300](https://github.com/rajanadar/VaultSharp/issues/304) Remove Newtonsoft.Json dependency
 
 **IMROVEMENTS:**
 
   * [GH-301](https://github.com/rajanadar/VaultSharp/pull/301) Add support for reading a secret backend
   * Add support for .NET 7.0
-  * Use System.Text.Json as the JSON provider instead of Newtonsoft.Json
+  * [GH-300](https://github.com/rajanadar/VaultSharp/issues/304) Use System.Text.Json as the JSON provider instead of Newtonsoft.Json
 
 ## 1.12.2.1 (January 23, 2023)
 
