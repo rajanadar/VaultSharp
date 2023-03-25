@@ -1,4 +1,4 @@
-## 1.13.0 (TBD)
+## 1.13.0 (March 25, 2023)
 
 **BREAKING CHANGES:**
 
