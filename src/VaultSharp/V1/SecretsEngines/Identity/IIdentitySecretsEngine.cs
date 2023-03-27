@@ -46,35 +46,35 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// <summary>
         /// This endpoint creates or updates a named key which is used by a role to sign tokens.
         /// </summary>
-        /// <param name="name">Name of the named key.</param>
+        /// <param name="keyName">Name of the named key.</param>
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.Identity" />
         /// Provide a value only if you have customized the Azure mount point.
         /// </param>
         /// <param name="createNamedKeyRequest">Request object to create a named key.</param>
         /// <returns>This endpoint doesn't return anything.</returns>
-        Task CreateNamedKeyAsync(string name, CreateNamedKeyRequest createNamedKeyRequest, string mountPoint = null);
+        Task CreateNamedKeyAsync(string keyName, CreateNamedKeyRequest createNamedKeyRequest, string mountPoint = null);
 
         /// <summary>
         /// This endpoint reads a named key which is used by a role to sign tokens.
         /// </summary>
-        /// <param name="name">Name of the named key.</param>
+        /// <param name="keyName">Name of the named key.</param>
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.Identity" />
         /// Provide a value only if you have customized the Azure mount point.
         /// </param>
-        Task<ReadNamedKeyResponse> ReadNamedKeyAsync(string name, string mountPoint = null);
+        Task<ReadNamedKeyResponse> ReadNamedKeyAsync(string keyName, string mountPoint = null);
 
         /// <summary>
         /// This endpoint deletes a named key.
         /// </summary>
-        /// <param name="name">Name of the key.</param>
+        /// <param name="keyName">Name of the key.</param>
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.Identity" />
         /// Provide a value only if you have customized the Azure mount point.
         /// </param>
         /// <returns>This endpoint doesn't return anything</returns>
-        Task DeleteNamedKeyAsync(string name, string mountPoint = null);
+        Task DeleteNamedKeyAsync(string keyName, string mountPoint = null);
 
         /// <summary>
         /// Use this endpoint to generate a signed ID (OIDC) token.

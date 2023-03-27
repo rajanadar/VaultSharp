@@ -173,26 +173,26 @@ namespace VaultSharp.V1.SecretsEngines.Identity
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task CreateNamedKeyAsync(string name, CreateNamedKeyRequest createNamedKeyRequest, string mountPoint = null)
+        public async Task CreateNamedKeyAsync(string keyName, CreateNamedKeyRequest createNamedKeyRequest, string mountPoint = null)
         {
-            Checker.NotNull(name, "name");
+            Checker.NotNull(keyName, "keyName");
             Checker.NotNull(createNamedKeyRequest, "createNamedKeyRequest");
 
             await _polymath.MakeVaultApiRequest(
                 mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
-                "/oidc/key/" + name.Trim('/'), 
+                "/oidc/key/" + keyName.Trim('/'), 
                 HttpMethod.Post, 
                 createNamedKeyRequest)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<ReadNamedKeyResponse> ReadNamedKeyAsync(string name, string mountPoint = null)
+        public async Task<ReadNamedKeyResponse> ReadNamedKeyAsync(string keyName, string mountPoint = null)
         {
-            Checker.NotNull(name, "name");
+            Checker.NotNull(keyName, "keyName");
 
             return await _polymath.MakeVaultApiRequest<ReadNamedKeyResponse>(
                 mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
-                "/oidc/key/" + name.Trim('/'),
+                "/oidc/key/" + keyName.Trim('/'),
                 HttpMethod.Get)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
@@ -232,13 +232,13 @@ namespace VaultSharp.V1.SecretsEngines.Identity
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task DeleteNamedKeyAsync(string name, string mountPoint = null)
+        public async Task DeleteNamedKeyAsync(string keyName, string mountPoint = null)
         {
-            Checker.NotNull(name, "name");
+            Checker.NotNull(keyName, "keyName");
 
             await _polymath.MakeVaultApiRequest(
                 mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
-                "/oidc/key/" + name.Trim('/'),
+                "/oidc/key/" + keyName.Trim('/'),
                 HttpMethod.Delete)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
