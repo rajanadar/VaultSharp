@@ -1,12 +1,12 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿using System.Text.Json.Serialization;
+
 
 namespace VaultSharp.V1.SecretsEngines.SSH
 {
     /// <summary>
     /// Represents the type of SSH key to be generated.
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum SSHKeyType
     {
         /// <summary>

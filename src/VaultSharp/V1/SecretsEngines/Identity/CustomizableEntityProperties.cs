@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Identity
 {
@@ -11,19 +11,19 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// <summary>
         /// Key-Values pairs of the metadata associated with the entity
         /// </summary>
-        [JsonProperty("metadata")]
+        [JsonPropertyName("metadata")]
         public IDictionary<string, string> Metadata { get; set; }
 
         /// <summary>
         /// List of strings which with policies to be tied to the entity
         /// </summary>
-        [JsonProperty("policies")]
+        [JsonPropertyName("policies")]
         public IList<string> Policies { get; set; }
 
         /// <summary>
         /// Boolean indicating whether the entity starts disabled.
         /// </summary>
-        [JsonProperty("disabled")]
+        [JsonPropertyName("disabled")]
         public bool Disabled { get; set; }
     }
 }

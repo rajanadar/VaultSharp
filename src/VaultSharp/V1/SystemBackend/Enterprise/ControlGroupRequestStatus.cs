@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend.Enterprise
 {
@@ -11,25 +11,25 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
         /// <summary>
         /// Gets or sets the approval status.
         /// </summary>
-        [JsonProperty("approved")]
+        [JsonPropertyName("approved")]
         public bool Approved { get; set; }
 
         /// <summary>
         /// Gets or sets the request path.
         /// </summary>
-        [JsonProperty("request_path")]
+        [JsonPropertyName("request_path")]
         public string RequestPath { get; set; }
 
         /// <summary>
         /// Gets or sets the requesting entity.
         /// </summary>
-        [JsonProperty("request_entity")]
+        [JsonPropertyName("request_entity")]
         public ControlGroupRequestEntity RequestEntity { get; set; }
 
         /// <summary>
         /// Gets or sets the authorizations.
         /// </summary>
-        [JsonProperty("authorizations")]
+        [JsonPropertyName("authorizations")]
         public IEnumerable<ControlGroupRequestAuthorization> Authorizations { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.AuthMethods.Token
 {
@@ -19,7 +19,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// (they will have no parent). As such, they will not be automatically
         /// revoked by the revocation of any other token.
         /// </summary>
-        [JsonProperty("orphan")]
+        [JsonPropertyName("orphan")]
         public bool Orphan { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// the new suffix as part of their path, and then tokens with the old 
         /// suffix can be revoked via /sys/leases/revoke-prefix
         /// </summary>
-        [JsonProperty("path_suffix")]
+        [JsonPropertyName("path_suffix")]
         public string PathSuffix { get; set; }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// its initial TTL. Setting the value to true will allow the token to 
         /// be renewable up to the system/mount maximum TTL.
         /// </summary>
-        [JsonProperty("renewable")]
+        [JsonPropertyName("renewable")]
         public bool Renewable { get; set; }
 
         /// <summary>
@@ -47,20 +47,20 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// hard cap even if token_ttl and token_max_ttl would otherwise allow 
         /// a renewal.
         /// </summary>
-        [JsonProperty("token_explicit_max_ttl")]
+        [JsonPropertyName("token_explicit_max_ttl")]
         public string TokenExplicitMaxTimeToLive { get; set; }
 
         /// <summary>
         /// If set, the default policy will not be set on generated tokens; 
         /// otherwise it will be added to the policies set in token_policies.
         /// </summary>
-        [JsonProperty("token_no_default_policy")]
+        [JsonPropertyName("token_no_default_policy")]
         public bool TokenNoDefaultPolicy { get; set; }
 
         /// <summary>
         /// Period if anything is set on the token.
         /// </summary>
-        [JsonProperty("token_period")]
+        [JsonPropertyName("token_period")]
         public string TokenPeriod { get; set; }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// type to return unless the client requests a different type at 
         /// generation time.
         /// </summary>
-        [JsonProperty("token_type")]
+        [JsonPropertyName("token_type")]
         public string TokenType { get; set; }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// generation. This field supports globbing. 
         /// Note that allowed_entity_aliases is not case sensitive.
         /// </summary>
-        [JsonProperty("allowed_entity_aliases")]
+        [JsonPropertyName("allowed_entity_aliases")]
         public IList<string> AllowedEntityAliases { get; set; }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         ///  the "default" policy will be added to the created token 
         ///  automatically.
         /// </summary>
-        [JsonProperty("allowed_policies")]
+        [JsonPropertyName("allowed_policies")]
         public IList<string> AllowedPolcies { get; set; }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// list will prevent "default" from being added automatically to 
         /// created tokens.
         /// </summary>
-        [JsonProperty("disallowed_policies")]
+        [JsonPropertyName("disallowed_policies")]
         public IList<string> DisallowedPolcies { get; set; }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// the token when no policies are specified in the call to 
         /// /auth/token/create/:role_name.
         /// </summary>
-        [JsonProperty("allowed_policies_glob")]
+        [JsonPropertyName("allowed_policies_glob")]
         public IList<string> AllowedPolciesGlob { get; set; }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// combined with disallowed_policies policies need to only match one 
         /// of the two lists to be blocked.
         /// </summary>
-        [JsonProperty("disallowed_policies_glob")]
+        [JsonPropertyName("disallowed_policies_glob")]
         public IList<string> DisallowedPolciesGlob { get; set; }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// can authenticate successfully, and ties the resulting token to these 
         /// blocks as well.
         /// </summary>
-        [JsonProperty("token_bound_cidrs")]
+        [JsonPropertyName("token_bound_cidrs")]
         public IList<string> TokenBoundCidrs { get; set; }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// to have the ability to create child tokens, you will need to set this 
         /// value to 0.
         /// </summary>
-        [JsonProperty("token_num_uses")]
+        [JsonPropertyName("token_num_uses")]
         public int TokenNumUses { get; set; }
 
         public CreateTokenRoleRequest(string tokenType = "service")

@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.Commons
 {
@@ -14,7 +14,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The token.
         /// </value>
-        [JsonProperty("token")]
+        [JsonPropertyName("token")]
         public string Token { get; set; }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The time to live.
         /// </value>
-        [JsonProperty("ttl")]
+        [JsonPropertyName("ttl")]
         public int TimeToLive { get; set; }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The creation time.
         /// </value>
-        [JsonProperty("creation_time")]
+        [JsonPropertyName("creation_time")]
         public DateTimeOffset CreationTime { get; set; }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The wrapped accessor.
         /// </value>
-        [JsonProperty("accessor")]
+        [JsonPropertyName("accessor")]
         public string Accessor { get; set; }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The creation path.
         /// </value>
-        [JsonProperty("creation_path")]
+        [JsonPropertyName("creation_path")]
         public string CreationPath { get; set; }
     }
 }

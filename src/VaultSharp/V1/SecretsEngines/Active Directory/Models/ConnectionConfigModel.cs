@@ -1,58 +1,60 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.ActiveDirectory.Models
 {
     public class ConnectionConfigModel
     {
-        [JsonProperty("binddn")]
+        [JsonPropertyName("binddn")]
         public string BindingDistinguishedName { get; set; }
 
-        [JsonProperty("certificate")]
+        [JsonPropertyName("certificate")]
         public string X509PEMEncodedCertificate { get; set; }
 
-        [JsonProperty("formatter", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("formatter")]
         [Obsolete]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string LegacyParameterFormatter { get; set; }
 
-        [JsonProperty("insecure_tls")]
+        [JsonPropertyName("insecure_tls")]
         public bool? ConnectionInsecureTLS { get; set; }
 
-        [JsonProperty("last_rotation_tolerance")]
+        [JsonPropertyName("last_rotation_tolerance")]
         public long LastRotationTolerance { get; set; }
 
-        [JsonProperty("length", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("length")]
         [Obsolete]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string LegacyParameterLength { get; set; }
 
-        [JsonProperty("max_ttl")]
+        [JsonPropertyName("max_ttl")]
         public long PasswordMaximumTimeToLive { get; set; }
 
-        [JsonProperty("password_policy")]
+        [JsonPropertyName("password_policy")]
         public string PasswordPolicy { get; set; }
 
-        [JsonProperty("request_timeout")]
+        [JsonPropertyName("request_timeout")]
         public long ConnectionRequestTimeout { get; set; }
 
-        [JsonProperty("starttls")]
+        [JsonPropertyName("starttls")]
         public bool? ConnectionStartTLS { get; set; }
 
-        [JsonProperty("tls_max_version")]
+        [JsonPropertyName("tls_max_version")]
         public string TLSMaxVersion { get; set; }
 
-        [JsonProperty("tls_min_version")]
+        [JsonPropertyName("tls_min_version")]
         public string TLSMinVersion { get; set; }
 
-        [JsonProperty("ttl")]
+        [JsonPropertyName("ttl")]
         public long PasswordTimeToLive { get; set; }
 
-        [JsonProperty("upndomain")]
+        [JsonPropertyName("upndomain")]
         public string UPNDomain { get; set; }
 
-        [JsonProperty("url")]
+        [JsonPropertyName("url")]
         public string ConnectionURL { get; set; }
 
-        [JsonProperty("userdn")]
+        [JsonPropertyName("userdn")]
         public string UserDistinguishedName { get; set; }
     }
 }

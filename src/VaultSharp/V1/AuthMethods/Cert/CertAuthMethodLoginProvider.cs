@@ -1,8 +1,9 @@
 using System;
 using System.Globalization;
 using System.Net.Http;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
 
@@ -25,9 +26,9 @@ namespace VaultSharp.V1.AuthMethods.Cert
             // It shouldn't need a token.
             var response = string.IsNullOrWhiteSpace(_certAuthMethodInfo.RoleName) ? 
                 
-                (await _polymath.MakeVaultApiRequest<Secret<JToken>>(LoginResourcePath, HttpMethod.Post, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext)) : 
+                (await _polymath.MakeVaultApiRequest<Secret<JsonObject>>(LoginResourcePath, HttpMethod.Post, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext)) : 
                 
-                (await _polymath.MakeVaultApiRequest<Secret<JToken>>(LoginResourcePath, HttpMethod.Post, new { name = _certAuthMethodInfo.RoleName }, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext));
+                (await _polymath.MakeVaultApiRequest<Secret<JsonObject>>(LoginResourcePath, HttpMethod.Post, new { name = _certAuthMethodInfo.RoleName }, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext));
 
             _certAuthMethodInfo.ReturnedLoginAuthInfo = response?.AuthInfo;
 

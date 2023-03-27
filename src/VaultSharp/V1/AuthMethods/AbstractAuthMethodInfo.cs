@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.AuthMethods

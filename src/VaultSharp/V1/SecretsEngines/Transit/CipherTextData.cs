@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -13,10 +13,12 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <value>
         /// The cipher text.
         /// </value>
-        [JsonProperty("ciphertext", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("ciphertext")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string CipherText { get; set; }
 
-        [JsonProperty("key_version", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("key_version")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? KeyVersion { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -11,7 +11,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Gets or sets the random bytes, returned in the format found on the request.
         /// </summary>
         /// <value>The encoded random bytes.</value>
-        [JsonProperty("random_bytes")]
+        [JsonPropertyName("random_bytes")]
         public string EncodedRandomBytes { get; set; }
     }
 }

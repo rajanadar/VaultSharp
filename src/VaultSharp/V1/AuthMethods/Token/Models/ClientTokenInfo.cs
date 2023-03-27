@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.AuthMethods.Token.Models
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// <value>
         /// The accessor.
         /// </value>
-        [JsonProperty("accessor")]
+        [JsonPropertyName("accessor")]
         public string Accessor { get; set; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// <value>
         /// The explicit maximum time to live.
         /// </value>
-        [JsonProperty("explicit_max_ttl")]
+        [JsonPropertyName("explicit_max_ttl")]
         public int ExplicitMaximumTimeToLive { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// <value>
         ///   <c>true</c> if renewable; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("renewable")]
+        [JsonPropertyName("renewable")]
         public bool Renewable { get; set; }
     }
 }

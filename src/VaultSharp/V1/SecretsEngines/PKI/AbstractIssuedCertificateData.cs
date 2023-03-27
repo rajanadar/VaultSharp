@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.PKI
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <value>
         /// The content of the issuing ca certificate.
         /// </value>
-        [JsonProperty("issuing_ca")]
+        [JsonPropertyName("issuing_ca")]
         public string IssuingCACertificateContent { get; set; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <value>
         /// The content of the ca chain.
         /// </value>
-        [JsonProperty("ca_chain")]
+        [JsonPropertyName("ca_chain")]
         public string[] CAChainContent { get; set; }
     }
 }

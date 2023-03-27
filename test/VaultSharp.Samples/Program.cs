@@ -1,14 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
-using Newtonsoft.Json;
+using System.Text.Json;
 using VaultSharp.V1.AuthMethods;
 
 namespace VaultSharp.Samples
 {
     partial class Program
     {
-        private const string ExpectedVaultVersion = "1.12.2";
+        private const string ExpectedVaultVersion = "1.13.0";
 
         private static IVaultClient _unauthenticatedVaultClient;
         private static IVaultClient _authenticatedVaultClient;
@@ -34,22 +34,32 @@ namespace VaultSharp.Samples
                     var existingOut = Console.Out;
                     Console.SetOut(sw);
 
-                    var settings = GetVaultClientSettings();
-                    _unauthenticatedVaultClient = new VaultClient(settings);
+                    try
+                    {
+                        var settings = GetVaultClientSettings();
+                        _unauthenticatedVaultClient = new VaultClient(settings);
 
-                    _unauthenticatedVaultClient.V1.Auth.ResetVaultToken();
+                        _unauthenticatedVaultClient.V1.Auth.ResetVaultToken();
 
-                    Console.WriteLine("\n RunAllIntegrationTests \n");
-                    RunAllIntegrationTests();
+                        Console.WriteLine("\n RunAllIntegrationTests \n");
+                        RunAllIntegrationTests();
 
-                    Console.SetOut(existingOut);
+                        Console.SetOut(existingOut);
 
-                    Console.WriteLine();
-                    Console.Write("I think we are done here. Press any key to exit...");
+                        Console.WriteLine();
+                        Console.Write("I think we are done here. Press any key to exit...");
+                    }
+                    catch
+                    {
+                        sw.Close();
+                        fs.Close();
+
+                        throw;
+                    }
                 }
             }
 
-            Console.ReadLine();
+            Console.ReadLine(); ;
         }
 
         private static void RunAllIntegrationTests()
@@ -68,6 +78,19 @@ namespace VaultSharp.Samples
         {
             var settings = new VaultClientSettings("http://localhost:8200", authMethodInfo)
             {
+                BeforeApiRequestAction = (client, req) =>
+                {
+                    var requestContent = req.Content != null ? req.Content.ReadAsStringAsync().Result : "";
+
+                    Console.WriteLine("===Start Request===");
+
+                    Console.WriteLine(req.Method + "   " + req.RequestUri.ToString());
+                    Console.WriteLine(requestContent);
+                    
+                    Console.WriteLine("===End Request===");
+                    Console.WriteLine();
+                },
+
                 AfterApiResponseAction = r =>
                 {
                     var value = ((int)r.StatusCode + "-" + r.StatusCode) + "\n";
@@ -138,7 +161,7 @@ namespace VaultSharp.Samples
 
             Console.WriteLine(line + line);
             Console.WriteLine(_responseContent);
-            Console.WriteLine(JsonConvert.SerializeObject(value));
+            Console.WriteLine(JsonSerializer.Serialize(value, new JsonSerializerOptions { WriteIndented = false }));
             Console.WriteLine(line + line);
             Console.WriteLine();
             Console.WriteLine();

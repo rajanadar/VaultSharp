@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Enterprise.Transform
 {
@@ -11,7 +11,7 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.Transform
         /// <summary>
         /// Decoded items.
         /// </summary>
-        [JsonProperty("batch_results")]
+        [JsonPropertyName("batch_results")]
         public List<DecodedItem> DecodedItems { get; set; }
     }
 }

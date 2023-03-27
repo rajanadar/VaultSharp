@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -11,19 +11,19 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <summary>
         /// The list of key-version pairs in the key ring.
         /// </summary>
-        [JsonProperty("keys")]
+        [JsonPropertyName("keys")]
         public Dictionary<string, object> Keys { get; set; }
 
         /// <summary>
         /// The name of the key
         /// </summary>
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
         /// <summary>
         /// The type of the key
         /// </summary>
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public TransitKeyType Type { get; set; }
     }
 }

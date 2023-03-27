@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Database
 {
@@ -11,13 +11,13 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <summary>
         /// Specifies the database username that this Vault role corresponds to.
         /// </summary>
-        [JsonProperty("username")]
+        [JsonPropertyName("username")]
         public string Username { get; set; }
 
         /// <summary>
         /// The name of the database connection to use for this role.
         /// </summary>
-        [JsonProperty("db_name")]
+        [JsonPropertyName("db_name")]
         public DatabaseProviderType DatabaseProviderType { get; set; }
 
         /// <summary>
@@ -25,14 +25,14 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// Not every plugin type will support this functionality. 
         /// See the plugin's API page for more information on support and formatting for this parameter.
         /// </summary>
-        [JsonProperty("rotation_statements")]
+        [JsonPropertyName("rotation_statements")]
         public List<string> RotationStatements { get; set; }
 
         /// <summary>
         /// Specifies the amount of time Vault should wait before rotating the password. 
         /// The minimum is 5 seconds.
         /// </summary>
-        [JsonProperty("rotation_period")]
+        [JsonPropertyName("rotation_period")]
         public string RotationPeriod { get; set; }
     }
 }

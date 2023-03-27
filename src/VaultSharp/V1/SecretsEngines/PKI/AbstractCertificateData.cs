@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.PKI
 {
@@ -22,7 +22,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <value>
         /// The content of the certificate.
         /// </value>
-        [JsonProperty("certificate")]
+        [JsonPropertyName("certificate")]
         public string CertificateContent { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <value>
         /// The serial number.
         /// </value>
-        [JsonProperty("serial_number")]
+        [JsonPropertyName("serial_number")]
         public string SerialNumber { get; set; }
     }
 }

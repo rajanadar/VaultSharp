@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend.Enterprise
 {
@@ -12,25 +12,25 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
         /// <summary>
         /// Gets or sets the license expiration time.
         /// </summary>
-        [JsonProperty("expiration_time")]
+        [JsonPropertyName("expiration_time")]
         public DateTimeOffset ExpirationTime { get; set; }
 
         /// <summary>
         /// Gets or sets the features.
         /// </summary>
-        [JsonProperty("features")]
+        [JsonPropertyName("features")]
         public IEnumerable<string> Features { get; set; }
 
         /// <summary>
         /// Gets or sets the license id.
         /// </summary>
-        [JsonProperty("license_id")]
+        [JsonPropertyName("license_id")]
         public string LicenseId { get; set; }
 
         /// <summary>
         /// Gets or sets the license start time.
         /// </summary>
-        [JsonProperty("start_time")]
+        [JsonPropertyName("start_time")]
         public DateTimeOffset StartTime { get; set; }
     }
 }

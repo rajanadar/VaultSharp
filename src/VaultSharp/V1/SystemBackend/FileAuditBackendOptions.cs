@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -15,7 +15,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The file path.
         /// </value>
-        [JsonProperty("file_path")]
+        [JsonPropertyName("file_path")]
         public string FilePath { get; set; }
     }
 }

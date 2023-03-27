@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Enterprise.KMIP
 {
@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.KMIP
         /// <value>
         /// The content of the ca chain.
         /// </value>
-        [JsonProperty("ca_chain")]
+        [JsonPropertyName("ca_chain")]
         public List<string> CAChainContent { get; set; }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.KMIP
         /// <value>
         /// The content of the certificate.
         /// </value>
-        [JsonProperty("certificate")]
+        [JsonPropertyName("certificate")]
         public string CertificateContent { get; set; }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.KMIP
         /// <value>
         /// The private key.
         /// </value>
-        [JsonProperty("private_key")]
+        [JsonPropertyName("private_key")]
         public string PrivateKeyContent { get; set; }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.KMIP
         /// <value>
         /// The serial number.
         /// </value>
-        [JsonProperty("serial_number")]
+        [JsonPropertyName("serial_number")]
         public string SerialNumber { get; set; }
     }
 }

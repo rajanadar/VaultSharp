@@ -225,6 +225,7 @@ namespace VaultSharp.Samples
                 Hmac = hmacResponse.Data.Hmac,      
                 MarshalingAlgorithm = MarshalingAlgorithm.asn1
             };
+
             var verifyHmacResponse = _authenticatedVaultClient.V1.Secrets.Transit.VerifySignedDataAsync(keyName, verifyHmacOptions, mountPoint).Result;
             DisplayJson(verifyHmacResponse);
             Assert.True(verifyHmacResponse.Data.Valid);

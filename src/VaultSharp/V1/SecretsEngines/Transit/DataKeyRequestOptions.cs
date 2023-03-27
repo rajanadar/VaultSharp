@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -15,7 +15,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         ///  Specifies the base64 encoded context for key derivation. 
         ///  This is required if key derivation is enabled for this key.
         /// </summary>
-        [JsonProperty("context")]
+        [JsonPropertyName("context")]
         public string Base64EncodedContext { get; set; }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The value must be exactly 96 bits (12 bytes) long and the user must ensure that for any given context 
         /// (and thus, any given encryption key) this nonce value is never reused.
         /// </summary>
-        [JsonProperty("nonce")]
+        [JsonPropertyName("nonce")]
         public string Nonce { get; set; }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Specifies the number of bits in the desired key. Can be 128, 256, or 512.
         /// Defaults to 256.
         /// </summary>
-        [JsonProperty("bits")]
+        [JsonPropertyName("bits")]
         public int Bits { get; set; }
 
         public DataKeyRequestOptions()

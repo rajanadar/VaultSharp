@@ -1,24 +1,24 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.AuthMethods.AliCloud.Models
 {
     // raja todo: This should ideally be CreateAliCloudRoleModel, check why not?
     public class AliCloudRoleModel
     {
-        [JsonProperty("arn")]
+        [JsonPropertyName("arn")]
         public string ARN { get; set; }
 
-        [JsonProperty("policies")]
+        [JsonPropertyName("policies")]
         public List<string> Policies { get; set; }
 
-        [JsonProperty("ttl")]
+        [JsonPropertyName("ttl")]
         public string TimeToLive { get; set; }
 
-        [JsonProperty("max_ttl")]
+        [JsonPropertyName("max_ttl")]
         public string MaximumTimeToLive { get; set; }
 
-        [JsonProperty("period")]
+        [JsonPropertyName("period")]
         public string Period { get; set; }
     }
 }

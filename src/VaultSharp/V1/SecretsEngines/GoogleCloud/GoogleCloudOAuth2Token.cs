@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.GoogleCloud
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
         /// <value>
         /// The token.
         /// </value>
-        [JsonProperty("token")]
+        [JsonPropertyName("token")]
         public string Token { get; set; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
         /// <value>
         /// The time.
         /// </value>
-        [JsonProperty("expires_at_seconds")]
+        [JsonPropertyName("expires_at_seconds")]
         public long ExpiresAtSeconds { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
         /// <value>
         /// The ttl.
         /// </value>
-        [JsonProperty("token_ttl")]
+        [JsonPropertyName("token_ttl")]
         public int TokenTimeToLive { get; set; }
     }
 }

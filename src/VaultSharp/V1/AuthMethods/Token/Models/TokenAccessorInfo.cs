@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.AuthMethods.Token.Models
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// <value>
         /// The creation time.
         /// </value>
-        [JsonProperty("creation_time")]
+        [JsonPropertyName("creation_time")]
         public int CreationTime { get; set; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// <value>
         /// The creation time to live.
         /// </value>
-        [JsonProperty("creation_ttl")]
+        [JsonPropertyName("creation_ttl")]
         public int CreationTimeToLive { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// <value>
         ///   <c>true</c> if orphan; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("orphan")]
+        [JsonPropertyName("orphan")]
         public bool Orphan { get; set; }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// <value>
         /// The time to live.
         /// </value>
-        [JsonProperty("ttl")]
+        [JsonPropertyName("ttl")]
         public int TimeToLive { get; set; }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// <value>
         /// The type.
         /// </value>
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
     }
 }

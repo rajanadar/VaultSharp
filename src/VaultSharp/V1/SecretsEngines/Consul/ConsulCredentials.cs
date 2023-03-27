@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Consul
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.Consul
         /// <value>
         /// The token.
         /// </value>
-        [JsonProperty("token")]
+        [JsonPropertyName("token")]
         public string Token { get; set; }
     }
 }

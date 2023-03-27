@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -14,7 +14,8 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <value>
         /// The batch results.
         /// </value>
-        [JsonProperty("batch_results", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("batch_results")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<PlainTextData> BatchedResults
         {
             get; set;

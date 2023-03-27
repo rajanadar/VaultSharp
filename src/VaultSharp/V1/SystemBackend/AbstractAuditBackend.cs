@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -7,6 +6,9 @@ namespace VaultSharp.V1.SystemBackend
     /// Represents an audit backend.
     /// </summary>
     [JsonConverter(typeof(AuditBackendJsonConverter))]
+    [JsonDerivedType(typeof(FileAuditBackend))]
+    [JsonDerivedType(typeof(SyslogAuditBackend))]
+    [JsonDerivedType(typeof(CustomAuditBackend))]
     public abstract class AbstractAuditBackend
     {
         /// <summary>
@@ -26,7 +28,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The type of the backend.
         /// </value>
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public abstract AuditBackendType Type { get; }
 
         /// <summary>
@@ -36,7 +38,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The description.
         /// </value>
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
         /// <summary>
@@ -49,7 +51,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The flag.
         /// </value>
-        [JsonProperty("local")]
+        [JsonPropertyName("local")]
         public bool Local { get; set; }
     }
 }

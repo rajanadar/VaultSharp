@@ -1,12 +1,26 @@
-## 1.12.2.2 (TBD)
+## 1.13.0.1 (TBD)
 
 **IMROVEMENTS:**
 
+ * [GH-309](https://github.com/rajanadar/VaultSharp/issues/309) identity/oidc/key: create, read, update and delete apis.
+ * [GH-309](https://github.com/rajanadar/VaultSharp/issues/309) identity/oidc/role: create, read, update and delete apis.
+ * [GH-309](https://github.com/rajanadar/VaultSharp/issues/309) auth/approle: ````PullNewSecretIdAsync``` allows for reponse wrapping using ```wrapTimeToLive``` parameter
+
+## 1.13.0 (March 25, 2023)
+
+**BREAKING CHANGES:**
+
   * [GH-300](https://github.com/rajanadar/VaultSharp/issues/300) Remove support for EOL .NET 4.5
+  * Remove support for EOL .NET 4.6, .NET 4.6.1
+  * Remove support for .NET Standard 1.3
+  * [GH-300](https://github.com/rajanadar/VaultSharp/issues/304) Remove Newtonsoft.Json dependency
+
+**IMROVEMENTS:**
+
   * [GH-301](https://github.com/rajanadar/VaultSharp/pull/301) Add support for reading a secret backend
-  * identity/oidc/key: create, read, update and delete apis.
-  * identity/oidc/role: create, read, update and delete apis.
-  * auth/approle: ````PullNewSecretIdAsync``` allows for reponse wrapping using ```wrapTimeToLive``` parameter
+  * Add support for .NET 7.0
+  * [GH-300](https://github.com/rajanadar/VaultSharp/issues/304) Use System.Text.Json as the JSON provider instead of Newtonsoft.Json
+
 ## 1.12.2.1 (January 23, 2023)
 
 **BREAKING CHANGES:**

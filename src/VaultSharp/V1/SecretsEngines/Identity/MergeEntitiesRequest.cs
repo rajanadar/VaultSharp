@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Identity
 {
@@ -13,14 +13,14 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// [required]
         /// Entity IDs which needs to get merged.
         /// </summary>
-        [JsonProperty("from_entity_ids")]
+        [JsonPropertyName("from_entity_ids")]
         public IList<string> FromEntityIds { get; set; }
 
         /// <summary>
         /// [required]
         /// Entity ID into which all the other entities need to get merged.
         /// </summary>
-        [JsonProperty("to_entity_id")]
+        [JsonPropertyName("to_entity_id")]
         public string ToEntityId { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// getting merged, secrets in the destination will be unaltered. If 
         /// not set, this API will throw an error containing all the conflicts.
         /// </summary>
-        [JsonProperty("force")]
+        [JsonPropertyName("force")]
         public bool Force { get; set; }
     }
 }

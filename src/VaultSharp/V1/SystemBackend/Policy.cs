@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -18,7 +18,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The rules.
         /// </value>
-        [JsonProperty("rules")]
+        [JsonPropertyName("rules")]
         public string Rules { get; set; }
     }
 }

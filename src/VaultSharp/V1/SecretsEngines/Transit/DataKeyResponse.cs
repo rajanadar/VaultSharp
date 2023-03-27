@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -13,10 +13,10 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <value>
         /// The cipher text.
         /// </value>
-        [JsonProperty("ciphertext")]
+        [JsonPropertyName("ciphertext")]
         public string CipherText { get; set; }
 
-        [JsonProperty("key_version")]
+        [JsonPropertyName("key_version")]
         public int KeyVersion { get; set; }
 
         /// <summary>
@@ -25,7 +25,8 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <value>
         /// The plain text.
         /// </value>
-        [JsonProperty("plaintext", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("plaintext")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Base64EncodedPlainText { get; set; }
     }
 }

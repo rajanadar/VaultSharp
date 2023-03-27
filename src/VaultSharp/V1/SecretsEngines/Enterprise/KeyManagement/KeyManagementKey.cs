@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Enterprise.KeyManagement
 {
@@ -11,37 +11,37 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.KeyManagement
         /// <summary>
         /// 
         /// </summary>
-        [JsonProperty("deletion_allowed")]
+        [JsonPropertyName("deletion_allowed")]
         public bool DeletionAllowed { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [JsonProperty("keys")]
+        [JsonPropertyName("keys")]
         public Dictionary<string, Dictionary<string, object>> Keys;
 
         /// <summary>
         /// 
         /// </summary>
-        [JsonProperty("latest_version")]
+        [JsonPropertyName("latest_version")]
         public int LatestVersion { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [JsonProperty("min_enabled_version")]
+        [JsonPropertyName("min_enabled_version")]
         public int MinimumEnabledVersion { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; }
     }
 }

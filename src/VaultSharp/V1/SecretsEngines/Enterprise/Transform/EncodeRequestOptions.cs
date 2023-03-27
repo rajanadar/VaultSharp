@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Enterprise.Transform
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.Transform
         /// When this parameter is set, the 'value', 'transformation' and 'tweak' parameters are ignored. 
         /// Instead, the aforementioned parameters should be provided within each object in the list.
         /// </summary>
-        [JsonProperty("batch_input")]
+        [JsonPropertyName("batch_input")]
         public List<EncodingItem> BatchItems { get; set; }
     }
 }

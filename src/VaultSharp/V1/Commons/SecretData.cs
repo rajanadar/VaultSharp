@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.Commons
 {
@@ -18,7 +18,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The data.
         /// </value>
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public T Data { get; set; }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The metadata.
         /// </value>
-        [JsonProperty("metadata")]
+        [JsonPropertyName("metadata")]
         public CurrentSecretMetadata Metadata { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.ActiveDirectory.Models
 {
@@ -7,10 +7,10 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory.Models
     /// </summary>
     public class CheckedOutCredentials
     {
-        [JsonProperty("password")]
+        [JsonPropertyName("password")]
         public string Password { get; set; }
 
-        [JsonProperty("service_account_name")]
+        [JsonPropertyName("service_account_name")]
         public string ServiceAccountName { get; set; }
     }
 }

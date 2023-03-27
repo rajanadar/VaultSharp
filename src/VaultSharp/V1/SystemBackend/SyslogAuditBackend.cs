@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -26,7 +26,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The options.
         /// </value>
-        [JsonProperty("options")]
+        [JsonPropertyName("options")]
         public SyslogAuditBackendOptions Options { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.AuthMethods.AppRole.Models
 {
@@ -8,7 +8,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole.Models
         /// <summary>
         /// SecretID to be attached to the Role.
         /// </summary>
-        [JsonProperty("secret_id")]
+        [JsonPropertyName("secret_id")]
         public string SecretId { get; set; }
     }
 }

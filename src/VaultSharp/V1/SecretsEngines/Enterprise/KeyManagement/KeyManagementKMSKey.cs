@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Enterprise.KeyManagement
 {
@@ -10,19 +10,19 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.KeyManagement
         /// <summary>
         /// 
         /// </summary>
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [JsonProperty("protection")]
+        [JsonPropertyName("protection")]
         public string Protection { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [JsonProperty("purpose")]
+        [JsonPropertyName("purpose")]
         public string Purpose { get; set; }
     }
 }

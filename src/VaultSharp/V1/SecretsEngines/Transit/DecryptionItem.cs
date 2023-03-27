@@ -1,5 +1,5 @@
 using System.Net;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -12,7 +12,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// [required]
         /// Specifies cipher text to be decrypted.
         /// </summary>
-        [JsonProperty("ciphertext")]
+        [JsonPropertyName("ciphertext")]
         public string CipherText { get; set; }
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         ///  Specifies the base64 encoded context for key derivation. 
         ///  This is required if key derivation is enabled for this key.
         /// </summary>
-        [JsonProperty("context")]
+        [JsonPropertyName("context")]
         public string Base64EncodedContext { get; set; }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// This must be provided if convergent encryption is enabled for this key and the key was generated with Vault 0.6.1. 
         /// Not required for keys created in 0.6.2+. 
         /// </summary>
-        [JsonProperty("nonce")]
+        [JsonPropertyName("nonce")]
         public string Nonce { get; set; }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Be warned that some failures (such as failure to decrypt) could be 
         /// indicative of a security breach and should not be ignored.
         /// </summary>
-        [JsonProperty("partial_failure_response_code")]
+        [JsonPropertyName("partial_failure_response_code")]
         public int PartialFailureResponseCode { get; set; }
 
         public DecryptionItem()

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend.Enterprise
 {
@@ -10,13 +10,13 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
         /// <summary>
         /// Gets or sets the entity id.
         /// </summary>
-        [JsonProperty("entity_id")]
+        [JsonPropertyName("entity_id")]
         public string EntityId { get; set; }
 
         /// <summary>
         /// Gets or sets the entity name.
         /// </summary>
-        [JsonProperty("entity_name")]
+        [JsonPropertyName("entity_name")]
         public string EntityName { get; set; }
     }
 }

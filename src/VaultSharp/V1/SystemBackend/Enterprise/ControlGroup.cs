@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend.Enterprise
 {
@@ -11,7 +11,7 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
         /// <value>
         /// The max ttl.
         /// </value>
-        [JsonProperty("max_ttl")]
+        [JsonPropertyName("max_ttl")]
         public string MaxTimeToLive { get; set; }
     }
 }

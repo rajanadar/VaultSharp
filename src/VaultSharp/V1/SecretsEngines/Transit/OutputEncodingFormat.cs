@@ -1,12 +1,12 @@
-﻿using Newtonsoft.Json.Converters;
-using Newtonsoft.Json;
+﻿
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
     /// <summary>
     /// The output encoding format options for a request.
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum OutputEncodingFormat
     {
         /// <summary>

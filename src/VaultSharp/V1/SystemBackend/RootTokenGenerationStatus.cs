@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The nonce.
         /// </value>
-        [JsonProperty("nonce")]
+        [JsonPropertyName("nonce")]
         public string Nonce { get; set; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         ///   <c>true</c> if started; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("started")]
+        [JsonPropertyName("started")]
         public bool Started { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The progress.
         /// </value>
-        [JsonProperty("progress")]
+        [JsonPropertyName("progress")]
         public int UnsealKeysProvided { get; set; }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The required unseal keys.
         /// </value>
-        [JsonProperty("required")]
+        [JsonPropertyName("required")]
         public int RequiredUnsealKeys { get; set; }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         ///   <c>true</c> if complete; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("complete")]
+        [JsonPropertyName("complete")]
         public bool Complete { get; set; }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The encoded token.
         /// </value>
-        [JsonProperty("encoded_token")]
+        [JsonPropertyName("encoded_token")]
         public string EncodedToken { get; set; }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The encoded root token.
         /// </value>
-        [JsonProperty("encoded_root_token")]
+        [JsonPropertyName("encoded_root_token")]
         public string EncodedRootToken { get; set; }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The PGP finger prints.
         /// </value>
-        [JsonProperty("pgp_fingerprint")]
+        [JsonPropertyName("pgp_fingerprint")]
         public string PGPFingerPrint { get; set; }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The OTP.
         /// </value>
-        [JsonProperty("otp")]
+        [JsonPropertyName("otp")]
         public string OTP { get; set; }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The OTP length.
         /// </value>
-        [JsonProperty("otp_length")]
+        [JsonPropertyName("otp_length")]
         public int OTPLength { get; set; }
     }
 }

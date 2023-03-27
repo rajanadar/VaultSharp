@@ -1,21 +1,21 @@
 ﻿
 using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.ActiveDirectory.Models
 {
     public class ActiveDirectoryRoleModel
     {
-        [JsonProperty("last_vault_rotation")]
+        [JsonPropertyName("last_vault_rotation")]
         public DateTimeOffset? LastVaultRotation { get; set; }
 
-        [JsonProperty("password_last_set")]
+        [JsonPropertyName("password_last_set")]
         public DateTimeOffset? PasswordLastSet { get; set; }
 
-        [JsonProperty("service_account_name")]
+        [JsonPropertyName("service_account_name")]
         public string ServiceAccountName { get; set; }
 
-        [JsonProperty("ttl")]
+        [JsonPropertyName("ttl")]
         public long TimeToLive { get; set; }
     }
 }

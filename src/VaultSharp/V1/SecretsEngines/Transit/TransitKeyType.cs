@@ -1,19 +1,21 @@
-﻿using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿using System;
+using System.Runtime.Serialization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using VaultSharp.Core;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
     /// <summary>
     /// Represents the type of Transit key to be generated.
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(TransitKeyTypeEnumConverter))]
     public enum TransitKeyType
     {
         /// <summary>
         /// AES-256 wrapped with GCM using a 96-bit nonce size AEAD (symmetric, supports derivation and convergent encryption, default)
         /// </summary>
-        [EnumMember(Value = "aes256-gcm96")]
+        [EnumMember(Value = "aes256-gcm96")] // CRITICAL: doesn't work for System.Text.Json
         aes256_gcm96 = 1,
 
         /// <summary>
@@ -78,4 +80,26 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         [EnumMember(Value = "hmac")]
         hmac = 11,
     }
+
+    internal sealed class TransitKeyTypeEnumConverter : JsonConverter<TransitKeyType>
+    {
+        public override TransitKeyType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var stringValue = reader.GetString();
+
+            if (!string.IsNullOrWhiteSpace(stringValue))
+            {
+                return (TransitKeyType)Enum.Parse(typeof(TransitKeyType), stringValue.Replace("-", "_"));
+            }
+
+
+            throw new VaultApiException("TransitKeyType was null");
+        }
+
+        public override void Write(Utf8JsonWriter writer, TransitKeyType value, JsonSerializerOptions options)
+        {
+            writer.WriteStringValue(value.ToString().Replace("_", "-"));
+        }
+    }
+
 }

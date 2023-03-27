@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.Commons
 {
@@ -14,7 +14,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The client token accessor.
         /// </value>
-        [JsonProperty("accessor")]
+        [JsonPropertyName("accessor")]
         public string ClientTokenAccessor { get; set; }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The client token.
         /// </value>
-        [JsonProperty("client_token")]
+        [JsonPropertyName("client_token")]
         public string ClientToken { get; set; }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The policies.
         /// </value>
-        [JsonProperty("policies")]
+        [JsonPropertyName("policies")]
         public List<string> Policies { get; set; }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The metadata.
         /// </value>
-        [JsonProperty("metadata")]
+        [JsonPropertyName("metadata")]
         public Dictionary<string, string> Metadata { get; set; }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         /// The lease duration seconds.
         /// </value>
-        [JsonProperty("lease_duration")]
+        [JsonPropertyName("lease_duration")]
         public int LeaseDurationSeconds { get; set; }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace VaultSharp.V1.Commons
         /// <value>
         ///   <c>true</c> if renewable; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("renewable")]
+        [JsonPropertyName("renewable")]
         public bool Renewable { get; set; }
 
         // raja todo: Add more stuff to this.

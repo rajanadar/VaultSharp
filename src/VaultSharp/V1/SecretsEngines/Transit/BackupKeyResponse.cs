@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -10,7 +10,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <summary>
         /// The backup data for the key.
         /// </summary>
-        [JsonProperty("backup")]
+        [JsonPropertyName("backup")]
         public string BackupData { get; set; }
     }
 }

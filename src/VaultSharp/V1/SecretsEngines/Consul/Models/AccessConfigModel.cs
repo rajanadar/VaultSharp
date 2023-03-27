@@ -1,25 +1,25 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Consul.Models
 {
     public class AccessConfigModel
     {
-        [JsonProperty("address")]
+        [JsonPropertyName("address")]
         public string ConsulAddressWithPort { get; set; }
 
-        [JsonProperty("scheme")]
+        [JsonPropertyName("scheme")]
         public string UrlScheme { get; set; }
 
-        [JsonProperty("ca_cert")]
+        [JsonPropertyName("ca_cert")]
         public string X509PEMEncodedServerCertificate { get; set; }
 
-        [JsonProperty("client_cert")]
+        [JsonPropertyName("client_cert")]
         public string X509PEMEncodedTLSClientCertificate { get; set; }
 
-        [JsonProperty("client_key")]
+        [JsonPropertyName("client_key")]
         public string X509PEMEncodedTLSClientKey { get; set; }
 
-        [JsonProperty("token")]
+        [JsonPropertyName("token")]
         public string ConsulToken { get; set; }
     }
 }

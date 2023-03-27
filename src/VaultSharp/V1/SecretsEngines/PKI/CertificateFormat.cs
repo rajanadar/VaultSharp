@@ -1,12 +1,12 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿using System.Text.Json.Serialization;
+
 
 namespace VaultSharp.V1.SecretsEngines.PKI
 {
     /// <summary>
     /// Represents the Certificate format.
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum CertificateFormat
     {
         /// <summary>

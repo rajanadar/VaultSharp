@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.Core
 {
@@ -8,28 +8,29 @@ namespace VaultSharp.Core
     /// </summary>
     public class NewBackendConfig : BackendConfig
     {
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
-        [JsonProperty("audit_non_hmac_request_keys")]
+        [JsonPropertyName("audit_non_hmac_request_keys")]
         public List<string> AuditNonHMACRequestKeys { get; set; }
 
-        [JsonProperty("audit_non_hmac_response_keys")]
+        [JsonPropertyName("audit_non_hmac_response_keys")]
         public List<string> AuditNonHMACResponseKeys { get; set; }
 
-        [JsonProperty("listing_visibility")]
+        [JsonPropertyName("listing_visibility")]
         public BackendListingVisibility ListingVisibility { get; set; } = BackendListingVisibility.hidden;
 
-        [JsonProperty("passthrough_request_headers")]
+        [JsonPropertyName("passthrough_request_headers")]
         public List<string> PassthroughRequestHeaders { get; set; }
 
-        [JsonProperty("allowed_response_headers")]
+        [JsonPropertyName("allowed_response_headers")]
         public List<string> AllowedResponseHeaders { get; set; }
 
-        [JsonProperty("allowed_managed_keys")]
+        [JsonPropertyName("allowed_managed_keys")]
         public List<string> AllowedManagedKeys { get; set; }
 
-        [JsonProperty("plugin_version", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("plugin_version")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] // CRITICAL: Very very important
         public string PluginVersion { get; set; }
     }
 }

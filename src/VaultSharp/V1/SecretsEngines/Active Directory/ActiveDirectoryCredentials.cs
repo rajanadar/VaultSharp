@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
         /// <value>
         /// The token.
         /// </value>
-        [JsonProperty("current_password")]
+        [JsonPropertyName("current_password")]
         public string CurrentPassword { get; set; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
         /// <value>
         /// The token.
         /// </value>
-        [JsonProperty("last_password")]
+        [JsonPropertyName("last_password")]
         public string LastPassword { get; set; }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
         /// <value>
         /// The token.
         /// </value>
-        [JsonProperty("username")]
+        [JsonPropertyName("username")]
         public string Username { get; set; }
     }
 }

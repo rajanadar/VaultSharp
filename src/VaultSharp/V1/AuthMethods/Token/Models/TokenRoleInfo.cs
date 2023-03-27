@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.AuthMethods.Token.Models
 {
@@ -11,7 +11,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// <summary>
         /// Name of the token role.
         /// </summary>
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// (they will have no parent). As such, they will not be automatically
         /// revoked by the revocation of any other token.
         /// </summary>
-        [JsonProperty("orphan")]
+        [JsonPropertyName("orphan")]
         public bool Orphan { get; set; }
 
         /// <summary>
@@ -31,10 +31,10 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// the new suffix as part of their path, and then tokens with the old 
         /// suffix can be revoked via /sys/leases/revoke-prefix
         /// </summary>
-        [JsonProperty("path_suffix")]
+        [JsonPropertyName("path_suffix")]
         public string PathSuffix { get; set; }
 
-        [JsonProperty("period")]
+        [JsonPropertyName("period")]
         public string Period { get; set; }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// its initial TTL. Setting the value to true will allow the token to 
         /// be renewable up to the system/mount maximum TTL.
         /// </summary>
-        [JsonProperty("renewable")]
+        [JsonPropertyName("renewable")]
         public bool Renewable { get; set; }
 
         /// <summary>
@@ -50,20 +50,20 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// hard cap even if token_ttl and token_max_ttl would otherwise allow 
         /// a renewal.
         /// </summary>
-        [JsonProperty("token_explicit_max_ttl")]
+        [JsonPropertyName("token_explicit_max_ttl")]
         public string TokenExplicitMaxTimeToLive { get; set; }
 
         /// <summary>
         /// If set, the default policy will not be set on generated tokens; 
         /// otherwise it will be added to the policies set in token_policies.
         /// </summary>
-        [JsonProperty("token_no_default_policy")]
+        [JsonPropertyName("token_no_default_policy")]
         public bool TokenNoDefaultPolicy { get; set; }
 
         /// <summary>
         /// Period if anything is set on the token.
         /// </summary>
-        [JsonProperty("token_period")]
+        [JsonPropertyName("token_period")]
         public string TokenPeriod { get; set; }
 
         /// <summary>
@@ -73,13 +73,13 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// type to return unless the client requests a different type at 
         /// generation time.
         /// </summary>
-        [JsonProperty("token_type")]
+        [JsonPropertyName("token_type")]
         public string TokenType { get; set; }
 
         /// <summary>
         /// Explicit Max TTL of the role.
         /// </summary>
-        [JsonProperty("explicit_max_ttl")]
+        [JsonPropertyName("explicit_max_ttl")]
         public string ExplicitMaxTimeToLive { get; set; }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// generation. This field supports globbing. 
         /// Note that allowed_entity_aliases is not case sensitive.
         /// </summary>
-        [JsonProperty("allowed_entity_aliases")]
+        [JsonPropertyName("allowed_entity_aliases")]
         public IList<string> AllowedEntityAliases { get; set; }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         ///  the "default" policy will be added to the created token 
         ///  automatically.
         /// </summary>
-        [JsonProperty("allowed_policies")]
+        [JsonPropertyName("allowed_policies")]
         public IList<string> AllowedPolcies { get; set; }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// list will prevent "default" from being added automatically to 
         /// created tokens.
         /// </summary>
-        [JsonProperty("disallowed_policies")]
+        [JsonPropertyName("disallowed_policies")]
         public IList<string> DisallowedPolcies { get; set; }
 
         /// <summary>
@@ -129,13 +129,13 @@ namespace VaultSharp.V1.AuthMethods.Token.Models
         /// the token when no policies are specified in the call to 
         /// /auth/token/create/:role_name.
         /// </summary>
-        [JsonProperty("allowed_policies_glob")]
+        [JsonPropertyName("allowed_policies_glob")]
         public IList<string> AllowedPolciesGlob { get; set; }
 
         /// <summary>
         ///  If set, successful token creation via this role will require that no requested policies glob match any of policies in this list. The parameter is a comma-delimited string of policy name globs. Adding any glob that matches "default" to this list will prevent "default" from being added automatically to created tokens. If combined with disallowed_policies policies need to only match one of the two lists to be blocked.
         /// </summary>
-        [JsonProperty("disallowed_policies_glob")]
+        [JsonPropertyName("disallowed_policies_glob")]
         public IList<string> DisallowedPolciesGlob { get; set; }
     }
 }

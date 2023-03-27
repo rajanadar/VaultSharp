@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json.Converters;
-using Newtonsoft.Json;
+﻿
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.AWS
 {
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum AWSCredentialsType
     {
         iam_user,

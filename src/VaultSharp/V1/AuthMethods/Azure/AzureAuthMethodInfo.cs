@@ -1,5 +1,5 @@
 ﻿
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using VaultSharp.Core;
 
 namespace VaultSharp.V1.AuthMethods.Azure
@@ -35,7 +35,7 @@ namespace VaultSharp.V1.AuthMethods.Azure
         /// <value>
         /// The role name.
         /// </value>
-        [JsonProperty("role")]
+        [JsonPropertyName("role")]
         public string RoleName { get; }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace VaultSharp.V1.AuthMethods.Azure
         /// <value>
         /// The jwt.
         /// </value>
-        [JsonProperty("jwt")]
+        [JsonPropertyName("jwt")]
         public string JWT { get; }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace VaultSharp.V1.AuthMethods.Azure
         /// <value>
         /// The value.
         /// </value>
-        [JsonProperty("subscription_id")]
+        [JsonPropertyName("subscription_id")]
         public string SubscriptionId { get; }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace VaultSharp.V1.AuthMethods.Azure
         /// <value>
         /// The value.
         /// </value>
-        [JsonProperty("resource_group_name")]
+        [JsonPropertyName("resource_group_name")]
         public string ResourceGroupName { get; }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace VaultSharp.V1.AuthMethods.Azure
         /// <value>
         /// The value.
         /// </value>
-        [JsonProperty("vm_name")]
+        [JsonPropertyName("vm_name")]
         public string VirtualMachineName { get; }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace VaultSharp.V1.AuthMethods.Azure
         /// <value>
         /// The value.
         /// </value>
-        [JsonProperty("vmss_name")]
+        [JsonPropertyName("vmss_name")]
         public string VirtualMachineScaleSetName { get; }
 
         /// <summary>

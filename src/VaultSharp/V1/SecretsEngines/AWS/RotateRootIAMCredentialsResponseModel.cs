@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.AWS
 {
     public class RotateRootIAMCredentialsResponseModel
     {
-        [JsonProperty("access_key")]
+        [JsonPropertyName("access_key")]
         public string NewAccessKey { get; set; }
     }
 }

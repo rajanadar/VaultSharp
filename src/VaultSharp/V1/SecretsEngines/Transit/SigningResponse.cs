@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -12,7 +12,8 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Gets or sets a list of results if multiple signatures were requested at once.
         /// </summary>
         /// <value>The list of results.</value>
-        [JsonProperty("batch_results", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("batch_results")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<SigningBatchResponse> BatchResults { get; set; }
     }
 
@@ -22,25 +23,29 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Gets or sets the error message returned if unable to sign the input data string.
         /// </summary>
         /// <value>The error.</value>
-        [JsonProperty("error", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("error")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Error { get; set; }
 
 
-        [JsonProperty("key_version", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("key_version")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? KeyVersion { get; set; }
 
         /// <summary>
         /// Gets or sets the derived public key used for the signature, if requested.
         /// </summary>
         /// <value>The derived public key.</value>
-        [JsonProperty("publickey", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("publickey")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string PublicKey { get; set; }
 
         /// <summary>
         /// Gets or sets the signature for the input data string.
         /// </summary>
         /// <value>The signature.</value>
-        [JsonProperty("signature", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("signature")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Signature { get; set; }
     }
 }

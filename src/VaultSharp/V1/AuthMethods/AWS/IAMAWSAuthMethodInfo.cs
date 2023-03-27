@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 using VaultSharp.Core;
 
 namespace VaultSharp.V1.AuthMethods.AWS
@@ -25,7 +25,7 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// <value>
         /// The HTTP method used in the signed request.
         /// </value>
-        [JsonProperty("iam_http_request_method")]
+        [JsonPropertyName("iam_http_request_method")]
         public string HttpRequestMethod { get; }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// <value>
         /// The Request Url used in the signed request.
         /// </value>
-        [JsonProperty("iam_request_url")]
+        [JsonPropertyName("iam_request_url")]
         public string RequestUrl { get; }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// <value>
         /// The Request Url used in the signed request.
         /// </value>
-        [JsonProperty("iam_request_body")]
+        [JsonPropertyName("iam_request_body")]
         public string RequestBody { get; }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace VaultSharp.V1.AuthMethods.AWS
         /// <value>
         /// The Base64-encoded, JSON-serialized representation of the sts:GetCallerIdentity HTTP request headers. 
         /// </value>
-        [JsonProperty("iam_request_headers")]
+        [JsonPropertyName("iam_request_headers")]
         public string RequestHeaders { get; }
 
         /// <summary>

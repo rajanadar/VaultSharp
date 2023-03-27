@@ -1,13 +1,13 @@
 ﻿using System;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json;
+
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
     /// <summary>
     /// The set of hash functions that are currently supported by Vault.
     /// </summary>
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum TransitHashFunction
     {        
         SHA1,

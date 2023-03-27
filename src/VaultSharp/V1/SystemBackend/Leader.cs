@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// <c>true</c> if [high availability enabled]; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("ha_enabled")]
+        [JsonPropertyName("ha_enabled")]
         public bool HighAvailabilityEnabled { get; set; }
 
         /// <summary>
@@ -23,13 +23,13 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         ///   <c>true</c> if this instance is the leader; otherwise, <c>false</c>.
         /// </value>
-        [JsonProperty("is_self")]
+        [JsonPropertyName("is_self")]
         public bool IsSelf { get; set; }
 
         /// <summary>
         /// Gets or sets active time of the leader.
         /// </summary>
-        [JsonProperty("active_time")]
+        [JsonPropertyName("active_time")]
         public DateTimeOffset ActiveTime { get; set; }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The address.
         /// </value>
-        [JsonProperty("leader_address")]
+        [JsonPropertyName("leader_address")]
         public string Address { get; set; }
 
         /// <summary>
@@ -49,37 +49,39 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The address.
         /// </value>
-        [JsonProperty("leader_cluster_address")]
+        [JsonPropertyName("leader_cluster_address")]
         public string ClusterAddress { get; set; }
 
         /// <summary>
         /// Gets or sets the performance standby.
         /// </summary>
-        [JsonProperty("performance_standby")]
+        [JsonPropertyName("performance_standby")]
         public bool PerformanceStandby { get; set; }
 
         /// <summary>
         /// Gets or sets the performance standby last remote wal.
         /// </summary>
-        [JsonProperty("performance_standby_last_remote_wal")]
+        [JsonPropertyName("performance_standby_last_remote_wal")]
         public long PerformanceStandbyLastRemoteWal { get; set; }
 
         /// <summary>
         /// Gets or sets the last remote.
         /// </summary>
-        [JsonProperty("last_wal")]
+        [JsonPropertyName("last_wal")]
         public long LastWal { get; set; }
 
         /// <summary>
         /// Gets or sets the raft committed index.
         /// </summary>
-        [JsonProperty("raft_committed_index", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("raft_committed_index")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public long RaftCommittedIndex { get; set; }
 
         /// <summary>
         /// Gets or sets the raft applied index.
         /// </summary>
-        [JsonProperty("raft_applied_index", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("raft_applied_index")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public long RaftAppliedIndex { get; set; }
     }
 }

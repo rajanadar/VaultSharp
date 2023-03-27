@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
 {
@@ -13,13 +13,14 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
         /// <remarks>
         /// raja todo: why is this not int?
         /// </remarks>
-        [JsonProperty("key_version")]
+        [JsonPropertyName("key_version")]
         public string KeyVersion { get; set; }
 
         /// <summary>
         /// Encrypted cipher text.
         /// </summary>
-        [JsonProperty("ciphertext")]
+        [JsonPropertyName("ciphertext")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string CipherText { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -12,7 +12,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// </summary>
         /// <remarks>Must be 0 (default) or a value greater than or equal to 10 (minimum cache size).</remarks>
         /// <value>The size, in terms of number of entries.</value>
-        [JsonProperty("size")]
+        [JsonPropertyName("size")]
         public int Size { get; set; }
     }
 }

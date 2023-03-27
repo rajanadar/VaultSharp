@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.TOTP
 {
@@ -10,33 +10,33 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
         /// <summary>
         /// Gets or sets the name of the account associated with the key.
         /// </summary>
-        [JsonProperty("account_name")]
+        [JsonPropertyName("account_name")]
         public string AccountName { get; set; }
 
         /// <summary>
         /// Gets or sets the used hashing algorithm.
         /// </summary>
-        [JsonProperty("algorithm")]
+        [JsonPropertyName("algorithm")]
         public string Algorithm { get; set; }
 
         /// <summary>
         /// Gets or sets the number of digits in the generated TOTP code.
         /// This value can be set to 6 or 8.
         /// </summary>
-        [JsonProperty("digits")]
+        [JsonPropertyName("digits")]
         public int Digits { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the issuing organization.
         /// </summary>
-        [JsonProperty("issuer")]
+        [JsonPropertyName("issuer")]
         public string Issuer { get; set; }
 
         /// <summary>
         /// Gets or sets the length of time in seconds used to
         /// create a counter for the TOTP code calculation.
         /// </summary>
-        [JsonProperty("period")]
+        [JsonPropertyName("period")]
         public long Period { get; set; }
     }
 }

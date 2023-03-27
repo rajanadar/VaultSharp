@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -11,7 +11,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Specifies the version of the key to use for the operation. 
         /// If not set, uses the latest version.
         /// </summary>
-        [JsonProperty(PropertyName = "key_version")]
+        [JsonPropertyName("key_version")]
         public int KeyVersion { get; set; }
     }
 }

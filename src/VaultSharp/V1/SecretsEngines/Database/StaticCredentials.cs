@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Database
 {
@@ -10,19 +10,19 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <summary>
         /// Specifies the last time Vault rotated this cred.
         /// </summary>
-        [JsonProperty("last_vault_rotation")]
+        [JsonPropertyName("last_vault_rotation")]
         public string LastVaultRotation { get; set; }
 
         /// <summary>
         /// Specifies the rotation period for this cred.
         /// </summary>
-        [JsonProperty("rotation_period")]
+        [JsonPropertyName("rotation_period")]
         public string RotationPeriod { get; set; }
 
         /// <summary>
         /// Specifies the remaining time for the creds.
         /// </summary>
-        [JsonProperty("ttl")]
+        [JsonPropertyName("ttl")]
         public string TimeToLive { get; set; }
     }
 }

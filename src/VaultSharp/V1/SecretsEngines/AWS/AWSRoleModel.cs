@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.AWS
 {
@@ -8,7 +8,7 @@ namespace VaultSharp.V1.SecretsEngines.AWS
     /// </summary>
     public class AWSRoleModel : AbstractAWSRoleModel
     {
-        [JsonProperty("credential_types")]
+        [JsonPropertyName("credential_types")]
         public List<AWSCredentialsType> CredentialTypes { get; set; }
     }
 }

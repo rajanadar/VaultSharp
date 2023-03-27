@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -15,7 +15,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The creation path.
         /// </value>
-        [JsonProperty("creation_path")]
+        [JsonPropertyName("creation_path")]
         public string CreationPath { get; set; }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The creation time.
         /// </value>
-        [JsonProperty("creation_time")]
+        [JsonPropertyName("creation_time")]
         public DateTimeOffset CreationTime { get; set; }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The creation time to live.
         /// </value>
-        [JsonProperty("creation_ttl")]
+        [JsonPropertyName("creation_ttl")]
         public int CreationTimeToLive { get; set; }
     }
 }

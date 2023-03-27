@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The nonce.
         /// </value>
-        [JsonProperty("nonce")]
+        [JsonPropertyName("nonce")]
         public string Nonce { get; set; }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The map of PGP key fingerprint to hex-encoded PGP-encrypted key.
         /// </value>
-        [JsonProperty("keys")]
+        [JsonPropertyName("keys")]
         public Dictionary<string, string> PGPFingerprintToEncryptedKeyMap { get; set; }
     }
 }

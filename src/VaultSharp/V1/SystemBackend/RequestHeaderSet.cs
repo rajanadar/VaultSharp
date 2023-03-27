@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend
 {
@@ -12,7 +12,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <summary>
         /// Gets or sets a value.
         /// </summary>
-        [JsonProperty("headers")]
+        [JsonPropertyName("headers")]
         public IList<RequestHeader> Headers { get; set; }
 
         /// <summary>

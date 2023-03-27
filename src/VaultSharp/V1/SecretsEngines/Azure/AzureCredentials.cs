@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Azure
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.Azure
         /// <value>
         /// The Client Id.
         /// </value>
-        [JsonProperty("client_id")]
+        [JsonPropertyName("client_id")]
         public string ClientId { get; set; }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace VaultSharp.V1.SecretsEngines.Azure
         /// <value>
         /// The Client secret.
         /// </value>
-        [JsonProperty("client_secret")]
+        [JsonPropertyName("client_secret")]
         public string ClientSecret { get; set; }
     }
 }

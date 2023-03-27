@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -13,7 +13,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// permanently deleted. This value can at most be equal to the lesser 
         /// of min_decryption_version and min_encryption_version.
         /// </summary>
-        [JsonProperty(PropertyName = "min_available_version")]
+        [JsonPropertyName("min_available_version")]
         public int MinimumAvailableVersion { get; set; }
     }
 }

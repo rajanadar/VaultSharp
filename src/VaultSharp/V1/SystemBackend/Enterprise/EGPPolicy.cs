@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SystemBackend.Enterprise
 {
@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
         /// <value>
         /// The paths.
         /// </value>
-        [JsonProperty("paths")]
+        [JsonPropertyName("paths")]
         public IEnumerable<string> Paths { get; set; }
     }
 }

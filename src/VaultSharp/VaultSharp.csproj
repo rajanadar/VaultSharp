@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net46;net461;net462;net47;net471;net472;net48;netstandard1.3;netstandard2.0;netstandard2.1;net5.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net462;net47;net471;net472;net48;net481;netstandard2.0;netstandard2.1;net6.0;net7.0;</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>VaultSharp.snk</AssemblyOriginatorKeyFile>
     <Title>VaultSharp</Title>
-    <Version>1.12.2.2</Version>
+    <Version>1.13.0</Version>
     <Authors>Raja Nadar</Authors>
-    <Copyright>Copyright ©  2021 Raja Nadar. All rights reserved.</Copyright>
+    <Copyright>Copyright ©  2023 Raja Nadar. All rights reserved.</Copyright>
     <PackageProjectUrl>https://github.com/rajanadar/VaultSharp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/rajanadar/VaultSharp</RepositoryUrl>
     <PackageTags>c# vault hashicorp .net netcore netstandard api secret consul kv ldap aws ec2 iam userpass</PackageTags>
@@ -20,11 +20,11 @@
  * VaultSharp  has first class support for Consul and Enterpise Vault APIs etc.
  * Enterprise APIs like Control Groups, Transform Secrets Engine &amp; KMIP Secrets Engine etc.
 
-This library is built with .NET Standard 1.3, .NET Standard 2.0, .NET Standard 2.1, .NET Framework 4.6, 4.6.*, 4.7, 4.7.*, 4.8  &amp; .NET 5, .NET 6 and hence is cross-platform across .NET Core 1.x, 2.x, 3.x, .NET Frameworks 4.x, Xamarin iOS, Android, Mac, UWP etc.</Description>
+This library is built with .NET Standard 2.0, .NET Standard 2.1, 4.6.2, 4.7.2*, 4.8, .NET 6  &amp; .NET 7 and hence is cross-platform across .NET Core 2.x, 3.x, .NET Frameworks 4.x, Xamarin iOS, Android, Mac, UWP etc.</Description>
     <RepositoryType>Github</RepositoryType>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.12.2.2</AssemblyVersion>
-    <FileVersion>1.12.2.1</FileVersion>
+    <AssemblyVersion>1.13.0</AssemblyVersion>
+    <FileVersion>1.13.0</FileVersion>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageIcon>icon.png</PackageIcon>
     
@@ -71,67 +71,57 @@ This library is built with .NET Standard 1.3, .NET Standard 2.0, .NET Standard 2
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
 
-  
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net46'">
-    <AssemblyTitle>VaultSharp .NET Framework 4.6</AssemblyTitle>
-  </PropertyGroup>
-  
-  <ItemGroup Condition="'$(TargetFramework)' == 'net46'">
-    <PackageReference Include="System.Net.Http.WinHttpHandler">
-      <Version>5.0.0</Version>
-    </PackageReference>
-  </ItemGroup>
-  
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">
-    <AssemblyTitle>VaultSharp .NET Framework 4.6.1</AssemblyTitle>
-  </PropertyGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
-    <PackageReference Include="System.Net.Http.WinHttpHandler">
-      <Version>5.0.0</Version>
-    </PackageReference>
-  </ItemGroup>
-  
   <PropertyGroup Condition="'$(TargetFramework)' == 'net462'">
     <AssemblyTitle>VaultSharp .NET Framework 4.6.2</AssemblyTitle>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net47'">
+    <AssemblyTitle>VaultSharp .NET Framework 4.7</AssemblyTitle>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net471'">
+    <AssemblyTitle>VaultSharp .NET Framework 4.7.1</AssemblyTitle>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net472'">
+    <AssemblyTitle>VaultSharp .NET Framework 4.7.2</AssemblyTitle>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
     <PackageReference Include="System.Net.Http.WinHttpHandler">
       <Version>5.0.0</Version>
     </PackageReference>
+    <PackageReference Include="System.Text.Json">
+      <Version>7.0.2</Version>
+    </PackageReference>
   </ItemGroup>
-  
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net47'">
-    <AssemblyTitle>VaultSharp .NET Framework 4.7</AssemblyTitle>
-  </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net47'">
     <PackageReference Include="System.Net.Http.WinHttpHandler">
       <Version>5.0.0</Version>
     </PackageReference>
+    <PackageReference Include="System.Text.Json">
+      <Version>7.0.2</Version>
+    </PackageReference>
   </ItemGroup>
-  
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net471'">
-    <AssemblyTitle>VaultSharp .NET Framework 4.7.1</AssemblyTitle>
-  </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net471'">
     <PackageReference Include="System.Net.Http.WinHttpHandler">
       <Version>5.0.0</Version>
     </PackageReference>
+    <PackageReference Include="System.Text.Json">
+      <Version>7.0.2</Version>
+    </PackageReference>
   </ItemGroup>
-  
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net472'">
-    <AssemblyTitle>VaultSharp .NET Framework 4.7.2</AssemblyTitle>
-  </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <PackageReference Include="System.Net.Http.WinHttpHandler">
       <Version>5.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Text.Json">
+      <Version>7.0.2</Version>
     </PackageReference>
   </ItemGroup>
   
@@ -143,32 +133,64 @@ This library is built with .NET Standard 1.3, .NET Standard 2.0, .NET Standard 2
     <PackageReference Include="System.Net.Http.WinHttpHandler">
       <Version>5.0.0</Version>
     </PackageReference>
+    <PackageReference Include="System.Text.Json">
+      <Version>7.0.2</Version>
+    </PackageReference>
   </ItemGroup>
-  
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
-    <AssemblyTitle>VaultSharp .NET Standard 1.3</AssemblyTitle>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net481'">
+    <AssemblyTitle>VaultSharp .NET Framework 4.8.1</AssemblyTitle>
   </PropertyGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
-    <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
-    <PackageReference Include="System.Net.Requests" Version="4.3.0" />
+  <ItemGroup Condition="'$(TargetFramework)' == 'net481'">
+    <PackageReference Include="System.Net.Http.WinHttpHandler">
+      <Version>5.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Text.Json">
+      <Version>7.0.2</Version>
+    </PackageReference>
   </ItemGroup>
+
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <AssemblyTitle>VaultSharp .NET Standard 2.0</AssemblyTitle>
   </PropertyGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="System.Text.Json">
+      <Version>7.0.2</Version>
+    </PackageReference>
+  </ItemGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
     <AssemblyTitle>VaultSharp .NET Standard 2.1</AssemblyTitle>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='net5.0'">
-    <AssemblyTitle>VaultSharp .NET 5</AssemblyTitle>
-  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
+    <PackageReference Include="System.Text.Json">
+      <Version>7.0.2</Version>
+    </PackageReference>
+  </ItemGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'=='net6.0'">
     <AssemblyTitle>VaultSharp .NET 6</AssemblyTitle>
   </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="System.Text.Json">
+      <Version>7.0.2</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='net7.0'">
+    <AssemblyTitle>VaultSharp .NET 7</AssemblyTitle>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+    <PackageReference Include="System.Text.Json">
+      <Version>7.0.2</Version>
+    </PackageReference>
+  </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
     <WarningLevel>5</WarningLevel>

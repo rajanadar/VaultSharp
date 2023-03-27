@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -14,13 +14,13 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The wrapped AES key should be the first 512 bytes of the ciphertext, 
         /// and the encrypted key material should be the remaining bytes. 
         /// </summary>
-        [JsonProperty(PropertyName = "ciphertext")]
+        [JsonPropertyName("ciphertext")]
         public string Base64EncodedCipherText { get; set; }
 
         /// <summary>
         /// The hash function used for the RSA-OAEP step of creating the ciphertext.
         /// </summary>
-        [JsonProperty(PropertyName = "hash_function")]
+        [JsonPropertyName("hash_function")]
         public TransitHashFunction HashFunction { get; set; } = TransitHashFunction.SHA256;
     }
 }

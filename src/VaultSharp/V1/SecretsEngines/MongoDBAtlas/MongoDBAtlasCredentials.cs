@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.MongoDBAtlas
 {
@@ -10,31 +10,31 @@ namespace VaultSharp.V1.SecretsEngines.MongoDBAtlas
         /// <summary>
         /// Gets or sets the lease duration seconds.
         /// </summary>
-        [JsonProperty("lease_duration")]
+        [JsonPropertyName("lease_duration")]
         public string LeaseDuration { get; set; }
 
         /// <summary>
         /// Gets or sets the lease renewable flag.
         /// </summary>
-        [JsonProperty("lease_renewable")]
+        [JsonPropertyName("lease_renewable")]
         public string LeaseRenewable { get; set; }
 
         /// <summary>
         /// Gets or sets the description of the creds.
         /// </summary>
-        [JsonProperty("description")]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the private key.
         /// </summary>
-        [JsonProperty("private_key")]
+        [JsonPropertyName("private_key")]
         public string PrivateKey { get; set; }
 
         /// <summary>
         /// Gets or sets the public key.
         /// </summary>
-        [JsonProperty("public_key")]
+        [JsonPropertyName("public_key")]
         public string PublicKey { get; set; }
     }
 }

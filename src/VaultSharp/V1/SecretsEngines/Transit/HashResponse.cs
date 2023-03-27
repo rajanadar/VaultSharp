@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Transit
 {
@@ -11,7 +11,7 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// Gets or sets the hash sum using the output encoding specified on the request.
         /// </summary>
         /// <value>The hash sum.</value>
-        [JsonProperty("sum")]
+        [JsonPropertyName("sum")]
         public string HashSum { get; set; }
     }
 }
