@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Identity
 {
@@ -8,7 +8,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// How often to generate a new signing key. Uses duration format strings.
         /// </summary>
         /// <example>"24h"</example>
-        [JsonProperty("rotation_period")]
+        [JsonPropertyName("rotation_period")]
         public string RotationPeriod { get; set; }
 
         /// <summary>
@@ -16,14 +16,14 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// available for verification after being rotated. Uses duration format strings.
         /// </summary>
         /// <example>"24h"</example>
-        [JsonProperty("verification_ttl")]
+        [JsonPropertyName("verification_ttl")]
         public string VerificationTimeToLive { get; set; }
 
         /// <summary>
         /// Signing algorithm to use. Allowed values are: RS256 (default), 
         /// RS384, RS512, ES256, ES384, ES512, EdDSA.
         /// </summary>
-        [JsonProperty("algorithm")]
+        [JsonPropertyName("algorithm")]
         public string Algorithm { get; set; }
     }
 }

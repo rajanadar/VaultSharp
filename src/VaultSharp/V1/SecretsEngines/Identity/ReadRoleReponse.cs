@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Identity
 {
     public class ReadRoleResponse
     {
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public RoleInfo Data { get; set; }
     }
 }

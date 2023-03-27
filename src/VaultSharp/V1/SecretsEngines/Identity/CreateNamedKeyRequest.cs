@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.Identity
 {
@@ -12,7 +12,7 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// Array of role client ids allowed to use this key for signing. If 
         /// empty, no roles are allowed. If "*", all roles are allowed.
         /// </summary>
-        [JsonProperty("allowed_client_ids")]
+        [JsonPropertyName("allowed_client_ids")]
         public List<string> AllowedClientIDs { get; set; }
     }
 }
