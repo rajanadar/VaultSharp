@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using VaultSharp.Core;
 
 namespace VaultSharp.V1.AuthMethods.AliCloud.Models
 {
@@ -13,6 +14,7 @@ namespace VaultSharp.V1.AuthMethods.AliCloud.Models
         public List<string> Policies { get; set; }
 
         [JsonPropertyName("ttl")]
+        [JsonConverter(typeof(IntegerToStringJsonConverter))]
         public string TimeToLive { get; set; }
 
         [JsonPropertyName("max_ttl")]

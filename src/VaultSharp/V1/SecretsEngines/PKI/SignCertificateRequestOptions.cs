@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using VaultSharp.Core;
 
 namespace VaultSharp.V1.SecretsEngines.PKI
 {
@@ -85,6 +86,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The time to live.
         /// </value>
         [JsonPropertyName("ttl")]
+        [JsonConverter(typeof(IntegerToStringJsonConverter))]
         public string TimeToLive { get; set; }
 
         /// <summary>

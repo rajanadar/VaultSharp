@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using VaultSharp.Core;
 
 namespace VaultSharp.V1.SecretsEngines.Database
 {
@@ -33,6 +34,7 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// The minimum is 5 seconds.
         /// </summary>
         [JsonPropertyName("rotation_period")]
+        [JsonConverter(typeof(IntegerToStringJsonConverter))]
         public string RotationPeriod { get; set; }
     }
 }

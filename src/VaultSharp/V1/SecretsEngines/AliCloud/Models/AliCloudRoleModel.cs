@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using VaultSharp.Core;
 
 namespace VaultSharp.V1.SecretsEngines.AliCloud.Models
 {
@@ -19,6 +20,7 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud.Models
         public string RoleARN { get; set; }
 
         [JsonPropertyName("ttl")]
+        [JsonConverter(typeof(IntegerToStringJsonConverter))]
         public string TimeToLive { get; set; }
     }
 }

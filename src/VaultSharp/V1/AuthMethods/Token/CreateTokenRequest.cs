@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using VaultSharp.Core;
 
 namespace VaultSharp.V1.AuthMethods.Token
 {
@@ -67,6 +68,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         /// If not provided, the token is valid for the default lease TTL, or indefinitely if the root policy is used.
         /// </summary>
         [JsonPropertyName("ttl")]
+        [JsonConverter(typeof(IntegerToStringJsonConverter))]
         public string TimeToLive { get; set; }
 
         /// <summary>
