@@ -1,3 +1,9 @@
+## 1.13.0.1 (April 03, 2023)
+
+**BUG FIXES:**
+
+  * [GH-312](https://github.com/rajanadar/VaultSharp/issues/312) Fix ```rotation_period``` deserialization issues in System.Text.Json. And all such duration fields that Vault allows in string and integer form.
+
 ## 1.13.0.1-beta1 (April 01, 2023)
 
 **BUG FIXES:**
