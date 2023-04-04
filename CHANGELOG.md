@@ -1,10 +1,22 @@
-## 1.13.0.1 (TBD)
+## 1.13.0.2 (TBD)
 
 **IMROVEMENTS:**
 
  * [GH-309](https://github.com/rajanadar/VaultSharp/issues/309) identity/oidc/key: create, read, update and delete apis.
  * [GH-309](https://github.com/rajanadar/VaultSharp/issues/309) identity/oidc/role: create, read, update and delete apis.
  * [GH-309](https://github.com/rajanadar/VaultSharp/issues/309) auth/approle: ````PullNewSecretIdAsync``` allows for reponse wrapping using ```wrapTimeToLive``` parameter
+
+## 1.13.0.1 (April 03, 2023)
+
+**BUG FIXES:**
+
+  * [GH-312](https://github.com/rajanadar/VaultSharp/issues/312) Fix ```rotation_period``` deserialization issues in System.Text.Json. And all such duration fields that Vault allows in string and integer form.
+
+## 1.13.0.1-beta1 (April 01, 2023)
+
+**BUG FIXES:**
+
+  * [GH-312](https://github.com/rajanadar/VaultSharp/issues/312) Fix ```rotation_period``` deserialization issues in System.Text.Json. And all such duration fields that Vault allows in string and integer form.
 
 ## 1.13.0 (March 25, 2023)
 

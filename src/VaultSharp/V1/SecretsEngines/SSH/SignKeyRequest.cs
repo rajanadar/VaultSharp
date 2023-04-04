@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using VaultSharp.Core;
 
 namespace VaultSharp.V1.SecretsEngines.SSH
 {
@@ -23,6 +24,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// Note that the role values default to system values if not explicitly set.
         /// </summary>
         [JsonPropertyName("ttl")]
+        [JsonConverter(typeof(IntegerToStringJsonConverter))]
         public string TimeToLive { get; set; }
 
         /// <summary>

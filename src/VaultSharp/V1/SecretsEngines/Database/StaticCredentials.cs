@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using VaultSharp.Core;
 
 namespace VaultSharp.V1.SecretsEngines.Database
 {
@@ -17,12 +18,14 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// Specifies the rotation period for this cred.
         /// </summary>
         [JsonPropertyName("rotation_period")]
+        [JsonConverter(typeof(IntegerToStringJsonConverter))]
         public string RotationPeriod { get; set; }
 
         /// <summary>
         /// Specifies the remaining time for the creds.
         /// </summary>
         [JsonPropertyName("ttl")]
+        [JsonConverter(typeof(IntegerToStringJsonConverter))]
         public string TimeToLive { get; set; }
     }
 }

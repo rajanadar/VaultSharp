@@ -6,7 +6,7 @@
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>VaultSharp.snk</AssemblyOriginatorKeyFile>
     <Title>VaultSharp</Title>
-    <Version>1.13.0</Version>
+    <Version>1.13.0.1</Version>
     <Authors>Raja Nadar</Authors>
     <Copyright>Copyright ©  2023 Raja Nadar. All rights reserved.</Copyright>
     <PackageProjectUrl>https://github.com/rajanadar/VaultSharp</PackageProjectUrl>
@@ -23,8 +23,8 @@
 This library is built with .NET Standard 2.0, .NET Standard 2.1, 4.6.2, 4.7.2*, 4.8, .NET 6  &amp; .NET 7 and hence is cross-platform across .NET Core 2.x, 3.x, .NET Frameworks 4.x, Xamarin iOS, Android, Mac, UWP etc.</Description>
     <RepositoryType>Github</RepositoryType>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.13.0</AssemblyVersion>
-    <FileVersion>1.13.0</FileVersion>
+    <AssemblyVersion>1.13.0.1</AssemblyVersion>
+    <FileVersion>1.13.0.1</FileVersion>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageIcon>icon.png</PackageIcon>
     

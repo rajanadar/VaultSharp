@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Text.Json.Serialization;
 using VaultSharp.V1.AuthMethods;
 using VaultSharp.V1.AuthMethods.Cert;
 using VaultSharp.V1.AuthMethods.Kerberos;
