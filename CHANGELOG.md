@@ -1,3 +1,11 @@
+## 1.13.0.2 (TBD)
+
+**IMROVEMENTS:**
+
+ * [GH-309](https://github.com/rajanadar/VaultSharp/issues/309) identity/oidc/key: create, read, update and delete apis.
+ * [GH-309](https://github.com/rajanadar/VaultSharp/issues/309) identity/oidc/role: create, read, update and delete apis.
+ * [GH-309](https://github.com/rajanadar/VaultSharp/issues/309) auth/approle: ````PullNewSecretIdAsync``` allows for reponse wrapping using ```wrapTimeToLive``` parameter
+
 ## 1.13.0.1 (April 03, 2023)
 
 **BUG FIXES:**

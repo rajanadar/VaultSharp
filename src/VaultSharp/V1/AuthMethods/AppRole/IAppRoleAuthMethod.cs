@@ -92,8 +92,12 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param>        
+        /// <param name="wrapTimeToLive">
+        /// <para>[optional]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
         /// <returns>The secret id info</returns>
-        Task<Secret<SecretIdInfo>> PullNewSecretIdAsync(string roleName, PullSecretIdRequestOptions secretIdRequestOptions = null, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<SecretIdInfo>> PullNewSecretIdAsync(string roleName, PullSecretIdRequestOptions secretIdRequestOptions = null, string mountPoint = AuthMethodDefaultPaths.AppRole, string wrapToTimeLive = null);
 
         /// <summary>
         /// Lists the accessors of all the SecretIDs issued against the AppRole. 

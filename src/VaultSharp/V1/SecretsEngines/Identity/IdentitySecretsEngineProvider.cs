@@ -172,5 +172,75 @@ namespace VaultSharp.V1.SecretsEngines.Identity
                 mergeEntitiesRequest)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
+
+        public async Task CreateNamedKeyAsync(string keyName, CreateNamedKeyRequest createNamedKeyRequest, string mountPoint = null)
+        {
+            Checker.NotNull(keyName, "keyName");
+            Checker.NotNull(createNamedKeyRequest, "createNamedKeyRequest");
+
+            await _polymath.MakeVaultApiRequest(
+                mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
+                "/oidc/key/" + keyName.Trim('/'), 
+                HttpMethod.Post, 
+                createNamedKeyRequest)
+                .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<ReadNamedKeyResponse> ReadNamedKeyAsync(string keyName, string mountPoint = null)
+        {
+            Checker.NotNull(keyName, "keyName");
+
+            return await _polymath.MakeVaultApiRequest<ReadNamedKeyResponse>(
+                mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
+                "/oidc/key/" + keyName.Trim('/'),
+                HttpMethod.Get)
+                .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task CreateRoleAsync(string roleName, CreateRoleRequest createRoleRequest, string mountPoint = null)
+        {
+            Checker.NotNull(roleName, "roleName");
+            Checker.NotNull(createRoleRequest, "createRoleRequest");
+
+            await _polymath.MakeVaultApiRequest(
+                mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
+                "/oidc/role/" + roleName.Trim('/'),
+                HttpMethod.Post,
+                createRoleRequest)
+                .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task<ReadRoleResponse> ReadRoleAsync(string roleName, string mountPoint = null)
+        {
+            Checker.NotNull(roleName, "roleName");
+
+            return await _polymath.MakeVaultApiRequest<ReadRoleResponse>(
+                mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
+                "/oidc/role/" + roleName.Trim('/'),
+                HttpMethod.Get)
+                .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task DeleteRoleAsync(string roleName, string mountPoint = null)
+        {
+            Checker.NotNull(roleName, "roleName");
+
+            await _polymath.MakeVaultApiRequest(
+                mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
+                "/oidc/role/" + roleName.Trim('/'),
+                HttpMethod.Delete)
+                .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
+
+        public async Task DeleteNamedKeyAsync(string keyName, string mountPoint = null)
+        {
+            Checker.NotNull(keyName, "keyName");
+
+            await _polymath.MakeVaultApiRequest(
+                mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Identity,
+                "/oidc/key/" + keyName.Trim('/'),
+                HttpMethod.Delete)
+                .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+        }
     }
 }
