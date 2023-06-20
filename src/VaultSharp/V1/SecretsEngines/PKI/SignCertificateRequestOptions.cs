@@ -114,6 +114,18 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         public bool ExcludeCommonNameFromSubjectAlternativeNames { get; set; }
 
         /// <summary>
+        /// <para>[optional]</para>
+        /// Gets or sets a value indicating whether to [remove roots from chain].
+        /// If true, the returned <c>ca_chain</c> field will not include any self-signed CA certificates.
+        /// Useful if end-users already have the root CA in their trust store.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [remove roots from chain]; otherwise, <c>false</c>.
+        /// </value>
+        [JsonPropertyName("remove_roots_from_chain")]
+        public bool RemoveRootsFromChain { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SignCertificatesRequestOptions"/> class.
         /// </summary>
         public SignCertificatesRequestOptions()
