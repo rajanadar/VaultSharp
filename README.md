@@ -366,7 +366,7 @@ await _authenticatedVaultClient.V1.Auth.LDAP.DeleteUserAsync(username);
 
 #### Kerberos Authentication Backend
 
-Requires https://github.com/wintoncode/vault-plugin-auth-kerberos .
+Requires https://github.com/hashicorp/vault-plugin-auth-kerberos .
 
 ```cs
 IAuthMethodInfo authMethod = new KerberosAuthMethodInfo(); // uses network credential by default.
