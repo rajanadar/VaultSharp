@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using VaultSharp.Core;
@@ -109,7 +110,9 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         {
             Checker.NotNull(path, "path");
 
-            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV2, "/metadata/" + path.Trim('/'), _polymath.ListHttpMethod, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            string queryParameters = "?list=true";
+
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV2, "/metadata/" + path.Trim('/') + queryParameters, HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<FullSecretMetadata>> ReadSecretMetadataAsync(string path, string mountPoint = null, string wrapTimeToLive = null)
