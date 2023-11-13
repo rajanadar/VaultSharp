@@ -24,7 +24,6 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// Specifies the rotation period for this cred.
         /// </summary>
         [JsonPropertyName("rotation_period")]
-        [JsonConverter(typeof(IntegerToStringJsonConverter))]
         public int RotationPeriod { get; set; }
 
         /// <summary>
@@ -32,5 +31,11 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// </summary>
         [JsonPropertyName("ttl")]
         public int TimeToLive { get; set; }
+
+        /// <summary>
+        /// Specifies the previous password set for the user.
+        /// </summary>
+        [JsonPropertyName("last_password")]
+        public string LastPassword { get; set; }
     }
 }
