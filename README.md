@@ -1177,7 +1177,17 @@ string secretId = nomadCredentials.Data.SecretId;
 
 #### OpenLDAP Secrets Engine
 
-##### Generate static credentials
+##### Generate dynamic role credentials
+
+ - This endpoint offers the credential information for a given role.
+
+```cs
+Secret<LdapCredentials> credentials = await vaultClient.V1.Secrets.OpenLDAP.GetCredentialsAsync(roleName);
+string username = credentials.Data.Username;
+string password = credentials.Data.Password;
+```
+
+##### Generate static role credentials
 
  - This endpoint offers the credential information for a given static-role.
 

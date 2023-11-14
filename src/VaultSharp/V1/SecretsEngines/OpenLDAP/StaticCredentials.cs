@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using VaultSharp.Core;
 
 namespace VaultSharp.V1.SecretsEngines.OpenLDAP
 {
