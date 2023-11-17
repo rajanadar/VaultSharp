@@ -9,7 +9,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole.Models
         public bool BindSecretId { get; set; } = true;
 
         [JsonPropertyName("local_secret_ids")]
-        public bool LocalSecretIds { get; set; }
+        public virtual bool LocalSecretIds { get; set; }
 
         [JsonPropertyName("policies")]
         public List<string> Policies { get; set; }
