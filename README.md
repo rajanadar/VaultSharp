@@ -1182,7 +1182,7 @@ string secretId = nomadCredentials.Data.SecretId;
  - This endpoint offers the credential information for a given role.
 
 ```cs
-Secret<LdapCredentials> credentials = await vaultClient.V1.Secrets.OpenLDAP.GetCredentialsAsync(roleName);
+Secret<LDAPCredentials> credentials = await vaultClient.V1.Secrets.OpenLDAP.GetDynamicCredentialsAsync(roleName);
 string username = credentials.Data.Username;
 string password = credentials.Data.Password;
 ```
