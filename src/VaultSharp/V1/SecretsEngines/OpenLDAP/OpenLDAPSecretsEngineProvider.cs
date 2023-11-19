@@ -14,7 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
             _polymath = polymath;
         }
 
-        public async Task CreateRoleAsync(string roleName, Role role, string mountPoint = null)
+        public async Task CreateDynamicRoleAsync(string roleName, DynamicRole role, string mountPoint = null)
         {
             Checker.NotNull(roleName, "roleName");
             Checker.NotNull(role, "role");
@@ -22,30 +22,30 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
             await _polymath.MakeVaultApiRequest(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.OpenLDAP, "/role/" + roleName.Trim('/'), HttpMethod.Post, role).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<Role>> ReadRoleAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<DynamicRole>> ReadDynamicRoleAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null)
         {
             Checker.NotNull(roleName, "roleName");
 
-            return await _polymath.MakeVaultApiRequest<Secret<Role>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.OpenLDAP, "/role/" + roleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<DynamicRole>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.OpenLDAP, "/role/" + roleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<ListInfo>> ReadAllRolesAsync(string mountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<ListInfo>> ReadAllDynamicRolesAsync(string mountPoint = null, string wrapTimeToLive = null)
         {
             return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.OpenLDAP, "/role/", _polymath.ListHttpMethod, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task DeleteRoleAsync(string roleName, string mountPoint = null)
+        public async Task DeleteDynamicRoleAsync(string roleName, string mountPoint = null)
         {
             Checker.NotNull(roleName, "roleName");
 
             await _polymath.MakeVaultApiRequest(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.OpenLDAP, "/role/" + roleName.Trim('/'), HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<LdapCredentials>> GetCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<LDAPCredentials>> GetDynamicCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null)
         {
             Checker.NotNull(roleName, "roleName");
 
-            return await _polymath.MakeVaultApiRequest<Secret<LdapCredentials>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.OpenLDAP, "/creds/" + roleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<LDAPCredentials>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.OpenLDAP, "/creds/" + roleName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task CreateStaticRoleAsync(string roleName, StaticRole staticRole, string mountPoint = null)

@@ -2,7 +2,7 @@
 
 namespace VaultSharp.V1.SecretsEngines.OpenLDAP
 {
-    public class Role
+    public class DynamicRole
     {
         /// <summary>
         /// A templatized LDIF string used to create a user account.
@@ -16,7 +16,7 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// more details. This field may optionally be provided as a base64 encoded string.
         /// </remarks>
         [JsonPropertyName("creation_ldif")]
-        public string CreationLdif { get; set; }
+        public string CreationLDIF { get; set; }
 
         /// <summary>
         /// A templatized LDIF string used to delete the user account once its TTL has expired.
@@ -28,7 +28,7 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// provided as a base64 encoded string.
         /// </remarks>
         [JsonPropertyName("deletion_ldif")]
-        public string DeletionLdif { get; set; }
+        public string DeletionLDIF { get; set; }
 
         /// <summary>
         /// A templatized LDIF string used to attempt to rollback any changes in the event that
@@ -41,7 +41,7 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// provided as a base64 encoded string.
         /// </remarks>
         [JsonPropertyName("rollback_ldif")]
-        public string RollbackLdif { get; set; }
+        public string RollbackLDIF { get; set; }
 
         /// <summary>
         /// A template used to generate a dynamic username. This will be used to fill in

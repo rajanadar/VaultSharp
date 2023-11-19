@@ -20,7 +20,7 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// The mount point for the OpenLDAP backend. Defaults to <see cref="SecretsEngineMountPoints.OpenLDAP" />
         /// Provide a value only if you have customized the mount point.</param>        
         /// <returns>The task</returns>
-        Task CreateRoleAsync(string roleName, Role role, string mountPoint = null);
+        Task CreateDynamicRoleAsync(string roleName, DynamicRole role, string mountPoint = null);
 
         /// <summary>
         /// This endpoint queries the role definition.
@@ -35,7 +35,7 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
         /// <returns>The role info.</returns>
-        Task<Secret<Role>> ReadRoleAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<DynamicRole>> ReadDynamicRoleAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint returns a list of available roles. 
@@ -49,7 +49,7 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
         /// <returns>The role names.</returns>
-        Task<Secret<ListInfo>> ReadAllRolesAsync(string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<ListInfo>> ReadAllDynamicRolesAsync(string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint deletes the role definition.
@@ -60,7 +60,7 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// The mount point for the OpenLDAP backend. Defaults to <see cref="SecretsEngineMountPoints.OpenLDAP" />
         /// Provide a value only if you have customized the mount point.</param>   
         /// <returns>The task.</returns>
-        Task DeleteRoleAsync(string roleName, string mountPoint = null);
+        Task DeleteDynamicRoleAsync(string roleName, string mountPoint = null);
 
         /// <summary>
         /// Generates a new set of dynamic credentials based on the named role.
@@ -75,9 +75,9 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
         /// <returns>
-        /// The secret with the <see cref="LdapCredentials" /> as the data.
+        /// The secret with the <see cref="LDAPCredentials" /> as the data.
         /// </returns>
-        Task<Secret<LdapCredentials>> GetCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<LDAPCredentials>> GetDynamicCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint creates or updates a static role definition.

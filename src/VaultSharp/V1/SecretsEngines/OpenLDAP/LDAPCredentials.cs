@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.OpenLDAP
 {
-    public class LdapCredentials : UsernamePasswordCredentials
+    public class LDAPCredentials : UsernamePasswordCredentials
     {
 
         /// <summary>
