@@ -232,8 +232,10 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// Folders are suffixed with /. The input must be a folder; list on a file will not return a value. 
         /// The values themselves are not accessible via this API.
         /// </summary>
-        /// <param name="path"><para>[required]</para>
-        /// The location path where the secret needs to be read from.</param>
+        /// <param name="path">
+        /// The location path where the secret needs to be read from. Can be empty string or null, if you
+        /// want to list all secrets on the mount point.
+        /// </param>
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
         /// Provide a value only if you have customized the mount point.</param>
