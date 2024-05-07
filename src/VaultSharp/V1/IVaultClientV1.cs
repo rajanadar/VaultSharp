@@ -1,4 +1,6 @@
-﻿using VaultSharp.V1.AuthMethods;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
+using VaultSharp.V1.AuthMethods;
 using VaultSharp.V1.SecretsEngines;
 using VaultSharp.V1.SystemBackend;
 
@@ -23,5 +25,7 @@ namespace VaultSharp.V1
         /// The System Backend interface.
         /// </summary>
         ISystemBackend System { get; }
+
+        Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod method) where TResponse : class;
     }
 }
