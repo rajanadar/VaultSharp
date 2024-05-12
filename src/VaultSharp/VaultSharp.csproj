@@ -27,7 +27,7 @@ This library is built with .NET Standard 2.0, .NET Standard 2.1, 4.6.2, 4.7.2*, 
     <FileVersion>1.13.0.1</FileVersion>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageIcon>icon.png</PackageIcon>
-    
+
     <!-- SourceLink specific details: https://github.com/dotnet/sourcelink/blob/master/README.md -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -56,14 +56,8 @@ This library is built with .NET Standard 2.0, .NET Standard 2.1, 4.6.2, 4.7.2*, 
     <Compile Remove="Common\**" />
     <EmbeddedResource Remove="Common\**" />
     <None Remove="Common\**" />
-    <None Include="..\..\icon.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <None Include="..\..\README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
+    <None Include="..\..\icon.png" Pack="true" PackagePath="" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -89,108 +83,29 @@ This library is built with .NET Standard 2.0, .NET Standard 2.1, 4.6.2, 4.7.2*, 
     <AssemblyTitle>VaultSharp .NET Framework 4.7.2</AssemblyTitle>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
-    <PackageReference Include="System.Net.Http.WinHttpHandler">
-      <Version>5.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Text.Json">
-      <Version>7.0.2</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net47'">
-    <PackageReference Include="System.Net.Http.WinHttpHandler">
-      <Version>5.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Text.Json">
-      <Version>7.0.2</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net471'">
-    <PackageReference Include="System.Net.Http.WinHttpHandler">
-      <Version>5.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Text.Json">
-      <Version>7.0.2</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <PackageReference Include="System.Net.Http.WinHttpHandler">
-      <Version>5.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Text.Json">
-      <Version>7.0.2</Version>
-    </PackageReference>
-  </ItemGroup>
-  
   <PropertyGroup Condition="'$(TargetFramework)' == 'net48'">
     <AssemblyTitle>VaultSharp .NET Framework 4.8</AssemblyTitle>
   </PropertyGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
-    <PackageReference Include="System.Net.Http.WinHttpHandler">
-      <Version>5.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Text.Json">
-      <Version>7.0.2</Version>
-    </PackageReference>
-  </ItemGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net481'">
     <AssemblyTitle>VaultSharp .NET Framework 4.8.1</AssemblyTitle>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net481'">
-    <PackageReference Include="System.Net.Http.WinHttpHandler">
-      <Version>5.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Text.Json">
-      <Version>7.0.2</Version>
-    </PackageReference>
-  </ItemGroup>
-
-
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <AssemblyTitle>VaultSharp .NET Standard 2.0</AssemblyTitle>
   </PropertyGroup>
-  
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="System.Text.Json">
-      <Version>7.0.2</Version>
-    </PackageReference>
-  </ItemGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
     <AssemblyTitle>VaultSharp .NET Standard 2.1</AssemblyTitle>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
-    <PackageReference Include="System.Text.Json">
-      <Version>7.0.2</Version>
-    </PackageReference>
-  </ItemGroup>
-
   <PropertyGroup Condition="'$(TargetFramework)'=='net6.0'">
     <AssemblyTitle>VaultSharp .NET 6</AssemblyTitle>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-    <PackageReference Include="System.Text.Json">
-      <Version>7.0.2</Version>
-    </PackageReference>
-  </ItemGroup>
-
   <PropertyGroup Condition="'$(TargetFramework)'=='net7.0'">
     <AssemblyTitle>VaultSharp .NET 7</AssemblyTitle>
   </PropertyGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-    <PackageReference Include="System.Text.Json">
-      <Version>7.0.2</Version>
-    </PackageReference>
-  </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
     <WarningLevel>5</WarningLevel>
@@ -199,5 +114,14 @@ This library is built with .NET Standard 2.0, .NET Standard 2.1, 4.6.2, 4.7.2*, 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|AnyCPU'">
     <WarningLevel>5</WarningLevel>
   </PropertyGroup>
-  
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net462' or '$(TargetFramework)' == 'net47' or '$(TargetFramework)' == 'net471' or '$(TargetFramework)' == 'net472' or '$(TargetFramework)' == 'net48' or '$(TargetFramework)' == 'net481'">
+    <PackageReference Include="System.Net.Http.WinHttpHandler" Version="5.0.0" />
+    <PackageReference Include="System.Text.Json" Version="7.0.2" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netstandard2.1' or '$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="System.Text.Json" Version="7.0.2" />
+  </ItemGroup>
+
 </Project>
