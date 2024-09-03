@@ -51,7 +51,7 @@ Secret<SecretData> kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2
 
 // Generate a dynamic Consul credential
 Secret<ConsulCredentials> consulCreds = await vaultClient.V1.Secrets.Consul.GetCredentialsAsync(consulRole, consulMount);
-string consulToken = consulCredentials.Data.Token;
+string consulToken = consulCreds.Data.Token;
 ```
 
 ### Gist of the features
