@@ -37,7 +37,8 @@ namespace VaultSharp.V1.AuthMethods.JWT
                 requestData.Add("client_nonce", clientNonce);
             }
 
-            return await _polymath.MakeVaultApiRequest<Secret<OIDCAuthURLInfo>>("v1/auth/" + mountPoint.Trim('/') + "/oidc/auth_url", HttpMethod.Post, requestData: requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            // Send unauthenticated as true.
+            return await _polymath.MakeVaultApiRequest<Secret<OIDCAuthURLInfo>>("v1/auth/" + mountPoint.Trim('/') + "/oidc/auth_url", HttpMethod.Post, requestData: requestData, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<AuthInfo>> DoOIDCCallbackAsync(string state, string nonce, string code, string clientNonce = null, string mountPoint = AuthMethodDefaultPaths.JWT)
