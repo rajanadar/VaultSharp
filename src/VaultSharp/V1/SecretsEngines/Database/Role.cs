@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using VaultSharp.Core;
 
 namespace VaultSharp.V1.SecretsEngines.Database
 {
@@ -20,6 +21,7 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// Defaults to system/engine default TTL time.
         /// </summary>
         [JsonPropertyName("default_ttl")]
+        [JsonConverter(typeof(IntegerToStringJsonConverter))]
         public string DefaultTimeToLive { get; set; }
 
         /// <summary>
@@ -30,6 +32,7 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// (or, if not set, the system max TTL), but it is not allowed to be longer.
         /// </summary>
         [JsonPropertyName("max_ttl")]
+        [JsonConverter(typeof(IntegerToStringJsonConverter))]
         public string MaximumTimeToLive { get; set; }
 
         /// <summary>
