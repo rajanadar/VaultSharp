@@ -14,6 +14,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// Specifies the SSH public key that should be signed.
         /// </summary>
         [JsonPropertyName("public_key")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string PublicKey { get; set; }
 
         /// <summary>
@@ -25,6 +26,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// </summary>
         [JsonPropertyName("ttl")]
         [JsonConverter(typeof(IntegerToStringJsonConverter))]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string TimeToLive { get; set; }
 
         /// <summary>
@@ -32,6 +34,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// Specifies valid principals, either usernames or hostnames, that the certificate should be signed for.
         /// </summary>
         [JsonPropertyName("valid_principals")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string ValidPrincipals { get; set; }
 
         /// <summary>
@@ -40,6 +43,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// Defaults to "user"
         /// </summary>
         [JsonPropertyName("cert_type")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string CertificateType { get; set; }
 
         /// <summary>
@@ -48,6 +52,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// If not specified, the display name of the token will be used.
         /// </summary>
         [JsonPropertyName("key_id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string KeyId { get; set; }
 
         /// <summary>
@@ -56,6 +61,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// Defaults to none.
         /// </summary>
         [JsonPropertyName("critical_options")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Dictionary<string, string> CriticalOptions { get; set; }
 
         /// <summary>
@@ -63,6 +69,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// Specifies a map of the extensions that the certificate should be signed for. Defaults to none.
         /// </summary>
         [JsonPropertyName("extension")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Dictionary<string, string> Extension { get; set; }
 
         public SignKeyRequest()
