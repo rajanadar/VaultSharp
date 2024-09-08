@@ -65,6 +65,34 @@ namespace VaultSharp.Samples
             Assert.Equal(newAppRoleRole.TokenMaximumTimeToLive, writtenRole.Data.TokenMaximumTimeToLive);
             Assert.Equal(newAppRoleRole.TokenNumberOfUses, writtenRole.Data.TokenNumberOfUses);
 
+            var updatedAppRoleRole = new UpdateAppRoleRoleModel
+            {
+                BindSecretId = true,
+                SecretIdBoundCIDRs = new System.Collections.Generic.List<string> { "192.168.129.23/17", "127.0.0.1/32" },
+                SecretIdNumberOfUses = 100,
+                SecretIdTimeToLive = 48 * 60 * 60,
+                TokenTimeToLive = 13 * 60 * 60,
+                TokenMaximumTimeToLive = 15 * 60 * 60,
+                TokenPolicies = new System.Collections.Generic.List<string> { "dev", "test", "local" },
+
+                // raja todo. Does not seem to reflect.
+                Policies = new System.Collections.Generic.List<string> { "devp", "testp", "qap" },
+
+                TokenBoundCIDRs = new System.Collections.Generic.List<string> { "192.168.128.23/17" },
+                TokenExplicitMaximumTimeToLive = 35 * 60 * 60,
+                TokenNumberOfUses = 0,
+                TokenPeriod = 19 * 60 * 60,
+                TokenType = AuthTokenType.Service
+            };
+
+            _authenticatedVaultClient.V1.Auth.AppRole.WriteRoleAsync(roleName, updatedAppRoleRole, mountPoint).Wait();
+
+            var writtenUpdatedRole = _authenticatedVaultClient.V1.Auth.AppRole.ReadRoleAsync(roleName, mountPoint).Result;
+            DisplayJson(writtenUpdatedRole);
+
+            Assert.Equal(updatedAppRoleRole.TokenMaximumTimeToLive, writtenUpdatedRole.Data.TokenMaximumTimeToLive);
+            Assert.Equal(updatedAppRoleRole.TokenNumberOfUses, writtenUpdatedRole.Data.TokenNumberOfUses);
+
             var roles = _authenticatedVaultClient.V1.Auth.AppRole.ReadAllRolesAsync(mountPoint).Result;
             DisplayJson(roles);
             Assert.True(roles.Data.Keys.Count() == 1);
@@ -198,8 +226,8 @@ namespace VaultSharp.Samples
             var readNewPolicies = _authenticatedVaultClient.V1.Auth.AppRole.ReadRolePoliciesAsync(roleName, mountPoint).Result;
             DisplayJson(readNewPolicies);
 
-            Assert.True(readNewPolicies.Data.Policies.Count == 3);
-            Assert.True(readNewPolicies.Data.TokenPolicies.Count == 3);
+            Assert.Equal(new System.Collections.Generic.List<string>{"dev", "local", "raaa", "test"}, readNewPolicies.Data.Policies);
+            Assert.Equal(new System.Collections.Generic.List<string>{"dev", "local", "raaa", "test"}, readNewPolicies.Data.TokenPolicies);
 
             _authenticatedVaultClient.V1.Auth.AppRole.DeleteRolePoliciesAsync(roleName, mountPoint).Wait();
             readNewPolicies = _authenticatedVaultClient.V1.Auth.AppRole.ReadRolePoliciesAsync(roleName, mountPoint).Result;
