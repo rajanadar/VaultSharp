@@ -96,6 +96,9 @@ This library is built with .NET Standard 2.0, .NET Standard 2.1, 4.6.2, 4.7.2*, 
     <PackageReference Include="System.Text.Json">
       <Version>7.0.2</Version>
     </PackageReference>
+    <PackageReference Include="System.Net.Http.Json">
+      <Version>7.0.1</Version>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net47'">
@@ -104,6 +107,9 @@ This library is built with .NET Standard 2.0, .NET Standard 2.1, 4.6.2, 4.7.2*, 
     </PackageReference>
     <PackageReference Include="System.Text.Json">
       <Version>7.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="System.Net.Http.Json">
+      <Version>7.0.1</Version>
     </PackageReference>
   </ItemGroup>
 
@@ -114,6 +120,9 @@ This library is built with .NET Standard 2.0, .NET Standard 2.1, 4.6.2, 4.7.2*, 
     <PackageReference Include="System.Text.Json">
       <Version>7.0.2</Version>
     </PackageReference>
+    <PackageReference Include="System.Net.Http.Json">
+      <Version>7.0.1</Version>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
@@ -122,6 +131,9 @@ This library is built with .NET Standard 2.0, .NET Standard 2.1, 4.6.2, 4.7.2*, 
     </PackageReference>
     <PackageReference Include="System.Text.Json">
       <Version>7.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="System.Net.Http.Json">
+      <Version>7.0.1</Version>
     </PackageReference>
   </ItemGroup>
   
@@ -136,6 +148,9 @@ This library is built with .NET Standard 2.0, .NET Standard 2.1, 4.6.2, 4.7.2*, 
     <PackageReference Include="System.Text.Json">
       <Version>7.0.2</Version>
     </PackageReference>
+    <PackageReference Include="System.Net.Http.Json">
+      <Version>7.0.1</Version>
+    </PackageReference>
   </ItemGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net481'">
@@ -149,6 +164,9 @@ This library is built with .NET Standard 2.0, .NET Standard 2.1, 4.6.2, 4.7.2*, 
     <PackageReference Include="System.Text.Json">
       <Version>7.0.2</Version>
     </PackageReference>
+    <PackageReference Include="System.Net.Http.Json">
+      <Version>7.0.1</Version>
+    </PackageReference>
   </ItemGroup>
 
 
@@ -160,6 +178,9 @@ This library is built with .NET Standard 2.0, .NET Standard 2.1, 4.6.2, 4.7.2*, 
     <PackageReference Include="System.Text.Json">
       <Version>7.0.2</Version>
     </PackageReference>
+    <PackageReference Include="System.Net.Http.Json">
+      <Version>7.0.1</Version>
+    </PackageReference>
   </ItemGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
@@ -169,6 +190,9 @@ This library is built with .NET Standard 2.0, .NET Standard 2.1, 4.6.2, 4.7.2*, 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
     <PackageReference Include="System.Text.Json">
       <Version>7.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="System.Net.Http.Json">
+      <Version>7.0.1</Version>
     </PackageReference>
   </ItemGroup>
 
