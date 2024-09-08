@@ -12,6 +12,7 @@ using VaultSharp.V1.AuthMethods.Kerberos;
 using VaultSharp.V1.Commons;
 using System.Text.Json.Nodes;
 using System.Text.Json;
+using System.Net.Http.Json;
 
 namespace VaultSharp.Core
 {
@@ -199,7 +200,7 @@ namespace VaultSharp.Core
                 var requestUri = new Uri(_httpClient.BaseAddress, new Uri(resourcePath, UriKind.Relative));
 
                 var requestContent = requestData != null
-                    ? new StringContent(JsonSerializer.Serialize(requestData), Encoding.UTF8)
+                    ? JsonContent.Create(requestData)
                     : null;
 
                 HttpRequestMessage httpRequestMessage = null;
@@ -233,7 +234,7 @@ namespace VaultSharp.Core
                         httpRequestMessage = new HttpRequestMessage(httpMethod, requestUri)
                         {
                             Content = requestData != null 
-                            ? new StringContent(JsonSerializer.Serialize(requestData), Encoding.UTF8, "application/merge-patch+json")
+                            ? JsonContent.Create(requestData, mediaType: new System.Net.Http.Headers.MediaTypeHeaderValue("application/merge-patch+json"))
                             : null
                         };
 
