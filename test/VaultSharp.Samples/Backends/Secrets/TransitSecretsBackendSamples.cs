@@ -80,7 +80,7 @@ namespace VaultSharp.Samples
                 Base64EncodedPlainText = encodedPlainText,
                 Base64EncodedContext = encodedContext,
                 ConvergentEncryption = true,
-                Nonce = nonce
+                // Nonce = nonce  // Nonce cannot be provided anymore. "provided nonce not allowed for this key" error
             };
 
             var encryptionResponse = _authenticatedVaultClient.V1.Secrets.Transit.EncryptAsync(keyName, encryptOptions, mountPoint).Result;
@@ -93,20 +93,21 @@ namespace VaultSharp.Samples
             {
                 CipherText = cipherText,
                 Base64EncodedContext = encodedContext,
-                Nonce = nonce
+                // Nonce = nonce
             };
 
             var decryptionResponse = _authenticatedVaultClient.V1.Secrets.Transit.DecryptAsync(keyName, decryptOptions, mountPoint).Result;
             DisplayJson(decryptionResponse);
             Assert.Equal(encodedPlainText, decryptionResponse.Data.Base64EncodedPlainText);
 
+            // Nonce not allowed.
             var batchEncryptOptions = new EncryptRequestOptions
             {
                 BatchedEncryptionItems = new List<EncryptionItem>
                 {
-                    new EncryptionItem { KeyVersion = 1, Nonce = nonce, Base64EncodedContext = encodedContext, Base64EncodedPlainText = encodedPlainText },
-                    new EncryptionItem { KeyVersion = 1, Nonce = nonce, Base64EncodedContext = encodedContext, Base64EncodedPlainText = encodedPlainText },
-                    new EncryptionItem { KeyVersion = 1, Nonce = nonce, Base64EncodedContext = encodedContext, Base64EncodedPlainText = encodedPlainText },
+                    new EncryptionItem { KeyVersion = 1, Base64EncodedContext = encodedContext, Base64EncodedPlainText = encodedPlainText },
+                    new EncryptionItem { KeyVersion = 1, Base64EncodedContext = encodedContext, Base64EncodedPlainText = encodedPlainText },
+                    new EncryptionItem { KeyVersion = 1, Base64EncodedContext = encodedContext, Base64EncodedPlainText = encodedPlainText },
                 }
             };
 
@@ -118,9 +119,9 @@ namespace VaultSharp.Samples
             {
                 BatchedDecryptionItems = new List<DecryptionItem>
                 {
-                    new DecryptionItem { Nonce = nonce, Base64EncodedContext = encodedContext, CipherText = batchedEncryptionResponse.Data.BatchedResults.ElementAt(0).CipherText },
-                    new DecryptionItem { Nonce = nonce, Base64EncodedContext = encodedContext, CipherText = batchedEncryptionResponse.Data.BatchedResults.ElementAt(1).CipherText },
-                    new DecryptionItem { Nonce = nonce, Base64EncodedContext = encodedContext, CipherText = batchedEncryptionResponse.Data.BatchedResults.ElementAt(2).CipherText },
+                    new DecryptionItem { Base64EncodedContext = encodedContext, CipherText = batchedEncryptionResponse.Data.BatchedResults.ElementAt(0).CipherText },
+                    new DecryptionItem { Base64EncodedContext = encodedContext, CipherText = batchedEncryptionResponse.Data.BatchedResults.ElementAt(1).CipherText },
+                    new DecryptionItem { Base64EncodedContext = encodedContext, CipherText = batchedEncryptionResponse.Data.BatchedResults.ElementAt(2).CipherText },
                 }
             };
 
@@ -139,7 +140,7 @@ namespace VaultSharp.Samples
                 {
                     Base64EncodedContext = encodedContext,
                     CipherText = encryptionResponse.Data.CipherText,
-                    Nonce = nonce,
+                    // Nonce = nonce,
                 }, mountPoint).Result;
             DisplayJson(rewrappedResult);
             Assert.NotNull(rewrappedResult.Data.CipherText);
@@ -147,7 +148,7 @@ namespace VaultSharp.Samples
             {
                 Base64EncodedPlainText = encodedPlainText,
                 Base64EncodedContext = encodedContext,
-                Nonce = nonce
+                // Nonce = nonce
             };
 
             var directEncryptionResponse = _authenticatedVaultClient.V1.Secrets.Transit.EncryptAsync(keyName, directEncryptOptions, mountPoint).Result;
