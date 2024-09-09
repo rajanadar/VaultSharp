@@ -237,3 +237,6 @@ _Pvt_Extensions
 
 test/VaultSharp.Samples/ProgramOutput.txt
 
+# Rider
+.idea/
+
