@@ -600,6 +600,16 @@ namespace VaultSharp.V1.SystemBackend
         /// The task.
         /// </returns>
         Task DeleteACLPolicyAsync(string policyName);
+        
+        /// <summary>
+        /// This endpoint generates a password from the specified existing password policy.
+        /// </summary>
+        /// <param name="passwordPolicyName">
+        /// <para>[required]</para>
+        /// Specifies the name of the password policy to generate a password from. 
+        /// </param>
+        /// <returns>The generated password.</returns>
+        Task<string> GeneratePasswordFromPasswordPolicy(string passwordPolicyName);
 
         /// <summary>
         ///  Returns a list keys for a given path prefix.
