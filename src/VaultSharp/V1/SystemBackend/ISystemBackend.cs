@@ -609,7 +609,7 @@ namespace VaultSharp.V1.SystemBackend
         /// Specifies the name of the password policy to generate a password from. 
         /// </param>
         /// <returns>The generated password.</returns>
-        Task<string> GeneratePasswordFromPasswordPolicy(string passwordPolicyName);
+        Task<string> GeneratePasswordFromPasswordPolicyAsync(string passwordPolicyName);
 
         /// <summary>
         ///  Returns a list keys for a given path prefix.
