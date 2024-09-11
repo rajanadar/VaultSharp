@@ -82,5 +82,14 @@ namespace VaultSharp.V1.Commons
         /// </value>
         [JsonPropertyName("auth")]
         public AuthInfo AuthInfo { get; set; }
+
+        /// <summary>
+        /// Gets or sets the mount type
+        /// </summary>
+        /// <value>
+        /// The mount type
+        /// </value>
+        [JsonPropertyName("mount_type")]
+        public string MountType { get; set; }
     }
 }

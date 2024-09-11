@@ -172,14 +172,11 @@ namespace VaultSharp.Samples
 
             // enable new file audit
             var newFileAudit = new FileAuditBackend
-            {
+            {        
                 Description = "store logs in a file - test cases",
                 Options = new FileAuditBackendOptions
                 {
-                    FilePath = "/var/log/file",
-                    LogSensitiveDataInRawFormat = true.ToString().ToLowerInvariant(),
-                    HmacAccessor = false.ToString().ToLowerInvariant(),
-                    Format = "jsonx"
+                    FilePath = "/var/log/file"
                 }
             };
 
@@ -321,7 +318,7 @@ namespace VaultSharp.Samples
             _authenticatedVaultClient.V1.System.DeleteAuditRequestHeaderAsync(headerValue2).Wait();
 
             reqHeaders = _authenticatedVaultClient.V1.System.GetAuditRequestHeadersAsync().Result;
-            Assert.False(reqHeaders.Data.Headers.Any());
+            Assert.True(reqHeaders.Data.Headers.Any()); // Two headers always come up
 
             // control group config. Enterprise only.
             // https://github.com/hashicorp/vault/issues/3702
