@@ -4,11 +4,11 @@
 
  * [GH-309](https://github.com/rajanadar/VaultSharp/issues/309) identity/oidc/key: create, read, update and delete apis.
  * [GH-309](https://github.com/rajanadar/VaultSharp/issues/309) identity/oidc/role: create, read, update and delete apis.
- * [GH-309](https://github.com/rajanadar/VaultSharp/issues/309) auth/approle: ````PullNewSecretIdAsync``` allows for reponse wrapping using ```wrapTimeToLive``` parameter
+ * [GH-309](https://github.com/rajanadar/VaultSharp/issues/309) auth/approle: ```PullNewSecretIdAsync``` allows for reponse wrapping using ```wrapTimeToLive``` parameter
  * [GH-329](https://github.com/rajanadar/VaultSharp/issues/329) kv2/metadata: `ReadSecretPathsAsync` to use HTTP `GET` method and `?list=true` instead of non-standard HTTP verb `LIST`
  * [GH-334](https://github.com/rajanadar/VaultSharp/issues/334) kv2/metadata: `ReadSecretPathsAsync` allows empty path value to list all secrets on the `mountPoint`
  * [GH-342](https://github.com/rajanadar/VaultSharp/issues/342) /sys/policies/password/:name/generate password generation api.
- * [GH-317](https://github.com/rajanadar/VaultSharp/issues/317) Read Default Issuer Certificate Chain API.
+ * [GH-317](https://github.com/rajanadar/VaultSharp/issues/317) PKI: Read Default Issuer Certificate Chain API.
 
 ## 1.13.0.1 (April 03, 2023)
 
