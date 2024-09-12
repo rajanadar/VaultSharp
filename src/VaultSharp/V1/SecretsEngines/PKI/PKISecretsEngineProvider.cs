@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using VaultSharp.Core;
@@ -116,6 +117,26 @@ namespace VaultSharp.V1.SecretsEngines.PKI
             var result = await _polymath.MakeVaultApiRequest<Secret<CertificateKeys>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/certs/revoked", _polymath.ListHttpMethod).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
             return result;
+        }
+        
+        public async Task<Secret<CertificateData>> ReadDefaultIssuerCertificateChainAsync(CertificateFormat certificateFormat, string pkiBackendMountPoint = null)
+        {
+            if (certificateFormat != CertificateFormat.json
+                && certificateFormat != CertificateFormat.pem)
+            {
+                throw new ArgumentException("Certificate format should be json or pem.");
+            }
+
+            // json
+            string path = "/cert/ca_chain";
+
+            if (certificateFormat == CertificateFormat.pem)
+            {
+                path = "/cert/ca_chain";
+            }
+
+            var certificateDataSecret = await _polymath.MakeVaultApiRequest<Secret<CertificateData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, path, HttpMethod.Get, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return certificateDataSecret;
         }
     }
 }

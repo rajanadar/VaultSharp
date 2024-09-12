@@ -28,5 +28,10 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The PEM Bundle encoded format.
         /// </summary>
         pem_bundle = 3,
+        
+        /// <summary>
+        /// The JSON format
+        /// </summary>
+        json = 4,
     }
 }
