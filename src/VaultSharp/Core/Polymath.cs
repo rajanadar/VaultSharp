@@ -182,13 +182,15 @@ namespace VaultSharp.Core
             return new Secret<T2>
             {
                 Data = destinationData,
+
                 LeaseDurationSeconds = sourceSecret.LeaseDurationSeconds,
                 RequestId = sourceSecret.RequestId,
                 Warnings = sourceSecret.Warnings,
                 LeaseId = sourceSecret.LeaseId,
                 Renewable = sourceSecret.Renewable,
                 AuthInfo = sourceSecret.AuthInfo,
-                WrapInfo = sourceSecret.WrapInfo
+                WrapInfo = sourceSecret.WrapInfo,
+                MountType = sourceSecret.MountType,
             };
         }
 

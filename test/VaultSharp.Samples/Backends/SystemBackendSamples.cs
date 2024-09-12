@@ -522,6 +522,10 @@ namespace VaultSharp.Samples
             DisplayJson(oldSecretBackends);
             Assert.Equal(secretBackends.Data.Count(), oldSecretBackends.Data.Count());
 
+            // var password = _authenticatedVaultClient.V1.System.GeneratePasswordFromPasswordPolicyAsync("raja").Result;
+            // DisplayJson(password);
+            // Assert.NotNull(password.Data);
+
             // raja todo:
             return;
 

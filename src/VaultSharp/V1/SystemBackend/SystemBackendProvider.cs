@@ -518,13 +518,13 @@ namespace VaultSharp.V1.SystemBackend
         
         // raja todo: add password policy configuration apis
         
-        public async Task<string> GeneratePasswordFromPasswordPolicyAsync(string passwordPolicyName)
+        public async Task<Secret<string>> GeneratePasswordFromPasswordPolicyAsync(string passwordPolicyName)
         {
             var response = await _polymath
-                .MakeVaultApiRequest<JsonObject>("v1/sys/policies/password/" + passwordPolicyName + "/generate", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+                .MakeVaultApiRequest<Secret<JsonObject>>("v1/sys/policies/password/" + passwordPolicyName + "/generate", HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
-            string password = response["password"].ToString();
-            return password;
+            var result = _polymath.GetMappedSecret(response, response.Data["password"].ToString());
+            return result;
         }
 
         public async Task<Secret<ListInfo>> GetRawSecretKeysAsync(string storagePathPrefix)
