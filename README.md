@@ -86,6 +86,8 @@ The following implementations are supported due to that.
 
 Source: https://github.com/dotnet/standard/blob/master/docs/versions.md
 
+VaultSharp will follow the .NET EOL dates mentioned here: https://learn.microsoft.com/en-us/lifecycle/products/microsoft-net-framework
+
 ### VaultSharp and Consul Support
 
 - VaultSharp supports dynamic Consul credential generation.
