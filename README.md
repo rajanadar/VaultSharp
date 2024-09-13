@@ -89,6 +89,7 @@ Source: https://github.com/dotnet/standard/blob/master/docs/versions.md
 VaultSharp will follow the .NET EOL dates mentioned here: 
  * https://learn.microsoft.com/en-us/lifecycle/products/microsoft-net-framework
  * https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core
+ * https://learn.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks
 
 ### VaultSharp and Consul Support
 
