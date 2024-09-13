@@ -1,3 +1,8 @@
+## Useful Gists related to VaultSharp usage
+
+ * Helper code to get Kerberos Negotiation Token using keytab and krb5 config file: https://gist.github.com/rajanadar/28c86d967695262bfe1f17ae82fb3d3d
+ * Helper code to generate on-demand CloudFoundry signature in .NET Applications: https://gist.github.com/rajanadar/84769efeca64e0128d7a8a627b7bb4db
+
 ## 1.17.5 (TBD)
 
 **IMROVEMENTS:**
