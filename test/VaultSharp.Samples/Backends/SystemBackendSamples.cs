@@ -154,15 +154,13 @@ namespace VaultSharp.Samples
             // logger endpoints. raja todo
             // Check when 1.13.0 Vault is released
 
-            /*
-
             var loggers = _authenticatedVaultClient.V1.System.GetVerbosityLevelOfAllLoggersAsync().Result;
+            DisplayJson(loggers);
             Assert.True(loggers.Data.Count > 0);
 
             var logger = _authenticatedVaultClient.V1.System.GetVerbosityLevelOfLoggerAsync("audit").Result;
+            DisplayJson(logger);
             Assert.True(logger.Data.Count > 0);
-
-            */
 
             // audit backends
 
@@ -522,16 +520,12 @@ namespace VaultSharp.Samples
             DisplayJson(oldSecretBackends);
             Assert.Equal(secretBackends.Data.Count(), oldSecretBackends.Data.Count());
 
+            // TODO: needs api to write password policy. However tested manually.
             // var password = _authenticatedVaultClient.V1.System.GeneratePasswordFromPasswordPolicyAsync("raja").Result;
             // DisplayJson(password);
             // Assert.NotNull(password.Data);
 
-            // raja todo:
-            return;
-
             // remount - raja todo
-
-            /*
 
             // mount a new secret backend
             _authenticatedVaultClient.V1.System.MountSecretBackendAsync(newSecretBackend).Wait();
@@ -540,11 +534,12 @@ namespace VaultSharp.Samples
             // _authenticatedVaultClient.V1.System.RemountSecretBackendAsync(newSecretBackend.Path, new Path);
 
             // get new secret backend config
-            var config = _authenticatedVaultClient.GetMountedSecretBackendConfigurationAsync(newMountPoint);
-            Assert.NotNull(config);
+            //var config = _authenticatedVaultClient.GetMountedSecretBackendConfigurationAsync(newMountPoint);
+            //Assert.NotNull(config);
 
+            /*
             // unmount
-            _authenticatedVaultClient.UnmountSecretBackendAsync(newMountPoint);
+            //_authenticatedVaultClient.UnmountSecretBackendAsync(newMountPoint);
 
             // quick
             secretBackends = _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();
@@ -555,7 +550,7 @@ namespace VaultSharp.Samples
             _authenticatedVaultClient.QuickUnmountSecretBackendAsync(SecretBackendType.AWS);
             newSecretBackends = _authenticatedVaultClient.GetAllMountedSecretBackendsAsync();
             Assert.Equal(secretBackends.Data.Count(), newSecretBackends.Data.Count());
-            */
+            
 
             // catalog and plugin apis.
 
@@ -595,6 +590,7 @@ namespace VaultSharp.Samples
             // ["cassandra-database-plugin","hana-database-plugin","mongodb-database-plugin","mssql-database-plugin","mysql-aurora-database-plugin",
             //  "mysql-database-plugin","mysql-legacy-database-plugin","mysql-rds-database-plugin","postgresql-database-plugin"]
 
+            */
             // policy apis.
 
             var policies = _authenticatedVaultClient.V1.System.GetPoliciesAsync().Result;
@@ -712,7 +708,7 @@ namespace VaultSharp.Samples
 
             readRawValues1 = _authenticatedVaultClient.V1.System.ReadRawSecretAsync(rawPath1).Result;
             DisplayJson(readRawValues1);
-            Assert.Equal("bar42", readRawValues1.Data["foo"]);
+            Assert.Equal("bar42", readRawValues1.Data["foo"].ToString());
 
             var rawPath2 = "secret/raw/path2";
             var rawValues2 = new Dictionary<string, object>
