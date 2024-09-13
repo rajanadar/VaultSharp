@@ -386,6 +386,11 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 // vault token/policies mapped to the current ActiveDirectory/Kerberos identity.
 ```
 
+If you are dealing with a keytab file and krb5 config file and want to use VaultSharp, you can do that using the following two steps:
+
+ - Use this gist to generate SP-Nego-Token from the keytab and krb5 file: 
+ - Once you have the token use VaultSettings.BeforeApiRequestAction to set the Authorization header to the Sp-nego-toekn value from the above helper method.
+
 #### OCI Auth Method
 
 ```cs
