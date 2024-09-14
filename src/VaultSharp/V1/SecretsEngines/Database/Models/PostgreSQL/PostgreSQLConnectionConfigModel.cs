@@ -7,6 +7,7 @@ namespace VaultSharp.V1.SecretsEngines.Database.Models.PostgreSQL
     /// </summary>
     public class PostgreSQLConnectionConfigModel : ConnectionConfigModel
     {
+        [JsonIgnore]
         public DatabaseProviderType DatabaseProviderType { get; } = DatabaseProviderType.PostgreSQL;
         
         /// <summary>

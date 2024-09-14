@@ -27,6 +27,96 @@ namespace VaultSharp.V1.SecretsEngines.Database
         Task ConfigureConnectionAsync(string connectionName, ConnectionConfigModel connectionConfigModel, string mountPoint = null);
         
         /// <summary>
+        /// This endpoint returns the configuration settings for a connection.
+        /// </summary>
+        /// <param name="connectionName">
+        /// <para>[required]</para>
+        /// Specifies the name for this database connection.
+        /// </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineMountPoints.Database" />
+        /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="wrapTimeToLive">
+        /// <para>[optional]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
+        /// <returns>The role info.</returns>
+        Task<Secret<ConnectionConfigModel>> ReadConnectionConfigAsync(string connectionName, string mountPoint = null, string wrapTimeToLive = null);
+
+        /// <summary>
+        /// This endpoint returns a list of available connections. 
+        /// Only the connection names are returned, not any values.
+        /// </summary>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineMountPoints.Database" />
+        /// Provide a value only if you have customized the mount point.</param>   
+        /// <param name="wrapTimeToLive">
+        /// <para>[optional]</para>
+        /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
+        /// </param>
+        /// <returns>The connection names.</returns>
+        Task<Secret<ListInfo>> ReadAllConnectionsAsync(string mountPoint = null, string wrapTimeToLive = null);
+        
+        /// <summary>
+        /// Deletes the connection config.
+        /// </summary>
+        /// <param name="connectionName">
+        /// <para>[required]</para>
+        /// Specifies the name for this database connection.
+        /// </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the AD backend. Defaults to <see cref="SecretsEngineMountPoints.ActiveDirectory" />
+        /// Provide a value only if you have customized the mount point.</param>
+        /// <returns>The task</returns>
+        Task DeleteConnectionAsync(string connectionName, string mountPoint = null);
+        
+        /// <summary>
+        /// This endpoint closes a connection and it's underlying plugin and restarts it
+        /// with the configuration stored in the barrier.
+        /// </summary>
+        /// <param name="connectionName">
+        /// <para>[required]</para>
+        /// Specifies the name for this database connection.
+        /// </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the AD backend. Defaults to <see cref="SecretsEngineMountPoints.ActiveDirectory" />
+        /// Provide a value only if you have customized the mount point.</param>
+        /// <returns>The task</returns>
+        Task ResetConnectionAsync(string connectionName, string mountPoint = null);
+        
+        /// <summary>
+        /// This endpoint performs the same operation as reset connection but for all connections
+        /// that reference a specific plugin name.
+        /// This can be useful to restart a specific plugin after it's been upgraded in the plugin catalog.
+        /// </summary>
+        /// <param name="pluginName">
+        /// <para>[required]</para>
+        ///  Specifies the name of the plugin for which all connections should be reset. 
+        /// </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the AD backend. Defaults to <see cref="SecretsEngineMountPoints.ActiveDirectory" />
+        /// Provide a value only if you have customized the mount point.</param>
+        /// <returns>The task</returns>
+        Task ReloadPluginAsync(string pluginName, string mountPoint = null);
+        
+        /// <summary>
+        /// This endpoint is used to rotate the "root" user credentials stored for the database connection.
+        /// This user must have permissions to update its own password.
+        /// Use caution: the root user's password will not be accessible once rotated so
+        /// it is highly recommended that you create a user for Vault to utilize
+        /// rather than using the actual root user.
+        /// </summary>
+        /// <param name="connectionName">
+        /// <para>[required]</para>
+        /// Specifies the name for this database connection.
+        /// </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the AD backend. Defaults to <see cref="SecretsEngineMountPoints.ActiveDirectory" />
+        /// Provide a value only if you have customized the mount point.</param>
+        /// <returns>The task</returns>
+        Task RotateRootCredentialsAsync(string connectionName, string mountPoint = null);
+        
+        /// <summary>
         /// This endpoint creates or updates a role definition.
         /// </summary>
         /// <param name="roleName"><para>[required]</para>
