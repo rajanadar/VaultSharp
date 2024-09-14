@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
+using VaultSharp.V1.SecretsEngines.Database.Models;
 
 namespace VaultSharp.V1.SecretsEngines.Database
 {
@@ -12,6 +13,11 @@ namespace VaultSharp.V1.SecretsEngines.Database
         public DatabaseSecretsEngineProvider(Polymath polymath)
         {
             _polymath = polymath;
+        }
+        
+        public async Task ConfigureConnectionAsync(string connectionName, ConnectionConfigModel connectionConfigModel, string mountPoint = null)
+        {
+            await _polymath.MakeVaultApiRequest(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Database, "/config/" + connectionName, HttpMethod.Post, requestData: connectionConfigModel).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task CreateRoleAsync(string roleName, Role role, string mountPoint = null)

@@ -182,6 +182,10 @@ This library is built with .NET Standard 2.0, .NET Standard 2.1, 4.6.2, 4.7.2*, 
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="V1\AuthMethods\Enterpise\SAML\" />
+  </ItemGroup>
+
   <PropertyGroup Condition="'$(TargetFramework)'=='net7.0'">
     <AssemblyTitle>VaultSharp .NET 7</AssemblyTitle>
   </PropertyGroup>

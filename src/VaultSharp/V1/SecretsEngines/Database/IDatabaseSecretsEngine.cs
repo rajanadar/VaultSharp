@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
+using VaultSharp.V1.SecretsEngines.Database.Models;
 
 namespace VaultSharp.V1.SecretsEngines.Database
 {
@@ -8,6 +9,23 @@ namespace VaultSharp.V1.SecretsEngines.Database
     /// </summary>
     public interface IDatabaseSecretsEngine
     {
+        /// <summary>
+        /// Configures the connection string used to communicate with the desired database.
+        /// </summary>
+        /// <param name="connectionName">
+        /// <para>[required]</para>
+        /// Specifies the name for this database connection.
+        /// </param>
+        /// <param name="connectionConfigModel">
+        /// <para>[required]</para>
+        /// The connection details
+        /// </param>
+        /// <param name="mountPoint"><para>[optional]</para>
+        /// The mount point for the AD backend. Defaults to <see cref="SecretsEngineMountPoints.ActiveDirectory" />
+        /// Provide a value only if you have customized the mount point.</param>
+        /// <returns>The task</returns>
+        Task ConfigureConnectionAsync(string connectionName, ConnectionConfigModel connectionConfigModel, string mountPoint = null);
+        
         /// <summary>
         /// This endpoint creates or updates a role definition.
         /// </summary>

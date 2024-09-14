@@ -19,6 +19,7 @@
  * [GH-342](https://github.com/rajanadar/VaultSharp/issues/342) /sys/policies/password/:name/generate password generation api.
  * [GH-317](https://github.com/rajanadar/VaultSharp/issues/317) PKI: Read Default Issuer Certificate Chain API.
  * Health Status now adds the new fields ```enterprise```, ```echo_duration_ms```, ```clock_skew_ms``` & ```replication_primary_canary_age_ms```
+ * [GH-362](https://github.com/rajanadar/VaultSharp/issues/362) secrets/database: Connection Apis with additional postgresql support
 
 ## 1.13.0.1 (April 03, 2023)
 
