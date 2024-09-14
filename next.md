@@ -1,4 +1,21 @@
 
+As of 1.17.5 of Vault, lets check all Auth and Secret backends for consumer operations
+
+Auth Methods
+
+0. SAML is missing. So add it. Enterprise.SAML
+
+1. AliCloud
+
+Login is good.
+Admin is also good.
+
+
+Secret Backends
+
+Everything seems to be there. Cool.
+
+
 From Vault Changelog, after 1.13.0
 
 1.13.1 https://github.com/hashicorp/vault/blob/main/CHANGELOG.md#1131
