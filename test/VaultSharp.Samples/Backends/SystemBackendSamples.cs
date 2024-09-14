@@ -249,7 +249,7 @@ namespace VaultSharp.Samples
             Assert.Equal(2764800, backendConfig.Data.DefaultLeaseTtl);
             Assert.Equal(2764800, backendConfig.Data.MaximumLeaseTtl);
 
-            var newBackendConfig = new NewBackendConfig
+            var newBackendConfig = new BackendConfig
             {
                 DefaultLeaseTtl = 3600,
                 MaximumLeaseTtl = 4200,
@@ -494,7 +494,7 @@ namespace VaultSharp.Samples
 
             var ttl = 36000;
 
-            _authenticatedVaultClient.V1.System.ConfigureSecretBackendAsync(newSecretBackend.Path, new NewBackendConfig { DefaultLeaseTtl = ttl, MaximumLeaseTtl = ttl, ForceNoCache = true }).Wait();
+            _authenticatedVaultClient.V1.System.ConfigureSecretBackendAsync(newSecretBackend.Path, new BackendConfig { DefaultLeaseTtl = ttl, MaximumLeaseTtl = ttl, ForceNoCache = true }).Wait();
 
             var newMountConfig = _authenticatedVaultClient.V1.System.GetSecretBackendConfigAsync(newSecretBackend.Path).Result;
             DisplayJson(newMountConfig);

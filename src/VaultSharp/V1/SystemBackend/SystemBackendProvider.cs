@@ -108,7 +108,7 @@ namespace VaultSharp.V1.SystemBackend
             return await _polymath.MakeVaultApiRequest<Secret<BackendConfig>>(resourcePath, HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task ConfigureAuthBackendAsync(string path, NewBackendConfig backendConfig)
+        public async Task ConfigureAuthBackendAsync(string path, BackendConfig backendConfig)
         {
             var resourcePath = string.Format(CultureInfo.InvariantCulture, "v1/sys/auth/{0}/tune", path.Trim('/'));
             await _polymath.MakeVaultApiRequest(resourcePath, HttpMethod.Post, backendConfig).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
@@ -460,7 +460,7 @@ namespace VaultSharp.V1.SystemBackend
             return await _polymath.MakeVaultApiRequest<Secret<BackendConfig>>(resourcePath, HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task ConfigureSecretBackendAsync(string path, NewBackendConfig backendConfig)
+        public async Task ConfigureSecretBackendAsync(string path, BackendConfig backendConfig)
         {
             var resourcePath = string.Format(CultureInfo.InvariantCulture, "v1/sys/mounts/{0}/tune", path.Trim('/'));
             await _polymath.MakeVaultApiRequest(resourcePath, HttpMethod.Post, backendConfig).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);

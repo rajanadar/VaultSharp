@@ -90,6 +90,42 @@ namespace VaultSharp.V1.SystemBackend
         [JsonPropertyName("cluster_id")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string ClusterId { get; set; }
+        
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance of Vault is an enterprise version.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if enterprise; otherwise, <c>false</c>.
+        /// </value>
+        [JsonPropertyName("enterprise")]
+        public bool Enterprise { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the echo_duration_ms
+        /// </summary>
+        /// <value>
+        /// The echo_duration_ms
+        /// </value>
+        [JsonPropertyName("echo_duration_ms")]
+        public long EchoDurationMilliseconds { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the clock_skew_ms
+        /// </summary>
+        /// <value>
+        /// The clock_skew_ms
+        /// </value>
+        [JsonPropertyName("clock_skew_ms")]
+        public long ClockSkewMilliseconds { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the replication_primary_canary_age_ms
+        /// </summary>
+        /// <value>
+        /// The replication_primary_canary_age_ms
+        /// </value>
+        [JsonPropertyName("replication_primary_canary_age_ms")]
+        public long ReplicationPrimaryCanaryAgeMilliseconds { get; set; }
 
         /// <summary>
         /// Gets the friendly server time from ServerTimeUtcUnixTimestamp 

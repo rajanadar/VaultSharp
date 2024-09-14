@@ -5,6 +5,10 @@
 
 ## 1.17.5 (TBD)
 
+**BREAKING CHANGES:**
+
+* ```NewBackendConfig``` class is removed and instead ```BackendConfig``` class has been enhanced.
+
 **IMROVEMENTS:**
 
  * [GH-309](https://github.com/rajanadar/VaultSharp/issues/309) identity/oidc/key: create, read, update and delete apis.
@@ -14,6 +18,7 @@
  * [GH-334](https://github.com/rajanadar/VaultSharp/issues/334) kv2/metadata: `ReadSecretPathsAsync` allows empty path value to list all secrets on the `mountPoint`
  * [GH-342](https://github.com/rajanadar/VaultSharp/issues/342) /sys/policies/password/:name/generate password generation api.
  * [GH-317](https://github.com/rajanadar/VaultSharp/issues/317) PKI: Read Default Issuer Certificate Chain API.
+ * Health Status now adds the new fields ```enterprise```, ```echo_duration_ms```, ```clock_skew_ms``` & ```replication_primary_canary_age_ms```
 
 ## 1.13.0.1 (April 03, 2023)
 

@@ -130,7 +130,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <returns>
         /// A task
         /// </returns>
-        Task ConfigureAuthBackendAsync(string path, NewBackendConfig backendConfig);
+        Task ConfigureAuthBackendAsync(string path, BackendConfig backendConfig);
 
         /// <summary>
         /// Gets the capabilities of the token on the given path.
@@ -519,7 +519,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <returns>
         /// A task
         /// </returns>
-        Task ConfigureSecretBackendAsync(string path, NewBackendConfig backendConfig);
+        Task ConfigureSecretBackendAsync(string path, BackendConfig backendConfig);
 
         /// <summary>
         /// Gets all the available policy names in the system.
