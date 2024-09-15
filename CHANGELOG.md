@@ -3,23 +3,37 @@
  * Helper code to get Kerberos Negotiation Token using keytab and krb5 config file: https://gist.github.com/rajanadar/28c86d967695262bfe1f17ae82fb3d3d
  * Helper code to generate on-demand CloudFoundry signature in .NET Applications: https://gist.github.com/rajanadar/84769efeca64e0128d7a8a627b7bb4db
 
-## 1.17.5 (TBD)
+## 1.17.5 (September 15, 2024)
 
 **BREAKING CHANGES:**
 
 * ```NewBackendConfig``` class is removed and instead ```BackendConfig``` class has been enhanced.
 
-**IMROVEMENTS:**
+**BUG FIXES:**
+
+ * [GH-315](https://github.com/rajanadar/VaultSharp/issues/315) Fix exception in secret database ```readrole``` api due to ttl conversion issues 
+ * [GH-337](https://github.com/rajanadar/VaultSharp/issues/337) kv2/metadata: ```ReadSecretPathsAsync``` allows empty path value to list all secrets on the mountPoint
+ * [GH-346](https://github.com/rajanadar/VaultSharp/issues/346) Serialized SigninKeyRequest can be invalid due to missing JsonIgnore
+ * [GH-348](https://github.com/rajanadar/VaultSharp/issues/348) JWTAuthMethodProvider should pass unauthenticated: true for callback requests
+
+**FEATURES:**
 
  * [GH-309](https://github.com/rajanadar/VaultSharp/issues/309) identity/oidc/key: create, read, update and delete apis.
  * [GH-309](https://github.com/rajanadar/VaultSharp/issues/309) identity/oidc/role: create, read, update and delete apis.
- * [GH-309](https://github.com/rajanadar/VaultSharp/issues/309) auth/approle: ```PullNewSecretIdAsync``` allows for reponse wrapping using ```wrapTimeToLive``` parameter
- * [GH-329](https://github.com/rajanadar/VaultSharp/issues/329) kv2/metadata: `ReadSecretPathsAsync` to use HTTP `GET` method and `?list=true` instead of non-standard HTTP verb `LIST`
- * [GH-334](https://github.com/rajanadar/VaultSharp/issues/334) kv2/metadata: `ReadSecretPathsAsync` allows empty path value to list all secrets on the `mountPoint`
+ * [GH-317](https://github.com/rajanadar/VaultSharp/issues/317) pki: Add support for the ```read ca chain``` Api
+ * [GH-333](https://github.com/rajanadar/VaultSharp/issues/333) ldap: Add support for role apis, dynamic credentials etc.
  * [GH-342](https://github.com/rajanadar/VaultSharp/issues/342) /sys/policies/password/:name/generate password generation api.
- * [GH-317](https://github.com/rajanadar/VaultSharp/issues/317) PKI: Read Default Issuer Certificate Chain API.
- * Health Status now adds the new fields ```enterprise```, ```echo_duration_ms```, ```clock_skew_ms``` & ```replication_primary_canary_age_ms```
+ * [GH-356](https://github.com/rajanadar/VaultSharp/issues/356) Add support for .NET 8.0
  * [GH-362](https://github.com/rajanadar/VaultSharp/issues/362) secrets/database: Connection Apis with additional postgresql support
+
+**IMROVEMENTS:**
+
+ * [GH-309](https://github.com/rajanadar/VaultSharp/issues/309) auth/approle: ```PullNewSecretIdAsync``` allows for reponse wrapping using ```wrapTimeToLive``` parameter
+ * [GH-318](https://github.com/rajanadar/VaultSharp/issues/318) pki: Add ```RemoveRootsFromChain``` field to ```SignCertificatesRequestOptions```
+ * [GH-329](https://github.com/rajanadar/VaultSharp/issues/329) kv2/metadata: `ReadSecretPathsAsync` to use HTTP `GET` method and `?list=true` instead of non-standard HTTP verb `LIST`
+ * [GH-336](https://github.com/rajanadar/VaultSharp/issues/336) approle: Allow updating of app role by ignoring ```local_secret_ids```
+ * [GH-356](https://github.com/rajanadar/VaultSharp/issues/356) Reduce dependency on System.Text.Json for .net 7.
+ * Health Status now adds the new fields ```enterprise```, ```echo_duration_ms```, ```clock_skew_ms``` & ```replication_primary_canary_age_ms```
 
 ## 1.13.0.1 (April 03, 2023)
 
