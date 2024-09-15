@@ -187,9 +187,6 @@ namespace VaultSharp.Samples
                 Options = new FileAuditBackendOptions
                 {
                     FilePath = "/var/log/file2",
-                    LogSensitiveDataInRawFormat = true.ToString().ToLowerInvariant(),
-                    HmacAccessor = false.ToString().ToLowerInvariant(),
-                    Format = "jsonx"
                 }
             };
 

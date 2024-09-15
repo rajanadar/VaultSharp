@@ -24,6 +24,7 @@ namespace VaultSharp.V1.SystemBackend
 
                 auditBackendJsonObject.Add("description", value.Description);
                 auditBackendJsonObject.Add("type", value.Type.Value);
+                
                 auditBackendJsonObject.Add("local", value.Local);
 
 
