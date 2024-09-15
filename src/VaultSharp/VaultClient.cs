@@ -18,12 +18,6 @@ namespace VaultSharp
         /// <param name="vaultClientSettings"></param>
         public VaultClient(VaultClientSettings vaultClientSettings)
         {
-            // Due to the bug https://github.com/dotnet/runtime/issues/46372
-            // Register some converters programmatically here
-            JsonSerializerOptions.Default.Converters.Add(new ConnectionConfigModelJsonConverter());
-            
-            // raja todo: Change AuditBackend converter from Attribute to this.
-            
             polymath = new Polymath(vaultClientSettings);
             V1 = new VaultClientV1(polymath);
         }
