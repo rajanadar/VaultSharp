@@ -132,7 +132,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
 
             if (certificateFormat == CertificateFormat.pem)
             {
-                path = "/cert/ca_chain";
+                path = "/ca_chain";
             }
 
             var certificateDataSecret = await _polymath.MakeVaultApiRequest<Secret<CertificateData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, path, HttpMethod.Get, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
