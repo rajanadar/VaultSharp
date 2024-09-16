@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net462;net47;net471;net472;net48;net481;netstandard2.0;netstandard2.1;net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>net462;net47;net471;net472;net48;net481;netstandard2.0;netstandard2.1;net6.0;net7.0;net8.0</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>VaultSharp.snk</AssemblyOriginatorKeyFile>
@@ -188,6 +188,10 @@ This library is built with .NET Standard 2.0, .NET Standard 2.1, 4.6.2, 4.7.2*, 
 
   <PropertyGroup Condition="'$(TargetFramework)'=='net7.0'">
     <AssemblyTitle>VaultSharp .NET 7</AssemblyTitle>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0'">
+    <AssemblyTitle>VaultSharp .NET 8</AssemblyTitle>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
