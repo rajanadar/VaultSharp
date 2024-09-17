@@ -3,11 +3,17 @@
  * Helper code to get Kerberos Negotiation Token using keytab and krb5 config file: https://gist.github.com/rajanadar/28c86d967695262bfe1f17ae82fb3d3d
  * Helper code to generate on-demand CloudFoundry signature in .NET Applications: https://gist.github.com/rajanadar/84769efeca64e0128d7a8a627b7bb4db
 
+## 1.17.5.1 (September 18, 2024)
+
+**BUG FIXES:**
+
+ * ```ReadConnectionConfigAsync``` method uses the correct model object.
+
 ## 1.17.5 (September 16, 2024)
 
 **BREAKING CHANGES:**
 
-* ```NewBackendConfig``` class is removed and instead ```BackendConfig``` class has been enhanced.
+ * ```NewBackendConfig``` class is removed and instead ```BackendConfig``` class has been enhanced.
 
 **BUG FIXES:**
 

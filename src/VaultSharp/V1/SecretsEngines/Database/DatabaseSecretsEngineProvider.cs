@@ -20,11 +20,11 @@ namespace VaultSharp.V1.SecretsEngines.Database
             await _polymath.MakeVaultApiRequest(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Database, "/config/" + connectionName, HttpMethod.Post, requestData: connectionConfigModel).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
         
-        public async Task<Secret<ConnectionConfigModel>> ReadConnectionConfigAsync(string connectionName, string mountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<ConnectionModel>> ReadConnectionConfigAsync(string connectionName, string mountPoint = null, string wrapTimeToLive = null)
         {
             Checker.NotNull(connectionName, "connectionName");
 
-            return await _polymath.MakeVaultApiRequest<Secret<ConnectionConfigModel>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Database, "/config/" + connectionName, HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<ConnectionModel>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Database, "/config/" + connectionName, HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
         
         public async Task<Secret<ListInfo>> ReadAllConnectionsAsync(string mountPoint = null, string wrapTimeToLive = null)

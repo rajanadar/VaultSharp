@@ -41,7 +41,7 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
         /// <returns>The role info.</returns>
-        Task<Secret<ConnectionConfigModel>> ReadConnectionConfigAsync(string connectionName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<ConnectionModel>> ReadConnectionConfigAsync(string connectionName, string mountPoint = null, string wrapTimeToLive = null);
 
         /// <summary>
         /// This endpoint returns a list of available connections. 

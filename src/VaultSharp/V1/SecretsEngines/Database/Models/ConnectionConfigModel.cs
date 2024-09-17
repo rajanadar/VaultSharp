@@ -1,19 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using VaultSharp.V1.SecretsEngines.Database.Models.PostgreSQL;
 
 namespace VaultSharp.V1.SecretsEngines.Database.Models
 {
-    /// <summary>
-    /// Connection Config Model.
-    /// </summary>
-    
-    // VERY IMPORTANT: Do not use Attribute based converter notation.
-    // It is a short-coming of STJ to go into a infinite loop 
-    // https://github.com/dotnet/runtime/issues/46372
-    // And if you use then you have to do manual serialization.
-    [JsonConverter(typeof(ConnectionConfigModelJsonConverter))]
-    [JsonDerivedType(typeof(PostgreSQLConnectionConfigModel))]
     public class ConnectionConfigModel
     {
         /// <summary>
