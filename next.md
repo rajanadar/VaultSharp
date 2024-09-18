@@ -1,20 +1,46 @@
 
+Any todo will be marked by my name, Raja. Search for it.
+
 As of 1.17.5 of Vault, lets check all Auth and Secret backends for consumer operations
 
 Auth Methods
-
-0. SAML is missing. So add it. Enterprise.SAML
 
 1. AliCloud
 
 Login is good.
 Admin is also good.
 
+Investigated the Gist to get CallerIdentityRequestUrl and Headers.
+It is a good little problem as the code is hidden deep inside the AliCloud C# SDK Tea Core DLL classes.
+Maybe very tricky to intercept. We need to capture the HttpRequestMessage. It is gold. But hidden.
+Maybe a dummy proxy way? Go library seem to give a capture mechanism. Anyways, weekend problem. Raja
+
+2. AppRole : good
+3. AWS : login is good
+4. Azure: Resource Id was missing in login. Added. >> good now.
+5. Cloud Foundry: login is good. Gist is also there.
+6. Github: login is good
+7. Google Cloud: login is good. Probably needs a helper gist to get the JWT. Raja
+8. OIDC/JWT: login is good
+9. Kerberos: login is good. Gist is also there. Needs login extension for sp-nego-toekn input. Raja
+10. Kubernetes: login is good. Probably needs a helper gist to get the JWT. Raja
+11. LDAP: login is good
+12. OCI: login is good. Probably needs a helper gist to get the signed request headers. Raja
+13. Okta: login is good
+14. Radius: login is good
+15. SAML: Login is missing. So add it. Enterprise.SAML. Seems to be a weird 2-3 step flow. Understand. Raja
+16. TLS Cert: login is good
+17. Tokens: check this cleanly for every method. Raja
+18. Username & Password: login is good.
 
 Secret Backends
 
+Mainly the credential generating apis.
 Everything seems to be there. Cool.
 
+------
+
+Every detail. Not necessary to implement, but read. Raja.
 
 From Vault Changelog, after 1.13.0
 
