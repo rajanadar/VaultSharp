@@ -92,6 +92,16 @@ namespace VaultSharp.V1.AuthMethods.Azure
         /// </value>
         [JsonPropertyName("vmss_name")]
         public string VirtualMachineScaleSetName { get; }
+        
+        /// <summary>
+        /// [optional]
+        /// The fully qualified ID of the Azure resource that generated the MSI token,
+        /// including the resource name and resource type.
+        /// Use the format /subscriptions/{guid}/resourceGroups/{resource-group-name}/{resource-provider-namespace}/{resource-type}/{resource-name}.
+        /// If <see cref="VirtualMachineName" /> or <see cref="VirtualMachineScaleSetName" /> is provided, this value is ignored.
+        /// </summary>
+        [JsonPropertyName("resource_id")]
+        public string ResourceId { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AzureAuthMethodInfo"/> class.
@@ -124,8 +134,15 @@ namespace VaultSharp.V1.AuthMethods.Azure
         /// The virtual machine scale set name for the machine that generated the MSI token. 
         /// This information can be obtained through instance metadata.
         /// </param>
-        public AzureAuthMethodInfo(string roleName, string jwt, string subscriptionId = null, string resourceGroupName = null, string virtualMachineName = null, string virtualMachineScaleSetName = null)
-            : this (AuthMethodType.Azure.Type, roleName, jwt, subscriptionId, resourceGroupName, virtualMachineName, virtualMachineScaleSetName)
+        /// <param name="resourceId">
+        /// [optional]
+        /// The fully qualified ID of the Azure resource that generated the MSI token,
+        /// including the resource name and resource type.
+        /// Use the format /subscriptions/{guid}/resourceGroups/{resource-group-name}/{resource-provider-namespace}/{resource-type}/{resource-name}.
+        /// If <see cref="VirtualMachineName" /> or <see cref="VirtualMachineScaleSetName" /> is provided, this value is ignored.
+        /// </param>
+        public AzureAuthMethodInfo(string roleName, string jwt, string subscriptionId = null, string resourceGroupName = null, string virtualMachineName = null, string virtualMachineScaleSetName = null, string resourceId = null)
+            : this (AuthMethodType.Azure.Type, roleName, jwt, subscriptionId, resourceGroupName, virtualMachineName, virtualMachineScaleSetName, resourceId)
         {
         }
 
@@ -161,19 +178,29 @@ namespace VaultSharp.V1.AuthMethods.Azure
         /// The virtual machine scale set name for the machine that generated the MSI token. 
         /// This information can be obtained through instance metadata.
         /// </param>
-        public AzureAuthMethodInfo(string mountPoint, string roleName, string jwt, string subscriptionId = null, string resourceGroupName = null, string virtualMachineName = null, string virtualMachineScaleSetName = null)
+        /// <param name="resourceId">
+        /// [optional]
+        /// The fully qualified ID of the Azure resource that generated the MSI token,
+        /// including the resource name and resource type.
+        /// Use the format /subscriptions/{guid}/resourceGroups/{resource-group-name}/{resource-provider-namespace}/{resource-type}/{resource-name}.
+        /// If <see cref="VirtualMachineName" /> or <see cref="VirtualMachineScaleSetName" /> is provided, this value is ignored.
+        /// </param>
+        public AzureAuthMethodInfo(string mountPoint, string roleName, string jwt, string subscriptionId = null, string resourceGroupName = null, string virtualMachineName = null, string virtualMachineScaleSetName = null, string resourceId = null)
         {
             Checker.NotNull(mountPoint, "mountPoint");
+            
             Checker.NotNull(roleName, "roleName");
             Checker.NotNull(jwt, "jwt");
 
             MountPoint = mountPoint;
+            
             RoleName = roleName;
             JWT = jwt;
             SubscriptionId = subscriptionId;
             ResourceGroupName = resourceGroupName;
             VirtualMachineName = virtualMachineName;
             VirtualMachineScaleSetName = virtualMachineScaleSetName;
+            ResourceId = resourceId;
         }
     }
 }
