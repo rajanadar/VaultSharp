@@ -10,6 +10,10 @@ namespace VaultSharp.V1.SecretsEngines.Transit
 
         signing_key = 2,
 
-        hmac_key = 3
+        hmac_key = 3,
+
+        public_key = 4,
+        
+        certificate_chain = 5
     }
 }
