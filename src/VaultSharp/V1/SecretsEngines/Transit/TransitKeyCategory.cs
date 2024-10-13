@@ -14,6 +14,10 @@ namespace VaultSharp.V1.SecretsEngines.Transit
 
         public_key = 4,
         
-        certificate_chain = 5
+        certificate_chain = 5,
+        /// <summary>
+        /// Enterprise only
+        /// </summary>
+        cmac_key = 6
     }
 }
