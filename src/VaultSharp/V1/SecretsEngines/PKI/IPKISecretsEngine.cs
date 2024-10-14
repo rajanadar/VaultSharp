@@ -162,7 +162,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <returns>
         /// The secret with the certificate data
         /// </returns>
-        Task<Secret<CertificateData>> ReadCertificateAsync(string serialNumber, string pkiBackendMountPoint = null);
+        Task<Secret<RawCertificateData>> ReadCertificateAsync(string serialNumber, string pkiBackendMountPoint = null);
 
         /// <summary>
         /// Retrieves a list of all certificate keys (serial numbers).

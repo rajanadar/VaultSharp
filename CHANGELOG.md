@@ -8,6 +8,8 @@
 **IMROVEMENTS:**
 
  * auth/azure: Add the ```resource_id``` parameter to the login method.
+ * [GH-365](https://github.com/rajanadar/VaultSharp/issues/365) Add new ```transit key type``` values like ```hmac-key```, ```cmac-key``` etc.
+ * [GH-366](https://github.com/rajanadar/VaultSharp/issues/366) PKI Secrets Engine - return raw cert data, including revocation date
 
 ## 1.17.5.1 (September 18, 2024)
 
