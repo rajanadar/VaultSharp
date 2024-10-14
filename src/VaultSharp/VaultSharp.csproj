@@ -64,7 +64,6 @@ This library is built with .NET Standard 2.0, .NET Standard 2.1, 4.6.2, 4.7.2*, 
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
-    <Compile Remove="VaultSecrets\VaultSecretsClientSettings.cs" />
   </ItemGroup>
 
   <ItemGroup>
