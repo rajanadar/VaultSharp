@@ -126,5 +126,25 @@ namespace VaultSharp.V1.SecretsEngines.PKI
             var certificateDataSecret = await _polymath.MakeVaultApiRequest<Secret<CertificateData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, path, HttpMethod.Get, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             return certificateDataSecret;
         }
+
+        public Task<Secret<PKIRoleNames>> ListRolesAsync(string pkiBackendMountPoint = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Secret<PKIRole>> ReadRoleAsync(string pkiRoleName, string pkiBackendMountPoint = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Secret<PKIRole>> WriteRoleAsync(string pkiRoleName, PKIRole pkiRoleDetails, string pkiBackendMountPoint = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Secret<PKIRole>> PatchRoleAsync(string pkiRoleName, PKIRole pkiRoleDetails, string pkiBackendMountPoint = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
