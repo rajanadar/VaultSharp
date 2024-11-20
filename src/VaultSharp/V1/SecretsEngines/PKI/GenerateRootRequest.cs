@@ -32,7 +32,8 @@ namespace VaultSharp.V1.SecretsEngines.PKI
 
         /// <summary>
         /// Format for returned data. Can be "pem", "der", or "pem_bundle". If "pem_bundle", any private key and issuing cert will be appended to the certificate pem. 
-        /// If "der", the value will be base64 encoded. Defaults to "pem".
+        /// If "der", the value will be base64 encoded. 
+        /// Defaults to "pem".
         /// </summary>
         [JsonPropertyName("format")]
         public string Format { get; set; }
@@ -71,7 +72,9 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         public string KeyRef { get; set; }
 
         /// <summary>
-        /// The type of key to use; defaults to RSA. "rsa" "ec" and "ed25519" are the only valid values.
+        /// The type of key to use; 
+        /// defaults to RSA. 
+        /// "rsa" "ec" and "ed25519" are the only valid values.
         /// </summary>
         [JsonPropertyName("key_type")]
         public string KeyType { get; set; }
@@ -203,5 +206,13 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         [JsonPropertyName("use_pss")]
         public bool UsePss { get; set; }
 
+        public GenerateRootRequest()
+        {
+            //set defaults
+            Format = "pem";
+            KeyType = "rsa";
+            IssuerName = string.Empty;
+            KeyName = string.Empty;
+        }
     }
 }

@@ -29,10 +29,9 @@ namespace VaultSharp.Samples
             var pkiPath = Guid.NewGuid().ToString();
 
             // verify the role list is initially empty
-            var roleListResponse = _authenticatedVaultClient.V1.Secrets.PKI.ListRolesAsync().Result;
+            var roleListResponse = _authenticatedVaultClient.V1.Secrets.PKI.ListRolesAsync(pkiMountPath).Result;
 
-            Assert.Empty(roleListResponse.Data.Keys);
-
+            Assert.Empty(roleListResponse.Data?.Keys);
 
             // write a new role
             var allowedDomain = "test.com";
@@ -41,24 +40,26 @@ namespace VaultSharp.Samples
             var newRole = new PKIRole()
             {
                 AllowedDomains = new List<string>() { allowedDomain },
-                AllowSubdomains = true
+                AllowSubdomains = true,
             };
 
             var newRoleResponse = _authenticatedVaultClient.V1.Secrets.PKI.WriteRoleAsync(roleName, newRole, pkiMountPath).Result;
             Assert.True(newRoleResponse.Data.AllowedDomains.Exists(d => d == allowedDomain));
 
             // verify it shows up in the list now
-            roleListResponse = _authenticatedVaultClient.V1.Secrets.PKI.ListRolesAsync().Result;
+            roleListResponse = _authenticatedVaultClient.V1.Secrets.PKI.ListRolesAsync(pkiMountPath).Result;
 
             Assert.Single(roleListResponse.Data.Keys);
 
             // generate a new root CA
             var newRoot = new GenerateRootRequest()
             {
-                CommonName = "test.com"
+                CommonName = "test.com",
+                IssuerName = "testroot_test_com",
+                KeyName = "testroot_key",                
             };
 
-            var newRootResponse = _authenticatedVaultClient.V1.Secrets.PKI.GenerateRootAsync("exported", newRoot).Result;
+            var newRootResponse = _authenticatedVaultClient.V1.Secrets.PKI.GenerateRootAsync("exported", newRoot, pkiMountPath).Result;
 
             Assert.NotEmpty(newRootResponse.Data.PrivateKey);
 
@@ -66,7 +67,9 @@ namespace VaultSharp.Samples
 
             var signCertOptions = new SignCertificatesRequestOptions()
             {
-                CommonName = "my.test.com"
+                CommonName = "my.test.com",
+                Csr = "-----BEGIN CERTIFICATE REQUEST-----\r\nMIIChDCCAWwCAQAwFjEUMBIGA1UEAwwLbXkudGVzdC5jb20wggEiMA0GCSqGSIb3\r\nDQEBAQUAA4IBDwAwggEKAoIBAQCQj/loI/Us7ayc/GOQlDWWv/lH+pcJ9g3w2Q/U\r\nzl8LBR7CD6Lve7TzBHxXU77gpg/lrCksr9LfE85FofhMy2WdEDTQw2BqdA/xwphh\r\nGsmaV+gfniZT96KzTOTRfMLE8Lf88bw5us7ha12MdJEhVX72kqXs7r/Hx5wz6gyw\r\niKcuezeTjp3r0qBPUIgHDgSg2TCVPs+THuhozQd4InQFU4HIWrDnR8unm5udRWId\r\nXOfxcQcgPp+UhzHzj+H/TfhqVeDzSvjVyir0llRAg7mNZctb/8lyOFPOTZkm4dWW\r\nzWVowYctnWgL05KcFK2wOJry16+gyzJaDE4EoxA/+YXVlnsfAgMBAAGgKTAnBgkq\r\nhkiG9w0BCQ4xGjAYMBYGA1UdEQQPMA2CC215LnRlc3QuY29tMA0GCSqGSIb3DQEB\r\nCwUAA4IBAQA41h0RFx8NLNSq92sgQwAh+FjZNqcjq8sLj7P0jwYi0CJrGf2fFfw1\r\nRhcZefwc3uGPsa/LXyGeBO4k88q8hA6x0B3yUhH26nC+OI1jhfj97x5pl+JFGkYT\r\nAP5Su9vwDKc22T8cv9K7Yzor3mfGc+Vs4HPH/pasg5cTqTageXNiBMd9VZKXzvrb\r\nhQyjW1uomsKCTlqCcjkRSA6eppxdAYCOKR/cfNNai2cIhZXuLZ4Y3gLosk/J8MGP\r\npRgz1SBls41Vk9gP8XF9e8eAKXVvnxSoCbifdNfjBkLaQgfaYpCV+NKBwQBmz7ad\r\nHjirOTU4elr/qUq91gyYuakOCZGWKm0k\r\n-----END CERTIFICATE REQUEST-----",
+                TimeToLive = "24h"
             };
 
             var newCertResponse = _authenticatedVaultClient.V1.Secrets.PKI.SignCertificateAsync(roleName, signCertOptions, pkiMountPath).Result;

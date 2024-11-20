@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using VaultSharp.Core;
@@ -137,8 +138,22 @@ namespace VaultSharp.V1.SecretsEngines.PKI
 
         public async Task<Secret<PKIRoleNames>> ListRolesAsync(string pkiBackendMountPoint = null)
         {
-            var path = "/roles";
-            var roleNamesSecret = await _polymath.MakeVaultApiRequest<Secret<PKIRoleNames>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, path, HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            var path = "/roles?list=true";
+            var roleNamesSecret = new Secret<PKIRoleNames>() { Data = new PKIRoleNames() { Keys = new List<string>() } };
+            
+            try
+            {
+                roleNamesSecret = await _polymath.MakeVaultApiRequest<Secret<PKIRoleNames>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, path, HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);                
+            }
+            catch (VaultApiException ex)
+            {
+                // if the role list is empty, we will get a 404 response with { "errors": [] }
+                // make sure it's that error only, and return the empty list if so
+                if (ex.StatusCode != 404)
+                {
+                    throw;
+                }                
+            }
             return roleNamesSecret;
         }
 

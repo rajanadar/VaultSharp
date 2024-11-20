@@ -45,12 +45,6 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         public bool AllowSubdomains { get; set; }
 
         /// <summary>
-        /// 
-        /// </summary>
-        [JsonPropertyName("allow_token_displayname")]
-        public bool AllowTokenDisplayname { get; set; }
-
-        /// <summary>
         /// If set, allows certificates with wildcards in the common name to be issued, conforming to RFC 6125's Section 6.4.3; e.g., 
         /// ".example.net" or "bz.example.net". See the documentation for more information.
         /// </summary>
@@ -126,16 +120,19 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// If set, Country will be set to this value in certificates issued by this role.
         /// </summary>
         [JsonPropertyName("country")]
-        public string Country { get; set; }
+        public List<string> Country { get; set; }
 
         /// <summary>
-        /// If set, certificates are flagged for email protection use. Defaults to false. See also RFC 5280 Section 4.2.1.12.
+        /// If set, certificates are flagged for email protection use. 
+        /// Defaults to false. 
+        /// See also RFC 5280 Section 4.2.1.12.
         /// </summary>
         [JsonPropertyName("email_protection_flag")]
         public bool EmailProtectionFlag { get; set; }
 
         /// <summary>
-        /// If set, only valid host names are allowed for CN and DNS SANs, and the host part of email addresses. Defaults to true.
+        /// If set, only valid host names are allowed for CN and DNS SANs, and the host part of email addresses. 
+        /// Defaults to true.
         /// </summary>
         [JsonPropertyName("enforce_hostnames")]
         public bool EnforceHostnames { get; set; }
@@ -175,7 +172,9 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         public int KeyBits { get; set; }
 
         /// <summary>
-        /// The type of key to use; defaults to RSA. "rsa" "ec", "ed25519" and "any" are the only valid values.
+        /// The type of key to use; 
+        /// defaults to RSA. 
+        /// "rsa" "ec", "ed25519" and "any" are the only valid values.
         /// </summary>
         [JsonPropertyName("key_type")]
         public string KeyType { get; set; }
@@ -312,5 +311,12 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// </summary>
         [JsonPropertyName("use_pss")]
         public bool UsePss { get; set; }
+
+
+        public PKIRole()
+        {
+            // set defaults
+            KeyType = "rsa";
+        }
     }
 }
