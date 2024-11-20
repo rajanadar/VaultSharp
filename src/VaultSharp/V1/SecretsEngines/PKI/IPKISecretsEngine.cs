@@ -202,6 +202,23 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         Task<Secret<CertificateData>> ReadDefaultIssuerCertificateChainAsync(CertificateFormat certificateFormat, string pkiBackendMountPoint = null);
 
         /// <summary>
+        /// Generates a new self-signed CA certificate and private key. If the path ends with exported, the private key will be returned in the response; 
+        /// if it is internal the private key will not be returned and cannot be retrieved later; 
+        /// if it is existing, the key specified by key_ref will be reused for this root; 
+        /// if it is kms, a managed key will be used.
+        /// </summary>
+        /// <param name="type">valid values are "exported", "internal", and "existing"</param>
+        /// <param name="generateRootRequest">The configuration values to use for the newly generated root certificate</param>
+        /// <param name="pkiBackendMountPoint">
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
+        /// Provide a value only if you have customized the PKI mount point.</param>
+        /// <returns>
+        /// The secret with the generated root response
+        /// if the type was "exported", the private key will be included.
+        /// </returns>
+        Task<Secret<GenerateRootResponse>> GenerateRootAsync(string type, GenerateRootRequest generateRootRequest, string pkiBackendMountPoint = null);
+
+        /// <summary>
         /// Retrieves a list of all PKI role names.
         /// </summary>
         /// <param name="pkiBackendMountPoint">

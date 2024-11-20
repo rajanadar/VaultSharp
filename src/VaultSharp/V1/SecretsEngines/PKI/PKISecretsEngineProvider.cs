@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using VaultSharp.Core;
@@ -26,7 +27,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
 
             return result;
         }
-        
+
         public async Task<Secret<SignedCertificateData>> SignCertificateAsync(string pkiRoleName, SignCertificatesRequestOptions signCertificatesRequestOptions, string pkiBackendMountPoint = null, string wrapTimeToLive = null)
         {
             Checker.NotNull(pkiRoleName, "pkiRoleName");
@@ -77,7 +78,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
                 : CertificateFormat.der;
 
             var result = await _polymath.MakeVaultApiRequest<string>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/ca" + format, HttpMethod.Get, rawResponse: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
-            
+
             return new RawCertificateData
             {
                 CertificateContent = result,
@@ -89,7 +90,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         {
             Checker.NotNull(serialNumber, "serialNumber");
 
-            var certificateDataSecret = await _polymath.MakeVaultApiRequest<Secret<RawCertificateData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/cert/" + serialNumber , HttpMethod.Get, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            var certificateDataSecret = await _polymath.MakeVaultApiRequest<Secret<RawCertificateData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/cert/" + serialNumber, HttpMethod.Get, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             return certificateDataSecret;
         }
 
@@ -106,7 +107,7 @@ namespace VaultSharp.V1.SecretsEngines.PKI
 
             return result;
         }
-        
+
         public async Task<Secret<CertificateData>> ReadDefaultIssuerCertificateChainAsync(CertificateFormat certificateFormat, string pkiBackendMountPoint = null)
         {
             if (certificateFormat != CertificateFormat.json
@@ -127,24 +128,39 @@ namespace VaultSharp.V1.SecretsEngines.PKI
             return certificateDataSecret;
         }
 
-        public Task<Secret<PKIRoleNames>> ListRolesAsync(string pkiBackendMountPoint = null)
+        public async Task<Secret<GenerateRootResponse>> GenerateRootAsync(string type, GenerateRootRequest generateRootRequest, string pkiBackendMountPoint = null)
         {
-            throw new NotImplementedException();
+            var path = $"/root/generate/{type}";
+            var generatedRootDataSecret = await _polymath.MakeVaultApiRequest<Secret<GenerateRootResponse>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, path, HttpMethod.Post, generateRootRequest).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return generatedRootDataSecret;
         }
 
-        public Task<Secret<PKIRole>> ReadRoleAsync(string pkiRoleName, string pkiBackendMountPoint = null)
+        public async Task<Secret<PKIRoleNames>> ListRolesAsync(string pkiBackendMountPoint = null)
         {
-            throw new NotImplementedException();
+            var path = "/roles";
+            var roleNamesSecret = await _polymath.MakeVaultApiRequest<Secret<PKIRoleNames>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, path, HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return roleNamesSecret;
         }
 
-        public Task<Secret<PKIRole>> WriteRoleAsync(string pkiRoleName, PKIRole pkiRoleDetails, string pkiBackendMountPoint = null)
+        public async Task<Secret<PKIRole>> ReadRoleAsync(string pkiRoleName, string pkiBackendMountPoint = null)
         {
-            throw new NotImplementedException();
+            var path = $"/roles/{pkiRoleName}";
+            var roleDetailsSecret = await _polymath.MakeVaultApiRequest<Secret<PKIRole>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, path, HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return roleDetailsSecret;
         }
 
-        public Task<Secret<PKIRole>> PatchRoleAsync(string pkiRoleName, PKIRole pkiRoleDetails, string pkiBackendMountPoint = null)
+        public async Task<Secret<PKIRole>> WriteRoleAsync(string pkiRoleName, PKIRole pkiRoleDetails, string pkiBackendMountPoint = null)
         {
-            throw new NotImplementedException();
+            var path = $"/roles/{pkiRoleName}";
+            var roleDetailsSecret = await _polymath.MakeVaultApiRequest<Secret<PKIRole>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, path, HttpMethod.Post, pkiRoleDetails).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return roleDetailsSecret;
+        }
+
+        public async Task<Secret<PKIRole>> PatchRoleAsync(string pkiRoleName, PKIRole pkiRoleDetails, string pkiBackendMountPoint = null)
+        {
+            var path = $"/roles/{pkiRoleName}";
+            var roleDetailsSecret = await _polymath.MakeVaultApiRequest<Secret<PKIRole>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, path, new HttpMethod("PATCH"), pkiRoleDetails).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return roleDetailsSecret;
         }
     }
 }
