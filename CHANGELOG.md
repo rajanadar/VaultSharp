@@ -1,3 +1,4 @@
+
 ## Useful Gists related to VaultSharp usage
 
  * Helper code to get Kerberos Negotiation Token using keytab and krb5 config file: https://gist.github.com/rajanadar/28c86d967695262bfe1f17ae82fb3d3d
@@ -10,6 +11,7 @@
  * auth/azure: Add the ```resource_id``` parameter to the login method.
  * [GH-365](https://github.com/rajanadar/VaultSharp/issues/365) Add new ```transit key type``` values like ```hmac-key```, ```cmac-key``` etc.
  * [GH-366](https://github.com/rajanadar/VaultSharp/issues/366) PKI Secrets Engine - return raw cert data, including revocation date
+ * [GH-373](https://github.com/rajanadar/VaultSharp/issues/373) PKI Secrets Engine - added methods for interacting with PKI Roles, and method for generating a self-signed root CA.
 
 ## 1.17.5.1 (September 18, 2024)
 
