@@ -1304,6 +1304,59 @@ var caCert = await vaultClient.V1.Secrets.PKI.ReadCACertificateAsync(Certificate
 Assert.NotNull(caCert.CertificateContent);
 ```
 
+##### Generate Root
+  - This endpoint generates a new self-signed CA certificate and private key. If the 'type' is `exported`, the private key will be returned in the response; 
+  - if it is `internal` the private key will not be returned and cannot be retrieved later; 
+  - if it is `existing`, the key specified by key_ref will be reused for this root; 
+  - if it is `kms`, a managed key will be used.
+
+  ```cs
+var newRoot = new GenerateRootRequest()
+{
+    CommonName = "test.com",
+    IssuerName = "testroot_test_com",
+    KeyName = "testroot_key",                
+};
+var type = "exported";
+var caCert = await vaultClient.V1.Secrets.PKI.GenerateRootAsync(type, newRoot, mountpoint)
+Assert.NotEmpty(newRootResponse.Data.PrivateKey);
+```
+
+##### List Roles
+
+  - This endpoint lists all of the role names that have been created for the PKI secrets engine.
+
+```cs
+var roleNames = await vaultClient.V1.Secrets.PKI.ListRolesAsync(mountpoint);
+Assert.IsList(roleNames);
+```
+
+##### Read Role
+
+  - This endpoint retreives the details for a role with the specified name.
+
+```cs
+var roleDetails = await vaultClient.V1.Secrets.PKI.ReadRoleAsync(roleName, mountpoint);
+```
+
+##### Write Role
+
+  - This endpoint writes a new role definition
+  - If the role name already exists, it will be completely overwritten
+
+```cs
+var roleDetails = await vaultClient.V1.Secrets.PKI.ReadRoleAsync(roleName, roleDetails, mountpoint);
+```
+
+##### Patch Role
+  - This endpoint will update an existing role with provided values
+  - Null values in the request will not overwritten existing values in the role definition
+
+```cs
+var updatedRoleDetails = await vaultClient.V1.Secrets.PKI.PatchRoleAsync(roleName, roleDetails, mountpoint);
+```
+
+
 #### RabbitMQ Secrets Engine
 
 ##### Generate dynamic DB credentials

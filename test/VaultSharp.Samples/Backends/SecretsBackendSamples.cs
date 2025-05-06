@@ -24,6 +24,9 @@ namespace VaultSharp.Samples
 
             Console.WriteLine("\n RunTransitSecretsBackendSamples \n");
             RunTransitSecretsBackendSamples();
+
+            Console.WriteLine("\n RunPkiSecretsBackendSamples \n");
+            RunPKISecretsBackendSamples();
         }
     }
 }
