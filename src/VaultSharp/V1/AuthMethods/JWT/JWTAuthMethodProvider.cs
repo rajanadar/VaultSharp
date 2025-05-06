@@ -63,7 +63,7 @@ namespace VaultSharp.V1.AuthMethods.JWT
 
             var queryString = "?" + string.Join("&", queryStrings);
 
-            return await _polymath.MakeVaultApiRequest<Secret<AuthInfo>>("v1/auth/" + mountPoint.Trim('/') + "/oidc/callback" + queryString, HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<AuthInfo>>("v1/auth/" + mountPoint.Trim('/') + "/oidc/callback" + queryString, HttpMethod.Get, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }
