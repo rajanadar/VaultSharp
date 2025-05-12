@@ -11,6 +11,10 @@
  * [GH-365](https://github.com/rajanadar/VaultSharp/issues/365) Add new ```transit key type``` values like ```hmac-key```, ```cmac-key``` etc.
  * [GH-366](https://github.com/rajanadar/VaultSharp/issues/366) PKI Secrets Engine - return raw cert data, including revocation date
 
+**BUG FIXES:**
+
+ * [GH-378](https://github.com/rajanadar/VaultSharp/issues/378) DoOIDCCallbackAsync should be allowed for an unauthenticated client
+
 ## 1.17.5.1 (September 18, 2024)
 
 **BUG FIXES:**
