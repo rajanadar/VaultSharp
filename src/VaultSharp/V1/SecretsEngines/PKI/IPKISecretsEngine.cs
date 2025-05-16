@@ -200,5 +200,90 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The secret with the certificate chain data
         /// </returns>
         Task<Secret<CertificateData>> ReadDefaultIssuerCertificateChainAsync(CertificateFormat certificateFormat, string pkiBackendMountPoint = null);
+
+        /// <summary>
+        /// Generates a new self-signed CA certificate and private key. If the path ends with exported, the private key will be returned in the response; 
+        /// if it is internal the private key will not be returned and cannot be retrieved later; 
+        /// if it is existing, the key specified by key_ref will be reused for this root; 
+        /// if it is kms, a managed key will be used.
+        /// </summary>
+        /// <param name="type">valid values are "exported", "internal", and "existing"</param>
+        /// <param name="generateRootRequest">The configuration values to use for the newly generated root certificate</param>
+        /// <param name="pkiBackendMountPoint">
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
+        /// Provide a value only if you have customized the PKI mount point.</param>
+        /// <returns>
+        /// The secret with the generated root response
+        /// if the type was "exported", the private key will be included.
+        /// </returns>
+        Task<Secret<GenerateRootResponse>> GenerateRootAsync(string type, GenerateRootRequest generateRootRequest, string pkiBackendMountPoint = null);
+
+        /// <summary>
+        /// Retrieves a list of all PKI role names.
+        /// </summary>
+        /// <param name="pkiBackendMountPoint">
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
+        /// Provide a value only if you have customized the PKI mount point.
+        /// </param>
+        /// <returns>
+        /// The secret with the list of role names
+        /// </returns>
+        Task<Secret<PKIRoleNames>> ListRolesAsync(string pkiBackendMountPoint = null);
+
+        /// <summary>
+        /// Retrieves details for a role by name.
+        /// </summary>
+        /// <param name="pkiRoleName">
+        /// The name of the role to be retrieved.
+        /// </param>
+        /// <param name="pkiBackendMountPoint">
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
+        /// Provide a value only if you have customized the PKI mount point.
+        /// </param>
+        /// <returns>
+        /// The secret with the role data
+        /// </returns>
+        Task<Secret<PKIRole>> ReadRoleAsync(string pkiRoleName, string pkiBackendMountPoint = null);
+
+        /// <summary>
+        /// Writes a role definition with the provided pkiRoleName.
+        /// if the role already exists, it will overwrite it with all values (including elided parameters)
+        /// To update a role with only the provided parameters, use 'PatchRoleAsync'
+        /// </summary>
+        /// <param name="pkiRoleName">
+        /// The name of the role to be retrieved.
+        /// </param>
+        /// <param name="pkiRoleDetails">
+        /// The PKIRole object containing the values.
+        /// </param>
+        /// <param name="pkiBackendMountPoint">
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
+        /// Provide a value only if you have customized the PKI mount point.
+        /// </param>
+        /// <returns>
+        /// The secret with the role data
+        /// </returns>
+        Task<Secret<PKIRole>> WriteRoleAsync(string pkiRoleName, PKIRole pkiRoleDetails, string pkiBackendMountPoint = null);
+
+        /// <summary>
+        /// Patches an existing role definition with the provided pkiRoleName.
+        /// Use this method for updating (not replacing) a role definition with the non-null values provided in the pkiRoleDetails object.
+        /// This method requires the role definition to already exist, and will update it with any non-null values set in pkiRoleDetails.
+        /// To replace a role definition, use the 'WriteRoleAsync' method.
+        /// </summary>
+        /// <param name="pkiRoleName">
+        /// The name of the role to be retrieved.
+        /// </param>
+        /// <param name="pkiRoleDetails">
+        /// The PKIRole object containing the values.
+        /// </param>
+        /// <param name="pkiBackendMountPoint">
+        /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
+        /// Provide a value only if you have customized the PKI mount point.
+        /// </param>
+        /// <returns>
+        /// The secret with the role data
+        /// </returns>
+        Task<Secret<PKIRole>> PatchRoleAsync(string pkiRoleName, PKIRole pkiRoleDetails, string pkiBackendMountPoint = null);
     }
 }
