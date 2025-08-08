@@ -539,7 +539,7 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 - In this approach, you write the delegate logic that gets the token from Vault along with lease renewal info etc.
 
 ```cs
-// Func<Task<CustomAuthMethodInfo>> getCustomAuthMethodInfoAsync = a custom async method to return the vault token.
+// Func<Task<AuthInfo>> getCustomAuthMethodInfoAsync = a custom async method to return the vault token.
 IAuthMethodInfo authMethod = new CustomAuthMethodInfo("vault-server-auth-method", getCustomAuthMethodInfoAsync);
 var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
 
@@ -549,6 +549,7 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 // authMethod.ReturnedLoginAuthInfo has all the info including the token and renewal info.
 
 ``` 
+To see a sample implementation of this you can read the guide here: [AppSettings Documentation](test/VaultSharp.Samples/Docs/CustomAuthMethod.md)
 
 #### App Id Auth Method (DEPRECATED)
 
