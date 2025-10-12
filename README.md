@@ -560,22 +560,20 @@ Once you have your token provider, you can initialize the VaultClient using Cust
 ```C#
 private VaultClient BuildVaultClient()
 {
-        var vaultSettings = new VaultClientSettings(
-            "https://MY_VAULT_SERVER:8200",
-            new CustomAuthMethodInfo("vault-server-auth-method", GetCustomAuthMethodInfo)
-        );
-        return new VaultClient(vaultSettings);
+    var vaultSettings = new VaultClientSettings(
+        "https://MY_VAULT_SERVER:8200",
+        new CustomAuthMethodInfo("vault-server-auth-method", GetCustomAuthMethodInfo)
+    );
+    return new VaultClient(vaultSettings);
 }
 
 // Once VaultSharp evaluates the delegate, VaultSharp can now provide you with the associated lease info for the Token as well.
 // authMethod.ReturnedLoginAuthInfo has all the info including the token and renewal info.
 ```
 
+**Adding Retry Logic for Custom Auth Method**
 
-
-**Adding Retry Logic for Token Expiration**
-
-Vault tokens can expire or be revoked. To handle this gracefully, you can catch VaultApiException errors and reset the token before retrying the operation(This only works with a few of the ways of providing the token. In this case, Custom Auth Method is one of those methods):
+With the custom auth method, there is an easy way to write in your own retry logic:
 
 ```C#
 public async Task<Secret<T>> ReadSecretAsync<T>(string path, string mountPoint = null, string wrapTimeToLive = null)
