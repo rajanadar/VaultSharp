@@ -8,7 +8,7 @@ namespace VaultSharp.Samples
 {
     partial class Program
     {
-        private const string ExpectedVaultVersion = "1.17.5";
+        private const string ExpectedVaultVersion = "1.17.6+ent";
 
         private static IVaultClient _unauthenticatedVaultClient;
         private static IVaultClient _authenticatedVaultClient;
@@ -103,7 +103,7 @@ namespace VaultSharp.Samples
                         Console.WriteLine(_responseContent);
                     }
                 },
-                Namespace = "bhjk",
+                //Namespace = "bhjk", // ?? 
                 MyHttpClientProviderFunc = handler => new HttpClient(handler)
             };
 
