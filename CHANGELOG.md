@@ -3,6 +3,12 @@
  * Helper code to get Kerberos Negotiation Token using keytab and krb5 config file: https://gist.github.com/rajanadar/28c86d967695262bfe1f17ae82fb3d3d
  * Helper code to generate on-demand CloudFoundry signature in .NET Applications: https://gist.github.com/rajanadar/84769efeca64e0128d7a8a627b7bb4db
 
+## 1.17.5.3 (May 06, 2025)
+
+**BUG FIXES:**
+
+ * [GH-367](https://github.com/rajanadar/VaultSharp/issues/367) Update System.Text.Json to address known security vulnerability
+
 ## 1.17.5.2 (TBD)
 
 **IMROVEMENTS:**
@@ -10,6 +16,10 @@
  * auth/azure: Add the ```resource_id``` parameter to the login method.
  * [GH-365](https://github.com/rajanadar/VaultSharp/issues/365) Add new ```transit key type``` values like ```hmac-key```, ```cmac-key``` etc.
  * [GH-366](https://github.com/rajanadar/VaultSharp/issues/366) PKI Secrets Engine - return raw cert data, including revocation date
+
+**BUG FIXES:**
+
+ * [GH-378](https://github.com/rajanadar/VaultSharp/issues/378) DoOIDCCallbackAsync should be allowed for an unauthenticated client
 
 ## 1.17.5.1 (September 18, 2024)
 

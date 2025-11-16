@@ -535,17 +535,58 @@ IVaultClient vaultClient = new VaultClient(vaultClientSettings);
 - In cases where the Vault Server has a supported Auth backend, not YET supported by VaultSharp, you can use the CustomAuthMethodInfo
 - In this approach, you write the delegate logic that gets the token from Vault along with lease renewal info etc.
 
-```cs
-// Func<Task<CustomAuthMethodInfo>> getCustomAuthMethodInfoAsync = a custom async method to return the vault token.
-IAuthMethodInfo authMethod = new CustomAuthMethodInfo("vault-server-auth-method", getCustomAuthMethodInfoAsync);
-var vaultClientSettings = new VaultClientSettings("https://MY_VAULT_SERVER:8200", authMethod);
+**Implementing Custom Token Provider**
 
-IVaultClient vaultClient = new VaultClient(vaultClientSettings);
+The CustomAuthMethodInfo constructor accepts a delegate that returns an AuthInfo object. This is where you provide your Vault token:
+
+```C#
+private Task<AuthInfo> GetCustomAuthMethodInfo()
+{
+    var vaultOptions = new VaultOptions();
+    return Task.FromResult(new AuthInfo()
+    {
+        ClientToken = vaultOptions.VaultToken
+    });
+}
+```
+
+**Creating the Vault Client with Custom Auth**
+
+Once you have your token provider, you can initialize the VaultClient using CustomAuthMethodInfo.
+
+```C#
+private VaultClient BuildVaultClient()
+{
+    var vaultSettings = new VaultClientSettings(
+        "https://MY_VAULT_SERVER:8200",
+        new CustomAuthMethodInfo("vault-server-auth-method", GetCustomAuthMethodInfo)
+    );
+    return new VaultClient(vaultSettings);
+}
 
 // Once VaultSharp evaluates the delegate, VaultSharp can now provide you with the associated lease info for the Token as well.
 // authMethod.ReturnedLoginAuthInfo has all the info including the token and renewal info.
+```
 
-``` 
+**Adding Retry Logic for Custom Auth Method**
+
+With the custom auth method, there is an easy way to write in your own retry logic:
+
+```C#
+public async Task<Secret<T>> ReadSecretAsync<T>(string path, string mountPoint = null, string wrapTimeToLive = null)
+{
+    try
+    {
+        return await _vaultClient.V1.Secrets.KeyValue.V1.ReadSecretAsync<T>(path, mountPoint, wrapTimeToLive);
+    }
+    catch (VaultApiException ex) when (ex.HttpStatusCode == HttpStatusCode.Forbidden)
+    {
+        _logger?.LogError(ex, "Vault Could not be authenticated with current token retrieving new token and trying again.");
+        _vaultClient.V1.Auth.ResetVaultToken();
+        return await _vaultClient.V1.Secrets.KeyValue.V1.ReadSecretAsync<T>(path, mountPoint, wrapTimeToLive);
+    }
+}
+```
 
 #### App Id Auth Method (DEPRECATED)
 

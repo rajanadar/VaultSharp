@@ -8,7 +8,7 @@
     <AssemblyOriginatorKeyFile>VaultSharp.snk</AssemblyOriginatorKeyFile>
     <PackageId>Wws.VaultSharp</PackageId>
     <Title>VaultSharp</Title>
-    <Version>1.17.5.2</Version>
+    <Version>1.17.5.3</Version>
     <Authors>Raja Nadar</Authors>
     <Copyright>Copyright ©  2021 Raja Nadar. All rights reserved.</Copyright>
     <PackageProjectUrl>https://github.com/rajanadar/VaultSharp</PackageProjectUrl>
@@ -27,8 +27,8 @@
     </Description>
     <RepositoryType>Github</RepositoryType>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.17.5.2</AssemblyVersion>
-    <FileVersion>1.17.5.2</FileVersion>
+    <AssemblyVersion>1.17.5.3</AssemblyVersion>
+    <FileVersion>1.17.5.3</FileVersion>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageIcon>icon.png</PackageIcon>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
