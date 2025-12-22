@@ -196,6 +196,8 @@ namespace VaultSharp.Core
 
         protected async Task<TResponse> MakeRequestAsync<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, IDictionary<string, string> headers = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null) where TResponse : class
         {
+            HttpRequestMessage httpRequestMessage = null;
+
             try
             {
                 var requestUri = new Uri(_httpClient.BaseAddress, new Uri(resourcePath, UriKind.Relative));
@@ -205,8 +207,6 @@ namespace VaultSharp.Core
                 var requestContent = requestJson != null
                     ? new StringContent(requestJson, Encoding.UTF8)
                     : null;
-
-                HttpRequestMessage httpRequestMessage = null;
 
                 switch (httpMethod.ToString().ToUpperInvariant())
                 {
@@ -282,7 +282,7 @@ namespace VaultSharp.Core
                     return default(TResponse);
                 }
 
-                throw new VaultApiException(httpResponseMessage.StatusCode, responseText);
+                throw new VaultApiException(httpResponseMessage.StatusCode, httpRequestMessage.Headers, responseText);
             }
             catch (WebException ex)
             {
@@ -298,7 +298,7 @@ namespace VaultSharp.Core
                                 await stream.ReadToEndAsync().ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
                         }
 
-                        throw new VaultApiException(response.StatusCode, responseText);
+                        throw new VaultApiException(response.StatusCode, httpRequestMessage?.Headers, responseText);
                     }
 
                     throw;
