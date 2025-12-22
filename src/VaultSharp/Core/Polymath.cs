@@ -22,6 +22,7 @@ namespace VaultSharp.Core
         private const string AuthorizationHeaderKey = "Authorization";
         private const string VaultTokenHeaderKey = "X-Vault-Token";
         private const string VaultWrapTimeToLiveHeaderKey = "X-Vault-Wrap-TTL";
+        private const string VaultCorrelationIdHeaderKey = "X-Correlation-Id";
 
         private const string VaultSharpV1Path = "v1/";
 
@@ -248,6 +249,12 @@ namespace VaultSharp.Core
                 }
 
                 httpRequestMessage.Headers.Add(VaultRequestHeaderKey, "true");
+
+                var correlationId = VaultClientSettings.CorrelationIdProviderFunc();
+                if (!string.IsNullOrWhiteSpace(correlationId))
+                {
+                    httpRequestMessage.Headers.Add(VaultCorrelationIdHeaderKey, correlationId);
+                }
 
                 if (headers != null)
                 {
