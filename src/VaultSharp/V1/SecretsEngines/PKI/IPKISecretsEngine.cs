@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
+using VaultSharp.V1.SecretsEngines.PKI.Issuers;
+using VaultSharp.V1.SecretsEngines.PKI.Keys;
+using VaultSharp.V1.SecretsEngines.PKI.Roles;
 
 namespace VaultSharp.V1.SecretsEngines.PKI
 {
@@ -9,6 +12,12 @@ namespace VaultSharp.V1.SecretsEngines.PKI
     /// </summary>
     public interface IPKISecretsEngine
     {
+        IPKIIssuers Issuers { get; }
+
+        IPKIKeys Keys { get; }
+
+        IPKIRoles Roles { get; }
+
         /// <summary>
         /// Generates a new set of credentials (private key and certificate) based on the role named in the endpoint.
         /// The issuing CA certificate is returned as well, so that only the root CA need be in a client's trust store.
