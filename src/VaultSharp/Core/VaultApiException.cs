@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -20,6 +21,16 @@ namespace VaultSharp.Core
         /// The http status code returned by Api.
         /// </summary>
         public HttpStatusCode HttpStatusCode { get; }
+        
+        /// <summary>
+        /// The correlation id included in the request.
+        /// </summary>
+        public string CorrelationId { get; }
+        
+        /// <summary>
+        /// The request id returned by the Api.
+        /// </summary>
+        public string RequestId { get; }
 
         /// <summary>
         /// The list of api errors.
@@ -59,30 +70,44 @@ namespace VaultSharp.Core
         /// Status code based exception.
         /// </summary>
         /// <param name="httpStatusCode">Http status code.</param>
+        /// <param name="requestHeaders">Headers from the http request</param>
         /// <param name="message">Exception message.</param>
-        public VaultApiException(HttpStatusCode httpStatusCode, string message) : base(message)
+        public VaultApiException(HttpStatusCode httpStatusCode, HttpRequestHeaders requestHeaders, string message) : base(message)
         {
             HttpStatusCode = httpStatusCode;
-            StatusCode = (int) HttpStatusCode;
+            StatusCode = (int) httpStatusCode;
 
-            try
+            if (requestHeaders != null && (
+                requestHeaders.TryGetValues("x-correlation-id", out var correlationIdValues) ||
+                requestHeaders.TryGetValues("correlation-id", out correlationIdValues)))
             {
-                var structured = JsonSerializer.Deserialize<Dictionary<string, IEnumerable<string>>>(message);
+                CorrelationId = string.Join(",", correlationIdValues);
+            }
 
-                if (structured.ContainsKey("errors"))
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                try
                 {
-                    ApiErrors = structured["errors"];
+                    var errorResponse = JsonSerializer.Deserialize<ErrorResponse>(message);
+                    RequestId = errorResponse?.RequestId;
+                    ApiErrors = errorResponse?.Errors;
+                    ApiWarnings = errorResponse?.Warnings;
                 }
-
-                if (structured.ContainsKey("warnings"))
+                catch
                 {
-                    ApiWarnings = structured["warnings"];
+                    // nothing to do.
                 }
             }
-            catch
-            {
-                // nothing to do.
-            }
+        }
+
+        private class ErrorResponse
+        {
+            [JsonPropertyName("request_id")]
+            public string RequestId { get; set; }
+            [JsonPropertyName("errors")]
+            public string[] Errors { get; set; }
+            [JsonPropertyName("warnings")]
+            public string[] Warnings { get; set; }
         }
     }
 }

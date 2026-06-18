@@ -3,6 +3,12 @@
  * Helper code to get Kerberos Negotiation Token using keytab and krb5 config file: https://gist.github.com/rajanadar/28c86d967695262bfe1f17ae82fb3d3d
  * Helper code to generate on-demand CloudFoundry signature in .NET Applications: https://gist.github.com/rajanadar/84769efeca64e0128d7a8a627b7bb4db
 
+## 1.17.5.4 (TBD)
+
+**IMROVEMENTS:**
+
+ * [GH-391](https://github.com/rajanadar/VaultSharp/issues/391) Automatically set audit logging correlation id and expose on VaultApiException
+
 ## 1.17.5.3 (May 06, 2025)
 
 **BUG FIXES:**

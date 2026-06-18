@@ -1908,6 +1908,21 @@ var settings = new VaultClientSettings("http://localhost:8200", authMethodInfo)
             };
 ```
 
+### Can I provide my own correlation id for audit logs
+
+- Yes you can.
+- The ```VaultClientSettings``` object takes a ```CorrelationIdProviderFunc``` delegate that can be as follows.
+- The default delegate retrieves the correlation id from the current .NET activity
+- More information on audit logging: https://developer.hashicorp.com/vault/docs/audit#logging-request-headers
+
+```cs
+var settings = new VaultClientSettings("http://localhost:8200", authMethodInfo)
+            {
+                Namespace = "mynamespace",
+                CorrelationIdProviderFunc = () => Guid.NewGuid().ToString()
+            };
+```
+
 ### What is the deal with the Versioning of VaultSharp?
 
 - This library is written for Hashicorp's Vault Service

@@ -104,7 +104,8 @@ namespace VaultSharp.Samples
                     }
                 },
                 Namespace = "bhjk",
-                MyHttpClientProviderFunc = handler => new HttpClient(handler)
+                MyHttpClientProviderFunc = handler => new HttpClient(handler),
+                CorrelationIdProviderFunc = () => Guid.NewGuid().ToString()
             };
 
             return settings;

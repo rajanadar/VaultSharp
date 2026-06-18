@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net.Http;
 using VaultSharp.V1.AuthMethods;
 using VaultSharp.V1.SecretsEngines;
@@ -85,5 +86,13 @@ namespace VaultSharp
         /// See <see cref="V1.SecretsEngines.SecretsEngineMountPoints.Defaults" /> for defaults.
         /// </summary>
         public SecretsEngineMountPoints SecretsEngineMountPoints { get; set; } = new SecretsEngineMountPoints();
+
+        /// <summary>
+        /// Provider of a correlation id to include in the Vault request headers.
+        /// See also: https://developer.hashicorp.com/vault/docs/audit#logging-request-headers
+        /// Defaults to the id of the current <see cref="Activity"/>.
+        /// </summary>
+        public Func<string> CorrelationIdProviderFunc { get; set; } =
+            () => Activity.Current?.Id;
     }
 }
