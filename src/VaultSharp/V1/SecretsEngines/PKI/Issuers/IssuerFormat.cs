@@ -3,7 +3,11 @@ using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.PKI.Issuers
 {
+#if NET8_0_OR_GREATER
+    [JsonConverter(typeof(JsonStringEnumConverter<IssuerFormat>))]
+#else
     [JsonConverter(typeof(JsonStringEnumConverter))]
+#endif
     public enum IssuerFormat
     {
         /// <summary>
