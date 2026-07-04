@@ -1,9 +1,13 @@
-﻿using System.Runtime.Serialization;
+using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.PKI.Roles
 {
+#if NET8_0_OR_GREATER
+    [JsonConverter(typeof(JsonStringEnumConverter<PrivateKeyRoleType>))]
+#else
     [JsonConverter(typeof(JsonStringEnumConverter))]
+#endif
     public enum PrivateKeyRoleType
     {
         /// <summary>

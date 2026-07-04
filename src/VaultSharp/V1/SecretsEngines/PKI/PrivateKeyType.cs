@@ -3,7 +3,11 @@ using System.Text.Json.Serialization;
 
 namespace VaultSharp.V1.SecretsEngines.PKI
 {
+#if NET8_0_OR_GREATER
+    [JsonConverter(typeof(JsonStringEnumConverter<PrivateKeyType>))]
+#else
     [JsonConverter(typeof(JsonStringEnumConverter))]
+#endif
     public enum PrivateKeyType
     {
         /// <summary>

@@ -248,6 +248,32 @@ namespace VaultSharp.Core
     [JsonSerializable(typeof(VaultSharp.V1.AuthMethods.GoogleCloud.GoogleCloudAuthMethodInfo))]
     [JsonSerializable(typeof(VaultSharp.V1.AuthMethods.JWT.JWTAuthMethodInfo))]
     [JsonSerializable(typeof(VaultSharp.V1.AuthMethods.Kubernetes.KubernetesAuthMethodInfo))]
+    // PKI Issuers
+    [JsonSerializable(typeof(VaultSharp.V1.Commons.Secret<VaultSharp.V1.SecretsEngines.PKI.Issuers.KeysData>), TypeInfoPropertyName = "SecretPKIIssuersKeysData")]
+    [JsonSerializable(typeof(VaultSharp.V1.Commons.Secret<VaultSharp.V1.SecretsEngines.PKI.Issuers.IssuerResponseData>))]
+    [JsonSerializable(typeof(VaultSharp.V1.Commons.Secret<VaultSharp.V1.SecretsEngines.PKI.Issuers.IssuerConfigResponseData>))]
+    [JsonSerializable(typeof(VaultSharp.V1.Commons.Secret<VaultSharp.V1.SecretsEngines.PKI.Issuers.IssuerData>))]
+    [JsonSerializable(typeof(VaultSharp.V1.SecretsEngines.PKI.Issuers.IssuerData))]
+    [JsonSerializable(typeof(VaultSharp.V1.SecretsEngines.PKI.Issuers.IssuerConfigRequestData))]
+    [JsonSerializable(typeof(VaultSharp.V1.SecretsEngines.PKI.Issuers.IssuerConfigResponseData))]
+    [JsonSerializable(typeof(VaultSharp.V1.SecretsEngines.PKI.Issuers.IssuerResponseData))]
+    [JsonSerializable(typeof(VaultSharp.V1.SecretsEngines.PKI.Issuers.KeysData), TypeInfoPropertyName = "PKIIssuersKeysData")]
+    [JsonSerializable(typeof(VaultSharp.V1.SecretsEngines.PKI.Issuers.KeyInfo), TypeInfoPropertyName = "PKIIssuersKeyInfo")]
+    [JsonSerializable(typeof(System.Collections.Generic.Dictionary<string, VaultSharp.V1.SecretsEngines.PKI.Issuers.KeyInfo>), TypeInfoPropertyName = "DictionaryStringPKIIssuersKeyInfo")]
+    // PKI Keys
+    [JsonSerializable(typeof(VaultSharp.V1.Commons.Secret<VaultSharp.V1.SecretsEngines.PKI.Keys.KeysData>), TypeInfoPropertyName = "SecretPKIKeysKeysData")]
+    [JsonSerializable(typeof(VaultSharp.V1.Commons.Secret<VaultSharp.V1.SecretsEngines.PKI.Keys.KeyData>))]
+    [JsonSerializable(typeof(VaultSharp.V1.Commons.Secret<VaultSharp.V1.SecretsEngines.PKI.Keys.ImportKeyData>))]
+    [JsonSerializable(typeof(VaultSharp.V1.SecretsEngines.PKI.Keys.KeyData))]
+    [JsonSerializable(typeof(VaultSharp.V1.SecretsEngines.PKI.Keys.ImportKeyData))]
+    [JsonSerializable(typeof(VaultSharp.V1.SecretsEngines.PKI.Keys.KeysData), TypeInfoPropertyName = "PKIKeysKeysData")]
+    [JsonSerializable(typeof(VaultSharp.V1.SecretsEngines.PKI.Keys.KeyInfo), TypeInfoPropertyName = "PKIKeysKeyInfo")]
+    [JsonSerializable(typeof(System.Collections.Generic.Dictionary<string, VaultSharp.V1.SecretsEngines.PKI.Keys.KeyInfo>), TypeInfoPropertyName = "DictionaryStringPKIKeysKeyInfo")]
+    // PKI Roles
+    [JsonSerializable(typeof(VaultSharp.V1.Commons.Secret<VaultSharp.V1.SecretsEngines.PKI.Roles.RolesData>))]
+    [JsonSerializable(typeof(VaultSharp.V1.Commons.Secret<VaultSharp.V1.SecretsEngines.PKI.Roles.RoleData>))]
+    [JsonSerializable(typeof(VaultSharp.V1.SecretsEngines.PKI.Roles.RoleData))]
+    [JsonSerializable(typeof(VaultSharp.V1.SecretsEngines.PKI.Roles.RolesData))]
     internal partial class VaultSharpJsonContext : JsonSerializerContext
     {
     }
