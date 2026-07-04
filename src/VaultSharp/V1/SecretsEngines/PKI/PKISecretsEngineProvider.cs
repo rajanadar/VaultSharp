@@ -4,6 +4,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
+using VaultSharp.V1.SecretsEngines.PKI.Issuers;
+using VaultSharp.V1.SecretsEngines.PKI.Keys;
+using VaultSharp.V1.SecretsEngines.PKI.Roles;
 
 namespace VaultSharp.V1.SecretsEngines.PKI
 {
@@ -14,7 +17,16 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         public PKISecretsEngineProvider(Polymath polymath)
         {
             _polymath = polymath;
+            this.Issuers = new PKISecretIssuersProvider(polymath);
+            this.Keys = new PKISecretKeysProvider(polymath);
+            this.Roles = new PKISecretRolesProvider(polymath);
         }
+
+        public IPKIIssuers Issuers { get; }
+
+        public IPKIKeys Keys { get; }
+
+        public IPKIRoles Roles { get; }
 
         public async Task<Secret<CertificateCredentials>> GetCredentialsAsync(string pkiRoleName, CertificateCredentialsRequestOptions certificateCredentialRequestOptions, string pkiBackendMountPoint = null, string wrapTimeToLive = null)
         {

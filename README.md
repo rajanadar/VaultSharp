@@ -1345,6 +1345,106 @@ var caCert = await vaultClient.V1.Secrets.PKI.ReadCACertificateAsync(Certificate
 Assert.NotNull(caCert.CertificateContent);
 ```
 
+##### List Issuers
+
+```cs
+var issuers = await vaultClient.V1.Secrets.PKI.Issuers.ListIssuers();
+List<string> issuerKeys = issuers.Data.Keys;
+```
+
+##### Add Issuer
+
+```cs
+var issuerData = new IssuerData { CommonName = "example.com", KeyType = PrivateKeyType.rsa, KeyBits = 4096 };
+Secret<IssuerResponseData> issuer = await vaultClient.V1.Secrets.PKI.Issuers.AddIssuer(issuerData);
+string issuerId = issuer.Data.IssuerId;
+```
+
+##### Read Issuer Config
+
+```cs
+Secret<IssuerConfigResponseData> config = await vaultClient.V1.Secrets.PKI.Issuers.GetIssuerConfigData("my-issuer");
+string issuerName = config.Data.IssuerName;
+```
+
+##### Configure Issuer
+
+```cs
+var configData = new IssuerConfigRequestData { IssuerName = "my-issuer", Usage = "issuing-certificates,crl-signing" };
+Secret<IssuerConfigResponseData> config = await vaultClient.V1.Secrets.PKI.Issuers.ConfigureIssuer(configData);
+string issuerId = config.Data.IssuerId;
+```
+
+##### Delete Issuer
+
+```cs
+await vaultClient.V1.Secrets.PKI.Issuers.DeleteIssuer("my-issuer");
+```
+
+##### List Keys
+
+```cs
+var keys = await vaultClient.V1.Secrets.PKI.Keys.ListKeys();
+List<string> keyIds = keys.Data.Keys;
+```
+
+##### Generate Key
+
+```cs
+var keyData = new KeyData { KeyType = PrivateKeyType.rsa, KeyBits = 4096, KeyName = "my-key" };
+Secret<KeyData> key = await vaultClient.V1.Secrets.PKI.Keys.GenerateKey(keyData);
+string keyName = key.Data.KeyName;
+```
+
+##### Read Key
+
+```cs
+Secret<KeyData> key = await vaultClient.V1.Secrets.PKI.Keys.GetKey("my-key");
+PrivateKeyType keyType = key.Data.KeyType;
+```
+
+##### Import Key
+
+```cs
+var importData = new ImportKeyData { KeyName = "my-key", PemBundle = "-----BEGIN RSA PRIVATE KEY-----\n..." };
+Secret<ImportKeyData> key = await vaultClient.V1.Secrets.PKI.Keys.ImportKey(importData);
+string keyName = key.Data.KeyName;
+```
+
+##### Delete Key
+
+```cs
+await vaultClient.V1.Secrets.PKI.Keys.DeleteKey("my-key");
+```
+
+##### List PKI Roles
+
+```cs
+var roles = await vaultClient.V1.Secrets.PKI.Roles.ListRoles();
+List<string> roleKeys = roles.Data.Keys;
+```
+
+##### Add PKI Role
+
+```cs
+var roleData = new RoleData { Name = "my-role", AllowedDomains = new List<string> { "example.com" }, AllowSubdomains = true };
+Secret<RoleData> role = await vaultClient.V1.Secrets.PKI.Roles.AddRole(roleData);
+PrivateKeyRoleType keyType = role.Data.KeyType;
+```
+
+##### Read PKI Role
+
+```cs
+Secret<RoleData> role = await vaultClient.V1.Secrets.PKI.Roles.GetRole("my-role");
+bool allowAnyName = role.Data.AllowAnyName;
+```
+
+##### Delete PKI Role
+
+```cs
+await vaultClient.V1.Secrets.PKI.Roles.DeleteRole("my-role");
+```
+
 #### RabbitMQ Secrets Engine
 
 ##### Generate dynamic DB credentials
