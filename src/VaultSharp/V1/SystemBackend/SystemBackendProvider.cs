@@ -291,7 +291,7 @@ namespace VaultSharp.V1.SystemBackend
                 // we don't know what status code out of 2xx was returned. hence the delegate.
 
                 int? statusCode = null;
-                var healthStatus = await _polymath.MakeVaultApiRequest<HealthStatus>(resourcePath, queryHttpMethod, postResponseAction: message => statusCode = (int)message.StatusCode).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+                var healthStatus = await _polymath.MakeVaultApiRequest<HealthStatus>(resourcePath, queryHttpMethod, postResponseAction: message => statusCode = (int)message.StatusCode, sendNamespaceHeader: false).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
                 healthStatus.HttpStatusCode = statusCode;
                 return healthStatus;
             }
