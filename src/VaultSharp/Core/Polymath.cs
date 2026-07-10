@@ -127,26 +127,26 @@ namespace VaultSharp.Core
             }
         }
 
-        public async Task MakeVaultApiRequest(string mountPoint, string path, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false)
+        public async Task MakeVaultApiRequest(string mountPoint, string path, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false, bool sendNamespaceHeader = true)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             
-            await MakeVaultApiRequest(VaultSharpV1Path + mountPoint.Trim('/') + path, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await MakeVaultApiRequest(VaultSharpV1Path + mountPoint.Trim('/') + path, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated, sendNamespaceHeader: sendNamespaceHeader).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false)
+        public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false, bool sendNamespaceHeader = true)
         {
-            await MakeVaultApiRequest<JsonObject>(resourcePath, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await MakeVaultApiRequest<JsonObject>(resourcePath, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated, sendNamespaceHeader: sendNamespaceHeader).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<TResponse> MakeVaultApiRequest<TResponse>(string mountPoint, string path, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null, string wrapTimeToLive = null, bool unauthenticated = false) where TResponse : class 
+        public async Task<TResponse> MakeVaultApiRequest<TResponse>(string mountPoint, string path, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null, string wrapTimeToLive = null, bool unauthenticated = false, bool sendNamespaceHeader = true) where TResponse : class 
         {
             Checker.NotNull(mountPoint, "mountPoint");
 
-            return await MakeVaultApiRequest<TResponse>(VaultSharpV1Path + mountPoint.Trim('/') + path, httpMethod, requestData, rawResponse, postResponseAction, wrapTimeToLive, unauthenticated).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await MakeVaultApiRequest<TResponse>(VaultSharpV1Path + mountPoint.Trim('/') + path, httpMethod, requestData, rawResponse, postResponseAction, wrapTimeToLive, unauthenticated, sendNamespaceHeader).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null, string wrapTimeToLive = null, bool unauthenticated = false) where TResponse : class
+        public async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null, string wrapTimeToLive = null, bool unauthenticated = false, bool sendNamespaceHeader = true) where TResponse : class
         {
             var headers = new Dictionary<string, string>();
 
@@ -169,7 +169,7 @@ namespace VaultSharp.Core
                 headers.Add(VaultWrapTimeToLiveHeaderKey, wrapTimeToLive);
             }
 
-            if (!string.IsNullOrWhiteSpace(VaultClientSettings.Namespace))
+            if (sendNamespaceHeader && !string.IsNullOrWhiteSpace(VaultClientSettings.Namespace))
             {
                 headers.Add(NamespaceHeaderKey, VaultClientSettings.Namespace);
             }
