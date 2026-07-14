@@ -195,14 +195,6 @@ This library is built with .NET Standard 2.0, .NET Standard 2.1, 4.6.2, 4.7.2*, 
     <AssemblyTitle>VaultSharp .NET 8</AssemblyTitle>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='net9.0'">
-    <AssemblyTitle>VaultSharp .NET 9</AssemblyTitle>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)'=='net10.0'">
-    <AssemblyTitle>VaultSharp .NET 10</AssemblyTitle>
-  </PropertyGroup>
-
   <ItemGroup>
     <Folder Include="V1\SecretsEngines\PKI\Certificates\" />
   </ItemGroup>
