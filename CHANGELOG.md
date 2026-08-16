@@ -3,10 +3,11 @@
  * Helper code to get Kerberos Negotiation Token using keytab and krb5 config file: https://gist.github.com/rajanadar/28c86d967695262bfe1f17ae82fb3d3d
  * Helper code to generate on-demand CloudFoundry signature in .NET Applications: https://gist.github.com/rajanadar/84769efeca64e0128d7a8a627b7bb4db
 
-## 1.17.5.4 (TBD)
+## 2.0.4.1-beta1 (Aug 16, 2026)
 
 **BUG FIXES:**
 
+* [GH-394](https://github.com/rajanadar/VaultSharp/pull/394) Add Native AOT support for .NET 8+
  * Health Status no longer sends the Vault namespace header because the ```/sys/health``` endpoint is only valid from the root namespace.
 
 ## 1.17.5.3 (May 06, 2025)
