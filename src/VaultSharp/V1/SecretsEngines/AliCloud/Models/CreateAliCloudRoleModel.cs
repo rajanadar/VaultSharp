@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using VaultSharp.Core;
+#if NET8_0_OR_GREATER
+using System.Text.Json.Serialization.Metadata;
+#endif
 
 namespace VaultSharp.V1.SecretsEngines.AliCloud.Models
 {
@@ -16,7 +19,11 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud.Models
         {
             get
             {
+#if NET8_0_OR_GREATER
+                return JsonSerializer.Serialize(RemotePolicies, (JsonTypeInfo<List<AliCloudRemotePolicyModel>>)VaultSharpJsonContext.Default.GetTypeInfo(typeof(List<AliCloudRemotePolicyModel>)));
+#else
                 return JsonSerializer.Serialize(RemotePolicies);
+#endif
             }
         }
 
@@ -28,7 +35,11 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud.Models
         {
             get
             {
+#if NET8_0_OR_GREATER
+                return JsonSerializer.Serialize(InlinePolicies, (JsonTypeInfo<List<AliCloudInlinePolicyModel>>)VaultSharpJsonContext.Default.GetTypeInfo(typeof(List<AliCloudInlinePolicyModel>)));
+#else
                 return JsonSerializer.Serialize(InlinePolicies);
+#endif
             }
         }
 

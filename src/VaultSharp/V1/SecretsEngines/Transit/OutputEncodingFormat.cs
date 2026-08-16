@@ -6,7 +6,11 @@ namespace VaultSharp.V1.SecretsEngines.Transit
     /// <summary>
     /// The output encoding format options for a request.
     /// </summary>
+#if NET8_0_OR_GREATER
+    [JsonConverter(typeof(JsonStringEnumConverter<OutputEncodingFormat>))]
+#else
     [JsonConverter(typeof(JsonStringEnumConverter))]
+#endif
     public enum OutputEncodingFormat
     {
         /// <summary>

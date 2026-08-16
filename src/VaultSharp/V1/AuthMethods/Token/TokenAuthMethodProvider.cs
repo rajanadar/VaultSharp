@@ -62,7 +62,7 @@ namespace VaultSharp.V1.AuthMethods.Token
         {
             Checker.NotNull(clientToken, nameof(clientToken));
 
-            var requestData = new { token = clientToken };
+            var requestData = new TokenRequest { Token = clientToken };
             return await _polymath.MakeVaultApiRequest<Secret<ClientTokenInfo>>("v1/auth/token/lookup", HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
@@ -80,7 +80,7 @@ namespace VaultSharp.V1.AuthMethods.Token
 
         public async Task<AuthInfo> RenewSelfAsync(string increment = null)
         {
-            var requestData = !string.IsNullOrWhiteSpace(increment) ? new { increment = increment } : null;
+            var requestData = !string.IsNullOrWhiteSpace(increment) ? new IncrementRequest { Increment = increment } : null;
 
             var result = await _polymath.MakeVaultApiRequest<Secret<JsonObject>>("v1/auth/token/renew-self", HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             return result.AuthInfo;

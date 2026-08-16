@@ -43,17 +43,17 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
 
         public async Task<Secret<CheckedOutCredentials>> CheckoutCredentialsAsync(string setName, long? timeToLive = null, string mountPoint = null, string wrapTimeToLive = null)
         {
-            return await _polymath.MakeVaultApiRequest<Secret<CheckedOutCredentials>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.ActiveDirectory, "/library/" + setName + "/check-out", HttpMethod.Post, requestData: new { ttl = timeToLive }, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<CheckedOutCredentials>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.ActiveDirectory, "/library/" + setName + "/check-out", HttpMethod.Post, requestData: new TtlRequest { Ttl = timeToLive }, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<CheckedInAccounts>> CheckinCredentialsAsync(string setName, List<string> serviceAccountNames = null, string mountPoint = null, string wrapTimeToLive = null)
         {
-            return await _polymath.MakeVaultApiRequest<Secret<CheckedInAccounts>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.ActiveDirectory, "/library/" + setName + "/check-in", HttpMethod.Post, requestData: new { service_account_names = serviceAccountNames }, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<CheckedInAccounts>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.ActiveDirectory, "/library/" + setName + "/check-in", HttpMethod.Post, requestData: new ServiceAccountNamesRequest { ServiceAccountNames = serviceAccountNames }, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<CheckedInAccounts>> ForceCheckinCredentialsAsync(string setName, List<string> serviceAccountNames = null, string mountPoint = null, string wrapTimeToLive = null)
         {
-            return await _polymath.MakeVaultApiRequest<Secret<CheckedInAccounts>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.ActiveDirectory, "/library/manage/" + setName + "/check-in", HttpMethod.Post, requestData: new { service_account_names = serviceAccountNames }, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<CheckedInAccounts>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.ActiveDirectory, "/library/manage/" + setName + "/check-in", HttpMethod.Post, requestData: new ServiceAccountNamesRequest { ServiceAccountNames = serviceAccountNames }, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

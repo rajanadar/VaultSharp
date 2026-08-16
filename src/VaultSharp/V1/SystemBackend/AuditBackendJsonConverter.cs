@@ -130,15 +130,27 @@ namespace VaultSharp.V1.SystemBackend
 
                 if (auditBackendType == AuditBackendType.File)
                 {
-                    return JsonSerializer.Deserialize<FileAuditBackend>(jsonString);
+#if NET8_0_OR_GREATER
+                    return (FileAuditBackend)JsonSerializer.Deserialize(jsonString, options.GetTypeInfo(typeof(FileAuditBackend)));
+#else
+                    return JsonSerializer.Deserialize<FileAuditBackend>(jsonString, options);
+#endif
                 }
 
                 if (auditBackendType == AuditBackendType.Syslog)
                 {
-                    return JsonSerializer.Deserialize<SyslogAuditBackend>(jsonString);
+#if NET8_0_OR_GREATER
+                    return (SyslogAuditBackend)JsonSerializer.Deserialize(jsonString, options.GetTypeInfo(typeof(SyslogAuditBackend)));
+#else
+                    return JsonSerializer.Deserialize<SyslogAuditBackend>(jsonString, options);
+#endif
                 }
 
-                return JsonSerializer.Deserialize<CustomAuditBackend>(jsonString);
+#if NET8_0_OR_GREATER
+                return (CustomAuditBackend)JsonSerializer.Deserialize(jsonString, options.GetTypeInfo(typeof(CustomAuditBackend)));
+#else
+                return JsonSerializer.Deserialize<CustomAuditBackend>(jsonString, options);
+#endif
             }
         }
     }

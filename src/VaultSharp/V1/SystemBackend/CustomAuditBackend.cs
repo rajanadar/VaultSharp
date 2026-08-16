@@ -34,6 +34,7 @@ namespace VaultSharp.V1.SystemBackend
         /// <value>
         /// The type of the backend.
         /// </value>
+        [JsonPropertyName("type")]
         public override AuditBackendType Type { get; }
     }
 }

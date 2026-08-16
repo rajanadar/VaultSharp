@@ -50,7 +50,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
 
             if (checkAndSet != null)
             {
-                requestData.Add("options", new { cas = checkAndSet.Value });
+                requestData.Add("options", new CasRequest { Cas = checkAndSet.Value });
             }
 
             return await _polymath.MakeVaultApiRequest<Secret<CurrentSecretMetadata>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV2, "/data/" + path.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
@@ -81,7 +81,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
             Checker.NotNull(path, "path");
             Checker.NotNull(versions, "versions");
 
-            var requestData = new { versions = versions };
+            var requestData = new VersionsRequest { Versions = versions };
 
             await _polymath.MakeVaultApiRequest(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV2, "/delete/" + path.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
@@ -91,7 +91,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
             Checker.NotNull(path, "path");
             Checker.NotNull(versions, "versions");
 
-            var requestData = new { versions = versions };
+            var requestData = new VersionsRequest { Versions = versions };
 
             await _polymath.MakeVaultApiRequest(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV2, "/undelete/" + path.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
@@ -101,7 +101,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
             Checker.NotNull(path, "path");
             Checker.NotNull(versions, "versions");
 
-            var requestData = new { versions = versions };
+            var requestData = new VersionsRequest { Versions = versions };
 
             await _polymath.MakeVaultApiRequest(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV2, "/destroy/" + path.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }

@@ -7,7 +7,11 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
     /// Represents the ServiceAccountPrivateKeyType.
     /// https://cloud.google.com/iam/reference/rest/v1/projects.serviceAccounts.keys#ServiceAccountPrivateKeyType
     /// </summary>
+#if NET8_0_OR_GREATER
+    [JsonConverter(typeof(JsonStringEnumConverter<ServiceAccountPrivateKeyType>))]
+#else
     [JsonConverter(typeof(JsonStringEnumConverter))]
+#endif
     public enum ServiceAccountPrivateKeyType
     {
         /// <summary>

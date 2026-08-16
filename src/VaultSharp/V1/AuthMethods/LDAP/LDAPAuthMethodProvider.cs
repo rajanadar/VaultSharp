@@ -23,7 +23,7 @@ namespace VaultSharp.V1.AuthMethods.LDAP
 
             var flatPolicies = string.Join(",", policies);
 
-            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/groups/" + groupName.Trim('/'), HttpMethod.Post, new { policies = flatPolicies }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/groups/" + groupName.Trim('/'), HttpMethod.Post, new PoliciesRequest { Policies = flatPolicies }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<List<string>>> ReadGroupAsync(string groupName, string mountPoint = AuthMethodDefaultPaths.LDAP, string wrapTimeToLive = null)
@@ -57,7 +57,7 @@ namespace VaultSharp.V1.AuthMethods.LDAP
             var flatPolicies = string.Join(",", policies ?? new List<string>());
             var flatGroups = string.Join(",", groups ?? new List<string>());
 
-            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/users/" + username.Trim('/'), HttpMethod.Post, new { policies = flatPolicies, groups = flatGroups }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/users/" + username.Trim('/'), HttpMethod.Post, new PoliciesGroupsRequest { Policies = flatPolicies, Groups = flatGroups }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<Dictionary<string, object>>> ReadUserAsync(string username, string mountPoint = "ldap", string wrapTimeToLive = null)

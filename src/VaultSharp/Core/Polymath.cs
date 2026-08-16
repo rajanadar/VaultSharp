@@ -12,6 +12,9 @@ using VaultSharp.V1.AuthMethods.Kerberos;
 using VaultSharp.V1.Commons;
 using System.Text.Json.Nodes;
 using System.Text.Json;
+#if NET8_0_OR_GREATER
+using System.Text.Json.Serialization.Metadata;
+#endif
 
 namespace VaultSharp.Core
 {
@@ -28,14 +31,25 @@ namespace VaultSharp.Core
         private readonly HttpClient _httpClient;
         private Lazy<Task<string>> _lazyVaultToken;
         private readonly IAuthMethodLoginProvider _authMethodLoginProvider;
+        private readonly JsonSerializerOptions _jsonSerializerOptions;
 
         public HttpMethod ListHttpMethod { get; } = new HttpMethod("LIST");
 
         public VaultClientSettings VaultClientSettings { get; }
+        internal JsonSerializerOptions JsonSerializerOptions => _jsonSerializerOptions;
 
         public Polymath(VaultClientSettings vaultClientSettings)
         {
             VaultClientSettings = vaultClientSettings;
+
+            _jsonSerializerOptions = VaultClientSettings.JsonSerializerOptions ?? new JsonSerializerOptions();
+
+#if NET8_0_OR_GREATER
+            if (!_jsonSerializerOptions.TypeInfoResolverChain.Contains(VaultSharpJsonContext.Default))
+            {
+                _jsonSerializerOptions.TypeInfoResolverChain.Insert(0, VaultSharpJsonContext.Default);
+            }
+#endif
 
 #if NET45
             var handler = new WebRequestHandler();
@@ -200,7 +214,11 @@ namespace VaultSharp.Core
             {
                 var requestUri = new Uri(_httpClient.BaseAddress, new Uri(resourcePath, UriKind.Relative));
 
-                string requestJson = requestData != null ? JsonSerializer.Serialize(requestData) : null;
+#if NET8_0_OR_GREATER
+                string requestJson = requestData != null ? JsonSerializer.Serialize(requestData, _jsonSerializerOptions.GetTypeInfo(requestData.GetType())) : null;
+#else
+                string requestJson = requestData != null ? JsonSerializer.Serialize(requestData, requestData.GetType(), _jsonSerializerOptions) : null;
+#endif
 
                 var requestContent = requestJson != null
                     ? new StringContent(requestJson, Encoding.UTF8)
@@ -237,7 +255,11 @@ namespace VaultSharp.Core
                         httpRequestMessage = new HttpRequestMessage(httpMethod, requestUri)
                         {
                             Content = requestData != null 
-                            ? new StringContent(JsonSerializer.Serialize(requestData), Encoding.UTF8, "application/merge-patch+json")
+#if NET8_0_OR_GREATER
+                            ? new StringContent(JsonSerializer.Serialize(requestData, _jsonSerializerOptions.GetTypeInfo(requestData.GetType())), Encoding.UTF8, "application/merge-patch+json")
+#else
+                            ? new StringContent(JsonSerializer.Serialize(requestData, requestData.GetType(), _jsonSerializerOptions), Encoding.UTF8, "application/merge-patch+json")
+#endif
                             : null
                         };
 
@@ -275,7 +297,12 @@ namespace VaultSharp.Core
                 {
                     if (!string.IsNullOrWhiteSpace(responseText))
                     {
-                        var response = rawResponse ? (responseText as TResponse) : JsonSerializer.Deserialize<TResponse>(responseText);
+
+#if NET8_0_OR_GREATER
+                        var response = rawResponse ? (responseText as TResponse) : (TResponse)JsonSerializer.Deserialize(responseText, _jsonSerializerOptions.GetTypeInfo(typeof(TResponse)));
+#else
+                        var response = rawResponse ? (responseText as TResponse) : JsonSerializer.Deserialize<TResponse>(responseText, _jsonSerializerOptions);
+#endif
                         return response;
                     }
 

@@ -7,7 +7,11 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
     /// Represents the ServiceAccountKeyAlgorithm.
     /// https://cloud.google.com/iam/reference/rest/v1/projects.serviceAccounts.keys#ServiceAccountKeyAlgorithm
     /// </summary>
+#if NET8_0_OR_GREATER
+    [JsonConverter(typeof(JsonStringEnumConverter<ServiceAccountKeyAlgorithm>))]
+#else
     [JsonConverter(typeof(JsonStringEnumConverter))]
+#endif
     public enum ServiceAccountKeyAlgorithm
     {
         /// <summary>

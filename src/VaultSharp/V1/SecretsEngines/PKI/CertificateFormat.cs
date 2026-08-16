@@ -6,7 +6,11 @@ namespace VaultSharp.V1.SecretsEngines.PKI
     /// <summary>
     /// Represents the Certificate format.
     /// </summary>
+#if NET8_0_OR_GREATER
+    [JsonConverter(typeof(JsonStringEnumConverter<CertificateFormat>))]
+#else
     [JsonConverter(typeof(JsonStringEnumConverter))]
+#endif
     public enum CertificateFormat
     {
         /// <summary>

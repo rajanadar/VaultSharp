@@ -68,7 +68,7 @@ namespace VaultSharp.V1.SystemBackend
 
         public async Task<Secret<AuditHash>> AuditHashAsync(string path, string inputToHash)
         {
-            var requestData = new { input = inputToHash };
+            var requestData = new InputRequest { Input = inputToHash };
 
             return await _polymath.MakeVaultApiRequest<Secret<AuditHash>>("v1/sys/audit-hash/" + path.Trim('/'), HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
@@ -116,19 +116,19 @@ namespace VaultSharp.V1.SystemBackend
 
         public async Task<Secret<TokenCapability>> GetTokenCapabilitiesAsync(string path, string token)
         {
-            var requestData = new { path = path, token = token };
+            var requestData = new PathTokenRequest { Path = path, Token = token };
             return await _polymath.MakeVaultApiRequest<Secret<TokenCapability>>("v1/sys/capabilities", HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<TokenCapability>> GetTokenCapabilitiesByAcessorAsync(string path, string tokenAccessor)
         {
-            var requestData = new { path = path, accessor = tokenAccessor };
+            var requestData = new PathAccessorRequest { Path = path, Accessor = tokenAccessor };
             return await _polymath.MakeVaultApiRequest<Secret<TokenCapability>>("v1/sys/capabilities-accessor", HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<TokenCapability>> GetCallingTokenCapabilitiesAsync(string path)
         {
-            var requestData = new { path = path };
+            var requestData = new PathRequest { Path = path };
             return await _polymath.MakeVaultApiRequest<Secret<TokenCapability>>("v1/sys/capabilities-self", HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
@@ -174,10 +174,7 @@ namespace VaultSharp.V1.SystemBackend
 
         public async Task PutAuditRequestHeaderAsync(string name, bool hmac = false)
         {
-            var requestData = new
-            {
-                hmac = hmac
-            };
+            var requestData = new HmacRequest { Hmac = hmac };
 
             await _polymath.MakeVaultApiRequest("v1/sys/config/auditing/request-headers/" + name, HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
@@ -209,7 +206,7 @@ namespace VaultSharp.V1.SystemBackend
 
         public async Task<RootTokenGenerationStatus> InitiateRootTokenGenerationAsync(string base64EncodedOneTimePassword, string pgpKey)
         {
-            var requestData = new { otp = base64EncodedOneTimePassword, pgpKey = pgpKey };
+            var requestData = new OtpPgpKeyRequest { Otp = base64EncodedOneTimePassword, PgpKey = pgpKey };
             return await _polymath.MakeVaultApiRequest<RootTokenGenerationStatus>("v1/sys/generate-root/attempt", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
@@ -220,11 +217,7 @@ namespace VaultSharp.V1.SystemBackend
 
         public async Task<RootTokenGenerationStatus> ContinueRootTokenGenerationAsync(string masterShareKey, string nonce)
         {
-            var requestData = new
-            {
-                key = masterShareKey,
-                nonce = nonce
-            };
+            var requestData = new KeyNonceRequest { Key = masterShareKey, Nonce = nonce };
 
             return await _polymath.MakeVaultApiRequest<RootTokenGenerationStatus>("v1/sys/generate-root/update", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
@@ -304,7 +297,11 @@ namespace VaultSharp.V1.SystemBackend
                 }
 
                 // for head calls, the response is empty. So return a null object, to avoid misleading callers.
-                var healthStatus = JsonSerializer.Deserialize<HealthStatus>(vaultApiException.Message);
+#if NET8_0_OR_GREATER
+                var healthStatus = (HealthStatus)JsonSerializer.Deserialize(vaultApiException.Message, _polymath.JsonSerializerOptions.GetTypeInfo(typeof(HealthStatus)));
+#else
+                var healthStatus = JsonSerializer.Deserialize<HealthStatus>(vaultApiException.Message, _polymath.JsonSerializerOptions);
+#endif
                 healthStatus.HttpStatusCode = vaultApiException.StatusCode;
 
                 return healthStatus;
@@ -335,10 +332,7 @@ namespace VaultSharp.V1.SystemBackend
 
         public async Task<Secret<Lease>> GetLeaseAsync(string leaseId)
         {
-            var requestData = new
-            {
-                lease_id = leaseId
-            };
+            var requestData = new LeaseIdRequest { LeaseId = leaseId };
 
             return await _polymath.MakeVaultApiRequest<Secret<Lease>>("v1/sys/leases/lookup", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
@@ -350,21 +344,14 @@ namespace VaultSharp.V1.SystemBackend
 
         public async Task<Secret<RenewedLease>> RenewLeaseAsync(string leaseId, int incrementSeconds)
         {
-            var requestData = new
-            {
-                lease_id = leaseId,
-                increment = incrementSeconds
-            };
+            var requestData = new LeaseRenewRequest { LeaseId = leaseId, Increment = incrementSeconds };
 
             return await _polymath.MakeVaultApiRequest<Secret<RenewedLease>>("v1/sys/leases/renew", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task RevokeLeaseAsync(string leaseId)
         {
-            var requestData = new
-            {
-                lease_id = leaseId
-            };
+            var requestData = new LeaseIdRequest { LeaseId = leaseId };
 
             await _polymath.MakeVaultApiRequest("v1/sys/leases/revoke", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
@@ -391,20 +378,14 @@ namespace VaultSharp.V1.SystemBackend
 
         public async Task ModifyVerbosityLevelForAllLoggersAsync(LogVerbosityLevel logVerbosityLevel)
         {
-            var requestData = new
-            {
-                level = logVerbosityLevel.ToString()
-            };
+            var requestData = new LevelRequest { Level = logVerbosityLevel.ToString() };
 
             await _polymath.MakeVaultApiRequest("v1/sys/loggers", HttpMethod.Post, requestData: requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task ModifyVerbosityLevelForLoggerAsync(string loggerName, LogVerbosityLevel logVerbosityLevel)
         {
-            var requestData = new
-            {
-                level = logVerbosityLevel.ToString()
-            };
+            var requestData = new LevelRequest { Level = logVerbosityLevel.ToString() };
 
             await _polymath.MakeVaultApiRequest("v1/sys/loggers/" + loggerName, HttpMethod.Post, requestData: requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
@@ -478,10 +459,7 @@ namespace VaultSharp.V1.SystemBackend
 
         public async Task WritePolicyAsync(Policy policy)
         {
-            var requestData = new
-            {
-                rules = policy.Rules
-            };
+            var requestData = new RulesRequest { Rules = policy.Rules };
 
             await _polymath.MakeVaultApiRequest("v1/sys/policy/" + policy.Name, HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
@@ -503,10 +481,7 @@ namespace VaultSharp.V1.SystemBackend
 
         public async Task WriteACLPolicyAsync(ACLPolicy policy)
         {
-            var requestData = new
-            {
-                policy = policy.Policy
-            };
+            var requestData = new PolicyTextRequest { Policy = policy.Policy };
 
             await _polymath.MakeVaultApiRequest("v1/sys/policies/acl/" + policy.Name, HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
@@ -538,17 +513,22 @@ namespace VaultSharp.V1.SystemBackend
             var response = await _polymath.MakeVaultApiRequest<Secret<JsonObject>>("v1/sys/raw/" + storagePath.Trim('/'), HttpMethod.Get).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
             string value = response.Data["value"].ToString();
-            var data = JsonSerializer.Deserialize<Dictionary<string, object>>(value);
+#if NET8_0_OR_GREATER
+            var data = (Dictionary<string, object>)JsonSerializer.Deserialize(value, _polymath.JsonSerializerOptions.GetTypeInfo(typeof(Dictionary<string, object>)));
+#else
+            var data = JsonSerializer.Deserialize<Dictionary<string, object>>(value, _polymath.JsonSerializerOptions);
+#endif
 
             return _polymath.GetMappedSecret(response, data);
         }
 
         public async Task WriteRawSecretAsync(string storagePath, Dictionary<string, object> values)
         {
-            var requestData = new
-            {
-                value = JsonSerializer.Serialize(values)
-            };
+#if NET8_0_OR_GREATER
+            var requestData = new ValueRequest { Value = JsonSerializer.Serialize(values, _polymath.JsonSerializerOptions.GetTypeInfo(typeof(Dictionary<string, object>))) };
+#else
+            var requestData = new ValueRequest { Value = JsonSerializer.Serialize(values, _polymath.JsonSerializerOptions) };
+#endif
 
             await _polymath.MakeVaultApiRequest("v1/sys/raw/" + storagePath.Trim('/'), HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
@@ -565,7 +545,7 @@ namespace VaultSharp.V1.SystemBackend
 
         public async Task<RekeyStatus> InitiateRekeyAsync(int secretShares, int secretThreshold, string[] pgpKeys = null, bool backup = false)
         {
-            var requestData = new { secret_shares = secretShares, secret_threshold = secretThreshold, pgp_keys = pgpKeys, backup = backup };
+            var requestData = new RekeyInitRequest { SecretShares = secretShares, SecretThreshold = secretThreshold, PgpKeys = pgpKeys, Backup = backup };
             return await _polymath.MakeVaultApiRequest<RekeyStatus>("v1/sys/rekey/init", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
@@ -586,11 +566,7 @@ namespace VaultSharp.V1.SystemBackend
 
         public async Task<RekeyProgress> ContinueRekeyAsync(string masterShareKey, string rekeyNonce)
         {
-            var requestData = new
-            {
-                key = masterShareKey,
-                nonce = rekeyNonce
-            };
+            var requestData = new KeyNonceRequest { Key = masterShareKey, Nonce = rekeyNonce };
 
             return await _polymath.MakeVaultApiRequest<RekeyProgress>("v1/sys/rekey/update", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
@@ -628,11 +604,7 @@ namespace VaultSharp.V1.SystemBackend
 
         public async Task<SealStatus> UnsealAsync(string masterShareKey = null, bool resetCompletely = false)
         {
-            var requestData = new
-            {
-                key = masterShareKey,
-                reset = resetCompletely
-            };
+            var requestData = new KeyResetRequest { Key = masterShareKey, Reset = resetCompletely };
 
             return await _polymath.MakeVaultApiRequest<SealStatus>("v1/sys/unseal", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
@@ -657,19 +629,19 @@ namespace VaultSharp.V1.SystemBackend
 
         public async Task<Secret<TokenWrapData>> LookupTokenWrapInfoAsync(string tokenId)
         {
-            var requestData = new { token = tokenId };
+            var requestData = new TokenRequest { Token = tokenId };
             return await _polymath.MakeVaultApiRequest<Secret<TokenWrapData>>("v1/sys/wrapping/lookup", HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<object>> RewrapWrappedResponseDataAsync(string tokenId)
         {
-            var requestData = new { token = tokenId };
+            var requestData = new TokenRequest { Token = tokenId };
             return await _polymath.MakeVaultApiRequest<Secret<object>>("v1/sys/wrapping/rewrap", HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<TData>> UnwrapWrappedResponseDataAsync<TData>(string tokenId)
         {
-            var requestData = new { token = tokenId };
+            var requestData = new TokenRequest { Token = tokenId };
             return await _polymath.MakeVaultApiRequest<Secret<TData>>("v1/sys/wrapping/unwrap", HttpMethod.Post, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 

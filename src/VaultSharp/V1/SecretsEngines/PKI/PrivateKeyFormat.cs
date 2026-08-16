@@ -6,7 +6,11 @@ namespace VaultSharp.V1.SecretsEngines.PKI
     /// <summary>
     /// Represents the Private key format.
     /// </summary>
+#if NET8_0_OR_GREATER
+    [JsonConverter(typeof(JsonStringEnumConverter<PrivateKeyFormat>))]
+#else
     [JsonConverter(typeof(JsonStringEnumConverter))]
+#endif
     public enum PrivateKeyFormat
     {
         /// <summary>

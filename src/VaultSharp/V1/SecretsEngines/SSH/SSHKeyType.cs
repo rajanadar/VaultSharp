@@ -6,7 +6,11 @@ namespace VaultSharp.V1.SecretsEngines.SSH
     /// <summary>
     /// Represents the type of SSH key to be generated.
     /// </summary>
+#if NET8_0_OR_GREATER
+    [JsonConverter(typeof(JsonStringEnumConverter<SSHKeyType>))]
+#else
     [JsonConverter(typeof(JsonStringEnumConverter))]
+#endif
     public enum SSHKeyType
     {
         /// <summary>

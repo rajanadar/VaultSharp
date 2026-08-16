@@ -24,7 +24,7 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
 
         public async Task ConfigureControlGroupAsync(string maxTimeToLive)
         {
-            await _polymath.MakeVaultApiRequest("v1/sys/config/control-group", HttpMethod.Put, new { max_ttl = maxTimeToLive }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/sys/config/control-group", HttpMethod.Put, new MaxTtlRequest { MaxTtl = maxTimeToLive }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task DeleteControlGroupConfigAsync()
@@ -34,12 +34,12 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
 
         public async Task<Secret<ControlGroupRequestStatus>> AuthorizeControlGroupAsync(string accessor)
         {
-            return await _polymath.MakeVaultApiRequest<Secret<ControlGroupRequestStatus>>("v1/sys/control-group/authorize", HttpMethod.Post, new { accessor = accessor }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<ControlGroupRequestStatus>>("v1/sys/control-group/authorize", HttpMethod.Post, new AccessorRequest { Accessor = accessor }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<ControlGroupRequestStatus>> CheckControlGroupStatusAsync(string accessor)
         {
-            return await _polymath.MakeVaultApiRequest<Secret<ControlGroupRequestStatus>>("v1/sys/control-group/request", HttpMethod.Post, new { accessor = accessor }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<ControlGroupRequestStatus>>("v1/sys/control-group/request", HttpMethod.Post, new AccessorRequest { Accessor = accessor }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<License>> GetLicenseAsync()

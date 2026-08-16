@@ -28,7 +28,7 @@ namespace VaultSharp.V1.AuthMethods.Cert
                 
                 (await _polymath.MakeVaultApiRequest<Secret<JsonObject>>(LoginResourcePath, HttpMethod.Post, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext)) : 
                 
-                (await _polymath.MakeVaultApiRequest<Secret<JsonObject>>(LoginResourcePath, HttpMethod.Post, new { name = _certAuthMethodInfo.RoleName }, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext));
+                (await _polymath.MakeVaultApiRequest<Secret<JsonObject>>(LoginResourcePath, HttpMethod.Post, new NameRequest { Name = _certAuthMethodInfo.RoleName }, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext));
 
             _certAuthMethodInfo.ReturnedLoginAuthInfo = response?.AuthInfo;
 

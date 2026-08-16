@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace VaultSharp.Core
 {
@@ -67,16 +66,29 @@ namespace VaultSharp.Core
 
             try
             {
-                var structured = JsonSerializer.Deserialize<Dictionary<string, IEnumerable<string>>>(message);
-
-                if (structured.ContainsKey("errors"))
+                using (var document = JsonDocument.Parse(message))
                 {
-                    ApiErrors = structured["errors"];
+                var root = document.RootElement;
+
+                if (root.TryGetProperty("errors", out var errorsElement) && errorsElement.ValueKind == JsonValueKind.Array)
+                {
+                    var errors = new List<string>();
+                    foreach (var item in errorsElement.EnumerateArray())
+                    {
+                        errors.Add(item.GetString());
+                    }
+                    ApiErrors = errors;
                 }
 
-                if (structured.ContainsKey("warnings"))
+                if (root.TryGetProperty("warnings", out var warningsElement) && warningsElement.ValueKind == JsonValueKind.Array)
                 {
-                    ApiWarnings = structured["warnings"];
+                    var warnings = new List<string>();
+                    foreach (var item in warningsElement.EnumerateArray())
+                    {
+                        warnings.Add(item.GetString());
+                    }
+                    ApiWarnings = warnings;
+                }
                 }
             }
             catch

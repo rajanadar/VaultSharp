@@ -37,6 +37,7 @@ This library is built with .NET Standard 2.0, .NET Standard 2.1, 4.6.2, 4.7.2*, 
     <Deterministic>True</Deterministic>
     <ContinousIntegrationBuild>True</ContinousIntegrationBuild>
     <WarningsAsErrors>CA2007</WarningsAsErrors> <!-- CA2007:Do not directly await a Task - -->
+    <IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsAotCompatible>
   </PropertyGroup>
 
   <ItemGroup>

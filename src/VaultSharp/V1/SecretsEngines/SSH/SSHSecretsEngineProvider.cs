@@ -19,7 +19,7 @@ namespace VaultSharp.V1.SecretsEngines.SSH
             Checker.NotNull(roleName, "roleName");
             Checker.NotNull(ipAddress, "ipAddress");
 
-            var requestData = new { ip = ipAddress, username = username };
+            var requestData = new IpUsernameRequest { Ip = ipAddress, Username = username };
 
             return await _polymath.MakeVaultApiRequest<Secret<SSHCredentials>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.SSH, "/creds/" + roleName.Trim('/'), HttpMethod.Post, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }

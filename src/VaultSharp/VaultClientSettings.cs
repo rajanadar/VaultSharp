@@ -85,5 +85,14 @@ namespace VaultSharp
         /// See <see cref="V1.SecretsEngines.SecretsEngineMountPoints.Defaults" /> for defaults.
         /// </summary>
         public SecretsEngineMountPoints SecretsEngineMountPoints { get; set; } = new SecretsEngineMountPoints();
+
+        /// <summary>
+        /// Optional <see cref="System.Text.Json.JsonSerializerOptions"/> for serialization.
+        /// Use this to provide a custom <see cref="System.Text.Json.Serialization.JsonSerializerContext"/>
+        /// for Native AOT support. VaultSharp's built-in types are handled automatically;
+        /// register your own types (e.g. for KV secrets) via
+        /// <see cref="System.Text.Json.JsonSerializerOptions.TypeInfoResolverChain"/>.
+        /// </summary>
+        public System.Text.Json.JsonSerializerOptions JsonSerializerOptions { get; set; }
     }
 }

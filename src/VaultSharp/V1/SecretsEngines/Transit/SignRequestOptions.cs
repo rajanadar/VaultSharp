@@ -83,7 +83,11 @@ namespace VaultSharp.V1.SecretsEngines.Transit
     /// <summary>
     /// The RSA signature algorithm to use for signing, if applicable.
     /// </summary>
+#if NET8_0_OR_GREATER
+    [JsonConverter(typeof(JsonStringEnumConverter<SignatureAlgorithm>))]
+#else
     [JsonConverter(typeof(JsonStringEnumConverter))]
+#endif
     public enum SignatureAlgorithm
     {
         pss,
@@ -93,7 +97,11 @@ namespace VaultSharp.V1.SecretsEngines.Transit
     /// <summary>
     /// The way in which the signature should be marshaled, if applicable.
     /// </summary>
+#if NET8_0_OR_GREATER
+    [JsonConverter(typeof(JsonStringEnumConverter<MarshalingAlgorithm>))]
+#else
     [JsonConverter(typeof(JsonStringEnumConverter))]
+#endif
     public enum MarshalingAlgorithm
     {
         asn1,

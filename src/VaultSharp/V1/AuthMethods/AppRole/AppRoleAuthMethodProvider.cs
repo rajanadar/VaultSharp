@@ -90,7 +90,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             Checker.NotNull(roleName, "roleName");
             Checker.NotNull(secretId, "secretId");
 
-            return await _polymath.MakeVaultApiRequest<Secret<FullSecretIdInfo>>("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/secret-id/lookup", HttpMethod.Post, requestData: new { secret_id = secretId }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<FullSecretIdInfo>>("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/secret-id/lookup", HttpMethod.Post, requestData: new SecretIdRequest { SecretId = secretId }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task DestroySecretIdAsync(string roleName, string secretId, string mountPoint = AuthMethodDefaultPaths.AppRole)
@@ -99,7 +99,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             Checker.NotNull(roleName, "roleName");
             Checker.NotNull(secretId, "secretId");
 
-            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/secret-id/destroy", HttpMethod.Post, requestData: new { secret_id = secretId }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/secret-id/destroy", HttpMethod.Post, requestData: new SecretIdRequest { SecretId = secretId }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<FullSecretIdInfo>> ReadSecretIdInfoByAccessorAsync(string roleName, string secretIdAccessor, string mountPoint = AuthMethodDefaultPaths.AppRole)
@@ -108,7 +108,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             Checker.NotNull(roleName, "roleName");
             Checker.NotNull(secretIdAccessor, "secretIdAccessor");
 
-            return await _polymath.MakeVaultApiRequest<Secret<FullSecretIdInfo>>("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/secret-id-accessor/lookup", HttpMethod.Post, requestData: new { secret_id_accessor = secretIdAccessor }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<FullSecretIdInfo>>("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/secret-id-accessor/lookup", HttpMethod.Post, requestData: new SecretIdAccessorRequest { SecretIdAccessor = secretIdAccessor }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task DestroySecretIdByAccessorAsync(string roleName, string secretIdAccessor, string mountPoint = AuthMethodDefaultPaths.AppRole)
@@ -117,7 +117,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             Checker.NotNull(roleName, "roleName");
             Checker.NotNull(secretIdAccessor, "secretIdAccessor");
 
-            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/secret-id-accessor/destroy", HttpMethod.Post, requestData: new { secret_id_accessor = secretIdAccessor }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/secret-id-accessor/destroy", HttpMethod.Post, requestData: new SecretIdAccessorRequest { SecretIdAccessor = secretIdAccessor }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<Secret<SecretIdInfo>> PushNewSecretIdAsync(string roleName, PushSecretIdRequestOptions secretIdRequestOptions = null, string mountPoint = AuthMethodDefaultPaths.AppRole)
@@ -167,7 +167,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");
 
-            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/secret-id-num-uses", HttpMethod.Post, new { secret_id_num_uses = secretIdNumberOfUses }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/secret-id-num-uses", HttpMethod.Post, new SecretIdNumUsesRequest { SecretIdNumUses = secretIdNumberOfUses }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task DeleteRoleSecretIdNumberOfUsesAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole)
@@ -193,7 +193,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");
 
-            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/secret-id-ttl", HttpMethod.Post, new { secret_id_ttl = secretIdTimeToLive }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/secret-id-ttl", HttpMethod.Post, new SecretIdTtlRequest { SecretIdTtl = secretIdTimeToLive }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task DeleteRoleSecretIdTimeToLiveAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole)
@@ -219,7 +219,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");
 
-            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/token-ttl", HttpMethod.Post, new { token_ttl = tokenTimeToLive }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/token-ttl", HttpMethod.Post, new TokenTtlRequest { TokenTtl = tokenTimeToLive }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task DeleteRoleTokenTimeToLiveAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole)
@@ -245,7 +245,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");
 
-            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/token-max-ttl", HttpMethod.Post, new { token_max_ttl = tokenMaximumTimeToLive }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/token-max-ttl", HttpMethod.Post, new TokenMaxTtlRequest { TokenMaxTtl = tokenMaximumTimeToLive }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task DeleteRoleTokenMaximumTimeToLiveAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole)
@@ -271,7 +271,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");
 
-            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/bind-secret-id", HttpMethod.Post, new { bind_secret_id = bindSecretId }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/bind-secret-id", HttpMethod.Post, new BindSecretIdRequest { BindSecretId = bindSecretId }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task DeleteRoleBindSecretIdAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole)
@@ -310,7 +310,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");
 
-            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/secret-id-bound-cidrs", HttpMethod.Post, new { secret_id_bound_cidrs = secretIdBoundCIDRs }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/secret-id-bound-cidrs", HttpMethod.Post, new SecretIdBoundCidrsRequest { SecretIdBoundCidrs = secretIdBoundCIDRs }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task DeleteRoleSecretIdBoundCIDRsAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole)
@@ -355,7 +355,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");
 
-            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/token-bound-cidrs", HttpMethod.Post, new { token_bound_cidrs = tokenBoundCIDRs }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/token-bound-cidrs", HttpMethod.Post, new TokenBoundCidrsRequest { TokenBoundCidrs = tokenBoundCIDRs }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task DeleteRoleTokenBoundCIDRsAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole)
@@ -381,7 +381,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(roleName, "roleName");
 
-            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/period", HttpMethod.Post, new { token_period = period }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/role/" + roleName.Trim('/') + "/period", HttpMethod.Post, new TokenPeriodRequest { TokenPeriod = period }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task DeleteRolePeriodAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole)

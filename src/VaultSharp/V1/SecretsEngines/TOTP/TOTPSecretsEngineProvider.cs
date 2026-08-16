@@ -92,7 +92,7 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
             Checker.NotNull(keyName, "keyName");
             Checker.NotNull(code, "code");
 
-            var requestData = new { code = code };
+            var requestData = new CodeRequest { Code = code };
             return await _polymath.MakeVaultApiRequest<Secret<TOTPCodeValidity>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.TOTP, "/code/" + keyName.Trim('/'), HttpMethod.Post, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }

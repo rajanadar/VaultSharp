@@ -26,12 +26,12 @@ namespace VaultSharp.V1.AuthMethods.CloudFoundry
 
         public async Task<string> GetVaultTokenAsync()
         {
-            var requestData = new
+            var requestData = new CloudFoundryLoginRequest
             {
-                role = _cloudFoundryAuthMethodInfo.RoleName,
-                cf_instance_cert = _cloudFoundryAuthMethodInfo.CFInstanceCertContent,
-                signing_time = GetFormattedSigningTime(_cloudFoundryAuthMethodInfo.SignatureDateTime),
-                signature = _cloudFoundryAuthMethodInfo.Signature
+                Role = _cloudFoundryAuthMethodInfo.RoleName,
+                CfInstanceCert = _cloudFoundryAuthMethodInfo.CFInstanceCertContent,
+                SigningTime = GetFormattedSigningTime(_cloudFoundryAuthMethodInfo.SignatureDateTime),
+                Signature = _cloudFoundryAuthMethodInfo.Signature
             };
             
             // make an unauthenticated call to Vault, since this is the call to get the token. 

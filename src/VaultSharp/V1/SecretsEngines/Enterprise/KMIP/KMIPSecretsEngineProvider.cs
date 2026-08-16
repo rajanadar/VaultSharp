@@ -19,7 +19,7 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.KMIP
             Checker.NotNull(scopeName, "scopeName");
             Checker.NotNull(roleName, "roleName");
 
-            return await _polymath.MakeVaultApiRequest<Secret<KMIPCredentials>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KMIP, "/scope/" + scopeName.Trim('/') + "/role/" + scopeName.Trim('/') + "/credential/generate", HttpMethod.Post, new { format }, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<KMIPCredentials>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KMIP, "/scope/" + scopeName.Trim('/') + "/role/" + scopeName.Trim('/') + "/credential/generate", HttpMethod.Post, new FormatRequest { Format = format.ToString() }, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }
