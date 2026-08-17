@@ -91,48 +91,6 @@ VaultSharp will follow the .NET EOL dates mentioned here:
  * https://dotnet.microsoft.com/en-us/platform/support/policy/dotnet-core
  * https://learn.microsoft.com/en-us/dotnet/standard/frameworks#supported-target-frameworks
 
-#### NativeAOT and consumer-defined JSON types
-
-On .NET 8 and later, VaultSharp uses source-generated JSON metadata for its built-in API models. Applications using custom types, such as strongly typed KV secrets, must add their own generated context before constructing `VaultClient`:
-
-```csharp
-var settings = new VaultClientSettings(
-    "https://vault.example",
-    new TokenAuthMethodInfo("token"));
-
-var options =
-    settings.JsonSerializerOptions ??= new JsonSerializerOptions();
-
-options.TypeInfoResolverChain.Insert(
-    0,
-    MyVaultJsonContext.Default);
-
-var client = new VaultClient(settings);
-```
-
-Use the generated `Default` context directly. Do not construct a context with the same `JsonSerializerOptions` instance and then insert that context into the instance, because constructing the context freezes the options before VaultSharp can add its own generated context.
-
-For KV v2, register the custom DTO and the exact generic read response wrapper:
-
-```csharp
-[JsonSerializable(typeof(MyDto))]
-[JsonSerializable(typeof(Secret<SecretData<MyDto>>))]
-internal partial class MyVaultJsonContext : JsonSerializerContext
-{
-}
-```
-
-The same configured client then supports both generic reads and writes:
-
-```csharp
-var read =
-    await client.V1.Secrets.KeyValue.V2.ReadSecretAsync<MyDto>("path");
-
-await client.V1.Secrets.KeyValue.V2.WriteSecretAsync(
-    "path",
-    new MyDto());
-```
-
 ### VaultSharp and Consul Support
 
 - VaultSharp supports dynamic Consul credential generation.
