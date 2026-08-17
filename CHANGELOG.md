@@ -3,6 +3,13 @@
  * Helper code to get Kerberos Negotiation Token using keytab and krb5 config file: https://gist.github.com/rajanadar/28c86d967695262bfe1f17ae82fb3d3d
  * Helper code to generate on-demand CloudFoundry signature in .NET Applications: https://gist.github.com/rajanadar/84769efeca64e0128d7a8a627b7bb4db
 
+## 2.0.4.1-beta2 (Aug 17, 2026)
+
+**BUG FIXES:**
+
+ * Complete source-generated JSON coverage for closed public API responses and request bodies on .NET 8+ NativeAOT.
+ * Document and test source-generated context composition for consumer-defined KV v2 DTOs.
+
 ## 2.0.4.1-beta1 (Aug 16, 2026)
 
 **BUG FIXES:**
