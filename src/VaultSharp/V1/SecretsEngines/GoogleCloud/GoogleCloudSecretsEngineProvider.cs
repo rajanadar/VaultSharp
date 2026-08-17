@@ -25,11 +25,11 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
         {
             Checker.NotNull(roleset, "roleset");
 
-            var requestData = new
+            var requestData = new GoogleCloudServiceAccountKeyRequest
             {
-                key_algorithm = keyAlgorithm.ToString(),
-                key_type = ServiceAccountPrivateKeyType.TYPE_GOOGLE_CREDENTIALS_FILE.ToString(),
-                ttl = timeToLive
+                KeyAlgorithm = keyAlgorithm.ToString(),
+                KeyType = ServiceAccountPrivateKeyType.TYPE_GOOGLE_CREDENTIALS_FILE.ToString(),
+                TimeToLive = timeToLive
             };
 
             return await _polymath.MakeVaultApiRequest<Secret<GoogleCloudServiceAccountKey>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.GoogleCloud, "/roleset/" + roleset.Trim('/') + "/key", HttpMethod.Post, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);

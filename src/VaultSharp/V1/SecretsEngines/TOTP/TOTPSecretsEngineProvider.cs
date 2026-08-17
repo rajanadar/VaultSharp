@@ -24,36 +24,36 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
 
             if (createKeyRequest.KeyGenerationOption is TOTPVaultBasedKeyGeneration vaultBasedOption)
             {
-                request = new
+                request = new TOTPVaultGeneratedKeyRequest
                 {
-                    generate = true,
-                    exported = vaultBasedOption.Exported,
-                    key_size = vaultBasedOption.KeySize,
+                    Generate = true,
+                    Exported = vaultBasedOption.Exported,
+                    KeySize = vaultBasedOption.KeySize,
 
-                    issuer = createKeyRequest.Issuer,
-                    account_name = createKeyRequest.AccountName,
-                    period = createKeyRequest.Period,
-                    algorithm = createKeyRequest.Algorithm,
-                    digits = createKeyRequest.Digits,
+                    Issuer = createKeyRequest.Issuer,
+                    AccountName = createKeyRequest.AccountName,
+                    Period = createKeyRequest.Period,
+                    Algorithm = createKeyRequest.Algorithm,
+                    Digits = createKeyRequest.Digits,
 
-                    skew = vaultBasedOption.Skew,
-                    qr_size = vaultBasedOption.QRSize
+                    Skew = vaultBasedOption.Skew,
+                    QRSize = vaultBasedOption.QRSize
                 };
             }
             else
             {
                 var nonVaultOption = createKeyRequest.KeyGenerationOption as TOTPNonVaultBasedKeyGeneration;
 
-                request = new
+                request = new TOTPExternalKeyRequest
                 {
-                    url = nonVaultOption.Url,
-                    key = nonVaultOption.Key,
+                    Url = nonVaultOption.Url,
+                    Key = nonVaultOption.Key,
 
-                    issuer = createKeyRequest.Issuer,
-                    account_name = createKeyRequest.AccountName,
-                    period = createKeyRequest.Period,
-                    algorithm = createKeyRequest.Algorithm,
-                    digits = createKeyRequest.Digits
+                    Issuer = createKeyRequest.Issuer,
+                    AccountName = createKeyRequest.AccountName,
+                    Period = createKeyRequest.Period,
+                    Algorithm = createKeyRequest.Algorithm,
+                    Digits = createKeyRequest.Digits
                 };
             }
 

@@ -20,10 +20,10 @@ namespace VaultSharp.V1.SystemBackend.Plugin
 
         public async Task ReloadBackendsAsync(string plugin, IEnumerable<string> backendMountPaths)
         {
-            var requestData = new
+            var requestData = new PluginReloadRequest
             {
-                plugin = plugin,
-                mounts = backendMountPaths
+                Plugin = plugin,
+                Mounts = backendMountPaths
             };
 
             await _polymath.MakeVaultApiRequest("v1/sys/plugin/reload/backend", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
@@ -36,10 +36,10 @@ namespace VaultSharp.V1.SystemBackend.Plugin
 
         public async Task RegisterAsync(PluginConfig pluginConfig)
         {
-            var requestData = new
+            var requestData = new PluginRegistrationRequest
             {
-                sha_256 = pluginConfig.Sha256, // raja todo: check this https://www.vaultproject.io/api/system/plugins-catalog.html
-                command = pluginConfig.Command
+                Sha256 = pluginConfig.Sha256, // raja todo: check this https://www.vaultproject.io/api/system/plugins-catalog.html
+                Command = pluginConfig.Command
             };
 
             await _polymath.MakeVaultApiRequest("v1/sys/plugins/catalog/" + pluginConfig.Name, HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);

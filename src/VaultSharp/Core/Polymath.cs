@@ -43,6 +43,7 @@ namespace VaultSharp.Core
             VaultClientSettings = vaultClientSettings;
 
             _jsonSerializerOptions = VaultClientSettings.JsonSerializerOptions ?? new JsonSerializerOptions();
+            VaultClientSettings.JsonSerializerOptions = _jsonSerializerOptions;
 
 #if NET8_0_OR_GREATER
             if (!_jsonSerializerOptions.TypeInfoResolverChain.Contains(VaultSharpJsonContext.Default))
