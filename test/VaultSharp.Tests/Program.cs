@@ -20,6 +20,7 @@ catch (Exception exception)
 
 static void VerifyClosedPublicResponseRoots()
 {
+    // Snapshot of closed Task<T> roots exposed by beta1; API additions must update the context and this count.
     const int ExpectedClosedPublicResponseRootCount = 142;
 
     var settings = new VaultClientSettings(
