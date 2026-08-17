@@ -19,11 +19,11 @@ namespace VaultSharp.V1.SecretsEngines.Kubernetes
             Checker.NotNull(kubernetesRoleName, "kubernetesRoleName");
             Checker.NotNull(kubernetesNamespace, "kubernetesNamespace");
 
-            var requestData = new
+            var requestData = new KubernetesCredentialsRequest
             {
-                kubernetes_namespace = kubernetesNamespace,
-                cluster_role_binding = clusterRoleBinding,
-                ttl = timeToLive
+                KubernetesNamespace = kubernetesNamespace,
+                ClusterRoleBinding = clusterRoleBinding,
+                TimeToLive = timeToLive
             };
 
             return await _polymath.MakeVaultApiRequest<Secret<KubernetesCredentials>>(kubernetesBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Kubernetes, "/creds/" + kubernetesRoleName.Trim('/'), HttpMethod.Post, requestData: requestData,  wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
