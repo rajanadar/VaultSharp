@@ -91,7 +91,8 @@ namespace VaultSharp
         /// Use this to provide a custom <see cref="System.Text.Json.Serialization.JsonSerializerContext"/>
         /// for Native AOT support. VaultSharp's built-in types are handled automatically;
         /// register your own types (e.g. for KV secrets) via
-        /// <see cref="System.Text.Json.JsonSerializerOptions.TypeInfoResolverChain"/>.
+        /// <see cref="System.Text.Json.JsonSerializerOptions.TypeInfoResolverChain"/> before constructing
+        /// the <see cref="VaultClient"/>.
         /// </summary>
         public System.Text.Json.JsonSerializerOptions JsonSerializerOptions { get; set; }
     }

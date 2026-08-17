@@ -220,6 +220,62 @@ namespace VaultSharp.Core
         [JsonPropertyName("policy")] public string Policy { get; set; }
     }
 
+    internal sealed class PluginReloadRequest
+    {
+        [JsonPropertyName("plugin")] public string Plugin { get; set; }
+        [JsonPropertyName("mounts")] public IEnumerable<string> Mounts { get; set; }
+    }
+
+    internal sealed class PluginRegistrationRequest
+    {
+        [JsonPropertyName("sha_256")] public string Sha256 { get; set; }
+        [JsonPropertyName("command")] public string Command { get; set; }
+    }
+
+    internal sealed class LicenseTextRequest
+    {
+        [JsonPropertyName("text")] public string Text { get; set; }
+    }
+
+    internal sealed class KubernetesCredentialsRequest
+    {
+        [JsonPropertyName("kubernetes_namespace")] public string KubernetesNamespace { get; set; }
+        [JsonPropertyName("cluster_role_binding")] public bool ClusterRoleBinding { get; set; }
+        [JsonPropertyName("ttl")] public string TimeToLive { get; set; }
+    }
+
+    internal sealed class GoogleCloudServiceAccountKeyRequest
+    {
+        [JsonPropertyName("key_algorithm")] public string KeyAlgorithm { get; set; }
+        [JsonPropertyName("key_type")] public string KeyType { get; set; }
+        [JsonPropertyName("ttl")] public string TimeToLive { get; set; }
+    }
+
+    internal sealed class TOTPVaultGeneratedKeyRequest
+    {
+        [JsonPropertyName("generate")] public bool Generate { get; set; }
+        [JsonPropertyName("exported")] public bool Exported { get; set; }
+        [JsonPropertyName("key_size")] public int KeySize { get; set; }
+        [JsonPropertyName("issuer")] public string Issuer { get; set; }
+        [JsonPropertyName("account_name")] public string AccountName { get; set; }
+        [JsonPropertyName("period")] public string Period { get; set; }
+        [JsonPropertyName("algorithm")] public string Algorithm { get; set; }
+        [JsonPropertyName("digits")] public int Digits { get; set; }
+        [JsonPropertyName("skew")] public int Skew { get; set; }
+        [JsonPropertyName("qr_size")] public int QRSize { get; set; }
+    }
+
+    internal sealed class TOTPExternalKeyRequest
+    {
+        [JsonPropertyName("url")] public string Url { get; set; }
+        [JsonPropertyName("key")] public string Key { get; set; }
+        [JsonPropertyName("issuer")] public string Issuer { get; set; }
+        [JsonPropertyName("account_name")] public string AccountName { get; set; }
+        [JsonPropertyName("period")] public string Period { get; set; }
+        [JsonPropertyName("algorithm")] public string Algorithm { get; set; }
+        [JsonPropertyName("digits")] public int Digits { get; set; }
+    }
+
     internal sealed class CloudFoundryLoginRequest
     {
         [JsonPropertyName("role")] public string Role { get; set; }

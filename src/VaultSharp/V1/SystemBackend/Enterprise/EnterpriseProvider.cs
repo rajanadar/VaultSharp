@@ -49,9 +49,9 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
 
         public async Task InstallLicenseAsync(string licenseText)
         {
-            var requestData = new
+            var requestData = new LicenseTextRequest
             {
-                text = licenseText
+                Text = licenseText
             };
 
             await _polymath.MakeVaultApiRequest<Secret<License>>("v1/sys/license", HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
@@ -69,9 +69,9 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
 
         public async Task WriteRGPPolicyAsync(RGPPolicy policy)
         {
-            var requestData = new
+            var requestData = new PolicyTextRequest
             {
-                policy = policy.Policy
+                Policy = policy.Policy
             };
 
             await _polymath.MakeVaultApiRequest("v1/sys/policies/rgp/" + policy.Name, HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
@@ -94,9 +94,9 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
 
         public async Task WriteEGPPolicyAsync(EGPPolicy policy)
         {
-            var requestData = new
+            var requestData = new PolicyTextRequest
             {
-                policy = policy.Policy
+                Policy = policy.Policy
             };
 
             await _polymath.MakeVaultApiRequest("v1/sys/policies/egp/" + policy.Name, HttpMethod.Put, requestData).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
