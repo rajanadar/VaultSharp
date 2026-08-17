@@ -7,10 +7,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole.Models
     {
         [JsonIgnore]
         [Obsolete("LocalSecretIds can only be set when creating an app role. Use AppRoleRoleModel if creating a new app role", true)]
-        public new bool LocalSecretIds
-        {
-            get => base.LocalSecretIds;
-            set => base.LocalSecretIds = value;
-        }
+#pragma warning disable CS0809 // The member is intentionally obsolete only for update requests.
+        public override bool LocalSecretIds { get; set; }
+#pragma warning restore CS0809
     }
 }

@@ -20,6 +20,8 @@ catch (Exception exception)
 
 static void VerifyClosedPublicResponseRoots()
 {
+    const int ExpectedClosedPublicResponseRootCount = 142;
+
     var settings = new VaultClientSettings(
         "https://vault.invalid",
         new TokenAuthMethodInfo("token"))
@@ -65,8 +67,8 @@ static void VerifyClosedPublicResponseRoots()
     Console.WriteLine($"Missing roots: {missingRoots.Count}");
 
     AotApiScenario.Require(
-        responseRoots.Count == 142,
-        $"Expected 142 closed public response roots, found {responseRoots.Count}.");
+        responseRoots.Count == ExpectedClosedPublicResponseRootCount,
+        $"Expected {ExpectedClosedPublicResponseRootCount} closed public response roots, found {responseRoots.Count}.");
     AotApiScenario.Require(
         missingRoots.Count == 0,
         "Missing response roots: " + string.Join(", ", missingRoots));
