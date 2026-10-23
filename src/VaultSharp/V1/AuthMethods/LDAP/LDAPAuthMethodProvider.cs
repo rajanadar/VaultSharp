@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
@@ -16,40 +17,40 @@ namespace VaultSharp.V1.AuthMethods.LDAP
             _polymath = polymath;
         }
 
-        public async Task WriteGroupAsync(string groupName, IList<string> policies, string mountPoint = AuthMethodDefaultPaths.LDAP)
+        public async Task WriteGroupAsync(string groupName, IList<string> policies, string mountPoint = AuthMethodDefaultPaths.LDAP, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(groupName, "groupName");
 
             var flatPolicies = string.Join(",", policies);
 
-            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/groups/" + groupName.Trim('/'), HttpMethod.Post, new PoliciesRequest { Policies = flatPolicies }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/groups/" + groupName.Trim('/'), HttpMethod.Post, new PoliciesRequest { Policies = flatPolicies }, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<List<string>>> ReadGroupAsync(string groupName, string mountPoint = AuthMethodDefaultPaths.LDAP, string wrapTimeToLive = null)
+        public async Task<Secret<List<string>>> ReadGroupAsync(string groupName, string mountPoint = AuthMethodDefaultPaths.LDAP, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(groupName, "groupName");
 
-            return await _polymath.MakeVaultApiRequest<Secret<List<string>>>("v1/auth/" + mountPoint.Trim('/') + "/groups/" + groupName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<List<string>>>("v1/auth/" + mountPoint.Trim('/') + "/groups/" + groupName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<ListInfo>> ReadAllGroupsAsync(string mountPoint = AuthMethodDefaultPaths.LDAP, string wrapTimeToLive = null)
+        public async Task<Secret<ListInfo>> ReadAllGroupsAsync(string mountPoint = AuthMethodDefaultPaths.LDAP, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(mountPoint, "mountPoint");
 
-            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/auth/" + mountPoint.Trim('/') + "/groups", _polymath.ListHttpMethod, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/auth/" + mountPoint.Trim('/') + "/groups", _polymath.ListHttpMethod, wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task DeleteGroupAsync(string groupName, string mountPoint = AuthMethodDefaultPaths.LDAP)
+        public async Task DeleteGroupAsync(string groupName, string mountPoint = AuthMethodDefaultPaths.LDAP, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(groupName, "groupName");
 
-            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/groups/" + groupName.Trim('/'), HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/groups/" + groupName.Trim('/'), HttpMethod.Delete, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task WriteUserAsync(string username, IList<string> policies, IList<string> groups, string mountPoint = "ldap")
+        public async Task WriteUserAsync(string username, IList<string> policies, IList<string> groups, string mountPoint = "ldap", CancellationToken cancellationToken = default)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(username, "username");
@@ -57,30 +58,30 @@ namespace VaultSharp.V1.AuthMethods.LDAP
             var flatPolicies = string.Join(",", policies ?? new List<string>());
             var flatGroups = string.Join(",", groups ?? new List<string>());
 
-            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/users/" + username.Trim('/'), HttpMethod.Post, new PoliciesGroupsRequest { Policies = flatPolicies, Groups = flatGroups }).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/users/" + username.Trim('/'), HttpMethod.Post, new PoliciesGroupsRequest { Policies = flatPolicies, Groups = flatGroups }, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<Dictionary<string, object>>> ReadUserAsync(string username, string mountPoint = "ldap", string wrapTimeToLive = null)
+        public async Task<Secret<Dictionary<string, object>>> ReadUserAsync(string username, string mountPoint = "ldap", string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(username, "username");
 
-            return await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>("v1/auth/" + mountPoint.Trim('/') + "/users/" + username.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>("v1/auth/" + mountPoint.Trim('/') + "/users/" + username.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<ListInfo>> ReadAllUsersAsync(string mountPoint = "ldap", string wrapTimeToLive = null)
+        public async Task<Secret<ListInfo>> ReadAllUsersAsync(string mountPoint = "ldap", string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(mountPoint, "mountPoint");
 
-            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/auth/" + mountPoint.Trim('/') + "/users", _polymath.ListHttpMethod, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>("v1/auth/" + mountPoint.Trim('/') + "/users", _polymath.ListHttpMethod, wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task DeleteUserAsync(string username, string mountPoint = "ldap")
+        public async Task DeleteUserAsync(string username, string mountPoint = "ldap", CancellationToken cancellationToken = default)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(username, "username");
 
-            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/users/" + username.Trim('/'), HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest("v1/auth/" + mountPoint.Trim('/') + "/users/" + username.Trim('/'), HttpMethod.Delete, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

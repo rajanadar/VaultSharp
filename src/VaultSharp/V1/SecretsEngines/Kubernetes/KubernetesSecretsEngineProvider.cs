@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
@@ -14,7 +15,7 @@ namespace VaultSharp.V1.SecretsEngines.Kubernetes
             _polymath = polymath;
         }
 
-        public async Task<Secret<KubernetesCredentials>> GetCredentialsAsync(string kubernetesRoleName, string kubernetesNamespace, bool clusterRoleBinding = false, string timeToLive = "", string kubernetesBackendMountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<KubernetesCredentials>> GetCredentialsAsync(string kubernetesRoleName, string kubernetesNamespace, bool clusterRoleBinding = false, string timeToLive = "", string kubernetesBackendMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(kubernetesRoleName, "kubernetesRoleName");
             Checker.NotNull(kubernetesNamespace, "kubernetesNamespace");
@@ -26,7 +27,7 @@ namespace VaultSharp.V1.SecretsEngines.Kubernetes
                 TimeToLive = timeToLive
             };
 
-            return await _polymath.MakeVaultApiRequest<Secret<KubernetesCredentials>>(kubernetesBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Kubernetes, "/creds/" + kubernetesRoleName.Trim('/'), HttpMethod.Post, requestData: requestData,  wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<KubernetesCredentials>>(kubernetesBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.Kubernetes, "/creds/" + kubernetesRoleName.Trim('/'), HttpMethod.Post, requestData: requestData,  wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

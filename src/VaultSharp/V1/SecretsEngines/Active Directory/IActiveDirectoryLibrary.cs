@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 using VaultSharp.V1.SecretsEngines.ActiveDirectory.Models;
@@ -20,8 +21,9 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the AD backend. Defaults to <see cref="SecretsEngineMountPoints.ActiveDirectory" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task</returns>
-        Task WriteServiceAccountSetAsync(string setName, CreateServiceAccountSetModel createServiceAccountSetModel, string mountPoint = null);
+        Task WriteServiceAccountSetAsync(string setName, CreateServiceAccountSetModel createServiceAccountSetModel, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint queries an existing set
@@ -35,8 +37,9 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The role info.</returns>
-        Task<Secret<ServiceAccountSetModel>> ReadServiceAccountSetAsync(string setName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<ServiceAccountSetModel>> ReadServiceAccountSetAsync(string setName, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint lists all existing sets in the secrets engine.
@@ -48,8 +51,9 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The list of names.</returns>
-        Task<Secret<ListInfo>> ReadAllServiceAccountSetsAsync(string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<ListInfo>> ReadAllServiceAccountSetsAsync(string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes a set
@@ -59,8 +63,9 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the AD backend. Defaults to <see cref="SecretsEngineMountPoints.ActiveDirectory" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task</returns>
-        Task DeleteServiceAccountSetAsync(string setName, string mountPoint = null);
+        Task DeleteServiceAccountSetAsync(string setName, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Returns a credential if available.
@@ -80,10 +85,11 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the <see cref="CheckedOutCredentials" /> as the data.
         /// </returns>
-        Task<Secret<CheckedOutCredentials>> CheckoutCredentialsAsync(string setName, long? timeToLive = null, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<CheckedOutCredentials>> CheckoutCredentialsAsync(string setName, long? timeToLive = null, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Checks in a checked out credential.
@@ -106,10 +112,11 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the <see cref="CheckedInAccounts" /> as the data.
         /// </returns>
-        Task<Secret<CheckedInAccounts>> CheckinCredentialsAsync(string setName, List<string> serviceAccountNames = null, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<CheckedInAccounts>> CheckinCredentialsAsync(string setName, List<string> serviceAccountNames = null, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Force checks in a checked out credential.
@@ -132,9 +139,10 @@ namespace VaultSharp.V1.SecretsEngines.ActiveDirectory
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the <see cref="CheckedInAccounts" /> as the data.
         /// </returns>
-        Task<Secret<CheckedInAccounts>> ForceCheckinCredentialsAsync(string setName, List<string> serviceAccountNames = null, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<CheckedInAccounts>> ForceCheckinCredentialsAsync(string setName, List<string> serviceAccountNames = null, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
     }
 }

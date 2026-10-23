@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
@@ -16,54 +17,54 @@ namespace VaultSharp.V1.SecretsEngines.PKI.Keys
             _polymath = polymath;
         }
 
-        public async Task<Secret<KeysData>> ListKeys(string pkiBackendMountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<KeysData>> ListKeys(string pkiBackendMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             var result = await _polymath.MakeVaultApiRequest<Secret<KeysData>>(pkiBackendMountPoint ?? 
                                                                                _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, 
                     "/keys/?list=true", HttpMethod.Get, 
                     null, 
-                    wrapTimeToLive: wrapTimeToLive)
+                    wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             return result;
         }
 
-        public async Task<Secret<KeyData>> GenerateKey(KeyData data, string pkiBackendMountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<KeyData>> GenerateKey(KeyData data, string pkiBackendMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(data, "data");
 
             var generationPath = data.KeyGenerationType == KeyGenerationType.Internal ? InternalPath : ExternalPath;
 
-            var result = await _polymath.MakeVaultApiRequest<Secret<KeyData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, generationPath, HttpMethod.Post, data, wrapTimeToLive: wrapTimeToLive)
+            var result = await _polymath.MakeVaultApiRequest<Secret<KeyData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, generationPath, HttpMethod.Post, data, wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             result.Data.KeyGenerationType = data.KeyGenerationType;
             return result;
         }
 
-        public async Task<Secret<KeyData>> GetKey(string keyName, string pkiBackendMountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<KeyData>> GetKey(string keyName, string pkiBackendMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(keyName, "keyName");
             var result = await _polymath.MakeVaultApiRequest<Secret<KeyData>>(
                     pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI,
-                    "/key/" + keyName, HttpMethod.Get, null, wrapTimeToLive: wrapTimeToLive)
+                    "/key/" + keyName, HttpMethod.Get, null, wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             return result;
         }
 
-        public async Task<Secret<ImportKeyData>> ImportKey(ImportKeyData data, string pkiBackendMountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<ImportKeyData>> ImportKey(ImportKeyData data, string pkiBackendMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(data, "data");
 
             var importPath = "keys/import";
 
-            var result = await _polymath.MakeVaultApiRequest<Secret<ImportKeyData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, importPath, HttpMethod.Post, data, wrapTimeToLive: wrapTimeToLive)
+            var result = await _polymath.MakeVaultApiRequest<Secret<ImportKeyData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, importPath, HttpMethod.Post, data, wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             return result;
         }
 
-        public async Task DeleteKey(string keyName, string pkiBackendMountPoint = null, string wrapTimeToLive = null)
+        public async Task DeleteKey(string keyName, string pkiBackendMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(keyName, "keyName");
-            await _polymath.MakeVaultApiRequest<Secret<KeysData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/key/" + keyName, HttpMethod.Delete, null, wrapTimeToLive: wrapTimeToLive)
+            await _polymath.MakeVaultApiRequest<Secret<KeysData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/key/" + keyName, HttpMethod.Delete, null, wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }

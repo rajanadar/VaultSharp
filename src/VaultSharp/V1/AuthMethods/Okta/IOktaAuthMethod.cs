@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.AuthMethods.Okta
@@ -17,7 +18,8 @@ namespace VaultSharp.V1.AuthMethods.Okta
         /// Logins through the vault login CLI command will automatically generate a nonce.
         /// </param>
         /// <param name="mountPoint">Mount point of the Okta Auth method</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Correct answer</returns>
-        Task<Secret<OktaVerifyPushChallengeResponse>> VerifyPushChallengeAsync(string nonce, string mountPoint = "okta");
+        Task<Secret<OktaVerifyPushChallengeResponse>> VerifyPushChallengeAsync(string nonce, string mountPoint = "okta", CancellationToken cancellationToken = default);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.SecretsEngines.Terraform
@@ -24,7 +25,8 @@ namespace VaultSharp.V1.SecretsEngines.Terraform
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Terraform Cloud token</returns>
-        Task<Secret<TerraformCredentials>> GetCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<TerraformCredentials>> GetCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
     }
 }

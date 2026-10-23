@@ -1,4 +1,5 @@
 ﻿
+using System.Threading;
 using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 
@@ -21,8 +22,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
-        Task CreateEncryptionKeyAsync(string keyName, CreateKeyRequestOptions createKeyRequestOptions = null, string mountPoint = null);
+        Task CreateEncryptionKeyAsync(string keyName, CreateKeyRequestOptions createKeyRequestOptions = null, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint imports existing key material into a new transit-managed encryption key. 
@@ -35,8 +37,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
-        Task ImportEncryptionKeyAsync(string keyName, ImportKeyRequestOptions importKeyRequestOptions, string mountPoint = null);
+        Task ImportEncryptionKeyAsync(string keyName, ImportKeyRequestOptions importKeyRequestOptions, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint imports new key material into an existing imported key.
@@ -49,8 +52,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
-        Task ImportEncryptionKeyVersionAsync(string keyName, ImportKeyVersionRequestOptions importKeyVersionRequestOptions, string mountPoint = null);
+        Task ImportEncryptionKeyVersionAsync(string keyName, ImportKeyVersionRequestOptions importKeyVersionRequestOptions, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint is used to retrieve the wrapping key to use for importing keys. 
@@ -64,8 +68,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The public key</returns>
-        Task<Secret<TransitWrappingKeyModel>> ReadWrappingKeyAsync(string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<TransitWrappingKeyModel>> ReadWrappingKeyAsync(string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint returns information about a named encryption key.
@@ -81,8 +86,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The information about the encryption key.</returns>
-        Task<Secret<EncryptionKeyInfo>> ReadEncryptionKeyAsync(string keyName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<EncryptionKeyInfo>> ReadEncryptionKeyAsync(string keyName, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Returns a list of keys. Only the key names are returned.
@@ -95,8 +101,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The list of key names.</returns>
-        Task<Secret<ListInfo>> ReadAllEncryptionKeysAsync(string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<ListInfo>> ReadAllEncryptionKeysAsync(string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint deletes a named encryption key. It will no longer be possible to decrypt any data encrypted with the named key.
@@ -108,8 +115,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
-        Task DeleteEncryptionKeyAsync(string keyName, string mountPoint = null);
+        Task DeleteEncryptionKeyAsync(string keyName, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint allows tuning configuration values for a given key.
@@ -124,8 +132,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
-        Task UpdateEncryptionKeyConfigAsync(string keyName, UpdateKeyRequestOptions updateKeyRequestOptions, string mountPoint = null);
+        Task UpdateEncryptionKeyConfigAsync(string keyName, UpdateKeyRequestOptions updateKeyRequestOptions, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint rotates the version of the named key. After rotation, new plaintext requests will be encrypted with the new version of the key.
@@ -137,8 +146,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
-        Task RotateEncryptionKeyAsync(string keyName, string mountPoint = null);
+        Task RotateEncryptionKeyAsync(string keyName, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint returns the named key.
@@ -168,8 +178,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
-        Task<Secret<ExportedKeyInfo>> ExportKeyAsync(TransitKeyCategory keyType, string keyName, string version = null, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<ExportedKeyInfo>> ExportKeyAsync(TransitKeyCategory keyType, string keyName, string version = null, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Encrypts the provided plaintext using the named key.
@@ -194,10 +205,11 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with cipher text.
         /// </returns>
-        Task<Secret<EncryptionResponse>> EncryptAsync(string keyName, EncryptRequestOptions encryptRequestOptions, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<EncryptionResponse>> EncryptAsync(string keyName, EncryptRequestOptions encryptRequestOptions, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Decrypts the provided ciphertext using the named key.
@@ -217,10 +229,11 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with plain text.
         /// </returns>
-        Task<Secret<DecryptionResponse>> DecryptAsync(string keyName, DecryptRequestOptions decryptRequestOptions, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<DecryptionResponse>> DecryptAsync(string keyName, DecryptRequestOptions decryptRequestOptions, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint rewraps the provided ciphertext using the latest version of the named key.
@@ -241,8 +254,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The new cyphertext.</returns>
-        Task<Secret<EncryptionResponse>> RewrapAsync(string keyName, RewrapRequestOptions rewrapRequestOptions, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<EncryptionResponse>> RewrapAsync(string keyName, RewrapRequestOptions rewrapRequestOptions, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint generates a new high-entropy key and the value encrypted with the named key.
@@ -263,10 +277,11 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with data key response.
         /// </returns>
-        Task<Secret<DataKeyResponse>> GenerateDataKeyAsync(string keyName, DataKeyRequestOptions dataKeyRequestOptions, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<DataKeyResponse>> GenerateDataKeyAsync(string keyName, DataKeyRequestOptions dataKeyRequestOptions, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint returns high-quality random bytes of the specified length.
@@ -281,8 +296,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>A set of random bytes in the requested output format.</returns>
-        Task<Secret<RandomBytesResponse>> GenerateRandomBytesAsync(RandomBytesRequestOptions randomOptions, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<RandomBytesResponse>> GenerateRandomBytesAsync(RandomBytesRequestOptions randomOptions, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint returns the cryptographic hash of given data using the specified algorithm.
@@ -297,8 +313,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The cryptographic hash(es) of the input data.</returns>
-        Task<Secret<HashResponse>> HashDataAsync(HashRequestOptions hashOptions, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<HashResponse>> HashDataAsync(HashRequestOptions hashOptions, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint returns the digest of given data using the specified hash algorithm 
@@ -319,8 +336,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The HMAC digest of the requested data.</returns>
-        Task<Secret<HmacResponse>> GenerateHmacAsync(string keyName, HmacRequestOptions hmacOptions, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<HmacResponse>> GenerateHmacAsync(string keyName, HmacRequestOptions hmacOptions, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint returns the cryptographic signature of the given data using the 
@@ -339,8 +357,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The cryptographic signature of the requested data.</returns>
-        Task<Secret<SigningResponse>> SignDataAsync(string keyName, SignRequestOptions signOptions, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<SigningResponse>> SignDataAsync(string keyName, SignRequestOptions signOptions, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint returns whether the provided signature is valid for the given data.
@@ -357,8 +376,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>If the given signature is valid for the given data.</returns>
-        Task<Secret<VerifyResponse>> VerifySignedDataAsync(string keyName, VerifyRequestOptions verifyOptions, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<VerifyResponse>> VerifySignedDataAsync(string keyName, VerifyRequestOptions verifyOptions, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint returns a plaintext backup of a named key.
@@ -376,8 +396,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The backed up key data for secure storage or a subsequent restore operation.</returns>
-        Task<Secret<BackupKeyResponse>> BackupKeyAsync(string keyName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<BackupKeyResponse>> BackupKeyAsync(string keyName, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint restores the backup as a named key.
@@ -398,8 +419,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
-        Task RestoreKeyAsync(RestoreKeyRequestOptions backupData, string keyName = null, string mountPoint = null);
+        Task RestoreKeyAsync(RestoreKeyRequestOptions backupData, string keyName = null, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint trims older key versions setting a minimum version
@@ -415,8 +437,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
-        Task TrimKeyAsync(string keyName, TrimKeyRequestOptions trimKeyRequestOptions, string mountPoint = null);
+        Task TrimKeyAsync(string keyName, TrimKeyRequestOptions trimKeyRequestOptions, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint is used to configure the transit engine's cache.
@@ -429,8 +452,9 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// The mount point for the Transit backend. Defaults to <see cref="SecretsEngineMountPoints.Transit" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Nothing is returned. No error means the operation was successful.</returns>
-        Task SetCacheConfigAsync(CacheConfigRequestOptions cacheOptions, string mountPoint = null);
+        Task SetCacheConfigAsync(CacheConfigRequestOptions cacheOptions, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint retrieves configurations for the transit engine's cache.
@@ -443,7 +467,8 @@ namespace VaultSharp.V1.SecretsEngines.Transit
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The current size of the transit engine's cache.</returns>
-        Task<Secret<CacheResponse>> ReadCacheConfigAsync(string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<CacheResponse>> ReadCacheConfigAsync(string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
     }
 }

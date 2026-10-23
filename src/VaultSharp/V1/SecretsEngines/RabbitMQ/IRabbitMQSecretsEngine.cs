@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.SecretsEngines.RabbitMQ
@@ -20,10 +21,11 @@ namespace VaultSharp.V1.SecretsEngines.RabbitMQ
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the <see cref="UsernamePasswordCredentials" /> as the data.
         /// </returns>
-        Task<Secret<UsernamePasswordCredentials>> GetCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<UsernamePasswordCredentials>> GetCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Configures the lease settings for generated credentials.
@@ -34,7 +36,8 @@ namespace VaultSharp.V1.SecretsEngines.RabbitMQ
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.RabbitMQ" />
         /// Provide a value only if you have customized the mount point.</param>
-        Task ConfigureLeaseAsync(RabbitMQLease lease, string mountPoint = null);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task ConfigureLeaseAsync(RabbitMQLease lease, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Creates or updates the role definition.
@@ -47,7 +50,8 @@ namespace VaultSharp.V1.SecretsEngines.RabbitMQ
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.RabbitMQ" />
         /// Provide a value only if you have customized the mount point.</param>
-        Task CreateRoleAsync(string roleName, RabbitMQRole role, string mountPoint = null);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task CreateRoleAsync(string roleName, RabbitMQRole role, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Queries the role definition.
@@ -57,10 +61,11 @@ namespace VaultSharp.V1.SecretsEngines.RabbitMQ
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.RabbitMQ" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the <see cref="RabbitMQRole" /> as the data.
         /// </returns>
-        Task<Secret<RabbitMQRole>> ReadRoleAsync(string roleName, string mountPoint = null);
+        Task<Secret<RabbitMQRole>> ReadRoleAsync(string roleName, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes the role definition.
@@ -70,6 +75,7 @@ namespace VaultSharp.V1.SecretsEngines.RabbitMQ
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.RabbitMQ" />
         /// Provide a value only if you have customized the mount point.</param>
-        Task DeleteRoleAsync(string roleName, string mountPoint = null);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task DeleteRoleAsync(string roleName, string mountPoint = null, CancellationToken cancellationToken = default);
     }
 }

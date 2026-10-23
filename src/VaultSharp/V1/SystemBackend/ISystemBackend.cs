@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods;
@@ -36,30 +37,33 @@ namespace VaultSharp.V1.SystemBackend
         /// Gets all the enabled audit backends (it does not list all available audit backends).
         /// This endpoint requires sudo capability in addition to any path-specific capabilities.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The mounted audit backends.
         /// </returns>
-        Task<Secret<Dictionary<string, AbstractAuditBackend>>> GetAuditBackendsAsync();
+        Task<Secret<Dictionary<string, AbstractAuditBackend>>> GetAuditBackendsAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint enables a new audit device at the supplied path. 
         /// The path can be a single word name or a more complex, nested path.
         /// </summary>
         /// <param name="abstractAuditBackend">The audit backend.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task MountAuditBackendAsync(AbstractAuditBackend abstractAuditBackend);
+        Task MountAuditBackendAsync(AbstractAuditBackend abstractAuditBackend, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Unmounts the audit backend at the given mount point.
         /// </summary>
         /// <param name="path"><para>[required]</para>
         /// The mount point for the audit backend. (with or without trailing slashes. it doesn't matter)</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task UnmountAuditBackendAsync(string path);
+        Task UnmountAuditBackendAsync(string path, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Hash the given input data with the specified audit backend's hash function and salt.
@@ -74,38 +78,42 @@ namespace VaultSharp.V1.SystemBackend
         /// The mount point for the audit backend. (with or without trailing slashes. it doesn't matter)</param>
         /// <param name="inputToHash"><para>[required]</para>
         /// The input value to hash</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The hashed value.
         /// </returns>
-        Task<Secret<AuditHash>> AuditHashAsync(string path, string inputToHash);
+        Task<Secret<AuditHash>> AuditHashAsync(string path, string inputToHash, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets all the enabled authentication backends.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The enabled authentication backends.
         /// </returns>
-        Task<Secret<Dictionary<string, AuthMethod>>> GetAuthBackendsAsync();
+        Task<Secret<Dictionary<string, AuthMethod>>> GetAuthBackendsAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Mounts a new authentication backend.
         /// The auth backend can be accessed and configured via the auth path specified in the URL. 
         /// </summary>
         /// <param name="authBackend">The authentication backend.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task MountAuthBackendAsync(AuthMethod authBackend);
+        Task MountAuthBackendAsync(AuthMethod authBackend, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Unmounts the authentication backend at the given mount point.
         /// </summary>
         /// <param name="path"><para>[required]</para>
         /// The authentication path for the authentication backend. (with or without trailing slashes. it doesn't matter)</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task UnmountAuthBackendAsync(string path);
+        Task UnmountAuthBackendAsync(string path, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the mounted authentication backend's configuration values.
@@ -114,10 +122,11 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="path"><para>[required]</para>
         /// The authentication path for the authentication backend in which to tune. 
         /// (with or without trailing slashes. it doesn't matter)</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The mounted secret backend's configuration values.
         /// </returns>
-        Task<Secret<BackendConfig>> GetAuthBackendConfigAsync(string path);
+        Task<Secret<BackendConfig>> GetAuthBackendConfigAsync(string path, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Tunes the mount configuration parameters for the given <see paramref="path" />.
@@ -127,10 +136,11 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="backendConfig"><para>[required]</para>
         /// The mount configuration with the required setting values.
         /// Provide a value of <value>"0"</value> for the TTL settings if you want to use the system defaults.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// A task
         /// </returns>
-        Task ConfigureAuthBackendAsync(string path, BackendConfig backendConfig);
+        Task ConfigureAuthBackendAsync(string path, BackendConfig backendConfig, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the capabilities of the token on the given path.
@@ -139,8 +149,9 @@ namespace VaultSharp.V1.SystemBackend
         /// Path on which the token's capabilities will be checked.</param>
         /// <param name="token"><para>[required]</para>
         /// Token for which capabilities are being queried.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The list of capabilities.</returns>
-        Task<Secret<TokenCapability>> GetTokenCapabilitiesAsync(string path, string token);
+        Task<Secret<TokenCapability>> GetTokenCapabilitiesAsync(string path, string token, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the capabilities of the token associated with the accessor on the given path.
@@ -149,29 +160,33 @@ namespace VaultSharp.V1.SystemBackend
         /// Path on which the token's capabilities will be checked.</param>
         /// <param name="tokenAccessor"><para>[required]</para>
         /// Accessor to the Token for which capabilities are being queried.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The list of capabilities.</returns>
-        Task<Secret<TokenCapability>> GetTokenCapabilitiesByAcessorAsync(string path, string tokenAccessor);
+        Task<Secret<TokenCapability>> GetTokenCapabilitiesByAcessorAsync(string path, string tokenAccessor, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the capabilities of the calling token.
         /// </summary>
         /// <param name="path"><para>[required]</para>
         /// Path on which the token's capabilities will be checked.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The list of capabilities.</returns>
-        Task<Secret<TokenCapability>> GetCallingTokenCapabilitiesAsync(string path);
+        Task<Secret<TokenCapability>> GetCallingTokenCapabilitiesAsync(string path, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the request headers configured to be audited.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns></returns>
-        Task<Secret<RequestHeaderSet>> GetAuditRequestHeadersAsync();
+        Task<Secret<RequestHeaderSet>> GetAuditRequestHeadersAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets a particular request header.
         /// </summary>
         /// <param name="name">The name of the header.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Header details.</returns>
-        Task<Secret<RequestHeader>> GetAuditRequestHeaderAsync(string name);
+        Task<Secret<RequestHeader>> GetAuditRequestHeaderAsync(string name, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Creates/updates the request header to be audited.
@@ -182,21 +197,24 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="hmac"><para>[optional]</para>
         /// Specifies if this header's value should be HMAC'ed in the audit logs.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task.</returns>
-        Task PutAuditRequestHeaderAsync(string name, bool hmac = false);
+        Task PutAuditRequestHeaderAsync(string name, bool hmac = false, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes a particular request header.
         /// </summary>
         /// <param name="name">The name of the header.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Header details.</returns>
-        Task DeleteAuditRequestHeaderAsync(string name);
+        Task DeleteAuditRequestHeaderAsync(string name, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the current CORS configuration.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Config</returns>
-        Task<Secret<CORSConfig>> GetCORSConfigAsync();
+        Task<Secret<CORSConfig>> GetCORSConfigAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Configures CORS.
@@ -204,20 +222,23 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="corsConfig">
         /// The CORS Configuration.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Task</returns>
-        Task ConfigureCORSAsync(CORSConfig corsConfig);
+        Task ConfigureCORSAsync(CORSConfig corsConfig, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes the current CORS configuration.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Task</returns>
-        Task DeleteCORSConfigAsync();
+        Task DeleteCORSConfigAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the configuration and progress of the current root generation attempt.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The root status</returns>
-        Task<RootTokenGenerationStatus> GetRootTokenGenerationStatusAsync();
+        Task<RootTokenGenerationStatus> GetRootTokenGenerationStatusAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Initializes a new root generation attempt. 
@@ -230,16 +251,18 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="pgpKey"><para>[optional]</para>
         /// A base64-encoded PGP public key. The raw bytes of the token will be encrypted with this value before being 
         /// returned to the final unseal key provider.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The root token generation status.</returns>
-        Task<RootTokenGenerationStatus> InitiateRootTokenGenerationAsync(string base64EncodedOneTimePassword, string pgpKey);
+        Task<RootTokenGenerationStatus> InitiateRootTokenGenerationAsync(string base64EncodedOneTimePassword, string pgpKey, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Cancels any in-progress root generation attempt. 
         /// This clears any progress made. 
         /// This must be called to change the OTP or PGP key being used.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task.</returns>
-        Task CancelRootTokenGenerationAsync();
+        Task CancelRootTokenGenerationAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Continues the root generation process.
@@ -253,11 +276,12 @@ namespace VaultSharp.V1.SystemBackend
         /// A single master share key.</param>
         /// <param name="nonce"><para>[required]</para>
         /// The nonce of the root generation attempt.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// An object indicating the attempt nonce, and completion status, 
         /// and the encoded root token, if the attempt is complete.
         /// </returns>
-        Task<RootTokenGenerationStatus> ContinueRootTokenGenerationAsync(string masterShareKey, string nonce);
+        Task<RootTokenGenerationStatus> ContinueRootTokenGenerationAsync(string masterShareKey, string nonce, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Generates a root token in a single call. 
@@ -267,8 +291,9 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="thresholdMasterShareKeys">Threshold master share keys.</param>
         /// <param name="nonce"><para>[required]</para>
         /// The nonce of the root generation attempt.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The final Status after all the share keys are applied.</returns>
-        Task<RootTokenGenerationStatus> QuickRootTokenGenerationAsync(string[] thresholdMasterShareKeys, string nonce);
+        Task<RootTokenGenerationStatus> QuickRootTokenGenerationAsync(string[] thresholdMasterShareKeys, string nonce, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the health status of Vault. This provides a simple way to monitor the health of a Vault instance.
@@ -304,19 +329,21 @@ namespace VaultSharp.V1.SystemBackend
         /// The <see cref="HttpMethod"/> to be used to query vault. By default <see cref="HttpMethod.Get"/> will be used.
         /// You can change it to <see cref="HttpMethod.Head"/>.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The health status.
         /// </returns>
-        Task<HealthStatus> GetHealthStatusAsync(bool standbyOk = false, int activeStatusCode = (int)HttpStatusCode.OK, int standbyStatusCode = 429, int sealedStatusCode = (int)HttpStatusCode.ServiceUnavailable, int uninitializedStatusCode = (int)HttpStatusCode.NotImplemented, HttpMethod queryHttpMethod = null);
+        Task<HealthStatus> GetHealthStatusAsync(bool standbyOk = false, int activeStatusCode = (int)HttpStatusCode.OK, int standbyStatusCode = 429, int sealedStatusCode = (int)HttpStatusCode.ServiceUnavailable, int uninitializedStatusCode = (int)HttpStatusCode.NotImplemented, HttpMethod queryHttpMethod = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the initialization status of Vault.
         /// This is an unauthenticated call and does not use the credentials.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The initialization status of Vault.
         /// </returns>
-        Task<bool> GetInitStatusAsync();
+        Task<bool> GetInitStatusAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Initializes a new Vault. The Vault must not have been previously initialized. 
@@ -325,26 +352,29 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="initOptions"><para>[required]</para>
         /// The initialization options.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// An object including the (possibly encrypted, if pgp_keys was provided) master keys and initial root token.
         /// </returns>
-        Task<MasterCredentials> InitAsync(InitOptions initOptions);
+        Task<MasterCredentials> InitAsync(InitOptions initOptions, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets information about the current encryption key used by Vault
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The status of the encryption key.
         /// </returns>
-        Task<Secret<EncryptionKeyStatus>> GetKeyStatusAsync();
+        Task<Secret<EncryptionKeyStatus>> GetKeyStatusAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the high availability status and current leader instance of Vault.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The leader info.
         /// </returns>
-        Task<Leader> GetLeaderAsync();
+        Task<Leader> GetLeaderAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the lease metadata.
@@ -352,8 +382,9 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="leaseId"><para>[required]</para>
         /// The lease id.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Info.</returns>
-        Task<Secret<Lease>> GetLeaseAsync(string leaseId);
+        Task<Secret<Lease>> GetLeaseAsync(string leaseId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the list of lease ids.
@@ -361,8 +392,9 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="prefix"><para>[required]</para>
         /// The prefix for the leases.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The lease ids.</returns>
-        Task<Secret<ListInfo>> GetAllLeasesAsync(string prefix);
+        Task<Secret<ListInfo>> GetAllLeasesAsync(string prefix, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the lease metadata.
@@ -373,8 +405,9 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="incrementSeconds"><para>[required]</para>
         /// Specifies the requested amount of time (in seconds) to extend the lease.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Info.</returns>
-        Task<Secret<RenewedLease>> RenewLeaseAsync(string leaseId, int incrementSeconds);
+        Task<Secret<RenewedLease>> RenewLeaseAsync(string leaseId, int incrementSeconds, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Revokes a lease immediately.
@@ -382,8 +415,9 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="leaseId"><para>[required]</para>
         /// The lease id.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Task.</returns>
-        Task RevokeLeaseAsync(string leaseId);
+        Task RevokeLeaseAsync(string leaseId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Revokes all secrets or tokens generated under a given prefix immediately. 
@@ -397,8 +431,9 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="prefix"><para>[required]</para>
         /// Specifies the prefix to revoke.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Task.</returns>
-        Task ForceRevokeLeaseAsync(string prefix);
+        Task ForceRevokeLeaseAsync(string prefix, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Revokes revokes all secrets (via a lease ID prefix) or tokens (via the tokens' path property) generated under a given prefix immediately. 
@@ -408,14 +443,16 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="prefix"><para>[required]</para>
         /// Specifies the prefix to revoke.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Task.</returns>
-        Task RevokePrefixLeaseAsync(string prefix);
+        Task RevokePrefixLeaseAsync(string prefix, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get the verbosity level of all loggers.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The verbosity levels</returns>
-        Task<Secret<Dictionary<string, object>>> GetVerbosityLevelOfAllLoggersAsync();
+        Task<Secret<Dictionary<string, object>>> GetVerbosityLevelOfAllLoggersAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get the verbosity level of a logger.
@@ -423,8 +460,9 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="loggerName">
         /// Specifies the logger name.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The verbosity level</returns>
-        Task<Secret<Dictionary<string, object>>> GetVerbosityLevelOfLoggerAsync(string loggerName);
+        Task<Secret<Dictionary<string, object>>> GetVerbosityLevelOfLoggerAsync(string loggerName, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Modify the verbosity level of all loggers.
@@ -432,7 +470,8 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="logVerbosityLevel">
         /// Specifies the log verbosity level to be set for all loggers.
         /// </param>
-        Task ModifyVerbosityLevelForAllLoggersAsync(LogVerbosityLevel logVerbosityLevel);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task ModifyVerbosityLevelForAllLoggersAsync(LogVerbosityLevel logVerbosityLevel, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Modify the verbosity level of a logger.
@@ -443,12 +482,14 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="logVerbosityLevel">
         /// Specifies the log verbosity level to be set for all loggers.
         /// </param>
-        Task ModifyVerbosityLevelForLoggerAsync(string loggerName, LogVerbosityLevel logVerbosityLevel);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task ModifyVerbosityLevelForLoggerAsync(string loggerName, LogVerbosityLevel logVerbosityLevel, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Reverts the verbosity level of all loggers.
         /// </summary>
-        Task RevertVerbosityLevelForAllLoggersAsync();
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task RevertVerbosityLevelForAllLoggersAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Revert the verbosity level of a logger
@@ -456,43 +497,48 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="loggerName">
         /// Specifies the logger to be modified.
         /// </param>
-        Task RevertVerbosityLevelForLoggerAsync(string loggerName);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task RevertVerbosityLevelForLoggerAsync(string loggerName, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets a specific mounted secret backend.
         /// </summary>
         /// <param name="mountPoint">The secret backend.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The mounted secret backend.
         /// </returns>
-        Task<Secret<SecretsEngine>> GetSecretBackendAsync(string mountPoint);
+        Task<Secret<SecretsEngine>> GetSecretBackendAsync(string mountPoint, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets all the mounted secret backends.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The mounted secret backends.
         /// </returns>
-        Task<Secret<Dictionary<string, SecretsEngine>>> GetSecretBackendsAsync();
+        Task<Secret<Dictionary<string, SecretsEngine>>> GetSecretBackendsAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Mounts the new secret backend to the mount point in the URL.
         /// </summary>
         /// <param name="secretBackend">The secret backend.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// A task
         /// </returns>
-        Task MountSecretBackendAsync(SecretsEngine secretBackend);
+        Task MountSecretBackendAsync(SecretsEngine secretBackend, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Unmounts the mount point specified in the URL.
         /// </summary>
         /// <param name="path"><para>[required]</para>
         /// The mount point for the secret backend. (with or without trailing slashes. it doesn't matter)</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// A task
         /// </returns>
-        Task UnmountSecretBackendAsync(string path);
+        Task UnmountSecretBackendAsync(string path, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the mounted secret backend's configuration values.
@@ -502,10 +548,11 @@ namespace VaultSharp.V1.SystemBackend
         /// </summary>
         /// <param name="mountPoint"><para>[required]</para>
         /// The mount point for the secret backend. (with or without trailing slashes. it doesn't matter)</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The mounted secret backend's configuration values.
         /// </returns>
-        Task<Secret<BackendConfig>> GetSecretBackendConfigAsync(string mountPoint);
+        Task<Secret<BackendConfig>> GetSecretBackendConfigAsync(string mountPoint, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Tunes the mount configuration parameters for the given <see paramref="path" />.
@@ -516,18 +563,20 @@ namespace VaultSharp.V1.SystemBackend
         /// The mount configuration with the required setting values.
         /// Provide a value of <value>0</value> for the TTL settings 
         /// if you want to use the system defaults.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// A task
         /// </returns>
-        Task ConfigureSecretBackendAsync(string path, BackendConfig backendConfig);
+        Task ConfigureSecretBackendAsync(string path, BackendConfig backendConfig, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets all the available policy names in the system.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The policy names.
         /// </returns>
-        Task<Secret<ListInfo>> GetPoliciesAsync();
+        Task<Secret<ListInfo>> GetPoliciesAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the rules for the named policy.
@@ -535,10 +584,11 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="policyName">
         /// <para>[required]</para>
         /// The name of the policy.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The rules for the policy.
         /// </returns>
-        Task<Secret<Policy>> GetPolicyAsync(string policyName);
+        Task<Secret<Policy>> GetPolicyAsync(string policyName, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Adds or updates the policy.
@@ -546,28 +596,31 @@ namespace VaultSharp.V1.SystemBackend
         /// </summary>
         /// <param name="policy"><para>[required]</para>
         /// The policy to be added or updated.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task WritePolicyAsync(Policy policy);
+        Task WritePolicyAsync(Policy policy, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes the named policy. This will immediately affect all associated users.
         /// </summary>
         /// <param name="policyName"><para>[required]</para>
         /// The name of the policy.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task DeletePolicyAsync(string policyName);
+        Task DeletePolicyAsync(string policyName, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets all the ACL policy names in the system.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The policy names.
         /// </returns>
-        Task<Secret<ListInfo>> GetACLPoliciesAsync();
+        Task<Secret<ListInfo>> GetACLPoliciesAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the rules for the named ACL policy.
@@ -575,10 +628,11 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="policyName">
         /// <para>[required]</para>
         /// The name of the policy.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The rules for the policy.
         /// </returns>
-        Task<Secret<ACLPolicy>> GetACLPolicyAsync(string policyName);
+        Task<Secret<ACLPolicy>> GetACLPolicyAsync(string policyName, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Adds or updates the ACL policy.
@@ -586,20 +640,22 @@ namespace VaultSharp.V1.SystemBackend
         /// </summary>
         /// <param name="policy"><para>[required]</para>
         /// The policy to be added or updated.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task WriteACLPolicyAsync(ACLPolicy policy);
+        Task WriteACLPolicyAsync(ACLPolicy policy, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes the named ACL policy. This will immediately affect all associated users.
         /// </summary>
         /// <param name="policyName"><para>[required]</para>
         /// The name of the policy.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task DeleteACLPolicyAsync(string policyName);
+        Task DeleteACLPolicyAsync(string policyName, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint generates a password from the specified existing password policy.
@@ -608,16 +664,18 @@ namespace VaultSharp.V1.SystemBackend
         /// <para>[required]</para>
         /// Specifies the name of the password policy to generate a password from. 
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The generated password.</returns>
-        Task<Secret<string>> GeneratePasswordFromPasswordPolicyAsync(string passwordPolicyName);
+        Task<Secret<string>> GeneratePasswordFromPasswordPolicyAsync(string passwordPolicyName, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///  Returns a list keys for a given path prefix.
         /// </summary>
         /// <param name="storagePathPrefix"><para>[required]</para>
         /// Raw path in the storage backend and not the logical path that is exposed via the mount system.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Keys.</returns>
-        Task<Secret<ListInfo>> GetRawSecretKeysAsync(string storagePathPrefix);
+        Task<Secret<ListInfo>> GetRawSecretKeysAsync(string storagePathPrefix, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Reads the value of the key at the given path.
@@ -625,10 +683,11 @@ namespace VaultSharp.V1.SystemBackend
         /// </summary>
         /// <param name="storagePath"><para>[required]</para>
         /// Raw path in the storage backend and not the logical path that is exposed via the mount system.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The SecretsEngine with raw data.
         /// </returns>
-        Task<Secret<Dictionary<string, object>>> ReadRawSecretAsync(string storagePath);
+        Task<Secret<Dictionary<string, object>>> ReadRawSecretAsync(string storagePath, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Update the value of the key at the given path.
@@ -638,10 +697,11 @@ namespace VaultSharp.V1.SystemBackend
         /// Raw path in the storage backend and not the logical path that is exposed via the mount system.</param>
         /// <param name="values"><para>[required]</para>
         /// The values to write. The dictionary will be JSONized as a raw value string before being written.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task WriteRawSecretAsync(string storagePath, Dictionary<string, object> values);
+        Task WriteRawSecretAsync(string storagePath, Dictionary<string, object> values, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete the key with given path.
@@ -649,10 +709,11 @@ namespace VaultSharp.V1.SystemBackend
         /// </summary>
         /// <param name="storagePath"><para>[required]</para>
         /// Raw path in the storage backend and not the logical path that is exposed via the mount system.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task DeleteRawSecretAsync(string storagePath);
+        Task DeleteRawSecretAsync(string storagePath, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the configuration and progress of the current rekey attempt.
@@ -660,10 +721,11 @@ namespace VaultSharp.V1.SystemBackend
         /// the number of unseal keys provided for this rekey and the required number of unseal keys is returned.
         /// This is an unauthenticated call and does not need credentials.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The rekey status.
         /// </returns>
-        Task<RekeyStatus> GetRekeyStatusAsync();
+        Task<RekeyStatus> GetRekeyStatusAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Initiates a new rekey attempt.
@@ -686,34 +748,38 @@ namespace VaultSharp.V1.SystemBackend
         /// via the GetRekeyBackupAsync endpoint. Makes sense only when pgp keys are provided.
         /// Defaults to 'false', meaning no backup.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The rekey status.
         /// </returns>
-        Task<RekeyStatus> InitiateRekeyAsync(int secretShares, int secretThreshold, string[] pgpKeys = null, bool backup = false);
+        Task<RekeyStatus> InitiateRekeyAsync(int secretShares, int secretThreshold, string[] pgpKeys = null, bool backup = false, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Cancels any in-progress rekey. This clears the rekey settings as well as any progress made.
         /// This must be called to change the parameters of the rekey.
         /// This is an unauthenticated call and does not need credentials.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task CancelRekeyAsync();
+        Task CancelRekeyAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the the backup copy of PGP-encrypted unseal keys. 
         /// The returned value is the nonce of the rekey operation and a map of PGP key 
         /// fingerprint to hex-encoded PGP-encrypted key.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The rekey backup info.</returns>
-        Task<Secret<RekeyBackupInfo>> GetRekeyBackupKeysAsync();
+        Task<Secret<RekeyBackupInfo>> GetRekeyBackupKeysAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes the backup copy of PGP-encrypted unseal keys.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task.</returns>
-        Task DeleteRekeyBackupKeysAsync();
+        Task DeleteRekeyBackupKeysAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Continues the rekey process. Enter a single master key share to progress the rekey of the Vault.
@@ -725,6 +791,7 @@ namespace VaultSharp.V1.SystemBackend
         /// A single master share key.</param>
         /// <param name="rekeyNonce"><para>[required]</para>
         /// The nonce of the rekey operation.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// An object indicating the rekey operation nonce and completion status; 
         /// if completed, the new master keys are returned. 
@@ -738,7 +805,7 @@ namespace VaultSharp.V1.SystemBackend
         /// Unfortunately, in C# we can return only one type, and it is not worth all the inheritance/jugaad.
         /// So for most-valued simplicity, the method returns the final data type. [potential future raja todo]
         /// </remarks>
-        Task<RekeyProgress> ContinueRekeyAsync(string masterShareKey, string rekeyNonce);
+        Task<RekeyProgress> ContinueRekeyAsync(string masterShareKey, string rekeyNonce, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Rekeys the Vault in a single call.
@@ -749,27 +816,30 @@ namespace VaultSharp.V1.SystemBackend
         /// <param name="thresholdMasterShareKeys">Threshold master share keys.</param>
         /// <param name="rekeyNonce"><para>[required]</para>
         /// The nonce of the rekey operation.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The final Rekey progress after all the share keys are applied.</returns>
-        Task<RekeyProgress> QuickRekeyAsync(string[] thresholdMasterShareKeys, string rekeyNonce);
+        Task<RekeyProgress> QuickRekeyAsync(string[] thresholdMasterShareKeys, string rekeyNonce, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Seals the Vault. In HA mode, only an active node can be sealed. 
         /// Standby nodes should be restarted to get the same effect. 
         /// Requires a token with root policy or sudo capability on the path.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task SealAsync();
+        Task SealAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the seal status of the Vault.
         /// This is an unauthenticated call and does not need credentials.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The seal status of the Vault.
         /// </returns>
-        Task<SealStatus> GetSealStatusAsync();
+        Task<SealStatus> GetSealStatusAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Progresses the unsealing of the Vault.
@@ -788,18 +858,20 @@ namespace VaultSharp.V1.SystemBackend
         /// Default value is <value>false</value>.
         /// If you make a call with the value as <value>true</value>, it doesn't matter if this call has a valid unused <see paramref="masterShareKey" />. 
         /// It'll be ignored.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The seal status of the Vault.
         /// </returns>
-        Task<SealStatus> UnsealAsync(string masterShareKey = null, bool resetCompletely = false);
+        Task<SealStatus> UnsealAsync(string masterShareKey = null, bool resetCompletely = false, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Unseals the Vault in a single call.
         /// Provide all the master keys together.
         /// </summary>
         /// <param name="thresholdMasterShareKeys">Threshold Master share keys.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The final Seal Status after all the share keys are applied.</returns>
-        Task<SealStatus> QuickUnsealAsync(string[] thresholdMasterShareKeys);
+        Task<SealStatus> QuickUnsealAsync(string[] thresholdMasterShareKeys, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Wraps the given user-supplied data inside a response-wrapped token.
@@ -811,8 +883,9 @@ namespace VaultSharp.V1.SystemBackend
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The wrapped response.</returns>
-        Task<Secret<object>> WrapResponseDataAsync(Dictionary<string, object> data, string wrapTimeToLive);
+        Task<Secret<object>> WrapResponseDataAsync(Dictionary<string, object> data, string wrapTimeToLive, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Looks up wrapping properties for the given token.
@@ -821,8 +894,9 @@ namespace VaultSharp.V1.SystemBackend
         /// <para>[required]</para>
         /// The wrapping token identifier.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The token wrap info.</returns>
-        Task<Secret<TokenWrapData>> LookupTokenWrapInfoAsync(string tokenId);
+        Task<Secret<TokenWrapData>> LookupTokenWrapInfoAsync(string tokenId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Rewraps a response-wrapped token; the new token will use the same creation TTL as 
@@ -835,8 +909,9 @@ namespace VaultSharp.V1.SystemBackend
         /// <para>[required]</para>
         /// The wrapping token identifier.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The secret with re-wrapped info.</returns>
-        Task<Secret<object>> RewrapWrappedResponseDataAsync(string tokenId);
+        Task<Secret<object>> RewrapWrappedResponseDataAsync(string tokenId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Returns the original response inside the given wrapping token. 
@@ -848,7 +923,8 @@ namespace VaultSharp.V1.SystemBackend
         /// <para>[required]</para>
         /// The wrapping token identifier.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The unwrapped original data.</returns>
-        Task<Secret<TData>> UnwrapWrappedResponseDataAsync<TData>(string tokenId);
+        Task<Secret<TData>> UnwrapWrappedResponseDataAsync<TData>(string tokenId, CancellationToken cancellationToken = default);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.SystemBackend.Enterprise
@@ -14,8 +15,9 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
         /// <remarks>
         /// Requires Enterprise Vault.
         /// </remarks>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Config</returns>
-        Task<Secret<ControlGroup>> GetControlGroupConfigAsync();
+        Task<Secret<ControlGroup>> GetControlGroupConfigAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Configures control groups.
@@ -24,8 +26,9 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
         /// Requires Enterprise Vault.
         /// </remarks>
         /// <param name="maxTimeToLive">The maximum ttl for a control group wrapping token. This can be provided in seconds or duration (2h).</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Task</returns>
-        Task ConfigureControlGroupAsync(string maxTimeToLive);
+        Task ConfigureControlGroupAsync(string maxTimeToLive, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Removes any control group configuration.
@@ -33,36 +36,40 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
         /// <remarks>
         /// Requires Enterprise Vault.
         /// </remarks>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Task</returns>
-        Task DeleteControlGroupConfigAsync();
+        Task DeleteControlGroupConfigAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Authorizes a control group request.
         /// </summary>
         /// <param name="accessor"><para>[required]</para>
         /// The accessor for the control group wrapping token.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <remarks>
         /// Requires Enterprise Vault.
         /// </remarks>
         /// <returns>Authorization.</returns>
-        Task<Secret<ControlGroupRequestStatus>> AuthorizeControlGroupAsync(string accessor);
+        Task<Secret<ControlGroupRequestStatus>> AuthorizeControlGroupAsync(string accessor, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Checks the status of a control group request.
         /// </summary>
         /// <param name="accessor"><para>[required]</para>
         /// The accessor for the control group wrapping token.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <remarks>
         /// Requires Enterprise Vault.
         /// </remarks>
         /// <returns>The status.</returns>
-        Task<Secret<ControlGroupRequestStatus>> CheckControlGroupStatusAsync(string accessor);
+        Task<Secret<ControlGroupRequestStatus>> CheckControlGroupStatusAsync(string accessor, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Returns information about the currently installed license.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>License.</returns>
-        Task<Secret<License>> GetLicenseAsync();
+        Task<Secret<License>> GetLicenseAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Used to install a license into Vault.
@@ -70,16 +77,18 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
         /// <param name="licenceText"><para>[required]</para>
         /// The license text.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Task.</returns>
-        Task InstallLicenseAsync(string licenceText);
+        Task InstallLicenseAsync(string licenceText, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets all the RGP policy names in the system.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The policy names.
         /// </returns>
-        Task<Secret<ListInfo>> GetRGPPoliciesAsync();
+        Task<Secret<ListInfo>> GetRGPPoliciesAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the rules for the named RGP policy.
@@ -87,10 +96,11 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
         /// <param name="policyName">
         /// <para>[required]</para>
         /// The name of the policy.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The rules for the policy.
         /// </returns>
-        Task<Secret<RGPPolicy>> GetRGPPolicyAsync(string policyName);
+        Task<Secret<RGPPolicy>> GetRGPPolicyAsync(string policyName, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Adds or updates the RGP policy.
@@ -98,28 +108,31 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
         /// </summary>
         /// <param name="policy"><para>[required]</para>
         /// The policy to be added or updated.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task WriteRGPPolicyAsync(RGPPolicy policy);
+        Task WriteRGPPolicyAsync(RGPPolicy policy, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes the named RGP policy. This will immediately affect all associated users.
         /// </summary>
         /// <param name="policyName"><para>[required]</para>
         /// The name of the policy.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task DeleteRGPPolicyAsync(string policyName);
+        Task DeleteRGPPolicyAsync(string policyName, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets all the EGP policy names in the system.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The policy names.
         /// </returns>
-        Task<Secret<ListInfo>> GetEGPPoliciesAsync();
+        Task<Secret<ListInfo>> GetEGPPoliciesAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the rules for the named EGP policy.
@@ -127,10 +140,11 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
         /// <param name="policyName">
         /// <para>[required]</para>
         /// The name of the policy.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The rules for the policy.
         /// </returns>
-        Task<Secret<EGPPolicy>> GetEGPPolicyAsync(string policyName);
+        Task<Secret<EGPPolicy>> GetEGPPolicyAsync(string policyName, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Adds or updates the EGP policy.
@@ -138,19 +152,21 @@ namespace VaultSharp.V1.SystemBackend.Enterprise
         /// </summary>
         /// <param name="policy"><para>[required]</para>
         /// The policy to be added or updated.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task WriteEGPPolicyAsync(EGPPolicy policy);
+        Task WriteEGPPolicyAsync(EGPPolicy policy, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes the named EGP policy. This will immediately affect all associated users.
         /// </summary>
         /// <param name="policyName"><para>[required]</para>
         /// The name of the policy.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task DeleteEGPPolicyAsync(string policyName);
+        Task DeleteEGPPolicyAsync(string policyName, CancellationToken cancellationToken = default);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.SecretsEngines.TOTP
@@ -20,8 +21,9 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the TOTP backend. Defaults to <see cref="SecretsEngineMountPoints.TOTP" />
         /// Provide a value only if you have customized the TOTP mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The barcode and url of the key.</returns>
-        Task<Secret<TOTPCreateKeyResponse>> CreateKeyAsync(string keyName, TOTPCreateKeyRequest createKeyRequest, string mountPoint = null);
+        Task<Secret<TOTPCreateKeyResponse>> CreateKeyAsync(string keyName, TOTPCreateKeyRequest createKeyRequest, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves a TOTP key.
@@ -36,8 +38,9 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Key Info.</returns>
-        Task<Secret<TOTPKey>> ReadKeyAsync(string keyName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<TOTPKey>> ReadKeyAsync(string keyName, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Returns a list of available keys. Only the key names are returned, not any values.
@@ -49,8 +52,9 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>List of available keys</returns>
-        Task<Secret<ListInfo>> ReadAllKeysAsync(string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<ListInfo>> ReadAllKeysAsync(string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes a TOTP key.
@@ -61,7 +65,8 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the TOTP backend. Defaults to <see cref="SecretsEngineMountPoints.TOTP" />
         /// Provide a value only if you have customized the TOTP mount point.</param>
-        Task DeleteKeyAsync(string keyName, string mountPoint = null);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task DeleteKeyAsync(string keyName, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Generates a new time-based one-time use password based on the named key.
@@ -76,10 +81,11 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the <see cref="TOTPCode" /> as the data.
         /// </returns>
-        Task<Secret<TOTPCode>> GetCodeAsync(string keyName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<TOTPCode>> GetCodeAsync(string keyName, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Generates a new time-based one-time use password based on the named key.
@@ -97,9 +103,10 @@ namespace VaultSharp.V1.SecretsEngines.TOTP
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the <see cref="TOTPCode" /> as the data.
         /// </returns>
-        Task<Secret<TOTPCodeValidity>> ValidateCodeAsync(string keyName, string code, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<TOTPCodeValidity>> ValidateCodeAsync(string keyName, string code, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
@@ -14,34 +15,34 @@ namespace VaultSharp.V1.SecretsEngines.PKI.Roles
             _polymath = polymath;
         }
 
-        public async Task<Secret<RolesData>> ListRoles(string pkiBackendMountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<RolesData>> ListRoles(string pkiBackendMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             var result = await _polymath.MakeVaultApiRequest<Secret<RolesData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI,
                     "/roles/?list=true", HttpMethod.Get,
-                    wrapTimeToLive: wrapTimeToLive)
+                    wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             return result;
         }
 
-        public async Task<Secret<RoleData>> AddRole(RoleData data, string pkiBackendMountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<RoleData>> AddRole(RoleData data, string pkiBackendMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(data, "data");
-            var result = await _polymath.MakeVaultApiRequest<Secret<RoleData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/roles/" + data.Name, HttpMethod.Post, data, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            var result = await _polymath.MakeVaultApiRequest<Secret<RoleData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/roles/" + data.Name, HttpMethod.Post, data, wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             return result;
         }
 
-        public async Task<Secret<RoleData>> GetRole(string roleName, string pkiBackendMountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<RoleData>> GetRole(string roleName, string pkiBackendMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(roleName, "roleName");
-            var result = await _polymath.MakeVaultApiRequest<Secret<RoleData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/roles/" + roleName, HttpMethod.Get, null, wrapTimeToLive:wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            var result = await _polymath.MakeVaultApiRequest<Secret<RoleData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/roles/" + roleName, HttpMethod.Get, null, wrapTimeToLive:wrapTimeToLive, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             result.Data.Name = roleName;
             return result;
         }
 
-        public async Task DeleteRole(string roleName, string pkiBackendMountPoint = null)
+        public async Task DeleteRole(string roleName, string pkiBackendMountPoint = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(roleName, "roleName");
-            await _polymath.MakeVaultApiRequest(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/roles/" + roleName, HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/roles/" + roleName, HttpMethod.Delete, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

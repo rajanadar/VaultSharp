@@ -3,6 +3,14 @@
  * Helper code to get Kerberos Negotiation Token using keytab and krb5 config file: https://gist.github.com/rajanadar/28c86d967695262bfe1f17ae82fb3d3d
  * Helper code to generate on-demand CloudFoundry signature in .NET Applications: https://gist.github.com/rajanadar/84769efeca64e0128d7a8a627b7bb4db
 
+## Unreleased
+
+**IMPROVEMENTS:**
+
+ * [GH-368](https://github.com/rajanadar/VaultSharp/issues/368) All async methods accept an optional ```CancellationToken``` as the last parameter and forward it to the HTTP request.
+ * This is a binary breaking change: assemblies compiled against an earlier version must be recompiled, and custom implementations of the public interfaces must add the new parameter.
+ * Mock setups built from expression trees (e.g. Moq's ```mock.Setup(x => x.ReadSecretAsync("path", null, null, null))```) no longer compile (CS0854), because expression trees cannot omit optional arguments. Add ```It.IsAny<CancellationToken>()``` to such setups.
+
 ## 2.0.4.1-beta1 (Aug 16, 2026)
 
 **BUG FIXES:**

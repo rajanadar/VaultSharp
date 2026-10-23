@@ -133,41 +133,41 @@ namespace VaultSharp.Core
             }
         }
 
-        internal async Task PerformImmediateLogin()
+        internal async Task PerformImmediateLogin(CancellationToken cancellationToken = default)
         {
             if (_authMethodLoginProvider != null)
             {
                 // make a dummy call, that will force a login.
-                await _lazyVaultToken.Value.ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+                await _lazyVaultToken.Value.WaitAsync(cancellationToken).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             }
         }
 
-        public async Task MakeVaultApiRequest(string mountPoint, string path, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false, bool sendNamespaceHeader = true)
+        public async Task MakeVaultApiRequest(string mountPoint, string path, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false, bool sendNamespaceHeader = true, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             
-            await MakeVaultApiRequest(VaultSharpV1Path + mountPoint.Trim('/') + path, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated, sendNamespaceHeader: sendNamespaceHeader).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await MakeVaultApiRequest(VaultSharpV1Path + mountPoint.Trim('/') + path, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated, sendNamespaceHeader: sendNamespaceHeader, cancellationToken: cancellationToken).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false, bool sendNamespaceHeader = true)
+        public async Task MakeVaultApiRequest(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, bool unauthenticated = false, bool sendNamespaceHeader = true, CancellationToken cancellationToken = default)
         {
-            await MakeVaultApiRequest<JsonObject>(resourcePath, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated, sendNamespaceHeader: sendNamespaceHeader).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await MakeVaultApiRequest<JsonObject>(resourcePath, httpMethod, requestData, rawResponse, unauthenticated: unauthenticated, sendNamespaceHeader: sendNamespaceHeader, cancellationToken: cancellationToken).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<TResponse> MakeVaultApiRequest<TResponse>(string mountPoint, string path, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null, string wrapTimeToLive = null, bool unauthenticated = false, bool sendNamespaceHeader = true) where TResponse : class 
+        public async Task<TResponse> MakeVaultApiRequest<TResponse>(string mountPoint, string path, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null, string wrapTimeToLive = null, bool unauthenticated = false, bool sendNamespaceHeader = true, CancellationToken cancellationToken = default) where TResponse : class 
         {
             Checker.NotNull(mountPoint, "mountPoint");
 
-            return await MakeVaultApiRequest<TResponse>(VaultSharpV1Path + mountPoint.Trim('/') + path, httpMethod, requestData, rawResponse, postResponseAction, wrapTimeToLive, unauthenticated, sendNamespaceHeader).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await MakeVaultApiRequest<TResponse>(VaultSharpV1Path + mountPoint.Trim('/') + path, httpMethod, requestData, rawResponse, postResponseAction, wrapTimeToLive, unauthenticated, sendNamespaceHeader, cancellationToken: cancellationToken).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null, string wrapTimeToLive = null, bool unauthenticated = false, bool sendNamespaceHeader = true) where TResponse : class
+        public async Task<TResponse> MakeVaultApiRequest<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null, string wrapTimeToLive = null, bool unauthenticated = false, bool sendNamespaceHeader = true, CancellationToken cancellationToken = default) where TResponse : class
         {
             var headers = new Dictionary<string, string>();
 
             if (!unauthenticated && _lazyVaultToken != null)
             {
-                var vaultToken = await _lazyVaultToken.Value.ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+                var vaultToken = await _lazyVaultToken.Value.WaitAsync(cancellationToken).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
                 if (VaultClientSettings.UseVaultTokenHeaderInsteadOfAuthorizationHeader)
                 {
@@ -189,7 +189,7 @@ namespace VaultSharp.Core
                 headers.Add(NamespaceHeaderKey, VaultClientSettings.Namespace);
             }
 
-            return await MakeRequestAsync<TResponse>(resourcePath, httpMethod, requestData, headers, rawResponse, postResponseAction).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await MakeRequestAsync<TResponse>(resourcePath, httpMethod, requestData, headers, rawResponse, postResponseAction, cancellationToken: cancellationToken).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public Secret<T2> GetMappedSecret<T1, T2>(Secret<T1> sourceSecret, T2 destinationData)
@@ -209,7 +209,7 @@ namespace VaultSharp.Core
             };
         }
 
-        protected async Task<TResponse> MakeRequestAsync<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, IDictionary<string, string> headers = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null) where TResponse : class
+        protected async Task<TResponse> MakeRequestAsync<TResponse>(string resourcePath, HttpMethod httpMethod, object requestData = null, IDictionary<string, string> headers = null, bool rawResponse = false, Action<HttpResponseMessage> postResponseAction = null, CancellationToken cancellationToken = default) where TResponse : class
         {
             try
             {
@@ -283,7 +283,7 @@ namespace VaultSharp.Core
 
                 VaultClientSettings.BeforeApiRequestAction?.Invoke(_httpClient, httpRequestMessage);
 
-                var httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+                var httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage, cancellationToken).ConfigureAwait(VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
 
                 // internal delegate.
                 postResponseAction?.Invoke(httpResponseMessage);

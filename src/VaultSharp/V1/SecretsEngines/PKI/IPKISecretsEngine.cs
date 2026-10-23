@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 using VaultSharp.V1.SecretsEngines.PKI.Issuers;
@@ -38,10 +39,11 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the new Certificate credentials.
         /// </returns>
-        Task<Secret<CertificateCredentials>> GetCredentialsAsync(string pkiRoleName, CertificateCredentialsRequestOptions certificateCredentialRequestOptions, string pkiBackendMountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<CertificateCredentials>> GetCredentialsAsync(string pkiRoleName, CertificateCredentialsRequestOptions certificateCredentialRequestOptions, string pkiBackendMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint signs a new certificate based upon the provided CSR and the supplied parameters,
@@ -62,10 +64,11 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the signed Certificate.
         /// </returns>
-        Task<Secret<SignedCertificateData>> SignCertificateAsync(string pkiRoleName, SignCertificatesRequestOptions signCertificateRequestOptions, string pkiBackendMountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<SignedCertificateData>> SignCertificateAsync(string pkiRoleName, SignCertificatesRequestOptions signCertificateRequestOptions, string pkiBackendMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint revokes a certificate using its serial number. 
@@ -79,10 +82,11 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
         /// Provide a value only if you have customized the PKI mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the Certificate revokation info.
         /// </returns>
-        Task<Secret<RevokeCertificateResponse>> RevokeCertificateAsync(string serialNumber, string pkiBackendMountPoint = null);
+        Task<Secret<RevokeCertificateResponse>> RevokeCertificateAsync(string serialNumber, string pkiBackendMountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint allows tidying up the storage backend and/or CRL by removing certificates that have expired 
@@ -93,10 +97,11 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
         /// Provide a value only if you have customized the PKI mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task
         /// </returns>
-        Task TidyAsync(CertificateTidyRequest certificateTidyRequest = null, string pkiBackendMountPoint = null);
+        Task TidyAsync(CertificateTidyRequest certificateTidyRequest = null, string pkiBackendMountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint allows auto tidying up the storage backend and/or CRL by removing certificates that have expired 
@@ -107,10 +112,11 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
         /// Provide a value only if you have customized the PKI mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task
         /// </returns>
-        Task AutoTidyAsync(CertificateAutoTidyRequest certificateAutoTidyRequest = null, string pkiBackendMountPoint = null);
+        Task AutoTidyAsync(CertificateAutoTidyRequest certificateAutoTidyRequest = null, string pkiBackendMountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This is a read only endpoint that returns information about the current tidy operation, 
@@ -120,8 +126,9 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
         /// Provide a value only if you have customized the PKI mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The tidy status</returns>
-        Task<Secret<CertificateTidyStatus>> GetTidyStatusAsync(string pkiBackendMountPoint = null);
+        Task<Secret<CertificateTidyStatus>> GetTidyStatusAsync(string pkiBackendMountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint allows cancelling a running tidy operation. 
@@ -133,8 +140,9 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
         /// Provide a value only if you have customized the PKI mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The tidy status</returns>
-        Task<Secret<CertificateTidyStatus>> CancelTidyAsync(string pkiBackendMountPoint = null);
+        Task<Secret<CertificateTidyStatus>> CancelTidyAsync(string pkiBackendMountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves the CA certificate in raw DER-encoded form. 
@@ -149,10 +157,11 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
         /// Provide a value only if you have customized the PKI mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The raw certificate data.
         /// </returns>
-        Task<RawCertificateData> ReadCACertificateAsync(CertificateFormat certificateFormat = CertificateFormat.der, string pkiBackendMountPoint = null);
+        Task<RawCertificateData> ReadCACertificateAsync(CertificateFormat certificateFormat = CertificateFormat.der, string pkiBackendMountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves a certificate by key (serial number). The certificate format is always <see cref="CertificateFormat.pem"/>.
@@ -168,10 +177,11 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
         /// Provide a value only if you have customized the PKI mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the certificate data
         /// </returns>
-        Task<Secret<RawCertificateData>> ReadCertificateAsync(string serialNumber, string pkiBackendMountPoint = null);
+        Task<Secret<RawCertificateData>> ReadCertificateAsync(string serialNumber, string pkiBackendMountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves a list of all certificate keys (serial numbers).
@@ -180,10 +190,11 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
         /// Provide a value only if you have customized the PKI mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the list of certificate keys (serial numbers)
         /// </returns>
-        Task<Secret<CertificateKeys>> ListCertificatesAsync(string pkiBackendMountPoint = null);
+        Task<Secret<CertificateKeys>> ListCertificatesAsync(string pkiBackendMountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves a list of all revoked certificate keys (serial numbers).
@@ -192,10 +203,11 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
         /// Provide a value only if you have customized the PKI mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the list of revoked certificate keys (serial numbers)
         /// </returns>
-        Task<Secret<CertificateKeys>> ListRevokedCertificatesAsync(string pkiBackendMountPoint = null);
+        Task<Secret<CertificateKeys>> ListRevokedCertificatesAsync(string pkiBackendMountPoint = null, CancellationToken cancellationToken = default);
         
         /// <summary>
         /// Retrieves the default issuer's CA certificate chain, including the default issuer.
@@ -205,9 +217,10 @@ namespace VaultSharp.V1.SecretsEngines.PKI
         /// The mount point for the PKI backend. Defaults to <see cref="SecretsEngineMountPoints.PKI" />
         /// Provide a value only if you have customized the PKI mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the certificate chain data
         /// </returns>
-        Task<Secret<CertificateData>> ReadDefaultIssuerCertificateChainAsync(CertificateFormat certificateFormat, string pkiBackendMountPoint = null);
+        Task<Secret<CertificateData>> ReadDefaultIssuerCertificateChainAsync(CertificateFormat certificateFormat, string pkiBackendMountPoint = null, CancellationToken cancellationToken = default);
     }
 }

@@ -5,7 +5,9 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
+using VaultSharp.V1.AuthMethods;
 using VaultSharp.V1.AuthMethods.Token;
+using VaultSharp.V1.AuthMethods.UserPass;
 using VaultSharp.V1.Commons;
 using VaultSharp.V1.SecretsEngines.GoogleCloud;
 using VaultSharp.V1.SecretsEngines.TOTP;
@@ -145,6 +147,49 @@ internal static class AotApiScenario
         handler.AssertComplete();
     }
 
+    internal static async Task RunCancellationPathAsync()
+    {
+        var client = CreateClient(new HangingHttpMessageHandler(), new JsonSerializerOptions());
+        await RequireCancelledAsync(
+            token => client.V1.Secrets.KeyValue.V2.ReadSecretAsync("sample", cancellationToken: token),
+            "Cancellation token was not forwarded to the HTTP request.");
+
+        var loginClient = CreateClient(new HangingHttpMessageHandler(), new JsonSerializerOptions(), new UserPassAuthMethodInfo("user", "password"));
+        await RequireCancelledAsync(
+            token => loginClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("sample", cancellationToken: token),
+            "Cancellation token did not stop waiting for the login.");
+        await RequireCancelledAsync(
+            token => loginClient.V1.Auth.PerformImmediateLogin(token),
+            "Cancellation token did not stop waiting for the immediate login.");
+
+        var slowLogin = new SlowLoginHttpMessageHandler();
+        var slowLoginClient = CreateClient(slowLogin, new JsonSerializerOptions(), new UserPassAuthMethodInfo("user", "password"));
+        await RequireCancelledAsync(
+            token => slowLoginClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("sample", cancellationToken: token),
+            "Cancellation token did not stop waiting for the slow login.");
+        slowLogin.CompleteLogin();
+        await slowLoginClient.V1.Secrets.KeyValue.V2.ReadSecretAsync("sample");
+        Require(slowLogin.LoginRequestCount == 1, $"Expected the cancelled caller's login to be reused, found {slowLogin.LoginRequestCount} login requests.");
+    }
+
+    private static async Task RequireCancelledAsync(Func<CancellationToken, Task> action, string message)
+    {
+        using var cancellation = new CancellationTokenSource(TimeSpan.FromMilliseconds(100));
+
+        var request = action(cancellation.Token);
+        var finished = await Task.WhenAny(request, Task.Delay(TimeSpan.FromSeconds(10)));
+        Require(finished == request, message);
+
+        try
+        {
+            await request;
+            throw new InvalidOperationException("Cancelled request completed successfully.");
+        }
+        catch (OperationCanceledException)
+        {
+        }
+    }
+
     internal static void Require(bool condition, string message)
     {
         if (!condition)
@@ -153,14 +198,14 @@ internal static class AotApiScenario
         }
     }
 
-    private static VaultClient CreateClient(StubHttpMessageHandler handler, JsonSerializerOptions options)
+    private static VaultClient CreateClient(HttpMessageHandler handler, JsonSerializerOptions options, IAuthMethodInfo? authMethodInfo = null)
     {
         var settings = new VaultClientSettings(
             "https://vault.invalid",
-            new TokenAuthMethodInfo("token"))
+            authMethodInfo ?? new TokenAuthMethodInfo("token"))
         {
             JsonSerializerOptions = options,
-            MyHttpClientProviderFunc = _ => new HttpClient(handler),
+            MyHttpClientProviderFunc = _ => new HttpClient(handler) { Timeout = Timeout.InfiniteTimeSpan },
         };
 
         var client = new VaultClient(settings);
@@ -182,6 +227,45 @@ internal static class AotApiScenario
         internal string PathAndQuery { get; }
         internal string? Json { get; }
         internal string ResponseJson { get; }
+    }
+
+    private sealed class HangingHttpMessageHandler : HttpMessageHandler
+    {
+        protected override async Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken)
+        {
+            await Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken);
+            throw new InvalidOperationException("Hanging handler must only finish by cancellation.");
+        }
+    }
+
+    private sealed class SlowLoginHttpMessageHandler : HttpMessageHandler
+    {
+        private readonly TaskCompletionSource _loginGate = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        private int _loginRequestCount;
+
+        internal int LoginRequestCount => _loginRequestCount;
+
+        internal void CompleteLogin() => _loginGate.SetResult();
+
+        protected override async Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken)
+        {
+            if (request.RequestUri!.AbsolutePath.Contains("/login/"))
+            {
+                Interlocked.Increment(ref _loginRequestCount);
+                await _loginGate.Task;
+                return JsonResponse("""{"auth":{"client_token":"login-token"}}""");
+            }
+
+            Require(request.Headers.Authorization?.Parameter == "login-token", "Request was sent without the login token.");
+            return JsonResponse("""{"data":{"data":{},"metadata":{"version":1}}}""");
+        }
+
+        private static HttpResponseMessage JsonResponse(string json) =>
+            new(HttpStatusCode.OK) { Content = new StringContent(json, Encoding.UTF8, "application/json") };
     }
 
     private sealed class StubHttpMessageHandler : HttpMessageHandler

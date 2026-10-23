@@ -133,6 +133,20 @@ vaultClient.V1.Auth.PerformImmediateLogin();
 
 * Please note that this will not work for Token Authentication since you already have a vault token.
 
+### VaultSharp and Cancellation
+
+* Every async method accepts an optional ```CancellationToken cancellationToken``` as its last parameter.
+* The token is forwarded to the underlying ```HttpClient``` call, so cancelling it aborts the in-flight Vault request.
+* The lazy login to Vault (performed on the first call) is shared by all callers. Cancelling a caller's token stops that caller from waiting for the login, but the login itself keeps running and its result is reused by later calls.
+* The login request itself is not cancellable and is bounded only by ```VaultServiceTimeout```. If it hangs, later calls keep waiting for the same login until their tokens are cancelled. Call ```vaultClient.V1.Auth.ResetVaultToken()``` to start a new login.
+
+```cs
+using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+
+Secret<SecretData> kv2Secret = await vaultClient.V1.Secrets.KeyValue.V2
+                               .ReadSecretAsync(path: "secretPath", cancellationToken: cts.Token);
+```
+
 ### Auth Methods
 
 - VaultSharp supports all authentication methods supported by the Vault Service

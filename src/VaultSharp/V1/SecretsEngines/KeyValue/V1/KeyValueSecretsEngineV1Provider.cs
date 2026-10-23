@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
@@ -15,41 +16,41 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
             _polymath = polymath;
         }
 
-        public async Task<Secret<Dictionary<string, object>>> ReadSecretAsync(string path, string mountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<Dictionary<string, object>>> ReadSecretAsync(string path, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
-            return await ReadSecretAsync<Dictionary<string, object>>(path, mountPoint, wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await ReadSecretAsync<Dictionary<string, object>>(path, mountPoint, wrapTimeToLive, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
         
-        public async Task<Secret<T>> ReadSecretAsync<T>(string path, string mountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<T>> ReadSecretAsync<T>(string path, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(path, "path");
 
-            return await _polymath.MakeVaultApiRequest<Secret<T>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV1, "/" + path.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<T>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV1, "/" + path.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<ListInfo>> ReadSecretPathsAsync(string path, string mountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<ListInfo>> ReadSecretPathsAsync(string path, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             var suffixPath = string.IsNullOrWhiteSpace(path) ? string.Empty : path.Trim('/') + "/";
-            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV1, "/" + suffixPath, _polymath.ListHttpMethod, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<ListInfo>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV1, "/" + suffixPath, _polymath.ListHttpMethod, wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<Dictionary<string, object>>> WriteSecretAsync(string path, IDictionary<string, object> values, string mountPoint = null)
+        public async Task<Secret<Dictionary<string, object>>> WriteSecretAsync(string path, IDictionary<string, object> values, string mountPoint = null, CancellationToken cancellationToken = default)
         {
-            return await WriteSecretAsync(path, new Dictionary<string, object>(values), mountPoint).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await WriteSecretAsync(path, new Dictionary<string, object>(values), mountPoint, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
         
-        public async Task<Secret<T>> WriteSecretAsync<T>(string path, T values, string mountPoint = null)
+        public async Task<Secret<T>> WriteSecretAsync<T>(string path, T values, string mountPoint = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(path, "path");
 
-            return await _polymath.MakeVaultApiRequest<Secret<T>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV1, "/" + path.Trim('/'), HttpMethod.Post, values).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<T>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV1, "/" + path.Trim('/'), HttpMethod.Post, values, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task DeleteSecretAsync(string path, string mountPoint = null)
+        public async Task DeleteSecretAsync(string path, string mountPoint = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(path, "path");
 
-            await _polymath.MakeVaultApiRequest(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV1, "/" + path.Trim('/'), HttpMethod.Delete).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyValueV1, "/" + path.Trim('/'), HttpMethod.Delete, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
@@ -28,10 +29,11 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with cipher text.
         /// </returns>
-        Task<Secret<EncryptionResponse>> EncryptAsync(string keyName, EncryptRequestOptions encryptRequestOptions, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<EncryptionResponse>> EncryptAsync(string keyName, EncryptRequestOptions encryptRequestOptions, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint uses the named encryption key to decrypt the ciphertext string. 
@@ -55,10 +57,11 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with plain text.
         /// </returns>
-        Task<Secret<DecryptionResponse>> DecryptAsync(string keyName, DecryptRequestOptions decryptRequestOptions, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<DecryptionResponse>> DecryptAsync(string keyName, DecryptRequestOptions decryptRequestOptions, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint uses the named encryption key to re-encrypt the underlying cryptokey to the latest version for this ciphertext without disclosing the original plaintext value to the requestor. 
@@ -80,10 +83,11 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with cipher text.
         /// </returns>
-        Task<Secret<ReEncryptionResponse>> ReEncryptAsync(string keyName, ReEncryptRequestOptions reEncryptRequestOptions, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<ReEncryptionResponse>> ReEncryptAsync(string keyName, ReEncryptRequestOptions reEncryptRequestOptions, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint uses the named encryption key to sign digest string data. 
@@ -105,10 +109,11 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with signed text.
         /// </returns>
-        Task<Secret<SignatureResponse>> SignAsync(string keyName, SignatureOptions signatureOptions, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<SignatureResponse>> SignAsync(string keyName, SignatureOptions signatureOptions, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint uses the named encryption key to verify a signature and digest string data.
@@ -129,9 +134,10 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloudKMS
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with verified text.
         /// </returns>
-        Task<Secret<VerificationResponse>> VerifyAsync(string keyName, VerificationOptions verificationOptions, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<VerificationResponse>> VerifyAsync(string keyName, VerificationOptions verificationOptions, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
     }
 }

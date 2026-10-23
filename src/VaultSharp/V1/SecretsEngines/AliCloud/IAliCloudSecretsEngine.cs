@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 using VaultSharp.V1.Commons;
 using VaultSharp.V1.SecretsEngines.AliCloud.Models;
@@ -18,8 +19,9 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.AliCloud" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task</returns>
-        Task ConfigureRootCredentialsAsync(CreateRootCredentialsConfigModel createRootCredentialsConfigModel = null, string mountPoint = null);
+        Task ConfigureRootCredentialsAsync(CreateRootCredentialsConfigModel createRootCredentialsConfigModel = null, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Reads the Connection details.
@@ -31,8 +33,9 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The config</returns>
-        Task<Secret<RootCredentialsConfigModel>> ReadRootCredentialsConfigAsync(string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<RootCredentialsConfigModel>> ReadRootCredentialsConfigAsync(string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// The role endpoint configures how Vault will generate credentials for users of each role.
@@ -43,8 +46,9 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.AliCloud" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task</returns>
-        Task WriteRoleAsync(string roleName, CreateAliCloudRoleModel createAliCloudRoleModel, string mountPoint = null);
+        Task WriteRoleAsync(string roleName, CreateAliCloudRoleModel createAliCloudRoleModel, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint queries an existing role by the given name.
@@ -58,8 +62,9 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The role info.</returns>
-        Task<Secret<AliCloudRoleModel>> ReadRoleAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<AliCloudRoleModel>> ReadRoleAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint lists all existing roles in the secrets engine.
@@ -71,8 +76,9 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The list of role names.</returns>
-        Task<Secret<ListInfo>> ReadAllRolesAsync(string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<ListInfo>> ReadAllRolesAsync(string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes a role
@@ -82,8 +88,9 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.AliCloud" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task</returns>
-        Task DeleteRoleAsync(string roleName, string mountPoint = null);
+        Task DeleteRoleAsync(string roleName, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Generates a dynamic AliCloud RAM credential based on the named role.
@@ -97,9 +104,10 @@ namespace VaultSharp.V1.SecretsEngines.AliCloud
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the <see cref="AliCloudCredentials" /> as the data.
         /// </returns>
-        Task<Secret<AliCloudCredentials>> GetCredentialsAsync(string aliCloudRoleName, string aliCloudMountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<AliCloudCredentials>> GetCredentialsAsync(string aliCloudRoleName, string aliCloudMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
     }
 }

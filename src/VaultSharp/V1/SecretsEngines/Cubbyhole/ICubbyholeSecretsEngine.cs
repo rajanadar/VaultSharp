@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 
@@ -18,10 +19,11 @@ namespace VaultSharp.V1.SecretsEngines.Cubbyhole
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the data.
         /// </returns>
-        Task<Secret<Dictionary<string, object>>> ReadSecretAsync(string secretPath, string wrapTimeToLive = null);
+        Task<Secret<Dictionary<string, object>>> ReadSecretAsync(string secretPath, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves the secret location path entries at the specified location.
@@ -34,10 +36,11 @@ namespace VaultSharp.V1.SecretsEngines.Cubbyhole
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret list with the data.
         /// </returns>
-        Task<Secret<ListInfo>> ReadSecretPathsAsync(string folderPath, string wrapTimeToLive = null);
+        Task<Secret<ListInfo>> ReadSecretPathsAsync(string folderPath, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Stores a secret at the specified location.
@@ -46,19 +49,21 @@ namespace VaultSharp.V1.SecretsEngines.Cubbyhole
         /// The location path where the secret needs to be stored.</param>
         /// <param name="values"><para>[required]</para>
         /// The values to be written. The values will be overwritten.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task WriteSecretAsync(string secretPath, IDictionary<string, object> values);
+        Task WriteSecretAsync(string secretPath, IDictionary<string, object> values, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes the secret at the specified location.
         /// </summary>
         /// <param name="secretPath"><para>[required]</para>
         /// The location path where the secret needs to be deleted from.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task DeleteSecretAsync(string secretPath);
+        Task DeleteSecretAsync(string secretPath, CancellationToken cancellationToken = default);
     }
 }

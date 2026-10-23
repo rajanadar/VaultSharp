@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using VaultSharp.V1.AuthMethods.AppRole.Models;
 using VaultSharp.V1.Commons;
@@ -18,8 +19,9 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.
         /// </param>  
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The role names.</returns>
-        Task<Secret<ListInfo>> ReadAllRolesAsync(string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<ListInfo>> ReadAllRolesAsync(string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Creates a new AppRole or updates an existing AppRole. 
@@ -34,16 +36,18 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param>        
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task</returns>
-        Task WriteRoleAsync(string roleName, AppRoleRoleModel appRoleRoleModel, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task WriteRoleAsync(string roleName, AppRoleRoleModel appRoleRoleModel, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Reads the properties of an existing AppRole.
         /// </summary>
         /// <param name="roleName">Name of the Role.</param>
         /// <param name="mountPoint">Mount point of the AppRole Auth method</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Metadata of Named AppRole</returns>
-        Task<Secret<AppRoleRoleModel>> ReadRoleAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<AppRoleRoleModel>> ReadRoleAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes an existing AppRole from the method.
@@ -54,16 +58,18 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.
         /// </param>        
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task</returns>
-        Task DeleteRoleAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task DeleteRoleAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Reads the RoleID of an existing AppRole.
         /// </summary>
         /// <param name="roleName">Name of the Role.</param>
         /// <param name="mountPoint">Mount point of the AppRole Auth method</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task</returns>
-        Task<Secret<RoleIdInfo>> GetRoleIdAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<RoleIdInfo>> GetRoleIdAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Updates the RoleID of an existing AppRole to a custom value.
@@ -75,8 +81,9 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param>        
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task</returns>
-        Task WriteRoleIdAsync(string roleName, RoleIdInfo roleIdInfo, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task WriteRoleIdAsync(string roleName, RoleIdInfo roleIdInfo, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Generates and issues a new SecretID on an existing AppRole. 
@@ -96,8 +103,9 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The secret id info</returns>
-        Task<Secret<SecretIdInfo>> PullNewSecretIdAsync(string roleName, PullSecretIdRequestOptions secretIdRequestOptions = null, string mountPoint = AuthMethodDefaultPaths.AppRole, string wrapToTimeLive = null);
+        Task<Secret<SecretIdInfo>> PullNewSecretIdAsync(string roleName, PullSecretIdRequestOptions secretIdRequestOptions = null, string mountPoint = AuthMethodDefaultPaths.AppRole, string wrapToTimeLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Lists the accessors of all the SecretIDs issued against the AppRole. 
@@ -109,8 +117,9 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The secret accessors.</returns>
-        Task<Secret<ListInfo>> ReadAllSecretIdAccessorsAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<ListInfo>> ReadAllSecretIdAccessorsAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Reads out the properties of a SecretID.
@@ -118,8 +127,9 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="roleName">Name of the Role.</param>
         /// <param name="secretId">The secret id.</param>
         /// <param name="mountPoint">Mount point of the AppRole Auth method</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Secret Id properties</returns>
-        Task<Secret<FullSecretIdInfo>> ReadSecretIdInfoAsync(string roleName, string secretId, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<FullSecretIdInfo>> ReadSecretIdInfoAsync(string roleName, string secretId, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Destroy an AppRole secret ID.
@@ -127,8 +137,9 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="roleName">Name of the Role.</param>
         /// <param name="secretId">The secret id.</param>
         /// <param name="mountPoint">Mount point of the AppRole Auth method</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task</returns>
-        Task DestroySecretIdAsync(string roleName, string secretId, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task DestroySecretIdAsync(string roleName, string secretId, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Reads out the properties of a SecretID by accessor.
@@ -136,8 +147,9 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="roleName">Name of the Role.</param>
         /// <param name="secretIdAccessor">The secret id accessor.</param>
         /// <param name="mountPoint">Mount point of the AppRole Auth method</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Secret Id properties</returns>
-        Task<Secret<FullSecretIdInfo>> ReadSecretIdInfoByAccessorAsync(string roleName, string secretIdAccessor, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<FullSecretIdInfo>> ReadSecretIdInfoByAccessorAsync(string roleName, string secretIdAccessor, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Destroy an AppRole secret id by Accessor.
@@ -145,8 +157,9 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="roleName">Name of the Role.</param>
         /// <param name="secretIdAccessor">The secret id accessor.</param>
         /// <param name="mountPoint">Mount point of the AppRole Auth method</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task</returns>
-        Task DestroySecretIdByAccessorAsync(string roleName, string secretIdAccessor, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task DestroySecretIdByAccessorAsync(string roleName, string secretIdAccessor, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Assigns a "custom" SecretID against an existing AppRole. 
@@ -159,8 +172,9 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param>        
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The secret id info</returns>
-        Task<Secret<SecretIdInfo>> PushNewSecretIdAsync(string roleName, PushSecretIdRequestOptions secretIdRequestOptions = null, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<SecretIdInfo>> PushNewSecretIdAsync(string roleName, PushSecretIdRequestOptions secretIdRequestOptions = null, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the policies attribute of the Role entity.
@@ -170,8 +184,9 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param>        
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The policy value.</returns>
-        Task<Secret<AppRolePoliciesModel>> ReadRolePoliciesAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<AppRolePoliciesModel>> ReadRolePoliciesAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Updates the policy attribute of the Role entity
@@ -182,7 +197,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task WriteRolePoliciesAsync(string roleName, AppRolePoliciesModel policies, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task WriteRolePoliciesAsync(string roleName, AppRolePoliciesModel policies, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes the policy attribute of the Role entity
@@ -192,7 +208,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task DeleteRolePoliciesAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task DeleteRolePoliciesAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the secret-id-num-uses attribute of the Role entity.
@@ -202,8 +219,9 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param>        
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The policy value.</returns>
-        Task<Secret<long>> ReadRoleSecretIdNumberOfUsesAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<long>> ReadRoleSecretIdNumberOfUsesAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Updates the secret-id-num-uses attribute of the Role entity
@@ -214,7 +232,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task WriteRoleSecretIdNumberOfUsesAsync(string roleName, long secretIdNumberOfUses, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task WriteRoleSecretIdNumberOfUsesAsync(string roleName, long secretIdNumberOfUses, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes the secret-id-num-uses attribute of the Role entity
@@ -224,7 +243,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task DeleteRoleSecretIdNumberOfUsesAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task DeleteRoleSecretIdNumberOfUsesAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the secret-id-ttl attribute of the Role entity.
@@ -234,8 +254,9 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param>        
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The secret-id-ttl value.</returns>
-        Task<Secret<long>> ReadRoleSecretIdTimeToLiveAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<long>> ReadRoleSecretIdTimeToLiveAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Updates the secret-id-ttl attribute of the Role entity
@@ -246,7 +267,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task WriteRoleSecretIdTimeToLiveAsync(string roleName, long secretIdTimeToLive, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task WriteRoleSecretIdTimeToLiveAsync(string roleName, long secretIdTimeToLive, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes the secret-id-ttl attribute of the Role entity
@@ -256,7 +278,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task DeleteRoleSecretIdTimeToLiveAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task DeleteRoleSecretIdTimeToLiveAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the token-ttl attribute of the Role entity.
@@ -266,8 +289,9 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param>        
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The token-ttl value.</returns>
-        Task<Secret<long>> ReadRoleTokenTimeToLiveAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<long>> ReadRoleTokenTimeToLiveAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Updates the token-ttl attribute of the Role entity
@@ -278,7 +302,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task WriteRoleTokenTimeToLiveAsync(string roleName, long tokenTimeToLive, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task WriteRoleTokenTimeToLiveAsync(string roleName, long tokenTimeToLive, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes the token-ttl attribute of the Role entity
@@ -288,7 +313,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task DeleteRoleTokenTimeToLiveAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task DeleteRoleTokenTimeToLiveAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the token-max-ttl attribute of the Role entity.
@@ -298,8 +324,9 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param>        
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The token-max-ttl value.</returns>
-        Task<Secret<long>> ReadRoleTokenMaximumTimeToLiveAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<long>> ReadRoleTokenMaximumTimeToLiveAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Updates the token-max-ttl attribute of the Role entity
@@ -310,7 +337,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task WriteRoleTokenMaximumTimeToLiveAsync(string roleName, long tokenMaximumTimeToLive, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task WriteRoleTokenMaximumTimeToLiveAsync(string roleName, long tokenMaximumTimeToLive, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes the token-max-ttl attribute of the Role entity
@@ -320,7 +348,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task DeleteRoleTokenMaximumTimeToLiveAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task DeleteRoleTokenMaximumTimeToLiveAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the bind-secret-id attribute of the Role entity.
@@ -330,8 +359,9 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param>        
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The bind-secret-id value.</returns>
-        Task<Secret<bool>> ReadRoleBindSecretIdAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<bool>> ReadRoleBindSecretIdAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Updates the bind-secret-id attribute of the Role entity
@@ -342,7 +372,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task WriteRoleBindSecretIdAsync(string roleName, bool bindSecretId, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task WriteRoleBindSecretIdAsync(string roleName, bool bindSecretId, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes the bind-secret-id attribute of the Role entity
@@ -352,7 +383,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task DeleteRoleBindSecretIdAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task DeleteRoleBindSecretIdAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the secret-id-bound-cidrs attribute of the Role entity.
@@ -362,8 +394,9 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param>        
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The secret-id-bound-cidrs value.</returns>
-        Task<Secret<List<string>>> ReadRoleSecretIdBoundCIDRsAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<List<string>>> ReadRoleSecretIdBoundCIDRsAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Updates the secret-id-bound-cidrs attribute of the Role entity
@@ -374,7 +407,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task WriteRoleSecretIdBoundCIDRsAsync(string roleName, List<string> secretIdBoundCIDRs, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task WriteRoleSecretIdBoundCIDRsAsync(string roleName, List<string> secretIdBoundCIDRs, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes the secret-id-bound-cidrs attribute of the Role entity
@@ -384,7 +418,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task DeleteRoleSecretIdBoundCIDRsAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task DeleteRoleSecretIdBoundCIDRsAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the token-bound-cidrs attribute of the Role entity.
@@ -394,8 +429,9 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param>        
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The token-bound-cidrs value.</returns>
-        Task<Secret<List<string>>> ReadRoleTokenBoundCIDRsAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<List<string>>> ReadRoleTokenBoundCIDRsAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Updates the token-bound-cidrs attribute of the Role entity
@@ -406,7 +442,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task WriteRoleTokenBoundCIDRsAsync(string roleName, List<string> tokenBoundCIDRs, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task WriteRoleTokenBoundCIDRsAsync(string roleName, List<string> tokenBoundCIDRs, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes the token-bound-cidrs attribute of the Role entity
@@ -416,7 +453,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task DeleteRoleTokenBoundCIDRsAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task DeleteRoleTokenBoundCIDRsAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets the period attribute of the Role entity.
@@ -426,8 +464,9 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param>        
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The period value.</returns>
-        Task<Secret<long>> ReadRolePeriodAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<long>> ReadRolePeriodAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Updates the period attribute of the Role entity
@@ -438,7 +477,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task WriteRolePeriodAsync(string roleName, long period, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task WriteRolePeriodAsync(string roleName, long period, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes the period attribute of the Role entity
@@ -448,7 +488,8 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
-        Task DeleteRolePeriodAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task DeleteRolePeriodAsync(string roleName, string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Performs some maintenance tasks to clean up invalid entries that may remain in the token store.
@@ -458,15 +499,17 @@ namespace VaultSharp.V1.AuthMethods.AppRole
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Auth backend. Defaults to <see cref="AuthMethodDefaultPaths.AppRole" />
         /// Provide a value only if you have customized the mount point.</param> 
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The secret with warning message.</returns>
-        Task<Secret<Dictionary<string, object>>> TidyTokensAsync(string mountPoint = AuthMethodDefaultPaths.AppRole);
+        Task<Secret<Dictionary<string, object>>> TidyTokensAsync(string mountPoint = AuthMethodDefaultPaths.AppRole, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Useful to generate the login token as an explicit api.
         /// Unauthenticated API.
         /// </summary>
         /// <param name="appRoleAuthMethodInfo">The request object</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The secret with the login token</returns>
-        Task<Secret<Dictionary<string, object>>> LoginAsync(AppRoleAuthMethodInfo appRoleAuthMethodInfo);
+        Task<Secret<Dictionary<string, object>>> LoginAsync(AppRoleAuthMethodInfo appRoleAuthMethodInfo, CancellationToken cancellationToken = default);
     }
 }

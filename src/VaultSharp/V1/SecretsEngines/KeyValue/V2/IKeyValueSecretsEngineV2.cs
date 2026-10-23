@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 
@@ -16,7 +17,8 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the KeyValue backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
         /// Provide a value only if you have customized the mount point.</param>
-        Task ConfigureAsync(KeyValue2ConfigModel configModel, string mountPoint = null);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task ConfigureAsync(KeyValue2ConfigModel configModel, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Reads the common config for all keys.
@@ -28,8 +30,9 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The config</returns>
-        Task<Secret<KeyValue2ConfigModel>> ReadConfigAsync(string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<KeyValue2ConfigModel>> ReadConfigAsync(string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves the secret at the specified location.
@@ -46,10 +49,11 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the data.
         /// </returns>
-        Task<Secret<SecretData>> ReadSecretAsync(string path, int? version = null, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<SecretData>> ReadSecretAsync(string path, int? version = null, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
         
         /// <summary>
         /// Retrieves the secret at the specified location.
@@ -66,10 +70,11 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the data.
         /// </returns>
-        Task<Secret<SecretData<T>>> ReadSecretAsync<T>(string path, int? version = null, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<SecretData<T>>> ReadSecretAsync<T>(string path, int? version = null, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Stores a secret at the specified location. If the value does not yet exist, the calling token must have an ACL policy granting the create capability. 
@@ -88,6 +93,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
@@ -99,12 +105,12 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// Even with a ttl set, the secrets engine never removes data on its own.The ttl key is merely advisory.
         /// When reading a value with a ttl, both the ttl key and the refresh interval will reflect the value:
         /// </remarks>
-        Task<Secret<CurrentSecretMetadata>> WriteSecretAsync<T>(string path, T data, int? checkAndSet = null, string mountPoint = null);
+        Task<Secret<CurrentSecretMetadata>> WriteSecretAsync<T>(string path, T data, int? checkAndSet = null, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Writes the data to the given path in the K/V v2 secrets engine. 
         /// The data can be of any type. 
-        /// Unlike the <see cref="WriteSecretAsync{T}(string, T, int?, string)"/> method, the patch command combines the change with existing data 
+        /// Unlike the <see cref="WriteSecretAsync{T}(string, T, int?, string, CancellationToken)"/> method, the patch command combines the change with existing data 
         /// instead of replacing them. 
         /// Therefore, this command makes it easy to make a partial updates to an existing data.
         /// </summary>
@@ -116,10 +122,11 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task<Secret<CurrentSecretMetadata>> PatchSecretAsync(string path, PatchSecretDataRequest patchSecretDataRequest, string mountPoint = null);
+        Task<Secret<CurrentSecretMetadata>> PatchSecretAsync(string path, PatchSecretDataRequest patchSecretDataRequest, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint provides the subkeys within a secret entry that 
@@ -151,8 +158,9 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Subkeys Info for specified version and depth.</returns>
-        Task<Secret<SecretSubkeysInfo>> ReadSecretSubkeysAsync(string path, int version = 0, int depth = 0, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<SecretSubkeysInfo>> ReadSecretSubkeysAsync(string path, int version = 0, int depth = 0, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint issues a soft delete of the secret's latest version at the specified location. 
@@ -165,10 +173,11 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task DeleteSecretAsync(string path, string mountPoint = null);
+        Task DeleteSecretAsync(string path, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint issues a soft delete of the secret's latest version at the specified location. 
@@ -185,10 +194,11 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task DeleteSecretVersionsAsync(string path, IList<int> versions, string mountPoint = null);
+        Task DeleteSecretVersionsAsync(string path, IList<int> versions, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Undeletes the data for the provided version and path in the key-value store.
@@ -204,10 +214,11 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task UndeleteSecretVersionsAsync(string path, IList<int> versions, string mountPoint = null);
+        Task UndeleteSecretVersionsAsync(string path, IList<int> versions, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Permanently removes the specified version data for the provided key and version numbers from the key-value store.
@@ -222,10 +233,11 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task DestroySecretVersionsAsync(string path, IList<int> versions, string mountPoint = null);
+        Task DestroySecretVersionsAsync(string path, IList<int> versions, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves the secret location path entries at the specified location.
@@ -243,10 +255,11 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret list with the data.
         /// </returns>
-        Task<Secret<ListInfo>> ReadSecretPathsAsync(string path, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<ListInfo>> ReadSecretPathsAsync(string path, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves the secret metadata at the specified location.
@@ -260,10 +273,11 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret metadata.
         /// </returns>
-        Task<Secret<FullSecretMetadata>> ReadSecretMetadataAsync(string path, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<FullSecretMetadata>> ReadSecretMetadataAsync(string path, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Creates or updates the metadata of a secret at the specified location in 
@@ -284,10 +298,11 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task WriteSecretMetadataAsync(string path, CustomMetadataRequest customMetadataRequest, string mountPoint = null);
+        Task WriteSecretMetadataAsync(string path, CustomMetadataRequest customMetadataRequest, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Patch the metadata of a secret at specified location in the K/V v2 secrets engine.
@@ -308,10 +323,11 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// Defaults to <see cref="SecretsEngineMountPoints.KeyValueV2" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task PatchSecretMetadataAsync(string path, CustomMetadataRequest customMetadataRequest, string mountPoint = null);
+        Task PatchSecretMetadataAsync(string path, CustomMetadataRequest customMetadataRequest, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint permanently deletes the key metadata and all version data for the specified key. 
@@ -324,9 +340,10 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V2
         /// The mount point for the Generic backend. Defaults to "secret"
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task DeleteMetadataAsync(string path, string mountPoint = null);
+        Task DeleteMetadataAsync(string path, string mountPoint = null, CancellationToken cancellationToken = default);
     }
 }

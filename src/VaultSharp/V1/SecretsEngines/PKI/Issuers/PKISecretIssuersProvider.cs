@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
@@ -14,46 +15,46 @@ namespace VaultSharp.V1.SecretsEngines.PKI.Issuers
             _polymath = polymath;
         }
 
-        public async Task<Secret<KeysData>> ListIssuers(string pkiBackendMountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<KeysData>> ListIssuers(string pkiBackendMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             var result = await _polymath.MakeVaultApiRequest<Secret<KeysData>>(pkiBackendMountPoint ?? 
                 _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, 
                 "/issuers/?list=true", HttpMethod.Get, 
                 null, 
-                wrapTimeToLive: wrapTimeToLive)
+                wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken)
                 .ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             return result;
         }
 
-        public async Task<Secret<IssuerResponseData>> AddIssuer(IssuerData createIssuerOptions, string pkiBackendMountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<IssuerResponseData>> AddIssuer(IssuerData createIssuerOptions, string pkiBackendMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(createIssuerOptions, "createIssuerOptions");
 
-            var result = await _polymath.MakeVaultApiRequest<Secret<IssuerResponseData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/root/generate/internal", HttpMethod.Post, createIssuerOptions, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            var result = await _polymath.MakeVaultApiRequest<Secret<IssuerResponseData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/root/generate/internal", HttpMethod.Post, createIssuerOptions, wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             return result;
         }
 
         public async Task<Secret<IssuerConfigResponseData>> GetIssuerConfigData(string issuerName,
-            string pkiBackendMountPoint = null, string wrapTimeToLive = null)
+            string pkiBackendMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(issuerName, "issuerName");
-            var result = await _polymath.MakeVaultApiRequest<Secret<IssuerConfigResponseData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/issuer/" + issuerName, HttpMethod.Get, null, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            var result = await _polymath.MakeVaultApiRequest<Secret<IssuerConfigResponseData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/issuer/" + issuerName, HttpMethod.Get, null, wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             return result;
         }
 
-        public async Task<Secret<IssuerConfigResponseData>> ConfigureIssuer(IssuerConfigRequestData data, string pkiBackendMountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<IssuerConfigResponseData>> ConfigureIssuer(IssuerConfigRequestData data, string pkiBackendMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(data, "data");
 
-            var result = await _polymath.MakeVaultApiRequest<Secret<IssuerConfigResponseData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/issuer/" + data.IssuerName, HttpMethod.Post, data, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            var result = await _polymath.MakeVaultApiRequest<Secret<IssuerConfigResponseData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/issuer/" + data.IssuerName, HttpMethod.Post, data, wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
             return result;
         }
 
         public async Task DeleteIssuer(string issuerName, string pkiBackendMountPoint = null,
-            string wrapTimeToLive = null)
+            string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(issuerName, "issuerName");
-            await _polymath.MakeVaultApiRequest<Secret<IssuerData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/issuer/" + issuerName, HttpMethod.Delete, null, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.MakeVaultApiRequest<Secret<IssuerData>>(pkiBackendMountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.PKI, "/issuer/" + issuerName, HttpMethod.Delete, null, wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

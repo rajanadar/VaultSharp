@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.SystemBackend.MFA
@@ -8,10 +9,10 @@ namespace VaultSharp.V1.SystemBackend.MFA
     /// </summary>
     public interface IMFAProviderBase<TMFAConfig> where TMFAConfig : AbstractMFAConfig
     {
-        Task ConfigureAsync(TMFAConfig mfaConfig);
+        Task ConfigureAsync(TMFAConfig mfaConfig, CancellationToken cancellationToken = default);
 
-        Task<Secret<TMFAConfig>> GetConfigAsync(string methodName);
+        Task<Secret<TMFAConfig>> GetConfigAsync(string methodName, CancellationToken cancellationToken = default);
 
-        Task DeleteConfigAsync(string methodName);
+        Task DeleteConfigAsync(string methodName, CancellationToken cancellationToken = default);
     }
 }

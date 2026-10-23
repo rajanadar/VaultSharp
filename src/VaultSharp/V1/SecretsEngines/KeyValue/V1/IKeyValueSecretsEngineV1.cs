@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 
@@ -21,10 +22,11 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the data.
         /// </returns>
-        Task<Secret<Dictionary<string, object>>> ReadSecretAsync(string path, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<Dictionary<string, object>>> ReadSecretAsync(string path, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves the secret at the specified location.
@@ -38,10 +40,11 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the data.
         /// </returns>
-        Task<Secret<T>> ReadSecretAsync<T>(string path, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<T>> ReadSecretAsync<T>(string path, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
         
         /// <summary>
         /// Retrieves the secret location path entries at the specified location.
@@ -57,10 +60,11 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret list with the data.
         /// </returns>
-        Task<Secret<ListInfo>> ReadSecretPathsAsync(string path, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<ListInfo>> ReadSecretPathsAsync(string path, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Stores a secret at the specified location. If the value does not yet exist, the calling token must have an ACL policy granting the create capability. 
@@ -74,6 +78,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV1" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The taskwith the secret.
         /// </returns>
@@ -85,7 +90,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// Even with a ttl set, the secrets engine never removes data on its own.The ttl key is merely advisory.
         /// When reading a value with a ttl, both the ttl key and the refresh interval will reflect the value:
         /// </remarks>
-        Task<Secret<Dictionary<string, object>>> WriteSecretAsync(string path, IDictionary<string, object> values, string mountPoint = null);
+        Task<Secret<Dictionary<string, object>>> WriteSecretAsync(string path, IDictionary<string, object> values, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Stores a secret at the specified location. If the value does not yet exist, the calling token must have an ACL policy granting the create capability. 
@@ -99,6 +104,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV1" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
@@ -110,7 +116,7 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// Even with a ttl set, the secrets engine never removes data on its own.The ttl key is merely advisory.
         /// When reading a value with a ttl, both the ttl key and the refresh interval will reflect the value:
         /// </remarks>
-        Task<Secret<T>> WriteSecretAsync<T>(string path, T values, string mountPoint = null);
+        Task<Secret<T>> WriteSecretAsync<T>(string path, T values, string mountPoint = null, CancellationToken cancellationToken = default);
         
         /// <summary>
         /// Deletes the value at the specified path in Vault.
@@ -121,9 +127,10 @@ namespace VaultSharp.V1.SecretsEngines.KeyValue.V1
         /// The mount point for the Generic backend. Defaults to <see cref="SecretsEngineMountPoints.KeyValueV1" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task.
         /// </returns>
-        Task DeleteSecretAsync(string path, string mountPoint = null);
+        Task DeleteSecretAsync(string path, string mountPoint = null, CancellationToken cancellationToken = default);
     }
 }

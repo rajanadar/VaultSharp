@@ -13,6 +13,7 @@ try
 
     await AotApiScenario.RunAffectedApiPathsAsync();
     await AotApiScenario.RunConsumerDtoPathsAsync();
+    await AotApiScenario.RunCancellationPathAsync();
     Console.WriteLine("NativeAOT canary passed.");
     return 0;
 }

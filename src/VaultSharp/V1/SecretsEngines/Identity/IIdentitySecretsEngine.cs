@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.SecretsEngines.Identity
@@ -18,8 +19,9 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.Identity" />
         /// Provide a value only if you have customized the Azure mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>This endpoint doesn't return anything.</returns>
-        Task CreateRoleAsync(string roleName, CreateRoleRequest createRoleRequest, string mountPoint = null);
+        Task CreateRoleAsync(string roleName, CreateRoleRequest createRoleRequest, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint queries a role and returs its configuration.
@@ -29,8 +31,9 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.Identity" />
         /// Provide a value only if you have customized the Azure mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The role information</returns>
-        Task<ReadRoleResponse> ReadRoleAsync(string roleName, string mountPoint = null);
+        Task<ReadRoleResponse> ReadRoleAsync(string roleName, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint deletes a role.
@@ -40,8 +43,9 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.Identity" />
         /// Provide a value only if you have customized the Azure mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>This endpoint doesn't return anything</returns>
-        Task DeleteRoleAsync(string roleName, string mountPoint = null);
+        Task DeleteRoleAsync(string roleName, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint creates or updates a named key which is used by a role to sign tokens.
@@ -52,8 +56,9 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// Provide a value only if you have customized the Azure mount point.
         /// </param>
         /// <param name="createNamedKeyRequest">Request object to create a named key.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>This endpoint doesn't return anything.</returns>
-        Task CreateNamedKeyAsync(string keyName, CreateNamedKeyRequest createNamedKeyRequest, string mountPoint = null);
+        Task CreateNamedKeyAsync(string keyName, CreateNamedKeyRequest createNamedKeyRequest, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint reads a named key which is used by a role to sign tokens.
@@ -63,7 +68,8 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.Identity" />
         /// Provide a value only if you have customized the Azure mount point.
         /// </param>
-        Task<ReadNamedKeyResponse> ReadNamedKeyAsync(string keyName, string mountPoint = null);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task<ReadNamedKeyResponse> ReadNamedKeyAsync(string keyName, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint deletes a named key.
@@ -73,8 +79,9 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.Identity" />
         /// Provide a value only if you have customized the Azure mount point.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>This endpoint doesn't return anything</returns>
-        Task DeleteNamedKeyAsync(string keyName, string mountPoint = null);
+        Task DeleteNamedKeyAsync(string keyName, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Use this endpoint to generate a signed ID (OIDC) token.
@@ -89,10 +96,11 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the <see cref="IdentityToken" /> as the data.
         /// </returns>
-        Task<Secret<IdentityToken>> GetTokenAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<IdentityToken>> GetTokenAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint can verify the authenticity and active state of a signed ID token.
@@ -110,10 +118,11 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// Indicates if the token is active.
         /// </returns>
-        Task<Secret<bool>> IntrospectTokenAsync(string token, string clientId = null, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<bool>> IntrospectTokenAsync(string token, string clientId = null, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint creates or updates an Entity.
@@ -132,10 +141,11 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// The TTL for the token and can be either an integer number of 
         /// seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the <see cref="CreateEntityResponse"/> as the data
         /// </returns>
-        Task<Secret<CreateEntityResponse>> CreateEntityAsync(CreateEntityRequest createEntityRequest, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<CreateEntityResponse>> CreateEntityAsync(CreateEntityRequest createEntityRequest, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint queries the entity by its identifier.
@@ -152,10 +162,11 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// The TTL for the token and can be either an integer number of 
         /// seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the <see cref="Entity"/> as the data
         /// </returns>
-        Task<Secret<Entity>> ReadEntityByIdAsync(string entityId, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<Entity>> ReadEntityByIdAsync(string entityId, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint deletes all entities provided.
@@ -167,7 +178,8 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// Defaults to <see cref="SecretsEngineMountPoints.Identity" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
-        Task BatchDeleteEntitiesByIdAsync(BatchDeleteEntitiesRequest batchDeleteEntitiesRequest, string mountPoint = null);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task BatchDeleteEntitiesByIdAsync(BatchDeleteEntitiesRequest batchDeleteEntitiesRequest, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint is used to create an entity by a given name.
@@ -185,8 +197,9 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// The TTL for the token and can be either an integer number of 
         /// seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns></returns>
-        Task<Secret<CreateEntityResponse>> CreateEntityByNameAsync(CreateEntityByNameRequest createEntityByNameRequest, string name, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<CreateEntityResponse>> CreateEntityByNameAsync(CreateEntityByNameRequest createEntityByNameRequest, string name, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint deletes an entity and all its associated aliases.
@@ -198,7 +211,8 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// Defaults to <see cref="SecretsEngineMountPoints.Identity" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
-        Task DeleteEntityByIdAsync(string entityId, string mountPoint = null);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task DeleteEntityByIdAsync(string entityId, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint deletes an entity and all its associated aliases.
@@ -210,7 +224,8 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// Defaults to <see cref="SecretsEngineMountPoints.Identity" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
-        Task DeleteEntityByNameAsync(string name, string mountPoint = null);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task DeleteEntityByNameAsync(string name, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint returns a list of available entities by their 
@@ -227,8 +242,9 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// The TTL for the token and can be either an integer number of 
         /// seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>List of keys.</returns>
-        Task<Secret<ListEntitiesResponse>> ListEntitiesByIdAsync(string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<ListEntitiesResponse>> ListEntitiesByIdAsync(string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint returns a list of available entities by their 
@@ -245,8 +261,9 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// The TTL for the token and can be either an integer number of 
         /// seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>List of keys.</returns>
-        Task<Secret<ListEntitiesResponse>> ListEntitiesByNameAsync(string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<ListEntitiesResponse>> ListEntitiesByNameAsync(string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint merges many entities into one entity. Additionally, 
@@ -260,7 +277,8 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// Defaults to <see cref="SecretsEngineMountPoints.Identity" />
         /// Provide a value only if you have customized the mount point.
         /// </param>
-        Task MergeEntitiesAsync(MergeEntitiesRequest mergeEntitiesRequest, string mountPoint = null);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task MergeEntitiesAsync(MergeEntitiesRequest mergeEntitiesRequest, string mountPoint = null, CancellationToken cancellationToken = default);
 
 
         /// <summary>
@@ -278,10 +296,11 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// The TTL for the token and can be either an integer number of 
         /// seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the <see cref="Entity"/> as the data
         /// </returns>
-        Task<Secret<Entity>> ReadEntityByNameAsync(string name, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<Entity>> ReadEntityByNameAsync(string name, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint updates an Entity.
@@ -301,10 +320,11 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// seconds or a string duration of seconds.
         /// </param>
         /// <param name="entityId">Id of the entity to be updated</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the <see cref="UpdateEntityResponse"/> as the data
         /// </returns>
-        Task<Secret<UpdateEntityResponse>> UpdateEntityByIdAsync(UpdateEntityRequest updateEntityRequest, string entityId, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<UpdateEntityResponse>> UpdateEntityByIdAsync(UpdateEntityRequest updateEntityRequest, string entityId, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint updates an Entity by name.
@@ -324,9 +344,10 @@ namespace VaultSharp.V1.SecretsEngines.Identity
         /// seconds or a string duration of seconds.
         /// </param>
         /// <param name="name">Name of the entity to be updated.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the <see cref="UpdateEntityResponse"/> as the data
         /// </returns>
-        Task<Secret<UpdateEntityResponse>> UpdateEntityByNameAsync(UpdateEntityByNameRequest updateEntityByNameRequest, string name, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<UpdateEntityResponse>> UpdateEntityByNameAsync(UpdateEntityByNameRequest updateEntityByNameRequest, string name, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
     }
 }

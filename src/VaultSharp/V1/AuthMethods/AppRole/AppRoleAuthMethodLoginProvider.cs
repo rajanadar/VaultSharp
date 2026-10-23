@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
@@ -19,7 +20,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             _polymath = polymath;
         }
 
-        public async Task<Secret<Dictionary<string, object>>> LoginAsync()
+        public async Task<Secret<Dictionary<string, object>>> LoginAsync(CancellationToken cancellationToken = default)
         {
             var requestData = new Dictionary<string, object>
             {
@@ -32,7 +33,7 @@ namespace VaultSharp.V1.AuthMethods.AppRole
             }
 
             // make an unauthenticated call to Vault, since this is the call to get the token. It shouldn't need a token.
-            return await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, requestData, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<Dictionary<string, object>>>(LoginResourcePath, HttpMethod.Post, requestData, unauthenticated: true, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
         public async Task<string> GetVaultTokenAsync()

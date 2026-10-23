@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
@@ -14,14 +15,14 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
             _polymath = polymath;
         }
 
-        public async Task<Secret<GoogleCloudOAuth2Token>> GetOAuth2TokenAsync(string roleset, string mountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<GoogleCloudOAuth2Token>> GetOAuth2TokenAsync(string roleset, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(roleset, "roleset");
 
-            return await _polymath.MakeVaultApiRequest<Secret<GoogleCloudOAuth2Token>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.GoogleCloud, "/roleset/" + roleset.Trim('/') + "/token", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<GoogleCloudOAuth2Token>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.GoogleCloud, "/roleset/" + roleset.Trim('/') + "/token", HttpMethod.Get, wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<GoogleCloudServiceAccountKey>> GetServiceAccountKeyAsync(string roleset, ServiceAccountKeyAlgorithm keyAlgorithm = ServiceAccountKeyAlgorithm.KEY_ALG_RSA_2048, ServiceAccountPrivateKeyType privateKeyType = ServiceAccountPrivateKeyType.TYPE_GOOGLE_CREDENTIALS_FILE, string timeToLive = "", string mountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<GoogleCloudServiceAccountKey>> GetServiceAccountKeyAsync(string roleset, ServiceAccountKeyAlgorithm keyAlgorithm = ServiceAccountKeyAlgorithm.KEY_ALG_RSA_2048, ServiceAccountPrivateKeyType privateKeyType = ServiceAccountPrivateKeyType.TYPE_GOOGLE_CREDENTIALS_FILE, string timeToLive = "", string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(roleset, "roleset");
 
@@ -32,7 +33,7 @@ namespace VaultSharp.V1.SecretsEngines.GoogleCloud
                 TimeToLive = timeToLive
             };
 
-            return await _polymath.MakeVaultApiRequest<Secret<GoogleCloudServiceAccountKey>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.GoogleCloud, "/roleset/" + roleset.Trim('/') + "/key", HttpMethod.Post, requestData, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<GoogleCloudServiceAccountKey>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.GoogleCloud, "/roleset/" + roleset.Trim('/') + "/key", HttpMethod.Post, requestData, wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

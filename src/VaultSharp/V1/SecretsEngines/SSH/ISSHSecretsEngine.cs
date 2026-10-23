@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.SecretsEngines.SSH
@@ -24,10 +25,11 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the SSH credentials.
         /// </returns>
-        Task<Secret<SSHCredentials>> GetCredentialsAsync(string roleName, string ipAddress, string username = null, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<SSHCredentials>> GetCredentialsAsync(string roleName, string ipAddress, string username = null, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint signs an SSH public key based on the supplied parameters, 
@@ -40,7 +42,8 @@ namespace VaultSharp.V1.SecretsEngines.SSH
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the SSH backend. Defaults to <see cref="SecretsEngineMountPoints.SSH" />
         /// Provide a value only if you have customized the SSH mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The signed key</returns>
-        Task<Secret<SignedKeyResponse>> SignKeyAsync(string roleName, SignKeyRequest signKeyRequest, string mountPoint = null);
+        Task<Secret<SignedKeyResponse>> SignKeyAsync(string roleName, SignKeyRequest signKeyRequest, string mountPoint = null, CancellationToken cancellationToken = default);
     }
 }

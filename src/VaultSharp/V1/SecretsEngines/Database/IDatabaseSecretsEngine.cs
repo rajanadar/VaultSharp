@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 using VaultSharp.V1.SecretsEngines.Database.Models;
 
@@ -23,8 +24,9 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the AD backend. Defaults to <see cref="SecretsEngineMountPoints.ActiveDirectory" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task</returns>
-        Task ConfigureConnectionAsync(string connectionName, ConnectionConfigModel connectionConfigModel, string mountPoint = null);
+        Task ConfigureConnectionAsync(string connectionName, ConnectionConfigModel connectionConfigModel, string mountPoint = null, CancellationToken cancellationToken = default);
         
         /// <summary>
         /// This endpoint returns the configuration settings for a connection.
@@ -40,8 +42,9 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The role info.</returns>
-        Task<Secret<ConnectionModel>> ReadConnectionConfigAsync(string connectionName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<ConnectionModel>> ReadConnectionConfigAsync(string connectionName, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint returns a list of available connections. 
@@ -54,8 +57,9 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The connection names.</returns>
-        Task<Secret<ListInfo>> ReadAllConnectionsAsync(string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<ListInfo>> ReadAllConnectionsAsync(string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
         
         /// <summary>
         /// Deletes the connection config.
@@ -67,8 +71,9 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the AD backend. Defaults to <see cref="SecretsEngineMountPoints.ActiveDirectory" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task</returns>
-        Task DeleteConnectionAsync(string connectionName, string mountPoint = null);
+        Task DeleteConnectionAsync(string connectionName, string mountPoint = null, CancellationToken cancellationToken = default);
         
         /// <summary>
         /// This endpoint closes a connection and it's underlying plugin and restarts it
@@ -81,8 +86,9 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the AD backend. Defaults to <see cref="SecretsEngineMountPoints.ActiveDirectory" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task</returns>
-        Task ResetConnectionAsync(string connectionName, string mountPoint = null);
+        Task ResetConnectionAsync(string connectionName, string mountPoint = null, CancellationToken cancellationToken = default);
         
         /// <summary>
         /// This endpoint performs the same operation as reset connection but for all connections
@@ -96,8 +102,9 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the AD backend. Defaults to <see cref="SecretsEngineMountPoints.ActiveDirectory" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task</returns>
-        Task ReloadPluginAsync(string pluginName, string mountPoint = null);
+        Task ReloadPluginAsync(string pluginName, string mountPoint = null, CancellationToken cancellationToken = default);
         
         /// <summary>
         /// This endpoint is used to rotate the "root" user credentials stored for the database connection.
@@ -113,8 +120,9 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the AD backend. Defaults to <see cref="SecretsEngineMountPoints.ActiveDirectory" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task</returns>
-        Task RotateRootCredentialsAsync(string connectionName, string mountPoint = null);
+        Task RotateRootCredentialsAsync(string connectionName, string mountPoint = null, CancellationToken cancellationToken = default);
         
         /// <summary>
         /// This endpoint creates or updates a role definition.
@@ -126,8 +134,9 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineMountPoints.Database" />
         /// Provide a value only if you have customized the mount point.</param>        
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task</returns>
-        Task CreateRoleAsync(string roleName, Role role, string mountPoint = null);
+        Task CreateRoleAsync(string roleName, Role role, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint queries the role definition.
@@ -141,8 +150,9 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The role info.</returns>
-        Task<Secret<Role>> ReadRoleAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<Role>> ReadRoleAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint returns a list of available roles. 
@@ -155,8 +165,9 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The role names.</returns>
-        Task<Secret<ListInfo>> ReadAllRolesAsync(string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<ListInfo>> ReadAllRolesAsync(string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint deletes the role definition.
@@ -166,8 +177,9 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineMountPoints.Database" />
         /// Provide a value only if you have customized the mount point.</param>   
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task.</returns>
-        Task DeleteRoleAsync(string roleName, string mountPoint = null);
+        Task DeleteRoleAsync(string roleName, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Generates a new set of dynamic credentials based on the named role.
@@ -181,10 +193,11 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the <see cref="UsernamePasswordCredentials" /> as the data.
         /// </returns>
-        Task<Secret<UsernamePasswordCredentials>> GetCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<UsernamePasswordCredentials>> GetCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint creates or updates a static role definition. 
@@ -199,8 +212,9 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineMountPoints.Database" />
         /// Provide a value only if you have customized the mount point.</param>        
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task</returns>
-        Task CreateStaticRoleAsync(string roleName, StaticRole staticRole, string mountPoint = null);
+        Task CreateStaticRoleAsync(string roleName, StaticRole staticRole, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint queries the static role definition.
@@ -214,8 +228,9 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The role info.</returns>
-        Task<Secret<StaticRole>> ReadStaticRoleAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<StaticRole>> ReadStaticRoleAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint returns a list of available static roles. 
@@ -228,8 +243,9 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The role names.</returns>
-        Task<Secret<ListInfo>> ReadAllStaticRolesAsync(string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<ListInfo>> ReadAllStaticRolesAsync(string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint deletes the static role definition and revokes the database user.
@@ -239,8 +255,9 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineMountPoints.Database" />
         /// Provide a value only if you have customized the mount point.</param>   
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task.</returns>
-        Task DeleteStaticRoleAsync(string roleName, string mountPoint = null);
+        Task DeleteStaticRoleAsync(string roleName, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Generates a new set of STATIC credentials based on the named role.
@@ -254,10 +271,11 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the <see cref="StaticCredentials" /> as the data.
         /// </returns>
-        Task<Secret<StaticCredentials>> GetStaticCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<StaticCredentials>> GetStaticCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint is used to rotate the Static Role credentials stored for a given role name. 
@@ -270,6 +288,7 @@ namespace VaultSharp.V1.SecretsEngines.Database
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineMountPoints.Database" />
         /// Provide a value only if you have customized the mount point.</param>
-        Task RotateStaticCredentialsAsync(string roleName, string mountPoint = null);
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
+        Task RotateStaticCredentialsAsync(string roleName, string mountPoint = null, CancellationToken cancellationToken = default);
     }
 }

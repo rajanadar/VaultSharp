@@ -1,4 +1,5 @@
 ﻿
+using System.Threading;
 using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods.AliCloud;
@@ -87,9 +88,9 @@ namespace VaultSharp.V1.AuthMethods
             _polymath.SetVaultTokenDelegate();
         }
 
-        public async Task PerformImmediateLogin()
+        public async Task PerformImmediateLogin(CancellationToken cancellationToken = default)
         {
-            await _polymath.PerformImmediateLogin().ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            await _polymath.PerformImmediateLogin(cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

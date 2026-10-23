@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using VaultSharp.V1.AuthMethods.AliCloud;
 using VaultSharp.V1.AuthMethods.AppRole;
 using VaultSharp.V1.AuthMethods.AWS;
@@ -118,7 +119,8 @@ namespace VaultSharp.V1.AuthMethods
         /// Performs immediate login to uncover login issues faster.
         /// Cannot be used for Token Authentication, since you already have a token.
         /// </summary>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>Nothing</returns>
-        Task PerformImmediateLogin();
+        Task PerformImmediateLogin(CancellationToken cancellationToken = default);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.AuthMethods.JWT.Models;
@@ -17,7 +18,7 @@ namespace VaultSharp.V1.AuthMethods.JWT
             this._polymath = polymath;
         }
 
-        public async Task<Secret<OIDCAuthURLInfo>> GetOIDCAuthURLAsync(string redirectUri, string roleName = null, string clientNonce = null, string mountPoint = AuthMethodDefaultPaths.JWT)
+        public async Task<Secret<OIDCAuthURLInfo>> GetOIDCAuthURLAsync(string redirectUri, string roleName = null, string clientNonce = null, string mountPoint = AuthMethodDefaultPaths.JWT, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(mountPoint, "mountPoint");
             Checker.NotNull(redirectUri, "redirectUri");
@@ -38,10 +39,10 @@ namespace VaultSharp.V1.AuthMethods.JWT
             }
 
             // Send unauthenticated as true.
-            return await _polymath.MakeVaultApiRequest<Secret<OIDCAuthURLInfo>>("v1/auth/" + mountPoint.Trim('/') + "/oidc/auth_url", HttpMethod.Post, requestData: requestData, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<OIDCAuthURLInfo>>("v1/auth/" + mountPoint.Trim('/') + "/oidc/auth_url", HttpMethod.Post, requestData: requestData, unauthenticated: true, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<AuthInfo>> DoOIDCCallbackAsync(string state, string nonce, string code, string clientNonce = null, string mountPoint = AuthMethodDefaultPaths.JWT)
+        public async Task<Secret<AuthInfo>> DoOIDCCallbackAsync(string state, string nonce, string code, string clientNonce = null, string mountPoint = AuthMethodDefaultPaths.JWT, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(state, "state");
             Checker.NotNull(nonce, "nonce");
@@ -63,7 +64,7 @@ namespace VaultSharp.V1.AuthMethods.JWT
 
             var queryString = "?" + string.Join("&", queryStrings);
 
-            return await _polymath.MakeVaultApiRequest<Secret<AuthInfo>>("v1/auth/" + mountPoint.Trim('/') + "/oidc/callback" + queryString, HttpMethod.Get, unauthenticated: true).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<AuthInfo>>("v1/auth/" + mountPoint.Trim('/') + "/oidc/callback" + queryString, HttpMethod.Get, unauthenticated: true, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

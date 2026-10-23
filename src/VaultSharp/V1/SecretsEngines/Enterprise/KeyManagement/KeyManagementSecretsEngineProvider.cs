@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using VaultSharp.Core;
 using VaultSharp.V1.Commons;
@@ -14,19 +15,19 @@ namespace VaultSharp.V1.SecretsEngines.Enterprise.KeyManagement
             _polymath = polymath;
         }
 
-        public async Task<Secret<KeyManagementKey>> ReadKeyAsync(string keyName, string mountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<KeyManagementKey>> ReadKeyAsync(string keyName, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(keyName, "keyName");
 
-            return await _polymath.MakeVaultApiRequest<Secret<KeyManagementKey>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyManagement, "/key/" + keyName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<KeyManagementKey>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyManagement, "/key/" + keyName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
 
-        public async Task<Secret<KeyManagementKMSKey>> ReadKeyInKMSAsync(string kmsName, string keyName, string mountPoint = null, string wrapTimeToLive = null)
+        public async Task<Secret<KeyManagementKMSKey>> ReadKeyInKMSAsync(string kmsName, string keyName, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default)
         {
             Checker.NotNull(kmsName, "kmsName");
             Checker.NotNull(keyName, "keyName");
 
-            return await _polymath.MakeVaultApiRequest<Secret<KeyManagementKMSKey>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyManagement, "/kms/" + kmsName.Trim('/') + "/key/" + keyName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
+            return await _polymath.MakeVaultApiRequest<Secret<KeyManagementKMSKey>>(mountPoint ?? _polymath.VaultClientSettings.SecretsEngineMountPoints.KeyManagement, "/kms/" + kmsName.Trim('/') + "/key/" + keyName.Trim('/'), HttpMethod.Get, wrapTimeToLive: wrapTimeToLive, cancellationToken: cancellationToken).ConfigureAwait(_polymath.VaultClientSettings.ContinueAsyncTasksOnCapturedContext);
         }
     }
 }

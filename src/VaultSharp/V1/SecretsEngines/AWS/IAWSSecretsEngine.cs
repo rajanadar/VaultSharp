@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.SecretsEngines.AWS
@@ -30,10 +31,11 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// <param name="awsMountPoint"><para>[optional]</para>
         /// The mount point for the AWS backend. Defaults to <see cref="SecretsEngineMountPoints.AWS" />
         /// Provide a value only if you have customized the AWS mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task
         /// </returns>
-        Task ConfigureRootIAMCredentialsAsync(ConfigureRootIAMCredentialsModel configureRootIAMCredentialsModel, string awsMountPoint = null);
+        Task ConfigureRootIAMCredentialsAsync(ConfigureRootIAMCredentialsModel configureRootIAMCredentialsModel, string awsMountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint allows you to read non-secure values that have been configured in the config/root endpoint.
@@ -47,10 +49,11 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The root config
         /// </returns>
-        Task<Secret<RootIAMCredentialsConfigModel>> GetRootIAMCredentialsConfigAsync(string awsMountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<RootIAMCredentialsConfigModel>> GetRootIAMCredentialsConfigAsync(string awsMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// When you have configured Vault with static credentials, 
@@ -66,10 +69,11 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// <param name="awsMountPoint"><para>[optional]</para>
         /// The mount point for the AWS backend. Defaults to <see cref="SecretsEngineMountPoints.AWS" />
         /// Provide a value only if you have customized the AWS mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The new access key Vault uses is returned by this operation.
         /// </returns>
-        Task<Secret<RotateRootIAMCredentialsResponseModel>> RotateRootIAMCredentialsAsync(string awsMountPoint = null);
+        Task<Secret<RotateRootIAMCredentialsResponseModel>> RotateRootIAMCredentialsAsync(string awsMountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint configures lease settings for the AWS secrets engine.
@@ -79,10 +83,11 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// <param name="awsMountPoint"><para>[optional]</para>
         /// The mount point for the AWS backend. Defaults to <see cref="SecretsEngineMountPoints.AWS" />
         /// Provide a value only if you have customized the AWS mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task
         /// </returns>
-        Task ConfigureLeaseAsync(AWSLeaseConfigModel leaseConfigModel, string awsMountPoint = null);
+        Task ConfigureLeaseAsync(AWSLeaseConfigModel leaseConfigModel, string awsMountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint returns the current lease settings for the AWS secrets engine.
@@ -95,10 +100,11 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The root config
         /// </returns>
-        Task<Secret<AWSLeaseConfigModel>> GetLeaseConfigAsync(string awsMountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<AWSLeaseConfigModel>> GetLeaseConfigAsync(string awsMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint creates or updates the role with the given name. 
@@ -112,10 +118,11 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// <param name="awsMountPoint"><para>[optional]</para>
         /// The mount point for the AWS backend. Defaults to <see cref="SecretsEngineMountPoints.AWS" />
         /// Provide a value only if you have customized the AWS mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The task
         /// </returns>
-        Task WriteRoleAsync(string awsRoleName, CreateAWSRoleModel awsRoleModel, string awsMountPoint = null);
+        Task WriteRoleAsync(string awsRoleName, CreateAWSRoleModel awsRoleModel, string awsMountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint queries an existing role by the given name.
@@ -131,8 +138,9 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The list of role names.</returns>
-        Task<Secret<AWSRoleModel>> ReadRoleAsync(string awsRoleName, string awsMountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<AWSRoleModel>> ReadRoleAsync(string awsRoleName, string awsMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint lists all existing roles in the secrets engine.
@@ -144,8 +152,9 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The list of role names.</returns>
-        Task<Secret<ListInfo>> ReadAllRolesAsync(string awsMountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<ListInfo>> ReadAllRolesAsync(string awsMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deletes a role
@@ -155,8 +164,9 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the backend. Defaults to <see cref="SecretsEngineMountPoints.AWS" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task</returns>
-        Task DeleteRoleAsync(string roleName, string mountPoint = null);
+        Task DeleteRoleAsync(string roleName, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Generates a dynamic IAM AWS credential based on the named role.
@@ -180,10 +190,11 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the <see cref="AWSCredentials" /> as the data.
         /// </returns>
-        Task<Secret<AWSCredentials>> GetCredentialsAsync(string awsRoleName, string roleARN = null, string roleSessionName = null, string awsMountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<AWSCredentials>> GetCredentialsAsync(string awsRoleName, string roleARN = null, string roleSessionName = null, string awsMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Generates a dynamic IAM AWS credential  with an STS token based on the named role.
@@ -210,9 +221,10 @@ namespace VaultSharp.V1.SecretsEngines.AWS
         /// <para>[required]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the <see cref="AWSCredentials" /> as the data.
         /// </returns>
-        Task<Secret<AWSCredentials>> GenerateSTSCredentialsAsync(string awsRoleName, string roleARN = null, string roleSessionName = null, string timeToLive = "1h", string awsMountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<AWSCredentials>> GenerateSTSCredentialsAsync(string awsRoleName, string roleARN = null, string roleSessionName = null, string timeToLive = "1h", string awsMountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
     }
 }

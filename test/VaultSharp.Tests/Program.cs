@@ -9,6 +9,7 @@ try
     VerifyClosedPublicResponseRoots();
     await AotApiScenario.RunAffectedApiPathsAsync();
     await AotApiScenario.RunConsumerDtoPathsAsync();
+    await AotApiScenario.RunCancellationPathAsync();
     Console.WriteLine("All NativeAOT regression tests passed.");
     return 0;
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using VaultSharp.V1.AuthMethods.JWT.Models;
 using VaultSharp.V1.Commons;
 
@@ -32,8 +33,9 @@ namespace VaultSharp.V1.AuthMethods.JWT
         /// <param name="mountPoint">
         /// Mount point of the JWT Auth method
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The OIDC Auth URL</returns>
-        Task<Secret<OIDCAuthURLInfo>> GetOIDCAuthURLAsync(string redirectUri, string roleName = null, string clientNonce = null, string mountPoint = AuthMethodDefaultPaths.JWT);
+        Task<Secret<OIDCAuthURLInfo>> GetOIDCAuthURLAsync(string redirectUri, string roleName = null, string clientNonce = null, string mountPoint = AuthMethodDefaultPaths.JWT, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Exchange an authorization code for an OIDC ID Token. 
@@ -61,7 +63,8 @@ namespace VaultSharp.V1.AuthMethods.JWT
         /// <param name="mountPoint">
         /// Mount point of the JWT Auth method
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The OIDC Vault Token</returns>
-        Task<Secret<AuthInfo>> DoOIDCCallbackAsync(string state, string nonce, string code, string clientNonce = null, string mountPoint = AuthMethodDefaultPaths.JWT);
+        Task<Secret<AuthInfo>> DoOIDCCallbackAsync(string state, string nonce, string code, string clientNonce = null, string mountPoint = AuthMethodDefaultPaths.JWT, CancellationToken cancellationToken = default);
     }
 }

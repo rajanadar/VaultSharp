@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using VaultSharp.V1.Commons;
 
 namespace VaultSharp.V1.SecretsEngines.OpenLDAP
@@ -19,8 +20,9 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the OpenLDAP backend. Defaults to <see cref="SecretsEngineMountPoints.OpenLDAP" />
         /// Provide a value only if you have customized the mount point.</param>        
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task</returns>
-        Task CreateDynamicRoleAsync(string roleName, DynamicRole role, string mountPoint = null);
+        Task CreateDynamicRoleAsync(string roleName, DynamicRole role, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint queries the role definition.
@@ -34,8 +36,9 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The role info.</returns>
-        Task<Secret<DynamicRole>> ReadDynamicRoleAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<DynamicRole>> ReadDynamicRoleAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint returns a list of available roles. 
@@ -48,8 +51,9 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The role names.</returns>
-        Task<Secret<ListInfo>> ReadAllDynamicRolesAsync(string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<ListInfo>> ReadAllDynamicRolesAsync(string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint deletes the role definition.
@@ -59,8 +63,9 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the OpenLDAP backend. Defaults to <see cref="SecretsEngineMountPoints.OpenLDAP" />
         /// Provide a value only if you have customized the mount point.</param>   
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The task.</returns>
-        Task DeleteDynamicRoleAsync(string roleName, string mountPoint = null);
+        Task DeleteDynamicRoleAsync(string roleName, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Generates a new set of dynamic credentials based on the named role.
@@ -74,10 +79,11 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the <see cref="LDAPCredentials" /> as the data.
         /// </returns>
-        Task<Secret<LDAPCredentials>> GetDynamicCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<LDAPCredentials>> GetDynamicCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint creates or updates a static role definition.
@@ -91,8 +97,9 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineMountPoints.OpenLDAP" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns></returns>
-        Task CreateStaticRoleAsync(string roleName, StaticRole staticRole, string mountPoint = null);
+        Task CreateStaticRoleAsync(string roleName, StaticRole staticRole, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint queries the static role definition.
@@ -106,8 +113,9 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The role info.</returns>
-        Task<Secret<StaticRole>> ReadStaticRoleAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<StaticRole>> ReadStaticRoleAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint returns a list of available static roles.
@@ -120,8 +128,9 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>The role names.</returns>
-        Task<Secret<ListInfo>> ReadAllStaticRolesAsync(string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<ListInfo>> ReadAllStaticRolesAsync(string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint deletes the static role definition.
@@ -131,8 +140,9 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the Database backend. Defaults to <see cref="SecretsEngineMountPoints.OpenLDAP" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns></returns>
-        Task DeleteStaticRoleAsync(string roleName, string mountPoint = null);
+        Task DeleteStaticRoleAsync(string roleName, string mountPoint = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Generates a new set of STATIC credentials based on the named role.
@@ -146,10 +156,11 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// <para>[optional]</para>
         /// The TTL for the token and can be either an integer number of seconds or a string duration of seconds.
         /// </param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns>
         /// The secret with the <see cref="StaticCredentials" /> as the data.
         /// </returns>
-        Task<Secret<StaticCredentials>> GetStaticCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null);
+        Task<Secret<StaticCredentials>> GetStaticCredentialsAsync(string roleName, string mountPoint = null, string wrapTimeToLive = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// This endpoint is used to rotate the Static Role credentials stored for a given role name.
@@ -162,7 +173,8 @@ namespace VaultSharp.V1.SecretsEngines.OpenLDAP
         /// <param name="mountPoint"><para>[optional]</para>
         /// The mount point for the OpenLDAP backend. Defaults to <see cref="SecretsEngineMountPoints.OpenLDAP" />
         /// Provide a value only if you have customized the mount point.</param>
+        /// <param name="cancellationToken"><para>[optional]</para>The token to monitor for cancellation requests.</param>
         /// <returns></returns>
-        Task RotateStaticCredentialsAsync(string roleName, string mountPoint = null);
+        Task RotateStaticCredentialsAsync(string roleName, string mountPoint = null, CancellationToken cancellationToken = default);
     }
 }
